@@ -3,7 +3,7 @@
 Generate a simple static HTML basketball league site from a Basketball GM-style JSON export.
 
 Usage:
-    python basketball_site_generator.py updated.json --out site
+    python3 basketball_site_generator.py mostrecent.json --out docs
 
 The generated site is static HTML/CSS/JS. Re-run this script whenever the JSON changes.
 """
@@ -2098,7 +2098,7 @@ def generate_site(json_path: Path, out_dir: Path, start_season: int = 2026, clea
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate a static HTML basketball league site from a JSON export.")
     parser.add_argument("json_file", type=Path, help="Path to the Basketball GM-style JSON file")
-    parser.add_argument("--out", type=Path, default=Path("site"), help="Output directory for the generated website")
+    parser.add_argument("--out", type=Path, default=Path("docs"), help="Output directory for the generated website")
     parser.add_argument("--start-season", type=int, default=2026, help="First season to show on player stat pages")
     parser.add_argument("--clean", action="store_true", help="Delete the output directory before generating")
     return parser.parse_args()

@@ -42,4 +42,36 @@
       });
     });
   });
+  document.querySelectorAll('[data-schedule-filter]').forEach((select) => {
+    const table = document.getElementById(select.dataset.scheduleFilter);
+    if (!table) return;
+    const apply = () => {
+      const value = select.value;
+      Array.from(table.tBodies[0].rows).forEach((row) => {
+        row.hidden = value !== 'all' && row.dataset.scheduleTeam !== value;
+      });
+    };
+    select.addEventListener('change', apply);
+    apply();
+  });
+
+  document.querySelectorAll('[data-day-select]').forEach((select) => {
+    const panels = Array.from(document.querySelectorAll('[data-day-panel]'));
+    const apply = () => {
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.dayPanel !== select.value;
+      });
+    };
+    select.addEventListener('change', apply);
+    apply();
+  });
+
+  document.querySelectorAll('.click-row[data-href]').forEach((row) => {
+    row.addEventListener('click', (event) => {
+      const target = event.target;
+      if (target && target.closest && target.closest('a')) return;
+      window.location.href = row.dataset.href;
+    });
+  });
+
 })();

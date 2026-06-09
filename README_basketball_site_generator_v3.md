@@ -6,7 +6,7 @@ This script generates a static HTML hub from a Basketball GM-style JSON export.
 
 ```bash
 python basketball_site_generator_v3.py preseason.json --out site --clean --schedule-days 46
-python3 basketball_site_generator_v3.py day11.json --out docs --clean
+python3 basketball_site_generator_v3.py day12.json --out docs --clean
 ```
 
 Then open:

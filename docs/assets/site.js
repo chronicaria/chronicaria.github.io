@@ -74,4 +74,22 @@
     });
   });
 
+  document.querySelectorAll('[data-view-toggle]').forEach((wrap) => {
+    const table = document.getElementById(wrap.dataset.viewToggle);
+    if (!table) return;
+    wrap.querySelectorAll('button').forEach((button) => {
+      button.addEventListener('click', () => {
+        wrap.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+        button.classList.add('active');
+        table.classList.toggle('show-adv', button.dataset.view === 'adv');
+      });
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    document.querySelectorAll('details.team-dropdown[open]').forEach((details) => {
+      if (!details.contains(event.target)) details.removeAttribute('open');
+    });
+  });
+
 })();

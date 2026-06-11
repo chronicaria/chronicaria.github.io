@@ -535,11 +535,12 @@ def sort_value(value: Any) -> str:
     return esc(value)
 
 
-def td(content: Any, sort: Any = None, cls: str = "", html_content: bool = True) -> str:
+def td(content: Any, sort: Any = None, cls: str = "", html_content: bool = True, style: str = "") -> str:
     sort_attr = f' data-sort="{sort_value(sort)}"' if sort is not None else ""
     cls_attr = f' class="{esc(cls)}"' if cls else ""
+    style_attr = f' style="{esc(style)}"' if style else ""
     body = str(content) if html_content else esc(content)
-    return f"<td{cls_attr}{sort_attr}>{body}</td>"
+    return f"<td{cls_attr}{sort_attr}{style_attr}>{body}</td>"
 
 
 def th(label: str, cls: str = "") -> str:
@@ -547,12 +548,12 @@ def th(label: str, cls: str = "") -> str:
     return f"<th{cls_attr}>{esc(label)}</th>"
 
 
-def table_html(headers: list[str], rows: list[str], table_id: str | None = None, empty_message: str = "No players found.") -> str:
+def table_html(headers: list, rows: list[str], table_id: str | None = None, empty_message: str = "No players found.") -> str:
     table_id_attr = f' id="{esc(table_id)}"' if table_id else ""
     if not rows:
         return f'<p class="empty-state">{esc(empty_message)}</p>'
-    header_html = "".join(th(label) for label in headers)
-    body_html = "\n".join(f"<tr>{row}</tr>" for row in rows)
+    header_html = "".join(th(label) if isinstance(label, str) else th(label[0], label[1]) for label in headers)
+    body_html = "\n".join(row if row.lstrip().startswith("<tr") else f"<tr>{row}</tr>" for row in rows)
     return f"""
     <div class="table-wrap">
       <table{table_id_attr} data-sortable>
@@ -645,7 +646,7 @@ def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
     dropdown_class = "team-dropdown active" if active.startswith("team-") else "team-dropdown"
     return f"""
     <header class="site-header">
-      <div class="brand"><a href="{root}index.html">League Browser</a></div>
+      <div class="brand"><a href="{root}index.html">SMP Basketball League</a></div>
       <nav class="primary-nav">
         {''.join(main_links)}
         <details class="{dropdown_class}">
@@ -739,39 +740,32 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
     return page_html(team_full, body, teams, root="../", active=f"team-{team.get('tid')}")
 
 
-def free_agent_row(player: dict[str, Any], season: int, start_season: int, root: str) -> str:
+def free_agent_row(player: dict[str, Any], season: int, root: str) -> str:
     rating = latest_rating(player, season)
-    stat = latest_regular_stat(player, start_season, season)
-    gp = stat_gp(stat)
     contract = player.get("contract") or {}
-    return "".join([
+    cells = [
         td(player_link(player, root), sort=player_name(player), cls="name-cell"),
         td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
         td(age(player, season), sort=(season - (player.get("born") or {}).get("year", season) if isinstance((player.get("born") or {}).get("year"), int) else None)),
         td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
         td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
         td(fmt_money(contract.get("amount")), sort=contract.get("amount")),
-        td(esc(contract.get("exp", "—")), sort=contract.get("exp")),
-        td(fmt_number(gp, 0), sort=gp),
-        td(fmt_number(per_game(stat, "min"), 1), sort=per_game(stat, "min")),
-        td(fmt_number(per_game(stat, "pts"), 1), sort=per_game(stat, "pts")),
-        td(fmt_number((float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0, 1), sort=((float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0)),
-        td(fmt_number(per_game(stat, "ast"), 1), sort=per_game(stat, "ast")),
-        td(fmt_number(stat.get("per"), 1), sort=stat.get("per")),
-        td(mood_html(player), sort=" ".join(player.get("moodTraits") or [])),
-    ])
+    ]
+    for key, _ in TEAM_RATING_RANK_KEYS:
+        cells.append(td(esc(rating.get(key, "—")), sort=rating.get(key)))
+    cells.append(td(mood_html(player), sort=" ".join(player.get("moodTraits") or [])))
+    return "".join(cells)
 
 
 def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int) -> str:
     sorted_players = sorted(players, key=lambda p: (-latest_rating(p, season).get("ovr", 0), -latest_rating(p, season).get("pot", 0), player_name(p)))
-    headers = ["Name", "Pos", "Age", "Ovr", "Pot", "Asking For", "Exp", "G", "MP", "PTS", "TRB", "AST", "PER", "Mood"]
-    rows = [free_agent_row(p, season, start_season, "") for p in sorted_players]
+    headers = ["Name", "Pos", "Age", "Ovr", "Pot", "Asking For"] + [label for _, label in TEAM_RATING_RANK_KEYS] + ["Mood"]
+    rows = [free_agent_row(p, season, "") for p in sorted_players]
     body = f"""
     <section class="page-hero">
       <div>
-        <p class="eyebrow">League</p>
         <h1>Free Agency</h1>
-        <p class="muted">{len(sorted_players)} available players</p>
+        <p class="muted">{len(sorted_players)} available players · detailed ratings</p>
       </div>
     </section>
     <section class="card">
@@ -786,14 +780,23 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
 
 def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int) -> str:
     teams_by_tid = {t["tid"]: t for t in teams}
-    sorted_players = sorted(players, key=lambda p: (p.get("tid", 999), p.get("rosterOrder", 9999), player_name(p)))
-    headers = ["Name", "Team", "Pos", "Age", "Ovr", "Pot", "Contract", "G", "MP", "PTS", "TRB", "AST", "PER"]
+    rostered = [p for p in players if isinstance(p.get("tid"), int) and p.get("tid") >= 0]
+    sorted_players = sorted(rostered, key=lambda p: (p.get("tid", 999), p.get("rosterOrder", 9999), player_name(p)))
+    headers = [
+        "Name", "Team", "Pos", "Age", "Ovr", "Pot", "G", "MP",
+        ("Contract", "col-basic"), ("PTS", "col-basic"), ("TRB", "col-basic"), ("AST", "col-basic"), ("PER", "col-basic"),
+        ("TS%", "col-adv"), ("USG%", "col-adv"), ("ORtg", "col-adv"), ("DRtg", "col-adv"),
+        ("OBPM", "col-adv"), ("DBPM", "col-adv"), ("BPM", "col-adv"), ("VORP", "col-adv"), ("WS", "col-adv"),
+    ]
     rows = []
     for p in sorted_players:
         rating = latest_rating(p, season)
         stat = latest_regular_stat(p, start_season, season)
         gp = stat_gp(stat)
         trb_pg = (float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0
+        obpm = safe_float(stat.get("obpm"), 0.0)
+        dbpm = safe_float(stat.get("dbpm"), 0.0)
+        ws = safe_float(stat.get("ows"), 0.0) + safe_float(stat.get("dws"), 0.0)
         rows.append("".join([
             td(player_link(p, "../"), sort=player_name(p), cls="name-cell"),
             td(team_label(p.get("tid"), teams_by_tid, "../"), sort=team_label(p.get("tid"), teams_by_tid, as_link=False)),
@@ -801,26 +804,38 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
             td(age(p, season), sort=(season - (p.get("born") or {}).get("year", season) if isinstance((p.get("born") or {}).get("year"), int) else None)),
             td(rating_delta_html(p, "ovr", rating), sort=rating.get("ovr")),
             td(rating_delta_html(p, "pot", rating), sort=rating.get("pot")),
-            td(fmt_contract(p), sort=(p.get("contract") or {}).get("amount")),
             td(fmt_number(gp, 0), sort=gp),
             td(fmt_number(per_game(stat, "min"), 1), sort=per_game(stat, "min")),
-            td(fmt_number(per_game(stat, "pts"), 1), sort=per_game(stat, "pts")),
-            td(fmt_number(trb_pg, 1), sort=trb_pg),
-            td(fmt_number(per_game(stat, "ast"), 1), sort=per_game(stat, "ast")),
-            td(fmt_number(stat.get("per"), 1), sort=stat.get("per")),
+            td(fmt_contract(p), sort=(p.get("contract") or {}).get("amount"), cls="col-basic"),
+            td(fmt_number(per_game(stat, "pts"), 1), sort=per_game(stat, "pts"), cls="col-basic"),
+            td(fmt_number(trb_pg, 1), sort=trb_pg, cls="col-basic"),
+            td(fmt_number(per_game(stat, "ast"), 1), sort=per_game(stat, "ast"), cls="col-basic"),
+            td(fmt_number(stat.get("per"), 1), sort=stat.get("per"), cls="col-basic"),
+            td(fmt_pct(ts_pct(stat)), sort=ts_pct(stat), cls="col-adv"),
+            td(fmt_number(stat.get("usgp"), 1), sort=stat.get("usgp"), cls="col-adv"),
+            td(fmt_number(stat.get("ortg"), 1), sort=stat.get("ortg"), cls="col-adv"),
+            td(fmt_number(stat.get("drtg"), 1), sort=stat.get("drtg"), cls="col-adv"),
+            td(fmt_number(obpm, 1), sort=obpm, cls="col-adv"),
+            td(fmt_number(dbpm, 1), sort=dbpm, cls="col-adv"),
+            td(fmt_number(obpm + dbpm, 1), sort=obpm + dbpm, cls="col-adv"),
+            td(fmt_number(stat.get("vorp"), 1), sort=stat.get("vorp"), cls="col-adv"),
+            td(fmt_number(ws, 1), sort=ws, cls="col-adv"),
         ]))
 
     body = f"""
     <section class="page-hero">
       <div>
-        <p class="eyebrow">League</p>
         <h1>Players</h1>
-        <p class="muted">{len(sorted_players)} non-retired roster and free-agent players</p>
+        <p class="muted">{len(sorted_players)} rostered players · free agents are in the <a href="../free-agency.html">Free Agency</a> tab</p>
       </div>
     </section>
     <section class="card">
       <div class="toolbar">
         <input class="table-search" data-table-filter="players-index" placeholder="Filter players…" aria-label="Filter players">
+        <div class="view-toggle" data-view-toggle="players-index">
+          <button type="button" class="active" data-view="basic">Per Game</button>
+          <button type="button" data-view="adv">Advanced</button>
+        </div>
       </div>
       {table_html(headers, rows, table_id="players-index", empty_message="No players found.")}
     </section>
@@ -1251,7 +1266,7 @@ def standings_table(data: dict[str, Any], teams: list[dict[str, Any]], season: i
         grouped[row["cid"]].append(row)
 
     sections = []
-    headers = ["Team", "W", "L", "%", "GB", "Home", "Road", "Div", "Conf", "PS", "PA", "MOV", "Streak", "L10", "Tiebreaker"]
+    headers = ["Team", "W", "L", "%", "GB", "Home", "Road", "PS", "PA", "MOV", "Streak", "L10"]
     for cid in sorted(grouped, key=lambda value: confs_by_cid.get(value, str(value))):
         rows = grouped[cid]
         rows.sort(key=lambda r: (-(r["pct"] if r["pct"] is not None else -1), -r["won"], r["lost"], team_full_name(r["team"])))
@@ -1268,7 +1283,7 @@ def standings_table(data: dict[str, Any], teams: list[dict[str, Any]], season: i
             else:
                 gb_text = "—"
             mov = row["mov"]
-            html_rows.append("".join([
+            cells = "".join([
                 td(f'<span class="row-rank">{rank}</span>{team_anchor(team)}{clinch_html(team_season)}', sort=rank, cls="name-cell"),
                 td(fmt_number(row["won"], 0), sort=row["won"]),
                 td(fmt_number(row["lost"], 0), sort=row["lost"]),
@@ -1276,140 +1291,41 @@ def standings_table(data: dict[str, Any], teams: list[dict[str, Any]], season: i
                 td(gb_text, sort=gb if leader else None),
                 td(fmt_record(team_season.get("wonHome"), team_season.get("lostHome")), sort=team_season.get("wonHome")),
                 td(fmt_record(team_season.get("wonAway"), team_season.get("lostAway")), sort=team_season.get("wonAway")),
-                td(fmt_record(team_season.get("wonDiv"), team_season.get("lostDiv")), sort=team_season.get("wonDiv")),
-                td(fmt_record(team_season.get("wonConf"), team_season.get("lostConf")), sort=team_season.get("wonConf")),
                 td(fmt_number(team_stat_per_game(stat, "pts"), 1), sort=team_stat_per_game(stat, "pts")),
                 td(fmt_number(team_stat_per_game(stat, "oppPts"), 1), sort=team_stat_per_game(stat, "oppPts")),
                 td(fmt_signed(mov, 1), sort=mov, cls=plus_minus_class(mov)),
                 td(streak_text(team_season.get("streak")), sort=team_season.get("streak")),
                 td(last_ten_text(team_season.get("lastTen")), sort=last_ten_text(team_season.get("lastTen"))),
-                td(esc(team_season.get("tiebreaker", "—")), sort=team_season.get("tiebreaker", "")),
-            ]))
-        title = confs_by_cid.get(cid, f"Conference {cid}" if cid is not None else "Independent")
+            ])
+            # Top 4 teams make the playoffs: draw the cutoff line above the 5th row.
+            row_cls = ' class="playoff-cut"' if rank == 5 else ""
+            html_rows.append(f"<tr{row_cls}>{cells}</tr>")
+        if len(grouped) == 1:
+            title = "Standings"
+        else:
+            conf_name = confs_by_cid.get(cid, f"Conference {cid}" if cid is not None else "Independent")
+            title = f"Standings · {conf_name}"
         sections.append(f'''
         <section class="card home-section standings-section">
-          <div class="section-title-row"><h2>{esc(title)}</h2></div>
+          <div class="section-title-row"><h2>{esc(title)}</h2><span class="muted small-copy">Top 4 make the playoffs</span></div>
           {table_html(headers, html_rows, table_id=f"standings-{esc(cid)}", empty_message="No standings data found.")}
         </section>
         ''')
     return "".join(sections)
 
 
-def weighted_roster_value(roster: list[dict[str, Any]], season: int, key: str, healthy_only: bool = False) -> float | None:
-    ordered = sorted(roster, key=lambda p: (p.get("rosterOrder", 10**9), -latest_rating(p, season).get("ovr", 0), player_name(p)))
-    if healthy_only:
-        ordered = [p for p in ordered if (p.get("injury") or {}).get("type", "Healthy") in ("Healthy", "")]
-    ordered = ordered[:10]
-    if not ordered:
-        return None
-    weights = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1]
-    total = 0.0
-    weight_sum = 0.0
-    for player, weight in zip(ordered, weights):
-        rating = latest_rating(player, season)
-        if key not in rating:
-            continue
-        total += safe_float(rating.get(key), 0.0) * weight
-        weight_sum += weight
-    return total / weight_sum if weight_sum else None
-
-
-def fallback_team_rating(roster: list[dict[str, Any]], season: int, healthy_only: bool = False) -> float | None:
-    value = weighted_roster_value(roster, season, "ovr", healthy_only=healthy_only)
-    if value is None:
-        return None
-    return value * 1.65
-
-
-def rank_desc(values: dict[int, float | None]) -> dict[int, int | None]:
-    ordered = sorted([(tid, value) for tid, value in values.items() if value is not None and math.isfinite(value)], key=lambda item: (-item[1], item[0]))
-    ranks: dict[int, int | None] = {tid: None for tid in values}
-    last_value = None
-    last_rank = 0
-    for index, (tid, value) in enumerate(ordered, 1):
-        if last_value is None or abs(value - last_value) > 1e-9:
-            last_rank = index
-            last_value = value
-        ranks[tid] = last_rank
-    return ranks
-
-
-def power_rankings_table(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> str:
-    ga = data.get("gameAttributes") or {}
-    confs_by_cid = {conf.get("cid"): conf.get("name", f"Conference {conf.get('cid')}") for conf in ga.get("confs", []) if isinstance(conf, dict)}
-    divs_by_did = {div.get("did"): div.get("name", f"Division {div.get('did')}") for div in ga.get("divs", []) if isinstance(div, dict)}
-    roster_by_tid: dict[int, list[dict[str, Any]]] = defaultdict(list)
-    for player in players:
-        if isinstance(player.get("tid"), int) and player.get("tid") >= 0:
-            roster_by_tid[player["tid"]].append(player)
-
-    metric_values: dict[str, dict[int, float | None]] = {key: {} for key, _ in TEAM_RATING_RANK_KEYS}
-    team_infos = []
-    for team in teams:
-        tid = int(team.get("tid"))
-        roster = roster_by_tid.get(tid, [])
-        team_season = latest_team_season(team, season)
-        stat = latest_team_stat(team, season)
-        current = team_season.get("ovrEnd", team_season.get("ovrStart"))
-        current = safe_float(current, float("nan"))
-        if not math.isfinite(current) or current <= 0:
-            current = fallback_team_rating(roster, season, healthy_only=False) or 0.0
-        healthy = fallback_team_rating(roster, season, healthy_only=True)
-        healthy = current if healthy is None else max(current, healthy)
-        pct = win_pct(team_season.get("won"), team_season.get("lost"))
-        mov = team_mov(stat) or 0.0
-        avg_age = team_season.get("avgAge")
-        if avg_age is None and roster:
-            ages = [safe_float(age(p, season), 0.0) for p in roster if age(p, season) != "—"]
-            avg_age = sum(ages) / len(ages) if ages else None
-        score = current + 12 * (pct or 0.0) + mov
-        for key, _ in TEAM_RATING_RANK_KEYS:
-            metric_values[key][tid] = weighted_roster_value(roster, season, key)
-        team_infos.append({
-            "team": team,
-            "tid": tid,
-            "season": team_season,
-            "stat": stat,
-            "current": current,
-            "healthy": healthy,
-            "pct": pct,
-            "mov": mov,
-            "avgAge": avg_age,
-            "score": score,
-        })
-
-    ranks_by_key = {key: rank_desc(values) for key, values in metric_values.items()}
-    team_infos.sort(key=lambda info: (-info["score"], team_full_name(info["team"])))
-
-    headers = ["#", "Team", "Conference", "Division", "Current", "Healthy", "W", "L", "L10", "MOV", "Age"] + [label for _, label in TEAM_RATING_RANK_KEYS]
-    rows = []
-    for rank, info in enumerate(team_infos, 1):
-        team = info["team"]
-        team_season = info["season"]
-        cells = [
-            td(rank, sort=rank),
-            td(team_anchor(team), sort=team_full_name(team), cls="name-cell"),
-            td(esc(team_conference_name(team_season or team, confs_by_cid)), sort=team_conference_name(team_season or team, confs_by_cid)),
-            td(esc(team_division_name(team_season or team, divs_by_did)), sort=team_division_name(team_season or team, divs_by_did)),
-            td(fmt_number(info["current"], 0), sort=info["current"]),
-            td(fmt_number(info["healthy"], 0), sort=info["healthy"]),
-            td(fmt_number(team_season.get("won"), 0), sort=team_season.get("won")),
-            td(fmt_number(team_season.get("lost"), 0), sort=team_season.get("lost")),
-            td(last_ten_text(team_season.get("lastTen")), sort=last_ten_text(team_season.get("lastTen"))),
-            td(fmt_signed(info["mov"], 1), sort=info["mov"], cls=plus_minus_class(info["mov"])),
-            td(fmt_number(info["avgAge"], 1), sort=info["avgAge"]),
-        ]
-        for key, _ in TEAM_RATING_RANK_KEYS:
-            rank_value = ranks_by_key[key].get(info["tid"])
-            cells.append(td(fmt_number(rank_value, 0), sort=rank_value))
-        rows.append("".join(cells))
-
-    return f'''
-    <section class="card home-section">
-      <div class="section-title-row"><h2>Power Rankings</h2><span class="muted">Team rating plus rating-category ranks</span></div>
-      {table_html(headers, rows, table_id="power-rankings", empty_message="No power rankings available.")}
-    </section>
-    '''
+def heat_style(value: Any, lo: float, hi: float, direction: int) -> str:
+    """Background tint from red (worst) to green (best) across a column's range."""
+    if direction == 0 or value is None:
+        return ""
+    value = safe_float(value, float("nan"))
+    if not math.isfinite(value) or hi - lo <= 1e-12:
+        return ""
+    frac = max(0.0, min(1.0, (value - lo) / (hi - lo)))
+    if direction < 0:
+        frac = 1.0 - frac
+    hue = 4 + frac * 126
+    return f"background-color: hsla({hue:.0f}, 55%, 41%, .45)"
 
 
 def team_stats_table(teams: list[dict[str, Any]], season: int) -> str:
@@ -1421,25 +1337,78 @@ def team_stats_table(teams: list[dict[str, Any]], season: int) -> str:
         infos.append({"team": team, "season": team_season, "stat": stat, "pct": pct, "mov": team_mov(stat)})
     infos.sort(key=lambda info: (-(info["pct"] if info["pct"] is not None else -1), -safe_float((info["season"] or {}).get("won")), team_full_name(info["team"])))
 
-    headers = ["#", "Team", "G", "W", "L", "%", "Age", "FG", "FGA", "FG%", "3P", "3PA", "3P%", "2P", "2PA", "2P%", "FT", "FTA", "FT%", "ORB", "DRB", "TRB", "AST", "TOV", "STL", "BLK", "PF", "PTS", "MOV"]
+    def stat_pg(key):
+        return lambda info: team_stat_per_game(info["stat"], key)
+
+    def shot_pct(made_key, att_key):
+        return lambda info: made_pct(info["stat"].get(made_key), info["stat"].get(att_key))
+
+    def two_made_pg(info):
+        gp = safe_float(info["stat"].get("gp"), 0.0)
+        return (safe_float(info["stat"].get("fg"), 0.0) - safe_float(info["stat"].get("tp"), 0.0)) / gp if gp else None
+
+    def two_att_pg(info):
+        gp = safe_float(info["stat"].get("gp"), 0.0)
+        return (safe_float(info["stat"].get("fga"), 0.0) - safe_float(info["stat"].get("tpa"), 0.0)) / gp if gp else None
+
+    def two_pct(info):
+        s = info["stat"]
+        return made_pct(safe_float(s.get("fg"), 0.0) - safe_float(s.get("tp"), 0.0), safe_float(s.get("fga"), 0.0) - safe_float(s.get("tpa"), 0.0))
+
+    def trb_pg(info):
+        gp = safe_float(info["stat"].get("gp"), 0.0)
+        return (safe_float(info["stat"].get("orb"), 0.0) + safe_float(info["stat"].get("drb"), 0.0)) / gp if gp else None
+
+    # (label, value getter, format, direction) — direction 1: high is good, -1: low is good, 0: no tint.
+    columns = [
+        ("FG", stat_pg("fg"), "num", 1),
+        ("FGA", stat_pg("fga"), "num", 0),
+        ("FG%", shot_pct("fg", "fga"), "pct", 1),
+        ("3P", stat_pg("tp"), "num", 1),
+        ("3PA", stat_pg("tpa"), "num", 0),
+        ("3P%", shot_pct("tp", "tpa"), "pct", 1),
+        ("2P", two_made_pg, "num", 1),
+        ("2PA", two_att_pg, "num", 0),
+        ("2P%", two_pct, "pct", 1),
+        ("FT", stat_pg("ft"), "num", 1),
+        ("FTA", stat_pg("fta"), "num", 0),
+        ("FT%", shot_pct("ft", "fta"), "pct", 1),
+        ("ORB", stat_pg("orb"), "num", 1),
+        ("DRB", stat_pg("drb"), "num", 1),
+        ("TRB", trb_pg, "num", 1),
+        ("AST", stat_pg("ast"), "num", 1),
+        ("TOV", stat_pg("tov"), "num", -1),
+        ("STL", stat_pg("stl"), "num", 1),
+        ("BLK", stat_pg("blk"), "num", 1),
+        ("PF", stat_pg("pf"), "num", -1),
+        ("PTS", stat_pg("pts"), "num", 1),
+        ("PA", stat_pg("oppPts"), "num", -1),
+        ("MOV", lambda info: info["mov"], "signed", 1),
+    ]
+
+    values_by_col: list[list[float]] = []
+    for _, getter, _, _ in columns:
+        col_values = []
+        for info in infos:
+            value = getter(info)
+            if value is not None and math.isfinite(safe_float(value, float("nan"))):
+                col_values.append(float(value))
+        values_by_col.append(col_values)
+
+    def fmt_cell(value, fmt):
+        if fmt == "pct":
+            return fmt_pct(value)
+        if fmt == "signed":
+            return fmt_signed(value, 1)
+        return fmt_number(value, 1)
+
+    headers = ["#", "Team", "G", "W", "L", "%"] + [label for label, _, _, _ in columns]
     rows = []
-    stat_totals: dict[str, float] = defaultdict(float)
-    total_gp = 0.0
-    ages = []
     for rank, info in enumerate(infos, 1):
         team = info["team"]
         team_season = info["season"]
         stat = info["stat"]
         gp = safe_float(stat.get("gp"), 0.0)
-        total_gp += gp
-        if stat:
-            for key in ["fg", "fga", "tp", "tpa", "ft", "fta", "orb", "drb", "ast", "tov", "stl", "blk", "pf", "pts", "oppPts"]:
-                stat_totals[key] += safe_float(stat.get(key), 0.0)
-        if team_season.get("avgAge") is not None:
-            ages.append(safe_float(team_season.get("avgAge"), 0.0))
-        two = safe_float(stat.get("fg"), 0.0) - safe_float(stat.get("tp"), 0.0)
-        two_a = safe_float(stat.get("fga"), 0.0) - safe_float(stat.get("tpa"), 0.0)
-        trb_pg = (safe_float(stat.get("orb"), 0.0) + safe_float(stat.get("drb"), 0.0)) / gp if gp else None
         cells = [
             td(rank, sort=rank),
             td(team_anchor(team), sort=team_full_name(team), cls="name-cell"),
@@ -1447,70 +1416,28 @@ def team_stats_table(teams: list[dict[str, Any]], season: int) -> str:
             td(fmt_number(team_season.get("won"), 0), sort=team_season.get("won")),
             td(fmt_number(team_season.get("lost"), 0), sort=team_season.get("lost")),
             td(fmt_win_pct(info["pct"]), sort=info["pct"]),
-            td(fmt_number(team_season.get("avgAge"), 1), sort=team_season.get("avgAge")),
-            td(fmt_number(team_stat_per_game(stat, "fg"), 1), sort=team_stat_per_game(stat, "fg")),
-            td(fmt_number(team_stat_per_game(stat, "fga"), 1), sort=team_stat_per_game(stat, "fga")),
-            td(fmt_pct(made_pct(stat.get("fg"), stat.get("fga"))), sort=made_pct(stat.get("fg"), stat.get("fga"))),
-            td(fmt_number(team_stat_per_game(stat, "tp"), 1), sort=team_stat_per_game(stat, "tp")),
-            td(fmt_number(team_stat_per_game(stat, "tpa"), 1), sort=team_stat_per_game(stat, "tpa")),
-            td(fmt_pct(made_pct(stat.get("tp"), stat.get("tpa"))), sort=made_pct(stat.get("tp"), stat.get("tpa"))),
-            td(fmt_number(two / gp if gp else None, 1), sort=(two / gp if gp else None)),
-            td(fmt_number(two_a / gp if gp else None, 1), sort=(two_a / gp if gp else None)),
-            td(fmt_pct(made_pct(two, two_a)), sort=made_pct(two, two_a)),
-            td(fmt_number(team_stat_per_game(stat, "ft"), 1), sort=team_stat_per_game(stat, "ft")),
-            td(fmt_number(team_stat_per_game(stat, "fta"), 1), sort=team_stat_per_game(stat, "fta")),
-            td(fmt_pct(made_pct(stat.get("ft"), stat.get("fta"))), sort=made_pct(stat.get("ft"), stat.get("fta"))),
-            td(fmt_number(team_stat_per_game(stat, "orb"), 1), sort=team_stat_per_game(stat, "orb")),
-            td(fmt_number(team_stat_per_game(stat, "drb"), 1), sort=team_stat_per_game(stat, "drb")),
-            td(fmt_number(trb_pg, 1), sort=trb_pg),
-            td(fmt_number(team_stat_per_game(stat, "ast"), 1), sort=team_stat_per_game(stat, "ast")),
-            td(fmt_number(team_stat_per_game(stat, "tov"), 1), sort=team_stat_per_game(stat, "tov")),
-            td(fmt_number(team_stat_per_game(stat, "stl"), 1), sort=team_stat_per_game(stat, "stl")),
-            td(fmt_number(team_stat_per_game(stat, "blk"), 1), sort=team_stat_per_game(stat, "blk")),
-            td(fmt_number(team_stat_per_game(stat, "pf"), 1), sort=team_stat_per_game(stat, "pf")),
-            td(fmt_number(team_stat_per_game(stat, "pts"), 1), sort=team_stat_per_game(stat, "pts")),
-            td(fmt_signed(info["mov"], 1), sort=info["mov"], cls=plus_minus_class(info["mov"])),
         ]
+        for (label, getter, fmt, direction), col_values in zip(columns, values_by_col):
+            value = getter(info)
+            lo = min(col_values) if col_values else 0.0
+            hi = max(col_values) if col_values else 0.0
+            cells.append(td(fmt_cell(value, fmt), sort=value, style=heat_style(value, lo, hi, direction)))
         rows.append("".join(cells))
 
-    if total_gp > 0:
-        two = stat_totals["fg"] - stat_totals["tp"]
-        two_a = stat_totals["fga"] - stat_totals["tpa"]
-        trb_pg = (stat_totals["orb"] + stat_totals["drb"]) / total_gp
-        avg_mov = (stat_totals["pts"] - stat_totals["oppPts"]) / total_gp
-        rows.append("".join([
-            td("Avg", sort=999),
+    if any(values for values in values_by_col):
+        cells = [
+            td("—", sort=999),
             td("League average", sort="zzzz", cls="name-cell"),
-            td(fmt_number(total_gp / max(1, len([i for i in infos if i["stat"]])), 0), sort=total_gp),
-            td("—"), td("—"), td("—"),
-            td(fmt_number(sum(ages) / len(ages) if ages else None, 1), sort=(sum(ages) / len(ages) if ages else None)),
-            td(fmt_number(stat_totals["fg"] / total_gp, 1), sort=stat_totals["fg"] / total_gp),
-            td(fmt_number(stat_totals["fga"] / total_gp, 1), sort=stat_totals["fga"] / total_gp),
-            td(fmt_pct(made_pct(stat_totals["fg"], stat_totals["fga"])), sort=made_pct(stat_totals["fg"], stat_totals["fga"])),
-            td(fmt_number(stat_totals["tp"] / total_gp, 1), sort=stat_totals["tp"] / total_gp),
-            td(fmt_number(stat_totals["tpa"] / total_gp, 1), sort=stat_totals["tpa"] / total_gp),
-            td(fmt_pct(made_pct(stat_totals["tp"], stat_totals["tpa"])), sort=made_pct(stat_totals["tp"], stat_totals["tpa"])),
-            td(fmt_number(two / total_gp, 1), sort=two / total_gp),
-            td(fmt_number(two_a / total_gp, 1), sort=two_a / total_gp),
-            td(fmt_pct(made_pct(two, two_a)), sort=made_pct(two, two_a)),
-            td(fmt_number(stat_totals["ft"] / total_gp, 1), sort=stat_totals["ft"] / total_gp),
-            td(fmt_number(stat_totals["fta"] / total_gp, 1), sort=stat_totals["fta"] / total_gp),
-            td(fmt_pct(made_pct(stat_totals["ft"], stat_totals["fta"])), sort=made_pct(stat_totals["ft"], stat_totals["fta"])),
-            td(fmt_number(stat_totals["orb"] / total_gp, 1), sort=stat_totals["orb"] / total_gp),
-            td(fmt_number(stat_totals["drb"] / total_gp, 1), sort=stat_totals["drb"] / total_gp),
-            td(fmt_number(trb_pg, 1), sort=trb_pg),
-            td(fmt_number(stat_totals["ast"] / total_gp, 1), sort=stat_totals["ast"] / total_gp),
-            td(fmt_number(stat_totals["tov"] / total_gp, 1), sort=stat_totals["tov"] / total_gp),
-            td(fmt_number(stat_totals["stl"] / total_gp, 1), sort=stat_totals["stl"] / total_gp),
-            td(fmt_number(stat_totals["blk"] / total_gp, 1), sort=stat_totals["blk"] / total_gp),
-            td(fmt_number(stat_totals["pf"] / total_gp, 1), sort=stat_totals["pf"] / total_gp),
-            td(fmt_number(stat_totals["pts"] / total_gp, 1), sort=stat_totals["pts"] / total_gp),
-            td(fmt_signed(avg_mov, 1), sort=avg_mov, cls=plus_minus_class(avg_mov)),
-        ]))
+            td("—"), td("—"), td("—"), td("—"),
+        ]
+        for (label, getter, fmt, direction), col_values in zip(columns, values_by_col):
+            avg = sum(col_values) / len(col_values) if col_values else None
+            cells.append(td(fmt_cell(avg, fmt), sort=avg))
+        rows.append(f'<tr class="avg-row">{"".join(cells)}</tr>')
 
     return f'''
     <section class="card home-section">
-      <div class="section-title-row"><h2>Team Stats</h2><span class="muted">Regular season per-game team totals</span></div>
+      <div class="section-title-row"><h2>Team Stats</h2><span class="muted small-copy">Per game · green is good, red is bad</span></div>
       {table_html(headers, rows, table_id="team-stats", empty_message="No team stats available.")}
     </section>
     '''
@@ -2096,58 +2023,63 @@ def compact_score_label(item: dict[str, Any], teams_by_tid: dict[int, dict[str, 
 
 def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], schedule_season: int | None = None, schedule_days: int | None = None) -> str:
     teams_by_tid = {int(team.get("tid")): team for team in teams if team.get("tid") is not None}
-    items, label = schedule_items_for_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
-    options = ['<option value="all">All teams</option>']
-    for team in sorted(teams, key=team_sort_key):
-        options.append(f'<option value="{esc(team.get("tid"))}">{esc(team_full_name(team))}</option>')
-
-    rows: list[str] = []
+    # Merge completed games into the schedule so the grid covers the whole season with results.
+    items, label = score_items_for_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
+    label = label.replace("scores", "schedule")
+    grid_teams = sorted(
+        [team for team in teams if team.get("tid") is not None and not team.get("disabled")],
+        key=lambda team: team_abbrev(team),
+    )
+    days = sorted({safe_int(item.get("day"), 0) for item in items})
+    by_day_tid: dict[tuple[int, int], list[dict[str, Any]]] = defaultdict(list)
     for item in items:
-        for tid in [item.get("home_tid"), item.get("away_tid")]:
-            if tid not in teams_by_tid:
-                continue
-            opponent_tid = item.get("away_tid") if tid == item.get("home_tid") else item.get("home_tid")
-            site = "Home" if tid == item.get("home_tid") else "Away"
-            row = "".join([
-                td(fmt_number(item.get("day"), 0), sort=item.get("day")),
-                td(team_label(tid, teams_by_tid), sort=team_full_for_tid(tid, teams_by_tid), cls="name-cell"),
-                td(schedule_matchup_label(item, int(tid), teams_by_tid), sort=team_abbrev_for_tid(opponent_tid, teams_by_tid)),
-                td(team_label(opponent_tid, teams_by_tid), sort=team_full_for_tid(opponent_tid, teams_by_tid)),
-                td(site, sort=site),
-                td(team_schedule_result(item, int(tid)), sort=item_team_points(item, tid) if is_completed_game_item(item) else ""),
-                td(f'<a href="{esc(game_url(item))}">Game page</a>', sort=1),
-            ])
-            rows.append(f'<tr class="click-row" data-schedule-team="{esc(tid)}" data-href="{esc(game_url(item))}">{row}</tr>')
+        for tid in (item.get("home_tid"), item.get("away_tid")):
+            if tid is not None:
+                by_day_tid[(safe_int(item.get("day")), safe_int(tid))].append(item)
 
-    header_html = "".join(th(label) for label in ["Day", "Team", "Game", "Opponent", "Site", "Result", "Box"])
-    body_html = "\n".join(rows)
-    table = f"""
-    <div class="table-wrap">
-      <table id="schedule-table" data-sortable>
-        <thead><tr>{header_html}</tr></thead>
-        <tbody>{body_html}</tbody>
-      </table>
-    </div>
-    """ if rows else '<p class="empty-state">No schedule data was found in this export.</p>'
+    header_cells = [th("Day")] + [th(team_abbrev(team)) for team in grid_teams]
+    rows: list[str] = []
+    for day in days:
+        cells = [td(fmt_number(day, 0), cls="day-label")]
+        for team in grid_teams:
+            tid = int(team.get("tid"))
+            cell_items = by_day_tid.get((day, tid), [])
+            if not cell_items:
+                cells.append(td("", cls="off-day"))
+                continue
+            parts = []
+            for item in cell_items:
+                matchup = schedule_matchup_label(item, tid, teams_by_tid)
+                cls = "sched-cell"
+                result_html = ""
+                if is_completed_game_item(item):
+                    result = team_schedule_result(item, tid)
+                    cls += " sched-win" if result.startswith("W") else " sched-loss"
+                    result_html = f'<span class="sched-result">{esc(result)}</span>'
+                parts.append(f'<a class="{cls}" href="{esc(game_url(item))}">{matchup}{result_html}</a>')
+            cells.append(td("".join(parts)))
+        rows.append("<tr>" + "".join(cells) + "</tr>")
+
+    if rows:
+        table = f"""
+        <div class="table-wrap schedule-grid-wrap">
+          <table id="schedule-grid" class="schedule-grid">
+            <thead><tr>{''.join(header_cells)}</tr></thead>
+            <tbody>{''.join(rows)}</tbody>
+          </table>
+        </div>
+        """
+    else:
+        table = '<p class="empty-state">No schedule data was found in this export.</p>'
 
     body = f"""
     <section class="page-hero">
       <div>
-        <p class="eyebrow">League schedule</p>
         <h1>Schedule</h1>
-        <p class="muted">{esc(label)} · {len(items)} games</p>
+        <p class="muted">{esc(label)} · <strong>vs.</strong> home · <strong>@</strong> road · click a game to open it</p>
       </div>
     </section>
     <section class="card">
-      <div class="toolbar">
-        <div>
-          <h2>Team schedule</h2>
-          <p class="muted small-copy">Pick a team to see home games as <strong>vs.</strong> and road games as <strong>@</strong>. Every row opens that game page.</p>
-        </div>
-        <label class="select-label">Team
-          <select data-schedule-filter="schedule-table">{''.join(options)}</select>
-        </label>
-      </div>
       {table}
     </section>
     """
@@ -2163,56 +2095,54 @@ def render_scores_page(data: dict[str, Any], teams: list[dict[str, Any]], schedu
         days = list(range(min_day, max_day + 1))
     else:
         days = []
-    options = "".join(f'<option value="{day}">Day {day}</option>' for day in days)
+    completed_days = sorted({safe_int(item.get("day"), 1) for item in items if is_completed_game_item(item)})
+    default_day = completed_days[-1] if completed_days else (days[0] if days else None)
+    options = "".join(
+        f'<option value="{day}"{" selected" if day == default_day else ""}>Day {day}</option>' for day in days
+    )
     panels: list[str] = []
-    for i, day in enumerate(days):
+    for day in days:
         day_items = [item for item in items if safe_int(item.get("day")) == day]
-        rows = []
+        lines = []
         for item in day_items:
             completed = is_completed_game_item(item)
-            winner = game_winner_tid(item)
-            status = "Final" if completed else "Scheduled"
-            winner_text = team_label(winner, teams_by_tid) if winner is not None else "—"
-            row = "".join([
-                td(full_matchup_label(item, teams_by_tid), sort=team_full_for_tid(item.get("away_tid"), teams_by_tid), cls="name-cell"),
-                td(team_label(item.get("away_tid"), teams_by_tid), sort=team_full_for_tid(item.get("away_tid"), teams_by_tid)),
-                td(team_label(item.get("home_tid"), teams_by_tid), sort=team_full_for_tid(item.get("home_tid"), teams_by_tid)),
-                td(compact_score_label(item, teams_by_tid), sort=item.get("home_pts") if completed else ""),
-                td(status, sort=1 if completed else 0),
-                td(winner_text, sort=team_full_for_tid(winner, teams_by_tid) if winner is not None else ""),
-                td(f'<a href="{esc(game_url(item))}">Box score</a>' if completed else f'<a href="{esc(game_url(item))}">Preview</a>', sort=1 if completed else 0),
-            ])
-            rows.append(f'<tr class="click-row" data-href="{esc(game_url(item))}">{row}</tr>')
-        if rows:
-            header_html = "".join(th(label) for label in ["Game", "Away", "Home", "Score", "Status", "Winner", "Box"])
-            table = f"""
-            <div class="table-wrap">
-              <table id="scores-day-{day}" data-sortable>
-                <thead><tr>{header_html}</tr></thead>
-                <tbody>{''.join(rows)}</tbody>
-              </table>
-            </div>
-            """
-        else:
-            table = '<p class="empty-state">No games on this day.</p>'
-        hidden = "" if i == 0 else " hidden"
-        panels.append(f'<section class="day-panel" data-day-panel="{day}"{hidden}><div class="section-title-row"><h2>Day {day}</h2><span class="count-pill">{len(day_items)}</span></div>{table}</section>')
+            away = team_abbrev_for_tid(item.get("away_tid"), teams_by_tid)
+            home = team_abbrev_for_tid(item.get("home_tid"), teams_by_tid)
+            if completed:
+                winner = game_winner_tid(item)
+                away_html = f"{esc(away)} {fmt_number(item.get('away_pts'), 0)}"
+                home_html = f"{esc(home)} {fmt_number(item.get('home_pts'), 0)}"
+                if winner == item.get("away_tid"):
+                    away_html = f"<strong>{away_html}</strong>"
+                elif winner == item.get("home_tid"):
+                    home_html = f"<strong>{home_html}</strong>"
+                status = '<span class="score-status final">Final</span>'
+            else:
+                away_html = esc(away)
+                home_html = esc(home)
+                status = '<span class="score-status">Scheduled</span>'
+            lines.append(
+                f'<a class="score-line" href="{esc(game_url(item))}">'
+                f'<span class="score-match">{away_html} <em>@</em> {home_html}</span>{status}</a>'
+            )
+        games_list = f'<div class="score-list">{"".join(lines)}</div>' if lines else '<p class="empty-state">No games on this day.</p>'
+        hidden = "" if day == default_day else " hidden"
+        panels.append(
+            f'<section class="day-panel" data-day-panel="{day}"{hidden}>'
+            f'<div class="section-title-row"><h2>Day {day}</h2><span class="count-pill">{len(day_items)} games</span></div>'
+            f'{games_list}</section>'
+        )
 
     panels_html = "\n".join(panels) if panels else '<p class="empty-state">No game or score data was found in this export.</p>'
     body = f"""
     <section class="page-hero">
       <div>
-        <p class="eyebrow">League scores</p>
         <h1>Scores</h1>
-        <p class="muted">{esc(label)} · {len(items)} games</p>
+        <p class="muted">{esc(label)} · click a game for the box score</p>
       </div>
     </section>
     <section class="card">
       <div class="toolbar">
-        <div>
-          <h2>Daily scoreboard</h2>
-          <p class="muted small-copy">Select a day, then click any game row to open its box score or scheduled-game preview.</p>
-        </div>
         <label class="select-label">Day
           <select data-day-select>{options}</select>
         </label>
@@ -2519,19 +2449,14 @@ def render_game_page(item: dict[str, Any], all_items: list[dict[str, Any]], team
 
 def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, start_season: int) -> str:
     chart_teams = active_teams_for_season(teams, season)
-    chart_note = f"{len(chart_teams)} teams in current-season charts"
-    if len(chart_teams) != len(teams):
-        chart_note += f" · {len(teams)} team pages"
     body = f'''
     <section class="page-hero home-hero">
       <div>
-        <p class="eyebrow">League Home</p>
-        <h1>{esc((data.get('meta') or {}).get('name') or 'Basketball League')}</h1>
-        <p class="muted">Season {season} · {chart_note} · {len(players)} active players</p>
+        <h1>SMP Basketball League</h1>
+        <p class="muted">Season {season}</p>
       </div>
     </section>
     {standings_table(data, chart_teams, season)}
-    {power_rankings_table(data, chart_teams, players, season)}
     {team_stats_table(chart_teams, season)}
     {awards_voting_table(data, players, teams, season)}
     '''
@@ -2546,119 +2471,156 @@ def write_text(path: Path, content: str) -> None:
 def stylesheet() -> str:
     return r"""
 :root {
-  --bg: #11161b;
-  --panel: #1c2229;
-  --panel-2: #242b33;
-  --panel-3: #303841;
-  --line: #3b4652;
-  --text: #f2f5f8;
-  --muted: #aeb8c2;
-  --accent: #ff8a34;
-  --accent-2: #8cb6ff;
-  --good: #2bd86d;
-  --bad: #ff6174;
-  --shadow: 0 20px 55px rgba(0,0,0,.22);
+  --bg: #101317;
+  --panel: #171b21;
+  --panel-2: #1f242c;
+  --panel-3: #272d36;
+  --line: #2b313a;
+  --text: #e8ecf1;
+  --muted: #939ca7;
+  --accent: #5b9dff;
+  --good: #3fbf72;
+  --bad: #e2566b;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  background: radial-gradient(circle at top left, rgba(255,138,52,.08), transparent 30rem), var(--bg);
+  background: var(--bg);
   color: var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height: 1.45;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
 }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+/* ---------- header / nav ---------- */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 20;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: .65rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem 1rem;
   align-items: center;
-  padding: .85rem clamp(1rem, 3vw, 2rem);
-  background: rgba(17, 22, 27, .94);
+  justify-content: space-between;
+  padding: .5rem clamp(.75rem, 2.5vw, 1.5rem);
+  background: rgba(16, 19, 23, .96);
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
 }
 .brand a {
   color: var(--text);
-  font-weight: 800;
+  font-weight: 700;
+  font-size: .95rem;
   letter-spacing: .01em;
   text-decoration: none;
 }
-.primary-nav, .team-nav {
+.primary-nav {
   display: flex;
-  gap: .35rem;
+  flex-wrap: wrap;
+  gap: .2rem;
   align-items: center;
-  overflow-x: auto;
-  scrollbar-width: thin;
 }
-.primary-nav { justify-content: flex-end; }
-.team-nav { grid-column: 1 / -1; }
-.primary-nav a, .team-nav a {
+.primary-nav a {
   white-space: nowrap;
-  padding: .42rem .65rem;
+  padding: .3rem .6rem;
   border: 1px solid transparent;
-  border-radius: .55rem;
+  border-radius: .4rem;
   color: var(--muted);
-  font-size: .9rem;
-  font-weight: 650;
+  font-size: .85rem;
+  font-weight: 500;
   text-decoration: none;
 }
-.primary-nav a:hover, .team-nav a:hover, .primary-nav a.active, .team-nav a.active {
+.primary-nav a:hover, .primary-nav a.active {
   color: var(--text);
   background: var(--panel-2);
   border-color: var(--line);
 }
+.team-dropdown { position: relative; flex: 0 0 auto; }
+.team-dropdown summary {
+  list-style: none;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: .3rem .6rem;
+  border: 1px solid transparent;
+  border-radius: .4rem;
+  color: var(--muted);
+  font-size: .85rem;
+  font-weight: 500;
+}
+.team-dropdown summary::-webkit-details-marker { display: none; }
+.team-dropdown summary::after { content: " ▾"; color: var(--muted); font-size: .75rem; }
+.team-dropdown[open] summary, .team-dropdown.active summary, .team-dropdown summary:hover {
+  color: var(--text);
+  background: var(--panel-2);
+  border-color: var(--line);
+}
+.team-menu {
+  position: absolute;
+  top: calc(100% + .35rem);
+  right: 0;
+  z-index: 40;
+  display: grid;
+  gap: .1rem;
+  width: max-content;
+  min-width: 13rem;
+  max-height: min(70vh, 26rem);
+  overflow-y: auto;
+  padding: .35rem;
+  border: 1px solid var(--line);
+  border-radius: .5rem;
+  background: var(--panel);
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+}
+.team-menu a {
+  display: block;
+  white-space: nowrap;
+  padding: .35rem .55rem;
+  border-radius: .35rem;
+  color: var(--muted);
+  font-size: .85rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+.team-menu a:hover, .team-menu a.active { color: var(--text); background: var(--panel-2); }
+
+/* ---------- layout ---------- */
 .page-shell {
-  width: min(100%, 1760px);
+  width: min(100%, 1560px);
   margin: 0 auto;
-  padding: 1.2rem clamp(.75rem, 2vw, 2rem) 3rem;
+  padding: 1rem clamp(.75rem, 2vw, 1.5rem) 2.5rem;
 }
 .page-hero, .card {
   border: 1px solid var(--line);
-  border-radius: 1rem;
-  background: linear-gradient(180deg, rgba(255,255,255,.035), transparent), var(--panel);
-  box-shadow: var(--shadow);
+  border-radius: .6rem;
+  background: var(--panel);
 }
-.page-hero {
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 1rem;
-  padding: clamp(1rem, 3vw, 1.6rem);
-}
-.page-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: .45rem;
-  background: linear-gradient(180deg, var(--team-primary, var(--accent)), var(--team-secondary, var(--accent-2)));
-}
+.page-hero { margin-bottom: .75rem; padding: .8rem 1rem; }
 .eyebrow {
-  margin: 0 0 .25rem;
-  color: var(--accent-2);
-  font-size: .78rem;
-  font-weight: 800;
-  letter-spacing: .1em;
+  margin: 0 0 .15rem;
+  color: var(--muted);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .09em;
   text-transform: uppercase;
 }
-h1, h2 { margin: 0; line-height: 1.1; }
-h1 { font-size: clamp(1.75rem, 3vw, 2.85rem); }
-h2 { font-size: clamp(1.05rem, 1.6vw, 1.45rem); }
+h1, h2 { margin: 0; line-height: 1.2; }
+h1 { font-size: 1.3rem; font-weight: 700; }
+h2 { font-size: .8rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 .muted { color: var(--muted); }
-.number { display: inline-block; min-width: 1.4rem; text-align: right; margin-right: .2rem; }
-.card { margin-bottom: 1rem; padding: .9rem; }
-.compact-card { padding: .65rem; }
+.small-copy { font-size: .78rem; }
+.number { display: inline-block; min-width: 1.3rem; text-align: right; margin-right: .15rem; color: var(--muted); }
+.card { margin-bottom: .75rem; padding: .75rem; }
+.compact-card { padding: .55rem; }
 .section-title-row, .toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: .65rem;
+  gap: .75rem;
+  margin-bottom: .5rem;
 }
 .count-pill, .mini-skill, .mood-chip, .award-chip {
   display: inline-flex;
@@ -2667,15 +2629,17 @@ h2 { font-size: clamp(1.05rem, 1.6vw, 1.45rem); }
   border: 1px solid var(--line);
   background: var(--panel-3);
   color: var(--text);
-  font-weight: 750;
+  font-weight: 500;
 }
-.count-pill { padding: .15rem .55rem; color: var(--muted); }
-.mini-skill { padding: .05rem .28rem; margin-left: .18rem; font-size: .72rem; color: #dce5ee; }
-.mood-chip { padding: .05rem .36rem; margin-right: .15rem; color: var(--good); }
-.award-chip { padding: .22rem .55rem; margin: .15rem .2rem .15rem 0; background: #c3cbd4; color: #1d252d; border-color: transparent; }
-.table-wrap { overflow-x: auto; border-radius: .75rem; border: 1px solid var(--line); }
-table { width: 100%; border-collapse: collapse; min-width: 980px; background: #181e24; }
-th, td { padding: .55rem .62rem; border-bottom: 1px solid rgba(255,255,255,.045); text-align: right; white-space: nowrap; }
+.count-pill { padding: .08rem .5rem; color: var(--muted); font-size: .75rem; }
+.mini-skill { padding: .02rem .26rem; margin-left: .15rem; font-size: .66rem; color: var(--muted); }
+.mood-chip { padding: .02rem .32rem; margin-right: .12rem; color: var(--good); font-size: .75rem; }
+.award-chip { padding: .12rem .5rem; margin: .12rem .18rem .12rem 0; font-size: .75rem; }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x: auto; border-radius: .5rem; border: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; background: var(--panel); font-size: .8rem; }
+th, td { padding: .32rem .55rem; border-bottom: 1px solid rgba(255,255,255,.05); text-align: right; white-space: nowrap; }
 th:first-child, td:first-child { text-align: left; position: sticky; left: 0; z-index: 2; }
 td:first-child { background: inherit; }
 th:first-child { z-index: 4; }
@@ -2683,305 +2647,300 @@ thead th {
   position: sticky;
   top: 0;
   z-index: 3;
-  background: #20272e;
-  color: #f6f7f9;
-  font-size: .82rem;
+  background: var(--panel-2);
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
   cursor: pointer;
   user-select: none;
   border-bottom: 1px solid var(--line);
 }
-thead th::after { content: "↕"; color: rgba(255,255,255,.35); margin-left: .35rem; font-size: .78rem; }
-thead th.sort-asc::after { content: "↑"; color: var(--accent-2); }
-thead th.sort-desc::after { content: "↓"; color: var(--accent-2); }
-tbody tr:nth-child(odd) { background: #252b31; }
-tbody tr:nth-child(even) { background: #1c2228; }
-tbody tr:hover { background: #303842; }
-.name-cell { min-width: 16rem; }
-.player-link { color: var(--accent); font-weight: 800; }
-.delta-up { color: var(--good); font-weight: 800; }
-.delta-down { color: var(--bad); font-weight: 800; }
+table[data-sortable] thead th:hover { color: var(--text); }
+thead th.sort-asc::after { content: " ↑"; color: var(--accent); }
+thead th.sort-desc::after { content: " ↓"; color: var(--accent); }
+tbody tr:nth-child(odd) { background: #1a1f26; }
+tbody tr:nth-child(even) { background: var(--panel); }
+tbody tr:hover { background: var(--panel-3); }
+tbody tr:last-child td { border-bottom: 0; }
+.name-cell { min-width: 11rem; }
+.player-link { color: var(--text); font-weight: 600; }
+.player-link:hover { color: var(--accent); }
+.delta-up { color: var(--good); font-weight: 600; }
+.delta-down { color: var(--bad); font-weight: 600; }
 .healthy { color: var(--good); }
 .injured { color: var(--bad); }
+.row-rank { display: inline-block; min-width: 1.5rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.clinch { color: var(--muted); font-weight: 700; margin-left: .2rem; }
+tr.playoff-cut > td { border-top: 2px solid var(--accent); }
+tr.avg-row > td { border-top: 1px solid var(--line); color: var(--muted); font-style: italic; }
+
+/* ---------- controls ---------- */
 .table-search {
-  width: min(100%, 24rem);
-  padding: .72rem .85rem;
-  border-radius: .65rem;
+  width: min(100%, 20rem);
+  padding: .45rem .65rem;
+  border-radius: .45rem;
   border: 1px solid var(--line);
-  background: #121820;
+  background: var(--bg);
   color: var(--text);
+  font: inherit;
+  font-size: .85rem;
   outline: none;
 }
-.table-search:focus { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(140,182,255,.16); }
-.empty-state { margin: .75rem 0 0; color: var(--muted); }
-.home-blank { min-height: 60vh; }
+.table-search:focus { border-color: var(--accent); }
+.empty-state { margin: .6rem 0 0; color: var(--muted); font-size: .85rem; }
+.select-label { display: flex; align-items: center; gap: .5rem; color: var(--muted); font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; }
+.select-label select {
+  min-width: 9rem;
+  padding: .4rem .55rem;
+  border-radius: .45rem;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: .85rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.view-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: .45rem; overflow: hidden; }
+.view-toggle button {
+  padding: .4rem .8rem;
+  border: 0;
+  background: var(--bg);
+  color: var(--muted);
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.view-toggle button + button { border-left: 1px solid var(--line); }
+.view-toggle button.active { background: var(--panel-3); color: var(--text); }
+#players-index .col-adv { display: none; }
+#players-index.show-adv .col-adv { display: table-cell; }
+#players-index.show-adv .col-basic { display: none; }
+
+/* ---------- scores ---------- */
+.score-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: .5rem;
+}
+.score-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem .7rem;
+  border: 1px solid var(--line);
+  border-radius: .5rem;
+  background: var(--panel-2);
+  color: var(--text);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.score-line:hover { border-color: var(--accent); text-decoration: none; }
+.score-match { font-size: .9rem; color: var(--muted); }
+.score-match strong { color: var(--text); font-weight: 700; }
+.score-match em { font-style: normal; color: var(--muted); font-size: .78rem; }
+.score-status { font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.score-status.final { color: var(--accent); }
+.day-panel[hidden] { display: none; }
+
+/* ---------- schedule grid ---------- */
+.schedule-grid th, .schedule-grid td { text-align: center; }
+.schedule-grid td:first-child, .schedule-grid th:first-child { text-align: center; }
+.schedule-grid td { padding: .18rem .3rem; }
+.day-label { color: var(--muted); font-variant-numeric: tabular-nums; }
+.off-day { background: rgba(255,255,255,.015); }
+.sched-cell { display: block; padding: .12rem .25rem; border-radius: .3rem; color: var(--text); font-size: .76rem; line-height: 1.25; text-decoration: none; }
+.sched-cell:hover { background: var(--panel-3); text-decoration: none; }
+.sched-result { display: block; font-size: .68rem; font-variant-numeric: tabular-nums; }
+.sched-win .sched-result { color: var(--good); }
+.sched-loss .sched-result { color: var(--bad); }
+
+/* ---------- player page ---------- */
 .player-hero {
   display: grid;
-  grid-template-columns: 150px minmax(280px, 1fr) minmax(380px, 640px);
-  gap: 1.25rem;
+  grid-template-columns: 120px minmax(260px, 1fr) minmax(360px, 600px);
+  gap: 1rem;
   align-items: start;
 }
 .portrait-wrap { display: flex; justify-content: center; align-items: flex-start; }
 .portrait {
-  width: 150px;
-  height: 150px;
-  border-radius: 1rem;
+  width: 120px;
+  height: 120px;
+  border-radius: .6rem;
   object-fit: cover;
   background: var(--panel-3);
   border: 1px solid var(--line);
 }
-.portrait.placeholder {
-  display: grid;
-  place-items: center;
-  font-size: 2.5rem;
-  font-weight: 900;
-  color: var(--muted);
-}
+.portrait.placeholder { display: grid; place-items: center; font-size: 2rem; font-weight: 700; color: var(--muted); }
 .details-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: .45rem .8rem;
-  margin-top: 1rem;
+  gap: .35rem .6rem;
+  margin-top: .75rem;
 }
 .detail-item {
   display: flex;
   justify-content: space-between;
-  gap: .75rem;
-  padding: .45rem .55rem;
-  background: rgba(255,255,255,.035);
-  border: 1px solid rgba(255,255,255,.045);
-  border-radius: .55rem;
+  gap: .6rem;
+  padding: .3rem .45rem;
+  background: var(--panel-2);
+  border: 1px solid rgba(255,255,255,.04);
+  border-radius: .4rem;
+  font-size: .8rem;
 }
 .detail-item span { color: var(--muted); }
-.detail-item strong { text-align: right; }
-.rating-panel {
-  display: grid;
-  gap: .75rem;
-}
+.detail-item strong { text-align: right; font-weight: 600; }
+.rating-panel { display: grid; gap: .6rem; }
+.rating-topline { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
 .big-rating {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: .8rem .9rem;
+  padding: .55rem .7rem;
   border: 1px solid var(--line);
-  border-radius: .85rem;
-  background: #111820;
+  border-radius: .5rem;
+  background: var(--panel-2);
 }
-.big-rating span { color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; }
-.big-rating strong { font-size: 2rem; }
-.micro-ratings { display: grid; grid-template-columns: repeat(2, 1fr); gap: .45rem; }
-.micro-ratings div { display: flex; justify-content: space-between; padding: .45rem .55rem; background: rgba(255,255,255,.035); border-radius: .5rem; }
-.micro-ratings span { color: var(--muted); }
-.awards-strip { display: flex; flex-wrap: wrap; }
-.summary-wrap table { min-width: 760px; }
-@media (max-width: 900px) {
-  .site-header { grid-template-columns: 1fr; }
-  .primary-nav { justify-content: flex-start; }
-  .player-hero { grid-template-columns: 1fr; }
-  .portrait-wrap { justify-content: flex-start; }
-  .details-grid, .micro-ratings { grid-template-columns: 1fr; }
-  th, td { padding: .48rem .52rem; }
-}
-
-.team-hero {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1rem;
-}
-.salary-summary {
-  width: min(100%, 24rem);
-  padding: .75rem .9rem;
-  border: 1px solid var(--line);
-  border-radius: .85rem;
-  background: rgba(12, 18, 25, .72);
-}
-.salary-copy { display: flex; justify-content: space-between; gap: .75rem; margin-bottom: .45rem; }
-.salary-copy span { color: var(--muted); font-weight: 750; }
-.salary-copy strong { color: var(--text); }
-.salary-bar { height: .62rem; border-radius: 999px; overflow: hidden; background: #10161d; border: 1px solid rgba(255,255,255,.08); }
-.salary-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
-.salary-summary.over .salary-copy strong { color: var(--bad); }
-.rating-topline { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-.full-rating-panel { min-width: min(100%, 520px); }
-.rating-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+.big-rating span { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .07em; font-size: .7rem; }
+.big-rating strong { font-size: 1.4rem; font-weight: 700; }
+.full-rating-panel { min-width: min(100%, 480px); }
+.rating-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
 .rating-group {
-  padding: .75rem;
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: .8rem;
-  background: rgba(255,255,255,.03);
+  padding: .55rem .6rem;
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: .5rem;
+  background: var(--panel-2);
 }
 .rating-group h3 {
-  margin: 0 0 .35rem;
-  padding-bottom: .35rem;
+  margin: 0 0 .3rem;
+  padding-bottom: .3rem;
   border-bottom: 1px solid var(--line);
   color: var(--text);
-  font-size: .95rem;
+  font-size: .8rem;
 }
-.rating-row { display: flex; justify-content: space-between; gap: .8rem; padding: .18rem 0; }
+.rating-row { display: flex; justify-content: space-between; gap: .6rem; padding: .12rem 0; font-size: .8rem; }
 .rating-row span { color: var(--muted); }
-.rating-row strong { text-align: right; }
-.home-hero { margin-bottom: 1rem; }
-.home-section { margin-bottom: 1.15rem; }
-.row-rank { display: inline-block; min-width: 1.7rem; color: var(--muted); }
-.clinch { color: #d9e0e8; font-weight: 900; margin-left: .25rem; }
-.award-name strong { display: block; font-size: 1.05rem; color: var(--text); }
-.award-name span { display: block; color: var(--muted); font-size: .82rem; }
-.candidate-cell { min-width: 14rem; text-align: left; }
-.candidate-card { display: flex; align-items: center; gap: .6rem; min-width: 13rem; text-align: left; }
-.candidate-card > div:last-child { display: grid; gap: .1rem; }
-.candidate-card span { color: var(--muted); font-size: .78rem; }
+.rating-row strong { text-align: right; font-weight: 600; white-space: nowrap; }
+.awards-strip { display: flex; flex-wrap: wrap; }
+.summary-wrap table { min-width: 700px; }
+.home-hero { margin-bottom: .75rem; }
+.home-section { margin-bottom: .75rem; }
+.award-name strong { display: block; font-size: .9rem; color: var(--text); }
+.award-name span { display: block; color: var(--muted); font-size: .72rem; }
+.candidate-cell { min-width: 12rem; text-align: left; }
+.candidate-card { display: flex; align-items: center; gap: .5rem; min-width: 11rem; text-align: left; }
+.candidate-card > div:last-child { display: grid; gap: .05rem; }
+.candidate-card span { color: var(--muted); font-size: .72rem; }
 .candidate-img {
   flex: 0 0 auto;
-  width: 42px;
-  height: 42px;
-  border-radius: .65rem;
+  width: 32px;
+  height: 32px;
+  border-radius: .4rem;
   object-fit: cover;
   background: var(--panel-3);
   border: 1px solid var(--line);
 }
-.candidate-img.placeholder {
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-  font-weight: 900;
-  font-size: .8rem;
-}
-@media (max-width: 1100px) {
-  .team-hero { display: block; }
-  .salary-summary { margin-top: 1rem; }
-  .rating-groups { grid-template-columns: 1fr; }
-  .rating-topline { grid-template-columns: 1fr; }
-}
-.team-dropdown { position: relative; flex: 0 0 auto; }
-.team-dropdown summary {
-  list-style: none;
-  cursor: pointer;
-  white-space: nowrap;
-  padding: .42rem .65rem;
-  border: 1px solid transparent;
-  border-radius: .55rem;
-  color: var(--muted);
-  font-size: .9rem;
-  font-weight: 650;
-}
-.team-dropdown summary::-webkit-details-marker { display: none; }
-.team-dropdown summary::after { content: "▾"; margin-left: .35rem; color: rgba(255,255,255,.48); }
-.team-dropdown[open] summary, .team-dropdown.active summary, .team-dropdown summary:hover {
-  color: var(--text);
-  background: var(--panel-2);
-  border-color: var(--line);
-}
-.team-menu {
+.candidate-img.placeholder { display: grid; place-items: center; color: var(--muted); font-weight: 700; font-size: .68rem; }
+
+/* ---------- team page ---------- */
+.team-hero { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; }
+.team-hero::before { background: linear-gradient(180deg, var(--team-primary, var(--accent)), var(--team-secondary, var(--accent))); }
+.page-hero { position: relative; overflow: hidden; }
+.page-hero::before {
+  content: "";
   position: absolute;
-  top: calc(100% + .45rem);
-  right: 0;
-  z-index: 40;
-  display: grid;
-  grid-template-columns: minmax(13rem, 1fr);
-  gap: .22rem;
-  width: max-content;
-  min-width: 16rem;
-  max-height: min(70vh, 30rem);
-  overflow-y: auto;
-  padding: .45rem;
-  border: 1px solid var(--line);
-  border-radius: .75rem;
-  background: rgba(17, 22, 27, .98);
-  box-shadow: var(--shadow);
+  inset: 0 auto 0 0;
+  width: .25rem;
+  background: var(--accent);
 }
-.team-menu a {
-  display: block;
-  white-space: nowrap;
-  padding: .48rem .6rem;
-  border: 1px solid transparent;
+.salary-summary {
+  width: min(100%, 20rem);
+  padding: .55rem .7rem;
+  border: 1px solid var(--line);
   border-radius: .5rem;
-  color: var(--muted);
-  font-size: .88rem;
-  font-weight: 700;
-  text-decoration: none;
+  background: var(--panel-2);
 }
-.team-menu a:hover, .team-menu a.active { color: var(--text); background: var(--panel-2); border-color: var(--line); }
-.small-copy { margin: .25rem 0 0; font-size: .9rem; }
-.select-label { display: grid; gap: .25rem; color: var(--muted); font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-.select-label select {
-  min-width: 12rem;
-  padding: .65rem .75rem;
-  border-radius: .65rem;
-  border: 1px solid var(--line);
-  background: #121820;
-  color: var(--text);
-  font: inherit;
-  text-transform: none;
-  letter-spacing: 0;
-}
+.salary-copy { display: flex; justify-content: space-between; gap: .6rem; margin-bottom: .35rem; font-size: .8rem; }
+.salary-copy span { color: var(--muted); font-weight: 500; }
+.salary-copy strong { color: var(--text); }
+.salary-bar { height: .45rem; border-radius: 999px; overflow: hidden; background: var(--bg); border: 1px solid rgba(255,255,255,.07); }
+.salary-bar span { display: block; height: 100%; background: var(--accent); }
+.salary-summary.over .salary-copy strong { color: var(--bad); }
+
+/* ---------- game pages ---------- */
 .click-row { cursor: pointer; }
-.click-row td:last-child { color: var(--accent); font-weight: 800; }
-.day-panel[hidden] { display: none; }
 .button-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: .55rem .75rem;
+  padding: .4rem .65rem;
   border: 1px solid var(--line);
-  border-radius: .55rem;
+  border-radius: .45rem;
   background: var(--panel-2);
   color: var(--text);
   text-decoration: none;
-  font-weight: 800;
+  font-weight: 600;
+  font-size: .82rem;
 }
-.button-link:hover { text-decoration: none; border-color: var(--accent-2); }
+.button-link:hover { text-decoration: none; border-color: var(--accent); }
 .button-link.disabled { opacity: .45; pointer-events: none; }
 .box-score-hero {
   display: grid;
-  grid-template-columns: auto minmax(0, 52rem) auto;
+  grid-template-columns: auto minmax(0, 48rem) auto;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: .75rem;
+  margin-bottom: .75rem;
 }
 .scoreboard-core { text-align: center; }
 .scoreboard-core h1 {
-  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-size: 1.1rem;
   display: flex;
   justify-content: center;
   align-items: baseline;
-  gap: .45rem;
+  gap: .4rem;
   flex-wrap: wrap;
 }
-.scoreboard-core h1 span { color: var(--text); font-weight: 950; }
-.scoreboard-core h1 em { color: var(--muted); font-style: normal; font-size: .9rem; }
-.scoreboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: .75rem;
-  margin-top: .65rem;
-}
-.mini-score-table.table-wrap { border-radius: .55rem; }
+.scoreboard-core h1 span { color: var(--text); font-weight: 700; }
+.scoreboard-core h1 em { color: var(--muted); font-style: normal; font-size: .82rem; }
+.scoreboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: .55rem; }
+.mini-score-table.table-wrap { border-radius: .45rem; }
 .mini-score-table table { min-width: 0; width: 100%; }
-.mini-score-table th, .mini-score-table td { padding: .34rem .45rem; font-size: .82rem; }
+.mini-score-table th, .mini-score-table td { padding: .26rem .4rem; font-size: .76rem; }
 .mini-score-table thead th { cursor: default; }
-.mini-score-table thead th::after { content: ""; margin: 0; }
-.score-team { color: var(--accent); font-weight: 900; }
-.final-score { font-weight: 950; }
-.series-note { margin: .45rem 0 0; color: var(--accent); font-weight: 900; }
-.scheduled-note { color: var(--muted); margin: .65rem 0 0; font-weight: 750; }
-.box-team-section { margin-bottom: 1.1rem; }
-.box-team-section h2 { margin: 0 0 .45rem; }
-.box-score-table { min-width: 1180px; }
-.bench-start td { border-top: 2px solid rgba(255,255,255,.35); }
-.total-row td, .pct-row td { font-weight: 900; background: #20272e; }
+.score-team { color: var(--text); font-weight: 700; }
+.final-score { font-weight: 700; }
+.series-note { margin: .4rem 0 0; color: var(--accent); font-weight: 600; }
+.scheduled-note { color: var(--muted); margin: .5rem 0 0; font-size: .85rem; }
+.box-team-section { margin-bottom: .9rem; }
+.box-team-section h2 { margin: 0 0 .4rem; font-size: .95rem; text-transform: none; letter-spacing: 0; color: var(--text); }
+.box-score-table { min-width: 1080px; }
+.bench-start td { border-top: 2px solid rgba(255,255,255,.25); }
+.total-row td, .pct-row td { font-weight: 700; background: var(--panel-2); }
 .total-label { color: var(--text); }
 .pct-row td { border-bottom: 0; }
+
 @media (max-width: 900px) {
+  .site-header { flex-direction: column; align-items: flex-start; }
+  .player-hero { grid-template-columns: 1fr; }
+  .portrait-wrap { justify-content: flex-start; }
+  .details-grid { grid-template-columns: 1fr; }
+  .rating-groups { grid-template-columns: 1fr; }
+  .rating-topline { grid-template-columns: 1fr; }
+  .team-hero { display: block; }
+  .salary-summary { margin-top: .75rem; }
   .team-dropdown { width: 100%; }
-  .team-menu { position: static; width: 100%; max-height: 16rem; margin-top: .35rem; }
+  .team-menu { position: static; width: 100%; max-height: 14rem; margin-top: .3rem; box-shadow: none; }
   .box-score-hero { grid-template-columns: 1fr; text-align: left; }
   .scoreboard-core { text-align: left; }
   .scoreboard-core h1 { justify-content: flex-start; }
   .scoreboard-grid { grid-template-columns: 1fr; }
+  th, td { padding: .3rem .45rem; }
 }
-
-
 """.strip() + "\n"
 
 
@@ -3060,6 +3019,24 @@ def javascript() -> str:
       const target = event.target;
       if (target && target.closest && target.closest('a')) return;
       window.location.href = row.dataset.href;
+    });
+  });
+
+  document.querySelectorAll('[data-view-toggle]').forEach((wrap) => {
+    const table = document.getElementById(wrap.dataset.viewToggle);
+    if (!table) return;
+    wrap.querySelectorAll('button').forEach((button) => {
+      button.addEventListener('click', () => {
+        wrap.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+        button.classList.add('active');
+        table.classList.toggle('show-adv', button.dataset.view === 'adv');
+      });
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    document.querySelectorAll('details.team-dropdown[open]').forEach((details) => {
+      if (!details.contains(event.target)) details.removeAttribute('open');
     });
   });
 

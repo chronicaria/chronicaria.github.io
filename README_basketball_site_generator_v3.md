@@ -6,7 +6,7 @@ This script generates a static HTML hub from a Basketball GM-style JSON export.
 
 ```bash
 python basketball_site_generator_v3.py preseason.json --out site --clean --schedule-days 46
-python3 basketball_site_generator_v3.py day15.json --out docs --clean
+python3 basketball_site_generator_v3.py day16.json --out docs --clean
 ```
 
 Then open:
@@ -30,13 +30,14 @@ python basketball_site_generator_v3.py preseason.json --out site --clean --start
 
 ## What it generates
 
-- `index.html`: home dashboard with standings, power rankings, team stats, and awards sentiment.
-- `scores.html`: daily scoreboard with a Day dropdown. Every game row opens its game page.
-- `schedule.html`: team schedule table with a team dropdown. Home games show as `vs. ABC`; away games show as `@ ABC`.
+- `index.html`: home dashboard with standings (playoff cutoff line below 4th place), heat-mapped team stats (red→green; reversed for TOV/PF/PA), and awards sentiment.
+- `scores.html`: daily scoreboard defaulting to the most recent played day, with compact `STO 96 @ DUR 110` score cards. Every card opens its game page.
+- `schedule.html`: season grid — one column per team, one row per day. Home games show as `vs. ABC`; away games as `@ ABC`, with W/L results filled in for completed games.
 - `games/*.html`: one game page for every score/schedule row. Completed games show a full box score; scheduled games show a projected 5-starter/5-bench preview that populates once results exist in the JSON.
-- `teams/*.html`: roster pages with starters, bench, reserves, all in alphabetical team navigation.
+- `teams/*.html`: roster pages with starters, bench, reserves, reachable from the Teams dropdown in the nav.
+- `players/index.html`: rostered players only (free agents live on the Free Agency page), with a Per Game / Advanced (TS%, USG%, ORtg, DRtg, OBPM, DBPM, BPM, VORP, WS) toggle.
 - `players/*.html`: player profiles with all ratings and stats from the configured start season onward.
-- `free-agency.html`: free-agent table.
+- `free-agency.html`: free agents with their 15 detailed ratings (Physical / Shooting / Skill) and asking price.
 
 ## Schedule and score behavior
 

@@ -3,19 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Isaiah Collier</title>
+  <title>Isaiah Collier — SMP Basketball League</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
   <link rel="stylesheet" href="../assets/styles.css">
   <script defer src="../assets/site.js"></script>
 </head>
-<body>
+<body data-root="../">
   
     <header class="site-header">
       <div class="brand"><a href="../index.html">SMP Basketball League</a></div>
+      <div class="nav-search">
+        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams">
+        <div class="search-results" data-search-results hidden></div>
+      </div>
       <nav class="primary-nav">
-        <a class="" href="../index.html">Home</a><a class="" href="../scores.html">Scores</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a>
+        <a class="" href="../index.html">Home</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a><a class="" href="../draft.html">Draft</a><a class="" href="../trade.html">Trade</a><a class="" href="../history.html">History</a><a class="" href="../records.html">Records</a>
         <details class="team-dropdown">
           <summary>Teams</summary>
-          <div class="team-menu" aria-label="Teams"><a class="" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
+          <div class="team-menu" aria-label="Teams"><a class="" data-tid="2" data-abbrev="CAM" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" data-tid="0" data-abbrev="DUR" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" data-tid="5" data-abbrev="GOO" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" data-tid="9" data-abbrev="ITH" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" data-tid="8" data-abbrev="MAN" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" data-tid="3" data-abbrev="QUE" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" data-tid="1" data-abbrev="ROC" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" data-tid="7" data-abbrev="STO" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" data-tid="4" data-abbrev="TOR" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" data-tid="6" data-abbrev="WAL" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
         </details>
       </nav>
     </header>
@@ -28,7 +33,7 @@
         <p class="eyebrow">Player profile</p>
         <h1>Isaiah Collier</h1>
         <p class="muted">#8 · <a href="../free-agency.html">FA</a></p>
-        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../free-agency.html">FA</a></strong></div><div class="detail-item"><span>Position</span><strong>SG</strong></div><div class="detail-item"><span>Age</span><strong>24</strong></div><div class="detail-item"><span>Height</span><strong>6'3"</strong></div><div class="detail-item"><span>Weight</span><strong>210 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2005 · Marietta, GA</strong></div><div class="detail-item"><span>College</span><strong>USC</strong></div><div class="detail-item"><span>Draft</span><strong>2024 · Undrafted</strong></div><div class="detail-item"><span>Contract</span><strong>$1M thru 2029</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip">$</span> <span class="mood-chip">W</span></strong></div></div>
+        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../free-agency.html">FA</a></strong></div><div class="detail-item"><span>Position</span><strong>SG</strong></div><div class="detail-item"><span>Age</span><strong>24</strong></div><div class="detail-item"><span>Height</span><strong>6'3"</strong></div><div class="detail-item"><span>Weight</span><strong>210 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2005 · Marietta, GA</strong></div><div class="detail-item"><span>College</span><strong>USC</strong></div><div class="detail-item"><span>Draft</span><strong>2024 · Undrafted</strong></div><div class="detail-item"><span>Contract</span><strong>$1M/2029</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip" title="Values Money">$</span> <span class="mood-chip" title="Values Winning">W</span></strong></div></div>
       </div>
       <div class="rating-panel full-rating-panel">
         <div class="rating-topline">
@@ -133,13 +138,31 @@
     <section class="card compact-card">
       <div class="table-wrap summary-wrap">
         <table>
-          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th>TS%</th><th>PER</th><th>WS</th></tr></thead>
+          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th title="Win Shares: estimated wins contributed">WS</th></tr></thead>
           <tbody>
             <tr><td data-sort="2029">2029</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
             <tr><td data-sort="Career">Career</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
           </tbody>
         </table>
       </div>
+    </section>
+    
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Season Highs · 2029</h2></div>
+      
+      <p class="muted small-copy">Career highs: 23 PTS · 8 TRB · 14 AST · 2 BLK · 4 STL</p>
+    </section>
+    
+    <section class="card">
+      <div class="section-title-row">
+        <h2>Development</h2>
+        <span class="muted small-copy"><span class="chart-key chart-key-ovr"></span> Overall · <span class="chart-key chart-key-pot"></span> Potential</span>
+      </div>
+      <svg viewBox="0 0 640 170" class="dev-chart" role="img" aria-label="Overall and potential by season">
+        <line x1="34" y1="103.8" x2="628" y2="103.8" class="chart-grid"/><text x="28" y="107.3" class="chart-tick" text-anchor="end">50</text><line x1="34" y1="56.9" x2="628" y2="56.9" class="chart-grid"/><text x="28" y="60.4" class="chart-tick" text-anchor="end">60</text><line x1="34" y1="10.0" x2="628" y2="10.0" class="chart-grid"/><text x="28" y="13.5" class="chart-tick" text-anchor="end">70</text><text x="34.0" y="162" class="chart-tick" text-anchor="middle">2025</text><text x="182.5" y="162" class="chart-tick" text-anchor="middle">2026</text><text x="331.0" y="162" class="chart-tick" text-anchor="middle">2027</text><text x="479.5" y="162" class="chart-tick" text-anchor="middle">2028</text><text x="628.0" y="162" class="chart-tick" text-anchor="middle">2029</text>
+        <polyline points="34.0,33.4 182.5,28.8 331.0,71.0 479.5,47.5 628.0,75.7" class="line-pot"/><circle cx="34.0" cy="33.4" r="3" class="line-pot-dot"><title>2025: 65</title></circle><circle cx="182.5" cy="28.8" r="3" class="line-pot-dot"><title>2026: 66</title></circle><circle cx="331.0" cy="71.0" r="3" class="line-pot-dot"><title>2027: 57</title></circle><circle cx="479.5" cy="47.5" r="3" class="line-pot-dot"><title>2028: 62</title></circle><circle cx="628.0" cy="75.7" r="3" class="line-pot-dot"><title>2029: 56</title></circle>
+        <polyline points="34.0,127.2 182.5,103.8 331.0,117.9 479.5,80.3 628.0,103.8" class="line-ovr"/><circle cx="34.0" cy="127.2" r="3" class="line-ovr-dot"><title>2025: 45</title></circle><circle cx="182.5" cy="103.8" r="3" class="line-ovr-dot"><title>2026: 50</title></circle><circle cx="331.0" cy="117.9" r="3" class="line-ovr-dot"><title>2027: 47</title></circle><circle cx="479.5" cy="80.3" r="3" class="line-ovr-dot"><title>2028: 55</title></circle><circle cx="628.0" cy="103.8" r="3" class="line-ovr-dot"><title>2029: 50</title></circle>
+      </svg>
     </section>
     
     <section class="card stats-section">
@@ -162,7 +185,7 @@
       
     <div class="table-wrap">
       <table id="ratings-1821" data-sortable>
-        <thead><tr><th>Year</th><th>Pos</th><th>Ovr</th><th>Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
+        <thead><tr><th>Year</th><th>Pos</th><th title="Current overall rating">Ovr</th><th title="Potential rating ceiling">Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026">2026</td><td data-sort="PG">PG</td><td data-sort="50">50</td><td data-sort="66">66</td><td data-sort="34">34</td><td data-sort="45">45</td><td data-sort="64">64</td><td data-sort="52">52</td><td data-sort="71">71</td><td data-sort="42">42</td><td data-sort="69">69</td><td data-sort="37">37</td><td data-sort="49">49</td><td data-sort="37">37</td><td data-sort="48">48</td><td data-sort="34">34</td><td data-sort="53">53</td><td data-sort="59">59</td><td data-sort="65">65</td><td data-sort="">—</td></tr>
 <tr><td data-sort="2027">2027</td><td data-sort="SG">SG</td><td data-sort="47">47</td><td data-sort="57">57</td><td data-sort="34">34</td><td data-sort="42">42</td><td data-sort="61">61</td><td data-sort="48">48</td><td data-sort="78">78</td><td data-sort="39">39</td><td data-sort="66">66</td><td data-sort="34">34</td><td data-sort="46">46</td><td data-sort="34">34</td><td data-sort="48">48</td><td data-sort="34">34</td><td data-sort="51">51</td><td data-sort="57">57</td><td data-sort="63">63</td><td data-sort="">—</td></tr>
@@ -173,7 +196,8 @@
     </div>
     
     </section>
-    
+    <div class="history-row"></div>
   </main>
+  <footer class="site-footer">SMP Basketball League · Season 2029 · updated through Day 17</footer>
 </body>
 </html>

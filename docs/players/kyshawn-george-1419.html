@@ -3,19 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kyshawn George</title>
+  <title>Kyshawn George — SMP Basketball League</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
   <link rel="stylesheet" href="../assets/styles.css">
   <script defer src="../assets/site.js"></script>
 </head>
-<body>
+<body data-root="../">
   
     <header class="site-header">
       <div class="brand"><a href="../index.html">SMP Basketball League</a></div>
+      <div class="nav-search">
+        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams">
+        <div class="search-results" data-search-results hidden></div>
+      </div>
       <nav class="primary-nav">
-        <a class="" href="../index.html">Home</a><a class="" href="../scores.html">Scores</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a>
+        <a class="" href="../index.html">Home</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a><a class="" href="../draft.html">Draft</a><a class="" href="../trade.html">Trade</a><a class="" href="../history.html">History</a><a class="" href="../records.html">Records</a>
         <details class="team-dropdown">
           <summary>Teams</summary>
-          <div class="team-menu" aria-label="Teams"><a class="" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
+          <div class="team-menu" aria-label="Teams"><a class="" data-tid="2" data-abbrev="CAM" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" data-tid="0" data-abbrev="DUR" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" data-tid="5" data-abbrev="GOO" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" data-tid="9" data-abbrev="ITH" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" data-tid="8" data-abbrev="MAN" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" data-tid="3" data-abbrev="QUE" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" data-tid="1" data-abbrev="ROC" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" data-tid="7" data-abbrev="STO" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" data-tid="4" data-abbrev="TOR" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" data-tid="6" data-abbrev="WAL" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
         </details>
       </nav>
     </header>
@@ -28,7 +33,7 @@
         <p class="eyebrow">Player profile</p>
         <h1>Kyshawn George</h1>
         <p class="muted">#33 · <a href="../teams/gooning-gooners-5.html">GOO</a></p>
-        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../teams/gooning-gooners-5.html">GOO</a></strong></div><div class="detail-item"><span>Position</span><strong>SF</strong></div><div class="detail-item"><span>Age</span><strong>25</strong></div><div class="detail-item"><span>Height</span><strong>6'8"</strong></div><div class="detail-item"><span>Weight</span><strong>205 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2004 · Monthey, Switzerland</strong></div><div class="detail-item"><span>College</span><strong>Miami (FL)</strong></div><div class="detail-item"><span>Draft</span><strong>2024 · Undrafted</strong></div><div class="detail-item"><span>Contract</span><strong>$16M thru 2031</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip">F</span></strong></div></div>
+        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../teams/gooning-gooners-5.html">GOO</a></strong></div><div class="detail-item"><span>Position</span><strong>SF</strong></div><div class="detail-item"><span>Age</span><strong>25</strong></div><div class="detail-item"><span>Height</span><strong>6'8"</strong></div><div class="detail-item"><span>Weight</span><strong>205 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2004 · Monthey, Switzerland</strong></div><div class="detail-item"><span>College</span><strong>Miami (FL)</strong></div><div class="detail-item"><span>Draft</span><strong>2024 · Undrafted</strong></div><div class="detail-item"><span>Contract</span><strong>$16M/2031</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip" title="Values Fame">F</span></strong></div></div>
       </div>
       <div class="rating-panel full-rating-panel">
         <div class="rating-topline">
@@ -133,7 +138,7 @@
     <section class="card compact-card">
       <div class="table-wrap summary-wrap">
         <table>
-          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th>TS%</th><th>PER</th><th>WS</th></tr></thead>
+          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th title="Win Shares: estimated wins contributed">WS</th></tr></thead>
           <tbody>
             <tr><td data-sort="2029">2029</td><td data-sort="1.0">1</td><td data-sort="1.6471467865610943">1.6</td><td data-sort="0.0">0.0</td><td data-sort="1.0">1.0</td><td data-sort="0.0">0.0</td><td>—</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td></tr>
             <tr><td data-sort="Career">Career</td><td data-sort="81.0">81</td><td data-sort="13.079739140650602">13.1</td><td data-sort="6.209876543209877">6.2</td><td data-sort="2.2839506172839505">2.3</td><td data-sort="1.5802469135802468">1.6</td><td data-sort="47.97979797979798">48.0</td><td data-sort="39.20454545454545">39.2</td><td data-sort="72.0">72.0</td><td data-sort="58.624708624708624">58.6</td><td data-sort="14.028253555301168">14.0</td><td data-sort="1.7856781585594863">1.8</td></tr>
@@ -142,12 +147,44 @@
       </div>
     </section>
     
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Season Highs · 2029</h2></div>
+      <div class="high-row"><a class="high-chip" href="../games/271.html" title="Day 10 vs ROC"><span>TRB</span><strong>1</strong></a></div>
+      <p class="muted small-copy">Career highs: 24 PTS · 10 TRB · 8 AST · 5 BLK · 3 STL</p>
+    </section>
+    
+    <section class="card">
+      <div class="section-title-row">
+        <h2>Development</h2>
+        <span class="muted small-copy"><span class="chart-key chart-key-ovr"></span> Overall · <span class="chart-key chart-key-pot"></span> Potential</span>
+      </div>
+      <svg viewBox="0 0 640 170" class="dev-chart" role="img" aria-label="Overall and potential by season">
+        <line x1="34" y1="117.9" x2="628" y2="117.9" class="chart-grid"/><text x="28" y="121.4" class="chart-tick" text-anchor="end">50</text><line x1="34" y1="71.0" x2="628" y2="71.0" class="chart-grid"/><text x="28" y="74.5" class="chart-tick" text-anchor="end">60</text><line x1="34" y1="24.1" x2="628" y2="24.1" class="chart-grid"/><text x="28" y="27.6" class="chart-tick" text-anchor="end">70</text><text x="34.0" y="162" class="chart-tick" text-anchor="middle">2025</text><text x="182.5" y="162" class="chart-tick" text-anchor="middle">2026</text><text x="331.0" y="162" class="chart-tick" text-anchor="middle">2027</text><text x="479.5" y="162" class="chart-tick" text-anchor="middle">2028</text><text x="628.0" y="162" class="chart-tick" text-anchor="middle">2029</text>
+        <polyline points="34.0,66.3 182.5,52.2 331.0,28.8 479.5,47.5 628.0,66.3" class="line-pot"/><circle cx="34.0" cy="66.3" r="3" class="line-pot-dot"><title>2025: 61</title></circle><circle cx="182.5" cy="52.2" r="3" class="line-pot-dot"><title>2026: 64</title></circle><circle cx="331.0" cy="28.8" r="3" class="line-pot-dot"><title>2027: 69</title></circle><circle cx="479.5" cy="47.5" r="3" class="line-pot-dot"><title>2028: 65</title></circle><circle cx="628.0" cy="66.3" r="3" class="line-pot-dot"><title>2029: 61</title></circle>
+        <polyline points="34.0,127.2 182.5,85.0 331.0,56.9 479.5,71.0 628.0,85.0" class="line-ovr"/><circle cx="34.0" cy="127.2" r="3" class="line-ovr-dot"><title>2025: 48</title></circle><circle cx="182.5" cy="85.0" r="3" class="line-ovr-dot"><title>2026: 57</title></circle><circle cx="331.0" cy="56.9" r="3" class="line-ovr-dot"><title>2027: 63</title></circle><circle cx="479.5" cy="71.0" r="3" class="line-ovr-dot"><title>2028: 60</title></circle><circle cx="628.0" cy="85.0" r="3" class="line-ovr-dot"><title>2029: 57</title></circle>
+      </svg>
+    </section>
+    
+    <section class="card stats-section">
+      <div class="section-title-row"><h2>Game Log · Season 2029</h2><span class="count-pill">1 games</span></div>
+      
+    <div class="table-wrap">
+      <table id="gamelog-1419" data-sortable>
+        <thead><tr><th>Day</th><th>Opp</th><th>Result</th><th>MP</th><th>FG</th><th>3P</th><th>FT</th><th>ORB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>PF</th><th>PTS</th><th>+/-</th><th title="Game Score: single-game performance rating">GmSc</th></tr></thead>
+        <tbody>
+          <tr><td data-sort="10">10</td><td data-sort="ROC"><span class="muted">vs.</span> <a href="../teams/rochester-dragons-1.html">ROC</a></td><td data-sort="20.0"><a href="../games/271.html"><span class="delta-up">W</span> 125-105</a></td><td data-sort="1.6471467865610943">1:39</td><td data-sort="0">0-0</td><td data-sort="0">0-0</td><td data-sort="0">0-0</td><td data-sort="0">0</td><td data-sort="1.0">1</td><td data-sort="0">0</td><td data-sort="0">0</td><td data-sort="0">0</td><td data-sort="0">0</td><td data-sort="0">0</td><td data-sort="0">0</td><td data-sort="0">0</td><td data-sort="0.3">0.3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    </section>
+    
     <section class="card stats-section">
       <div class="section-title-row"><h2>Per Game · Regular Season</h2><span class="count-pill">3</span></div>
       
     <div class="table-wrap">
       <table id="regular-1419" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th>eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th title="Effective FG%: counts threes as 1.5 field goals">eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
         <tbody>
           <tr><td data-sort="2027"><a href="#ratings">2027</a></td><td data-sort="GOO"><a href="../teams/gooning-gooners-5.html">GOO</a></td><td data-sort="23">23</td><td data-sort="40.0">40</td><td data-sort="0">0</td><td data-sort="11.620205306501905">11.6</td><td data-sort="2.125">2.1</td><td data-sort="4.45">4.5</td><td data-sort="47.752808988764045">47.8</td><td data-sort="0.825">0.8</td><td data-sort="2.075">2.1</td><td data-sort="39.75903614457831">39.8</td><td data-sort="1.3">1.3</td><td data-sort="2.375">2.4</td><td data-sort="54.73684210526316">54.7</td><td data-sort="57.02247191011236">57.0</td><td data-sort="0.575">0.6</td><td data-sort="0.85">0.8</td><td data-sort="67.6470588235294">67.6</td><td data-sort="0.45">0.5</td><td data-sort="1.725">1.7</td><td data-sort="2.175">2.2</td><td data-sort="1.425">1.4</td><td data-sort="0.875">0.9</td><td data-sort="0.375">0.4</td><td data-sort="0.275">0.3</td><td data-sort="0.25">0.2</td><td data-sort="1.075">1.1</td><td data-sort="5.65">5.7</td></tr>
 <tr><td data-sort="2028"><a href="#ratings">2028</a></td><td data-sort="GOO"><a href="../teams/gooning-gooners-5.html">GOO</a></td><td data-sort="24">24</td><td data-sort="40.0">40</td><td data-sort="0">0</td><td data-sort="14.82508778365154">14.8</td><td data-sort="2.625">2.6</td><td data-sort="5.45">5.5</td><td data-sort="48.1651376146789">48.2</td><td data-sort="0.9">0.9</td><td data-sort="2.325">2.3</td><td data-sort="38.70967741935484">38.7</td><td data-sort="1.725">1.7</td><td data-sort="3.125">3.1</td><td data-sort="55.2">55.2</td><td data-sort="56.42201834862385">56.4</td><td data-sort="0.775">0.8</td><td data-sort="1.025">1.0</td><td data-sort="75.60975609756098">75.6</td><td data-sort="0.575">0.6</td><td data-sort="1.85">1.9</td><td data-sort="2.425">2.4</td><td data-sort="1.775">1.8</td><td data-sort="1.05">1.1</td><td data-sort="0.25">0.2</td><td data-sort="0.475">0.5</td><td data-sort="0.375">0.4</td><td data-sort="1.55">1.6</td><td data-sort="6.925">6.9</td></tr>
@@ -181,12 +218,12 @@
       
     <div class="table-wrap">
       <table id="advanced-1419" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>PER</th><th>EWA</th><th>TS%</th><th>3PAr</th><th>FTr</th><th>ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th>TOV%</th><th>USG%</th><th>+/-</th><th>On-Off</th><th>ORtg</th><th>DRtg</th><th>OWS</th><th>DWS</th><th>WS</th><th>WS/48</th><th>OBPM</th><th>DBPM</th><th>BPM</th><th>VORP</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th>EWA</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th>3PAr</th><th>FTr</th><th title="Share of available offensive rebounds grabbed">ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th title="Turnovers per 100 plays">TOV%</th><th title="Usage: share of team possessions used while on the floor">USG%</th><th>+/-</th><th>On-Off</th><th title="Points produced per 100 possessions">ORtg</th><th title="Points allowed per 100 possessions">DRtg</th><th>OWS</th><th>DWS</th><th title="Win Shares: estimated wins contributed">WS</th><th>WS/48</th><th title="Offensive Box Plus/Minus per 100 possessions">OBPM</th><th title="Defensive Box Plus/Minus per 100 possessions">DBPM</th><th title="Box Plus/Minus per 100 possessions vs league average">BPM</th><th title="Value Over Replacement Player">VORP</th></tr></thead>
         <tbody>
           <tr><td data-sort="2027">2027</td><td data-sort="GOO"><a href="../teams/gooning-gooners-5.html">GOO</a></td><td data-sort="23">23</td><td data-sort="40.0">40</td><td data-sort="0">0</td><td data-sort="11.620205306501905">11.6</td><td data-sort="14.698404957012388">14.7</td><td data-sort="0.7766977522040875">0.8</td><td data-sort="58.56135986733001">58.6</td><td data-sort="0.46629213483146065">.466</td><td data-sort="0.19101123595505617">.191</td><td data-sort="4.426774088422228">4.4</td><td data-sort="16.35735680144722">16.4</td><td data-sort="10.501600086572815">10.5</td><td data-sort="18.48630238066793">18.5</td><td data-sort="1.5417785953889747">1.5</td><td data-sort="2.0623098237999438">2.1</td><td data-sort="15.353570801895069">15.4</td><td data-sort="20.85070198777469">20.9</td><td class="delta-down" data-sort="-6.064329128816351">-6.1</td><td class="delta-down" data-sort="-7.242198542656055">-7.2</td><td data-sort="110.37596784201185">110.4</td><td data-sort="112.15502995427094">112.2</td><td data-sort="0.2589941648149067">0.3</td><td data-sort="0.6234704818754117">0.6</td><td data-sort="0.8824646466903183">0.9</td><td data-sort="0.09113071138561199">.091</td><td data-sort="0.5520091134403842">0.6</td><td data-sort="0.9816344004163664">1.0</td><td data-sort="1.5336435138567506">1.5</td><td data-sort="0.41620944553530664">0.4</td></tr>
 <tr><td data-sort="2028">2028</td><td data-sort="GOO"><a href="../teams/gooning-gooners-5.html">GOO</a></td><td data-sort="24">24</td><td data-sort="40.0">40</td><td data-sort="0">0</td><td data-sort="14.82508778365154">14.8</td><td data-sort="13.541940613319273">13.5</td><td data-sort="0.7179627721411029">0.7</td><td data-sort="58.67649550923572">58.7</td><td data-sort="0.42660550458715596">.427</td><td data-sort="0.18807339449541285">.188</td><td data-sort="4.398132655551986">4.4</td><td data-sort="14.051443653327118">14.1</td><td data-sort="9.241743618721356">9.2</td><td data-sort="17.357766758561816">17.4</td><td data-sort="0.8092433797033446">0.8</td><td data-sort="2.835293220406278">2.8</td><td data-sort="15.105740181268883">15.1</td><td data-sort="20.093126268468758">20.1</td><td class="delta-down" data-sort="-1.2947894053419082">-1.3</td><td class="delta-up" data-sort="1.074128926241896">1.1</td><td data-sort="111.970146945113">112.0</td><td data-sort="116.89752374207265">116.9</td><td data-sort="0.4000625196201039">0.4</td><td data-sort="0.5031509922490642">0.5</td><td data-sort="0.9032135118691682">0.9</td><td data-sort="0.07310959840913935">.073</td><td data-sort="-0.4275599245381638">-0.4</td><td data-sort="-0.2725599251023336">-0.3</td><td data-sort="-0.7001198496404974">-0.7</td><td data-sort="0.19482711828472943">0.2</td></tr>
-<tr><td data-sort="2029">2029</td><td data-sort="GOO"><a href="../teams/gooning-gooners-5.html">GOO</a></td><td data-sort="25">25</td><td data-sort="1.0">1</td><td data-sort="0">0</td><td data-sort="1.6471467865610943">1.6</td><td data-sort="0">0.0</td><td data-sort="-0.0068835985110015895">-0.0</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="69.01417136329943">69.0</td><td data-sort="32.63535224411934">32.6</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td class="delta-up" data-sort="1.0442444463312819">1.0</td><td data-sort="0">0.0</td><td data-sort="106.13339586459146">106.1</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">.000</td><td data-sort="-6.176102138884592">-6.2</td><td data-sort="1.3271893850858563">1.3</td><td data-sort="-4.848912753798736">-4.8</td><td data-sort="-0.0011845082486256063">-0.0</td></tr>
-<tr><td data-sort="99999">Career</td><td data-sort="TOT">TOT</td><td>—</td><td data-sort="81.0">81</td><td data-sort="0.0">0</td><td data-sort="13.079739140650602">13.1</td><td data-sort="14.028253555301168">14.0</td><td data-sort="1.4877769258341889">1.5</td><td data-sort="58.624708624708624">58.6</td><td data-sort="0.4444444444444444">.444</td><td data-sort="0.1893939393939394">.189</td><td data-sort="4.403860488229694">4.4</td><td data-sort="15.148549997721583">15.1</td><td data-sort="9.830840899645896">9.8</td><td data-sort="17.8258942612943">17.8</td><td data-sort="1.129364765125557">1.1</td><td data-sort="2.491760134817635">2.5</td><td data-sort="15.217391304347826">15.2</td><td data-sort="20.394252717350067">20.4</td><td class="delta-down" data-sort="-3.385279735695515">-3.4</td><td class="delta-down" data-sort="-2.57447569215171">-2.6</td><td data-sort="111.09666442254634">111.1</td><td data-sort="114.80015099839784">114.8</td><td data-sort="0.6590566844350106">0.7</td><td data-sort="1.1266214741244758">1.1</td><td data-sort="1.7856781585594863">1.8</td><td data-sort="0.08090219828834426">.081</td><td data-sort="-0.006738453359104329">-0.0</td><td data-sort="0.28017020965938894">0.3</td><td data-sort="0.2734317563002846">0.3</td><td data-sort="0.6098520555714105">0.6</td></tr>
+<tr><td data-sort="2029">2029</td><td data-sort="GOO"><a href="../teams/gooning-gooners-5.html">GOO</a></td><td data-sort="25">25</td><td data-sort="1.0">1</td><td data-sort="0">0</td><td data-sort="1.6471467865610943">1.6</td><td data-sort="0">0.0</td><td data-sort="-0.0068835985110015895">-0.0</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="70.0052901810813">70.0</td><td data-sort="32.72735824617852">32.7</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td class="delta-up" data-sort="1.8535072876548853">1.9</td><td data-sort="0">0.0</td><td data-sort="106.36203838110727">106.4</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">.000</td><td data-sort="-6.275201768893818">-6.3</td><td data-sort="1.309735217410573">1.3</td><td data-sort="-4.965466551483245">-5.0</td><td data-sort="-0.0012334377761537615">-0.0</td></tr>
+<tr><td data-sort="99999">Career</td><td data-sort="TOT">TOT</td><td>—</td><td data-sort="81.0">81</td><td data-sort="0.0">0</td><td data-sort="13.079739140650602">13.1</td><td data-sort="14.028253555301168">14.0</td><td data-sort="1.4877769258341889">1.5</td><td data-sort="58.624708624708624">58.6</td><td data-sort="0.4444444444444444">.444</td><td data-sort="0.1893939393939394">.189</td><td data-sort="4.403860488229694">4.4</td><td data-sort="15.150090895836112">15.2</td><td data-sort="9.830983941905366">9.8</td><td data-sort="17.8258942612943">17.8</td><td data-sort="1.129364765125557">1.1</td><td data-sort="2.491760134817635">2.5</td><td data-sort="15.217391304347826">15.2</td><td data-sort="20.394252717350067">20.4</td><td class="delta-down" data-sort="-3.385279735695515">-3.4</td><td class="delta-down" data-sort="-2.5732175265675417">-2.6</td><td data-sort="111.09666442254634">111.1</td><td data-sort="114.80050647023056">114.8</td><td data-sort="0.6590566844350106">0.7</td><td data-sort="1.1266214741244758">1.1</td><td data-sort="1.7856781585594863">1.8</td><td data-sort="0.08090219828834426">.081</td><td data-sort="-0.006892524122661753">-0.0</td><td data-sort="0.28014307356472606">0.3</td><td data-sort="0.2732505494420643">0.3</td><td data-sort="0.6098031260438823">0.6</td></tr>
         </tbody>
       </table>
     </div>
@@ -198,7 +235,7 @@
       
     <div class="table-wrap">
       <table id="ratings-1419" data-sortable>
-        <thead><tr><th>Year</th><th>Pos</th><th>Ovr</th><th>Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
+        <thead><tr><th>Year</th><th>Pos</th><th title="Current overall rating">Ovr</th><th title="Potential rating ceiling">Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026">2026</td><td data-sort="GF">GF</td><td data-sort="57">57</td><td data-sort="64">64</td><td data-sort="52">52</td><td data-sort="36">36</td><td data-sort="53">53</td><td data-sort="66">66</td><td data-sort="45">45</td><td data-sort="45">45</td><td data-sort="63">63</td><td data-sort="53">53</td><td data-sort="77">77</td><td data-sort="60">60</td><td data-sort="60">60</td><td data-sort="43">43</td><td data-sort="46">46</td><td data-sort="51">51</td><td data-sort="60">60</td><td data-sort="3"><span class="mini-skill">3</span></td></tr>
 <tr><td data-sort="2027">2027</td><td data-sort="SF">SF</td><td data-sort="63">63</td><td data-sort="69">69</td><td data-sort="52">52</td><td data-sort="41">41</td><td data-sort="55">55</td><td data-sort="68">68</td><td data-sort="55">55</td><td data-sort="50">50</td><td data-sort="67">67</td><td data-sort="59">59</td><td data-sort="85">85</td><td data-sort="64">64</td><td data-sort="71">71</td><td data-sort="52">52</td><td data-sort="49">49</td><td data-sort="56">56</td><td data-sort="65">65</td><td data-sort="3 V"><span class="mini-skill">3</span> <span class="mini-skill">V</span></td></tr>
@@ -209,13 +246,31 @@
     </div>
     
     </section>
+    <div class="history-row">
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Salary History</h2></div>
+      
+    <div class="table-wrap fit-table">
+      <table id="salary-1419" data-sortable>
+        <thead><tr><th>Season</th><th>Salary</th></tr></thead>
+        <tbody>
+          <tr><td data-sort="2028">2028</td><td data-sort="16000.0">$16M</td></tr>
+<tr><td data-sort="2029">2029</td><td data-sort="16000.0">$16M</td></tr>
+<tr><td data-sort="2030">2030</td><td data-sort="16000.0">$16M</td></tr>
+<tr><td data-sort="2031">2031</td><td data-sort="16000.0">$16M</td></tr>
+<tr class="total-row"><td class="total-label">Total</td><td data-sort="64000.0">$64M</td></tr>
+        </tbody>
+      </table>
+    </div>
     
+    </section>
+    </div>
     <section class="card stats-section">
       <div class="section-title-row"><h2>Per Game · Playoffs</h2><span class="count-pill">1</span></div>
       
     <div class="table-wrap">
       <table id="playoffs-1419" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th>eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th title="Effective FG%: counts threes as 1.5 field goals">eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
         <tbody>
           <tr><td data-sort="2028"><a href="#ratings">2028</a></td><td data-sort="GOO"><a href="../teams/gooning-gooners-5.html">GOO</a></td><td data-sort="24">24</td><td data-sort="2.0">2</td><td data-sort="0">0</td><td data-sort="8.41236358002124">8.4</td><td data-sort="2.0">2.0</td><td data-sort="3.0">3.0</td><td data-sort="66.66666666666667">66.7</td><td data-sort="1.0">1.0</td><td data-sort="2.0">2.0</td><td data-sort="50.0">50.0</td><td data-sort="1.0">1.0</td><td data-sort="1.0">1.0</td><td data-sort="100.0">100.0</td><td data-sort="83.33333333333333">83.3</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="2.0">2.0</td><td data-sort="2.0">2.0</td><td data-sort="0.5">0.5</td><td data-sort="2.5">2.5</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.5">0.5</td><td data-sort="0.5">0.5</td><td data-sort="5.0">5.0</td></tr>
         </tbody>
@@ -229,7 +284,7 @@
       
     <div class="table-wrap">
       <table id="playoff-advanced-1419" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>PER</th><th>EWA</th><th>TS%</th><th>3PAr</th><th>FTr</th><th>ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th>TOV%</th><th>USG%</th><th>+/-</th><th>On-Off</th><th>ORtg</th><th>DRtg</th><th>OWS</th><th>DWS</th><th>WS</th><th>WS/48</th><th>OBPM</th><th>DBPM</th><th>BPM</th><th>VORP</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th>EWA</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th>3PAr</th><th>FTr</th><th title="Share of available offensive rebounds grabbed">ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th title="Turnovers per 100 plays">TOV%</th><th title="Usage: share of team possessions used while on the floor">USG%</th><th>+/-</th><th>On-Off</th><th title="Points produced per 100 possessions">ORtg</th><th title="Points allowed per 100 possessions">DRtg</th><th>OWS</th><th>DWS</th><th title="Win Shares: estimated wins contributed">WS</th><th>WS/48</th><th title="Offensive Box Plus/Minus per 100 possessions">OBPM</th><th title="Defensive Box Plus/Minus per 100 possessions">DBPM</th><th title="Box Plus/Minus per 100 possessions vs league average">BPM</th><th title="Value Over Replacement Player">VORP</th></tr></thead>
         <tbody>
           <tr><td data-sort="2028">2028</td><td data-sort="GOO"><a href="../teams/gooning-gooners-5.html">GOO</a></td><td data-sort="24">24</td><td data-sort="2.0">2</td><td data-sort="0">0</td><td data-sort="8.41236358002124">8.4</td><td data-sort="6.7064070768700486">6.7</td><td data-sort="-0.025403449109623662">-0.0</td><td data-sort="83.33333333333333">83.3</td><td data-sort="0.6666666666666666">.667</td><td data-sort="0.0">.000</td><td data-sort="0">0.0</td><td data-sort="27.664908977541504">27.7</td><td data-sort="13.832454488770752">13.8</td><td data-sort="10.248296123464915">10.2</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="45.45454545454545">45.5</td><td data-sort="27.591332091962933">27.6</td><td class="delta-down" data-sort="-22.464191264826137">-22.5</td><td class="delta-down" data-sort="-15.182373329577386">-15.2</td><td data-sort="72.92028349947337">72.9</td><td data-sort="119.13067026276619">119.1</td><td data-sort="-0.07956341820341334">-0.1</td><td data-sort="0.008459725028171189">0.0</td><td data-sort="-0.07110369317524215">-0.1</td><td data-sort="-0.20285483621494907">-.203</td><td data-sort="-4.88708734531866">-4.9</td><td data-sort="-2.4149309815045408">-2.4</td><td data-sort="-7.302018326823201">-7.3</td><td data-sort="-0.02266387493690226">-0.0</td></tr>
         </tbody>
@@ -239,5 +294,6 @@
     </section>
     
   </main>
+  <footer class="site-footer">SMP Basketball League · Season 2029 · updated through Day 17</footer>
 </body>
 </html>

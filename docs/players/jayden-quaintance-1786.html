@@ -3,19 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jayden Quaintance</title>
+  <title>Jayden Quaintance — SMP Basketball League</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
   <link rel="stylesheet" href="../assets/styles.css">
   <script defer src="../assets/site.js"></script>
 </head>
-<body>
+<body data-root="../">
   
     <header class="site-header">
       <div class="brand"><a href="../index.html">SMP Basketball League</a></div>
+      <div class="nav-search">
+        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams">
+        <div class="search-results" data-search-results hidden></div>
+      </div>
       <nav class="primary-nav">
-        <a class="" href="../index.html">Home</a><a class="" href="../scores.html">Scores</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a>
+        <a class="" href="../index.html">Home</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a><a class="" href="../draft.html">Draft</a><a class="" href="../trade.html">Trade</a><a class="" href="../history.html">History</a><a class="" href="../records.html">Records</a>
         <details class="team-dropdown">
           <summary>Teams</summary>
-          <div class="team-menu" aria-label="Teams"><a class="" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
+          <div class="team-menu" aria-label="Teams"><a class="" data-tid="2" data-abbrev="CAM" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" data-tid="0" data-abbrev="DUR" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" data-tid="5" data-abbrev="GOO" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" data-tid="9" data-abbrev="ITH" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" data-tid="8" data-abbrev="MAN" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" data-tid="3" data-abbrev="QUE" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" data-tid="1" data-abbrev="ROC" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" data-tid="7" data-abbrev="STO" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" data-tid="4" data-abbrev="TOR" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" data-tid="6" data-abbrev="WAL" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
         </details>
       </nav>
     </header>
@@ -28,7 +33,7 @@
         <p class="eyebrow">Player profile</p>
         <h1>Jayden Quaintance</h1>
         <p class="muted">#21 · <a href="../teams/waltham-bears-6.html">WAL</a></p>
-        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../teams/waltham-bears-6.html">WAL</a></strong></div><div class="detail-item"><span>Position</span><strong>C</strong></div><div class="detail-item"><span>Age</span><strong>21</strong></div><div class="detail-item"><span>Height</span><strong>6'9"</strong></div><div class="detail-item"><span>Weight</span><strong>235 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2008 · Cleveland, OH</strong></div><div class="detail-item"><span>College</span><strong>Kentucky</strong></div><div class="detail-item"><span>Draft</span><strong>2026 · Round 2, Pick 2</strong></div><div class="detail-item"><span>Contract</span><strong>$2M thru 2031</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip">F</span> <span class="mood-chip">L</span></strong></div></div>
+        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../teams/waltham-bears-6.html">WAL</a></strong></div><div class="detail-item"><span>Position</span><strong>C</strong></div><div class="detail-item"><span>Age</span><strong>21</strong></div><div class="detail-item"><span>Height</span><strong>6'9"</strong></div><div class="detail-item"><span>Weight</span><strong>235 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2008 · Cleveland, OH</strong></div><div class="detail-item"><span>College</span><strong>Kentucky</strong></div><div class="detail-item"><span>Draft</span><strong>2026 · Round 2, Pick 2</strong></div><div class="detail-item"><span>Contract</span><strong>$2M/2031</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip" title="Values Fame">F</span> <span class="mood-chip" title="Values Loyalty">L</span></strong></div></div>
       </div>
       <div class="rating-panel full-rating-panel">
         <div class="rating-topline">
@@ -133,7 +138,7 @@
     <section class="card compact-card">
       <div class="table-wrap summary-wrap">
         <table>
-          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th>TS%</th><th>PER</th><th>WS</th></tr></thead>
+          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th title="Win Shares: estimated wins contributed">WS</th></tr></thead>
           <tbody>
             <tr><td data-sort="2029">2029</td><td data-sort="0.0">0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td></tr>
             <tr><td data-sort="Career">Career</td><td data-sort="6.0">6</td><td data-sort="2.5728200108481274">2.6</td><td data-sort="0.16666666666666666">0.2</td><td data-sort="1.1666666666666667">1.2</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="50.0">50.0</td><td data-sort="26.595744680851066">26.6</td><td data-sort="0.18947100066461234">0.2</td><td data-sort="-0.041738263372166566">-0.0</td></tr>
@@ -142,12 +147,30 @@
       </div>
     </section>
     
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Season Highs · 2029</h2></div>
+      
+      <p class="muted small-copy">Career highs: 1 PTS · 5 TRB · 1 BLK</p>
+    </section>
+    
+    <section class="card">
+      <div class="section-title-row">
+        <h2>Development</h2>
+        <span class="muted small-copy"><span class="chart-key chart-key-ovr"></span> Overall · <span class="chart-key chart-key-pot"></span> Potential</span>
+      </div>
+      <svg viewBox="0 0 640 170" class="dev-chart" role="img" aria-label="Overall and potential by season">
+        <line x1="34" y1="123.3" x2="628" y2="123.3" class="chart-grid"/><text x="28" y="126.8" class="chart-tick" text-anchor="end">40</text><line x1="34" y1="85.6" x2="628" y2="85.6" class="chart-grid"/><text x="28" y="89.1" class="chart-tick" text-anchor="end">50</text><line x1="34" y1="47.8" x2="628" y2="47.8" class="chart-grid"/><text x="28" y="51.3" class="chart-tick" text-anchor="end">60</text><line x1="34" y1="10.0" x2="628" y2="10.0" class="chart-grid"/><text x="28" y="13.5" class="chart-tick" text-anchor="end">70</text><text x="34.0" y="162" class="chart-tick" text-anchor="middle">2026</text><text x="232.0" y="162" class="chart-tick" text-anchor="middle">2027</text><text x="430.0" y="162" class="chart-tick" text-anchor="middle">2028</text><text x="628.0" y="162" class="chart-tick" text-anchor="middle">2029</text>
+        <polyline points="34.0,28.9 232.0,32.7 430.0,25.1 628.0,32.7" class="line-pot"/><circle cx="34.0" cy="28.9" r="3" class="line-pot-dot"><title>2026: 65</title></circle><circle cx="232.0" cy="32.7" r="3" class="line-pot-dot"><title>2027: 64</title></circle><circle cx="430.0" cy="25.1" r="3" class="line-pot-dot"><title>2028: 66</title></circle><circle cx="628.0" cy="32.7" r="3" class="line-pot-dot"><title>2029: 64</title></circle>
+        <polyline points="34.0,127.1 232.0,130.9 430.0,100.7 628.0,85.6" class="line-ovr"/><circle cx="34.0" cy="127.1" r="3" class="line-ovr-dot"><title>2026: 39</title></circle><circle cx="232.0" cy="130.9" r="3" class="line-ovr-dot"><title>2027: 38</title></circle><circle cx="430.0" cy="100.7" r="3" class="line-ovr-dot"><title>2028: 46</title></circle><circle cx="628.0" cy="85.6" r="3" class="line-ovr-dot"><title>2029: 50</title></circle>
+      </svg>
+    </section>
+    
     <section class="card stats-section">
       <div class="section-title-row"><h2>Per Game · Regular Season</h2><span class="count-pill">3</span></div>
       
     <div class="table-wrap">
       <table id="regular-1786" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th>eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th title="Effective FG%: counts threes as 1.5 field goals">eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
         <tbody>
           <tr><td data-sort="2027"><a href="#ratings">2027</a></td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="19">19</td><td data-sort="1.0">1</td><td data-sort="0">0</td><td data-sort="2.919916503757111">2.9</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="1.0">1.0</td><td data-sort="1.0">1.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td></tr>
 <tr><td data-sort="2028"><a href="#ratings">2028</a></td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="20">20</td><td data-sort="5.0">5</td><td data-sort="0">0</td><td data-sort="2.503400712266331">2.5</td><td data-sort="0.0">0.0</td><td data-sort="0.2">0.2</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.2">0.2</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.2">0.2</td><td data-sort="0.4">0.4</td><td data-sort="50.0">50.0</td><td data-sort="0.2">0.2</td><td data-sort="1.0">1.0</td><td data-sort="1.2">1.2</td><td data-sort="0.0">0.0</td><td data-sort="0.4">0.4</td><td data-sort="0.0">0.0</td><td data-sort="0.2">0.2</td><td data-sort="0.0">0.0</td><td data-sort="0.2">0.2</td><td data-sort="0.2">0.2</td></tr>
@@ -181,12 +204,12 @@
       
     <div class="table-wrap">
       <table id="advanced-1786" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>PER</th><th>EWA</th><th>TS%</th><th>3PAr</th><th>FTr</th><th>ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th>TOV%</th><th>USG%</th><th>+/-</th><th>On-Off</th><th>ORtg</th><th>DRtg</th><th>OWS</th><th>DWS</th><th>WS</th><th>WS/48</th><th>OBPM</th><th>DBPM</th><th>BPM</th><th>VORP</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th>EWA</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th>3PAr</th><th>FTr</th><th title="Share of available offensive rebounds grabbed">ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th title="Turnovers per 100 plays">TOV%</th><th title="Usage: share of team possessions used while on the floor">USG%</th><th>+/-</th><th>On-Off</th><th title="Points produced per 100 possessions">ORtg</th><th title="Points allowed per 100 possessions">DRtg</th><th>OWS</th><th>DWS</th><th title="Win Shares: estimated wins contributed">WS</th><th>WS/48</th><th title="Offensive Box Plus/Minus per 100 possessions">OBPM</th><th title="Defensive Box Plus/Minus per 100 possessions">DBPM</th><th title="Box Plus/Minus per 100 possessions vs league average">BPM</th><th title="Value Over Replacement Player">VORP</th></tr></thead>
         <tbody>
           <tr><td data-sort="2027">2027</td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="19">19</td><td data-sort="1.0">1</td><td data-sort="0">0</td><td data-sort="2.919916503757111">2.9</td><td data-sort="0">0.0</td><td data-sort="-0.012318851717343433">-0.0</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="38.4635604886871">38.5</td><td data-sort="19.31630315781122">19.3</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td data-sort="0">0.0</td><td class="delta-down" data-sort="-32.96835457271678">-33.0</td><td class="delta-down" data-sort="-38.75302151764607">-38.8</td><td data-sort="0">0.0</td><td data-sort="113.5510245065974">113.6</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">.000</td><td data-sort="-2.7703288161753488">-2.8</td><td data-sort="-1.2144853072803743">-1.2</td><td data-sort="-3.984814123455723">-4.0</td><td data-sort="-0.0014686072899470083">-0.0</td></tr>
 <tr><td data-sort="2028">2028</td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="20">20</td><td data-sort="5.0">5</td><td data-sort="0">0</td><td data-sort="2.503400712266331">2.5</td><td data-sort="0.23367003752780216">0.2</td><td data-sort="-0.051643935943563604">-0.1</td><td data-sort="26.595744680851066">26.6</td><td data-sort="0.0">.000</td><td data-sort="2.0">2.000</td><td data-sort="9.046517687944178">9.0</td><td data-sort="44.29458545364372">44.3</td><td data-sort="26.85520384663289">26.9</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="7.070841411266713">7.1</td><td data-sort="51.54639175257732">51.5</td><td data-sort="13.324973575893408">13.3</td><td class="delta-up" data-sort="42.503966474044795">42.5</td><td class="delta-up" data-sort="42.377519160420945">42.4</td><td data-sort="44.24144400502759">44.2</td><td data-sort="108.23867237279951">108.2</td><td data-sort="-0.0645423274676918">-0.1</td><td data-sort="0.022804064095525232">0.0</td><td data-sort="-0.041738263372166566">-0.0</td><td data-sort="-0.16005720794497036">-.160</td><td data-sort="-10.998615903008293">-11.0</td><td data-sort="-1.4453649450914359">-1.4</td><td data-sort="-12.443980848099729">-12.4</td><td data-sort="-0.03312698016612933">-0.0</td></tr>
-<tr><td data-sort="2029">2029</td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="21">21</td><td data-sort="0.0">0</td><td data-sort="0">0</td><td data-sort="0.0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td class="delta-down" data-sort="-12.980973636737138">-13.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="-3.558102470448185">-3.6</td><td data-sort="-2.2270298563596285">-2.2</td><td data-sort="-5.785132326807814">-5.8</td><td data-sort="-9.554494246193968e-13">-0.0</td></tr>
-<tr><td data-sort="99999">Career</td><td data-sort="TOT">TOT</td><td>—</td><td data-sort="6.0">6</td><td data-sort="0.0">0</td><td data-sort="2.5728200108481274">2.6</td><td data-sort="0.18947100066461234">0.2</td><td data-sort="-0.06396278766090704">-0.1</td><td data-sort="26.595744680851066">26.6</td><td data-sort="0.0">.000</td><td data-sort="2.0">2.000</td><td data-sort="7.335355345509198">7.3</td><td data-sort="43.19163836593405">43.2</td><td data-sort="25.42920951300545">25.4</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="5.733381189593396">5.7</td><td data-sort="51.54639175257732">51.5</td><td data-sort="10.804534907277755">10.8</td><td class="delta-up" data-sort="28.228264140152643">28.2</td><td class="delta-up" data-sort="27.03155612597005">27.0</td><td data-sort="35.87310874413089">35.9</td><td data-sort="109.24351171923921">109.2</td><td data-sort="-0.0645423274676918">-0.1</td><td data-sort="0.022804064095525232">0.0</td><td data-sort="-0.041738263372166566">-0.0</td><td data-sort="-0.1297821478259028">-.130</td><td data-sort="-9.442223101776483">-9.4</td><td data-sort="-1.4016937165054564">-1.4</td><td data-sort="-10.843916818281938">-10.8</td><td data-sort="-0.03459558745703179">-0.0</td></tr>
+<tr><td data-sort="2029">2029</td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="21">21</td><td data-sort="0.0">0</td><td data-sort="0">0</td><td data-sort="0.0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td class="delta-down" data-sort="-11.36553399949233">-11.4</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="-3.7313917545216633">-3.7</td><td data-sort="-2.4519449821983432">-2.5</td><td data-sort="-6.1833367367200065">-6.2</td><td data-sort="-1.0563667823926828e-12">-0.0</td></tr>
+<tr><td data-sort="99999">Career</td><td data-sort="TOT">TOT</td><td>—</td><td data-sort="6.0">6</td><td data-sort="0.0">0</td><td data-sort="2.5728200108481274">2.6</td><td data-sort="0.18947100066461234">0.2</td><td data-sort="-0.06396278766090704">-0.1</td><td data-sort="26.595744680851066">26.6</td><td data-sort="0.0">.000</td><td data-sort="2.0">2.000</td><td data-sort="7.335355345509198">7.3</td><td data-sort="43.19163836593405">43.2</td><td data-sort="25.42920951300545">25.4</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="5.733381189593396">5.7</td><td data-sort="51.54639175257732">51.5</td><td data-sort="10.804534907277755">10.8</td><td class="delta-up" data-sort="28.228264140152643">28.2</td><td class="delta-up" data-sort="27.03155612597005">27.0</td><td data-sort="35.87310874413089">35.9</td><td data-sort="109.24351171923921">109.2</td><td data-sort="-0.0645423274676918">-0.1</td><td data-sort="0.022804064095525232">0.0</td><td data-sort="-0.041738263372166566">-0.0</td><td data-sort="-0.1297821478259028">-.130</td><td data-sort="-9.442223101776483">-9.4</td><td data-sort="-1.4016937165054564">-1.4</td><td data-sort="-10.843916818281938">-10.8</td><td data-sort="-0.034595587457132704">-0.0</td></tr>
         </tbody>
       </table>
     </div>
@@ -198,7 +221,7 @@
       
     <div class="table-wrap">
       <table id="ratings-1786" data-sortable>
-        <thead><tr><th>Year</th><th>Pos</th><th>Ovr</th><th>Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
+        <thead><tr><th>Year</th><th>Pos</th><th title="Current overall rating">Ovr</th><th title="Potential rating ceiling">Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026">2026</td><td data-sort="FC">FC</td><td data-sort="39">39</td><td data-sort="65">65</td><td data-sort="68">68</td><td data-sort="51">51</td><td data-sort="48">48</td><td data-sort="65">65</td><td data-sort="18">18</td><td data-sort="50">50</td><td data-sort="65">65</td><td data-sort="23">23</td><td data-sort="30">30</td><td data-sort="12">12</td><td data-sort="36">36</td><td data-sort="36">36</td><td data-sort="33">33</td><td data-sort="37">37</td><td data-sort="64">64</td><td data-sort="">—</td></tr>
 <tr><td data-sort="2027">2027</td><td data-sort="C">C</td><td data-sort="38">38</td><td data-sort="64">64</td><td data-sort="68">68</td><td data-sort="49">49</td><td data-sort="46">46</td><td data-sort="63">63</td><td data-sort="19">19</td><td data-sort="47">47</td><td data-sort="63">63</td><td data-sort="20">20</td><td data-sort="28">28</td><td data-sort="11">11</td><td data-sort="37">37</td><td data-sort="36">36</td><td data-sort="31">31</td><td data-sort="35">35</td><td data-sort="62">62</td><td data-sort="">—</td></tr>
@@ -209,13 +232,31 @@
     </div>
     
     </section>
+    <div class="history-row">
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Salary History</h2></div>
+      
+    <div class="table-wrap fit-table">
+      <table id="salary-1786" data-sortable>
+        <thead><tr><th>Season</th><th>Salary</th></tr></thead>
+        <tbody>
+          <tr><td data-sort="2028">2028</td><td data-sort="2000.0">$2M</td></tr>
+<tr><td data-sort="2029">2029</td><td data-sort="2000.0">$2M</td></tr>
+<tr><td data-sort="2030">2030</td><td data-sort="2000.0">$2M</td></tr>
+<tr><td data-sort="2031">2031</td><td data-sort="2000.0">$2M</td></tr>
+<tr class="total-row"><td class="total-label">Total</td><td data-sort="8000.0">$8M</td></tr>
+        </tbody>
+      </table>
+    </div>
     
+    </section>
+    </div>
     <section class="card stats-section">
       <div class="section-title-row"><h2>Per Game · Playoffs</h2><span class="count-pill">2</span></div>
       
     <div class="table-wrap">
       <table id="playoffs-1786" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th>eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th title="Effective FG%: counts threes as 1.5 field goals">eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
         <tbody>
           <tr><td data-sort="2027"><a href="#ratings">2027</a></td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="19">19</td><td data-sort="0.0">0</td><td data-sort="0">0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td></tr>
 <tr><td data-sort="2028"><a href="#ratings">2028</a></td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="20">20</td><td data-sort="0.0">0</td><td data-sort="0">0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td></tr>
@@ -231,7 +272,7 @@
       
     <div class="table-wrap">
       <table id="playoff-advanced-1786" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>PER</th><th>EWA</th><th>TS%</th><th>3PAr</th><th>FTr</th><th>ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th>TOV%</th><th>USG%</th><th>+/-</th><th>On-Off</th><th>ORtg</th><th>DRtg</th><th>OWS</th><th>DWS</th><th>WS</th><th>WS/48</th><th>OBPM</th><th>DBPM</th><th>BPM</th><th>VORP</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th>EWA</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th>3PAr</th><th>FTr</th><th title="Share of available offensive rebounds grabbed">ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th title="Turnovers per 100 plays">TOV%</th><th title="Usage: share of team possessions used while on the floor">USG%</th><th>+/-</th><th>On-Off</th><th title="Points produced per 100 possessions">ORtg</th><th title="Points allowed per 100 possessions">DRtg</th><th>OWS</th><th>DWS</th><th title="Win Shares: estimated wins contributed">WS</th><th>WS/48</th><th title="Offensive Box Plus/Minus per 100 possessions">OBPM</th><th title="Defensive Box Plus/Minus per 100 possessions">DBPM</th><th title="Box Plus/Minus per 100 possessions vs league average">BPM</th><th title="Value Over Replacement Player">VORP</th></tr></thead>
         <tbody>
           <tr><td data-sort="2027">2027</td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="19">19</td><td data-sort="0.0">0</td><td data-sort="0">0</td><td data-sort="0.0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td class="delta-up" data-sort="3.9303244528765724">3.9</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="-3.939554462672521">-3.9</td><td data-sort="-4.40705295086559">-4.4</td><td data-sort="-8.346607413538111">-8.3</td><td data-sort="-1.6124510705127312e-12">-0.0</td></tr>
 <tr><td data-sort="2028">2028</td><td data-sort="WAL"><a href="../teams/waltham-bears-6.html">WAL</a></td><td data-sort="20">20</td><td data-sort="0.0">0</td><td data-sort="0">0</td><td data-sort="0.0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td>—</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td>—</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td class="delta-up" data-sort="11.19977341800462">11.2</td><td data-sort="0">0.0</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="-5.025645110441361">-5.0</td><td data-sort="-3.4382106738271085">-3.4</td><td data-sort="-8.46385578426847">-8.5</td><td data-sort="-1.6422397825885343e-12">-0.0</td></tr>
@@ -243,5 +284,6 @@
     </section>
     
   </main>
+  <footer class="site-footer">SMP Basketball League · Season 2029 · updated through Day 17</footer>
 </body>
 </html>

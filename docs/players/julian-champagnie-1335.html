@@ -3,19 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Julian Champagnie</title>
+  <title>Julian Champagnie — SMP Basketball League</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
   <link rel="stylesheet" href="../assets/styles.css">
   <script defer src="../assets/site.js"></script>
 </head>
-<body>
+<body data-root="../">
   
     <header class="site-header">
       <div class="brand"><a href="../index.html">SMP Basketball League</a></div>
+      <div class="nav-search">
+        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams">
+        <div class="search-results" data-search-results hidden></div>
+      </div>
       <nav class="primary-nav">
-        <a class="" href="../index.html">Home</a><a class="" href="../scores.html">Scores</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a>
+        <a class="" href="../index.html">Home</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a><a class="" href="../draft.html">Draft</a><a class="" href="../trade.html">Trade</a><a class="" href="../history.html">History</a><a class="" href="../records.html">Records</a>
         <details class="team-dropdown">
           <summary>Teams</summary>
-          <div class="team-menu" aria-label="Teams"><a class="" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
+          <div class="team-menu" aria-label="Teams"><a class="" data-tid="2" data-abbrev="CAM" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" data-tid="0" data-abbrev="DUR" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" data-tid="5" data-abbrev="GOO" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" data-tid="9" data-abbrev="ITH" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" data-tid="8" data-abbrev="MAN" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" data-tid="3" data-abbrev="QUE" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" data-tid="1" data-abbrev="ROC" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" data-tid="7" data-abbrev="STO" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" data-tid="4" data-abbrev="TOR" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" data-tid="6" data-abbrev="WAL" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
         </details>
       </nav>
     </header>
@@ -28,7 +33,7 @@
         <p class="eyebrow">Player profile</p>
         <h1>Julian Champagnie</h1>
         <p class="muted">#17 · <a href="../free-agency.html">FA</a></p>
-        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../free-agency.html">FA</a></strong></div><div class="detail-item"><span>Position</span><strong>PF</strong></div><div class="detail-item"><span>Age</span><strong>28</strong></div><div class="detail-item"><span>Height</span><strong>6'8"</strong></div><div class="detail-item"><span>Weight</span><strong>220 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2001 · Staten Island, NY</strong></div><div class="detail-item"><span>College</span><strong>St. John&#x27;s</strong></div><div class="detail-item"><span>Draft</span><strong>2022 · Undrafted</strong></div><div class="detail-item"><span>Contract</span><strong>$1M thru 2029</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip">L</span></strong></div></div>
+        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../free-agency.html">FA</a></strong></div><div class="detail-item"><span>Position</span><strong>PF</strong></div><div class="detail-item"><span>Age</span><strong>28</strong></div><div class="detail-item"><span>Height</span><strong>6'8"</strong></div><div class="detail-item"><span>Weight</span><strong>220 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2001 · Staten Island, NY</strong></div><div class="detail-item"><span>College</span><strong>St. John&#x27;s</strong></div><div class="detail-item"><span>Draft</span><strong>2022 · Undrafted</strong></div><div class="detail-item"><span>Contract</span><strong>$1M/2029</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip" title="Values Loyalty">L</span></strong></div><div class="detail-item"><span>Family</span><strong>Brother: Justin Champagnie</strong></div></div>
       </div>
       <div class="rating-panel full-rating-panel">
         <div class="rating-topline">
@@ -133,7 +138,7 @@
     <section class="card compact-card">
       <div class="table-wrap summary-wrap">
         <table>
-          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th>TS%</th><th>PER</th><th>WS</th></tr></thead>
+          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th title="Win Shares: estimated wins contributed">WS</th></tr></thead>
           <tbody>
             <tr><td data-sort="2029">2029</td><td data-sort="33.0">33</td><td data-sort="3.833421224335455">3.8</td><td data-sort="1.0909090909090908">1.1</td><td data-sort="0.6060606060606061">0.6</td><td data-sort="0.2727272727272727">0.3</td><td data-sort="46.666666666666664">46.7</td><td data-sort="41.666666666666664">41.7</td><td data-sort="60.0">60.0</td><td data-sort="55.90062111801242">55.9</td><td data-sort="9.90928609193371">9.9</td><td data-sort="0.2823879918837904">0.3</td></tr>
             <tr><td data-sort="Career">Career</td><td data-sort="86.0">86</td><td data-sort="8.0148809445992">8.0</td><td data-sort="2.244186046511628">2.2</td><td data-sort="1.5465116279069768">1.5</td><td data-sort="0.38372093023255816">0.4</td><td data-sort="46.62162162162162">46.6</td><td data-sort="46.875">46.9</td><td data-sort="86.20689655172414">86.2</td><td data-sort="60.02736999253546">60.0</td><td data-sort="10.211007252204265">10.2</td><td data-sort="1.2994401192247294">1.3</td></tr>
@@ -142,12 +147,30 @@
       </div>
     </section>
     
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Season Highs · 2029</h2></div>
+      
+      <p class="muted small-copy">Career highs: 30 PTS · 10 TRB · 6 AST · 4 BLK · 5 STL</p>
+    </section>
+    
+    <section class="card">
+      <div class="section-title-row">
+        <h2>Development</h2>
+        <span class="muted small-copy"><span class="chart-key chart-key-ovr"></span> Overall · <span class="chart-key chart-key-pot"></span> Potential</span>
+      </div>
+      <svg viewBox="0 0 640 170" class="dev-chart" role="img" aria-label="Overall and potential by season">
+        <line x1="34" y1="128.3" x2="628" y2="128.3" class="chart-grid"/><text x="28" y="131.8" class="chart-tick" text-anchor="end">50</text><line x1="34" y1="98.7" x2="628" y2="98.7" class="chart-grid"/><text x="28" y="102.2" class="chart-tick" text-anchor="end">55</text><line x1="34" y1="69.1" x2="628" y2="69.1" class="chart-grid"/><text x="28" y="72.6" class="chart-tick" text-anchor="end">60</text><line x1="34" y1="39.6" x2="628" y2="39.6" class="chart-grid"/><text x="28" y="43.1" class="chart-tick" text-anchor="end">65</text><line x1="34" y1="10.0" x2="628" y2="10.0" class="chart-grid"/><text x="28" y="13.5" class="chart-tick" text-anchor="end">70</text><text x="34.0" y="162" class="chart-tick" text-anchor="middle">2023</text><text x="133.0" y="162" class="chart-tick" text-anchor="middle">2024</text><text x="232.0" y="162" class="chart-tick" text-anchor="middle">2025</text><text x="331.0" y="162" class="chart-tick" text-anchor="middle">2026</text><text x="430.0" y="162" class="chart-tick" text-anchor="middle">2027</text><text x="529.0" y="162" class="chart-tick" text-anchor="middle">2028</text><text x="628.0" y="162" class="chart-tick" text-anchor="middle">2029</text>
+        <polyline points="34.0,51.4 133.0,51.4 232.0,33.7 331.0,51.4 430.0,69.1 529.0,81.0 628.0,75.0" class="line-pot"/><circle cx="34.0" cy="51.4" r="3" class="line-pot-dot"><title>2023: 63</title></circle><circle cx="133.0" cy="51.4" r="3" class="line-pot-dot"><title>2024: 63</title></circle><circle cx="232.0" cy="33.7" r="3" class="line-pot-dot"><title>2025: 66</title></circle><circle cx="331.0" cy="51.4" r="3" class="line-pot-dot"><title>2026: 63</title></circle><circle cx="430.0" cy="69.1" r="3" class="line-pot-dot"><title>2027: 60</title></circle><circle cx="529.0" cy="81.0" r="3" class="line-pot-dot"><title>2028: 58</title></circle><circle cx="628.0" cy="75.0" r="3" class="line-pot-dot"><title>2029: 59</title></circle>
+        <polyline points="34.0,122.3 133.0,104.6 232.0,86.9 331.0,69.1 430.0,86.9 529.0,81.0 628.0,75.0" class="line-ovr"/><circle cx="34.0" cy="122.3" r="3" class="line-ovr-dot"><title>2023: 51</title></circle><circle cx="133.0" cy="104.6" r="3" class="line-ovr-dot"><title>2024: 54</title></circle><circle cx="232.0" cy="86.9" r="3" class="line-ovr-dot"><title>2025: 57</title></circle><circle cx="331.0" cy="69.1" r="3" class="line-ovr-dot"><title>2026: 60</title></circle><circle cx="430.0" cy="86.9" r="3" class="line-ovr-dot"><title>2027: 57</title></circle><circle cx="529.0" cy="81.0" r="3" class="line-ovr-dot"><title>2028: 58</title></circle><circle cx="628.0" cy="75.0" r="3" class="line-ovr-dot"><title>2029: 59</title></circle>
+      </svg>
+    </section>
+    
     <section class="card stats-section">
       <div class="section-title-row"><h2>Per Game · Regular Season</h2><span class="count-pill">3</span></div>
       
     <div class="table-wrap">
       <table id="regular-1335" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th>eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th title="Effective FG%: counts threes as 1.5 field goals">eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026"><a href="#ratings">2026</a></td><td data-sort="MAN"><a href="../teams/manhattan-elephants-8.html">MAN</a></td><td data-sort="25">25</td><td data-sort="32.0">32</td><td data-sort="0">0</td><td data-sort="14.9871113344037">15.0</td><td data-sort="1.40625">1.4</td><td data-sort="2.9375">2.9</td><td data-sort="47.87234042553192">47.9</td><td data-sort="0.71875">0.7</td><td data-sort="1.34375">1.3</td><td data-sort="53.48837209302326">53.5</td><td data-sort="0.6875">0.7</td><td data-sort="1.59375">1.6</td><td data-sort="43.13725490196079">43.1</td><td data-sort="60.1063829787234">60.1</td><td data-sort="0.46875">0.5</td><td data-sort="0.53125">0.5</td><td data-sort="88.23529411764706">88.2</td><td data-sort="0.71875">0.7</td><td data-sort="2.40625">2.4</td><td data-sort="3.125">3.1</td><td data-sort="0.59375">0.6</td><td data-sort="0.28125">0.3</td><td data-sort="0.34375">0.3</td><td data-sort="0.375">0.4</td><td data-sort="0.3125">0.3</td><td data-sort="1.875">1.9</td><td data-sort="4.0">4.0</td></tr>
 <tr><td data-sort="2027"><a href="#ratings">2027</a></td><td data-sort="MAN"><a href="../teams/manhattan-elephants-8.html">MAN</a></td><td data-sort="26">26</td><td data-sort="21.0">21</td><td data-sort="0">0</td><td data-sort="3.9613951491210795">4.0</td><td data-sort="0.47619047619047616">0.5</td><td data-sort="1.1428571428571428">1.1</td><td data-sort="41.666666666666664">41.7</td><td data-sort="0.09523809523809523">0.1</td><td data-sort="0.42857142857142855">0.4</td><td data-sort="22.22222222222222">22.2</td><td data-sort="0.38095238095238093">0.4</td><td data-sort="0.7142857142857143">0.7</td><td data-sort="53.333333333333336">53.3</td><td data-sort="45.833333333333336">45.8</td><td data-sort="0.3333333333333333">0.3</td><td data-sort="0.3333333333333333">0.3</td><td data-sort="100.0">100.0</td><td data-sort="0.09523809523809523">0.1</td><td data-sort="0.5238095238095238">0.5</td><td data-sort="0.6190476190476191">0.6</td><td data-sort="0.23809523809523808">0.2</td><td data-sort="0.14285714285714285">0.1</td><td data-sort="0.047619047619047616">0.0</td><td data-sort="0.09523809523809523">0.1</td><td data-sort="0.047619047619047616">0.0</td><td data-sort="0.47619047619047616">0.5</td><td data-sort="1.380952380952381">1.4</td></tr>
@@ -181,7 +204,7 @@
       
     <div class="table-wrap">
       <table id="advanced-1335" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>PER</th><th>EWA</th><th>TS%</th><th>3PAr</th><th>FTr</th><th>ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th>TOV%</th><th>USG%</th><th>+/-</th><th>On-Off</th><th>ORtg</th><th>DRtg</th><th>OWS</th><th>DWS</th><th>WS</th><th>WS/48</th><th>OBPM</th><th>DBPM</th><th>BPM</th><th>VORP</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th>EWA</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th>3PAr</th><th>FTr</th><th title="Share of available offensive rebounds grabbed">ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th title="Turnovers per 100 plays">TOV%</th><th title="Usage: share of team possessions used while on the floor">USG%</th><th>+/-</th><th>On-Off</th><th title="Points produced per 100 possessions">ORtg</th><th title="Points allowed per 100 possessions">DRtg</th><th>OWS</th><th>DWS</th><th title="Win Shares: estimated wins contributed">WS</th><th>WS/48</th><th title="Offensive Box Plus/Minus per 100 possessions">OBPM</th><th title="Defensive Box Plus/Minus per 100 possessions">DBPM</th><th title="Box Plus/Minus per 100 possessions vs league average">BPM</th><th title="Value Over Replacement Player">VORP</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026">2026</td><td data-sort="MAN"><a href="../teams/manhattan-elephants-8.html">MAN</a></td><td data-sort="25">25</td><td data-sort="32.0">32</td><td data-sort="0">0</td><td data-sort="14.9871113344037">15.0</td><td data-sort="10.4981753710268">10.5</td><td data-sort="-0.0003482863132697983">-0.0</td><td data-sort="63.066614111154905">63.1</td><td data-sort="0.4574468085106383">.457</td><td data-sort="0.18085106382978725">.181</td><td data-sort="5.199272640565744">5.2</td><td data-sort="18.370969896254053">18.4</td><td data-sort="11.607538223356404">11.6</td><td data-sort="5.357299413381283">5.4</td><td data-sort="1.1124695967058913">1.1</td><td data-sort="2.1294893261891614">2.1</td><td data-sort="8.146270818247647">8.1</td><td data-sort="9.831336773238487">9.8</td><td class="delta-up" data-sort="3.0340079846897807">3.0</td><td class="delta-up" data-sort="11.923571583733448">11.9</td><td data-sort="129.53932488688446">129.5</td><td data-sort="117.94362720497708">117.9</td><td data-sort="0.6580379504886099">0.7</td><td data-sort="0.2774424540486961">0.3</td><td data-sort="0.935480404537306">0.9</td><td data-sort="0.09362849020710165">.094</td><td data-sort="-2.2162493746583145">-2.2</td><td data-sort="-0.5056821561373503">-0.5</td><td data-sort="-2.721931530795665">-2.7</td><td data-sort="-0.08796478234043643">-0.1</td></tr>
 <tr><td data-sort="2027">2027</td><td data-sort="MAN"><a href="../teams/manhattan-elephants-8.html">MAN</a></td><td data-sort="26">26</td><td data-sort="21.0">21</td><td data-sort="0">0</td><td data-sort="3.9613951491210795">4.0</td><td data-sort="9.014294952181212">9.0</td><td data-sort="-0.08230211275226974">-0.1</td><td data-sort="53.54505169867061">53.5</td><td data-sort="0.375">.375</td><td data-sort="0.2916666666666667">.292</td><td data-sort="2.7023994842494456">2.7</td><td data-sort="15.02066482019402">15.0</td><td data-sort="8.829077706079023">8.8</td><td data-sort="8.163306062301785">8.2</td><td data-sort="0.5797168104708331">0.6</td><td data-sort="2.050384407625408">2.1</td><td data-sort="9.97340425531915">10.0</td><td data-sort="15.370395551248535">15.4</td><td class="delta-down" data-sort="-5.797168035021867">-5.8</td><td class="delta-down" data-sort="-4.778751179615087">-4.8</td><td data-sort="110.53630599328427">110.5</td><td data-sort="118.98535532241824">119.0</td><td data-sort="0.034229005814859596">0.0</td><td data-sort="0.04734271698877329">0.0</td><td data-sort="0.0815717228036329">0.1</td><td data-sort="0.04706666341123716">.047</td><td data-sort="-4.116496706502824">-4.1</td><td data-sort="-1.2445685427016882">-1.2</td><td data-sort="-5.361065249204512">-5.4</td><td data-sort="-0.0706696977275377">-0.1</td></tr>
@@ -198,7 +221,7 @@
       
     <div class="table-wrap">
       <table id="ratings-1335" data-sortable>
-        <thead><tr><th>Year</th><th>Pos</th><th>Ovr</th><th>Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
+        <thead><tr><th>Year</th><th>Pos</th><th title="Current overall rating">Ovr</th><th title="Potential rating ceiling">Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026">2026</td><td data-sort="SF">SF</td><td data-sort="60">60</td><td data-sort="63">63</td><td data-sort="56">56</td><td data-sort="44">44</td><td data-sort="51">51</td><td data-sort="50">50</td><td data-sort="68">68</td><td data-sort="39">39</td><td data-sort="44">44</td><td data-sort="66">66</td><td data-sort="70">70</td><td data-sort="71">71</td><td data-sort="69">69</td><td data-sort="47">47</td><td data-sort="29">29</td><td data-sort="45">45</td><td data-sort="62">62</td><td data-sort="3"><span class="mini-skill">3</span></td></tr>
 <tr><td data-sort="2027">2027</td><td data-sort="PF">PF</td><td data-sort="57">57</td><td data-sort="60">60</td><td data-sort="56">56</td><td data-sort="41">41</td><td data-sort="48">48</td><td data-sort="48">48</td><td data-sort="65">65</td><td data-sort="37">37</td><td data-sort="41">41</td><td data-sort="63">63</td><td data-sort="68">68</td><td data-sort="68">68</td><td data-sort="67">67</td><td data-sort="44">44</td><td data-sort="28">28</td><td data-sort="44">44</td><td data-sort="60">60</td><td data-sort="3"><span class="mini-skill">3</span></td></tr>
@@ -209,13 +232,43 @@
     </div>
     
     </section>
+    <div class="history-row">
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Salary History</h2></div>
+      
+    <div class="table-wrap fit-table">
+      <table id="salary-1335" data-sortable>
+        <thead><tr><th>Season</th><th>Salary</th></tr></thead>
+        <tbody>
+          <tr><td data-sort="2028">2028</td><td data-sort="9000.0">$9M</td></tr>
+<tr><td data-sort="2029">2029</td><td data-sort="9000.0">$9M</td></tr>
+<tr class="total-row"><td class="total-label">Total</td><td data-sort="18000.0">$18M</td></tr>
+        </tbody>
+      </table>
+    </div>
     
+    </section>
+    
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Injury History</h2><span class="count-pill">12 games missed</span></div>
+      
+    <div class="table-wrap fit-table">
+      <table id="injuries-1335" data-sortable>
+        <thead><tr><th>Season</th><th>Injury</th><th>Games</th></tr></thead>
+        <tbody>
+          <tr><td data-sort="2026">2026</td><td data-sort="Patellar Tendinitis">Patellar Tendinitis</td><td data-sort="12">12</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    </section>
+    </div>
     <section class="card stats-section">
       <div class="section-title-row"><h2>Per Game · Playoffs</h2><span class="count-pill">1</span></div>
       
     <div class="table-wrap">
       <table id="playoffs-1335" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th>eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th title="Effective FG%: counts threes as 1.5 field goals">eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
         <tbody>
           <tr><td data-sort="2028"><a href="#ratings">2028</a></td><td data-sort="MAN"><a href="../teams/manhattan-elephants-8.html">MAN</a></td><td data-sort="27">27</td><td data-sort="7.0">7</td><td data-sort="0">0</td><td data-sort="4.428469342756691">4.4</td><td data-sort="0.2857142857142857">0.3</td><td data-sort="1.0">1.0</td><td data-sort="28.571428571428573">28.6</td><td data-sort="0.0">0.0</td><td data-sort="0.2857142857142857">0.3</td><td data-sort="0.0">0.0</td><td data-sort="0.2857142857142857">0.3</td><td data-sort="0.7142857142857143">0.7</td><td data-sort="40.0">40.0</td><td data-sort="28.571428571428573">28.6</td><td data-sort="0.0">0.0</td><td data-sort="0.0">0.0</td><td>—</td><td data-sort="0.14285714285714285">0.1</td><td data-sort="0.2857142857142857">0.3</td><td data-sort="0.42857142857142855">0.4</td><td data-sort="0.14285714285714285">0.1</td><td data-sort="0.0">0.0</td><td data-sort="0.2857142857142857">0.3</td><td data-sort="0.0">0.0</td><td data-sort="0.2857142857142857">0.3</td><td data-sort="0.2857142857142857">0.3</td><td data-sort="0.5714285714285714">0.6</td></tr>
         </tbody>
@@ -229,7 +282,7 @@
       
     <div class="table-wrap">
       <table id="playoff-advanced-1335" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>PER</th><th>EWA</th><th>TS%</th><th>3PAr</th><th>FTr</th><th>ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th>TOV%</th><th>USG%</th><th>+/-</th><th>On-Off</th><th>ORtg</th><th>DRtg</th><th>OWS</th><th>DWS</th><th>WS</th><th>WS/48</th><th>OBPM</th><th>DBPM</th><th>BPM</th><th>VORP</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th>EWA</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th>3PAr</th><th>FTr</th><th title="Share of available offensive rebounds grabbed">ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th title="Turnovers per 100 plays">TOV%</th><th title="Usage: share of team possessions used while on the floor">USG%</th><th>+/-</th><th>On-Off</th><th title="Points produced per 100 possessions">ORtg</th><th title="Points allowed per 100 possessions">DRtg</th><th>OWS</th><th>DWS</th><th title="Win Shares: estimated wins contributed">WS</th><th>WS/48</th><th title="Offensive Box Plus/Minus per 100 possessions">OBPM</th><th title="Defensive Box Plus/Minus per 100 possessions">DBPM</th><th title="Box Plus/Minus per 100 possessions vs league average">BPM</th><th title="Value Over Replacement Player">VORP</th></tr></thead>
         <tbody>
           <tr><td data-sort="2028">2028</td><td data-sort="MAN"><a href="../teams/manhattan-elephants-8.html">MAN</a></td><td data-sort="27">27</td><td data-sort="7.0">7</td><td data-sort="0">0</td><td data-sort="4.428469342756691">4.4</td><td data-sort="3.666977293911814">3.7</td><td data-sort="-0.09664402244983089">-0.1</td><td data-sort="28.571428571428573">28.6</td><td data-sort="0.2857142857142857">.286</td><td data-sort="0.0">.000</td><td data-sort="3.6009832336095164">3.6</td><td data-sort="7.296233044015093">7.3</td><td data-sort="5.436594972978736">5.4</td><td data-sort="3.9352408664683995">3.9</td><td data-sort="3.087017765419035">3.1</td><td data-sort="0">0.0</td><td data-sort="0.0">0.0</td><td data-sort="9.610900078668157">9.6</td><td class="delta-down" data-sort="-15.435088329177622">-15.4</td><td class="delta-down" data-sort="-19.730632297951566">-19.7</td><td data-sort="77.5466800835731">77.5</td><td data-sort="114.8509222927897">114.9</td><td data-sort="-0.04684561172534403">-0.0</td><td data-sort="0.030687564129865078">0.0</td><td data-sort="-0.016158047595478953">-0.0</td><td data-sort="-0.025019489146049234">-.025</td><td data-sort="-6.1095788485589235">-6.1</td><td data-sort="-0.8957179746651036">-0.9</td><td data-sort="-7.005296823224027">-7.0</td><td data-sort="-0.0394208904309758">-0.0</td></tr>
         </tbody>
@@ -239,5 +292,6 @@
     </section>
     
   </main>
+  <footer class="site-footer">SMP Basketball League · Season 2029 · updated through Day 17</footer>
 </body>
 </html>

@@ -3,19 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>R.J. Barrett</title>
+  <title>R.J. Barrett — SMP Basketball League</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
   <link rel="stylesheet" href="../assets/styles.css">
   <script defer src="../assets/site.js"></script>
 </head>
-<body>
+<body data-root="../">
   
     <header class="site-header">
       <div class="brand"><a href="../index.html">SMP Basketball League</a></div>
+      <div class="nav-search">
+        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams">
+        <div class="search-results" data-search-results hidden></div>
+      </div>
       <nav class="primary-nav">
-        <a class="" href="../index.html">Home</a><a class="" href="../scores.html">Scores</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a>
+        <a class="" href="../index.html">Home</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a><a class="" href="../draft.html">Draft</a><a class="" href="../trade.html">Trade</a><a class="" href="../history.html">History</a><a class="" href="../records.html">Records</a>
         <details class="team-dropdown">
           <summary>Teams</summary>
-          <div class="team-menu" aria-label="Teams"><a class="" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
+          <div class="team-menu" aria-label="Teams"><a class="" data-tid="2" data-abbrev="CAM" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" data-tid="0" data-abbrev="DUR" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" data-tid="5" data-abbrev="GOO" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" data-tid="9" data-abbrev="ITH" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" data-tid="8" data-abbrev="MAN" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" data-tid="3" data-abbrev="QUE" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" data-tid="1" data-abbrev="ROC" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" data-tid="7" data-abbrev="STO" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" data-tid="4" data-abbrev="TOR" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" data-tid="6" data-abbrev="WAL" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
         </details>
       </nav>
     </header>
@@ -28,7 +33,7 @@
         <p class="eyebrow">Player profile</p>
         <h1>R.J. Barrett</h1>
         <p class="muted">#9 · <a href="../free-agency.html">FA</a></p>
-        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../free-agency.html">FA</a></strong></div><div class="detail-item"><span>Position</span><strong>SF</strong></div><div class="detail-item"><span>Age</span><strong>28</strong></div><div class="detail-item"><span>Height</span><strong>6'6"</strong></div><div class="detail-item"><span>Weight</span><strong>214 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2001 · Mississauga, Canada</strong></div><div class="detail-item"><span>College</span><strong>Duke</strong></div><div class="detail-item"><span>Draft</span><strong>2019 · Undrafted</strong></div><div class="detail-item"><span>Contract</span><strong>$1M thru 2029</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip">F</span></strong></div></div>
+        <div class="details-grid"><div class="detail-item"><span>Team</span><strong><a href="../free-agency.html">FA</a></strong></div><div class="detail-item"><span>Position</span><strong>SF</strong></div><div class="detail-item"><span>Age</span><strong>28</strong></div><div class="detail-item"><span>Height</span><strong>6'6"</strong></div><div class="detail-item"><span>Weight</span><strong>214 lbs</strong></div><div class="detail-item"><span>Born</span><strong>2001 · Mississauga, Canada</strong></div><div class="detail-item"><span>College</span><strong>Duke</strong></div><div class="detail-item"><span>Draft</span><strong>2019 · Undrafted</strong></div><div class="detail-item"><span>Contract</span><strong>$1M/2029</strong></div><div class="detail-item"><span>Injury</span><strong><span class="healthy">Healthy</span></strong></div><div class="detail-item"><span>Mood</span><strong><span class="mood-chip" title="Values Fame">F</span></strong></div></div>
       </div>
       <div class="rating-panel full-rating-panel">
         <div class="rating-topline">
@@ -133,7 +138,7 @@
     <section class="card compact-card">
       <div class="table-wrap summary-wrap">
         <table>
-          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th>TS%</th><th>PER</th><th>WS</th></tr></thead>
+          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th title="Win Shares: estimated wins contributed">WS</th></tr></thead>
           <tbody>
             <tr><td data-sort="2029">2029</td><td data-sort="34.0">34</td><td data-sort="6.479813843820585">6.5</td><td data-sort="2.764705882352941">2.8</td><td data-sort="1.0294117647058822">1.0</td><td data-sort="0.5">0.5</td><td data-sort="45.0">45.0</td><td data-sort="35.483870967741936">35.5</td><td data-sort="47.82608695652174">47.8</td><td data-sort="52.15268530847758">52.2</td><td data-sort="8.401308864592924">8.4</td><td data-sort="0.01824202249658477">0.0</td></tr>
             <tr><td data-sort="Career">Career</td><td data-sort="99.0">99</td><td data-sort="13.56054718421865">13.6</td><td data-sort="6.262626262626263">6.3</td><td data-sort="1.9494949494949494">1.9</td><td data-sort="1.0808080808080809">1.1</td><td data-sort="45.96774193548387">46.0</td><td data-sort="32.93413173652694">32.9</td><td data-sort="68.9873417721519">69.0</td><td data-sort="54.816805771679164">54.8</td><td data-sort="10.90531110846775">10.9</td><td data-sort="1.4112995811587485">1.4</td></tr>
@@ -142,12 +147,30 @@
       </div>
     </section>
     
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Season Highs · 2029</h2></div>
+      
+      <p class="muted small-copy">Career highs: 46 PTS · 15 TRB · 15 AST · 3 BLK · 6 STL</p>
+    </section>
+    
+    <section class="card">
+      <div class="section-title-row">
+        <h2>Development</h2>
+        <span class="muted small-copy"><span class="chart-key chart-key-ovr"></span> Overall · <span class="chart-key chart-key-pot"></span> Potential</span>
+      </div>
+      <svg viewBox="0 0 640 170" class="dev-chart" role="img" aria-label="Overall and potential by season">
+        <line x1="34" y1="106.5" x2="628" y2="106.5" class="chart-grid"/><text x="28" y="110.0" class="chart-tick" text-anchor="end">60</text><line x1="34" y1="62.6" x2="628" y2="62.6" class="chart-grid"/><text x="28" y="66.1" class="chart-tick" text-anchor="end">70</text><line x1="34" y1="18.8" x2="628" y2="18.8" class="chart-grid"/><text x="28" y="22.3" class="chart-tick" text-anchor="end">80</text><text x="34.0" y="162" class="chart-tick" text-anchor="middle">2020</text><text x="100.0" y="162" class="chart-tick" text-anchor="middle">2021</text><text x="166.0" y="162" class="chart-tick" text-anchor="middle">2022</text><text x="232.0" y="162" class="chart-tick" text-anchor="middle">2023</text><text x="298.0" y="162" class="chart-tick" text-anchor="middle">2024</text><text x="364.0" y="162" class="chart-tick" text-anchor="middle">2025</text><text x="430.0" y="162" class="chart-tick" text-anchor="middle">2026</text><text x="496.0" y="162" class="chart-tick" text-anchor="middle">2027</text><text x="562.0" y="162" class="chart-tick" text-anchor="middle">2028</text><text x="628.0" y="162" class="chart-tick" text-anchor="middle">2029</text>
+        <polyline points="34.0,27.5 100.0,36.3 166.0,45.1 232.0,40.7 298.0,62.6 364.0,62.6 430.0,84.6 496.0,97.7 562.0,110.9 628.0,128.5" class="line-pot"/><circle cx="34.0" cy="27.5" r="3" class="line-pot-dot"><title>2020: 78</title></circle><circle cx="100.0" cy="36.3" r="3" class="line-pot-dot"><title>2021: 76</title></circle><circle cx="166.0" cy="45.1" r="3" class="line-pot-dot"><title>2022: 74</title></circle><circle cx="232.0" cy="40.7" r="3" class="line-pot-dot"><title>2023: 75</title></circle><circle cx="298.0" cy="62.6" r="3" class="line-pot-dot"><title>2024: 70</title></circle><circle cx="364.0" cy="62.6" r="3" class="line-pot-dot"><title>2025: 70</title></circle><circle cx="430.0" cy="84.6" r="3" class="line-pot-dot"><title>2026: 65</title></circle><circle cx="496.0" cy="97.7" r="3" class="line-pot-dot"><title>2027: 62</title></circle><circle cx="562.0" cy="110.9" r="3" class="line-pot-dot"><title>2028: 59</title></circle><circle cx="628.0" cy="128.5" r="3" class="line-pot-dot"><title>2029: 55</title></circle>
+        <polyline points="34.0,119.7 100.0,106.5 166.0,110.9 232.0,93.4 298.0,97.7 364.0,97.7 430.0,93.4 496.0,106.5 562.0,115.3 628.0,128.5" class="line-ovr"/><circle cx="34.0" cy="119.7" r="3" class="line-ovr-dot"><title>2020: 57</title></circle><circle cx="100.0" cy="106.5" r="3" class="line-ovr-dot"><title>2021: 60</title></circle><circle cx="166.0" cy="110.9" r="3" class="line-ovr-dot"><title>2022: 59</title></circle><circle cx="232.0" cy="93.4" r="3" class="line-ovr-dot"><title>2023: 63</title></circle><circle cx="298.0" cy="97.7" r="3" class="line-ovr-dot"><title>2024: 62</title></circle><circle cx="364.0" cy="97.7" r="3" class="line-ovr-dot"><title>2025: 62</title></circle><circle cx="430.0" cy="93.4" r="3" class="line-ovr-dot"><title>2026: 63</title></circle><circle cx="496.0" cy="106.5" r="3" class="line-ovr-dot"><title>2027: 60</title></circle><circle cx="562.0" cy="115.3" r="3" class="line-ovr-dot"><title>2028: 58</title></circle><circle cx="628.0" cy="128.5" r="3" class="line-ovr-dot"><title>2029: 55</title></circle>
+      </svg>
+    </section>
+    
     <section class="card stats-section">
       <div class="section-title-row"><h2>Per Game · Regular Season</h2><span class="count-pill">3</span></div>
       
     <div class="table-wrap">
       <table id="regular-1247" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th>eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>FG</th><th>FGA</th><th>FG%</th><th>3P</th><th>3PA</th><th>3P%</th><th>2P</th><th>2PA</th><th>2P%</th><th title="Effective FG%: counts threes as 1.5 field goals">eFG%</th><th>FT</th><th>FTA</th><th>FT%</th><th>ORB</th><th>DRB</th><th>TRB</th><th>AST</th><th>TOV</th><th>STL</th><th>BLK</th><th>BA</th><th>PF</th><th>PTS</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026"><a href="#ratings">2026</a></td><td data-sort="QUE"><a href="../teams/queens-pigeons-3.html">QUE</a></td><td data-sort="25">25</td><td data-sort="39.0">39</td><td data-sort="35">35</td><td data-sort="24.16198412672431">24.2</td><td data-sort="4.205128205128205">4.2</td><td data-sort="9.102564102564102">9.1</td><td data-sort="46.19718309859155">46.2</td><td data-sort="0.8717948717948718">0.9</td><td data-sort="2.948717948717949">2.9</td><td data-sort="29.565217391304348">29.6</td><td data-sort="3.3333333333333335">3.3</td><td data-sort="6.153846153846154">6.2</td><td data-sort="54.166666666666664">54.2</td><td data-sort="50.985915492957744">51.0</td><td data-sort="2.051282051282051">2.1</td><td data-sort="2.8461538461538463">2.8</td><td data-sort="72.07207207207207">72.1</td><td data-sort="1.0">1.0</td><td data-sort="2.5128205128205128">2.5</td><td data-sort="3.5128205128205128">3.5</td><td data-sort="1.9230769230769231">1.9</td><td data-sort="1.4102564102564104">1.4</td><td data-sort="0.46153846153846156">0.5</td><td data-sort="0.2564102564102564">0.3</td><td data-sort="0.7692307692307693">0.8</td><td data-sort="2.5128205128205128">2.5</td><td data-sort="11.333333333333334">11.3</td></tr>
 <tr><td data-sort="2027"><a href="#ratings">2027</a></td><td data-sort="QUE"><a href="../teams/queens-pigeons-3.html">QUE</a></td><td data-sort="26">26</td><td data-sort="26.0">26</td><td data-sort="0">0</td><td data-sort="6.917812292519174">6.9</td><td data-sort="1.0769230769230769">1.1</td><td data-sort="2.3461538461538463">2.3</td><td data-sort="45.90163934426229">45.9</td><td data-sort="0.38461538461538464">0.4</td><td data-sort="0.8076923076923077">0.8</td><td data-sort="47.61904761904762">47.6</td><td data-sort="0.6923076923076923">0.7</td><td data-sort="1.5384615384615385">1.5</td><td data-sort="45.0">45.0</td><td data-sort="54.09836065573771">54.1</td><td data-sort="0.6923076923076923">0.7</td><td data-sort="0.9230769230769231">0.9</td><td data-sort="75.0">75.0</td><td data-sort="0.19230769230769232">0.2</td><td data-sort="0.6153846153846154">0.6</td><td data-sort="0.8076923076923077">0.8</td><td data-sort="0.5769230769230769">0.6</td><td data-sort="0.34615384615384615">0.3</td><td data-sort="0.07692307692307693">0.1</td><td data-sort="0.07692307692307693">0.1</td><td data-sort="0.19230769230769232">0.2</td><td data-sort="0.9230769230769231">0.9</td><td data-sort="3.230769230769231">3.2</td></tr>
@@ -181,7 +204,7 @@
       
     <div class="table-wrap">
       <table id="advanced-1247" data-sortable>
-        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th>PER</th><th>EWA</th><th>TS%</th><th>3PAr</th><th>FTr</th><th>ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th>TOV%</th><th>USG%</th><th>+/-</th><th>On-Off</th><th>ORtg</th><th>DRtg</th><th>OWS</th><th>DWS</th><th>WS</th><th>WS/48</th><th>OBPM</th><th>DBPM</th><th>BPM</th><th>VORP</th></tr></thead>
+        <thead><tr><th>Year</th><th>Team</th><th>Age</th><th>G</th><th>GS</th><th>MP</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th>EWA</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th>3PAr</th><th>FTr</th><th title="Share of available offensive rebounds grabbed">ORB%</th><th>DRB%</th><th>TRB%</th><th>AST%</th><th>STL%</th><th>BLK%</th><th title="Turnovers per 100 plays">TOV%</th><th title="Usage: share of team possessions used while on the floor">USG%</th><th>+/-</th><th>On-Off</th><th title="Points produced per 100 possessions">ORtg</th><th title="Points allowed per 100 possessions">DRtg</th><th>OWS</th><th>DWS</th><th title="Win Shares: estimated wins contributed">WS</th><th>WS/48</th><th title="Offensive Box Plus/Minus per 100 possessions">OBPM</th><th title="Defensive Box Plus/Minus per 100 possessions">DBPM</th><th title="Box Plus/Minus per 100 possessions vs league average">BPM</th><th title="Value Over Replacement Player">VORP</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026">2026</td><td data-sort="QUE"><a href="../teams/queens-pigeons-3.html">QUE</a></td><td data-sort="25">25</td><td data-sort="39.0">39</td><td data-sort="35">35</td><td data-sort="24.16198412672431">24.2</td><td data-sort="11.442262724841294">11.4</td><td data-sort="0.3533972310574943">0.4</td><td data-sort="54.72464342313787">54.7</td><td data-sort="0.323943661971831">.324</td><td data-sort="0.3126760563380282">.313</td><td data-sort="4.597279040786036">4.6</td><td data-sort="11.739867685176455">11.7</td><td data-sort="8.13978918306718">8.1</td><td data-sort="11.49685925964752">11.5</td><td data-sort="0.9093420204768331">0.9</td><td data-sort="0.938635930133318">0.9</td><td data-sort="11.98674919361869">12.0</td><td data-sort="20.39260752532267">20.4</td><td class="delta-down" data-sort="-3.283735070459375">-3.3</td><td class="delta-down" data-sort="-4.8979724015702795">-4.9</td><td data-sort="108.01095864143721">108.0</td><td data-sort="115.67802711874731">115.7</td><td data-sort="0.3388085311814161">0.3</td><td data-sort="0.787449557851867">0.8</td><td data-sort="1.126258089033283">1.1</td><td data-sort="0.057369618099945445">.057</td><td data-sort="-2.193335804516472">-2.2</td><td data-sort="-1.413735244407977">-1.4</td><td data-sort="-3.607071048924449">-3.6</td><td data-sort="-0.3798033686907529">-0.4</td></tr>
 <tr><td data-sort="2027">2027</td><td data-sort="QUE"><a href="../teams/queens-pigeons-3.html">QUE</a></td><td data-sort="26">26</td><td data-sort="26.0">26</td><td data-sort="0">0</td><td data-sort="6.917812292519174">6.9</td><td data-sort="11.159321408245667">11.2</td><td data-sort="0.04719904688945517">0.0</td><td data-sort="58.69200670765791">58.7</td><td data-sort="0.3442622950819672">.344</td><td data-sort="0.39344262295081966">.393</td><td data-sort="3.138587445110678">3.1</td><td data-sort="10.055274868187821">10.1</td><td data-sort="6.594901612217596">6.6</td><td data-sort="11.81015815928456">11.8</td><td data-sort="0.5324061190674331">0.5</td><td data-sort="0.9814381648626695">1.0</td><td data-sort="11.171797418073485">11.2</td><td data-sort="18.798240561884104">18.8</td><td class="delta-down" data-sort="-5.324061161073704">-5.3</td><td class="delta-down" data-sort="-4.994825466750385">-5.0</td><td data-sort="116.14643621319803">116.1</td><td data-sort="120.42951142324418">120.4</td><td data-sort="0.19380807862978264">0.2</td><td data-sort="0.07299139099909804">0.1</td><td data-sort="0.2667994696288807">0.3</td><td data-sort="0.07120066954401237">.071</td><td data-sort="-1.9424129143133237">-1.9</td><td data-sort="-1.992775756746676">-2.0</td><td data-sort="-3.9351886710599997">-3.9</td><td data-sort="-0.08820248879417314">-0.1</td></tr>
@@ -198,7 +221,7 @@
       
     <div class="table-wrap">
       <table id="ratings-1247" data-sortable>
-        <thead><tr><th>Year</th><th>Pos</th><th>Ovr</th><th>Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
+        <thead><tr><th>Year</th><th>Pos</th><th title="Current overall rating">Ovr</th><th title="Potential rating ceiling">Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
         <tbody>
           <tr><td data-sort="2026">2026</td><td data-sort="GF">GF</td><td data-sort="63">63</td><td data-sort="65">65</td><td data-sort="46">46</td><td data-sort="58">58</td><td data-sort="67">67</td><td data-sort="66">66</td><td data-sort="75">75</td><td data-sort="67">67</td><td data-sort="89">89</td><td data-sort="38">38</td><td data-sort="79">79</td><td data-sort="45">45</td><td data-sort="76">76</td><td data-sort="38">38</td><td data-sort="47">47</td><td data-sort="50">50</td><td data-sort="74">74</td><td data-sort="V"><span class="mini-skill">V</span></td></tr>
 <tr><td data-sort="2027">2027</td><td data-sort="SF">SF</td><td data-sort="60">60</td><td data-sort="62">62</td><td data-sort="46">46</td><td data-sort="55">55</td><td data-sort="65">65</td><td data-sort="64">64</td><td data-sort="72">72</td><td data-sort="64">64</td><td data-sort="87">87</td><td data-sort="35">35</td><td data-sort="77">77</td><td data-sort="42">42</td><td data-sort="73">73</td><td data-sort="35">35</td><td data-sort="45">45</td><td data-sort="48">48</td><td data-sort="72">72</td><td data-sort="V"><span class="mini-skill">V</span></td></tr>
@@ -209,7 +232,42 @@
     </div>
     
     </section>
+    <div class="history-row">
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Salary History</h2></div>
+      
+    <div class="table-wrap fit-table">
+      <table id="salary-1247" data-sortable>
+        <thead><tr><th>Season</th><th>Salary</th></tr></thead>
+        <tbody>
+          <tr><td data-sort="2028">2028</td><td data-sort="9000.0">$9M</td></tr>
+<tr><td data-sort="2029">2029</td><td data-sort="9000.0">$9M</td></tr>
+<tr><td data-sort="2030">2030</td><td data-sort="9000.0">$9M</td></tr>
+<tr><td data-sort="2031">2031</td><td data-sort="9000.0">$9M</td></tr>
+<tr class="total-row"><td class="total-label">Total</td><td data-sort="36000.0">$36M</td></tr>
+        </tbody>
+      </table>
+    </div>
     
+    </section>
+    
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Injury History</h2><span class="count-pill">20 games missed</span></div>
+      
+    <div class="table-wrap fit-table">
+      <table id="injuries-1247" data-sortable>
+        <thead><tr><th>Season</th><th>Injury</th><th>Games</th></tr></thead>
+        <tbody>
+          <tr><td data-sort="2027">2027</td><td data-sort="Patellar Tendinitis">Patellar Tendinitis</td><td data-sort="10">10</td></tr>
+<tr><td data-sort="2027">2027</td><td data-sort="Sprained Wrist">Sprained Wrist</td><td data-sort="8">8</td></tr>
+<tr><td data-sort="2026">2026</td><td data-sort="Sprained Ankle">Sprained Ankle</td><td data-sort="2">2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    </section>
+    </div>
   </main>
+  <footer class="site-footer">SMP Basketball League · Season 2029 · updated through Day 17</footer>
 </body>
 </html>

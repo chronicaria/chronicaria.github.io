@@ -401,6 +401,20 @@
     });
   }
 
+  // ---------- draft year tabs ----------
+  const draftTabs = document.querySelector('[data-draft-tabs]');
+  if (draftTabs) {
+    const buttons = Array.from(draftTabs.querySelectorAll('button[data-draft-tab]'));
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((b) => b.classList.toggle('active', b === button));
+        document.querySelectorAll('[data-draft-panel]').forEach((panel) => {
+          panel.hidden = panel.dataset.draftPanel !== button.dataset.draftTab;
+        });
+      });
+    });
+  }
+
   // ---------- keyboard shortcuts ----------
   document.addEventListener('keydown', (event) => {
     if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return;
@@ -409,39 +423,5 @@
     const input = document.querySelector('[data-global-search]');
     if (input) { event.preventDefault(); input.focus(); input.select(); }
   });
-
-  // ---------- favorite team ----------
-  const FAV_KEY = 'smp-fav-tid';
-  const favTid = localStorage.getItem(FAV_KEY);
-  document.querySelectorAll('[data-fav-team]').forEach((btn) => {
-    const tid = btn.dataset.favTeam;
-    const sync = () => btn.classList.toggle('active', localStorage.getItem(FAV_KEY) === tid);
-    sync();
-    btn.addEventListener('click', () => {
-      const current = localStorage.getItem(FAV_KEY);
-      if (current === tid) localStorage.removeItem(FAV_KEY);
-      else localStorage.setItem(FAV_KEY, tid);
-      sync();
-      applyFavorite();
-    });
-  });
-
-  function applyFavorite() {
-    const fav = localStorage.getItem(FAV_KEY);
-    document.querySelectorAll('.fav-row').forEach((el) => el.classList.remove('fav-row'));
-    document.querySelectorAll('.fav-pin').forEach((el) => el.remove());
-    if (!fav) return;
-    document.querySelectorAll('tr[data-tid="' + fav + '"], th[data-tid="' + fav + '"]').forEach((el) => el.classList.add('fav-row'));
-    const menuLink = document.querySelector('.team-menu a[data-tid="' + fav + '"]');
-    const nav = document.querySelector('.primary-nav');
-    if (menuLink && nav) {
-      const pin = document.createElement('a');
-      pin.href = menuLink.href;
-      pin.textContent = menuLink.dataset.abbrev || menuLink.textContent;
-      pin.className = 'fav-pin' + (menuLink.classList.contains('active') ? ' active' : '');
-      nav.insertBefore(pin, nav.firstElementChild);
-    }
-  }
-  applyFavorite();
 
 })();

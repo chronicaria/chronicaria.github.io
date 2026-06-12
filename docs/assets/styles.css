@@ -126,7 +126,9 @@ a:hover { text-decoration: underline; }
   border-radius: .6rem;
   background: var(--panel);
 }
-.page-hero { margin-bottom: .75rem; padding: .8rem 1rem; }
+.page-hero { margin-bottom: .75rem; padding: .8rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.draft-tabs button { padding: .45rem 1rem; font-size: .9rem; }
+[data-draft-panel][hidden] { display: none; }
 .eyebrow {
   margin: 0 0 .15rem;
   color: var(--muted);
@@ -276,6 +278,11 @@ tr.avg-row > td { border-top: 1px solid var(--line); color: var(--muted); font-s
 .score-status { font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .score-status.final { color: var(--accent); }
 .day-panel[hidden] { display: none; }
+.score-stack { flex-direction: column; align-items: stretch; gap: .15rem; }
+.score-row { display: flex; justify-content: space-between; gap: .8rem; color: var(--muted); font-size: .85rem; }
+.score-row strong { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+.score-row.score-won, .score-row.score-won strong { color: var(--text); font-weight: 700; }
+.score-stack .score-status { align-self: flex-end; }
 
 /* ---------- schedule grid ---------- */
 .schedule-grid th, .schedule-grid td { text-align: center; }
@@ -728,24 +735,6 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .search-results a:hover, .search-results a.selected { background: var(--panel-2); text-decoration: none; }
 .search-empty { padding: .45rem .6rem; color: var(--muted); font-size: .78rem; }
 
-/* ---------- favorite team ---------- */
-.fav-star {
-  margin-right: .4rem;
-  padding: 0 .2rem;
-  border: 0;
-  background: none;
-  color: var(--muted);
-  font: inherit;
-  font-size: 1.1rem;
-  cursor: pointer;
-  vertical-align: baseline;
-}
-.fav-star.active { color: #f2c14e; }
-.fav-star:hover { color: #f2c14e; }
-.fav-pin::before { content: "★ "; color: #f2c14e; }
-tr.fav-row > td { background: rgba(242,193,78,.07); }
-tr.fav-row > td:first-child { box-shadow: inset 2px 0 0 #f2c14e; }
-th.fav-row { color: #f2c14e !important; }
 
 /* ---------- round 3 ---------- */
 .rank-move { display: inline-block; min-width: 1.6rem; font-size: .68rem; font-variant-numeric: tabular-nums; }
@@ -753,6 +742,7 @@ th.fav-row { color: #f2c14e !important; }
 .l10-dots { display: inline-flex; gap: 2px; align-items: center; }
 .l10-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; }
 .l10-w { background: var(--good); }
+#playoff-odds td.seed-cut, #playoff-odds th:nth-child(8) { border-left: 1px solid var(--line); }
 .l10-l { background: var(--bad); opacity: .7; }
 .high-row { display: flex; flex-wrap: wrap; gap: .45rem; }
 .high-chip {
@@ -776,9 +766,10 @@ th.fav-row { color: #f2c14e !important; }
 .profile-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
 tr.dead-row > td { opacity: .65; }
 .dead-money { font-style: italic; }
-.honors { margin-top: .6rem; display: grid; gap: .3rem; }
-.honor-row { display: flex; gap: .6rem; font-size: .8rem; align-items: baseline; }
-.honor-label { flex: 0 0 9.5rem; color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.honors-table-wrap { margin-top: .6rem; }
+.honors-table th, .honors-table td { text-align: left; }
+.honor-label-cell { color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.honor-cell { min-width: 9rem; }
 .tx-season { border: 1px solid var(--line); border-radius: .5rem; background: var(--panel-2); padding: .45rem .7rem; margin-bottom: .5rem; }
 .tx-season summary { cursor: pointer; font-weight: 600; font-size: .85rem; display: flex; align-items: center; gap: .5rem; }
 .tx-season[open] summary { margin-bottom: .35rem; }

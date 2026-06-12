@@ -782,14 +782,6 @@ def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
 
 
 def page_html(title: str, body: str, teams: list[dict[str, Any]], root: str = "", active: str = "") -> str:
-    season = SITE_META.get("season")
-    day = SITE_META.get("day")
-    if season and day:
-        freshness = f"Season {season} · updated through Day {day}"
-    elif season:
-        freshness = f"Season {season}"
-    else:
-        freshness = ""
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -805,7 +797,6 @@ def page_html(title: str, body: str, teams: list[dict[str, Any]], root: str = ""
   <main class="page-shell">
     {body}
   </main>
-  <footer class="site-footer">SMP Basketball League · {esc(freshness)}</footer>
 </body>
 </html>
 """
@@ -815,11 +806,16 @@ def acquisition_html(player: dict[str, Any], teams_by_tid: dict[int, dict[str, A
     transactions = [t for t in (player.get("transactions") or []) if isinstance(t, dict)]
     relevant = [t for t in transactions if t.get("type") in ("draft", "trade", "freeAgent")]
     if not relevant:
-        return '<span class="muted">—</span>'
+        # No recorded move: these players were signed in current-season free agency.
+        season = SITE_META.get("season")
+        return f"FA '{str(season)[-2:]}" if season else '<span class="muted">—</span>'
     tx = relevant[-1]
     tx_type = tx.get("type")
     season_short = f"'{str(tx.get('season'))[-2:]}" if tx.get("season") else ""
     if tx_type == "draft":
+        # The league started in 2026; the inaugural draft just seeded rosters.
+        if safe_int(tx.get("season")) == 2026:
+            return '<span class="muted">—</span>'
         pick = tx.get("pickNum")
         pick_text = f" #{pick}" if pick else ""
         return f"Draft {esc(season_short)}{esc(pick_text)}"
@@ -1192,9 +1188,8 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
     <section class="page-hero team-hero" style="--team-primary:{esc(primary)};--team-secondary:{esc(secondary)}">
       <div>
         <p class="eyebrow">Team</p>
-        <h1><button class="fav-star" data-fav-team="{esc(team.get('tid'))}" title="Set as favorite team">★</button>{esc(team_full)}</h1>
+        <h1>{esc(team_full)}</h1>
         <p class="muted">{' · '.join(record_bits)}</p>
-        {team_vitals_html(team, season)}
       </div>
       {salary_cap_html(payroll, cap)}
     </section>
@@ -1292,7 +1287,7 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
         dbpm = safe_float(stat.get("dbpm"), 0.0)
         ws = safe_float(stat.get("ows"), 0.0) + safe_float(stat.get("dws"), 0.0)
         rows.append("".join([
-            td(player_link(p, "../"), sort=player_name(p), cls="name-cell"),
+            td(player_link(p, "../", show_number=False), sort=player_name(p), cls="name-cell"),
             td(team_label(p.get("tid"), teams_by_tid, "../"), sort=team_label(p.get("tid"), teams_by_tid, as_link=False)),
             td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
             td(age(p, season), sort=(season - (p.get("born") or {}).get("year", season) if isinstance((p.get("born") or {}).get("year"), int) else None)),
@@ -1413,7 +1408,10 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
     <section class="page-hero">
       <div>
         <h1>Players</h1>
-        <p class="muted">{len(sorted_players)} rostered players · free agents are in the <a href="../free-agency.html">Free Agency</a> tab · <a href="../compare.html">compare players →</a></p>
+        <p class="muted">{len(sorted_players)} rostered players · free agents are in the <a href="../free-agency.html">Free Agency</a> tab</p>
+      </div>
+      <div>
+        <a class="button-link compare-cta" href="../compare.html">⇄ Compare Players</a>
       </div>
     </section>
     {chart_card}
@@ -2123,7 +2121,7 @@ def simulate_playoff_odds(data: dict[str, Any], teams: list[dict[str, Any]], sea
 
     rng = random.Random(20290101)
     playoff_count = defaultdict(int)
-    seed1_count = defaultdict(int)
+    seed_counts: dict[int, list[int]] = {tid: [0] * len(tids) for tid in tids}
     win_total = defaultdict(float)
     probs = {
         (home, away): 1.0 / (1.0 + math.exp(-((strength[home] - strength[away] + 1.5) * 0.16)))
@@ -2141,16 +2139,15 @@ def simulate_playoff_odds(data: dict[str, Any], teams: list[dict[str, Any]], sea
         for seed, tid in enumerate(order, 1):
             if seed <= 4:
                 playoff_count[tid] += 1
-            if seed == 1:
-                seed1_count[tid] += 1
+            seed_counts[tid][seed - 1] += 1
         for tid in tids:
             win_total[tid] += wins[tid]
 
-    results: dict[int, dict[str, float]] = {}
+    results: dict[int, dict[str, Any]] = {}
     for tid in tids:
         results[tid] = {
             "po": playoff_count[tid] / sims,
-            "seed1": seed1_count[tid] / sims,
+            "seeds": [count / sims for count in seed_counts[tid]],
             "proj_w": win_total[tid] / sims,
             "games_left": games_left[tid],
             "wins": wins0[tid],
@@ -2193,35 +2190,47 @@ def magic_elimination(teams: list[dict[str, Any]], season: int, season_len: int 
     return out
 
 
+def seed_cell_style(pct: float) -> str:
+    """Single-hue intensity: faint for unlikely seeds, strong for likely ones."""
+    if pct < 0.5:
+        return ""
+    alpha = 0.06 + 0.55 * min(1.0, pct / 100.0)
+    return f"background-color: rgba(91,157,255,{alpha:.2f})"
+
+
 def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
     palette = team_palette_by_tid(teams)
     odds = simulate_playoff_odds(data, teams, season)
     if not odds or all(o["games_left"] == 0 for o in odds.values()):
         return ""
     season_len = regular_season_length(data, season) or 45
-    magic = magic_elimination(teams, season, season_len)
-    infos = sorted(odds.items(), key=lambda kv: -kv[1]["po"])
+    infos = sorted(odds.items(), key=lambda kv: (-kv[1]["po"], -kv[1]["proj_w"]))
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    n_seeds = len(infos)
     rows = []
     for tid, o in infos:
         team = teams_by_tid.get(tid, {})
         proj_w = o["proj_w"]
         proj_l = season_len - proj_w
         po_pct = 100 * o["po"]
-        seed1_pct = 100 * o["seed1"]
-        note = magic.get(tid, "—")
-        note_cls = "delta-up" if note == "Clinched" else "delta-down" if note == "Eliminated" else ""
-        rows.append(f'<tr data-tid="{tid}">' + "".join([
+        cells = [
             td(f'{team_dot(tid, palette)}{team_anchor(team)}', sort=team_full_name(team), cls="name-cell"),
             td(f"{fmt_number(proj_w, 1)}-{fmt_number(proj_l, 1)}", sort=proj_w),
             td(fmt_number(po_pct, 0) + "%", sort=po_pct, style=heat_style(po_pct, 0, 100, 1)),
-            td(fmt_number(seed1_pct, 0) + "%", sort=seed1_pct),
-            td(note, sort=note, cls=note_cls),
-        ]) + "</tr>")
-    headers = ["Team", "Proj W-L", "PO%", "Seed 1%", "Clinch"]
+        ]
+        for seed_index in range(n_seeds):
+            pct = 100 * o["seeds"][seed_index]
+            if pct < 0.5:
+                text = "—" if pct == 0 else "<1"
+            else:
+                text = fmt_number(pct, 0)
+            cls = "seed-cut" if seed_index == 4 else ""
+            cells.append(td(text, sort=pct, style=seed_cell_style(pct), cls=cls))
+        rows.append(f'<tr data-tid="{tid}">{"".join(cells)}</tr>')
+    headers = ["Team", "Proj W-L", "PO%"] + [str(i) for i in range(1, n_seeds + 1)]
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>Playoff Odds</h2><span class="muted small-copy">5,000 season simulations of the remaining schedule</span></div>
+      <div class="section-title-row"><h2>Playoff Odds</h2><span class="muted small-copy">5,000 season sims · % chance of finishing at each seed · top 4 make the playoffs</span></div>
       {table_html(headers, rows, table_id="playoff-odds", empty_message="Season complete.")}
     </section>
     """
@@ -3173,10 +3182,10 @@ def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], sche
         <p class="muted">{esc(label)} · <strong>vs.</strong> home · <strong>@</strong> road · the highlighted row is the next game day</p>
       </div>
     </section>
+    {head_to_head_matrix(data, teams, season_for_h2h)}
     <section class="card">
       {table}
     </section>
-    {head_to_head_matrix(data, teams, season_for_h2h)}
     """
     return page_html("Schedule", body, teams, root="", active="schedule")
 
@@ -3679,23 +3688,28 @@ def latest_results_strip(data: dict[str, Any], teams: list[dict[str, Any]], seas
         return ""
     last_day = max(safe_int(item.get("day")) for item in completed)
     day_items = [item for item in completed if safe_int(item.get("day")) == last_day]
+    def result_row(tid: Any, pts: Any, won: bool) -> str:
+        team = teams_by_tid.get(safe_int(tid), {})
+        team_season = latest_team_season(team, season)
+        record = fmt_record(team_season.get("won"), team_season.get("lost"))
+        name = esc(team.get("region") or team_abbrev(team))
+        cls = "score-row score-won" if won else "score-row"
+        return (
+            f'<span class="{cls}"><span>{name} <span class="muted">({esc(record)})</span></span>'
+            f'<strong>{fmt_number(pts, 0)}</strong></span>'
+        )
+
     lines = []
     for item in day_items:
         winner = game_winner_tid(item)
-        away = team_abbrev_for_tid(item.get("away_tid"), teams_by_tid)
-        home = team_abbrev_for_tid(item.get("home_tid"), teams_by_tid)
-        away_html = f"{esc(away)} {fmt_number(item.get('away_pts'), 0)}"
-        home_html = f"{esc(home)} {fmt_number(item.get('home_pts'), 0)}"
-        if winner == item.get("away_tid"):
-            away_html = f"<strong>{away_html}</strong>"
-        elif winner == item.get("home_tid"):
-            home_html = f"<strong>{home_html}</strong>"
         ot = game_ot_label(item)
-        ot_html = f' <span class="score-status">{esc(ot)}</span>' if ot else ""
+        ot_html = f'<span class="score-status">{esc(ot)}</span>' if ot else ""
         lines.append(
-            f'<a class="score-line" href="{esc(game_url(item))}">'
-            f'<span class="score-match">{away_html} <em>@</em> {home_html}{ot_html}</span>'
-            f'<span class="score-status final">Final</span></a>'
+            f'<a class="score-line score-stack" href="{esc(game_url(item))}">'
+            + result_row(item.get("away_tid"), item.get("away_pts"), winner == item.get("away_tid"))
+            + result_row(item.get("home_tid"), item.get("home_pts"), winner == item.get("home_tid"))
+            + ot_html
+            + "</a>"
         )
     return f"""
     <section class="card home-section">
@@ -3792,7 +3806,7 @@ def compose_event_html(event: dict[str, Any], all_players_by_pid: dict[int, dict
     return ""
 
 
-def news_feed_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int, root: str = "", limit: int = 25) -> str:
+def news_feed_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int, root: str = "", limit: int = 10) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
     current_gids = {str(g.get("gid")) for g in data.get("games", []) if g.get("season") == season}
@@ -4056,15 +4070,7 @@ def four_factors_table(data: dict[str, Any], teams: list[dict[str, Any]], season
 
 def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, start_season: int) -> str:
     chart_teams = active_teams_for_season(teams, season)
-    latest_day = max((safe_int(item.get("day")) for item in completed_game_items(data, season)), default=0)
-    season_note = f"{season}, Day {latest_day}" if latest_day else f"Season {season}"
     body = f"""
-    <section class="page-hero home-hero">
-      <div>
-        <h1>SMP Basketball League</h1>
-        <p class="muted">{season_note}</p>
-      </div>
-    </section>
     {latest_results_strip(data, chart_teams, season)}
     <div class="home-columns">
       <div class="home-main">
@@ -4109,32 +4115,47 @@ def award_winner_html(winner: dict[str, Any] | None, all_players_by_pid: dict[in
 
 
 def honors_html(award: dict[str, Any], all_players_by_pid: dict[int, dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str) -> str:
-    sections = []
+    table_rows = []
+    max_players = 0
     for key, title in (("allLeague", "All-League"), ("allDefensive", "All-Defensive"), ("allRookie", "All-Rookie")):
         groups = award.get(key)
         if not isinstance(groups, list) or not groups:
             continue
-        if key == "allRookie" and groups and isinstance(groups[0], dict) and "players" not in groups[0]:
+        if groups and isinstance(groups[0], dict) and "players" not in groups[0]:
             groups = [{"title": "", "players": groups}]
-        rows = []
         for group in groups:
             if not isinstance(group, dict):
                 continue
-            names = [
-                event_player_link(member.get("pid"), all_players_by_pid, root, label=member.get("name"))
-                + f' <span class="muted small-copy">{esc(team_abbrev(teams_by_tid.get(safe_int(member.get("tid"), -10))))}</span>'
-                for member in group.get("players") or []
-                if isinstance(member, dict)
-            ]
-            if not names:
+            members = [m for m in group.get("players") or [] if isinstance(m, dict)]
+            if not members:
                 continue
             group_title = group.get("title") or ""
             label = f"{title} {group_title}".strip()
-            rows.append(f'<div class="honor-row"><span class="honor-label">{esc(label)}</span><span>{" · ".join(names)}</span></div>')
-        sections.extend(rows)
-    if not sections:
+            cells = [td(esc(label), cls="name-cell honor-label-cell")]
+            for member in members:
+                name = event_player_link(member.get("pid"), all_players_by_pid, root, label=member.get("name"))
+                team = esc(team_abbrev(teams_by_tid.get(safe_int(member.get("tid"), -10))))
+                cells.append(td(f'{name} <span class="muted small-copy">{team}</span>', cls="honor-cell"))
+            max_players = max(max_players, len(members))
+            table_rows.append(cells)
+    if not table_rows:
         return ""
-    return f'<div class="honors">{"".join(sections)}</div>'
+    rows = []
+    for cells in table_rows:
+        while len(cells) < max_players + 1:
+            cells.append(td(""))
+        rows.append("".join(cells))
+    headers = ["Honor"] + [str(i) for i in range(1, max_players + 1)]
+    header_html = "".join(th(label) for label in headers)
+    body_html = "".join(f"<tr>{row}</tr>" for row in rows)
+    return f"""
+    <div class="table-wrap honors-table-wrap">
+      <table class="honors-table">
+        <thead><tr>{header_html}</tr></thead>
+        <tbody>{body_html}</tbody>
+      </table>
+    </div>
+    """
 
 
 def playoff_bracket_html(ps: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], root: str) -> str:
@@ -4260,12 +4281,9 @@ def projected_lottery_html(data: dict[str, Any], teams: list[dict[str, Any]], se
     """
 
 
-def render_draft_page(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
-    prospects = draft_prospects(data)
-    draft_years = sorted({(p.get("draft") or {}).get("year") for p in prospects if (p.get("draft") or {}).get("year")})
-    draft_year = draft_years[0] if draft_years else season
+def draft_class_panel(data: dict[str, Any], teams: list[dict[str, Any]], season: int, draft_year: int, class_prospects: list[dict[str, Any]], hidden: bool) -> str:
     sorted_prospects = sorted(
-        prospects,
+        class_prospects,
         key=lambda p: (-safe_int(latest_rating(p).get("pot")), -safe_int(latest_rating(p).get("ovr")), player_name(p)),
     )
     rating_ranges: dict[str, tuple[float, float]] = {}
@@ -4281,20 +4299,49 @@ def render_draft_page(data: dict[str, Any], teams: list[dict[str, Any]], season:
     for key, label in TEAM_RATING_RANK_KEYS:
         headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
     rows = [prospect_row(p, season, rating_ranges) for p in sorted_prospects]
+    table_id = f"prospects-{draft_year}"
+    hidden_attr = " hidden" if hidden else ""
+    return f"""
+    <div data-draft-panel="{draft_year}"{hidden_attr}>
+      {projected_lottery_html(data, teams, season, draft_year)}
+      <section class="card">
+        <div class="section-title-row"><h2>Class of {draft_year}</h2><span class="count-pill">{len(sorted_prospects)} prospects</span></div>
+        <div class="toolbar">
+          <input class="table-search" data-table-filter="{table_id}" placeholder="Filter prospects…" aria-label="Filter prospects">
+        </div>
+        {table_html(headers, rows, table_id=table_id, empty_message="No prospects in this class.")}
+      </section>
+    </div>
+    """
+
+
+def render_draft_page(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
+    prospects = draft_prospects(data)
+    by_year: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for p in prospects:
+        year = (p.get("draft") or {}).get("year")
+        if isinstance(year, int):
+            by_year[year].append(p)
+    draft_years = sorted(by_year)
+    if not draft_years:
+        draft_years = [season]
+    tabs = "".join(
+        f'<button type="button" class="{"active" if i == 0 else ""}" data-draft-tab="{year}">{year}</button>'
+        for i, year in enumerate(draft_years)
+    )
+    panels = "".join(
+        draft_class_panel(data, teams, season, year, by_year.get(year, []), hidden=(i != 0))
+        for i, year in enumerate(draft_years)
+    )
     body = f"""
     <section class="page-hero">
       <div>
-        <h1>Draft {esc(draft_year)}</h1>
-        <p class="muted">{len(sorted_prospects)} prospects · sorted by potential · ratings color-scaled against this class</p>
+        <h1>Draft</h1>
+        <p class="muted">Upcoming classes · sorted by potential · ratings color-scaled within each class · pick slots from current standings</p>
       </div>
+      <div class="view-toggle draft-tabs" data-draft-tabs>{tabs}</div>
     </section>
-    {projected_lottery_html(data, teams, season, draft_year)}
-    <section class="card">
-      <div class="toolbar">
-        <input class="table-search" data-table-filter="prospects" placeholder="Filter prospects…" aria-label="Filter prospects">
-      </div>
-      {table_html(headers, rows, table_id="prospects", empty_message="No draft prospects in this export.")}
-    </section>
+    {panels}
     """
     return page_html("Draft", body, teams, root="", active="draft")
 
@@ -4344,70 +4391,6 @@ def contract_efficiency_table(players: list[dict[str, Any]], teams: list[dict[st
       {table_html(headers, rows, table_id="contracts", empty_message="No contracts found.")}
     </section>
     """
-
-
-def trading_block_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int, root: str = "") -> str:
-    blocks = data.get("savedTradingBlock") or []
-    if not isinstance(blocks, list) or not blocks:
-        return ""
-    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
-    palette = team_palette_by_tid(teams)
-    cards = []
-    for block in blocks:
-        tid = safe_int(block.get("tid"), -10)
-        team = teams_by_tid.get(tid)
-        if team is None:
-            continue
-        asked_pids = block.get("pids") or []
-        asked_html = []
-        asked_value = 0.0
-        for pid in asked_pids:
-            player = ALL_PLAYERS_BY_PID.get(safe_int(pid, -10))
-            if not player:
-                continue
-            asked_value += safe_float(player.get("value"))
-            asked_html.append(
-                f'<span class="pick-chip">{event_player_link(pid, ALL_PLAYERS_BY_PID, root)} '
-                f'<span class="muted small-copy">{fmt_number(player.get("value"), 0)}</span></span>'
-            )
-        offer_rows = []
-        for offer in block.get("offers") or []:
-            offer_tid = safe_int(offer.get("tid"), -10)
-            offer_team = teams_by_tid.get(offer_tid)
-            names = []
-            offer_value = 0.0
-            for pid in offer.get("pids") or []:
-                player = ALL_PLAYERS_BY_PID.get(safe_int(pid, -10))
-                if not player:
-                    continue
-                offer_value += safe_float(player.get("value"))
-                names.append(event_player_link(pid, ALL_PLAYERS_BY_PID, root))
-            picks_count = len(offer.get("dpids") or [])
-            if picks_count:
-                names.append(f"{picks_count} draft pick{'s' if picks_count > 1 else ''}")
-            delta = offer_value - asked_value
-            offer_rows.append((delta, "".join([
-                td(f'{team_dot(offer_tid, palette)}{team_anchor(offer_team)}' if offer_team else "—", sort=team_full_name(offer_team) if offer_team else "", cls="name-cell"),
-                td(", ".join(names) or '<span class="muted">nothing</span>', sort=offer_value, cls="offer-cell"),
-                td(fmt_number(offer_value, 0), sort=offer_value),
-                td(fmt_signed(delta, 0), sort=delta, cls=plus_minus_class(delta)),
-            ])))
-        offer_rows.sort(key=lambda pair: -pair[0])
-        offers_table = table_html(
-            ["Team", "Their offer", "Offer value", "vs asked"],
-            [row for _, row in offer_rows],
-            table_id=f"block-{tid}",
-            empty_message="No offers on record.",
-        )
-        cards.append(f"""
-        <section class="card home-section">
-          <div class="section-title-row"><h2>Trading Block · {esc(team_abbrev(team))}</h2><span class="muted small-copy">players shopped and the offers other teams have made</span></div>
-          <div class="pick-row">{''.join(asked_html) or '<span class="muted">No players listed.</span>'}</div>
-          <p class="muted small-copy">Asked value: {fmt_number(asked_value, 0)} (BBGM trade value)</p>
-          {offers_table}
-        </section>
-        """)
-    return "".join(cards)
 
 
 def trade_machine_payload(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, cap: float) -> str:
@@ -4596,11 +4579,10 @@ def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players
     <section class="page-hero">
       <div>
         <h1>Trade Center</h1>
-        <p class="muted">Build trades, see what teams are shopping, and find contract bargains</p>
+        <p class="muted">Build and sanity-check trades, and find contract bargains</p>
       </div>
     </section>
     {machine}
-    {trading_block_card(data, teams, season)}
     {contract_efficiency_table(players, teams, season)}
     """
     return page_html("Trade Center", body, teams, root="", active="trade")
@@ -4861,11 +4843,14 @@ def render_history_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> st
     return page_html("History", body, teams, root="", active="history")
 
 
-def all_time_leaders_html(data: dict[str, Any], teams: list[dict[str, Any]], root: str = "") -> str:
+def all_time_leaders_html(data: dict[str, Any], teams: list[dict[str, Any]], root: str = "", start_season: int = 2026) -> str:
     all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
     totals = []
     for player in data.get("players", []):
-        rows = [s for s in player.get("stats", []) if isinstance(s, dict) and not s.get("playoffs")]
+        rows = [
+            s for s in player.get("stats", [])
+            if isinstance(s, dict) and not s.get("playoffs") and safe_int(s.get("season")) >= start_season
+        ]
         if not rows:
             continue
         combined = combine_stat_rows(rows)
@@ -4907,7 +4892,7 @@ def all_time_leaders_html(data: dict[str, Any], teams: list[dict[str, Any]], roo
     ]
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>All-Time Leaders</h2><span class="muted small-copy">regular season, all seasons on record, including retired players</span></div>
+      <div class="section-title-row"><h2>All-Time Leaders</h2><span class="muted small-copy">regular season since {start_season}, including retired players</span></div>
       <div class="leader-grid">{''.join(boxes)}</div>
     </section>
     """
@@ -4940,7 +4925,7 @@ def feat_badges(stats: dict[str, Any]) -> list[str]:
     return badges or ["Feat"]
 
 
-def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
+def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], season: int, start_season: int = 2026) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
     current_gids = {str(g.get("gid")) for g in data.get("games", []) if g.get("season") == season}
@@ -4975,7 +4960,7 @@ def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], seaso
         <p class="muted">All-time leaderboards and {len(rows)} notable single-game performances</p>
       </div>
     </section>
-    {all_time_leaders_html(data, teams)}
+    {all_time_leaders_html(data, teams, start_season=start_season)}
     <section class="card">
       <div class="section-title-row"><h2>Single-Game Feats</h2></div>
       <div class="toolbar">
@@ -5122,7 +5107,9 @@ a:hover { text-decoration: underline; }
   border-radius: .6rem;
   background: var(--panel);
 }
-.page-hero { margin-bottom: .75rem; padding: .8rem 1rem; }
+.page-hero { margin-bottom: .75rem; padding: .8rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.draft-tabs button { padding: .45rem 1rem; font-size: .9rem; }
+[data-draft-panel][hidden] { display: none; }
 .eyebrow {
   margin: 0 0 .15rem;
   color: var(--muted);
@@ -5272,6 +5259,11 @@ tr.avg-row > td { border-top: 1px solid var(--line); color: var(--muted); font-s
 .score-status { font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .score-status.final { color: var(--accent); }
 .day-panel[hidden] { display: none; }
+.score-stack { flex-direction: column; align-items: stretch; gap: .15rem; }
+.score-row { display: flex; justify-content: space-between; gap: .8rem; color: var(--muted); font-size: .85rem; }
+.score-row strong { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+.score-row.score-won, .score-row.score-won strong { color: var(--text); font-weight: 700; }
+.score-stack .score-status { align-self: flex-end; }
 
 /* ---------- schedule grid ---------- */
 .schedule-grid th, .schedule-grid td { text-align: center; }
@@ -5724,24 +5716,6 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .search-results a:hover, .search-results a.selected { background: var(--panel-2); text-decoration: none; }
 .search-empty { padding: .45rem .6rem; color: var(--muted); font-size: .78rem; }
 
-/* ---------- favorite team ---------- */
-.fav-star {
-  margin-right: .4rem;
-  padding: 0 .2rem;
-  border: 0;
-  background: none;
-  color: var(--muted);
-  font: inherit;
-  font-size: 1.1rem;
-  cursor: pointer;
-  vertical-align: baseline;
-}
-.fav-star.active { color: #f2c14e; }
-.fav-star:hover { color: #f2c14e; }
-.fav-pin::before { content: "★ "; color: #f2c14e; }
-tr.fav-row > td { background: rgba(242,193,78,.07); }
-tr.fav-row > td:first-child { box-shadow: inset 2px 0 0 #f2c14e; }
-th.fav-row { color: #f2c14e !important; }
 
 /* ---------- round 3 ---------- */
 .rank-move { display: inline-block; min-width: 1.6rem; font-size: .68rem; font-variant-numeric: tabular-nums; }
@@ -5749,6 +5723,7 @@ th.fav-row { color: #f2c14e !important; }
 .l10-dots { display: inline-flex; gap: 2px; align-items: center; }
 .l10-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; }
 .l10-w { background: var(--good); }
+#playoff-odds td.seed-cut, #playoff-odds th:nth-child(8) { border-left: 1px solid var(--line); }
 .l10-l { background: var(--bad); opacity: .7; }
 .high-row { display: flex; flex-wrap: wrap; gap: .45rem; }
 .high-chip {
@@ -5772,9 +5747,10 @@ th.fav-row { color: #f2c14e !important; }
 .profile-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
 tr.dead-row > td { opacity: .65; }
 .dead-money { font-style: italic; }
-.honors { margin-top: .6rem; display: grid; gap: .3rem; }
-.honor-row { display: flex; gap: .6rem; font-size: .8rem; align-items: baseline; }
-.honor-label { flex: 0 0 9.5rem; color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.honors-table-wrap { margin-top: .6rem; }
+.honors-table th, .honors-table td { text-align: left; }
+.honor-label-cell { color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+.honor-cell { min-width: 9rem; }
 .tx-season { border: 1px solid var(--line); border-radius: .5rem; background: var(--panel-2); padding: .45rem .7rem; margin-bottom: .5rem; }
 .tx-season summary { cursor: pointer; font-weight: 600; font-size: .85rem; display: flex; align-items: center; gap: .5rem; }
 .tx-season[open] summary { margin-bottom: .35rem; }
@@ -6243,6 +6219,20 @@ def javascript() -> str:
     });
   }
 
+  // ---------- draft year tabs ----------
+  const draftTabs = document.querySelector('[data-draft-tabs]');
+  if (draftTabs) {
+    const buttons = Array.from(draftTabs.querySelectorAll('button[data-draft-tab]'));
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((b) => b.classList.toggle('active', b === button));
+        document.querySelectorAll('[data-draft-panel]').forEach((panel) => {
+          panel.hidden = panel.dataset.draftPanel !== button.dataset.draftTab;
+        });
+      });
+    });
+  }
+
   // ---------- keyboard shortcuts ----------
   document.addEventListener('keydown', (event) => {
     if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return;
@@ -6251,40 +6241,6 @@ def javascript() -> str:
     const input = document.querySelector('[data-global-search]');
     if (input) { event.preventDefault(); input.focus(); input.select(); }
   });
-
-  // ---------- favorite team ----------
-  const FAV_KEY = 'smp-fav-tid';
-  const favTid = localStorage.getItem(FAV_KEY);
-  document.querySelectorAll('[data-fav-team]').forEach((btn) => {
-    const tid = btn.dataset.favTeam;
-    const sync = () => btn.classList.toggle('active', localStorage.getItem(FAV_KEY) === tid);
-    sync();
-    btn.addEventListener('click', () => {
-      const current = localStorage.getItem(FAV_KEY);
-      if (current === tid) localStorage.removeItem(FAV_KEY);
-      else localStorage.setItem(FAV_KEY, tid);
-      sync();
-      applyFavorite();
-    });
-  });
-
-  function applyFavorite() {
-    const fav = localStorage.getItem(FAV_KEY);
-    document.querySelectorAll('.fav-row').forEach((el) => el.classList.remove('fav-row'));
-    document.querySelectorAll('.fav-pin').forEach((el) => el.remove());
-    if (!fav) return;
-    document.querySelectorAll('tr[data-tid="' + fav + '"], th[data-tid="' + fav + '"]').forEach((el) => el.classList.add('fav-row'));
-    const menuLink = document.querySelector('.team-menu a[data-tid="' + fav + '"]');
-    const nav = document.querySelector('.primary-nav');
-    if (menuLink && nav) {
-      const pin = document.createElement('a');
-      pin.href = menuLink.href;
-      pin.textContent = menuLink.dataset.abbrev || menuLink.textContent;
-      pin.className = 'fav-pin' + (menuLink.classList.contains('active') ? ' active' : '');
-      nav.insertBefore(pin, nav.firstElementChild);
-    }
-  }
-  applyFavorite();
 
 })();
 """.strip() + "\n"
@@ -6375,7 +6331,7 @@ def generate_site(
     write_text(out_dir / "free-agency.html", render_free_agency_page(fa_players, teams, season, start_season))
     write_text(out_dir / "players" / "index.html", render_players_index(players, teams, season, start_season))
     write_text(out_dir / "history.html", render_history_page(data, teams))
-    write_text(out_dir / "records.html", render_records_page(data, teams, season))
+    write_text(out_dir / "records.html", render_records_page(data, teams, season, start_season=start_season))
     write_text(out_dir / "draft.html", render_draft_page(data, teams, season))
     write_text(out_dir / "trade.html", render_trade_page(data, teams, players, season, cap))
     write_text(out_dir / "compare.html", render_compare_page(data, teams, players, season, start_season))

@@ -401,6 +401,37 @@
     });
   }
 
+  // ---------- copy table as TSV ----------
+  document.querySelectorAll('.table-wrap').forEach((wrap) => {
+    const table = wrap.querySelector('table');
+    if (!table || !navigator.clipboard) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-table';
+    btn.title = 'Copy table for spreadsheets';
+    btn.textContent = '⧉';
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const lines = Array.from(table.querySelectorAll('tr')).map((tr) =>
+        Array.from(tr.cells).map((cell) => cell.textContent.trim().replace(/\s+/g, ' ')).join('\t'));
+      navigator.clipboard.writeText(lines.join('\n')).then(() => {
+        btn.textContent = '✓';
+        setTimeout(() => { btn.textContent = '⧉'; }, 1200);
+      });
+    });
+    wrap.appendChild(btn);
+  });
+
+  // ---------- mobile nav toggle ----------
+  const burger = document.querySelector('[data-nav-burger]');
+  if (burger) {
+    const nav = document.querySelector('.primary-nav');
+    burger.addEventListener('click', () => {
+      nav.classList.toggle('open');
+      burger.classList.toggle('open');
+    });
+  }
+
   // ---------- draft year tabs ----------
   const draftTabs = document.querySelector('[data-draft-tabs]');
   if (draftTabs) {

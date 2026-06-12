@@ -675,6 +675,14 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .chart-key { display: inline-block; width: .8rem; height: 2px; vertical-align: middle; margin-right: .25rem; }
 .chart-key-ovr { background: var(--accent); height: 3px; }
 .chart-key-pot { background: var(--muted); }
+.elo-chart { max-width: 100%; }
+.chart-label { font-size: 11px; font-weight: 600; }
+.rotation-map td.rot-cell { text-align: center; min-width: 2.1rem; font-variant-numeric: tabular-nums; }
+.rotation-map th.rot-w { color: var(--good); }
+.rotation-map th.rot-l { color: var(--bad); }
+.rotation-map th { text-align: center; }
+.milestone-list li { gap: .5rem; }
+.milestone-list .small-copy { margin-left: auto; text-align: right; }
 
 /* ---------- history ---------- */
 .bracket { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: .6rem; }
@@ -742,7 +750,9 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .l10-dots { display: inline-flex; gap: 2px; align-items: center; }
 .l10-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; }
 .l10-w { background: var(--good); }
-#playoff-odds td.seed-cut, #playoff-odds th:nth-child(8) { border-left: 1px solid var(--line); }
+#playoff-odds td.seed-cut, #playoff-odds th:nth-child(10) { border-left: 1px solid var(--line); }
+#playoff-odds th:nth-child(6) { border-left: 1px solid var(--line); }
+#playoff-odds td:nth-child(6) { border-left: 1px solid var(--line); }
 .l10-l { background: var(--bad); opacity: .7; }
 .high-row { display: flex; flex-wrap: wrap; gap: .45rem; }
 .high-chip {
@@ -825,7 +835,41 @@ tr.dead-row > td { opacity: .65; }
 .cmp-bar i { display: block; height: 100%; background: var(--accent); }
 .cmp-best .cmp-bar i { background: var(--good); }
 
+.table-wrap { position: relative; }
+.copy-table {
+  position: absolute;
+  top: .3rem;
+  right: .3rem;
+  z-index: 5;
+  padding: .1rem .4rem;
+  border: 1px solid var(--line);
+  border-radius: .35rem;
+  background: var(--panel-2);
+  color: var(--muted);
+  font-size: .72rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s;
+}
+.table-wrap:hover .copy-table { opacity: 1; }
+.copy-table:hover { color: var(--text); border-color: var(--accent); }
+.nav-burger { display: none; }
+.score-stack .recap { width: 100%; line-height: 1.35; }
+
 @media (max-width: 900px) {
   .nav-search { flex: none; width: 100%; }
   .home-columns { grid-template-columns: 1fr; }
+  .nav-burger {
+    display: inline-flex;
+    padding: .35rem .7rem;
+    border: 1px solid var(--line);
+    border-radius: .45rem;
+    background: var(--panel-2);
+    color: var(--text);
+    font: inherit;
+    font-size: .85rem;
+    cursor: pointer;
+  }
+  .primary-nav { display: none; width: 100%; }
+  .primary-nav.open { display: flex; }
 }

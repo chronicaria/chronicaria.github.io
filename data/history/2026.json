@@ -1,0 +1,614 @@
+{
+ "games": [
+  {
+   "team": "colts",
+   "label": "Colts",
+   "league": "NFL",
+   "date": "2026-01-04T18:00Z",
+   "opp": "Texans",
+   "home": false,
+   "res": "L",
+   "score": "30-38"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-02-28T17:00Z",
+   "opp": "Virginia",
+   "home": true,
+   "res": "W",
+   "score": "77-51"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-03T00:00Z",
+   "opp": "NC State",
+   "home": false,
+   "res": "W",
+   "score": "93-64"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-03-05T20:00Z",
+   "opp": "C Palace",
+   "home": true,
+   "res": "L",
+   "score": "1-3"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-07T23:30Z",
+   "opp": "North Carolina",
+   "home": true,
+   "res": "W",
+   "score": "76-61"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-12T23:00Z",
+   "opp": "Florida St",
+   "home": true,
+   "res": "W",
+   "score": "80-79"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-14T01:35Z",
+   "opp": "Clemson",
+   "home": true,
+   "res": "W",
+   "score": "73-61"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-15T00:40Z",
+   "opp": "Virginia",
+   "home": true,
+   "res": "W",
+   "score": "74-70"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-03-15T16:30Z",
+   "opp": "Liverpool",
+   "home": false,
+   "res": "D",
+   "score": "1-1"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-19T19:00Z",
+   "opp": "Siena",
+   "home": true,
+   "res": "W",
+   "score": "71-65"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-21T21:25Z",
+   "opp": "TCU",
+   "home": true,
+   "res": "W",
+   "score": "81-58"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-03-22T14:15Z",
+   "opp": "Nottm Forest",
+   "home": true,
+   "res": "L",
+   "score": "0-3"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-03-26T02:00Z",
+   "opp": "Nuggets",
+   "home": false,
+   "res": "L",
+   "score": "135-142"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-27T23:10Z",
+   "opp": "St John's",
+   "home": true,
+   "res": "W",
+   "score": "80-75"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-03-28T02:00Z",
+   "opp": "Trail Blazers",
+   "home": false,
+   "res": "W",
+   "score": "100-93"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2026-03-29T21:05Z",
+   "opp": "UConn",
+   "home": true,
+   "res": "L",
+   "score": "72-73"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-03-31T00:30Z",
+   "opp": "Timberwolves",
+   "home": true,
+   "res": "L",
+   "score": "94-124"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-04-01T00:00Z",
+   "opp": "Bucks",
+   "home": false,
+   "res": "L",
+   "score": "99-123"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-04-04T00:30Z",
+   "opp": "Magic",
+   "home": true,
+   "res": "L",
+   "score": "127-138"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-04-05T01:30Z",
+   "opp": "Orlando",
+   "home": true,
+   "res": "W",
+   "score": "6-0"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-04-05T23:30Z",
+   "opp": "Lakers",
+   "home": true,
+   "res": "W",
+   "score": "134-128"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-04-08T02:30Z",
+   "opp": "Clippers",
+   "home": false,
+   "res": "L",
+   "score": "103-116"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-04-09T02:00Z",
+   "opp": "Suns",
+   "home": false,
+   "res": "L",
+   "score": "107-112"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-04-11T00:00Z",
+   "opp": "Spurs",
+   "home": false,
+   "res": "L",
+   "score": "120-139"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-04-11T20:45Z",
+   "opp": "Portland",
+   "home": false,
+   "res": "L",
+   "score": "1-2"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-04-12T13:00Z",
+   "opp": "Sunderland",
+   "home": false,
+   "res": "L",
+   "score": "0-1"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-04-13T00:30Z",
+   "opp": "Bulls",
+   "home": true,
+   "res": "W",
+   "score": "149-128"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-04-18T16:30Z",
+   "opp": "Brighton",
+   "home": true,
+   "res": "D",
+   "score": "2-2"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-04-19T23:00Z",
+   "opp": "San Jose",
+   "home": true,
+   "res": "L",
+   "score": "1-4"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-04-23T02:30Z",
+   "opp": "Colorado",
+   "home": true,
+   "res": "D",
+   "score": "0-0"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-04-25T14:00Z",
+   "opp": "Wolves",
+   "home": false,
+   "res": "W",
+   "score": "1-0"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-04-25T20:45Z",
+   "opp": "Minnesota",
+   "home": false,
+   "res": "W",
+   "score": "1-0"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-05-03T01:30Z",
+   "opp": "San Diego",
+   "home": false,
+   "res": "D",
+   "score": "2-2"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-05-03T18:00Z",
+   "opp": "Aston Villa",
+   "home": false,
+   "res": "W",
+   "score": "2-1"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-05-11T01:00Z",
+   "opp": "Houston",
+   "home": true,
+   "res": "L",
+   "score": "1-4"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-05-11T19:00Z",
+   "opp": "Leeds",
+   "home": true,
+   "res": "D",
+   "score": "1-1"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-05-14T00:30Z",
+   "opp": "St. Louis",
+   "home": false,
+   "res": "L",
+   "score": "1-2"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-05-18T00:00Z",
+   "opp": "Nashville",
+   "home": false,
+   "res": "L",
+   "score": "2-3"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-05-19T19:15Z",
+   "opp": "Chelsea",
+   "home": false,
+   "res": "L",
+   "score": "1-2"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-05-22T00:00Z",
+   "opp": "Canadiens",
+   "home": true,
+   "res": "L",
+   "score": "2-6"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-05-23T23:00Z",
+   "opp": "Canadiens",
+   "home": true,
+   "res": "W",
+   "score": "3-2"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-05-24T15:00Z",
+   "opp": "Everton",
+   "home": true,
+   "res": "W",
+   "score": "1-0"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-05-25T01:15Z",
+   "opp": "Seattle",
+   "home": true,
+   "res": "W",
+   "score": "1-0"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-05-26T00:00Z",
+   "opp": "Canadiens",
+   "home": false,
+   "res": "W",
+   "score": "3-2"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-05-28T00:00Z",
+   "opp": "Canadiens",
+   "home": false,
+   "res": "W",
+   "score": "4-0"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-05-30T00:00Z",
+   "opp": "Canadiens",
+   "home": true,
+   "res": "W",
+   "score": "6-1"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-05-31T17:40Z",
+   "opp": "Marlins",
+   "home": true,
+   "res": "W",
+   "score": "10-1"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-02T01:40Z",
+   "opp": "Mariners",
+   "home": false,
+   "res": "L",
+   "score": "2-3"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-06-03T00:00Z",
+   "opp": "Golden Knights",
+   "home": true,
+   "res": "L",
+   "score": "4-5"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-03T01:40Z",
+   "opp": "Mariners",
+   "home": false,
+   "res": "L",
+   "score": "3-8"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-03T19:40Z",
+   "opp": "Mariners",
+   "home": false,
+   "res": "W",
+   "score": "7-1"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-06-05T00:00Z",
+   "opp": "Golden Knights",
+   "home": true,
+   "res": "W",
+   "score": "4-3"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-06T01:40Z",
+   "opp": "Padres",
+   "home": false,
+   "res": "W",
+   "score": "5-0"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-06-07T00:00Z",
+   "opp": "Golden Knights",
+   "home": false,
+   "res": "L",
+   "score": "4-5"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-07T02:10Z",
+   "opp": "Padres",
+   "home": false,
+   "res": "L",
+   "score": "2-3"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-07T20:10Z",
+   "opp": "Padres",
+   "home": false,
+   "res": "W",
+   "score": "7-3"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-09T23:10Z",
+   "opp": "Cardinals",
+   "home": true,
+   "res": "L",
+   "score": "0-7"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-06-10T00:00Z",
+   "opp": "Golden Knights",
+   "home": false,
+   "res": "W",
+   "score": "5-3"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-10T23:10Z",
+   "opp": "Cardinals",
+   "home": true,
+   "res": "L",
+   "score": "2-9"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-06-11T17:10Z",
+   "opp": "Cardinals",
+   "home": true,
+   "res": "W",
+   "score": "5-4"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-06-12T00:00Z",
+   "opp": "Golden Knights",
+   "home": true,
+   "res": "W",
+   "score": "4-2"
+  }
+ ]
+}

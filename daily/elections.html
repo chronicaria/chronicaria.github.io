@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Elections — The Gothic Times</title>
+  <meta name="description" content="The Gothic Times elections desk — 2026 midterm prediction-market odds from Polymarket and Kalshi, plus the campaign wire.">
+  <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23171b21'/%3E%3Ctext x='50' y='68' font-family='Helvetica,Arial,sans-serif' font-size='44' font-weight='700' fill='%23e2566b' text-anchor='middle'%3EGT%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="../assets/icon-180.png">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="../assets/daily.css">
+  <script defer src="../assets/daily.js"></script>
+  <script defer src="../assets/ui.js"></script>
+</head>
+<body data-section="daily" data-paper="elections">
+
+  <header class="site-header">
+    <div class="brand"><a href="../index.html">Andrew <span>Park</span></a></div>
+    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
+    <nav class="primary-nav">
+      <a href="../index.html">Home</a>
+      <a class="active" href="../daily/index.html">Newspaper</a>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn">Interests</button>
+        <div class="nav-drop-menu">
+          <a href="../sports.html">Sports</a>
+          <a href="../music.html">Music</a>
+          <a href="../literature.html">Literature</a>
+        </div>
+      </div>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn">Other</button>
+        <div class="nav-drop-menu">
+          <a href="../league/index.html">SMP Basketball League</a>
+          <a href="../weather.html">Temperature</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+
+    <header class="gt-masthead">
+      <div class="gt-dateline">
+        <span data-gt-date>—</span>
+        <span class="sep">·</span>
+        <span>The Elections Desk · 2026 Midterms</span>
+        <span class="sep">·</span>
+        <span data-gt-weather></span>
+        <span class="sep">·</span>
+        <span data-gt-edition></span>
+      </div>
+    </header>
+
+    <nav class="gt-nav" aria-label="Newspaper sections">
+      <a href="index.html">Front Page</a>
+      <a href="sports.html">Sports</a>
+      <a href="ai.html">AI &amp; Models</a>
+      <a href="markets.html">Markets</a>
+      <a class="active" href="elections.html">Elections</a>      <a href="math.html">Math</a>
+    </nav>
+
+    <div class="gt-notice" data-gt-notice hidden></div>
+
+    <div class="stat-strip" data-gt-control-big style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));"></div>
+
+    <p class="small-copy muted" data-gt-tipping style="margin:-.2rem 0 .55rem;"></p>
+
+    <section class="card">
+      <div class="section-title-row">
+        <h2>The map</h2>
+        <div class="gt-map-tabs" role="tablist" aria-label="Race type">
+          <button class="gt-map-tab active" type="button" data-gt-map-tab="senate">Senate</button>
+          <button class="gt-map-tab" type="button" data-gt-map-tab="governor">Governors</button>
+          <button class="gt-map-tab" type="button" data-gt-map-tab="house">House</button>
+        </div>
+      </div>
+      <div class="gt-map-wrap" data-gt-map-wrap>
+        <div class="gt-map-grid" data-gt-map></div>
+      </div>
+      <div class="gt-map-legend">
+        <span style="color:#CC2F4A;font-weight:700;">Safe R</span>
+        <span class="swatches" aria-hidden="true">
+          <i style="background:#800000;"></i><i style="background:#D40000;"></i><i style="background:#CC2F4A;"></i><i style="background:#E27F90;"></i><i style="background:#F2B3BE;"></i><i style="background:#B9D7FF;"></i><i style="background:#86B6F2;"></i><i style="background:#4389E3;"></i><i style="background:#1666CB;"></i><i style="background:#002B84;"></i>
+        </span>
+        <span style="color:#4389E3;font-weight:700;">Safe D</span>
+        <span style="color:#3FA03F;font-weight:700;">I = green</span>
+        <span data-gt-map-note></span>
+      </div>
+      <div class="gt-drill" data-gt-drill hidden></div>
+      <p class="small-copy muted" style="margin:.55rem 0 0;">Prices are live Polymarket odds for every 2026 race the
+        exchange lists, refreshed each morning. Shading follows the Wikipedia election-atlas palette — the same blues
+        and reds you'd see on a results map, but driven by percent odds instead of vote share. The House view is a
+        cartogram — one equal-size hex per district, grouped by state, so small urban seats stay visible.</p>
+    </section>
+
+    <div class="two-col">
+      <div class="col-stack">
+        <section class="card">
+          <h2>The campaign wire</h2>
+          <div data-gt-elec-news></div>
+          <p class="small-copy muted" style="margin:.5rem 0 0;">The Hill's campaign desk, Politico, NYT Politics, NPR,
+            NBC News, Roll Call, RCP (all midterm-filtered), and Sabato's Crystal Ball ratings notes.</p>
+        </section>
+      </div>
+      <div class="col-stack">
+        <section class="card">
+          <h2>Movers since yesterday</h2>
+          <div data-gt-movers></div>
+        </section>
+        <section class="card">
+          <h2>Balance of power</h2>
+          <div class="gt-scenarios" data-gt-balance></div>
+          <p class="small-copy muted" style="margin:.45rem 0 0;">Polymarket's combined-outcome market for November.</p>
+        </section>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <span>© <span data-year>2026</span> Andrew Park · <span class="monogram">GT</span> · The Gothic Times</span>
+      <span class="footer-tools">
+        <a href="index.html">Front page</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>◐ light mode</button>
+      </span>
+    </footer>
+
+  </main>
+</body>
+</html>

@@ -2,3 +2,6 @@
 tools/county-temp-map/work/
 tools/county-temp-map/.venv/
 __pycache__/
+
+# local editor/preview config
+.claude/

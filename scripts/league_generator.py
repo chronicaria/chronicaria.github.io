@@ -22,6 +22,14 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Iterable
 
+# Projection engine (faithful zengm port + Monte Carlo). Imported defensively so
+# the site still builds if numpy / projections.py is unavailable -- in that case
+# projection charts gracefully fall back to the static development chart.
+try:
+    import projections as _proj
+except Exception:  # pragma: no cover - degraded build path
+    _proj = None
+
 FREE_AGENT_TID = -1
 DRAFT_PROSPECT_TID = -2
 RETIRED_TID = -3
@@ -764,6 +772,7 @@ def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
         link("Trade", f"{root}trade.html", "trade"),
         link("History", f"{root}history.html", "history"),
         link("Records", f"{root}records.html", "records"),
+        link("Projections", f"{root}projections.html", "projections"),
     ]
     team_links = []
     for team in sorted(teams, key=team_sort_key):
@@ -1321,7 +1330,7 @@ def draft_picks_card(data: dict[str, Any], team: dict[str, Any], teams_by_tid: d
     """
 
 
-def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, cap: float, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None) -> str:
+def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, cap: float, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, league_proj_ctx: dict[str, Any] | None = None, team_proj: dict[str, Any] | None = None) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     sorted_roster = sorted(roster, key=lambda p: (p.get("rosterOrder", 10**9), -latest_rating(p, season).get("ovr", 0), player_name(p)))
     starters = sorted_roster[:5]
@@ -1345,6 +1354,21 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
     picks = draft_picks_card(data, team, teams_by_tid) if data else ""
     profile = team_quarter_profile(team, data, season, teams_by_tid) if data else ""
     rotation = rotation_map_card(team, sorted_roster, game_items or [], game_logs or {}, season, teams_by_tid) if game_items and game_logs else ""
+    # Forward-looking "Outlook": projected team strength, narrative tags, and the
+    # contract horizon. Wrapped so the team's color flows into the on-brand charts.
+    # team_proj may be precomputed by the caller (shared with the projections page).
+    if team_proj is None:
+        team_proj = _team_projection(team, sorted_roster, season, league_proj_ctx)
+    outlook = ""
+    if team_proj is not None:
+        outlook = (
+            f'<h2 class="block-title">Outlook</h2>'
+            f'<div class="team-outlook" style="--team-primary:{esc(primary)}">'
+            + team_trajectory_html(team, team_proj, "../")
+            + team_outlook_tags_html(team, sorted_roster, season, team_proj)
+            + contract_horizon_html(team, sorted_roster, season, team_proj)
+            + "</div>"
+        )
     body = f"""
     <section class="page-hero team-hero" style="--team-primary:{esc(primary)};--team-secondary:{esc(secondary)}">
       <div>
@@ -1362,6 +1386,7 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
     {roster_table("Bench", bench, season, start_season, "../", f"team-{team.get('tid')}-bench", teams_by_tid, game_logs)}
     {roster_table("Reserve", reserves, season, start_season, "../", f"team-{team.get('tid')}-reserve", teams_by_tid, game_logs)}
     {depth_chart_card(sorted_roster, season)}
+    {outlook}
     <h2 class="block-title">Finances</h2>
     {team_finances_table(sorted_roster, season, cap, data=data, tid=safe_int(team.get("tid")))}
     {picks}
@@ -2098,7 +2123,7 @@ def ratings_progress_svg(player: dict[str, Any]) -> str:
         [r for r in player.get("ratings", []) if isinstance(r.get("season"), int)],
         key=lambda r: r["season"],
     )
-    if len(ratings) < 2:
+    if len(ratings) < 1:
         return ""
     seasons = [r["season"] for r in ratings]
     ovr = [safe_float(r.get("ovr")) for r in ratings]
@@ -2147,6 +2172,1958 @@ def ratings_progress_svg(player: dict[str, Any]) -> str:
       </svg>
     </section>
     """
+
+
+# --- projection-backed development chart ------------------------------------
+PROJ_SEASONS_AHEAD = 6
+PROJ_N_SIMS = 1000
+PROJ_MASTER_SEED = 8675309
+
+
+def _player_projection(player: dict[str, Any], season: int) -> dict[str, Any] | None:
+    """Monte Carlo OVR projection for a player from the current season forward.
+
+    Returns None (caller falls back to the static chart) when projections are
+    unavailable: the projection engine/numpy is not importable, the player is
+    retired, or there is no current rating row carrying all 15 subratings.
+    The seed is derived from the pid so rebuilds are byte-identical.
+    """
+    if _proj is None:
+        return None
+    if player.get("retiredYear") is not None:
+        return None
+    born_year = (player.get("born") or {}).get("year")
+    if born_year is None:
+        return None
+    rows = [r for r in player.get("ratings", []) if isinstance(r.get("season"), int)]
+    if not rows:
+        return None
+    rows.sort(key=lambda r: r["season"])
+    cur = next((r for r in rows if r["season"] == season), rows[-1])
+    if not all(k in cur for k in _proj.RATINGS):
+        return None
+    cur_season = int(cur["season"])
+    age = cur_season - int(born_year)
+    if age < 14 or age > 50:
+        return None
+    seed = PROJ_MASTER_SEED * 100003 + safe_int(player.get("pid"), 0)
+    try:
+        sim = _proj.simulate_player(
+            cur, age, cur_season,
+            seasons_ahead=PROJ_SEASONS_AHEAD, n_sims=PROJ_N_SIMS, seed=seed,
+        )
+    except Exception:
+        return None
+    return {"cur_season": cur_season, "age": age, "sim": sim}
+
+
+# --- team projection --------------------------------------------------------
+REPLACEMENT_OVR = 40.0  # roster-construction floor: a freely-available filler
+
+
+def _player_current_ovr(player: dict[str, Any], season: int) -> int | None:
+    """The player's overall this season (the stored value, == player_ovr)."""
+    rows = [r for r in player.get("ratings", []) if isinstance(r.get("season"), int)]
+    if not rows:
+        return None
+    rows.sort(key=lambda r: r["season"])
+    cur = next((r for r in rows if r["season"] == season), rows[-1])
+    v = cur.get("ovr")
+    return safe_int(v) if v is not None else None
+
+
+def current_team_ovr(roster: list[dict[str, Any]], season: int) -> int | None:
+    """Raw engine team OVR from a roster's current player overalls (unclamped)."""
+    if _proj is None:
+        return None
+    ovrs = [o for o in (_player_current_ovr(p, season) for p in roster) if o is not None]
+    if not ovrs:
+        return None
+    return _proj.team_ovr(ovrs)
+
+
+def league_team_ovr_context(teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> dict[str, Any] | None:
+    """Current team-OVR for every active team, plus league reference points.
+
+    This league's player ratings run hot, so absolute team OVR sits well above the
+    formula's nominal "50 == even"; we therefore present team strength relative to
+    the current league (median == average line, 75th pct == contender line).
+    """
+    if _proj is None:
+        return None
+    by_tid: dict[int, list[dict[str, Any]]] = {}
+    for p in players:
+        tid = p.get("tid")
+        if isinstance(tid, int) and tid >= 0:
+            by_tid.setdefault(tid, []).append(p)
+    ovrs: dict[int, int] = {}
+    for t in teams:
+        tid = safe_int(t.get("tid"), -99)
+        if tid < 0 or t.get("disabled"):
+            continue
+        o = current_team_ovr(by_tid.get(tid, []), season)
+        if o is not None:
+            ovrs[tid] = o
+    if not ovrs:
+        return None
+    vals = sorted(ovrs.values())
+    n = len(vals)
+
+    def pct(q: float) -> float:
+        if n == 1:
+            return float(vals[0])
+        idx = q * (n - 1)
+        lo = int(math.floor(idx))
+        hi = int(math.ceil(idx))
+        return vals[lo] * (1 - (idx - lo)) + vals[hi] * (idx - lo)
+
+    return {"team_ovrs": ovrs, "avg": pct(0.5), "contender": pct(0.75), "n_teams": n}
+
+
+def _team_projection(team: dict[str, Any], roster: list[dict[str, Any]], season: int, league_ctx: dict[str, Any] | None = None) -> dict[str, Any] | None:
+    """Coupled Monte Carlo team-OVR projection (guaranteed-core & projected-roster).
+
+    Builds each current roster player's per-sim OVR paths (same per-pid seed as
+    the player pages) and aggregates them with the engine's team-OVR formula under
+    both roster scenarios. Returns None when projections are unavailable.
+    """
+    if _proj is None:
+        return None
+    seasons = list(range(season, season + PROJ_SEASONS_AHEAD + 1))
+    arrays = []
+    exps = []
+    for p in roster:
+        if p.get("retiredYear") is not None:
+            continue
+        born = (p.get("born") or {}).get("year")
+        if born is None:
+            continue
+        rows = [r for r in p.get("ratings", []) if isinstance(r.get("season"), int)]
+        if not rows:
+            continue
+        rows.sort(key=lambda r: r["season"])
+        cur = next((r for r in rows if r["season"] == season), rows[-1])
+        if not all(k in cur for k in _proj.RATINGS):
+            continue
+        age = int(cur["season"]) - int(born)
+        if age < 14 or age > 50:
+            continue
+        seed = PROJ_MASTER_SEED * 100003 + safe_int(p.get("pid"), 0)
+        try:
+            arr = _proj.player_ovr_paths(cur, age, PROJ_SEASONS_AHEAD, PROJ_N_SIMS, seed=seed)
+        except Exception:
+            continue
+        arrays.append(arr)
+        contract = p.get("contract") or {}
+        exps.append(safe_int(contract.get("exp"), season))
+    if not arrays:
+        return None
+    try:
+        res = _proj.simulate_team(arrays, exps, seasons, replacement_ovr=REPLACEMENT_OVR)
+    except Exception:
+        return None
+    if res is None:
+        return None
+    res["season"] = season
+    res["seasons"] = seasons
+    if league_ctx:
+        tid = safe_int(team.get("tid"), -99)
+        rank = None
+        if tid in league_ctx.get("team_ovrs", {}):
+            cur_o = league_ctx["team_ovrs"][tid]
+            rank = 1 + sum(1 for o in league_ctx["team_ovrs"].values() if o > cur_o)
+        res["league"] = {
+            "avg": league_ctx["avg"],
+            "contender": league_ctx["contender"],
+            "n_teams": league_ctx["n_teams"],
+            "rank": rank,
+        }
+    return res
+
+
+def league_projection(teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, league_ctx: dict[str, Any] | None = None, team_projections: dict[int, dict[str, Any]] | None = None, game_attrs: dict[str, Any] | None = None) -> dict[str, Any] | None:
+    """League-wide forward projection (the continuity "proj" scenario) for the
+    projections page: every team's projected median/80% band, plus per-season
+    rank and estimated round-robin win% (and games-per-season for record math).
+
+    Uses the continuity scenario because in the guaranteed-core scenario every
+    team collapses toward replacement as contracts lapse, which makes league ranks
+    meaningless; under continuity the differential aging IS the signal. Returns
+    None when projections are unavailable.
+    """
+    if _proj is None:
+        return None
+    if league_ctx is None:
+        league_ctx = league_team_ovr_context(teams, players, season)
+    by_tid: dict[int, list[dict[str, Any]]] = {}
+    for p in players:
+        tid = p.get("tid")
+        if isinstance(tid, int) and tid >= 0:
+            by_tid.setdefault(tid, []).append(p)
+    seasons = list(range(season, season + PROJ_SEASONS_AHEAD + 1))
+    palette = team_palette_by_tid(teams)
+
+    entries: list[dict[str, Any]] = []
+    for t in teams:
+        tid = safe_int(t.get("tid"), -99)
+        if tid < 0 or t.get("disabled"):
+            continue
+        tp = (team_projections or {}).get(tid)
+        if tp is None:
+            tp = _team_projection(t, by_tid.get(tid, []), season, league_ctx)
+        if tp is None:
+            continue
+        proj = tp.get("proj") or {}
+
+        def _clamp(arr: Any) -> list[float]:
+            return [max(0.0, round(float(v), 1)) for v in (arr or [])]
+
+        entries.append({
+            "tid": tid,
+            "name": team_full_name(t),
+            "abbrev": team_abbrev(t),
+            "color": palette.get(tid, "#5b9dff"),
+            "url": team_url(t, ""),
+            "current": safe_int(tp.get("current")),
+            "p10": _clamp(proj.get("p10")),
+            "p50": _clamp(proj.get("p50")),
+            "p90": _clamp(proj.get("p90")),
+        })
+    if len(entries) < 2:
+        return None
+    n_seasons = len(seasons)
+
+    # Per-season ranks (by projected median, desc) and round-robin win%.
+    for e in entries:
+        e["ranks"] = [0] * n_seasons
+        e["win_pct"] = [0.0] * n_seasons
+    for si in range(n_seasons):
+        ovrs = {e["tid"]: (e["p50"][si] if si < len(e["p50"]) else 0.0) for e in entries}
+        for rank, tid in enumerate(sorted(ovrs, key=lambda k: -ovrs[k]), 1):
+            for e in entries:
+                if e["tid"] == tid:
+                    e["ranks"][si] = rank
+                    break
+        wp = _proj.projected_win_pct(ovrs)
+        for e in entries:
+            e["win_pct"][si] = round(wp.get(e["tid"], 0.5), 4)
+
+    ga = game_attrs or {}
+    num_games = [safe_int(get_attr_value(ga.get("numGames"), s), 0) or 0 for s in seasons]
+
+    league_block = None
+    if league_ctx:
+        league_block = {"avg": league_ctx.get("avg"), "contender": league_ctx.get("contender")}
+    return {
+        "season": season,
+        "seasons": seasons,
+        "num_games": num_games,
+        "teams": entries,
+        "n_teams": len(entries),
+        "league": league_block,
+    }
+
+
+def power_ranking_bump_html(league_proj):
+    """Projected Power Rankings -- the page centerpiece bump chart.
+
+    Each team is a line tracing its league RANK (y-axis, 1 at top .. n_teams
+    at bottom) across the projected seasons (x-axis), drawn in the team's own
+    color, with a node dot at each season and the team abbrev labeled at both
+    the left (start) and right (end) ends. Crossovers show who overtakes whom.
+
+    The full chart is rendered statically in SVG (progressive enhancement) --
+    it is fully meaningful with NO JavaScript. An embedded JSON blob
+    (<script id="bump-data">) plus the JS module marked "power ranking bump"
+    add line/label/chip highlighting (dim the rest) and a hover tooltip with
+    that season's rank, projected strength (p50), and projected record
+    (round(win_pct * num_games)). A legend of colored team chips lets the
+    reader find a team. Rank ties are handled upstream (stable p50 order in
+    ``ranks``); end labels are de-overlapped (clamped apart, with leaders).
+
+    Returns "" when league_proj is None or fewer than 2 teams / seasons.
+    Never raises.
+    """
+    if not league_proj:
+        return ""
+    teams = league_proj.get("teams") or []
+    seasons = [safe_int(s) for s in (league_proj.get("seasons") or [])]
+    num_games = [safe_int(g) for g in (league_proj.get("num_games") or [])]
+    n_teams = safe_int(league_proj.get("n_teams"), len(teams))
+    if len(teams) < 2 or len(seasons) < 2:
+        return ""
+
+    n_seasons = len(seasons)
+    # Defensive: pad num_games to the season count.
+    if len(num_games) < n_seasons:
+        num_games = num_games + [num_games[-1] if num_games else 0] * (n_seasons - len(num_games))
+
+    rows = max(n_teams, len(teams))
+
+    # ---- Geometry (viewBox units) -------------------------------------
+    # Left/right gutters hold the start/end abbrev labels.
+    ML, MR = 76.0, 58.0
+    MT, MB = 30.0, 26.0
+    row_h = 34.0
+    col_w = 92.0
+    plot_w = col_w * (n_seasons - 1)
+    plot_h = row_h * (rows - 1)
+    width = ML + plot_w + MR
+    height = MT + plot_h + MB
+
+    def xs(i):
+        return ML + (plot_w * (i / (n_seasons - 1)) if n_seasons > 1 else 0.0)
+
+    def yr(rank):
+        # rank 1 -> top row, rank == rows -> bottom row.
+        r = min(max(safe_int(rank, 1), 1), rows)
+        return MT + (r - 1) * row_h
+
+    # Stable team order for deterministic z-stacking / legend: by current rank
+    # (ranks[0], already tie-broken upstream), then tid.
+    ordered = sorted(teams, key=lambda t: (safe_int((t.get("ranks") or [rows])[0], rows),
+                                           safe_int(t.get("tid"), 0)))
+
+    # ---- Background grid ---------------------------------------------
+    grid = []
+    for r in range(1, rows + 1):
+        y = MT + (r - 1) * row_h
+        grid.append('<line class="bump-rowline" x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/>'
+                    % (ML, y, ML + plot_w, y))
+        grid.append('<text class="bump-rankaxis" x="%.1f" y="%.1f">%d</text>'
+                    % (ML - 56.0, y + 3.0, r))
+    for i, s in enumerate(seasons):
+        x = xs(i)
+        grid.append('<line class="bump-collline" x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/>'
+                    % (x, MT - 8.0, x, MT + plot_h))
+        cap = "Now" if i == 0 else ("+%d" % i)
+        grid.append('<text class="bump-seasontick" x="%.1f" y="%.1f">%s</text>'
+                    % (x, MT - 14.0, esc(cap)))
+        grid.append('<text class="bump-seasonyr" x="%.1f" y="%.1f">%s</text>'
+                    % (x, height - 8.0, esc(str(s))))
+
+    # ---- Team lines ---------------------------------------------------
+    payload_teams = []
+    lines = []
+    start_labels = []
+    end_labels = []
+
+    for t in ordered:
+        tid = safe_int(t.get("tid"), 0)
+        color = t.get("color") or "#939ca7"
+        if not (isinstance(color, str) and color.startswith("#")):
+            color = "#939ca7"
+        abbrev = esc(t.get("abbrev") or "")
+        name = esc(t.get("name") or t.get("abbrev") or "")
+        url = t.get("url") or ""
+        ranks = [safe_int(v, rows) for v in (t.get("ranks") or [])][:n_seasons]
+        p50 = [safe_float(v) for v in (t.get("p50") or [])][:n_seasons]
+        win_pct = [safe_float(v) for v in (t.get("win_pct") or [])][:n_seasons]
+        if len(ranks) < n_seasons:
+            ranks = ranks + [rows] * (n_seasons - len(ranks))
+
+        pts = [(xs(i), yr(ranks[i])) for i in range(n_seasons)]
+        poly = " ".join("%.1f,%.1f" % p for p in pts)
+
+        # A halo polyline (base fill = --bg, never relying on color-mix) keeps
+        # the colored identity line legible over crossings on any theme.
+        lines.append(
+            '<g class="bump-team" data-bump-team data-tid="%d" style="--bump-color:%s">'
+            '<polyline class="bump-halo" points="%s"/>'
+            '<polyline class="bump-line" points="%s"/>'
+            % (tid, esc(color), poly, poly))
+        for i, (px, py) in enumerate(pts):
+            lines.append('<circle class="bump-node" cx="%.1f" cy="%.1f" r="3.3" data-i="%d"/>'
+                         % (px, py, i))
+        # Wide invisible hit line for easy hovering + click-through to the team
+        # page (wrapped in an SVG <a> so it works without JS).
+        if url:
+            lines.append('<a href="%s" class="bump-link" aria-label="%s">'
+                         '<polyline class="bump-hit" points="%s"/></a>'
+                         % (esc(url), name, poly))
+        else:
+            lines.append('<polyline class="bump-hit" points="%s"/>' % poly)
+        lines.append('</g>')
+
+        start_labels.append((yr(ranks[0]), tid, color, abbrev))
+        end_labels.append((yr(ranks[-1]), tid, color, abbrev))
+
+        records = [int(round(win_pct[i] * num_games[i])) if i < len(win_pct) else 0
+                   for i in range(n_seasons)]
+        payload_teams.append({
+            "tid": tid, "abbrev": t.get("abbrev") or "", "name": t.get("name") or "",
+            "color": color, "url": url, "ranks": ranks,
+            "p50": [round(v, 1) for v in (p50 + [0.0] * n_seasons)[:n_seasons]],
+            "rec": records, "games": num_games[:n_seasons],
+        })
+
+    # ---- End-label de-overlap (clamp >= gap apart, add leader if moved) --
+    def declutter(labels):
+        gap = 13.0
+        labels = sorted(labels, key=lambda L: L[0])
+        out = []
+        prev_y = -1e9
+        for (y, tid, color, abbrev) in labels:
+            ny = max(y, prev_y + gap)
+            out.append((y, ny, tid, color, abbrev))
+            prev_y = ny
+        return out
+
+    label_svg = []
+    for (anchor_y, ny, tid, color, abbrev) in declutter(start_labels):
+        label_svg.append(
+            '<text class="bump-endlabel bump-endlabel--start" data-bump-label data-tid="%d" '
+            'x="%.1f" y="%.1f" style="--bump-color:%s">%s</text>'
+            % (tid, ML - 9.0, ny + 3.0, esc(color), abbrev))
+        if abs(ny - anchor_y) > 1.0:
+            label_svg.append('<line class="bump-leader" x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/>'
+                             % (ML - 5.0, anchor_y, ML - 3.0, ny))
+    for (anchor_y, ny, tid, color, abbrev) in declutter(end_labels):
+        label_svg.append(
+            '<text class="bump-endlabel bump-endlabel--end" data-bump-label data-tid="%d" '
+            'x="%.1f" y="%.1f" style="--bump-color:%s">%s</text>'
+            % (tid, ML + plot_w + 9.0, ny + 3.0, esc(color), abbrev))
+        if abs(ny - anchor_y) > 1.0:
+            label_svg.append('<line class="bump-leader" x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/>'
+                             % (ML + plot_w + 5.0, anchor_y, ML + plot_w + 3.0, ny))
+
+    # ---- Legend chips (colored, with rank-change delta) ----------------
+    legend = []
+    for t in ordered:
+        tid = safe_int(t.get("tid"), 0)
+        color = t.get("color") or "#939ca7"
+        if not (isinstance(color, str) and color.startswith("#")):
+            color = "#939ca7"
+        abbrev = esc(t.get("abbrev") or "")
+        name = esc(t.get("name") or "")
+        cur_rank = safe_int((t.get("ranks") or [rows])[0], rows)
+        end_rank = safe_int((t.get("ranks") or [rows])[-1], rows)
+        delta = cur_rank - end_rank  # positive == climbed (lower rank number)
+        if delta > 0:
+            arrow, dcls = "▲%d" % delta, "bump-chip-up"
+        elif delta < 0:
+            arrow, dcls = "▼%d" % (-delta), "bump-chip-down"
+        else:
+            arrow, dcls = "▬", "bump-chip-flat"
+        legend.append(
+            '<button type="button" class="bump-chip" data-bump-chip data-tid="%d" '
+            'style="--bump-color:%s" title="%s">'
+            '<span class="bump-chip-dot"></span>'
+            '<span class="bump-chip-ab">%s</span>'
+            '<span class="bump-chip-delta %s">%s</span>'
+            '</button>'
+            % (tid, esc(color), name, abbrev, dcls, arrow))
+
+    ref = league_proj.get("league") or {}
+    sub_bits = []
+    if ref.get("contender") is not None:
+        sub_bits.append("contender ≈ %d OVR" % int(round(safe_float(ref.get("contender")))))
+    if ref.get("avg") is not None:
+        sub_bits.append("league avg ≈ %d" % int(round(safe_float(ref.get("avg")))))
+    sub = " · ".join(sub_bits)
+
+    payload = {
+        "seasons": seasons,
+        "rows": rows,
+        "g": {"ml": ML, "mr": MR, "mt": MT, "mb": MB,
+              "rowh": row_h, "colw": col_w, "pw": plot_w, "ph": plot_h,
+              "w": width, "h": height},
+        "teams": payload_teams,
+    }
+    payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
+
+    n_label = "%d teams" % len(teams)
+
+    return (
+        '<section class="card bump-card">'
+        '<div class="section-title-row">'
+        '<h2>Projected Power Rankings</h2>'
+        '<span class="count-pill">%s</span>'
+        '</div>'
+        '<p class="muted small-copy bump-sub">Each line follows a team’s league rank if every '
+        'roster simply ages forward — no trades, draft, or signings. Crossovers are where one '
+        'core overtakes another.%s</p>'
+        '<div class="bump-legend" data-bump-legend>%s</div>'
+        '<div class="chart-wrap bump-wrap" data-bump>'
+        '<svg viewBox="0 0 %g %g" class="bump-chart" role="img" '
+        'aria-label="Projected league power rankings over %d seasons" '
+        'preserveAspectRatio="xMidYMid meet">'
+        '<text class="bump-axislabel bump-axislabel--top" x="%.1f" y="%.1f">best</text>'
+        '<text class="bump-axislabel bump-axislabel--bot" x="%.1f" y="%.1f">worst</text>'
+        '%s%s%s'
+        '</svg>'
+        '<div class="chart-tooltip bump-tooltip" data-bump-tooltip hidden></div>'
+        '</div>'
+        '<script type="application/json" id="bump-data">%s</script>'
+        '</section>'
+        % (n_label,
+           (" " + sub if sub else ""),
+           "".join(legend),
+           width, height, n_seasons,
+           ML - 56.0, MT - 14.0,
+           ML - 56.0, MT + plot_h + 18.0,
+           "".join(grid), "".join(lines), "".join(label_svg),
+           payload_json)
+    )
+
+
+def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
+    """Projected Standings detail table for the league projections page.
+
+    Rows = teams (current-rank order); columns = the 7 projected seasons. Each
+    cell shows that team's projected strength (p50, rounded int) with a small
+    league-rank badge for that season, plus an estimated record
+    (round(win_pct * numGames)) on a secondary line / hover title. Cells are
+    tinted by strength relative to the current-league avg/contender reference
+    lines (>= contender -> greenish, ~avg -> neutral, well below -> reddish). The
+    current season (seasons[0]) is anchored with an accent left border since it
+    is actual, not projected. This is the continuity ("proj") scenario -- talent
+    ages forward, no trades / draft / re-signings -- so the signal is the
+    relative order. Returns "" when no projection is available or fewer than two
+    teams. Never raises.
+    """
+    if not league_proj:
+        return ""
+    seasons = [safe_int(s) for s in (league_proj.get("seasons") or [])]
+    entries = list(league_proj.get("teams") or [])
+    if len(seasons) < 1 or len(entries) < 2:
+        return ""
+    n_seasons = len(seasons)
+    num_games = [safe_int(g) for g in (league_proj.get("num_games") or [])]
+    league = league_proj.get("league") or {}
+    avg = safe_float(league.get("avg")) if league.get("avg") is not None else None
+    contender = safe_float(league.get("contender")) if league.get("contender") is not None else None
+
+    # Rows sorted by current (seasons[0]) rank ascending; tie-break by current OVR.
+    def _cur_rank(e: dict[str, Any]) -> int:
+        r = e.get("ranks") or []
+        return safe_int(r[0]) if r else 999
+    rows_data = sorted(entries, key=lambda e: (_cur_rank(e), -safe_int(e.get("current"))))
+
+    # Map a strength value to a tint relative to the league references. Always
+    # emit a plain fallback before the color-mix declaration.
+    def _tint(val: float) -> str:
+        if avg is None or contender is None or contender <= avg:
+            return ""  # no usable reference -> no tint
+        span = contender - avg
+        if val >= avg:
+            frac = min(1.0, (val - avg) / span)
+            pct = int(round(8 + frac * 26))  # 8%..34% toward --good
+            return ("background: var(--panel-2);"
+                    f"background: color-mix(in srgb, var(--good) {pct}%, transparent);")
+        frac = min(1.0, (avg - val) / span)
+        pct = int(round(6 + frac * 28))  # 6%..34% toward --bad
+        return ("background: var(--panel-2);"
+                f"background: color-mix(in srgb, var(--bad) {pct}%, transparent);")
+
+    # Header: team column + one column per season (label current vs projected).
+    head_cells = ['<th class="pstand-team-h" scope="col">Team</th>']
+    for si, s in enumerate(seasons):
+        anchor = " pstand-now" if si == 0 else ""
+        tag = "now" if si == 0 else "proj"
+        sub = "actual" if si == 0 else "proj"
+        head_cells.append(
+            f'<th class="pstand-yr{anchor}" scope="col">'
+            f'<span class="pstand-yr-num">{esc(s)}</span>'
+            f'<span class="pstand-yr-tag pstand-yr-tag--{tag}">{esc(sub)}</span>'
+            f"</th>"
+        )
+    head_html = "".join(head_cells)
+
+    body_rows = []
+    for e in rows_data:
+        color = esc(e.get("color") or "#5b9dff")
+        name = esc(e.get("name") or e.get("abbrev") or "Team")
+        abbrev = esc(e.get("abbrev") or "")
+        url = esc(e.get("url") or "#")
+        p50 = e.get("p50") or []
+        ranks = e.get("ranks") or []
+        win_pct = e.get("win_pct") or []
+
+        team_cell = (
+            f'<th class="pstand-team" scope="row">'
+            f'<a class="pstand-name" href="{url}">'
+            f'<span class="pstand-dot" style="background:{color}"></span>'
+            f'<span class="pstand-name-txt">{name}</span>'
+            f'<span class="pstand-abbr">{abbrev}</span>'
+            f"</a></th>"
+        )
+
+        cells = [team_cell]
+        for si in range(n_seasons):
+            raw = safe_float(p50[si]) if si < len(p50) else 0.0
+            val = int(round(raw))
+            rank = safe_int(ranks[si]) if si < len(ranks) else 0
+            ng = num_games[si] if si < len(num_games) else 0
+            wp = safe_float(win_pct[si]) if si < len(win_pct) else 0.0
+            if ng > 0:
+                wins = int(round(wp * ng))
+                losses = max(0, ng - wins)
+                rec = f"{wins}-{losses}"
+            else:
+                rec = f"{int(round(wp * 100))}%"
+            anchor = " pstand-now" if si == 0 else ""
+            rank_cls = ""
+            if rank == 1:
+                rank_cls = " pstand-rank--top"
+            elif rank <= 3:
+                rank_cls = " pstand-rank--hi"
+            title = f"{name} — {seasons[si]}: strength {val}, rank #{rank}, est. record {rec}"
+            cells.append(
+                f'<td class="pstand-cell{anchor}" style="{_tint(raw)}" title="{esc(title)}">'
+                f'<span class="pstand-val">{esc(val)}</span>'
+                f'<span class="pstand-rank{rank_cls}">#{esc(rank)}</span>'
+                f'<span class="pstand-rec">{esc(rec)}</span>'
+                f"</td>"
+            )
+        body_rows.append("<tr>" + "".join(cells) + "</tr>")
+
+    body_html = "\n".join(body_rows)
+    n_proj = max(0, n_seasons - 1)
+    caption = (
+        "Continuity scenario: every roster ages forward as-is — no trades, "
+        "draft, or re-signings, so the signal is relative order. Records are model "
+        "estimates from projected round-robin win rate."
+    )
+
+    return f"""
+    <section class="card pstand" id="projected-standings">
+      <div class="section-title-row">
+        <h2>Projected Standings</h2>
+        <span class="count-pill">{esc(n_proj)} seasons ahead</span>
+      </div>
+      <p class="muted small-copy pstand-caption">{esc(caption)}</p>
+      <div class="table-wrap pstand-wrap">
+        <table class="pstand-table">
+          <thead><tr>{head_html}</tr></thead>
+          <tbody>
+            {body_html}
+          </tbody>
+        </table>
+      </div>
+      <div class="scout-tags pstand-legend" aria-hidden="true">
+        <span class="scout-tag scout-tag--good">at / above contender</span>
+        <span class="scout-tag scout-tag--neutral">near league avg</span>
+        <span class="scout-tag scout-tag--bad">well below</span>
+      </div>
+    </section>
+    """
+
+
+def league_storylines_html(league_proj: dict[str, Any] | None) -> str:
+    """Editorial "Projected Storylines" chip strip for projections.html.
+
+    League-level parallel to the per-team Team Outlook tags: auto-derives the
+    handful of takeaways a reader should grab at a glance from the continuity
+    ("proj") projection. Each chip names ONE team + a data-backed storyline with
+    a numeric title= tooltip, reusing the ``.scout-tag`` chip vocabulary inside a
+    titled ``.card``. Diversifies so (where possible) each chip names a different
+    team. Returns "" when the projection is missing or has too few teams; never
+    raises.
+    """
+    if not league_proj:
+        return ""
+    teams = league_proj.get("teams") or []
+    if len(teams) < 2:
+        return ""
+
+    seasons = league_proj.get("seasons") or []
+    n_seasons = len(seasons)
+    if n_seasons < 2:
+        return ""
+    n_teams = len(teams)
+    last = n_seasons - 1
+    mid = min(3, last)  # mid/late window index for "future" judgements
+
+    def rank_at(t, i):
+        ranks = t.get("ranks") or []
+        return safe_int(ranks[i], n_teams) if i < len(ranks) else n_teams
+
+    def p50_at(t, i):
+        arr = t.get("p50") or []
+        return safe_float(arr[i], 0.0) if i < len(arr) else 0.0
+
+    def win_at(t, i):
+        arr = t.get("win_pct") or []
+        return safe_float(arr[i], 0.0) if i < len(arr) else 0.0
+
+    def avg_rank(t):
+        ranks = t.get("ranks") or []
+        vals = [safe_int(r, n_teams) for r in ranks[:n_seasons]]
+        return sum(vals) / len(vals) if vals else float(n_teams)
+
+    def best_future_rank(t):
+        # best (lowest) rank in any future season (excludes current season 0)
+        ranks = t.get("ranks") or []
+        fut = [safe_int(ranks[i], n_teams) for i in range(1, n_seasons) if i < len(ranks)]
+        return min(fut) if fut else rank_at(t, 0)
+
+    def peak_future_season(t, target_rank):
+        ranks = t.get("ranks") or []
+        for i in range(1, n_seasons):
+            if i < len(ranks) and safe_int(ranks[i], n_teams) == target_rank:
+                return seasons[i]
+        return seasons[last]
+
+    def dot(t):
+        # real base fill (never color-mix-only); inline so the league view is multi-colored
+        color = esc(t.get("color") or "var(--muted)")
+        return ('<span class="story-dot" style="background:%s"></span>' % color)
+
+    def name(t):
+        return esc(t.get("name") or t.get("abbrev") or "Team")
+
+    chips = []          # (priority, tone, team, label, title)
+    used = set()        # id(team) already named, to diversify
+
+    # ---- TITLE FAVORITE: rank 1 now (tie-break highest current OVR) ----
+    now_leaders = sorted(teams, key=lambda t: (rank_at(t, 0), -p50_at(t, 0)))
+    fav = now_leaders[0]
+    fav_is_top_now = rank_at(fav, 0) == 1
+    if fav_is_top_now:
+        chips.append((100, "good", fav, "Title favorite",
+            "Projects #1 in %d at %d OVR (%d%% expected win rate) -- the team to beat."
+            % (seasons[0], round(p50_at(fav, 0)), round(win_at(fav, 0) * 100))))
+
+    # ---- FUTURE #1 / DYNASTY: holds or takes the top rank at horizon end ----
+    fut_leaders = sorted(teams, key=lambda t: (rank_at(t, last), -p50_at(t, last)))
+    future_top = fut_leaders[0]
+    if rank_at(future_top, last) == 1:
+        if future_top is fav:
+            chips.append((95, "good", future_top, "Dynasty arc",
+                "Holds #1 from %d through %d -- no challenger overtakes them across the horizon."
+                % (seasons[0], seasons[last])))
+            used.add(id(future_top))
+        elif id(future_top) not in used:
+            chips.append((90, "info", future_top, "Future #1",
+                "Rises to #1 by %d (from #%d now) -- the projected next dynasty."
+                % (seasons[last], rank_at(future_top, 0))))
+            used.add(id(future_top))
+    if fav_is_top_now:
+        used.add(id(fav))
+
+    # ---- BIGGEST RISER / ON THE CLIMB: most rank places gained -> best future rank ----
+    risers = []
+    for t in teams:
+        gain = rank_at(t, 0) - best_future_rank(t)
+        if gain > 0:
+            risers.append((gain, t))
+    risers.sort(key=lambda g: (-g[0], rank_at(g[1], 0)))
+    for gain, t in risers:
+        if id(t) in used:
+            continue
+        bfr = best_future_rank(t)
+        tone = "good" if gain >= 3 else "info"
+        label = "Biggest riser" if gain >= 3 else "On the climb"
+        chips.append((88, tone, t, label,
+            "Climbs from #%d (%d) to a projected #%d by %s -- gains %d place%s as its young core holds."
+            % (rank_at(t, 0), seasons[0], bfr, peak_future_season(t, bfr), gain,
+               "" if gain == 1 else "s")))
+        used.add(id(t))
+        break
+
+    # ---- BIGGEST FALLER / WINDOW CLOSING: largest rank drop now -> horizon end ----
+    fallers = []
+    for t in teams:
+        drop = rank_at(t, last) - rank_at(t, 0)
+        if drop > 0:
+            fallers.append((drop, t))
+    fallers.sort(key=lambda g: (-g[0], rank_at(g[1], 0)))
+    for drop, t in fallers:
+        if id(t) in used:
+            continue
+        was_contender = rank_at(t, 0) <= max(1, round(n_teams * 0.3))
+        if was_contender:
+            tone, label = "warn", "Window closing"
+            title = ("Contender now (#%d) but slides to #%d by %s -- an aging core, %d place%s lost."
+                     % (rank_at(t, 0), rank_at(t, last), seasons[last], drop,
+                        "" if drop == 1 else "s"))
+        else:
+            tone, label = "bad", "Biggest faller"
+            title = ("Falls #%d -> #%d (%s to %s), shedding %d place%s as the roster ages out."
+                     % (rank_at(t, 0), rank_at(t, last), seasons[0], seasons[last], drop,
+                        "" if drop == 1 else "s"))
+        chips.append((84, tone, t, label, title))
+        used.add(id(t))
+        break
+
+    # ---- STAYING POWER: best average projected rank across the horizon ----
+    by_avg = sorted(teams, key=lambda t: (avg_rank(t), rank_at(t, 0)))
+    for t in by_avg:
+        if id(t) in used:
+            continue
+        ar = avg_rank(t)
+        if ar <= max(2.5, n_teams * 0.35):
+            chips.append((70, "good", t, "Staying power",
+                "Best average projected rank (#%.1f over %d seasons) -- contends every year, never fades."
+                % (ar, n_seasons)))
+            used.add(id(t))
+        break
+
+    # ---- REBUILD WATCH: bottom-third now but climbing relative to peers ----
+    by_now_worst = sorted(teams, key=lambda t: (-rank_at(t, 0), rank_at(t, last)))
+    for t in by_now_worst:
+        if id(t) in used:
+            continue
+        bottom_now = rank_at(t, 0) >= round(n_teams * 0.7)
+        bfr = best_future_rank(t)
+        gain = rank_at(t, 0) - bfr
+        if bottom_now and gain >= 1:
+            chips.append((60, "info", t, "Rebuild watch",
+                "Near the bottom now (#%d) but climbing to #%d by %s -- youth trending the right way."
+                % (rank_at(t, 0), bfr, peak_future_season(t, bfr))))
+            used.add(id(t))
+        break
+
+    chips.sort(key=lambda c: c[0], reverse=True)
+    chips = chips[:6]
+
+    n_chips = len(chips)
+    if n_chips == 0:
+        return ""
+    count_label = "%d storyline" % n_chips if n_chips == 1 else "%d storylines" % n_chips
+    out = ['<section class="card"><div class="section-title-row"><h2>Projected Storylines</h2>'
+           '<span class="count-pill">%s</span></div><div class="scout-tags">' % count_label]
+    for _, tone, t, label, title in chips:
+        out.append('<span class="scout-tag scout-tag--%s scout-tag--story" title="%s">%s%s: %s</span>'
+                   % (esc(tone), esc(title), dot(t), name(t), esc(label)))
+    out.append('</div></section>')
+    return "".join(out)
+
+
+def team_trajectory_html(team: dict[str, Any], team_proj: dict[str, Any] | None, root: str = "../") -> str:
+    """Projected Team Strength fan chart -- the TEAM-PAGE centerpiece.
+
+    Interactive fan chart of projected team OVR over the next 6 seasons with two
+    toggleable scenarios ("Projected roster" default, "Guaranteed core"). For the
+    active scenario it draws a median line, shaded 80% (P10-P90) and 50% (P25-P75)
+    confidence bands, a marker at the current season, and labelled horizontal
+    reference lines at the league average and contender thresholds so relative
+    strength and the contention window read at a glance. The default scenario is
+    rendered statically in the SVG (progressive enhancement); the embedded JSON +
+    JS module redraws on toggle and powers a hover readout. Returns "" when no
+    projection is available. Never raises.
+    """
+    if team_proj is None:
+        return ""
+    seasons = [safe_int(s) for s in team_proj.get("seasons", [])]
+    if len(seasons) < 2:
+        return ""
+    league = team_proj.get("league") or {}
+    cur_season = safe_int(team_proj.get("season"), seasons[0])
+    current = safe_int(team_proj.get("current"))
+    core_counts = [safe_int(c) for c in team_proj.get("core_counts", [])]
+
+    # Clamp displayed values to >= 0 (a fully-lapsed core legitimately reads as
+    # rock bottom -- nobody under contract).
+    def bands(scn: str) -> dict[str, list[float]] | None:
+        src = team_proj.get(scn) or {}
+        keys = ("p10", "p25", "p50", "p75", "p90")
+        if not all(k in src for k in keys):
+            return None
+        out: dict[str, list[float]] = {}
+        for k in keys:
+            vals = src.get(k) or []
+            if len(vals) != len(seasons):
+                return None
+            out[k] = [max(0.0, round(float(v), 1)) for v in vals]
+        return out
+
+    proj_b = bands("proj")
+    core_b = bands("core")
+    if proj_b is None:
+        return ""
+    scenarios: dict[str, dict[str, list[float]]] = {"proj": proj_b}
+    if core_b is not None:
+        scenarios["core"] = core_b
+
+    avg = safe_float(league.get("avg")) if league.get("avg") is not None else None
+    contender = safe_float(league.get("contender")) if league.get("contender") is not None else None
+    rank = league.get("rank")
+    n_teams = safe_int(league.get("n_teams"))
+
+    # y-axis spans up to the data max (may exceed 100) plus the reference lines.
+    all_vals: list[float] = [float(current)]
+    for b in scenarios.values():
+        all_vals += b["p10"] + b["p90"]
+    for ref in (avg, contender):
+        if ref is not None:
+            all_vals.append(ref)
+    hi = math.ceil(max(all_vals) / 5.0) * 5 + 4
+    lo = max(0.0, math.floor(min(all_vals) / 5.0) * 5 - 4)
+    if hi <= lo:
+        hi = lo + 10
+
+    width, height = 660, 230
+    ml, mr, mt, mb = 34, 14, 12, 26
+    plot_w, plot_h = width - ml - mr, height - mt - mb
+    s_min, s_max = seasons[0], seasons[-1]
+    span = max(1, s_max - s_min)
+
+    def xs(s: float) -> float:
+        return ml + (s - s_min) / span * plot_w
+
+    def yv(v: float) -> float:
+        return mt + plot_h - (v - lo) / (hi - lo) * plot_h
+
+    # --- grid + axis ticks ---
+    grid: list[str] = []
+    ystep = 10 if (hi - lo) > 40 else 5
+    ytick = math.ceil(lo / ystep) * ystep
+    while ytick <= hi:
+        gy = yv(ytick)
+        grid.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w}" y2="{gy:.1f}" class="chart-grid"/>')
+        grid.append(f'<text x="{ml - 6}" y="{gy + 3.5:.1f}" class="chart-tick" text-anchor="end">{int(ytick)}</text>')
+        ytick += ystep
+    for s in seasons:
+        grid.append(f'<text x="{xs(s):.1f}" y="{height - 8}" class="chart-tick" text-anchor="middle">{s}</text>')
+
+    # --- reference lines (scenario-independent) ---
+    refs: list[str] = []
+
+    def ref_line(val: float | None, cls: str, label: str) -> None:
+        if val is None:
+            return
+        gy = yv(max(0.0, val))
+        refs.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w}" y2="{gy:.1f}" class="ttraj-ref {cls}"/>')
+        refs.append(f'<text x="{ml + plot_w - 3}" y="{gy - 3:.1f}" class="ttraj-ref-label" text-anchor="end">{esc(label)} {int(round(val))}</text>')
+
+    ref_line(avg, "ttraj-ref-avg", "Lg avg")
+    ref_line(contender, "ttraj-ref-cont", "Contender")
+
+    # --- scenario geometry (static default = proj) ---
+    def band(upper: list[float], lower: list[float], cls: str) -> str:
+        fwd = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(seasons, upper))
+        back = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(reversed(seasons), reversed(lower)))
+        return f'<polygon points="{fwd} {back}" class="{cls}"/>'
+
+    def median_line(p50: list[float]) -> str:
+        pts = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(seasons, p50))
+        return f'<polyline points="{pts}" class="ttraj-median"/>'
+
+    band80 = band(proj_b["p90"], proj_b["p10"], "ttraj-band-80")
+    band50 = band(proj_b["p75"], proj_b["p25"], "ttraj-band-50")
+    median = median_line(proj_b["p50"])
+    cur_marker = f'<circle cx="{xs(s_min):.1f}" cy="{yv(float(current)):.1f}" r="3.6" class="ttraj-cur"/>'
+
+    # --- contention window: contiguous run from the first season where proj median >= contender ---
+    def contention_window(p50: list[float]) -> str:
+        if contender is None:
+            return ""
+        thr = round(contender, 1)  # match the rounded value the JS recompute uses
+        hit = [seasons[i] for i, v in enumerate(p50) if v >= thr]
+        if not hit:
+            return "none in window"
+        run = [hit[0]]
+        for s in hit[1:]:
+            if s == run[-1] + 1:
+                run.append(s)
+            else:
+                break
+        return str(run[0]) if run[0] == run[-1] else f"{run[0]}–{run[-1]}"
+
+    window_proj = contention_window(proj_b["p50"])
+
+    # --- summary line bits ---
+    rank_txt = ""
+    if isinstance(rank, int) and n_teams:
+        rank_txt = f'<span class="ttraj-rank">#{rank} of {n_teams}</span>'
+    window_html = ""
+    if contender is not None:
+        window_html = (
+            f'<span class="ttraj-window" data-ttraj-window>Contender window: '
+            f'<strong>{esc(window_proj)}</strong></span>'
+        )
+
+    # --- toggle button group (default proj) ---
+    has_core = "core" in scenarios
+    toggle = ['<div class="ttraj-toggle" role="group" aria-label="Projection scenario">']
+    toggle.append('<button type="button" class="ttraj-btn active" data-ttraj-scn="proj" aria-pressed="true">Projected roster</button>')
+    if has_core:
+        toggle.append('<button type="button" class="ttraj-btn" data-ttraj-scn="core" aria-pressed="false">Guaranteed core</button>')
+    toggle.append('</div>')
+
+    tid = safe_int(team.get("tid"), 0)
+    payload = {
+        "cur": cur_season,
+        "current": current,
+        "seasons": seasons,
+        "counts": core_counts,
+        "avg": round(avg, 1) if avg is not None else None,
+        "contender": round(contender, 1) if contender is not None else None,
+        "scn": {k: {kk: vv for kk, vv in b.items()} for k, b in scenarios.items()},
+        "labels": {"proj": "Projected roster", "core": "Guaranteed core"},
+        "g": {"ml": ml, "mt": mt, "pw": plot_w, "ph": plot_h,
+              "lo": lo, "hi": hi, "smin": s_min, "smax": s_max, "w": width, "h": height},
+    }
+    payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
+
+    sims_note = ""
+    n_players = safe_int(team_proj.get("n_players"))
+    if n_players:
+        sims_note = f" from {n_players} current players"
+
+    return f"""
+    <section class="card">
+      <div class="section-title-row">
+        <h2>Projected Team Strength</h2>
+        {rank_txt}
+      </div>
+      <div class="ttraj-controls">
+        {''.join(toggle)}
+        <span class="muted small-copy ttraj-key">
+          <span class="ttraj-k ttraj-k-band"></span> 80% / 50% range &middot;
+          <span class="ttraj-k ttraj-k-median"></span> Median
+        </span>
+      </div>
+      <div class="chart-wrap ttraj-wrap" data-team-traj data-ttraj-tid="{tid}">
+        <svg viewBox="0 0 {width} {height}" class="ttraj-chart" role="img" aria-label="Projected team overall for the next {PROJ_SEASONS_AHEAD} seasons">
+          {''.join(grid)}
+          <g data-ttraj-bands>
+            {band80}
+            {band50}
+          </g>
+          {''.join(refs)}
+          <g data-ttraj-line>
+            {median}
+          </g>
+          {cur_marker}
+          <line class="ttraj-hover-line" data-ttraj-hover-line y1="{mt}" y2="{mt + plot_h}" style="display:none"/>
+          <circle class="ttraj-hover-dot" data-ttraj-hover-dot r="3.5" style="display:none"/>
+        </svg>
+        <div class="chart-tooltip" data-ttraj-tooltip hidden></div>
+      </div>
+      <p class="muted small-copy">
+        Projected team overall for the next {PROJ_SEASONS_AHEAD} seasons{sims_note}, median with shaded
+        80% (P10&ndash;P90) and 50% (P25&ndash;P75) bands. <em>Projected roster</em> keeps every current player and
+        ages them forward; <em>Guaranteed core</em> counts only players still under contract that season (departed
+        slots fall to replacement level). {window_html}
+      </p>
+      <script type="application/json" id="team-traj-{tid}">{payload_json}</script>
+    </section>
+    """
+
+
+def contract_horizon_html(team: dict[str, Any], roster: list[dict[str, Any]], season: int,
+                          team_proj: dict[str, Any] | None = None) -> str:
+    """A "Contract Horizon" Gantt timeline of guaranteed-core decline.
+
+    One row per rostered player (sorted by current OVR desc, capped at 12 with a
+    "+N more" note), each a horizontal bar spanning from the current season to the
+    player's ``contract.exp`` year on a shared season axis (current .. current+6,
+    matching the trajectory chart). Bars are colored by ``--team-primary`` and
+    faded for lower-OVR players. A subtle per-season column shading plus a footer
+    "under contract" count make the roster thinning legible (the count mirrors
+    ``team_proj["core_counts"]`` when ``team_proj`` is supplied). Contracts that
+    run past the window show a "->{exp}" overflow indicator. Returns "" on empty
+    roster. Never raises.
+    """
+    if not roster:
+        return ""
+
+    season = safe_int(season)
+    s_max = season + PROJ_SEASONS_AHEAD
+    n_cols = PROJ_SEASONS_AHEAD + 1  # current .. current+6 inclusive
+    seasons_axis = list(range(season, s_max + 1))
+
+    # Collect rows: (ovr, name, exp, beyond) for active players, OVR desc.
+    entries: list[tuple[int, str, int, bool]] = []
+    for p in roster:
+        if p.get("retiredYear") is not None:
+            continue
+        ovr = _player_current_ovr(p, season)
+        if ovr is None:
+            continue
+        contract = p.get("contract") or {}
+        # Missing exp -> treat as expiring this season (floor at current season).
+        exp = safe_int(contract.get("exp"), season)
+        if exp < season:
+            exp = season
+        beyond = exp > s_max
+        entries.append((ovr, player_name(p), exp, beyond))
+    if not entries:
+        return ""
+
+    entries.sort(key=lambda e: (-e[0], e[1]))
+    total = len(entries)
+    MAX_ROWS = 12
+    shown = entries[:MAX_ROWS]
+    extra = total - len(shown)
+
+    ovrs = [e[0] for e in shown]
+    hi_ovr = max(ovrs)
+    lo_ovr = min(ovrs)
+
+    # Per-season count of ALL eligible roster players still under contract (drives
+    # the column shading; not limited to the <=12 displayed rows).
+    roster_counts = [sum(1 for _o, _n, exp, _b in entries if exp >= s) for s in seasons_axis]
+
+    # Footer: prefer team_proj["core_counts"] (full-roster truth) when present.
+    core_counts = None
+    if team_proj is not None:
+        cc = team_proj.get("core_counts")
+        if isinstance(cc, (list, tuple)) and len(cc) >= n_cols:
+            core_counts = [safe_int(cc[i], 0) for i in range(n_cols)]
+    footer_counts = core_counts if core_counts is not None else roster_counts
+    footer_label = "Under contract (full roster)" if core_counts is not None else "Under contract"
+
+    # --- SVG geometry (shared season axis across header, bars, footer) ---------
+    width = 680.0
+    ML, MR = 168.0, 16.0          # left gutter for labels, right margin
+    plot_w = width - ML - MR
+    col_w = plot_w / n_cols
+    row_h = 22.0
+    row_gap = 4.0
+    head_h = 20.0
+    foot_h = 26.0
+    top_pad = head_h + 6.0
+    n_rows = len(shown)
+    plot_h = n_rows * row_h + max(0, n_rows - 1) * row_gap
+    height = top_pad + plot_h + foot_h + 8.0
+
+    def col_x(i: int) -> float:
+        return ML + i * col_w
+
+    parts: list[str] = []
+
+    # Column shading: deepen as the roster thins (fewer players under contract).
+    max_cnt = max(roster_counts) or 1
+    for i, s in enumerate(seasons_axis):
+        x = col_x(i)
+        frac = roster_counts[i] / max_cnt
+        shade = 0.04 + (1.0 - frac) * 0.10
+        parts.append(
+            f'<rect x="{x:.1f}" y="{top_pad:.1f}" width="{col_w:.1f}" height="{plot_h:.1f}" '
+            f'class="tcon-col" style="fill:color-mix(in srgb, var(--muted) {shade * 100:.0f}%, transparent)"/>'
+        )
+        parts.append(
+            f'<text x="{x + col_w / 2:.1f}" y="{head_h - 4:.1f}" class="tcon-axis" text-anchor="middle">{esc(s)}</text>'
+        )
+        parts.append(
+            f'<line x1="{x:.1f}" y1="{top_pad:.1f}" x2="{x:.1f}" y2="{top_pad + plot_h:.1f}" class="tcon-gridline"/>'
+        )
+    parts.append(
+        f'<line x1="{col_x(n_cols):.1f}" y1="{top_pad:.1f}" x2="{col_x(n_cols):.1f}" '
+        f'y2="{top_pad + plot_h:.1f}" class="tcon-gridline"/>'
+    )
+
+    # Bars.
+    bar_h = row_h - 6.0
+    span_ovr = max(1, hi_ovr - lo_ovr)
+    for ridx, (ovr, name, exp, beyond) in enumerate(shown):
+        ry = top_pad + ridx * (row_h + row_gap)
+        bar_y = ry + 3.0
+        # Bar spans from current season to exp (clamped to the window edge).
+        end_i = min(n_cols, exp - season + 1)
+        end_i = max(1, end_i)
+        bx = col_x(0)
+        bw = max(col_w * 0.55, col_x(end_i) - bx)  # always show at least a stub
+        # Fade lower-OVR players: opacity 0.45..1.0 across the shown OVR range.
+        op = 0.45 + (ovr - lo_ovr) / span_ovr * 0.55
+        exp_txt = f"→{esc(exp)}" if beyond else esc(exp)
+        title = f"{name} · OVR {ovr} · through {exp}" + (" (beyond window)" if beyond else "")
+        parts.append(
+            f'<g class="tcon-row">'
+            f'<title>{esc(title)}</title>'
+            f'<rect x="{bx:.1f}" y="{bar_y:.1f}" width="{bw:.1f}" height="{bar_h:.1f}" rx="3" '
+            f'class="tcon-bar" style="opacity:{op:.2f}"/>'
+        )
+        if beyond:
+            ax = col_x(n_cols)
+            parts.append(
+                f'<path d="M{ax - 1:.1f},{bar_y + bar_h / 2 - 4:.1f} l6,4 l-6,4 z" class="tcon-overflow"/>'
+            )
+        chip_x = bx + bw - 5.0
+        parts.append(
+            f'<text x="{chip_x:.1f}" y="{bar_y + bar_h / 2 + 3.5:.1f}" class="tcon-expiry" '
+            f'text-anchor="end">{exp_txt}</text>'
+        )
+        parts.append(
+            f'<text x="{ML - 10:.1f}" y="{bar_y + bar_h / 2 + 4:.1f}" class="tcon-name" text-anchor="end">'
+            f'{esc(name)} <tspan class="tcon-ovr">{ovr}</tspan></text>'
+        )
+        parts.append('</g>')
+
+    # Footer: under-contract count per season.
+    fy = top_pad + plot_h + 4.0
+    parts.append(
+        f'<text x="{ML - 10:.1f}" y="{fy + foot_h / 2 + 1:.1f}" class="tcon-foot-label" text-anchor="end">{esc(footer_label)}</text>'
+    )
+    n_footer = min(n_cols, len(footer_counts))
+    for i in range(n_footer):
+        x = col_x(i) + col_w / 2
+        parts.append(
+            f'<text x="{x:.1f}" y="{fy + foot_h / 2 + 1:.1f}" class="tcon-foot-count" text-anchor="middle">{esc(footer_counts[i])}</text>'
+        )
+
+    truncated = (
+        f'<p class="muted small-copy tcon-note">+{extra} more {"player" if extra == 1 else "players"} not shown (lowest current overall).</p>'
+        if extra > 0 else ""
+    )
+
+    return f"""
+    <section class="card" id="contract-horizon">
+      <div class="section-title-row">
+        <h2>Contract Horizon</h2>
+        <span class="muted small-copy">Bars run from {esc(season)} to each contract's final season</span>
+      </div>
+      <div class="chart-wrap tcon-wrap">
+        <svg viewBox="0 0 {width:.0f} {height:.0f}" class="tcon-chart" role="img" aria-label="Contract expiry timeline for the roster, {esc(season)} to {esc(s_max)}">
+          {''.join(parts)}
+        </svg>
+      </div>
+      <p class="muted small-copy tcon-caption">Each bar covers the seasons a player is under contract; the footer counts players locked in per season. As bars expire, the guaranteed core thins &mdash; the gap to a re-signed roster is the value of that expiring talent.</p>
+      {truncated}
+    </section>
+    """
+
+
+def team_outlook_tags_html(team: dict[str, Any], roster: list[dict[str, Any]], season: int, team_proj: dict[str, Any] | None) -> str:
+    """Deterministic narrative "Team Outlook" chips (the team-level parallel to the
+    player "Scouting Outlook"). Reuses the ``.scout-tag`` chip vocabulary inside a
+    titled ``card`` section. Returns "" when no projection is available, and never
+    raises.
+
+    Trajectory reads the *near-term* (3-season) median slope of the projected-roster
+    ("proj") scenario rather than the full horizon: this league's proj band fades
+    steeply over six years for every roster as players age out (league-wide 6-yr
+    slopes observed ~ -19..-62), so the near-term slope is what actually
+    discriminates teams holding serve from teams sliding. Displayed medians are
+    clamped to >= 0 per the scale note.
+    """
+    if not team_proj:
+        return ""
+    proj = team_proj.get("proj") or {}
+    p50 = proj.get("p50") or []
+    if len(p50) < 7:
+        return ""
+    league = team_proj.get("league") or {}
+    avg = safe_float(league.get("avg"), 98.0)
+    contender = safe_float(league.get("contender"), 104.0)
+    n_teams = safe_int(league.get("n_teams"), 0)
+    rank = league.get("rank")
+    rank = safe_int(rank, 0) if rank is not None else None
+    counts = team_proj.get("core_counts") or []
+    n_players = safe_int(team_proj.get("n_players"), 0)
+
+    band = [max(0.0, float(v)) for v in p50]   # clamp displayed medians to >= 0
+    now = band[0]
+    near = band[3] - now      # 3-yr slope -- the discriminating trajectory signal
+    far = band[6] - now       # 6-yr slope -- cited for context only
+
+    # Roster ages in the current season.
+    ages = []
+    for p in roster or []:
+        if p.get("retiredYear") is not None:
+            continue
+        born = (p.get("born") or {}).get("year")
+        if born is None:
+            continue
+        a = season - safe_int(born, season)
+        if 14 <= a <= 50:
+            ages.append(a)
+    avg_age = sum(ages) / len(ages) if ages else 0.0
+    n_old = sum(1 for a in ages if a >= 30)
+    n_young = sum(1 for a in ages if a <= 23)
+    old_core = avg_age >= 26.5 or n_old >= 4
+
+    chips: list[tuple] = []   # (priority, tone, label, title); higher prints first
+
+    # ---- STANDING (current strength / rank) ----
+    if (rank is not None and rank <= 2) or now >= contender + 6:
+        chips.append((100, "good", "League favorite",
+            "Rank %s of %d; current team OVR %d sits at/above the contender line (%d)."
+            % (rank if rank else "-", n_teams, round(now), round(contender))))
+    elif now >= contender or (rank is not None and rank <= 4):
+        chips.append((95, "good", "Contender",
+            "Current team OVR %d vs contender line %d (league avg %d); rank %s of %d."
+            % (round(now), round(contender), round(avg), rank if rank else "-", n_teams)))
+    elif rank is not None and n_teams and rank >= n_teams - 1:
+        chips.append((90, "bad", "Cellar dweller",
+            "Rank %d of %d; current team OVR %d below league avg %d."
+            % (rank, n_teams, round(now), round(avg))))
+    else:
+        chips.append((60, "neutral", "Mid-pack",
+            "Current team OVR %d near league avg %d%s."
+            % (round(now), round(avg), (" (rank %d of %d)" % (rank, n_teams)) if rank else "")))
+
+    # ---- TRAJECTORY (near-term proj median slope) ----
+    strong_now = now >= contender
+    if near <= -10 and strong_now:
+        chips.append((88, "warn", "Win-now window",
+            "Contender now (OVR %d >= %d) but projected to slide %+d over 3 yrs (%+d over 6) -- contend now."
+            % (round(now), round(contender), round(near), round(far))))
+    elif near <= -10 and old_core:
+        chips.append((82, "bad", "Aging core",
+            "Projected median falls %+d over 3 yrs; avg roster age %.1f (%d players 30+)."
+            % (round(near), avg_age, n_old)))
+    elif near <= -10:
+        chips.append((70, "warn", "Sliding back",
+            "Projected median declines %+d over 3 yrs (now %d -> %d)."
+            % (round(near), round(now), round(band[3]))))
+    elif near >= -1:
+        chips.append((78, "good", "On the rise",
+            "Projected median holds/climbs (%+d over 3 yrs) while peers age -- now %d, %d in 3 yrs."
+            % (round(near), round(now), round(band[3]))))
+    else:
+        chips.append((45, "neutral", "Treading water",
+            "Projected median roughly steady near-term (%+d over 3 yrs)." % round(near)))
+
+    # ---- CONTRACT horizon (core_counts) ----
+    if len(counts) >= 7 and n_players:
+        c0 = safe_int(counts[0], n_players) or n_players
+        c2 = safe_int(counts[2], c0)
+        c3 = safe_int(counts[3], 0)
+        c5 = safe_int(counts[5], 0)
+        window_closing = strong_now and c3 <= max(1, round(c0 * 0.35))
+        if window_closing:
+            chips.append((85, "warn", "Contention window closing",
+                "Contender now (OVR %d) but only %d of %d players still under contract in 3 yrs."
+                % (round(now), c3, c0)))
+        if c2 <= max(1, round(c0 * 0.5)) and not window_closing:
+            chips.append((58, "info", "Roster turnover looming",
+                "Players under contract drops from %d to %d within 2 yrs -- heavy free agency ahead."
+                % (c0, c2)))
+        if c5 >= max(3, round(c0 * 0.5)):
+            chips.append((56, "info", "Locked-in core",
+                "%d of %d players still under contract 5 yrs out -- long-term continuity secured."
+                % (c5, c0)))
+
+    # ---- DEPTH / age ----
+    if avg_age and (avg_age >= 29 or n_old >= 5):
+        chips.append((50, "warn", "Veteran-heavy",
+            "Avg roster age %.1f across %d players (%d aged 30+)." % (avg_age, len(ages), n_old)))
+    elif avg_age and avg_age <= 24.0 and n_young >= 4:
+        chips.append((52, "good", "Young core",
+            "Avg roster age %.1f across %d players (%d aged 23 or under)." % (avg_age, len(ages), n_young)))
+
+    chips.sort(key=lambda t: t[0], reverse=True)
+    chips = chips[:5]
+
+    n_chips = len(chips)
+    count_label = "%d tag" % n_chips if n_chips == 1 else "%d tags" % n_chips
+    out = ['<section class="card"><div class="section-title-row"><h2>Team Outlook</h2>'
+           '<span class="count-pill">%s</span></div><div class="scout-tags">' % count_label]
+    for _, tone, label, title in chips:
+        out.append('<span class="scout-tag scout-tag--%s" title="%s">%s</span>'
+                   % (esc(tone), esc(title), esc(label)))
+    out.append('</div></section>')
+    return "".join(out)
+
+
+def development_chart_html(player: dict[str, Any], season: int, proj: dict[str, Any] | None = None) -> str:
+    """Historical overall/potential plus a Monte Carlo overall projection.
+
+    Renders a static SVG fan chart (always visible -- progressive enhancement);
+    site.js layers an interactive hover readout on top from the embedded JSON.
+    Falls back to the static :func:`ratings_progress_svg` when no projection is
+    available. ``proj`` may be passed in (computed once per player by the caller)
+    to avoid recomputing the simulation for each projection-backed section.
+    """
+    if proj is None:
+        proj = _player_projection(player, season)
+    if proj is None:
+        return ratings_progress_svg(player)
+
+    sim = proj["sim"]
+    cur_season = proj["cur_season"]
+
+    hist = sorted(
+        [r for r in player.get("ratings", [])
+         if isinstance(r.get("season"), int) and r["season"] <= cur_season
+         and r.get("ovr") is not None],
+        key=lambda r: r["season"],
+    )
+    if not hist:
+        return ratings_progress_svg(player)
+
+    hist_seasons = [int(r["season"]) for r in hist]
+    hist_ovr = [safe_float(r.get("ovr")) for r in hist]
+    # Missing potential falls back to the overall, so a malformed upstream row
+    # never renders as a spurious crash-to-zero on the line (pot is >= ovr).
+    hist_pot = [safe_float(r.get("pot")) if r.get("pot") is not None
+                else safe_float(r.get("ovr")) for r in hist]
+
+    proj_seasons = [int(s) for s in sim["seasons"]]
+    p10 = [round(float(v), 1) for v in sim["ovr"]["p10"]]
+    p25 = [round(float(v), 1) for v in sim["ovr"]["p25"]]
+    p50 = [round(float(v), 1) for v in sim["ovr"]["p50"]]
+    p75 = [round(float(v), 1) for v in sim["ovr"]["p75"]]
+    p90 = [round(float(v), 1) for v in sim["ovr"]["p90"]]
+    pot_peak = int(sim["pot_p75_peak"])
+
+    s_min = min(hist_seasons + proj_seasons)
+    s_max = max(hist_seasons + proj_seasons)
+    vals = hist_ovr + hist_pot + p10 + p90 + [float(pot_peak)]
+    lo = max(0.0, math.floor(min(vals)) - 4)
+    hi = min(100.0, math.ceil(max(vals)) + 4)
+    if hi <= lo:
+        hi = lo + 1
+
+    width, height = 660, 210
+    ml, mr, mt, mb = 34, 14, 12, 28
+    plot_w, plot_h = width - ml - mr, height - mt - mb
+    span = max(1, s_max - s_min)
+
+    def xs(s: float) -> float:
+        return ml + (s - s_min) / span * plot_w
+
+    def yv(v: float) -> float:
+        return mt + plot_h - (v - lo) / (hi - lo) * plot_h
+
+    grid: list[str] = []
+    ystep = 10 if (hi - lo) > 30 else 5
+    ytick = math.ceil(lo / ystep) * ystep
+    while ytick <= hi:
+        gy = yv(ytick)
+        grid.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w}" y2="{gy:.1f}" class="chart-grid"/>')
+        grid.append(f'<text x="{ml - 6}" y="{gy + 3.5:.1f}" class="chart-tick" text-anchor="end">{int(ytick)}</text>')
+        ytick += ystep
+    xstep = max(1, round((s_max - s_min + 1) / 9))
+    labeled: set[int] = set()
+    s = s_min
+    while s <= s_max:
+        labeled.add(s)
+        s += xstep
+    labeled.update({cur_season, s_max})
+    for s in sorted(labeled):
+        grid.append(f'<text x="{xs(s):.1f}" y="{height - 8}" class="chart-tick" text-anchor="middle">{s}</text>')
+
+    def poly(seasons: list[int], values: list[float], cls: str, titles: list[str] | None = None) -> str:
+        pts = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(seasons, values))
+        dots = "".join(
+            f'<circle cx="{xs(s):.1f}" cy="{yv(v):.1f}" r="3" class="{cls}-dot">'
+            f'<title>{titles[i] if titles else f"{s}: {int(round(v))}"}</title></circle>'
+            for i, (s, v) in enumerate(zip(seasons, values))
+        )
+        return f'<polyline points="{pts}" class="{cls}"/>{dots}'
+
+    def poly_hist(seasons: list[int], values: list[float], cls: str) -> str:
+        # Like poly(), but breaks the line at gap years (consecutive seasons that
+        # differ by more than 1) so missing seasons are not drawn as continuous
+        # data. Dots are still placed on every real season.
+        segments: list[list[int]] = []
+        run: list[int] = []
+        for i, s in enumerate(seasons):
+            if run and s - seasons[i - 1] != 1:
+                segments.append(run)
+                run = []
+            run.append(i)
+        if run:
+            segments.append(run)
+        lines = "".join(
+            f'<polyline points="{" ".join(f"{xs(seasons[i]):.1f},{yv(values[i]):.1f}" for i in seg)}" class="{cls}"/>'
+            for seg in segments
+        )
+        dots = "".join(
+            f'<circle cx="{xs(s):.1f}" cy="{yv(v):.1f}" r="3" class="{cls}-dot">'
+            f'<title>{s}: {int(round(v))}</title></circle>'
+            for s, v in zip(seasons, values)
+        )
+        return lines + dots
+
+    # Confidence-band polygons (forward along the upper edge, back along the lower).
+    def band(upper: list[float], lower: list[float], cls: str) -> str:
+        fwd = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(proj_seasons, upper))
+        back = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(reversed(proj_seasons), reversed(lower)))
+        return f'<polygon points="{fwd} {back}" class="{cls}"/>'
+
+    band80 = band(p90, p10, "proj-band-80")
+    band50 = band(p75, p25, "proj-band-50")
+    median = poly(
+        proj_seasons, p50, "proj-median",
+        titles=[f"{s}: {int(round(v))} proj" for s, v in zip(proj_seasons, p50)],
+    )
+    hist_pot_line = poly_hist(hist_seasons, hist_pot, "line-pot")
+    hist_ovr_line = poly_hist(hist_seasons, hist_ovr, "line-ovr")
+    divider = (
+        f'<line x1="{xs(cur_season):.1f}" y1="{mt}" x2="{xs(cur_season):.1f}" '
+        f'y2="{mt + plot_h}" class="proj-divider"/>'
+    )
+
+    pid = safe_int(player.get("pid"), 0)
+    payload = {
+        "cur": cur_season,
+        "potPeak": pot_peak,
+        "hist": {"s": hist_seasons,
+                 "ovr": [round(v, 1) for v in hist_ovr],
+                 "pot": [round(v, 1) for v in hist_pot]},
+        "proj": {"s": proj_seasons, "p10": p10, "p25": p25, "p50": p50, "p75": p75, "p90": p90},
+        "g": {"ml": ml, "mt": mt, "pw": plot_w, "ph": plot_h,
+              "lo": lo, "hi": hi, "smin": s_min, "smax": s_max, "w": width, "h": height},
+    }
+    payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
+
+    return f"""
+    <section class="card">
+      <div class="section-title-row">
+        <h2>Development &amp; Projection</h2>
+        <span class="muted small-copy"><span class="chart-key chart-key-ovr"></span> Overall · <span class="chart-key chart-key-pot"></span> Potential · <span class="chart-key proj-key-band"></span> Projection</span>
+      </div>
+      <div class="chart-wrap proj-wrap" data-proj-chart>
+        <svg viewBox="0 0 {width} {height}" class="proj-chart" role="img" aria-label="Overall rating history and {PROJ_SEASONS_AHEAD}-season projection">
+          {''.join(grid)}
+          {band80}
+          {band50}
+          {median}
+          {hist_pot_line}
+          {hist_ovr_line}
+          {divider}
+          <line class="proj-hover-line" data-proj-hover-line y1="{mt}" y2="{mt + plot_h}" style="display:none"/>
+          <circle class="proj-hover-dot" data-proj-hover-dot r="3.5" style="display:none"/>
+        </svg>
+        <div class="chart-tooltip" data-proj-tooltip hidden></div>
+      </div>
+      <p class="muted small-copy">Projected overall for the next {PROJ_SEASONS_AHEAD} seasons from {PROJ_N_SIMS:,} Monte Carlo simulations of the game's aging model — median with shaded 80% (P10–P90) and 50% (P25–P75) confidence bands. Engine potential ceiling ≈ {pot_peak}.</p>
+      <script type="application/json" id="proj-data-{pid}">{payload_json}</script>
+    </section>
+    """
+
+
+def subrating_grid_html(player, proj):
+    """A 3-group grid of 15 compact "fan sparkline" mini-charts -- one per
+    subrating. Each cell shows the rating label, the current value, a projected
+    delta chip, and an inline SVG with the gap-broken historical line, the
+    projected median, and the projected 80% (P10-P90) band, with a divider at
+    the current season. Each mini-chart auto-scales its own y-axis. A single
+    embedded JSON blob + small JS module syncs hover across all 15 charts.
+
+    Returns "" when proj is None or data is insufficient. Never raises.
+    """
+    if proj is None:
+        return ""
+    sim = proj.get("sim") or {}
+    subr = sim.get("subratings") or {}
+    proj_seasons = [safe_int(s) for s in sim.get("seasons", [])]
+    if len(proj_seasons) < 2 or not subr:
+        return ""
+    cur_season = safe_int(proj.get("cur_season"))
+
+    rows = [r for r in player.get("ratings", [])
+            if isinstance(r.get("season"), int) and r.get("season") <= cur_season]
+    rows.sort(key=lambda r: r["season"])
+
+    pid = safe_int(player.get("pid"), 0)
+
+    # Geometry of each mini-chart (SVG viewBox units).
+    W, H = 150.0, 46.0
+    ML, MR, MT, MB = 3.0, 3.0, 4.0, 4.0
+    PW, PH = W - ML - MR, H - MT - MB
+
+    all_seasons = sorted(set([int(r["season"]) for r in rows] + proj_seasons))
+    if not all_seasons:
+        return ""
+    s_min, s_max = all_seasons[0], all_seasons[-1]
+    s_span = max(1, s_max - s_min)
+
+    def xs(s):
+        return ML + (float(s) - s_min) / s_span * PW
+
+    cur_x = xs(cur_season)
+
+    def render_cell(key):
+        label = RATING_LABELS[key]
+        band = subr.get(key)
+        if not band:
+            return None
+        p10 = [safe_float(v) for v in band.get("p10", [])]
+        p25 = [safe_float(v) for v in band.get("p25", [])]
+        p50 = [safe_float(v) for v in band.get("p50", [])]
+        p75 = [safe_float(v) for v in band.get("p75", [])]
+        p90 = [safe_float(v) for v in band.get("p90", [])]
+        n = min(len(p10), len(p25), len(p50), len(p75), len(p90), len(proj_seasons))
+        if n < 2:
+            return None
+        p10, p25, p50, p75, p90 = p10[:n], p25[:n], p50[:n], p75[:n], p90[:n]
+        pseasons = proj_seasons[:n]
+
+        # Historical series for this rating (real rows so gap-years can break it).
+        h_seasons, h_vals = [], []
+        for r in rows:
+            v = r.get(key)
+            if v is None:
+                continue
+            h_seasons.append(int(r["season"]))
+            h_vals.append(safe_float(v))
+
+        # Current absolute value: the projection's index-0 median is the true
+        # current rating; end value drives the delta chip.
+        cur_val = p50[0]
+        end_val = p50[-1]
+        delta = int(round(end_val - cur_val))
+
+        # Auto-scale y to this rating's own range over history+projection.
+        yvals = list(h_vals) + p10 + p90
+        lo = max(0.0, math.floor(min(yvals)) - 2)
+        hi = min(100.0, math.ceil(max(yvals)) + 2)
+        if hi <= lo:
+            hi = lo + 1.0
+
+        def yv(v):
+            return MT + PH - (float(v) - lo) / (hi - lo) * PH
+
+        # 80% confidence band polygon (forward upper, back along lower).
+        fwd = " ".join("%.1f,%.1f" % (xs(s), yv(v)) for s, v in zip(pseasons, p90))
+        back = " ".join("%.1f,%.1f" % (xs(s), yv(v))
+                        for s, v in zip(reversed(pseasons), reversed(p10)))
+        band_poly = '<polygon points="%s %s" class="subg-band"/>' % (fwd, back)
+
+        # Projected median line.
+        med_pts = " ".join("%.1f,%.1f" % (xs(s), yv(v)) for s, v in zip(pseasons, p50))
+        median = '<polyline points="%s" class="subg-median"/>' % med_pts
+
+        # Historical line, broken at gap years.
+        hist_segs = []
+        run = []
+        for i, s in enumerate(h_seasons):
+            if run and s - h_seasons[i - 1] != 1:
+                hist_segs.append(run)
+                run = []
+            run.append(i)
+        if run:
+            hist_segs.append(run)
+        hist_parts = []
+        for seg in hist_segs:
+            if len(seg) == 1:
+                # A lone historical point (e.g. a rookie's single season) draws
+                # nothing as a polyline, so anchor it with a small dot.
+                i = seg[0]
+                hist_parts.append('<circle cx="%.1f" cy="%.1f" r="1.6" class="subg-hist-dot"/>'
+                                  % (xs(h_seasons[i]), yv(h_vals[i])))
+            else:
+                pts = " ".join("%.1f,%.1f" % (xs(h_seasons[i]), yv(h_vals[i])) for i in seg)
+                hist_parts.append('<polyline points="%s" class="subg-hist"/>' % pts)
+        hist_lines = "".join(hist_parts)
+
+        divider = ('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" class="subg-divider"/>'
+                   % (cur_x, MT, cur_x, MT + PH))
+
+        # Per-chart hover marker (line + dot, hidden until JS shows it).
+        hover = ('<line class="subg-hline" y1="%.1f" y2="%.1f" style="display:none"/>'
+                 '<circle class="subg-hdot" r="2.4" style="display:none"/>') % (MT, MT + PH)
+
+        delta_cls = "subg-up" if delta > 0 else "subg-down" if delta < 0 else "subg-flat"
+        arrow = "▲" if delta > 0 else "▼" if delta < 0 else "▬"
+        delta_txt = "%s%d" % (arrow, abs(delta))
+
+        svg = (
+            '<svg viewBox="0 0 %g %g" class="subg-svg" preserveAspectRatio="none" '
+            'role="img" aria-label="%s trajectory"><title>%s trajectory</title>%s%s%s%s%s</svg>'
+            % (W, H, esc(label), esc(label), band_poly, hist_lines, median, divider, hover)
+        )
+
+        cell = (
+            '<div class="subg-cell" data-subg-key="%s">'
+            '<div class="subg-head">'
+            '<span class="subg-label">%s</span>'
+            '<span class="subg-delta %s" title="Projected change by %d">%s</span>'
+            '</div>'
+            '<div class="subg-cur"><span class="subg-cur-val" data-subg-val>%d</span>'
+            '<span class="subg-cur-cap" data-subg-cap>now</span></div>'
+            '%s</div>'
+            % (esc(key), esc(label), delta_cls, pseasons[-1], esc(delta_txt),
+               int(round(cur_val)), svg)
+        )
+
+        return cell, {
+            "key": key,
+            "hist": {"s": h_seasons, "v": [round(v, 1) for v in h_vals]},
+            "proj": {"s": pseasons,
+                     "p10": [round(v, 1) for v in p10],
+                     "p50": [round(v, 1) for v in p50],
+                     "p90": [round(v, 1) for v in p90]},
+            "g": {"lo": round(lo, 2), "hi": round(hi, 2)},
+        }
+
+    groups_html = []
+    payload_charts = {}
+    rendered_any = False
+    for title, keys in RATING_GROUPS:
+        cells = []
+        for key in keys:
+            res = render_cell(key)
+            if res is None:
+                # Minimal placeholder keeps the 5-up grid aligned.
+                cells.append(
+                    '<div class="subg-cell subg-empty">'
+                    '<div class="subg-head"><span class="subg-label">%s</span></div>'
+                    '<div class="subg-cur"><span class="subg-cur-val">--</span></div>'
+                    '</div>' % esc(RATING_LABELS[key]))
+                continue
+            cell_html, cdata = res
+            cells.append(cell_html)
+            payload_charts[key] = cdata
+            rendered_any = True
+        groups_html.append(
+            '<div class="subg-group">'
+            '<h3 class="subg-group-title">%s</h3>'
+            '<div class="subg-row">%s</div></div>'
+            % (esc(title), "".join(cells)))
+
+    if not rendered_any:
+        return ""
+
+    payload = {
+        "cur": cur_season,
+        "smin": s_min, "smax": s_max,
+        "g": {"ml": ML, "mt": MT, "pw": PW, "ph": PH, "w": W, "h": H},
+        "charts": payload_charts,
+    }
+    payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
+
+    return (
+        '<section class="card">'
+        '<div class="section-title-row">'
+        '<h2>Rating Trajectories</h2>'
+        '<span class="muted small-copy">'
+        '<span class="subg-key subg-key-hist"></span> History · '
+        '<span class="subg-key subg-key-med"></span> Projected · '
+        '<span class="subg-key subg-key-band"></span> 80%% range'
+        '</span></div>'
+        '<div class="subg-grid" data-subrating-grid data-subg-pid="%d">'
+        '%s'
+        '</div>'
+        '<script type="application/json" id="subrating-data-%d">%s</script>'
+        '</section>'
+        % (pid, "".join(groups_html), pid, payload_json)
+    )
+
+
+def projection_table_html(player: dict[str, Any], proj: dict[str, Any] | None) -> str:
+    """Numeric table of the Monte Carlo future projection (the next 6 seasons).
+
+    Complements the historical "Ratings" table: rows are the projected future
+    seasons (``sim["seasons"][1:]`` with their ages); columns are Year, Age, Ovr,
+    then the 15 subratings in ``RATING_LABELS`` order. Each cell shows the median
+    (p50) as the primary number with the 80% range (p10-p90) underneath in muted
+    italic text, and a faint good/bad tint by delta vs. the current value
+    (``p50[0]``). Returns "" when no projection or data is insufficient.
+    """
+    if proj is None:
+        return ""
+    sim = proj.get("sim") or {}
+    seasons = sim.get("seasons") or []
+    ages = sim.get("ages") or []
+    ovr = sim.get("ovr") or {}
+    subratings = sim.get("subratings") or {}
+    # Index 0 is the current season; we need at least one future season.
+    if len(seasons) < 2 or len(ages) < 2:
+        return ""
+
+    def band(metric: dict, pct: str, idx: int):
+        arr = metric.get(pct) or []
+        if idx >= len(arr):
+            return None
+        v = safe_float(arr[idx], float("nan"))
+        if not math.isfinite(v):
+            return None
+        return int(round(v))
+
+    # Column metrics in display order: Ovr, then the 15 subratings.
+    col_metrics = [("Ovr", ovr)]
+    for key in RATING_LABELS:
+        col_metrics.append((RATING_LABELS[key], subratings.get(key) or {}))
+
+    # Header.
+    head_cells = '<th class="projtab-sticky">Year</th><th>Age</th>'
+    for i, (label, _m) in enumerate(col_metrics):
+        cls = ' class="projtab-ovr-col"' if i == 0 else ""
+        head_cells += f"<th{cls}>{esc(label)}</th>"
+
+    body_rows = []
+    n_future = len(seasons) - 1
+    for i in range(1, len(seasons)):
+        season_lbl = safe_int(seasons[i], 0)
+        age_lbl = safe_int(ages[i], 0) if i < len(ages) else 0
+        cells = [
+            f'<td class="projtab-sticky projtab-year">{esc(season_lbl)}</td>',
+            f'<td class="projtab-age">{esc(age_lbl)}</td>',
+        ]
+        for ci, (_label, metric) in enumerate(col_metrics):
+            p50 = band(metric, "p50", i)
+            cur = band(metric, "p50", 0)
+            p10 = band(metric, "p10", i)
+            p90 = band(metric, "p90", i)
+            ovr_cls = " projtab-ovr-col" if ci == 0 else ""
+            if p50 is None:
+                cells.append(f'<td class="projtab-cell{ovr_cls}">—</td>')
+                continue
+            # Faint delta tint vs. the current value, opacity scaled by magnitude.
+            style = ""
+            if cur is not None and p50 != cur:
+                delta = p50 - cur
+                op = min(0.18, 0.03 + abs(delta) * 0.012)
+                var = "--good" if delta > 0 else "--bad"
+                style = f' style="background:color-mix(in srgb, var({var}) {op * 100:.0f}%, transparent)"'
+            if p10 is not None and p90 is not None:
+                rng = f'<span class="projtab-range">{esc(p10)}–{esc(p90)}</span>'
+            else:
+                rng = ""
+            cells.append(
+                f'<td class="projtab-cell{ovr_cls}"{style}>'
+                f'<span class="projtab-med">{esc(p50)}</span>{rng}</td>'
+            )
+        body_rows.append("<tr>" + "".join(cells) + "</tr>")
+
+    body_html = "\n".join(body_rows)
+    return f"""
+    <section class="card stats-section" id="projection-table">
+      <div class="section-title-row">
+        <h2>Projection <span class="projtab-badge">Projected</span></h2>
+        <span class="muted small-copy">next {n_future} seasons</span>
+      </div>
+      <p class="muted small-copy projtab-caption">Monte&nbsp;Carlo medians with 80% ranges (P10–P90) shown underneath. Cells tint green or red by their projected change vs. the current value.</p>
+      <div class="table-wrap projtab-wrap">
+        <table class="projtab-table">
+          <thead><tr>{head_cells}</tr></thead>
+          <tbody>
+            {body_html}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    """
+
+
+def narrative_tags_html(player: dict[str, Any], proj: dict[str, Any] | None, season: int) -> str:
+    """Deterministic "Scouting Outlook" strip: 2-5 tone-colored chips auto-derived
+    from the Monte Carlo projection + age. One trajectory chip is always emitted;
+    ceiling/uncertainty and archetype-drift chips follow, capped at 5 and ordered by
+    importance. Each chip carries a title= tooltip stating the numbers behind it.
+    Returns "" when proj is None or the projection lacks the needed bands.
+    """
+    if proj is None:
+        return ""
+    sim = proj.get("sim") or {}
+    ovr = sim.get("ovr") or {}
+    subs = sim.get("subratings") or {}
+    p10 = ovr.get("p10")
+    p50 = ovr.get("p50")
+    p90 = ovr.get("p90")
+    if not (p10 and p50 and p90) or len(p50) < 7 or len(p10) < 7 or len(p90) < 7:
+        return ""
+
+    def f(value: Any) -> float:
+        try:
+            x = float(value)
+        except (TypeError, ValueError):
+            return 0.0
+        if x != x or x in (float("inf"), float("-inf")):
+            return 0.0
+        return x
+
+    age = safe_int(proj.get("age"), 0)
+    cur = f(p50[0])                          # today's median OVR (index 0 == current)
+    fin = f(p50[6])                          # median OVR at the 6-season horizon
+    slope = fin - cur                        # projected median OVR change over horizon
+    band_now = f(p90[0]) - f(p10[0])
+    band_fin = f(p90[6]) - f(p10[6])
+    band = max(band_now, band_fin)           # widest P10-P90 outcome spread
+    pot_peak = safe_int(sim.get("pot_p75_peak"), int(round(cur)))
+    ceiling_gap = pot_peak - cur             # engine 75th-pct peak above today
+
+    # Display-only integers, derived from the rounded endpoints so a tooltip's
+    # delta and its "(start to end)" parenthetical always reconcile exactly.
+    # (Thresholds below still use the float slope / ceiling_gap / band.)
+    rcur = int(round(cur))
+    rfin = int(round(fin))
+    dslope = rfin - rcur
+    dceiling = pot_peak - rcur
+
+    # (priority, tone, label, title). Lower priority sorts first.
+    chips: list[tuple] = []
+
+    # --- TRAJECTORY (always emit exactly one) -------------------------------
+    if age <= 23 and slope >= 14:
+        chips.append((0, "good", "Ascending",
+            "Projected median OVR climbs %+d over 6 seasons (%d to %d) at age %d -- steep early-career growth."
+            % (dslope, rcur, rfin, age)))
+    elif slope >= 6:
+        chips.append((0, "good", "Rising",
+            "Projected median OVR rises %+d over 6 seasons (%d to %d)." % (dslope, rcur, rfin)))
+    elif slope <= -16 and age >= 30:
+        chips.append((0, "bad", "Cliff risk",
+            "Median OVR projected to fall %d over 6 seasons (%d to %d) at age %d -- sharp age-driven decline."
+            % (-dslope, rcur, rfin, age)))
+    elif slope <= -6:
+        chips.append((0, "bad", "Declining" if age >= 30 else "Sliding",
+            "Projected median OVR drops %d over 6 seasons (%d to %d)." % (-dslope, rcur, rfin)))
+    elif age >= 31:
+        chips.append((0, "warn", "Aging veteran",
+            "Median OVR roughly flat (%+d over 6 seasons) but at age %d, regression risk grows." % (dslope, age)))
+    else:
+        chips.append((0, "neutral", "Steady",
+            "Projected median OVR holds near %d (%+d over 6 seasons)." % (rcur, dslope)))
+
+    # --- CEILING / UNCERTAINTY ---------------------------------------------
+    if ceiling_gap >= 12 and age <= 24:
+        chips.append((1, "good", "Star upside",
+            "Engine peak ceiling (75th pct) of %d sits %+d above today's %d at age %d."
+            % (pot_peak, dceiling, rcur, age)))
+    elif ceiling_gap >= 7:
+        chips.append((1, "info", "High ceiling",
+            "Engine peak ceiling (75th pct) of %d is %+d above today's %d." % (pot_peak, dceiling, rcur)))
+
+    if band >= 16:
+        chips.append((2, "warn", "Boom-or-bust",
+            "Wide outcome spread: P10-P90 OVR band reaches %d points -- high variance." % round(band)))
+    elif band <= 7 and age <= 30:
+        chips.append((2, "info", "Low variance",
+            "Tight outcome spread: P10-P90 OVR band only %d points -- a safe, predictable profile." % round(band)))
+
+    # --- ARCHETYPE EVOLUTION (subrating drift, p50[6] vs p50[0]) -----------
+    drift: dict[str, float] = {}
+    for k in RATING_LABELS:
+        arr = (subs.get(k) or {}).get("p50")
+        if arr and len(arr) >= 7:
+            drift[k] = f(arr[6]) - f(arr[0])
+
+    def grp(keys: list) -> float:
+        vals = [drift[k] for k in keys if k in drift]
+        return sum(vals) / len(vals) if vals else 0.0
+
+    def detail(keys: list) -> str:
+        return ", ".join("%s %+d" % (RATING_LABELS[k], round(drift[k])) for k in keys if k in drift)
+
+    arche: list[tuple] = []  # (gain_magnitude, tone, label, title)
+    if drift:
+        shoot = grp(["tp", "fg", "ft"])
+        play = grp(["pss", "oiq"])
+        defn = grp(["diq", "reb"])
+        burst = grp(["spd", "jmp"])
+        strength = drift.get("stre", 0.0)
+
+        if shoot >= 4:
+            arche.append((shoot, "good", "Developing shooter",
+                "Shooting subratings trending up over the horizon: %s." % detail(["tp", "fg", "ft"])))
+        if play >= 4:
+            arche.append((play, "good", "Emerging playmaker",
+                "Passing / offensive IQ trending up: %s." % detail(["pss", "oiq"])))
+        if defn >= 4:
+            arche.append((defn, "good", "Defensive riser",
+                "Defensive IQ / rebounding trending up: %s." % detail(["diq", "reb"])))
+        if burst <= -5:
+            arche.append((-burst, "bad", "Losing burst",
+                "Athleticism projected to fade: %s." % detail(["spd", "jmp"])))
+        if strength >= 4:
+            arche.append((strength, "info", "Adding strength",
+                "Strength projected to rise %+d over the horizon." % round(strength)))
+
+        arche.sort(key=lambda t: t[0], reverse=True)
+        for _, tone, label, title in arche[:2]:
+            chips.append((3, tone, label, title))
+
+    chips = chips[:5]
+
+    n_chips = len(chips)
+    count_label = "%d tag" % n_chips if n_chips == 1 else "%d tags" % n_chips
+    out = ['<section class="card scout-card"><div class="section-title-row"><h2>Scouting Outlook</h2>'
+           '<span class="count-pill">%s</span></div><div class="scout-tags">' % count_label]
+    for _, tone, label, title in chips:
+        out.append('<span class="scout-tag scout-tag--%s" title="%s">%s</span>'
+                   % (esc(tone), esc(title), esc(label)))
+    out.append('</div></section>')
+    return "".join(out)
 
 
 def player_form(log_entries: list[dict[str, Any]]) -> dict[str, Any] | None:
@@ -2412,18 +4389,24 @@ def render_player_page(player: dict[str, Any], teams: list[dict[str, Any]], seas
     teams_by_tid = {t["tid"]: t for t in teams}
     regular = regular_stats_since(player, start_season)
     playoffs = playoff_stats_since(player, start_season)
+    # Compute the Monte Carlo projection once and share it across every
+    # projection-backed section (chart, scouting tags, trajectory grid, table).
+    proj = _player_projection(player, season)
     body = "".join([
         render_player_hero(player, teams_by_tid, season, start_season),
         player_summary_rows(player, teams_by_tid, season, start_season),
         season_highs_html(player, log_entries or [], teams_by_tid, season, "../"),
         form_card_html(player, log_entries or []),
-        ratings_progress_svg(player),
+        development_chart_html(player, season, proj),
+        narrative_tags_html(player, proj, season),
+        subrating_grid_html(player, proj),
         game_log_table(player, log_entries or [], teams_by_tid, season, "../"),
         vs_opponent_table(player, log_entries or [], teams_by_tid, "../"),
         per_game_table(player, regular, teams_by_tid, "../", "Per Game · Regular Season", f"regular-{player.get('pid')}"),
         shot_table(player, regular, teams_by_tid, "../", "Shot Locations and Feats · Regular Season", f"shots-{player.get('pid')}"),
         advanced_table(player, regular, teams_by_tid, "../", "Advanced · Regular Season", f"advanced-{player.get('pid')}"),
         ratings_table(player, start_season),
+        projection_table_html(player, proj),
         '<div class="history-row">' + salary_history_html(player) + injury_history_html(player) + "</div>",
     ])
     if playoffs:
@@ -4881,6 +6864,35 @@ def four_factors_table(data: dict[str, Any], teams: list[dict[str, Any]], season
     """
 
 
+def render_projections_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, league_proj_ctx: dict[str, Any] | None = None, team_projections: dict[int, dict[str, Any]] | None = None) -> str:
+    """League-wide projections page: power-ranking bump chart, storylines, and a
+    projected standings table -- all from the continuity ("proj") scenario."""
+    league_proj = league_projection(
+        teams, players, season,
+        league_ctx=league_proj_ctx, team_projections=team_projections,
+        game_attrs=data.get("gameAttributes") or {},
+    )
+    intro = f"""
+    <section class="page-hero">
+      <div>
+        <p class="eyebrow">League</p>
+        <h1>Projections</h1>
+        <p class="muted">Where every roster is headed over the next {PROJ_SEASONS_AHEAD} seasons — {PROJ_N_SIMS:,} Monte Carlo simulations of the game's aging model per player, aggregated into team strength. <strong>Talent only</strong>: every team keeps its current roster and ages it forward (no trades, draft, or re-signings), so the signal is the relative pecking order. Strength is shown relative to the current league.</p>
+      </div>
+    </section>
+    """
+    if league_proj is None:
+        body = intro + '<section class="card"><p class="muted">Projections are unavailable for this league.</p></section>'
+        return page_html("Projections", body, teams, root="", active="projections")
+    body = (
+        intro
+        + power_ranking_bump_html(league_proj)
+        + league_storylines_html(league_proj)
+        + projected_standings_html(league_proj)
+    )
+    return page_html("Projections", body, teams, root="", active="projections")
+
+
 def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, start_season: int) -> str:
     chart_teams = active_teams_for_season(teams, season)
     body = f"""
@@ -6553,6 +8565,519 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .chart-key { display: inline-block; width: .8rem; height: 2px; vertical-align: middle; margin-right: .25rem; }
 .chart-key-ovr { background: var(--accent); height: 3px; }
 .chart-key-pot { background: var(--muted); }
+/* projection (fan) chart */
+.proj-wrap { max-width: 700px; }
+.proj-chart { width: 100%; max-width: 700px; height: auto; display: block; cursor: crosshair; }
+.proj-band-80 { fill: var(--accent); opacity: .12; stroke: none; }
+.proj-band-50 { fill: var(--accent); opacity: .20; stroke: none; }
+.proj-median { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 3; }
+.proj-median-dot { fill: var(--accent); }
+.proj-divider { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; opacity: .55; }
+.proj-hover-line { stroke: var(--muted); stroke-width: 1; pointer-events: none; }
+.proj-hover-dot { fill: var(--accent); stroke: var(--bg, #0f1318); stroke-width: 1.5; pointer-events: none; }
+.proj-key-band { background: var(--accent); opacity: .35; height: 8px; border-radius: 1px; }
+.proj-wrap .chart-tooltip { min-width: 9.5rem; max-width: 13rem; white-space: normal; }
+.proj-wrap .chart-tooltip span { display: block; }
+
+/* ---------- rating trajectories (subrating fan-sparkline grid) ---------- */
+.subg-grid { display: flex; flex-direction: column; gap: 1rem; }
+.subg-group-title {
+  margin: 0 0 .4rem; font-size: .68rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--muted);
+}
+.subg-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; }
+.subg-cell {
+  border: 1px solid var(--line); border-radius: .25rem;
+  background: var(--panel-2, var(--bg)); padding: .4rem .45rem .3rem;
+  display: flex; flex-direction: column; gap: .15rem;
+  transition: border-color .12s ease, background .12s ease;
+}
+.subg-cell.subg-active { border-color: var(--accent); }
+.subg-head { display: flex; align-items: baseline; justify-content: space-between; gap: .35rem; }
+.subg-label {
+  font-size: .66rem; font-weight: 600; letter-spacing: .02em;
+  color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.subg-delta {
+  font-size: .6rem; font-weight: 700; line-height: 1; flex: none;
+  padding: .12rem .3rem; border-radius: .6rem; border: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+.subg-up { color: var(--good); border-color: var(--good); }
+.subg-down { color: var(--bad); border-color: var(--bad); }
+.subg-flat { color: var(--muted); }
+.subg-cur { display: flex; align-items: baseline; gap: .25rem; }
+.subg-cur-val { font-size: 1.15rem; font-weight: 700; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
+.subg-cur-cap { font-size: .58rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.subg-svg { width: 100%; height: 42px; display: block; margin-top: .1rem; overflow: visible; }
+.subg-band { fill: var(--accent); opacity: .14; stroke: none; }
+.subg-hist { fill: none; stroke: var(--text); stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.subg-hist-dot { fill: var(--text); }
+.subg-median { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 3 2; vector-effect: non-scaling-stroke; }
+.subg-divider { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 2; opacity: .5; vector-effect: non-scaling-stroke; }
+.subg-hline { stroke: var(--accent); stroke-width: 1; opacity: .6; vector-effect: non-scaling-stroke; pointer-events: none; }
+.subg-hdot { fill: var(--accent); stroke: var(--bg); stroke-width: 1; pointer-events: none; }
+.subg-empty { opacity: .55; }
+.subg-empty .subg-cur-val { font-size: .95rem; color: var(--muted); }
+.subg-key { display: inline-block; width: .8rem; vertical-align: middle; margin-right: .25rem; }
+.subg-key-hist { height: 2px; background: var(--text); }
+.subg-key-med { height: 0; border-top: 2px dashed var(--accent); }
+.subg-key-band { height: 8px; border-radius: 1px; background: var(--accent); opacity: .35; }
+@media (max-width: 760px) { .subg-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 420px) { .subg-row { grid-template-columns: 1fr; } }
+/* --- Projection table (#projection-table) ------------------------------- */
+.projtab-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.4em;
+  padding: 0.1em 0.55em;
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  border-radius: 999px;
+}
+.projtab-caption { margin: 0.15rem 0 0.6rem; }
+.projtab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.projtab-table th,
+.projtab-table td {
+  padding: 0.35rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.projtab-table th {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+/* Sticky Year column so the row stays anchored while scrolling horizontally. */
+.projtab-table .projtab-sticky {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--bg);
+  text-align: left;
+}
+.projtab-table thead .projtab-sticky { z-index: 2; }
+.projtab-year { font-weight: 600; color: var(--text); }
+.projtab-age { color: var(--muted); }
+/* Slight emphasis on the Ovr column to anchor the eye. */
+.projtab-ovr-col {
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+.projtab-table td.projtab-ovr-col .projtab-med { font-weight: 700; }
+.projtab-cell { line-height: 1.15; }
+.projtab-med {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+/* Muted, italic, smaller range text marks the projected/uncertain nature. */
+.projtab-range {
+  display: block;
+  margin-top: 0.05rem;
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--muted);
+}
+@media (max-width: 720px) {
+  .projtab-table th,
+  .projtab-table td { padding: 0.3rem 0.4rem; }
+  .projtab-range { font-size: 0.62rem; }
+}
+/* ---------- scouting outlook tags ---------- */
+.scout-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem;
+}
+.scout-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: .15rem;
+  border: 1px solid var(--line);
+  background: var(--panel-3);
+  color: var(--text);
+  font-weight: 500;
+  font-size: .75rem;
+  padding: .1rem .5rem;
+  cursor: default;
+  position: relative;
+}
+.scout-tag::before {
+  content: "";
+  width: .42rem;
+  height: .42rem;
+  border-radius: 50%;
+  margin-right: .4rem;
+  background: var(--muted);
+  flex: none;
+}
+.scout-tag--good { border-color: color-mix(in srgb, var(--good) 45%, var(--line)); }
+.scout-tag--good::before { background: var(--good); }
+.scout-tag--bad { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
+.scout-tag--bad::before { background: var(--bad); }
+.scout-tag--warn { border-color: color-mix(in srgb, var(--bad) 30%, var(--line)); }
+.scout-tag--warn::before { background: color-mix(in srgb, var(--bad) 60%, var(--accent)); }
+.scout-tag--info { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.scout-tag--info::before { background: var(--accent); }
+.scout-tag--neutral { color: var(--muted); }
+.scout-tag--neutral::before { background: var(--muted); }
+
+/* ---------- team trajectory (projected team strength fan chart) ---------- */
+/* Uses --team-primary as the on-brand band/line accent, falling back to --accent. */
+.ttraj-wrap { max-width: 700px; --ttraj-accent: var(--team-primary, var(--accent)); }
+.ttraj-chart { width: 100%; max-width: 700px; height: auto; display: block; cursor: crosshair; }
+.ttraj-controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem;
+  margin: .15rem 0 .55rem;
+}
+.ttraj-toggle {
+  display: inline-flex; border: 1px solid var(--line); border-radius: .2rem;
+  overflow: hidden; background: var(--panel-2);
+}
+.ttraj-btn {
+  appearance: none; border: 0; background: transparent; cursor: pointer;
+  color: var(--muted); font: inherit; font-size: .76rem; font-weight: 600;
+  padding: .32rem .7rem; border-right: 1px solid var(--line);
+  letter-spacing: .02em; transition: background .12s, color .12s;
+}
+.ttraj-btn:last-child { border-right: 0; }
+.ttraj-btn:hover { color: var(--text); }
+.ttraj-btn.active {
+  color: var(--text);
+  background: color-mix(in srgb, var(--team-primary, var(--accent)) 22%, var(--panel-2));
+  box-shadow: inset 0 -2px 0 var(--team-primary, var(--accent));
+}
+.ttraj-rank {
+  font-size: .78rem; font-weight: 700; letter-spacing: .03em;
+  color: var(--text); padding: .12rem .5rem; border-radius: .15rem;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--team-primary, var(--accent)) 14%, transparent);
+}
+.ttraj-key { display: inline-flex; align-items: center; gap: .35rem; }
+.ttraj-k { display: inline-block; width: .9rem; vertical-align: middle; }
+.ttraj-k-band {
+  height: 8px; border-radius: 1px;
+  background: var(--team-primary, var(--accent));  /* solid fallback for no color-mix */
+  background: color-mix(in srgb, var(--team-primary, var(--accent)) 38%, transparent);
+}
+.ttraj-k-median { height: 2px; background: var(--team-primary, var(--accent)); }
+.ttraj-window {
+  display: inline-block; margin-left: .15rem;
+  color: var(--muted);
+}
+.ttraj-window strong { color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* fan bands + median in the team's color */
+.ttraj-band-80 { fill: var(--team-primary, var(--accent)); opacity: .12; stroke: none; }
+.ttraj-band-50 { fill: var(--team-primary, var(--accent)); opacity: .22; stroke: none; }
+.ttraj-median { fill: none; stroke: var(--team-primary, var(--accent)); stroke-width: 2.2; }
+.ttraj-cur {
+  fill: var(--team-primary, var(--accent));
+  stroke: var(--bg, #0f1318); stroke-width: 1.6;
+}
+/* reference lines */
+.ttraj-ref { stroke-width: 1; stroke-dasharray: 4 4; fill: none; }
+.ttraj-ref-avg { stroke: var(--muted); opacity: .7; }
+.ttraj-ref-cont { stroke: var(--good); opacity: .75; }
+.ttraj-ref-label {
+  fill: var(--muted); font-size: 9.5px; font-weight: 600;
+  letter-spacing: .02em; opacity: .85;
+}
+/* hover scrubber */
+.ttraj-hover-line { stroke: var(--muted); stroke-width: 1; pointer-events: none; }
+.ttraj-hover-dot {
+  fill: var(--team-primary, var(--accent));
+  stroke: var(--bg, #0f1318); stroke-width: 1.5; pointer-events: none;
+}
+.ttraj-wrap .chart-tooltip { min-width: 9.5rem; max-width: 13rem; white-space: normal; }
+.ttraj-wrap .chart-tooltip span { display: block; }
+
+@media (max-width: 600px) {
+  .ttraj-controls { gap: .45rem .7rem; }
+  .ttraj-btn { padding: .3rem .55rem; font-size: .72rem; }
+}
+
+/* ---------- projected power-ranking bump chart ---------- */
+.bump-card .bump-sub { margin: .1rem 0 .7rem; }
+
+.bump-legend { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .65rem; }
+.bump-chip {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .22rem .5rem; border: 1px solid var(--line); border-radius: .15rem;
+  background: var(--panel-2); color: var(--text); font: inherit; font-size: .74rem;
+  font-weight: 600; line-height: 1; cursor: pointer;
+  transition: opacity .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.bump-chip-dot { width: .6rem; height: .6rem; border-radius: 50%; background: var(--bump-color, var(--muted)); flex: none; }
+.bump-chip-ab { letter-spacing: .02em; }
+.bump-chip-delta { font-size: .68rem; font-weight: 700; }
+.bump-chip-up { color: var(--good); }
+.bump-chip-down { color: var(--bad); }
+.bump-chip-flat { color: var(--muted); }
+.bump-chip.is-active { border-color: var(--bump-color, var(--accent)); box-shadow: 0 0 0 1px var(--bump-color, var(--accent)) inset; }
+.bump-chip.is-dim { opacity: .38; }
+
+.bump-wrap { overflow-x: auto; }
+.bump-chart { display: block; width: 100%; min-width: 540px; height: auto; font-family: inherit; }
+
+.bump-rowline { stroke: var(--line); stroke-width: 1; opacity: .5; }
+.bump-collline { stroke: var(--line); stroke-width: 1; opacity: .35; }
+.bump-rankaxis { fill: var(--muted); font-size: 11px; text-anchor: middle; font-weight: 600; }
+.bump-seasontick { fill: var(--text); font-size: 11px; text-anchor: middle; font-weight: 700; }
+.bump-seasonyr { fill: var(--muted); font-size: 10px; text-anchor: middle; }
+.bump-axislabel { fill: var(--muted); font-size: 9px; text-anchor: middle; text-transform: uppercase; letter-spacing: .08em; opacity: .8; }
+
+/* The halo carries a real base fill (--bg) so it never falls back to opaque
+   black; the colored line carries team identity. */
+.bump-halo { fill: none; stroke: var(--bg); stroke-width: 5.5; stroke-linejoin: round; stroke-linecap: round; opacity: .85; }
+.bump-line { fill: none; stroke: var(--bump-color, var(--muted)); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; transition: opacity .12s ease, stroke-width .12s ease; }
+.bump-node { fill: var(--bump-color, var(--muted)); stroke: var(--bg); stroke-width: 1.4; transition: opacity .12s ease; }
+.bump-hit { fill: none; stroke: transparent; stroke-width: 16; stroke-linejoin: round; stroke-linecap: round; cursor: pointer; }
+.bump-link { cursor: pointer; }
+
+/* End/start abbrev labels: team-colored, with a --bg halo (paint-order:stroke)
+   so they stay legible where lines cross behind them. */
+.bump-endlabel { fill: var(--bump-color, var(--text)); font-size: 11px; font-weight: 800; paint-order: stroke; stroke: var(--bg); stroke-width: 2.6px; stroke-linejoin: round; transition: opacity .12s ease; }
+.bump-endlabel--start { text-anchor: end; }
+.bump-endlabel--end { text-anchor: start; }
+.bump-leader { stroke: var(--line); stroke-width: 1; opacity: .6; }
+
+/* Highlight: dim everything except the active team. */
+.bump-has-active .bump-team.is-dim .bump-line { opacity: .14; }
+.bump-has-active .bump-team.is-dim .bump-node { opacity: .14; }
+.bump-has-active .bump-team.is-dim .bump-halo { opacity: .2; }
+.bump-has-active .bump-team.is-active .bump-line { stroke-width: 3.4; }
+.bump-has-active .bump-endlabel.is-dim { opacity: .2; }
+
+.bump-tooltip { min-width: 8.5rem; max-width: 12rem; white-space: normal; }
+.bump-tooltip strong { display: block; font-size: .82rem; }
+.bump-tooltip span { display: block; color: var(--muted); }
+
+@media (max-width: 560px) {
+  .bump-chart { min-width: 480px; }
+}
+/* Projected Standings (league projections page) -- .pstand- namespace */
+.pstand .pstand-caption { margin: 2px 0 12px; max-width: 70ch; }
+
+.pstand-wrap { -webkit-overflow-scrolling: touch; }
+
+.pstand-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+
+.pstand-table th,
+.pstand-table td {
+  padding: 7px 9px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+/* Year header */
+.pstand-yr {
+  font-weight: 600;
+  color: var(--muted);
+  vertical-align: bottom;
+}
+.pstand-yr-num { display: block; color: var(--text); font-size: 0.95em; }
+.pstand-yr-tag {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.75;
+}
+.pstand-yr-tag--now { color: var(--accent); }
+.pstand-yr-tag--proj { color: var(--muted); }
+
+/* Sticky first column (team) */
+.pstand-team-h,
+.pstand-team {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  text-align: left;
+  background: var(--panel);
+  min-width: 140px;
+}
+.pstand-team-h { z-index: 3; color: var(--muted); font-weight: 600; }
+/* soft edge so scrolled cells don't bleed into the sticky column */
+.pstand-team::after,
+.pstand-team-h::after {
+  content: "";
+  position: absolute;
+  top: 0; right: -10px; bottom: 0;
+  width: 10px;
+  pointer-events: none;
+  background: linear-gradient(to right, var(--line), transparent);
+  opacity: 0.5;
+}
+
+.pstand-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+}
+.pstand-name:hover .pstand-name-txt { color: var(--accent); }
+.pstand-dot {
+  flex: 0 0 auto;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px rgba(0,0,0,0.35), 0 0 0 2.5px rgba(255,255,255,0.12);
+}
+.pstand-name-txt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+.pstand-abbr {
+  display: none;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* Data cell */
+.pstand-cell { line-height: 1.25; }
+.pstand-val {
+  display: block;
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: var(--text);
+}
+.pstand-rank {
+  display: inline-block;
+  margin-top: 1px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--panel-3);
+  background: color-mix(in srgb, var(--text) 9%, transparent);
+}
+.pstand-rank--hi { color: var(--text); }
+.pstand-rank--top {
+  color: #1a1208;
+  background: var(--accent);
+  background: color-mix(in srgb, #ffcf5c 80%, var(--accent));
+}
+.pstand-rec {
+  display: block;
+  margin-top: 1px;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+/* Current-season anchor: accent left border, since it's actual not projected */
+.pstand-now {
+  border-left: 2px solid var(--accent);
+  border-left: 2px solid color-mix(in srgb, var(--accent) 70%, transparent);
+}
+thead .pstand-now { border-left: 2px solid var(--accent); }
+
+.pstand-table tbody tr:hover .pstand-cell {
+  box-shadow: inset 0 0 0 999px rgba(255,255,255,0.03);  /* dark-theme fallback */
+  box-shadow: inset 0 0 0 999px color-mix(in srgb, var(--text) 5%, transparent);  /* theme-aware */
+}
+
+.pstand-legend { margin-top: 12px; }
+
+@media (max-width: 560px) {
+  .pstand-table th, .pstand-table td { padding: 6px 6px; }
+  .pstand-name-txt { display: none; }
+  .pstand-abbr { display: inline; }
+  .pstand-team-h, .pstand-team { min-width: 64px; }
+  .pstand-val { font-size: 0.95rem; }
+}
+/* Projected Storylines -- league-level chip strip (reuses .scout-tag*) */
+.scout-tag--story { align-items: baseline; }
+.scout-tag--story::before { display: none; }  /* the team-colored .story-dot replaces the tone dot */
+.story-dot {
+  display: inline-block;
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  margin-right: .4rem;
+  flex: 0 0 auto;
+  background: var(--muted); /* real fallback; never color-mix-only */
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+/* ---------- contract horizon (team page) ---------- */
+.tcon-wrap { margin-top: .35rem; }
+.tcon-chart { display: block; width: 100%; height: auto; }
+.tcon-col { fill: transparent; stroke: none; }  /* transparent base: without color-mix, never opaque black */
+.tcon-gridline { stroke: var(--line); stroke-width: 1; opacity: .5; }
+.tcon-axis {
+  fill: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.tcon-bar {
+  fill: var(--team-primary, var(--accent));
+  stroke: color-mix(in srgb, var(--team-primary, var(--accent)) 70%, var(--line));
+  stroke-width: 1;
+}
+.tcon-overflow { fill: var(--team-primary, var(--accent)); }
+.tcon-name {
+  fill: var(--text);
+  font-size: 12px;
+}
+.tcon-ovr {
+  fill: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.tcon-expiry {
+  fill: var(--bg);
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  paint-order: stroke;
+  stroke: #000;  /* legible halo fallback where color-mix is unsupported */
+  stroke: color-mix(in srgb, var(--team-primary, var(--accent)) 55%, #000);
+  stroke-width: 2.4px;
+  pointer-events: none;
+}
+.tcon-foot-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+.tcon-foot-count {
+  fill: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.tcon-row:hover .tcon-bar { stroke-width: 1.5; }
+.tcon-caption { margin-top: .5rem; }
+.tcon-note { margin-top: .25rem; }
+@media (max-width: 520px) {
+  .tcon-name { font-size: 11px; }
+  .tcon-axis, .tcon-ovr { font-size: 10px; }
+}
 .elo-chart { max-width: 100%; }
 .chart-label { font-size: 11px; font-weight: 600; }
 .rotation-map td.rot-cell { text-align: center; min-width: 2.1rem; font-variant-numeric: tabular-nums; }
@@ -7235,6 +9760,395 @@ def javascript() -> str:
     if (input) { event.preventDefault(); input.focus(); input.select(); }
   });
 
+  // ---------- player development projection charts (interactive hover) ----------
+  document.querySelectorAll('[data-proj-chart]').forEach((wrap) => {
+    const svg = wrap.querySelector('svg.proj-chart');
+    const tip = wrap.querySelector('[data-proj-tooltip]');
+    const hLine = wrap.querySelector('[data-proj-hover-line]');
+    const hDot = wrap.querySelector('[data-proj-hover-dot]');
+    const dataEl = wrap.parentElement &&
+      wrap.parentElement.querySelector('script[type="application/json"][id^="proj-data-"]');
+    if (!svg || !tip || !dataEl) return;
+    let d;
+    try { d = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    const g = d.g;
+    const sSpan = Math.max(1, g.smax - g.smin);
+    const xs = (s) => g.ml + (s - g.smin) / sSpan * g.pw;
+    const yv = (v) => g.mt + g.ph - (v - g.lo) / Math.max(1e-9, g.hi - g.lo) * g.ph;
+    const fmt = (v) => Math.round(v);
+
+    function toViewBox(evt) {
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return null;
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX; pt.y = evt.clientY;
+      return pt.matrixTransform(ctm.inverse());
+    }
+
+    function hide() {
+      tip.hidden = true;
+      hLine.style.display = 'none';
+      hDot.style.display = 'none';
+    }
+
+    function show(evt) {
+      const loc = toViewBox(evt);
+      if (!loc) return;
+      let season = Math.round(g.smin + (loc.x - g.ml) / g.pw * sSpan);
+      if (season < g.smin) season = g.smin;
+      if (season > g.smax) season = g.smax;
+      const hi = d.hist.s.indexOf(season);
+      const pi = d.proj.s.indexOf(season);
+      let markY = null;
+      let html = '';
+      if (season <= d.cur && hi >= 0) {
+        markY = d.hist.ovr[hi];
+        html = '<strong>' + season + (season === d.cur ? ' · current' : '') + '</strong>' +
+               '<span>Overall ' + fmt(d.hist.ovr[hi]) + ' · Potential ' + fmt(d.hist.pot[hi]) + '</span>';
+        if (season === d.cur && pi >= 0) html += '<span>Projection starts here</span>';
+      } else if (pi >= 0) {
+        markY = d.proj.p50[pi];
+        html = '<strong>' + season + ' · projected</strong>' +
+               '<span>Median ' + fmt(d.proj.p50[pi]) + ' · 80% ' +
+               fmt(d.proj.p10[pi]) + '–' + fmt(d.proj.p90[pi]) + '</span>' +
+               '<span>50% ' + fmt(d.proj.p25[pi]) + '–' + fmt(d.proj.p75[pi]) + '</span>';
+      } else {
+        hide();
+        return;
+      }
+      const cx = xs(season);
+      hLine.setAttribute('x1', cx);
+      hLine.setAttribute('x2', cx);
+      hLine.style.display = '';
+      hDot.setAttribute('cx', cx);
+      hDot.setAttribute('cy', yv(markY));
+      hDot.style.display = '';
+      tip.innerHTML = html;
+      tip.hidden = false;
+      const rect = wrap.getBoundingClientRect();
+      const tw = tip.offsetWidth;
+      let left = evt.clientX - rect.left + 14;
+      if (left + tw > rect.width) left = evt.clientX - rect.left - tw - 14;  // flip left
+      if (left + tw > rect.width) left = rect.width - tw - 4;                // still over: pin right
+      if (left < 0) left = 4;                                               // never off the left
+      tip.style.left = left + 'px';
+      tip.style.top = (evt.clientY - rect.top + 12) + 'px';
+    }
+
+    svg.addEventListener('mousemove', show);
+    svg.addEventListener('mouseleave', hide);
+  });
+
+  // subrating grid hover-sync: one scrubber drives all 15 mini-charts.
+  document.querySelectorAll('[data-subrating-grid]').forEach((grid) => {
+    const pid = grid.getAttribute('data-subg-pid');
+    const dataEl = grid.parentElement &&
+      grid.parentElement.querySelector('script[id="subrating-data-' + pid + '"]');
+    if (!dataEl) return;
+    let d;
+    try { d = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    const g = d.g;
+    const sSpan = Math.max(1, d.smax - d.smin);
+    const xs = (s) => g.ml + (s - d.smin) / sSpan * g.pw;
+
+    const cells = [];
+    grid.querySelectorAll('.subg-cell[data-subg-key]').forEach((cell) => {
+      const key = cell.getAttribute('data-subg-key');
+      const chart = d.charts[key];
+      if (!chart) return;
+      cells.push({
+        cell: cell,
+        chart: chart,
+        svg: cell.querySelector('svg.subg-svg'),
+        hline: cell.querySelector('.subg-hline'),
+        hdot: cell.querySelector('.subg-hdot'),
+        valEl: cell.querySelector('[data-subg-val]'),
+        capEl: cell.querySelector('[data-subg-cap]'),
+        curVal: cell.querySelector('[data-subg-val]')
+          ? cell.querySelector('[data-subg-val]').textContent : ''
+      });
+    });
+    if (!cells.length) return;
+
+    function yv(v, lo, hi) {
+      return g.mt + g.ph - (v - lo) / Math.max(1e-9, hi - lo) * g.ph;
+    }
+
+    function seasonFromEvent(svg, evt) {
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return null;
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX; pt.y = evt.clientY;
+      const loc = pt.matrixTransform(ctm.inverse());
+      let season = Math.round(d.smin + (loc.x - g.ml) / g.pw * sSpan);
+      if (season < d.smin) season = d.smin;
+      if (season > d.smax) season = d.smax;
+      return season;
+    }
+
+    function clear() {
+      cells.forEach((c) => {
+        c.cell.classList.remove('subg-active');
+        if (c.hline) c.hline.style.display = 'none';
+        if (c.hdot) c.hdot.style.display = 'none';
+        if (c.valEl) c.valEl.textContent = c.curVal;
+        if (c.capEl) c.capEl.textContent = 'now';
+      });
+    }
+
+    function sync(season) {
+      const cx = xs(season);
+      const future = season > d.cur;
+      cells.forEach((c) => {
+        const ch = c.chart;
+        let v = null;
+        if (season <= d.cur) {
+          const hi = ch.hist.s.indexOf(season);
+          if (hi >= 0) v = ch.hist.v[hi];
+        } else {
+          const pi = ch.proj.s.indexOf(season);
+          if (pi >= 0) v = ch.proj.p50[pi];
+        }
+        if (v === null) {
+          c.cell.classList.remove('subg-active');
+          if (c.hline) c.hline.style.display = 'none';
+          if (c.hdot) c.hdot.style.display = 'none';
+          if (c.valEl) c.valEl.textContent = c.curVal;
+          if (c.capEl) c.capEl.textContent = 'now';
+          return;
+        }
+        c.cell.classList.add('subg-active');
+        const cy = yv(v, ch.g.lo, ch.g.hi);
+        if (c.hline) {
+          c.hline.setAttribute('x1', cx);
+          c.hline.setAttribute('x2', cx);
+          c.hline.style.display = '';
+        }
+        if (c.hdot) {
+          c.hdot.setAttribute('cx', cx);
+          c.hdot.setAttribute('cy', cy);
+          c.hdot.style.display = '';
+        }
+        if (c.valEl) c.valEl.textContent = Math.round(v);
+        if (c.capEl) c.capEl.textContent = season + (future ? ' · proj' : (season === d.cur ? ' · now' : ''));
+      });
+    }
+
+    cells.forEach((c) => {
+      if (!c.svg) return;
+      c.svg.addEventListener('mousemove', (evt) => {
+        const s = seasonFromEvent(c.svg, evt);
+        if (s !== null) sync(s);
+      });
+    });
+    grid.addEventListener('mouseleave', clear);
+  });
+
+  // ---------- team trajectory (projected team strength fan chart) ----------
+  document.querySelectorAll('[data-team-traj]').forEach((wrap) => {
+    const svg = wrap.querySelector('svg.ttraj-chart');
+    const tip = wrap.querySelector('[data-ttraj-tooltip]');
+    const hLine = wrap.querySelector('[data-ttraj-hover-line]');
+    const hDot = wrap.querySelector('[data-ttraj-hover-dot]');
+    const bandsG = wrap.querySelector('[data-ttraj-bands]');
+    const lineG = wrap.querySelector('[data-ttraj-line]');
+    const tid = wrap.getAttribute('data-ttraj-tid');
+    const root = wrap.closest('section') || wrap.parentElement;
+    const dataEl = document.getElementById('team-traj-' + tid);
+    if (!svg || !tip || !dataEl || !bandsG || !lineG || !root) return;
+    let d;
+    try { d = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    const g = d.g;
+    const SVGNS = 'http://www.w3.org/2000/svg';
+    const sSpan = Math.max(1, g.smax - g.smin);
+    const xs = (s) => g.ml + (s - g.smin) / sSpan * g.pw;
+    const yv = (v) => g.mt + g.ph - (Math.max(0, v) - g.lo) / Math.max(1e-9, g.hi - g.lo) * g.ph;
+    const fmt = (v) => Math.round(Math.max(0, v));
+    let active = 'proj';
+
+    function bandPts(upper, lower) {
+      const fwd = d.seasons.map((s, i) => xs(s).toFixed(1) + ',' + yv(upper[i]).toFixed(1));
+      const back = d.seasons.map((s, i) => xs(s).toFixed(1) + ',' + yv(lower[i]).toFixed(1)).reverse();
+      return fwd.concat(back).join(' ');
+    }
+    function linePts(p50) {
+      return d.seasons.map((s, i) => xs(s).toFixed(1) + ',' + yv(p50[i]).toFixed(1)).join(' ');
+    }
+
+    function draw(scn) {
+      const b = d.scn[scn];
+      if (!b) return;
+      active = scn;
+      bandsG.innerHTML = '';
+      const p80 = document.createElementNS(SVGNS, 'polygon');
+      p80.setAttribute('points', bandPts(b.p90, b.p10));
+      p80.setAttribute('class', 'ttraj-band-80');
+      const p50b = document.createElementNS(SVGNS, 'polygon');
+      p50b.setAttribute('points', bandPts(b.p75, b.p25));
+      p50b.setAttribute('class', 'ttraj-band-50');
+      bandsG.appendChild(p80); bandsG.appendChild(p50b);
+      lineG.innerHTML = '';
+      const ml = document.createElementNS(SVGNS, 'polyline');
+      ml.setAttribute('points', linePts(b.p50));
+      ml.setAttribute('class', 'ttraj-median');
+      lineG.appendChild(ml);
+    }
+
+    function updateWindow(scn) {
+      const out = root.querySelector('[data-ttraj-window] strong');
+      if (!out || d.contender == null) return;
+      const p50 = d.scn[scn].p50;
+      const hit = [];
+      d.seasons.forEach((s, i) => { if (p50[i] >= d.contender) hit.push(s); });
+      let txt = 'none in window';
+      if (hit.length) {
+        const run = [hit[0]];
+        for (let i = 1; i < hit.length; i++) {
+          if (hit[i] === run[run.length - 1] + 1) run.push(hit[i]); else break;
+        }
+        txt = run[0] === run[run.length - 1] ? '' + run[0] : run[0] + '–' + run[run.length - 1];
+      }
+      out.textContent = txt;
+    }
+
+    function toViewBox(evt) {
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return null;
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX; pt.y = evt.clientY;
+      return pt.matrixTransform(ctm.inverse());
+    }
+
+    function hide() { tip.hidden = true; hLine.style.display = 'none'; hDot.style.display = 'none'; }
+
+    function show(evt) {
+      const loc = toViewBox(evt);
+      if (!loc) return;
+      let season = Math.round(g.smin + (loc.x - g.ml) / g.pw * sSpan);
+      if (season < g.smin) season = g.smin;
+      if (season > g.smax) season = g.smax;
+      const i = d.seasons.indexOf(season);
+      if (i < 0) { hide(); return; }
+      const b = d.scn[active];
+      const med = b.p50[i];
+      const cx = xs(season);
+      hLine.setAttribute('x1', cx); hLine.setAttribute('x2', cx); hLine.style.display = '';
+      hDot.setAttribute('cx', cx); hDot.setAttribute('cy', yv(med)); hDot.style.display = '';
+      const cnt = (d.counts && d.counts[i] != null) ? d.counts[i] : null;
+      let html = '<strong>' + season + (season === d.cur ? ' · current' : '') + '</strong>' +
+        '<span>' + (d.labels[active] || active) + '</span>' +
+        '<span>Median ' + fmt(med) + ' · 80% ' + fmt(b.p10[i]) + '–' + fmt(b.p90[i]) + '</span>';
+      if (cnt != null) html += '<span>' + cnt + ' under contract</span>';
+      tip.innerHTML = html; tip.hidden = false;
+      const rect = wrap.getBoundingClientRect();
+      const tw = tip.offsetWidth;
+      let left = evt.clientX - rect.left + 14;
+      if (left + tw > rect.width) left = evt.clientX - rect.left - tw - 14;
+      if (left + tw > rect.width) left = rect.width - tw - 4;
+      if (left < 0) left = 4;
+      tip.style.left = left + 'px';
+      tip.style.top = (evt.clientY - rect.top + 12) + 'px';
+    }
+
+    root.querySelectorAll('.ttraj-btn[data-ttraj-scn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const scn = btn.getAttribute('data-ttraj-scn');
+        if (!d.scn[scn]) return;
+        root.querySelectorAll('.ttraj-btn').forEach((b2) => {
+          const on = b2 === btn;
+          b2.classList.toggle('active', on);
+          b2.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        draw(scn);
+        updateWindow(scn);
+        hide();
+      });
+    });
+
+    svg.addEventListener('mousemove', show);
+    svg.addEventListener('mouseleave', hide);
+  });
+
+  // power ranking bump: hover/highlight a team line + tooltip, dim the rest.
+  document.querySelectorAll('[data-bump]').forEach((wrap) => {
+    const card = wrap.closest('.bump-card') || wrap;
+    const svg = wrap.querySelector('svg.bump-chart');
+    const tip = wrap.querySelector('[data-bump-tooltip]');
+    const dataEl = document.getElementById('bump-data');
+    if (!svg || !tip || !dataEl) return;
+    let d;
+    try { d = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    const g = d.g;
+    const n = (d.seasons || []).length;
+    const byId = {};
+    (d.teams || []).forEach((t) => { byId[String(t.tid)] = t; });
+
+    const groups = Array.from(card.querySelectorAll('.bump-team[data-tid]'));
+    const labels = Array.from(card.querySelectorAll('.bump-endlabel[data-tid]'));
+    const chips = Array.from(card.querySelectorAll('.bump-chip[data-tid]'));
+    if (!groups.length) return;
+
+    function setActive(tid) {
+      tid = String(tid);
+      card.classList.add('bump-has-active');
+      const apply = (el) => {
+        const on = String(el.getAttribute('data-tid')) === tid;
+        el.classList.toggle('is-active', on);
+        el.classList.toggle('is-dim', !on);
+      };
+      groups.forEach(apply); labels.forEach(apply); chips.forEach(apply);
+    }
+    function clear() {
+      card.classList.remove('bump-has-active');
+      [].concat(groups, labels, chips).forEach((el) => el.classList.remove('is-active', 'is-dim'));
+      tip.hidden = true;
+    }
+
+    function seasonIndex(evt) {
+      const ctm = svg.getScreenCTM();
+      if (!ctm || n < 2) return 0;
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX; pt.y = evt.clientY;
+      const loc = pt.matrixTransform(ctm.inverse());
+      let i = Math.round((loc.x - g.ml) / (g.pw / (n - 1)));
+      return Math.max(0, Math.min(n - 1, i));
+    }
+
+    function showTip(tid, i, evt) {
+      const t = byId[String(tid)];
+      if (!t) return;
+      // abbrev comes from league data; escape it before innerHTML (defense-in-depth).
+      const escHtml = (s) => String(s).replace(/[&<>"]/g, (c) => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      const games = (t.games && t.games[i] != null) ? t.games[i] : 0;
+      const wins = (t.rec && t.rec[i] != null) ? t.rec[i] : 0;
+      let html = '<strong>' + escHtml(t.abbrev || '') + ' · ' + d.seasons[i] +
+        (i === 0 ? ' · now' : '') + '</strong>' +
+        '<span>Rank #' + t.ranks[i] + ' of ' + d.rows + '</span>' +
+        '<span>Strength ' + Math.round(t.p50[i]) + '</span>';
+      if (games > 0) html += '<span>Est. ' + wins + '–' + Math.max(0, games - wins) + '</span>';
+      tip.innerHTML = html;
+      tip.hidden = false;
+      const rect = wrap.getBoundingClientRect();
+      const tw = tip.offsetWidth;
+      let left = evt.clientX - rect.left + 14;
+      if (left + tw > rect.width) left = evt.clientX - rect.left - tw - 14;
+      if (left + tw > rect.width) left = rect.width - tw - 4;
+      if (left < 0) left = 4;
+      tip.style.left = left + 'px';
+      tip.style.top = (evt.clientY - rect.top + 12) + 'px';
+    }
+
+    groups.forEach((grp) => {
+      const tid = grp.getAttribute('data-tid');
+      grp.addEventListener('mouseenter', () => setActive(tid));
+      grp.addEventListener('mousemove', (e) => { setActive(tid); showTip(tid, seasonIndex(e), e); });
+    });
+    labels.forEach((l) => l.addEventListener('mouseenter', () => setActive(l.getAttribute('data-tid'))));
+    chips.forEach((c) => c.addEventListener('mouseenter', () => setActive(c.getAttribute('data-tid'))));
+    card.addEventListener('mouseleave', clear);
+  });
+
 })();
 """.strip() + "\n"
 
@@ -7330,9 +10244,23 @@ def generate_site(
     write_text(out_dir / "compare.html", render_compare_page(data, teams, players, season, start_season))
 
     game_logs = build_game_logs(data, season)
+    league_proj_ctx = league_team_ovr_context(teams, players, season)
+    # Compute each team's projection once and reuse on the team pages AND the
+    # league projections page (the costly Monte Carlo runs only once per team).
+    team_projections: dict[int, dict[str, Any]] = {}
+    for team in teams:
+        tid = safe_int(team.get("tid"), -99)
+        if tid < 0 or team.get("disabled"):
+            continue
+        roster = [player for player in players if player.get("tid") == team.get("tid")]
+        proj = _team_projection(team, roster, season, league_proj_ctx)
+        if proj is not None:
+            team_projections[tid] = proj
     for team in teams:
         roster = [player for player in players if player.get("tid") == team.get("tid")]
-        write_text(out_dir / "teams" / f"{team_slug(team)}.html", render_team_page(team, roster, teams, season, start_season, cap, data=data, game_items=game_items, game_logs=game_logs))
+        write_text(out_dir / "teams" / f"{team_slug(team)}.html", render_team_page(team, roster, teams, season, start_season, cap, data=data, game_items=game_items, game_logs=game_logs, league_proj_ctx=league_proj_ctx, team_proj=team_projections.get(safe_int(team.get("tid"), -99))))
+
+    write_text(out_dir / "projections.html", render_projections_page(data, teams, players, season, league_proj_ctx=league_proj_ctx, team_projections=team_projections))
 
     prospects = draft_prospects(data)
     for prospect in prospects:

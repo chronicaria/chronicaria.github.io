@@ -1,0 +1,1098 @@
+{
+ "updated": "2026-06-13T00:02:24Z",
+ "errors": [],
+ "teams": [
+  {
+   "key": "duke-mbb",
+   "label": "Duke MBB",
+   "tier": 1,
+   "league": "NCAA MBB",
+   "path": "basketball/mens-college-basketball",
+   "id": "150",
+   "name": "Duke Blue Devils",
+   "abbr": "DUKE",
+   "record": "35-3",
+   "standing": "1st in ACC",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
+   "color": "00539b",
+   "form": [
+    {
+     "date": "2026-02-28T17:00Z",
+     "opp": "Virginia",
+     "oppAbbr": "UVA",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401820771",
+     "res": "W",
+     "score": "77-51"
+    },
+    {
+     "date": "2026-03-03T00:00Z",
+     "opp": "NC State",
+     "oppAbbr": "NCSU",
+     "home": false,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401820778",
+     "res": "W",
+     "score": "93-64"
+    },
+    {
+     "date": "2026-03-07T23:30Z",
+     "opp": "North Carolina",
+     "oppAbbr": "UNC",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401820788",
+     "res": "W",
+     "score": "76-61"
+    },
+    {
+     "date": "2026-03-12T23:00Z",
+     "opp": "Florida St",
+     "oppAbbr": "FSU",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401851179",
+     "res": "W",
+     "score": "80-79"
+    },
+    {
+     "date": "2026-03-14T01:35Z",
+     "opp": "Clemson",
+     "oppAbbr": "CLEM",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401851182",
+     "res": "W",
+     "score": "73-61"
+    },
+    {
+     "date": "2026-03-15T00:40Z",
+     "opp": "Virginia",
+     "oppAbbr": "UVA",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401851183",
+     "res": "W",
+     "score": "74-70"
+    },
+    {
+     "date": "2026-03-19T19:00Z",
+     "opp": "Siena",
+     "oppAbbr": "SIE",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401856478",
+     "res": "W",
+     "score": "71-65"
+    },
+    {
+     "date": "2026-03-21T21:25Z",
+     "opp": "TCU",
+     "oppAbbr": "TCU",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401856530",
+     "res": "W",
+     "score": "81-58"
+    },
+    {
+     "date": "2026-03-27T23:10Z",
+     "opp": "St John's",
+     "oppAbbr": "SJU",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401856570",
+     "res": "W",
+     "score": "80-75"
+    },
+    {
+     "date": "2026-03-29T21:05Z",
+     "opp": "UConn",
+     "oppAbbr": "CONN",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401856577",
+     "res": "L",
+     "score": "72-73"
+    }
+   ],
+   "next": []
+  },
+  {
+   "key": "duke-fb",
+   "label": "Duke FB",
+   "tier": 1,
+   "league": "NCAA FB",
+   "path": "football/college-football",
+   "id": "150",
+   "name": "Duke Blue Devils",
+   "abbr": "DUKE",
+   "record": "",
+   "standing": "2nd in ACC",
+   "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
+   "color": "00539b",
+   "form": [
+    {
+     "date": "2025-09-27T16:00Z",
+     "opp": "Syracuse",
+     "oppAbbr": "SYR",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754545",
+     "res": "W",
+     "score": "38-3"
+    },
+    {
+     "date": "2025-10-05T02:30Z",
+     "opp": "California",
+     "oppAbbr": "CAL",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754551",
+     "res": "W",
+     "score": "45-21"
+    },
+    {
+     "date": "2025-10-18T16:00Z",
+     "opp": "Georgia Tech",
+     "oppAbbr": "GT",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754566",
+     "res": "L",
+     "score": "18-27"
+    },
+    {
+     "date": "2025-11-01T16:00Z",
+     "opp": "Clemson",
+     "oppAbbr": "CLEM",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754577",
+     "res": "W",
+     "score": "46-45"
+    },
+    {
+     "date": "2025-11-08T20:30Z",
+     "opp": "UConn",
+     "oppAbbr": "CONN",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754590",
+     "res": "L",
+     "score": "34-37"
+    },
+    {
+     "date": "2025-11-15T20:35Z",
+     "opp": "Virginia",
+     "oppAbbr": "UVA",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754593",
+     "res": "L",
+     "score": "17-34"
+    },
+    {
+     "date": "2025-11-22T20:30Z",
+     "opp": "North Carolina",
+     "oppAbbr": "UNC",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754600",
+     "res": "W",
+     "score": "32-25"
+    },
+    {
+     "date": "2025-11-29T20:30Z",
+     "opp": "Wake Forest",
+     "oppAbbr": "WAKE",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754610",
+     "res": "W",
+     "score": "49-32"
+    },
+    {
+     "date": "2025-12-07T01:00Z",
+     "opp": "Virginia",
+     "oppAbbr": "UVA",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401777328",
+     "res": "W",
+     "score": "27-20"
+    },
+    {
+     "date": "2025-12-31T19:00Z",
+     "opp": "Arizona St",
+     "oppAbbr": "ASU",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401778329",
+     "res": "W",
+     "score": "42-39"
+    }
+   ],
+   "next": [
+    {
+     "date": "2026-09-05T19:30Z",
+     "opp": "Tulane",
+     "oppAbbr": "TULN",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858209",
+     "odds": "DUKE -8.5"
+    },
+    {
+     "date": "2026-09-12T19:30Z",
+     "opp": "Illinois",
+     "oppAbbr": "ILL",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858217"
+    },
+    {
+     "date": "2026-09-19T20:00Z",
+     "opp": "Stanford",
+     "oppAbbr": "STAN",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858231"
+    },
+    {
+     "date": "2026-09-26T19:30Z",
+     "opp": "William & Mary",
+     "oppAbbr": "W&M",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858244"
+    },
+    {
+     "date": "2026-10-10T04:00Z",
+     "opp": "Georgia Tech",
+     "oppAbbr": "GT",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858255",
+     "tbd": true
+    },
+    {
+     "date": "2026-10-17T04:00Z",
+     "opp": "North Carolina",
+     "oppAbbr": "UNC",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858266",
+     "tbd": true
+    },
+    {
+     "date": "2026-10-23T23:00Z",
+     "opp": "Virginia",
+     "oppAbbr": "UVA",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858271"
+    },
+    {
+     "date": "2026-10-31T04:00Z",
+     "opp": "Boston College",
+     "oppAbbr": "BC",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858279",
+     "tbd": true
+    },
+    {
+     "date": "2026-11-07T05:00Z",
+     "opp": "NC State",
+     "oppAbbr": "NCSU",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858286",
+     "tbd": true
+    },
+    {
+     "date": "2026-11-14T05:00Z",
+     "opp": "Miami",
+     "oppAbbr": "MIA",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858296",
+     "tbd": true
+    }
+   ]
+  },
+  {
+   "key": "mavs",
+   "label": "Mavs",
+   "tier": 1,
+   "league": "NBA",
+   "path": "basketball/nba",
+   "id": "6",
+   "name": "Dallas Mavericks",
+   "abbr": "DAL",
+   "record": "26-56",
+   "standing": "3rd in Southwest Division",
+   "logo": "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
+   "color": "0064b1",
+   "form": [
+    {
+     "date": "2026-03-26T02:00Z",
+     "opp": "Nuggets",
+     "oppAbbr": "DEN",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401810914",
+     "res": "L",
+     "score": "135-142"
+    },
+    {
+     "date": "2026-03-28T02:00Z",
+     "opp": "Trail Blazers",
+     "oppAbbr": "POR",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401810929",
+     "res": "W",
+     "score": "100-93"
+    },
+    {
+     "date": "2026-03-31T00:30Z",
+     "opp": "Timberwolves",
+     "oppAbbr": "MIN",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401810950",
+     "res": "L",
+     "score": "94-124"
+    },
+    {
+     "date": "2026-04-01T00:00Z",
+     "opp": "Bucks",
+     "oppAbbr": "MIL",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401858694",
+     "res": "L",
+     "score": "99-123"
+    },
+    {
+     "date": "2026-04-04T00:30Z",
+     "opp": "Magic",
+     "oppAbbr": "ORL",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401810982",
+     "res": "L",
+     "score": "127-138"
+    },
+    {
+     "date": "2026-04-05T23:30Z",
+     "opp": "Lakers",
+     "oppAbbr": "LAL",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401810995",
+     "res": "W",
+     "score": "134-128"
+    },
+    {
+     "date": "2026-04-08T02:30Z",
+     "opp": "Clippers",
+     "oppAbbr": "LAC",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401811011",
+     "res": "L",
+     "score": "103-116"
+    },
+    {
+     "date": "2026-04-09T02:00Z",
+     "opp": "Suns",
+     "oppAbbr": "PHX",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401811019",
+     "res": "L",
+     "score": "107-112"
+    },
+    {
+     "date": "2026-04-11T00:00Z",
+     "opp": "Spurs",
+     "oppAbbr": "SA",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401811035",
+     "res": "L",
+     "score": "120-139"
+    },
+    {
+     "date": "2026-04-13T00:30Z",
+     "opp": "Bulls",
+     "oppAbbr": "CHI",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401811048",
+     "res": "W",
+     "score": "149-128"
+    }
+   ],
+   "next": []
+  },
+  {
+   "key": "mets",
+   "label": "Mets",
+   "tier": 2,
+   "league": "MLB",
+   "path": "baseball/mlb",
+   "id": "21",
+   "name": "New York Mets",
+   "abbr": "NYM",
+   "record": "30-38",
+   "standing": "5th in NL East",
+   "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/nym.png",
+   "color": "002d72",
+   "form": [
+    {
+     "date": "2026-05-31T17:40Z",
+     "opp": "Marlins",
+     "oppAbbr": "MIA",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815568",
+     "res": "W",
+     "score": "10-1"
+    },
+    {
+     "date": "2026-06-02T01:40Z",
+     "opp": "Mariners",
+     "oppAbbr": "SEA",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815588",
+     "res": "L",
+     "score": "2-3"
+    },
+    {
+     "date": "2026-06-03T01:40Z",
+     "opp": "Mariners",
+     "oppAbbr": "SEA",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815603",
+     "res": "L",
+     "score": "3-8"
+    },
+    {
+     "date": "2026-06-03T19:40Z",
+     "opp": "Mariners",
+     "oppAbbr": "SEA",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815618",
+     "res": "W",
+     "score": "7-1"
+    },
+    {
+     "date": "2026-06-06T01:40Z",
+     "opp": "Padres",
+     "oppAbbr": "SD",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815641",
+     "res": "W",
+     "score": "5-0"
+    },
+    {
+     "date": "2026-06-07T02:10Z",
+     "opp": "Padres",
+     "oppAbbr": "SD",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815656",
+     "res": "L",
+     "score": "2-3"
+    },
+    {
+     "date": "2026-06-07T20:10Z",
+     "opp": "Padres",
+     "oppAbbr": "SD",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815671",
+     "res": "W",
+     "score": "7-3"
+    },
+    {
+     "date": "2026-06-09T23:10Z",
+     "opp": "Cardinals",
+     "oppAbbr": "STL",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815688",
+     "res": "L",
+     "score": "0-7"
+    },
+    {
+     "date": "2026-06-10T23:10Z",
+     "opp": "Cardinals",
+     "oppAbbr": "STL",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815703",
+     "res": "L",
+     "score": "2-9"
+    },
+    {
+     "date": "2026-06-11T17:10Z",
+     "opp": "Cardinals",
+     "oppAbbr": "STL",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815715",
+     "res": "W",
+     "score": "5-4"
+    }
+   ],
+   "next": [
+    {
+     "date": "2026-06-13T20:10Z",
+     "opp": "Braves",
+     "oppAbbr": "ATL",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815735"
+    },
+    {
+     "date": "2026-06-14T17:40Z",
+     "opp": "Braves",
+     "oppAbbr": "ATL",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815750"
+    },
+    {
+     "date": "2026-06-15T23:10Z",
+     "opp": "Reds",
+     "oppAbbr": "CIN",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815766"
+    },
+    {
+     "date": "2026-06-16T23:10Z",
+     "opp": "Reds",
+     "oppAbbr": "CIN",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815777"
+    },
+    {
+     "date": "2026-06-17T16:40Z",
+     "opp": "Reds",
+     "oppAbbr": "CIN",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815792"
+    },
+    {
+     "date": "2026-06-18T22:40Z",
+     "opp": "Phillies",
+     "oppAbbr": "PHI",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815804"
+    },
+    {
+     "date": "2026-06-20T23:15Z",
+     "opp": "Phillies",
+     "oppAbbr": "PHI",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815828"
+    },
+    {
+     "date": "2026-06-21T23:20Z",
+     "opp": "Phillies",
+     "oppAbbr": "PHI",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815842"
+    },
+    {
+     "date": "2026-06-22T23:10Z",
+     "opp": "Cubs",
+     "oppAbbr": "CHC",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815854"
+    },
+    {
+     "date": "2026-06-23T23:10Z",
+     "opp": "Cubs",
+     "oppAbbr": "CHC",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401815867"
+    }
+   ]
+  },
+  {
+   "key": "spurs",
+   "label": "Spurs",
+   "tier": 2,
+   "league": "Premier League",
+   "path": "soccer/eng.1",
+   "id": "367",
+   "name": "Tottenham Hotspur",
+   "abbr": "TOT",
+   "record": "10-11-17",
+   "standing": "17th in English Premier League",
+   "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
+   "color": "ffffff",
+   "form": [
+    {
+     "date": "2026-03-05T20:00Z",
+     "opp": "C Palace",
+     "oppAbbr": "CRY",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740884",
+     "res": "L",
+     "score": "1-3"
+    },
+    {
+     "date": "2026-03-15T16:30Z",
+     "opp": "Liverpool",
+     "oppAbbr": "LIV",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740891",
+     "res": "D",
+     "score": "1-1"
+    },
+    {
+     "date": "2026-03-22T14:15Z",
+     "opp": "Nottm Forest",
+     "oppAbbr": "NFO",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740904",
+     "res": "L",
+     "score": "0-3"
+    },
+    {
+     "date": "2026-04-12T13:00Z",
+     "opp": "Sunderland",
+     "oppAbbr": "SUN",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740915",
+     "res": "L",
+     "score": "0-1"
+    },
+    {
+     "date": "2026-04-18T16:30Z",
+     "opp": "Brighton",
+     "oppAbbr": "BHA",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740920",
+     "res": "D",
+     "score": "2-2"
+    },
+    {
+     "date": "2026-04-25T14:00Z",
+     "opp": "Wolves",
+     "oppAbbr": "WOL",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740934",
+     "res": "W",
+     "score": "1-0"
+    },
+    {
+     "date": "2026-05-03T18:00Z",
+     "opp": "Aston Villa",
+     "oppAbbr": "AVL",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740937",
+     "res": "W",
+     "score": "2-1"
+    },
+    {
+     "date": "2026-05-11T19:00Z",
+     "opp": "Leeds",
+     "oppAbbr": "LEE",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740954",
+     "res": "D",
+     "score": "1-1"
+    },
+    {
+     "date": "2026-05-19T19:15Z",
+     "opp": "Chelsea",
+     "oppAbbr": "CHE",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740960",
+     "res": "L",
+     "score": "1-2"
+    },
+    {
+     "date": "2026-05-24T15:00Z",
+     "opp": "Everton",
+     "oppAbbr": "EVE",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/740974",
+     "res": "W",
+     "score": "1-0"
+    }
+   ],
+   "next": []
+  },
+  {
+   "key": "colts",
+   "label": "Colts",
+   "tier": 3,
+   "league": "NFL",
+   "path": "football/nfl",
+   "id": "11",
+   "name": "Indianapolis Colts",
+   "abbr": "IND",
+   "record": "",
+   "standing": "3rd in AFC South",
+   "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
+   "color": "003b75",
+   "form": [
+    {
+     "date": "2025-10-26T20:25Z",
+     "opp": "Titans",
+     "oppAbbr": "TEN",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772761",
+     "res": "W",
+     "score": "38-14"
+    },
+    {
+     "date": "2025-11-02T18:00Z",
+     "opp": "Steelers",
+     "oppAbbr": "PIT",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772766",
+     "res": "L",
+     "score": "20-27"
+    },
+    {
+     "date": "2025-11-09T14:30Z",
+     "opp": "Falcons",
+     "oppAbbr": "ATL",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772636",
+     "res": "W",
+     "score": "31-25"
+    },
+    {
+     "date": "2025-11-23T18:00Z",
+     "opp": "Chiefs",
+     "oppAbbr": "KC",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772779",
+     "res": "L",
+     "score": "20-23"
+    },
+    {
+     "date": "2025-11-30T18:00Z",
+     "opp": "Texans",
+     "oppAbbr": "HOU",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772787",
+     "res": "L",
+     "score": "16-20"
+    },
+    {
+     "date": "2025-12-07T18:00Z",
+     "opp": "Jaguars",
+     "oppAbbr": "JAX",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772793",
+     "res": "L",
+     "score": "19-36"
+    },
+    {
+     "date": "2025-12-14T21:25Z",
+     "opp": "Seahawks",
+     "oppAbbr": "SEA",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772799",
+     "res": "L",
+     "score": "16-18"
+    },
+    {
+     "date": "2025-12-23T01:15Z",
+     "opp": "49ers",
+     "oppAbbr": "SF",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772824",
+     "res": "L",
+     "score": "27-48"
+    },
+    {
+     "date": "2025-12-28T18:00Z",
+     "opp": "Jaguars",
+     "oppAbbr": "JAX",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772915",
+     "res": "L",
+     "score": "17-23"
+    },
+    {
+     "date": "2026-01-04T18:00Z",
+     "opp": "Texans",
+     "oppAbbr": "HOU",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401772962",
+     "res": "L",
+     "score": "30-38"
+    }
+   ],
+   "next": [
+    {
+     "date": "2026-09-13T17:00Z",
+     "opp": "Ravens",
+     "oppAbbr": "BAL",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401872659",
+     "odds": "BAL -3.5 \u00b7 O/U 49.5"
+    },
+    {
+     "date": "2026-09-21T00:20Z",
+     "opp": "Chiefs",
+     "oppAbbr": "KC",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401872945"
+    },
+    {
+     "date": "2026-09-27T17:00Z",
+     "opp": "Texans",
+     "oppAbbr": "HOU",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401872951"
+    },
+    {
+     "date": "2026-10-04T13:30Z",
+     "opp": "Commanders",
+     "oppAbbr": "WSH",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401872965"
+    },
+    {
+     "date": "2026-10-11T17:00Z",
+     "opp": "Steelers",
+     "oppAbbr": "PIT",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401872985"
+    },
+    {
+     "date": "2026-10-18T17:00Z",
+     "opp": "Titans",
+     "oppAbbr": "TEN",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873003"
+    },
+    {
+     "date": "2026-10-25T17:00Z",
+     "opp": "Vikings",
+     "oppAbbr": "MIN",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873014"
+    },
+    {
+     "date": "2026-11-01T18:00Z",
+     "opp": "Jaguars",
+     "oppAbbr": "JAX",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873028"
+    },
+    {
+     "date": "2026-11-08T18:00Z",
+     "opp": "Cowboys",
+     "oppAbbr": "DAL",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873040"
+    },
+    {
+     "date": "2026-11-15T18:00Z",
+     "opp": "Dolphins",
+     "oppAbbr": "MIA",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873059"
+    }
+   ]
+  },
+  {
+   "key": "canes",
+   "label": "Canes",
+   "tier": 3,
+   "league": "NHL",
+   "path": "hockey/nhl",
+   "id": "7",
+   "name": "Carolina Hurricanes",
+   "abbr": "CAR",
+   "record": "53-22-7",
+   "standing": "1st in Metropolitan Division",
+   "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/car.png",
+   "color": "e30426",
+   "form": [
+    {
+     "date": "2026-05-22T00:00Z",
+     "opp": "Canadiens",
+     "oppAbbr": "MTL",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401873383",
+     "res": "L",
+     "score": "2-6"
+    },
+    {
+     "date": "2026-05-23T23:00Z",
+     "opp": "Canadiens",
+     "oppAbbr": "MTL",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401873384",
+     "res": "W",
+     "score": "3-2"
+    },
+    {
+     "date": "2026-05-26T00:00Z",
+     "opp": "Canadiens",
+     "oppAbbr": "MTL",
+     "home": false,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401873385",
+     "res": "W",
+     "score": "3-2"
+    },
+    {
+     "date": "2026-05-28T00:00Z",
+     "opp": "Canadiens",
+     "oppAbbr": "MTL",
+     "home": false,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401873386",
+     "res": "W",
+     "score": "4-0"
+    },
+    {
+     "date": "2026-05-30T00:00Z",
+     "opp": "Canadiens",
+     "oppAbbr": "MTL",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401873387",
+     "res": "W",
+     "score": "6-1"
+    },
+    {
+     "date": "2026-06-03T00:00Z",
+     "opp": "Golden Knights",
+     "oppAbbr": "VGK",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401874171",
+     "res": "L",
+     "score": "4-5"
+    },
+    {
+     "date": "2026-06-05T00:00Z",
+     "opp": "Golden Knights",
+     "oppAbbr": "VGK",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401874172",
+     "res": "W",
+     "score": "4-3"
+    },
+    {
+     "date": "2026-06-07T00:00Z",
+     "opp": "Golden Knights",
+     "oppAbbr": "VGK",
+     "home": false,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401874173",
+     "res": "L",
+     "score": "4-5"
+    },
+    {
+     "date": "2026-06-10T00:00Z",
+     "opp": "Golden Knights",
+     "oppAbbr": "VGK",
+     "home": false,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401874174",
+     "res": "W",
+     "score": "5-3"
+    },
+    {
+     "date": "2026-06-12T00:00Z",
+     "opp": "Golden Knights",
+     "oppAbbr": "VGK",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401874175",
+     "res": "W",
+     "score": "4-2"
+    }
+   ],
+   "next": [
+    {
+     "date": "2026-06-15T00:00Z",
+     "opp": "Golden Knights",
+     "oppAbbr": "VGK",
+     "home": false,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401874176",
+     "odds": "CAR -115 \u00b7 O/U 5.5"
+    },
+    {
+     "date": "2026-06-18T00:00Z",
+     "opp": "Golden Knights",
+     "oppAbbr": "VGK",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401874177"
+    }
+   ]
+  },
+  {
+   "key": "lafc",
+   "label": "LAFC",
+   "tier": 3,
+   "league": "MLS",
+   "path": "soccer/usa.1",
+   "id": "18966",
+   "name": "LAFC",
+   "abbr": "LAFC",
+   "record": "7-3-5",
+   "standing": "5th in MLS",
+   "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/18966.png",
+   "color": "000000",
+   "form": [
+    {
+     "date": "2026-04-05T01:30Z",
+     "opp": "Orlando",
+     "oppAbbr": "ORL",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761525",
+     "res": "W",
+     "score": "6-0"
+    },
+    {
+     "date": "2026-04-11T20:45Z",
+     "opp": "Portland",
+     "oppAbbr": "POR",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761531",
+     "res": "L",
+     "score": "1-2"
+    },
+    {
+     "date": "2026-04-19T23:00Z",
+     "opp": "San Jose",
+     "oppAbbr": "SJ",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761558",
+     "res": "L",
+     "score": "1-4"
+    },
+    {
+     "date": "2026-04-23T02:30Z",
+     "opp": "Colorado",
+     "oppAbbr": "COL",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761569",
+     "res": "D",
+     "score": "0-0"
+    },
+    {
+     "date": "2026-04-25T20:45Z",
+     "opp": "Minnesota",
+     "oppAbbr": "MIN",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761571",
+     "res": "W",
+     "score": "1-0"
+    },
+    {
+     "date": "2026-05-03T01:30Z",
+     "opp": "San Diego",
+     "oppAbbr": "SD",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761595",
+     "res": "D",
+     "score": "2-2"
+    },
+    {
+     "date": "2026-05-11T01:00Z",
+     "opp": "Houston",
+     "oppAbbr": "HOU",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761614",
+     "res": "L",
+     "score": "1-4"
+    },
+    {
+     "date": "2026-05-14T00:30Z",
+     "opp": "St. Louis",
+     "oppAbbr": "STL",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761625",
+     "res": "L",
+     "score": "1-2"
+    },
+    {
+     "date": "2026-05-18T00:00Z",
+     "opp": "Nashville",
+     "oppAbbr": "NSH",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761643",
+     "res": "L",
+     "score": "2-3"
+    },
+    {
+     "date": "2026-05-25T01:15Z",
+     "opp": "Seattle",
+     "oppAbbr": "SEA",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761658",
+     "res": "W",
+     "score": "1-0"
+    }
+   ],
+   "next": []
+  }
+ ]
+}

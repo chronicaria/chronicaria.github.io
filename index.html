@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Andrew Park</title>
+  <meta name="description" content="Andrew Park — Duke '28, B.S. Mathematics &amp; Computer Science (GPA 3.96). Probabilistic modeling, forecasting, and quantitative research. Aspiring quant trader/researcher.">
+  <meta property="og:title" content="Andrew Park">
+  <meta property="og:description" content="Quantitative researcher in training — Bayesian forecasting, numerical methods, and game-theory/markets. Duke Mathematics &amp; CS, Class of 2028.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://andrewparkus.github.io/assets/og/home.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23171b21'/%3E%3Ctext x='50' y='68' font-family='Helvetica,Arial,sans-serif' font-size='46' font-weight='700' fill='%235b9dff' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/site.js"></script>
+  <script defer src="assets/ui.js"></script>
+  <style>
+    .semester li .code.dept-math{color:#5b9dff}
+    .semester li .code.dept-cs{color:#a78bfa}
+    .semester li .code.dept-eng{color:#58c98a}
+    .semester li .code.dept-mus{color:#e3b341}
+    .semester li .code.dept-fr{color:#e2566b}
+    .semester li .code.dept-env{color:#45c4b0}
+    html[data-theme="light"] .semester li .code.dept-math{color:#2f6fd0}
+    html[data-theme="light"] .semester li .code.dept-cs{color:#7253d6}
+    html[data-theme="light"] .semester li .code.dept-eng{color:#1f8a55}
+    html[data-theme="light"] .semester li .code.dept-mus{color:#a87d18}
+    html[data-theme="light"] .semester li .code.dept-fr{color:#c43d55}
+    html[data-theme="light"] .semester li .code.dept-env{color:#1d8a7a}
+    .tag.grad{margin-left:.35rem;padding:.04rem .3rem;font-size:.58rem;vertical-align:1px;background:var(--accent-soft);color:var(--accent);border-radius:.15rem;letter-spacing:.05em}
+    .entry ul li strong{color:var(--accent);font-weight:700}
+  </style>
+</head>
+<body data-section="home">
+
+  <header class="site-header">
+    <div class="brand"><a href="index.html">Andrew <span>Park</span></a></div>
+    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
+    <nav class="primary-nav">
+      <a class="active" href="index.html">Home</a>
+      <a href="daily/index.html">Newspaper</a>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn">Interests</button>
+        <div class="nav-drop-menu">
+          <a href="sports.html">Sports</a>
+          <a href="music.html">Music</a>
+          <a href="literature.html">Literature</a>
+        </div>
+      </div>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn">Other</button>
+        <div class="nav-drop-menu">
+          <a href="league/index.html">SMP Basketball League</a>
+          <a href="weather.html">Temperature</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+
+    <section class="page-hero">
+      <div>
+        <p class="eyebrow">Duke University · Class of 2028 · New York, NY</p>
+        <h1>Andrew Park</h1>
+        <p class="tagline">B.S. Mathematics · B.S. Computer Science · Minor in English · GPA 3.96 / 4.00</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn primary" href="assets/andrew-park-resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="btn" href="https://www.linkedin.com/in/andrewparkus/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="mailto:andrewpark.us@duke.edu">Email</a>
+      </div>
+    </section>
+
+    <div class="two-col">
+      <div class="col-stack">
+
+        <section class="card" id="research-exp">
+          <h2>Experience</h2>
+
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Quantitative Research Intern</h3>
+              <span class="when">May 2026 – present</span>
+            </div>
+            <p class="org"><a href="https://databallr.com/" target="_blank" rel="noopener">DataBallR</a> · sports analytics</p>
+            <ul>
+              <li>Building a <strong>Bayesian state-space model</strong> that forecasts each player's true current
+                and future skill across six decomposed impact components (RAPM), with calibrated uncertainty bands
+                on every estimate.</li>
+              <li>Combines <strong>hierarchical priors</strong> — built from college / G-League data and adjusted
+                for age, role, team context, and cross-league translation — with possession-level evidence,
+                shrinking noisier or luck-driven signals (e.g. defensive 3P) by their reliability.</li>
+              <li><strong>Kalman-style updating</strong> evolves each skill as a latent trajectory refreshed
+                game-to-game; uncertainty widens when a player is injured, idle, or changes role, team, or league.</li>
+              <li>Outputs short- and long-term forecasts per component, plus composite oRAPM/dRAPM by summing the
+                component distributions — and projections for how current college / G-League prospects would translate.</li>
+            </ul>
+            <div class="chips"><span class="chip dim">Bayesian inference</span><span class="chip dim">State-space / Kalman</span><span class="chip dim">Python</span></div>
+          </article>
+
+          <article class="entry">
+            <div class="entry-head">
+              <h3><a href="https://math.duke.edu/undergraduate/pruv/fellows" target="_blank" rel="noopener">PRUV Fellow</a> &amp; Undergraduate Researcher</h3>
+              <span class="when">Apr 2025 – present</span>
+            </div>
+            <p class="org">Duke Mathematics · Advisor: <a href="https://scholars.duke.edu/person/beale" target="_blank" rel="noopener">Prof. J. Thomas Beale</a></p>
+            <ul>
+              <li>Implemented a research-grade numerical PDE solver in Python and Julia from a published
+                algorithm — handling geometry preprocessing, sparse linear systems, and finite-difference
+                stencils — prioritizing numerical accuracy and performance.</li>
+              <li>Built and rigorously validated solvers against five analytical benchmarks (diffusion, Poisson,
+                advection, reaction–diffusion, shallow-water) — emphasizing correctness verification before
+                trusting results.</li>
+              <li>Extending the framework toward <strong>shallow-water dynamics on exoplanet geometries</strong>;
+                research talk and thesis manuscript in preparation for Sept. 2026.</li>
+            </ul>
+            <div class="chips"><span class="chip dim">Python</span><span class="chip dim">Julia</span><span class="chip dim">Numerical PDEs</span><span class="chip dim">Linear algebra</span><span class="chip dim">Scientific computing</span></div>
+          </article>
+
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Teaching Assistant</h3>
+              <span class="when">Jul 2025 – present</span>
+            </div>
+            <p class="org">Duke Mathematics</p>
+            <ul>
+              <li>Graded and gave written feedback to 400+ students across seven courses, from intro calculus
+                through graduate mathematical finance (MATH 581).</li>
+            </ul>
+          </article>
+
+        </section>
+
+        <section class="card" id="projects">
+          <h2>Projects &amp; Leadership</h2>
+
+          <article class="entry">
+            <div class="entry-head">
+              <h3><a href="https://www.instagram.com/duke_poker/" target="_blank" rel="noopener">Duke Poker Club</a> — Founder &amp; President</h3>
+              <span class="when">Jan 2025 – present</span>
+            </div>
+            <ul>
+              <li>Founded and grew a 100+ member club centered on applied probability, game theory, and
+                expected-value decision-making under uncertainty — weekly sessions on poker strategy and
+                prediction markets.</li>
+              <li>Secured a collegiate partnership with Kalshi (prediction markets); trained the competitive team
+                for Intercollegiate Poker Association tournaments; interviewed by <em>The Wall Street Journal</em>
+                on college poker and prediction markets.</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Jupiter — College Basketball Forecasting Model</h3>
+              <span class="when">Jan 2025 – Apr 2026</span>
+            </div>
+            <ul>
+              <li>Hybrid Elo/PageRank model with home-court, possession-efficiency, and schedule-strength
+                features for NCAA game probabilities.</li>
+              <li>Backtested out-of-sample at 73% accuracy and 0.52 log loss on the 2025 season; ran Monte Carlo
+                tournament simulations for the 2026 March Madness bracket.</li>
+            </ul>
+            <div class="chips"><span class="chip dim">Python</span><span class="chip dim">pandas</span><span class="chip dim">scikit-learn</span></div>
+          </article>
+
+          <article class="entry">
+            <div class="entry-head">
+              <h3>U.S. Election Forecasting Engine</h3>
+              <span class="when">Sep 2021 – Jun 2024</span>
+            </div>
+            <ul>
+              <li>Led a 7-person team building SQL/Python pipelines over county and precinct election returns,
+                1912–2024.</li>
+              <li>Modeled local political realignment with regression and K-nearest neighbors, validated on
+                held-out election cycles and regions to test out-of-sample generalization.</li>
+              <li>Traded the model's signals on <strong>Polymarket</strong> across the 2020, 2022, and 2024 election
+                cycles — <strong>top-20 by trading volume and profit in the Elections category during the 2022
+                midterms.</strong></li>
+            </ul>
+            <div class="chips"><span class="chip dim">Python</span><span class="chip dim">SQL</span><span class="chip dim">scikit-learn</span></div>
+          </article>
+
+        </section>
+
+      </div>
+
+      <div class="col-stack">
+
+        <section class="card" id="education">
+          <h2>Education</h2>
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Duke University</h3>
+              <span class="when">Exp. May 2028</span>
+            </div>
+            <p class="org plain">Trinity College of Arts &amp; Sciences · Durham, NC</p>
+            <p>B.S. Mathematics · B.S. Computer Science · minor in English.</p>
+            <p>PRUV Fellow · First-Year Julia Dale Prize — Duke's highest first-year award for mathematical
+              excellence.</p>
+          </article>
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Stuyvesant High School</h3>
+              <span class="when">New York, NY</span>
+            </div>
+            <p>ACT 36 · PSAT National Merit Scholar.</p>
+          </article>
+        </section>
+
+        <section class="card" id="skills">
+          <h2>Skills</h2>
+          <p class="eyebrow">Languages</p>
+          <div class="chips">
+            <span class="chip">C++</span><span class="chip">Python</span><span class="chip">Julia</span>
+            <span class="chip">Java</span>
+          </div>
+          <p class="eyebrow" style="margin-top:.7rem;">Tools</p>
+          <div class="chips">
+            <span class="chip">Git</span><span class="chip">LaTeX</span><span class="chip">NumPy</span>
+            <span class="chip">pandas</span><span class="chip">scikit-learn</span>
+          </div>
+          <p class="eyebrow" style="margin-top:.7rem;">Quantitative methods</p>
+          <div class="chips">
+            <span class="chip dim">Bayesian inference</span><span class="chip dim">State-space / Kalman filtering</span>
+            <span class="chip dim">Probability &amp; statistics</span><span class="chip dim">Time series</span>
+            <span class="chip dim">Monte Carlo</span>
+            <span class="chip dim">Regression</span><span class="chip dim">Uncertainty quantification</span>
+            <span class="chip dim">Backtesting</span><span class="chip dim">Numerical PDEs</span>
+            <span class="chip dim">Finite differences</span>
+          </div>
+          <p class="eyebrow" style="margin-top:.7rem;">Human languages</p>
+          <div class="chips">
+            <span class="chip dim">English (native)</span><span class="chip dim">Korean (native)</span>
+            <span class="chip dim">French (fluent)</span>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <section class="card" id="coursework">
+      <div class="section-title-row">
+        <h2>Coursework</h2>
+        <span class="small-copy muted">graduate courses tagged</span>
+      </div>
+      <div class="semester-grid">
+
+        <div class="semester">
+          <h3>Fall 2024</h3>
+          <ul>
+            <li>Data Structures &amp; Algorithms<span class="code dept-cs">COMPSCI 201</span></li>
+            <li>Linear Algebra<span class="code dept-math">MATH 221</span></li>
+            <li>French for Current Affairs<span class="code dept-fr">FRENCH 303S</span></li>
+            <li>Academic Writing<span class="code dept-eng">WRITING 101</span></li>
+          </ul>
+        </div>
+
+        <div class="semester">
+          <h3>Spring 2025</h3>
+          <ul>
+            <li>Advanced Multivariable Calculus<span class="code dept-math">MATH 222</span></li>
+            <li>Advanced Intro to Probability<span class="code dept-math">MATH 340</span></li>
+            <li>Elementary Differential Equations<span class="code dept-math">MATH 356</span></li>
+            <li>Computer Architecture<span class="code dept-cs">COMPSCI 250D</span></li>
+            <li>Dante's Divine Comedy<span class="code dept-eng">MEDREN 341</span></li>
+          </ul>
+        </div>
+
+        <div class="semester">
+          <h3>Fall 2025</h3>
+          <ul>
+            <li><strong>Algebraic Structures I</strong><span class="tag grad">Grad</span><span class="code dept-math">MATH 501</span></li>
+            <li><strong>Mathematical Finance</strong><span class="tag grad">Grad</span><span class="code dept-math">MATH 581</span></li>
+            <li>Human Flourishing in the Digital Age<span class="code dept-cs">COMPSCI 247S</span></li>
+            <li>Conserving the Variety of Life<span class="code dept-env">ENVIRON 210D</span></li>
+          </ul>
+        </div>
+
+        <div class="semester">
+          <h3>Spring 2026</h3>
+          <ul>
+            <li><strong>Real Analysis I</strong><span class="tag grad">Grad</span><span class="code dept-math">MATH 531</span></li>
+            <li><strong>Financial Derivatives</strong><span class="tag grad">Grad</span><span class="code dept-math">MATH 582</span></li>
+            <li>Graphics Software Architecture<span class="code dept-cs">COMPSCI 345</span></li>
+            <li>Romanticism Across the Arts<span class="code dept-eng">ENGLISH 490S</span></li>
+            <li>Chamber Music<span class="code dept-mus">MUSIC 211</span></li>
+          </ul>
+        </div>
+
+        <div class="semester">
+          <h3>Fall 2026 <span class="tag neutral">enrolled</span></h3>
+          <ul>
+            <li><strong>Numerical Linear Algebra</strong><span class="tag grad">Grad</span><span class="code dept-math">MATH 561</span></li>
+            <li><strong>Measure &amp; Integration</strong><span class="tag grad">Grad</span><span class="code dept-math">MATH 631</span></li>
+            <li>Research Independent Study<span class="code dept-math">MATH 393</span></li>
+            <li>Discrete Mathematics &amp; Proofs<span class="code dept-cs">COMPSCI 232</span></li>
+            <li>Victorian Literature<span class="code dept-eng">ENGLISH 247</span></li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>© <span data-year>2026</span> Andrew Park · <span class="monogram">AP</span> · plain HTML/CSS, no frameworks harmed</span>
+      <span class="footer-tools">
+        <a href="mailto:andrewpark.us@duke.edu">andrewpark.us@duke.edu</a> ·
+        <a href="https://www.linkedin.com/in/andrewparkus/" target="_blank" rel="noopener">LinkedIn</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>◐ light mode</button>
+      </span>
+    </footer>
+
+  </main>
+
+</body>
+</html>

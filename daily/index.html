@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Gothic Times — Andrew Park</title>
+  <meta property="og:title" content="The Daily — Andrew Park">
+  <meta property="og:description" content="Sports, AI &amp; models, markets, and live 2026 midterm odds — printed every morning at 6:10.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://andrewparkus.github.io/assets/og/daily.png">
+
+  <meta name="description" content="The Gothic Times — Andrew Park's personal morning newspaper. Duke sports, AI & models, markets, and the 2026 midterms, printed fresh by 8 AM.">
+  <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23171b21'/%3E%3Ctext x='50' y='68' font-family='Helvetica,Arial,sans-serif' font-size='44' font-weight='700' fill='%235b9dff' text-anchor='middle'%3EGT%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="../assets/icon-180.png">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="../assets/daily.css">
+  <script defer src="../assets/daily.js"></script>
+  <script defer src="../assets/ui.js"></script>
+</head>
+<body data-section="daily" data-paper="front">
+
+  <header class="site-header">
+    <div class="brand"><a href="../index.html">Andrew <span>Park</span></a></div>
+    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
+    <nav class="primary-nav">
+      <a href="../index.html">Home</a>
+      <a class="active" href="../daily/index.html">Newspaper</a>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn">Interests</button>
+        <div class="nav-drop-menu">
+          <a href="../sports.html">Sports</a>
+          <a href="../music.html">Music</a>
+          <a href="../literature.html">Literature</a>
+        </div>
+      </div>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn">Other</button>
+        <div class="nav-drop-menu">
+          <a href="../league/index.html">SMP Basketball League</a>
+          <a href="../weather.html">Temperature</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+
+    <header class="gt-masthead">
+      <div class="gt-dateline">
+        <a data-gt-prev href="#" title="Previous edition (←)">‹ Older</a>
+        <span class="sep">·</span>
+        <span data-gt-date>—</span>
+        <span class="sep">·</span>
+        <span data-gt-weather></span>
+        <span class="sep">·</span>
+        <span data-gt-edition></span>
+        <span class="sep">·</span>
+        <span data-gt-printed></span>
+        <span class="sep">·</span>
+        <a data-gt-next href="#" title="Next edition (→)">Newer ›</a>
+      </div>
+    </header>
+
+    <nav class="gt-nav" aria-label="Newspaper sections">
+      <a class="active" href="index.html">Front Page</a>
+      <a href="sports.html">Sports</a>
+      <a href="ai.html">AI &amp; Models</a>
+      <a href="markets.html">Markets</a>
+      <a href="elections.html">Elections</a>      <a href="math.html">Math</a>
+    </nav>
+
+    <div class="gt-notice" data-gt-notice hidden></div>
+    <div class="gt-gameday" data-gt-gameday hidden></div>
+
+    <section class="card" data-gt-week hidden>
+      <h2>The week</h2>
+    </section>
+
+    <section class="gt-brief" data-gt-briefs aria-label="The brief"></section>
+
+    <div class="gt-fold">
+      <div class="col-stack">
+        <section class="gt-lead" data-gt-lead aria-label="Lead story"></section>
+        <section class="card" data-gt-wire-card hidden>
+          <h2>Across the wire</h2>
+          <ul class="gt-wire" data-gt-frontwire></ul>
+        </section>
+      </div>
+      <aside class="gt-rail col-stack">
+        <section class="card">
+          <div class="section-title-row">
+            <h2>Markets at a glance</h2>
+            <a class="more small-copy" href="markets.html">More →</a>
+          </div>
+          <div class="gt-mini-quotes" data-gt-quotes></div>
+        </section>
+        <section class="card">
+          <div class="section-title-row">
+            <h2>Control of Congress</h2>
+            <a class="more small-copy" href="elections.html">More →</a>
+          </div>
+          <div class="gt-control" data-gt-control></div>
+        </section>
+        <section class="card">
+          <div class="section-title-row">
+            <h2 data-gt-today-head>Today's slate</h2>
+            <a class="more small-copy" href="sports.html">More →</a>
+          </div>
+          <div class="score-list" data-gt-today></div>
+        </section>
+      </aside>
+    </div>
+
+    <div class="gt-foldrule" role="separator">The Fold</div>
+
+    <div class="gt-sections">
+      <section class="card gt-section-block" data-sec="sports">
+        <div class="section-title-row">
+          <h2>Sports</h2>
+          <a class="more" href="sports.html">More →</a>
+        </div>
+        <div data-gt-block-sports></div>
+      </section>
+      <section class="card gt-section-block" data-sec="ai">
+        <div class="section-title-row">
+          <h2>AI &amp; Models</h2>
+          <a class="more" href="ai.html">More →</a>
+        </div>
+        <div data-gt-block-ai></div>
+      </section>
+      <section class="card gt-section-block" data-sec="elections">
+        <div class="section-title-row">
+          <h2>The Midterms</h2>
+          <a class="more" href="elections.html">More →</a>
+        </div>
+        <div data-gt-block-elections></div>
+      </section>
+      <section class="card gt-section-block" data-sec="markets">
+        <div class="section-title-row">
+          <h2>Markets</h2>
+          <a class="more" href="markets.html">More →</a>
+        </div>
+        <div data-gt-block-markets></div>
+      </section>
+    </div>
+
+    <div class="gt-foldrule" role="separator">The Back Page</div>
+
+    <div class="gt-backpage">
+      <section class="card gt-poem">
+        <h2>Poetry corner</h2>
+        <div data-gt-poem></div>
+      </section>
+      <section class="card gt-reading">
+        <h2>Quant reading room</h2>
+        <div data-gt-reading></div>
+        <p class="small-copy muted" style="margin:.45rem 0 0;">One classic a day, on rotation.</p>
+      </section>
+      <section class="card">
+        <h2>Around the SMP</h2>
+        <div data-gt-league></div>
+        <p class="small-copy muted" style="margin:.45rem 0 0;">Ten fake teams, very real feelings.</p>
+      </section>
+      <section class="card">
+        <h2>The morgue</h2>
+        <ul class="gt-wire" data-gt-archive></ul>
+        <p class="small-copy muted" style="margin:.45rem 0 0;">Newspaper slang for the archive. Every edition is a JSON file committed to git — browse with ← and →, or visit <a href="archive.html">the full archive</a>.</p>
+      </section>
+    </div>
+
+    <p class="gt-colophon">The Gothic Times is printed overnight by a GitHub Action and delivered by 8 a.m. Eastern.<br>
+      Wire services: ESPN · The Athletic · NYT · SB Nation · Anthropic · OpenAI · Google DeepMind · DeepSeek · xAI · Mistral · arXiv · Hugging Face ·
+      WSJ · CNBC · MarketWatch · FT · r/quant · Polymarket · The Hill · Politico · NPR · NBC · Roll Call · Crystal Ball · Yahoo Finance · Open-Meteo.<br>
+      Prediction-market prices are last/mid quotes, not investment advice. No frameworks were harmed in the printing of this newspaper.</p>
+
+    <footer class="site-footer">
+      <span>© <span data-year>2026</span> Andrew Park · <span class="monogram">GT</span> · The Gothic Times</span>
+      <span class="footer-tools">
+        <a href="../index.html">andrewparkus.github.io</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>◐ light mode</button>
+      </span>
+    </footer>
+
+  </main>
+</body>
+</html>

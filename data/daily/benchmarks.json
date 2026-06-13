@@ -1,0 +1,8 @@
+{
+  "_note": "Hand-curated benchmark watch — append a row on release days. Numbers are vendor-reported headline scores; keep the source honest.",
+  "rows": [
+    {"model": "GPT-4", "bench": "MMLU", "score": "86.4%", "asOf": "2023-03"},
+    {"model": "Claude 3.5 Sonnet", "bench": "SWE-bench Verified", "score": "49.0%", "asOf": "2024-10"},
+    {"model": "DeepSeek-R1", "bench": "AIME 2024", "score": "79.8%", "asOf": "2025-01"}
+  ]
+}

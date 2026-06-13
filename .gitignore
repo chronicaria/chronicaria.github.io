@@ -1,0 +1,4 @@
+.DS_Store
+tools/county-temp-map/work/
+tools/county-temp-map/.venv/
+__pycache__/

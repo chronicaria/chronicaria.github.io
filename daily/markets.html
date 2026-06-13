@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Markets — The Gothic Times</title>
+  <meta name="description" content="The Gothic Times markets desk — index snapshot, financial news, and the quant corner.">
+  <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23171b21'/%3E%3Ctext x='50' y='68' font-family='Helvetica,Arial,sans-serif' font-size='44' font-weight='700' fill='%23e3b341' text-anchor='middle'%3EGT%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="../assets/icon-180.png">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="../assets/daily.css">
+  <script defer src="../assets/daily.js"></script>
+  <script defer src="../assets/ui.js"></script>
+</head>
+<body data-section="daily" data-paper="markets">
+
+  <header class="site-header">
+    <div class="brand"><a href="../index.html">Andrew <span>Park</span></a></div>
+    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
+    <nav class="primary-nav">
+      <a href="../index.html">Home</a>
+      <a class="active" href="../daily/index.html">Newspaper</a>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn">Interests</button>
+        <div class="nav-drop-menu">
+          <a href="../sports.html">Sports</a>
+          <a href="../music.html">Music</a>
+          <a href="../literature.html">Literature</a>
+        </div>
+      </div>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn">Other</button>
+        <div class="nav-drop-menu">
+          <a href="../league/index.html">SMP Basketball League</a>
+          <a href="../weather.html">Temperature</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+
+    <header class="gt-masthead">
+      <div class="gt-dateline">
+        <span data-gt-date>—</span>
+        <span class="sep">·</span>
+        <span>The Markets Desk</span>
+        <span class="sep">·</span>
+        <span data-gt-weather></span>
+        <span class="sep">·</span>
+        <span data-gt-edition></span>
+      </div>
+    </header>
+
+    <nav class="gt-nav" aria-label="Newspaper sections">
+      <a href="index.html">Front Page</a>
+      <a href="sports.html">Sports</a>
+      <a href="ai.html">AI &amp; Models</a>
+      <a class="active" href="markets.html">Markets</a>
+      <a href="elections.html">Elections</a>      <a href="math.html">Math</a>
+    </nav>
+
+    <div class="gt-notice" data-gt-notice hidden></div>
+
+    <p class="small-copy" data-gt-pnl hidden style="margin:0 0 .5rem;"></p>
+
+    <div class="section-title-row" style="margin-bottom:.35rem;">
+      <h2 style="margin-bottom:0;">Tickers</h2>
+      <div class="gt-map-tabs">
+        <button class="gt-map-tab active" type="button" data-gt-spark-view="1D">1D</button>
+        <button class="gt-map-tab" type="button" data-gt-spark-view="1M">1M</button>
+        <button class="gt-map-tab" type="button" data-gt-spark-view="3M">3M</button>
+      </div>
+    </div>
+    <div class="stat-strip" data-gt-snapshot></div>
+    <section class="card" style="padding:.55rem .8rem;">
+      <div class="gt-mini-quotes" data-gt-macro style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));"></div>
+    </section>
+
+    <div class="two-col">
+      <div class="col-stack">
+        <section class="card">
+          <h2>Top stories</h2>
+          <div data-gt-mkt-news></div>
+          <p class="small-copy muted" style="margin:.5rem 0 0;">WSJ, CNBC, MarketWatch, FT, and NYT Business (🔒 =
+            paywalled), with quant research from r/quant and arXiv q-fin riding in the main flow. Prices, the
+            day's change, and the 1D chart are the latest session via Yahoo Finance; 1M/3M show daily closes.</p>
+        </section>
+      </div>
+      <div class="col-stack">
+        <section class="card gt-reading">
+          <h2>Quant reading room</h2>
+          <div data-gt-reading></div>
+          <p class="small-copy muted" style="margin:.45rem 0 0;">Three picks a morning from a 3,200-paper archive of
+            quant-newsletter selections — SSRN, arXiv q-fin, AQR, Man Group, NBER and friends.</p>
+        </section>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <span>© <span data-year>2026</span> Andrew Park · <span class="monogram">GT</span> · The Gothic Times</span>
+      <span class="footer-tools">
+        <a href="index.html">Front page</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>◐ light mode</button>
+      </span>
+    </footer>
+
+  </main>
+</body>
+</html>

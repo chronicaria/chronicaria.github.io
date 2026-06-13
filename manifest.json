@@ -1,0 +1,15 @@
+{
+  "name": "Andrew Park",
+  "short_name": "AP Daily",
+  "start_url": "/daily/",
+  "display": "standalone",
+  "background_color": "#101317",
+  "theme_color": "#101317",
+  "icons": [
+    {
+      "src": "/assets/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

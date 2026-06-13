@@ -1,0 +1,48 @@
+name: Build SMP league site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "league-data/day*.json"
+      - "scripts/league_generator.py"
+      - "scripts/league_postprocess.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-league
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate league site from the newest export
+        run: |
+          NEWEST=$(ls league-data/day*.json | sort -V | tail -1)
+          echo "Building from $NEWEST"
+          python3 scripts/league_generator.py "$NEWEST" --out league --clean
+
+      - name: Stitch into the main site
+        run: python3 scripts/league_postprocess.py
+
+      - name: Commit regenerated site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add league
+          if git diff --cached --quiet; then
+            echo "No league changes."
+          else
+            git commit -m "Regenerate SMP league site [skip ci]"
+            git push
+          fi

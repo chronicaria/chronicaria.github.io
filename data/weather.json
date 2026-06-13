@@ -1,0 +1,43 @@
+{
+  "valid_time_utc": "2026-06-13T02:00:00Z",
+  "updated": "2026-06-13T02:56:30Z",
+  "hottest": [
+    {
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 100.0
+    },
+    {
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 99.1
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 98.3
+    }
+  ],
+  "coldest": [
+    {
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 43.1
+    },
+    {
+      "name": "North Slope",
+      "state": "AK",
+      "temp_f": 43.8
+    },
+    {
+      "name": "Lewis and Clark",
+      "state": "MT",
+      "temp_f": 44.0
+    }
+  ],
+  "national": {
+    "min_f": 43.1,
+    "max_f": 100.0,
+    "mean_f": 74.6
+  }
+}

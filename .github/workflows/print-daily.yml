@@ -1,0 +1,37 @@
+name: Print The Gothic Times
+
+on:
+  schedule:
+    # 10:10 UTC = 6:10 AM EDT / 5:10 AM EST — off-peak minute so GitHub's
+    # cron lag still lands the paper on the porch well before 8 AM Eastern.
+    - cron: "10 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: print-daily
+  cancel-in-progress: true
+
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Print today's edition
+        run: python3 scripts/update_daily.py
+
+      - name: Deliver if changed
+        run: |
+          if git diff --quiet data/daily/ && [ -z "$(git status --porcelain data/daily/)" ]; then
+            echo "No new edition."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/daily/
+          git commit -m "Print The Gothic Times — $(date -u +%F)"
+          git push

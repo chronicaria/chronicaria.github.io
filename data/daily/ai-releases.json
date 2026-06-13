@@ -1,0 +1,13 @@
+[
+  {"when": "2023-03", "label": "GPT-4", "who": "OpenAI"},
+  {"when": "2024-03", "label": "Claude 3", "who": "Anthropic"},
+  {"when": "2024-06", "label": "Claude 3.5 Sonnet", "who": "Anthropic"},
+  {"when": "2024-09", "label": "o1", "who": "OpenAI"},
+  {"when": "2025-01", "label": "DeepSeek-R1", "who": "DeepSeek"},
+  {"when": "2025-03", "label": "Gemini 2.5 Pro", "who": "Google DeepMind"},
+  {"when": "2025-05", "label": "Claude 4", "who": "Anthropic"},
+  {"when": "2025-08", "label": "GPT-5", "who": "OpenAI"},
+  {"when": "2025-09", "label": "Claude Sonnet 4.5", "who": "Anthropic"},
+  {"when": "2025-11", "label": "Gemini 3", "who": "Google DeepMind"},
+  {"when": "2026-06", "label": "Claude Fable 5", "who": "Anthropic"}
+]

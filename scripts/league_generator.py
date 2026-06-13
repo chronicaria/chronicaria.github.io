@@ -103,6 +103,13 @@ FAVICON = (
     "<text y='.9em' font-size='90'>🏀</text></svg>"
 )
 
+THEME_SNIPPET = (
+    '<script>document.documentElement.dataset.theme = '
+    'localStorage.getItem("theme") || '
+    '(matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");'
+    "</script>"
+)
+
 
 def team_palette_by_tid(teams: list[dict[str, Any]]) -> dict[int, str]:
     """Stable distinct color per team (the JSON's own colors are not distinct)."""
@@ -790,7 +797,7 @@ def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
 def page_html(title: str, body: str, teams: list[dict[str, Any]], root: str = "", active: str = "") -> str:
     return f"""<!doctype html>
 <html lang="en">
-<head>
+<head>{THEME_SNIPPET}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(title)} — SMP Basketball League</title>

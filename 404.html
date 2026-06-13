@@ -1,51 +1,33 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>404 — Andrew Park</title>
-  <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23171b21'/%3E%3Ctext x='50' y='68' font-family='Helvetica,Arial,sans-serif' font-size='46' font-weight='700' fill='%235b9dff' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
-  <link rel="manifest" href="manifest.json">
+  <title>404 - SMP Basketball League</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
   <link rel="stylesheet" href="assets/styles.css">
   <script defer src="assets/site.js"></script>
-  <script defer src="assets/ui.js"></script>
 </head>
-<body data-section="home">
-
+<body data-root="">
   <header class="site-header">
-    <div class="brand"><a href="index.html">Andrew <span>Park</span></a></div>
+    <div class="brand"><a href="index.html">SMP Basketball League</a></div>
+    <div class="nav-search">
+      <input type="search" placeholder="Search players &amp; teams..." data-global-search autocomplete="off" aria-label="Search players and teams">
+      <div class="search-results" data-search-results hidden></div>
+    </div>
+    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>Menu</button>
     <nav class="primary-nav">
-      <a href="index.html">Home</a>
-      <a href="daily/index.html">Newspaper</a>
-      <div class="nav-drop">
-        <button type="button" class="nav-drop-btn">Interests</button>
-        <div class="nav-drop-menu">
-          <a href="sports.html">Sports</a>
-          <a href="music.html">Music</a>
-          <a href="literature.html">Literature</a>
-        </div>
-      </div>
-      <div class="nav-drop">
-        <button type="button" class="nav-drop-btn">Other</button>
-        <div class="nav-drop-menu">
-          <a href="league/index.html">SMP Basketball League</a>
-          <a href="weather.html">Temperature</a>
-        </div>
-      </div>
+      <a href="index.html">Home</a><a href="schedule.html">Schedule</a><a href="players/index.html">Players</a><a href="free-agency.html">Free Agency</a><a href="draft.html">Draft</a><a href="trade.html">Trade</a><a href="history.html">History</a><a href="records.html">Records</a>
     </nav>
   </header>
-
   <main class="page-shell">
-    <section class="page-hero" style="margin-top:3rem;">
+    <section class="page-hero">
       <div>
-        <p class="eyebrow">404 · page not found</p>
-        <h1>This page is off-season.</h1>
-        <p class="tagline">No record, no standing, no scheduled return. The form strip is just
-          ten empty squares.</p>
-        <p style="margin-top:.6rem;"><span class="form-strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></p>
+        <p class="eyebrow">404</p>
+        <h1>Page not found</h1>
+        <p class="muted">That league page is not on the current roster.</p>
       </div>
-      <a class="btn primary" href="index.html">Back to the homepage</a>
+      <a class="button-link" href="index.html">Back to Home</a>
     </section>
   </main>
 </body>

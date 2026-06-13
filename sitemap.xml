@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://chronicaria.github.io/</loc></url>
-  <url><loc>https://chronicaria.github.io/daily/</loc></url>
-  <url><loc>https://chronicaria.github.io/daily/sports.html</loc></url>
-  <url><loc>https://chronicaria.github.io/daily/ai.html</loc></url>
-  <url><loc>https://chronicaria.github.io/daily/markets.html</loc></url>
-  <url><loc>https://chronicaria.github.io/daily/elections.html</loc></url>
-  <url><loc>https://chronicaria.github.io/daily/math.html</loc></url>
-  <url><loc>https://chronicaria.github.io/daily/archive.html</loc></url>
-  <url><loc>https://chronicaria.github.io/sports.html</loc></url>
-  <url><loc>https://chronicaria.github.io/music.html</loc></url>
-  <url><loc>https://chronicaria.github.io/literature.html</loc></url>
-  <url><loc>https://chronicaria.github.io/league/</loc></url>
+  <url><loc>https://chronicaria.github.io/schedule.html</loc></url>
+  <url><loc>https://chronicaria.github.io/players/</loc></url>
+  <url><loc>https://chronicaria.github.io/free-agency.html</loc></url>
+  <url><loc>https://chronicaria.github.io/draft.html</loc></url>
+  <url><loc>https://chronicaria.github.io/trade.html</loc></url>
+  <url><loc>https://chronicaria.github.io/history.html</loc></url>
+  <url><loc>https://chronicaria.github.io/records.html</loc></url>
 </urlset>

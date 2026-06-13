@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Post-process the generated SMP league pages for life inside andrewparkus.github.io.
+"""Post-process the generated SMP league pages for life inside chronicaria.github.io.
 
 The league generator (scripts/league_generator.py) emits a standalone site into
 league/. This script stitches it into the parent site: a "← andrewpark.us" link

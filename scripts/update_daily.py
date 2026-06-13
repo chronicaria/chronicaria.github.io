@@ -30,7 +30,7 @@ from pathlib import Path
 
 OUT_DIR = Path(__file__).resolve().parent.parent / "data" / "daily"
 LAUNCH = date(2026, 6, 12)  # edition No. 1
-UA = {"User-Agent": "andrewparkus.github.io gothic-times (personal news page)"}
+UA = {"User-Agent": "chronicaria.github.io gothic-times (personal news page)"}
 NOW = datetime.now(timezone.utc)
 
 # ---------------------------------------------------------------- helpers
@@ -809,7 +809,7 @@ def write_rss(edition, root):
     feed = (
         '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>'
         "<title>The Daily — Andrew Park</title>"
-        "<link>https://andrewparkus.github.io/daily/</link>"
+        "<link>https://chronicaria.github.io/daily/</link>"
         f"<description>Edition No. {edition['edition']} — sports, AI, markets, and the 2026 midterms.</description>"
         f"<lastBuildDate>{NOW.strftime('%a, %d %b %Y %H:%M:%S GMT')}</lastBuildDate>"
         + "".join(items) + "</channel></rss>")

@@ -29,7 +29,7 @@ TEAMS = [
 
 
 def get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "andrewparkus.github.io sports tracker"})
+    req = urllib.request.Request(url, headers={"User-Agent": "chronicaria.github.io sports tracker"})
     with urllib.request.urlopen(req, timeout=30) as res:
         return json.load(res)
 

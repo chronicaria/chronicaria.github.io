@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://andrewparkus.github.io/sitemap.xml
+Sitemap: https://chronicaria.github.io/sitemap.xml

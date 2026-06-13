@@ -1,4 +1,4 @@
-# andrewparkus.github.io
+# chronicaria.github.io
 
 Personal website for Andrew Park — plain HTML/CSS/JS, no build step, deployable on GitHub Pages.
 
@@ -56,5 +56,5 @@ workflow's own data commits) keeps it alive; re-enable from the Actions tab if i
 
 ## Deploying
 
-Push to a repo named `andrewparkus.github.io` (or enable Pages on any repo, serving from the
+Push to a repo named `chronicaria.github.io` (or enable Pages on any repo, serving from the
 root of `main`). No build step needed.

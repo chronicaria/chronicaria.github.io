@@ -113,7 +113,7 @@ def make_card(filename: str, title: str, subtitle: str) -> Path:
         draw.text((margin, y), line, font=sub_font, fill=MUTED)
         y += 48
 
-    draw.text((margin, H - 80), "andrewparkus.github.io",
+    draw.text((margin, H - 80), "chronicaria.github.io",
               font=foot_font, fill=ACCENT)
 
     out = OUT_DIR / filename

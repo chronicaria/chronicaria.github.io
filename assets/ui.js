@@ -232,7 +232,7 @@
       run: function (idx) {
         var done = function () { flashRow(idx, "Copied ✓"); };
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText("https://andrewparkus.github.io/daily.xml").then(done, done);
+          navigator.clipboard.writeText("https://chronicaria.github.io/daily.xml").then(done, done);
         }
       }
     }

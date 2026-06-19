@@ -14,20 +14,40 @@
     return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
   }
 
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"]/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+
   document.querySelectorAll("table[data-sortable]").forEach((table) => {
-    const headers = table.querySelectorAll("thead th");
+    const headers = Array.from(table.querySelectorAll("thead th"));
+    const caption = table.querySelector('caption');
+    if (caption) table.setAttribute('aria-label', caption.textContent.trim());
+    function activateSort(header, index) {
+      const tbody = table.tBodies[0];
+      if (!tbody) return;
+      const rows = Array.from(tbody.rows);
+      const descending = header.classList.contains("sort-asc");
+      headers.forEach((h) => {
+        h.classList.remove("sort-asc", "sort-desc");
+        h.setAttribute("aria-sort", "none");
+      });
+      header.classList.add(descending ? "sort-desc" : "sort-asc");
+      header.setAttribute("aria-sort", descending ? "descending" : "ascending");
+      rows.sort((ra, rb) => {
+        const result = compareValues(cellValue(ra, index), cellValue(rb, index));
+        return descending ? -result : result;
+      });
+      rows.forEach((row) => tbody.appendChild(row));
+    }
     headers.forEach((header, index) => {
-      header.addEventListener("click", () => {
-        const tbody = table.tBodies[0];
-        const rows = Array.from(tbody.rows);
-        const descending = header.classList.contains("sort-asc");
-        headers.forEach((h) => h.classList.remove("sort-asc", "sort-desc"));
-        header.classList.add(descending ? "sort-desc" : "sort-asc");
-        rows.sort((ra, rb) => {
-          const result = compareValues(cellValue(ra, index), cellValue(rb, index));
-          return descending ? -result : result;
-        });
-        rows.forEach((row) => tbody.appendChild(row));
+      header.tabIndex = 0;
+      header.setAttribute("aria-sort", "none");
+      header.addEventListener("click", () => activateSort(header, index));
+      header.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        activateSort(header, index);
       });
     });
   });
@@ -78,9 +98,14 @@
     const table = document.getElementById(wrap.dataset.viewToggle);
     if (!table) return;
     wrap.querySelectorAll('button').forEach((button) => {
+      button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false');
       button.addEventListener('click', () => {
-        wrap.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+        wrap.querySelectorAll('button').forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         button.classList.add('active');
+        button.setAttribute('aria-pressed', 'true');
         table.classList.remove('show-adv', 'show-p36', 'show-rate');
         if (button.dataset.view !== 'basic') table.classList.add('show-' + button.dataset.view);
       });
@@ -100,8 +125,10 @@
       });
     };
     wrap.querySelectorAll('button').forEach((button) => {
+      button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false');
       button.addEventListener('click', () => {
         button.classList.toggle('active');
+        button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false');
         apply();
       });
     });
@@ -160,10 +187,13 @@
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.style.setProperty('--dot', t.color);
+      btn.setAttribute('aria-label', 'Toggle ' + t.abbrev + ' players');
+      btn.setAttribute('aria-pressed', 'true');
       btn.innerHTML = '<span class=\"dot\"></span>' + t.abbrev;
       btn.addEventListener('click', () => {
         if (hidden.has(t.abbrev)) hidden.delete(t.abbrev); else hidden.add(t.abbrev);
         btn.classList.toggle('off', hidden.has(t.abbrev));
+        btn.setAttribute('aria-pressed', hidden.has(t.abbrev) ? 'false' : 'true');
         draw();
       });
       legend.appendChild(btn);
@@ -368,17 +398,34 @@
         .catch(() => ({ players: [], teams: [] }));
     }
 
-    function close() { searchResults.hidden = true; selected = -1; }
+    function close() {
+      searchResults.hidden = true;
+      selected = -1;
+      searchInput.setAttribute('aria-expanded', 'false');
+      searchInput.setAttribute('aria-activedescendant', '');
+    }
+
+    function syncSelected(links) {
+      links.forEach((l, i) => {
+        const on = i === selected;
+        l.classList.toggle('selected', on);
+        l.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      searchInput.setAttribute('aria-activedescendant', selected >= 0 && links[selected] ? links[selected].id : '');
+    }
 
     function renderResults(matches) {
       if (!matches.length) {
-        searchResults.innerHTML = '<div class="search-empty">No matches.</div>';
+        searchResults.innerHTML = '<div class="search-empty" role="option" aria-disabled="true">No matches.</div>';
         searchResults.hidden = false;
+        searchInput.setAttribute('aria-expanded', 'true');
+        searchInput.setAttribute('aria-activedescendant', '');
         return;
       }
-      searchResults.innerHTML = matches.map((m) =>
-        '<a href="' + root + m.u + '"><span>' + m.n + '</span><span class="muted">' + m.t + '</span></a>').join('');
+      searchResults.innerHTML = matches.map((m, i) =>
+        '<a id="search-option-' + i + '" role="option" aria-selected="false" href="' + root + escapeHtml(m.u) + '"><span>' + escapeHtml(m.n) + '</span><span class="muted">' + escapeHtml(m.t) + '</span></a>').join('');
       searchResults.hidden = false;
+      searchInput.setAttribute('aria-expanded', 'true');
       selected = -1;
     }
 
@@ -415,7 +462,7 @@
         if (target) window.location.href = target.href;
         return;
       } else { return; }
-      links.forEach((l, i) => l.classList.toggle('selected', i === selected));
+      syncSelected(links);
     });
     document.addEventListener('click', (event) => {
       if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) close();
@@ -430,6 +477,7 @@
     btn.type = 'button';
     btn.className = 'copy-table';
     btn.title = 'Copy table for spreadsheets';
+    btn.setAttribute('aria-label', 'Copy table for spreadsheets');
     btn.textContent = '⧉';
     btn.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -437,7 +485,11 @@
         Array.from(tr.cells).map((cell) => cell.textContent.trim().replace(/\s+/g, ' ')).join('\t'));
       navigator.clipboard.writeText(lines.join('\n')).then(() => {
         btn.textContent = '✓';
-        setTimeout(() => { btn.textContent = '⧉'; }, 1200);
+        btn.setAttribute('aria-label', 'Copied table');
+        setTimeout(() => {
+          btn.textContent = '⧉';
+          btn.setAttribute('aria-label', 'Copy table for spreadsheets');
+        }, 1200);
       });
     });
     wrap.appendChild(btn);
@@ -446,25 +498,86 @@
   // ---------- mobile nav toggle ----------
   const burger = document.querySelector('[data-nav-burger]');
   if (burger) {
-    const nav = document.querySelector('.primary-nav');
+    const nav = document.getElementById(burger.getAttribute('aria-controls')) || document.querySelector('.primary-nav');
     burger.addEventListener('click', () => {
-      nav.classList.toggle('open');
+      if (!nav) return;
+      const open = !nav.classList.contains('open');
+      nav.classList.toggle('open', open);
       burger.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !nav || !nav.classList.contains('open')) return;
+      nav.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
     });
   }
+
+  // ---------- generic tabs ----------
+  document.querySelectorAll('[data-tabs]').forEach((tablist) => {
+    const tabs = Array.from(tablist.querySelectorAll('[role="tab"][data-tab-target]'));
+    if (!tabs.length) return;
+    function activate(tab, focus) {
+      tabs.forEach((btn) => {
+        const on = btn === tab;
+        const panel = document.getElementById(btn.dataset.tabTarget || '');
+        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+        btn.tabIndex = on ? 0 : -1;
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+    }
+    tabs.forEach((tab, index) => {
+      tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+      tab.addEventListener('click', () => activate(tab, false));
+      tab.addEventListener('keydown', (event) => {
+        let next = null;
+        if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
+        if (event.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
+        if (event.key === 'Home') next = tabs[0];
+        if (event.key === 'End') next = tabs[tabs.length - 1];
+        if (!next) return;
+        event.preventDefault();
+        activate(next, true);
+      });
+    });
+    activate(tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') || tabs[0], false);
+  });
 
   // ---------- draft year tabs ----------
   const draftTabs = document.querySelector('[data-draft-tabs]');
   if (draftTabs) {
     const buttons = Array.from(draftTabs.querySelectorAll('button[data-draft-tab]'));
-    buttons.forEach((button) => {
+    function activateDraft(button, focus) {
+      buttons.forEach((b) => {
+        const on = b === button;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+        b.tabIndex = on ? 0 : -1;
+      });
+      document.querySelectorAll('[data-draft-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.draftPanel !== button.dataset.draftTab;
+      });
+      if (focus) button.focus();
+    }
+    buttons.forEach((button, index) => {
+      button.tabIndex = button.classList.contains('active') ? 0 : -1;
       button.addEventListener('click', () => {
-        buttons.forEach((b) => b.classList.toggle('active', b === button));
-        document.querySelectorAll('[data-draft-panel]').forEach((panel) => {
-          panel.hidden = panel.dataset.draftPanel !== button.dataset.draftTab;
-        });
+        activateDraft(button, false);
+      });
+      button.addEventListener('keydown', (event) => {
+        let next = null;
+        if (event.key === 'ArrowRight') next = buttons[(index + 1) % buttons.length];
+        if (event.key === 'ArrowLeft') next = buttons[(index - 1 + buttons.length) % buttons.length];
+        if (event.key === 'Home') next = buttons[0];
+        if (event.key === 'End') next = buttons[buttons.length - 1];
+        if (!next) return;
+        event.preventDefault();
+        activateDraft(next, true);
       });
     });
+    if (buttons.length) activateDraft(buttons.find((b) => b.classList.contains('active')) || buttons[0], false);
   }
 
   // ---------- keyboard shortcuts ----------
@@ -811,12 +924,14 @@
         const on = String(el.getAttribute('data-tid')) === tid;
         el.classList.toggle('is-active', on);
         el.classList.toggle('is-dim', !on);
+        if (el.matches && el.matches('.bump-chip')) el.setAttribute('aria-pressed', on ? 'true' : 'false');
       };
       groups.forEach(apply); labels.forEach(apply); chips.forEach(apply);
     }
     function clear() {
       card.classList.remove('bump-has-active');
       [].concat(groups, labels, chips).forEach((el) => el.classList.remove('is-active', 'is-dim'));
+      chips.forEach((el) => el.setAttribute('aria-pressed', 'false'));
       tip.hidden = true;
     }
 
@@ -861,7 +976,12 @@
       grp.addEventListener('mousemove', (e) => { setActive(tid); showTip(tid, seasonIndex(e), e); });
     });
     labels.forEach((l) => l.addEventListener('mouseenter', () => setActive(l.getAttribute('data-tid'))));
-    chips.forEach((c) => c.addEventListener('mouseenter', () => setActive(c.getAttribute('data-tid'))));
+    chips.forEach((c) => {
+      const tid = c.getAttribute('data-tid');
+      c.addEventListener('mouseenter', () => setActive(tid));
+      c.addEventListener('focus', () => setActive(tid));
+      c.addEventListener('click', () => setActive(tid));
+    });
     card.addEventListener('mouseleave', clear);
   });
 

@@ -13,12 +13,12 @@
     <header class="site-header">
       <div class="brand"><a href="../index.html">SMP Basketball League</a></div>
       <div class="nav-search">
-        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams">
-        <div class="search-results" data-search-results hidden></div>
+        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="global-search-results" aria-activedescendant="">
+        <div class="search-results" id="global-search-results" data-search-results role="listbox" hidden></div>
       </div>
-      <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
-      <nav class="primary-nav">
-        <a class="" href="../index.html">Home</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html">Players</a><a class="" href="../free-agency.html">Free Agency</a><a class="" href="../draft.html">Draft</a><a class="" href="../trade.html">Trade</a><a class="" href="../history.html">History</a><a class="" href="../records.html">Records</a><a class="" href="../projections.html">Projections</a>
+      <button class="nav-burger" type="button" aria-label="Toggle menu" aria-controls="primary-nav" aria-expanded="false" data-nav-burger>☰ Menu</button>
+      <nav class="primary-nav" id="primary-nav">
+        <a class="" href="../index.html">Home</a><a class="" href="../schedule.html">Schedule</a><a class="active" href="../players/index.html" aria-current="page">Players</a><a class="" href="../free-agency.html">Free Agency</a><a class="" href="../draft.html">Draft</a><a class="" href="../trade.html">Trade</a><a class="" href="../history.html">History</a><a class="" href="../records.html">Records</a><a class="" href="../projections.html">Projections</a>
         <details class="team-dropdown">
           <summary>Teams</summary>
           <div class="team-menu" aria-label="Teams"><a class="" data-tid="2" data-abbrev="CAM" href="../teams/cambridge-platypuses-2.html">Cambridge Platypuses</a><a class="" data-tid="0" data-abbrev="DUR" href="../teams/durham-destroyers-0.html">Durham Destroyers</a><a class="" data-tid="5" data-abbrev="GOO" href="../teams/gooning-gooners-5.html">Gooning Gooners</a><a class="" data-tid="9" data-abbrev="ITH" href="../teams/ithaca-thunder-9.html">Ithaca Thunder</a><a class="" data-tid="8" data-abbrev="MAN" href="../teams/manhattan-elephants-8.html">Manhattan Elephants</a><a class="" data-tid="3" data-abbrev="QUE" href="../teams/queens-pigeons-3.html">Queens Pigeons</a><a class="" data-tid="1" data-abbrev="ROC" href="../teams/rochester-dragons-1.html">Rochester Dragons</a><a class="" data-tid="7" data-abbrev="STO" href="../teams/stony-brook-stingrays-7.html">Stony Brook Stingrays</a><a class="" data-tid="4" data-abbrev="TOR" href="../teams/toronto-jays-4.html">Toronto Jays</a><a class="" data-tid="6" data-abbrev="WAL" href="../teams/waltham-bears-6.html">Waltham Bears</a></div>
@@ -139,7 +139,7 @@
     <section class="card compact-card">
       <div class="table-wrap summary-wrap">
         <table>
-          <thead><tr><th>Summary</th><th>G</th><th>MP</th><th>PTS</th><th>TRB</th><th>AST</th><th>FG%</th><th>3P%</th><th>FT%</th><th title="True shooting: efficiency including threes and free throws">TS%</th><th title="Player Efficiency Rating (league average is 15)">PER</th><th title="Win Shares: estimated wins contributed">WS</th></tr></thead>
+          <thead><tr><th scope="col">Summary</th><th scope="col">G</th><th scope="col">MP</th><th scope="col">PTS</th><th scope="col">TRB</th><th scope="col">AST</th><th scope="col">FG%</th><th scope="col">3P%</th><th scope="col">FT%</th><th scope="col" title="True shooting: efficiency including threes and free throws">TS%</th><th scope="col" title="Player Efficiency Rating (league average is 15)">PER</th><th scope="col" title="Win Shares: estimated wins contributed">WS</th></tr></thead>
           <tbody>
             <tr><td data-sort="2029">2029</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
             <tr><td data-sort="Career">Career</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
@@ -191,7 +191,8 @@
       
     <div class="table-wrap">
       <table id="ratings-113" data-sortable>
-        <thead><tr><th>Year</th><th>Pos</th><th title="Current overall rating">Ovr</th><th title="Potential rating ceiling">Pot</th><th>Height</th><th>Strength</th><th>Speed</th><th>Jumping</th><th>Endurance</th><th>Inside</th><th>Dunks/Layups</th><th>Free Throws</th><th>Mid Range</th><th>Three Pointers</th><th>Offensive IQ</th><th>Defensive IQ</th><th>Dribbling</th><th>Passing</th><th>Rebounding</th><th>Skills</th></tr></thead>
+        <caption class="sr-only">Ratings 113</caption>
+        <thead><tr><th scope="col">Year</th><th scope="col">Pos</th><th scope="col" title="Current overall rating">Ovr</th><th scope="col" title="Potential rating ceiling">Pot</th><th scope="col">Height</th><th scope="col">Strength</th><th scope="col">Speed</th><th scope="col">Jumping</th><th scope="col">Endurance</th><th scope="col">Inside</th><th scope="col">Dunks/Layups</th><th scope="col">Free Throws</th><th scope="col">Mid Range</th><th scope="col">Three Pointers</th><th scope="col">Offensive IQ</th><th scope="col">Defensive IQ</th><th scope="col">Dribbling</th><th scope="col">Passing</th><th scope="col">Rebounding</th><th scope="col">Skills</th></tr></thead>
         <tbody>
           <tr><td data-sort="2028">2028</td><td data-sort="PF">PF</td><td data-sort="36">36</td><td data-sort="58">58</td><td data-sort="56">56</td><td data-sort="54">54</td><td data-sort="50">50</td><td data-sort="55">55</td><td data-sort="32">32</td><td data-sort="54">54</td><td data-sort="49">49</td><td data-sort="40">40</td><td data-sort="27">27</td><td data-sort="32">32</td><td data-sort="35">35</td><td data-sort="27">27</td><td data-sort="33">33</td><td data-sort="36">36</td><td data-sort="47">47</td><td data-sort="">—</td></tr>
 <tr><td data-sort="2029">2029</td><td data-sort="PF">PF</td><td data-sort="50">50</td><td data-sort="67">67</td><td data-sort="56">56</td><td data-sort="62">62</td><td data-sort="52">52</td><td data-sort="57">57</td><td data-sort="44">44</td><td data-sort="58">58</td><td data-sort="58">58</td><td data-sort="47">47</td><td data-sort="30">30</td><td data-sort="41">41</td><td data-sort="49">49</td><td data-sort="36">36</td><td data-sort="36">36</td><td data-sort="41">41</td><td data-sort="51">51</td><td data-sort="">—</td></tr>
@@ -227,7 +228,8 @@
       
     <div class="table-wrap fit-table">
       <table id="salary-113" data-sortable>
-        <thead><tr><th>Season</th><th>Salary</th></tr></thead>
+        <caption class="sr-only">Salary 113</caption>
+        <thead><tr><th scope="col">Season</th><th scope="col">Salary</th></tr></thead>
         <tbody>
           <tr><td data-sort="2029">2029</td><td data-sort="1000.0">$1M</td></tr>
 <tr><td data-sort="2030">2030</td><td data-sort="1000.0">$1M</td></tr>

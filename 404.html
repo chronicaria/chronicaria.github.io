@@ -12,11 +12,11 @@
   <header class="site-header">
     <div class="brand"><a href="index.html">SMP Basketball League</a></div>
     <div class="nav-search">
-      <input type="search" placeholder="Search players &amp; teams..." data-global-search autocomplete="off" aria-label="Search players and teams">
-      <div class="search-results" data-search-results hidden></div>
+      <input type="search" placeholder="Search players &amp; teams..." data-global-search autocomplete="off" aria-label="Search players and teams" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="global-search-results" aria-activedescendant="">
+      <div class="search-results" id="global-search-results" data-search-results role="listbox" hidden></div>
     </div>
-    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>Menu</button>
-    <nav class="primary-nav">
+    <button class="nav-burger" type="button" aria-label="Toggle menu" aria-controls="primary-nav" aria-expanded="false" data-nav-burger>Menu</button>
+    <nav class="primary-nav" id="primary-nav">
       <a href="index.html">Home</a><a href="schedule.html">Schedule</a><a href="players/index.html">Players</a><a href="free-agency.html">Free Agency</a><a href="draft.html">Draft</a><a href="trade.html">Trade</a><a href="history.html">History</a><a href="records.html">Records</a>
     </nav>
   </header>

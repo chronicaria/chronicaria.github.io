@@ -40,7 +40,31 @@ from projections import (  # noqa: E402
     team_ovr,
 )
 
-_EXPORT_PATH = os.path.join(_REPO, "league-data", "day20.json")
+def _export_path():
+    override = os.environ.get("CHRONICARIA_TEST_EXPORT")
+    if override:
+        return override if os.path.isabs(override) else os.path.join(_REPO, override)
+
+    data_dir = os.path.join(_REPO, "league-data")
+    stable = os.path.join(data_dir, "day30.json")
+    if os.path.exists(stable):
+        return stable
+
+    candidates = []
+    for name in os.listdir(data_dir):
+        if not (name.startswith("day") and name.endswith(".json")):
+            continue
+        try:
+            day = int(name[len("day") : -len(".json")])
+        except ValueError:
+            continue
+        candidates.append((day, os.path.join(data_dir, name)))
+    if not candidates:
+        raise FileNotFoundError("no league-data/day*.json fixtures found")
+    return max(candidates)[1]
+
+
+_EXPORT_PATH = _export_path()
 
 
 def _load_export():

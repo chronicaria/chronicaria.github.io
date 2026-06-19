@@ -485,6 +485,21 @@ def free_agents(data: dict[str, Any]) -> list[dict[str, Any]]:
     return [p for p in active_players(data) if p.get("tid") == FREE_AGENT_TID]
 
 
+def contract_expiring_players(players: list[dict[str, Any]], exp_year: int, rostered_only: bool = True) -> list[dict[str, Any]]:
+    rows = []
+    for player in players:
+        if player.get("retiredYear") is not None:
+            continue
+        tid = safe_int(player.get("tid"), RETIRED_TID)
+        if rostered_only and tid < 0:
+            continue
+        if not rostered_only and tid < FREE_AGENT_TID:
+            continue
+        if safe_int((player.get("contract") or {}).get("exp"), -1) == exp_year:
+            rows.append(player)
+    return rows
+
+
 def regular_stats_since(player: dict[str, Any], start_season: int) -> list[dict[str, Any]]:
     return sorted(
         [s for s in player.get("stats", []) if not s.get("playoffs") and s.get("season", -10**9) >= start_season],
@@ -667,23 +682,27 @@ GLOSSARY = {
 }
 
 
-def th(label: str, cls: str = "") -> str:
+def th(label: str, cls: str = "", scope: str = "col") -> str:
     cls_attr = f' class="{esc(cls)}"' if cls else ""
+    scope_attr = f' scope="{esc(scope)}"' if scope else ""
     title = GLOSSARY.get(label)
     title_attr = f' title="{esc(title)}"' if title else ""
-    return f"<th{cls_attr}{title_attr}>{esc(label)}</th>"
+    return f"<th{scope_attr}{cls_attr}{title_attr}>{esc(label)}</th>"
 
 
-def table_html(headers: list, rows: list[str], table_id: str | None = None, empty_message: str = "No players found.", wrap_cls: str = "") -> str:
+def table_html(headers: list, rows: list[str], table_id: str | None = None, empty_message: str = "No players found.", wrap_cls: str = "", caption: str | None = None) -> str:
     table_id_attr = f' id="{esc(table_id)}"' if table_id else ""
     if not rows:
         return f'<p class="empty-state">{esc(empty_message)}</p>'
     header_html = "".join(th(label) if isinstance(label, str) else th(label[0], label[1]) for label in headers)
     body_html = "\n".join(row if row.lstrip().startswith("<tr") else f"<tr>{row}</tr>" for row in rows)
     wrap_cls_attr = f" {wrap_cls}" if wrap_cls else ""
+    caption_text = caption or (table_id.replace("-", " ").title() if table_id else "")
+    caption_html = f'<caption class="sr-only">{esc(caption_text)}</caption>' if caption_text else ""
     return f"""
     <div class="table-wrap{wrap_cls_attr}">
       <table{table_id_attr} data-sortable>
+        {caption_html}
         <thead><tr>{header_html}</tr></thead>
         <tbody>
           {body_html}
@@ -761,7 +780,8 @@ def injury_html(player: dict[str, Any]) -> str:
 def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
     def link(label: str, href: str, key: str) -> str:
         klass = "active" if key == active else ""
-        return f'<a class="{klass}" href="{href}">{esc(label)}</a>'
+        current = ' aria-current="page"' if key == active else ""
+        return f'<a class="{klass}" href="{href}"{current}>{esc(label)}</a>'
 
     main_links = [
         link("Home", f"{root}index.html", "home"),
@@ -778,9 +798,10 @@ def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
     for team in sorted(teams, key=team_sort_key):
         key = f"team-{team.get('tid')}"
         klass = "active" if key == active else ""
+        current = ' aria-current="page"' if key == active else ""
         team_links.append(
             f'<a class="{klass}" data-tid="{esc(team.get("tid"))}" data-abbrev="{esc(team.get("abbrev", ""))}" '
-            f'href="{team_url(team, root)}">{esc(team_full_name(team))}</a>'
+            f'href="{team_url(team, root)}"{current}>{esc(team_full_name(team))}</a>'
         )
 
     dropdown_class = "team-dropdown active" if active.startswith("team-") else "team-dropdown"
@@ -788,11 +809,11 @@ def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
     <header class="site-header">
       <div class="brand"><a href="{root}index.html">SMP Basketball League</a></div>
       <div class="nav-search">
-        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams">
-        <div class="search-results" data-search-results hidden></div>
+        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="global-search-results" aria-activedescendant="">
+        <div class="search-results" id="global-search-results" data-search-results role="listbox" hidden></div>
       </div>
-      <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
-      <nav class="primary-nav">
+      <button class="nav-burger" type="button" aria-label="Toggle menu" aria-controls="primary-nav" aria-expanded="false" data-nav-burger>☰ Menu</button>
+      <nav class="primary-nav" id="primary-nav">
         {''.join(main_links)}
         <details class="{dropdown_class}">
           <summary>Teams</summary>
@@ -888,7 +909,8 @@ def roster_table(title: str, players: list[dict[str, Any]], season: int, start_s
 
 
 def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, data: dict[str, Any] | None = None, tid: int | None = None) -> str:
-    seasons = list(range(season, season + 5))
+    finance_end_season = max(season, min(2033, season + PROJ_SEASONS_AHEAD))
+    seasons = list(range(season, finance_end_season + 1))
     players = sorted(
         roster,
         key=lambda p: (-safe_float((p.get("contract") or {}).get("amount"), 0.0), player_name(p)),
@@ -896,11 +918,26 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
     headers = ["Pos", "Name", "Cap%"] + [(str(s), "cur-season" if s == season else "") for s in seasons]
     rows = []
     totals = {s: 0.0 for s in seasons}
+    under_contract = {s: 0 for s in seasons}
+
+    def salary_for(player: dict[str, Any], salary_season: int) -> float:
+        contract = player.get("contract") or {}
+        exp = safe_int(contract.get("exp"), season)
+        if salary_season > exp:
+            return 0.0
+        exact = [
+            salary for salary in player.get("salaries", [])
+            if isinstance(salary, dict) and safe_int(salary.get("season"), -1) == salary_season
+        ]
+        if exact:
+            return safe_float(exact[-1].get("amount"), 0.0)
+        return safe_float(contract.get("amount"), 0.0)
+
     for player in players:
         contract = player.get("contract") or {}
-        amount = safe_float(contract.get("amount"), 0.0)
         exp = safe_int(contract.get("exp"), season)
         rating = latest_rating(player, season)
+        amount = salary_for(player, season)
         cap_pct = 100.0 * amount / cap if cap > 0 else None
         cap_bar = ""
         if cap_pct is not None:
@@ -912,9 +949,11 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
             td(f"{cap_bar}{fmt_number(cap_pct, 1)}", sort=cap_pct, cls="capcell"),
         ]
         for s in seasons:
-            if s <= exp and amount > 0:
-                totals[s] += amount
-                cells.append(td(fmt_money(amount), sort=amount, cls="cur-season" if s == season else ""))
+            season_amount = salary_for(player, s)
+            if s <= exp and season_amount > 0:
+                totals[s] += season_amount
+                under_contract[s] += 1
+                cells.append(td(fmt_money(season_amount), sort=season_amount, cls="cur-season" if s == season else ""))
             else:
                 cells.append(td("", sort=-1, cls="cur-season" if s == season else ""))
         rows.append("".join(cells))
@@ -943,14 +982,17 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
                     cells.append(td("", sort=-1, cls="cur-season" if s == season else ""))
             rows.append(f'<tr class="dead-row">{"".join(cells)}</tr>')
 
-    totals_cells = [td(""), td("Totals", cls="name-cell total-label"), td("")]
+    counts_cells = [td(""), td("Under Contract", cls="name-cell total-label"), td("")]
+    totals_cells = [td(""), td("Committed Salary", cls="name-cell total-label"), td("")]
     space_cells = [td(""), td("Free Cap Space", cls="name-cell total-label"), td("")]
     for s in seasons:
         cur = " cur-season" if s == season else ""
+        counts_cells.append(td(fmt_number(under_contract[s], 0), sort=under_contract[s], cls=cur.strip()))
         totals_cells.append(td(fmt_money(totals[s]), sort=totals[s], cls=cur.strip()))
         space = cap - totals[s]
         space_cls = ("delta-up" if space > 0 else "delta-down" if space < 0 else "") + cur
         space_cells.append(td(fmt_money(space), sort=space, cls=space_cls.strip()))
+    rows.append(f'<tr class="total-row">{"".join(counts_cells)}</tr>')
     rows.append(f'<tr class="total-row">{"".join(totals_cells)}</tr>')
     rows.append(f'<tr class="total-row">{"".join(space_cells)}</tr>')
 
@@ -958,7 +1000,7 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
     <section class="card">
       <div class="section-title-row">
         <h2>Salaries</h2>
-        <span class="muted small-copy">Salary cap {fmt_money(cap)}</span>
+        <span class="muted small-copy">Salary cap {fmt_money(cap)} · through {seasons[-1]}</span>
       </div>
       {table_html(headers, rows, table_id="team-finances", empty_message="No contracts found.", wrap_cls="fit-table")}
     </section>
@@ -997,7 +1039,7 @@ def team_games_strip(team: dict[str, Any], game_items: list[dict[str, Any]], tea
         item for item in game_items
         if safe_int(item.get("home_tid")) == tid or safe_int(item.get("away_tid")) == tid
     ]
-    involved.sort(key=lambda item: (safe_int(item.get("day")), str(item.get("gid"))))
+    involved.sort(key=game_sort_key)
     played = [item for item in involved if is_completed_game_item(item)]
     upcoming = [item for item in involved if not is_completed_game_item(item)]
     chips = []
@@ -1032,17 +1074,91 @@ def team_games_strip(team: dict[str, Any], game_items: list[dict[str, Any]], tea
     """
 
 
+def team_games_table(team: dict[str, Any], game_items: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], season: int) -> str:
+    tid = safe_int(team.get("tid"))
+    involved = [
+        item for item in game_items
+        if safe_int(item.get("season")) == season
+        and not item.get("playoffs")
+        and tid in (safe_int(item.get("home_tid")), safe_int(item.get("away_tid")))
+    ]
+    involved.sort(key=game_sort_key)
+    if not involved:
+        return ""
+    rows = []
+    for item in involved:
+        home = safe_int(item.get("home_tid")) == tid
+        opp_tid = item.get("away_tid") if home else item.get("home_tid")
+        loc = "Home" if home else "Road"
+        completed = is_completed_game_item(item)
+        result = team_schedule_result(item, tid)
+        ot = game_ot_label(item)
+        if ot and completed:
+            result += f" {ot}"
+        team_pts = item_team_points(item, tid)
+        opp_pts = item_team_points(item, safe_int(opp_tid))
+        score = f"{fmt_number(team_pts, 0)}-{fmt_number(opp_pts, 0)}" if completed else "Upcoming"
+        note = game_recap_text(item, teams_by_tid) if completed else "Scheduled"
+        cls = "game-log-win" if result.startswith("W") else "game-log-loss" if result.startswith("L") else "game-log-next"
+        rows.append(
+            f'<tr class="click-row {cls}" data-href="{esc(game_url(item, "../"))}">'
+            + "".join([
+                td(fmt_number(item.get("day"), 0), sort=safe_int(item.get("day"))),
+                td(team_label(opp_tid, teams_by_tid, "../"), sort=team_abbrev_for_tid(opp_tid, teams_by_tid), cls="name-cell"),
+                td(loc, sort=0 if home else 1),
+                td(esc(result), sort=result),
+                td(esc(score), sort=safe_float(team_pts) if completed else -1),
+                td(esc(note), sort=note, cls="game-note"),
+                td(f'<a class="button-link table-link" href="{esc(game_url(item, "../"))}">View</a>', sort=safe_int(item.get("day"))),
+            ])
+            + "</tr>"
+        )
+    completed_count = sum(1 for item in involved if is_completed_game_item(item))
+    headers = ["Day", "Opponent", "H/R", "Result", "Score", "Note", "Link"]
+    return f"""
+    <section class="card">
+      <div class="section-title-row"><h2>All Games</h2><span class="muted small-copy">{completed_count} completed · {len(involved) - completed_count} upcoming</span></div>
+      {table_html(headers, rows, table_id=f"team-{tid}-games", empty_message="No games found.", caption=f"{team_full_name(team)} current-season game log")}
+    </section>
+    """
+
+
 def depth_chart_card(roster: list[dict[str, Any]], season: int) -> str:
-    buckets = {
-        "PG": {"PG", "G"},
-        "SG": {"SG", "G", "GF"},
-        "SF": {"SF", "F", "GF"},
-        "PF": {"PF", "F", "FC"},
-        "C": {"C", "FC"},
-    }
+    slots = ["PG", "SG", "SF", "PF", "C"]
+
+    def preferred_slot(player: dict[str, Any]) -> str:
+        rating = latest_rating(player, season)
+        pos = rating.get("pos") or ""
+        if pos in slots:
+            return pos
+        height = safe_int(player.get("hgt"), 0)
+        if pos == "G":
+            playmaking = safe_int(rating.get("pss")) + safe_int(rating.get("drb"))
+            scoring = safe_int(rating.get("tp")) + safe_int(rating.get("fg"))
+            return "PG" if playmaking >= scoring else "SG"
+        if pos == "GF":
+            return "SG" if height and height < 79 else "SF"
+        if pos == "F":
+            return "SF" if height and height < 81 else "PF"
+        if pos == "FC":
+            return "PF" if height and height < 83 else "C"
+        if height:
+            if height < 76:
+                return "PG"
+            if height < 79:
+                return "SG"
+            if height < 81:
+                return "SF"
+            if height < 83:
+                return "PF"
+        return "C"
+
+    buckets: dict[str, list[dict[str, Any]]] = {slot: [] for slot in slots}
+    for player in roster:
+        buckets[preferred_slot(player)].append(player)
     columns = []
-    for slot, accepted in buckets.items():
-        fits = [p for p in roster if (latest_rating(p, season).get("pos") or "") in accepted]
+    for slot in slots:
+        fits = buckets[slot]
         fits.sort(key=lambda p: -safe_int(latest_rating(p, season).get("ovr")))
         rows = []
         for p in fits[:4]:
@@ -1057,7 +1173,7 @@ def depth_chart_card(roster: list[dict[str, Any]], season: int) -> str:
         columns.append(f'<div class="depth-col"><h3>{slot}</h3><ol class="leader-list">{body_rows}</ol></div>')
     return f"""
     <section class="card">
-      <div class="section-title-row"><h2>Depth Chart</h2><span class="muted small-copy">by position fit, best overall first · ✚ currently injured</span></div>
+      <div class="section-title-row"><h2>Depth Chart</h2><span class="muted small-copy">single best position fit · ✚ currently injured</span></div>
       <div class="depth-grid">{''.join(columns)}</div>
     </section>
     """
@@ -1067,13 +1183,17 @@ def rotation_map_card(team: dict[str, Any], roster: list[dict[str, Any]], game_i
     tid = safe_int(team.get("tid"))
     completed = [
         item for item in game_items
-        if is_completed_game_item(item) and tid in (safe_int(item.get("home_tid")), safe_int(item.get("away_tid")))
+        if is_completed_game_item(item)
+        and safe_int(item.get("season")) == season
+        and not item.get("playoffs")
+        and tid in (safe_int(item.get("home_tid")), safe_int(item.get("away_tid")))
     ]
-    completed.sort(key=lambda item: (safe_int(item.get("day")), str(item.get("gid"))))
-    window = completed[-10:]
+    completed.sort(key=game_sort_key)
+    window = completed
     if not window:
         return ""
     gids = [str(item.get("gid")) for item in window]
+    gid_set = set(gids)
     header_cells = ['<th class="name-cell">Player</th>']
     for item in window:
         won = game_winner_tid(item) == tid
@@ -1085,31 +1205,57 @@ def rotation_map_card(team: dict[str, Any], roster: list[dict[str, Any]], game_i
             f'{safe_int(item.get("day"))}</th>'
         )
 
+    rows_by_pid: dict[int, dict[str, Any]] = {}
+    for pid, entries in game_logs.items():
+        for entry in entries:
+            if safe_int(entry.get("tid"), -999) != tid:
+                continue
+            gid = str(entry.get("gid"))
+            if gid not in gid_set:
+                continue
+            minutes = safe_float((entry.get("box") or {}).get("min"))
+            if minutes <= 0:
+                continue
+            box = entry.get("box") or {}
+            player = ALL_PLAYERS_BY_PID.get(pid)
+            name = player_name(player) if player else str(box.get("name") or f"Player {pid}")
+            label = player_link(player, "../", show_number=False) if player else f'<span class="player-link">{esc(name)}</span>'
+            row = rows_by_pid.setdefault(pid, {"name": name, "label": label, "minutes_by_gid": defaultdict(float)})
+            row["minutes_by_gid"][gid] += minutes
+
     rows = []
-    for player in roster:
-        pid = safe_int(player.get("pid"), -1)
-        minutes_by_gid = {}
-        for entry in game_logs.get(pid, []):
-            minutes_by_gid[str(entry.get("gid"))] = safe_float((entry.get("box") or {}).get("min"))
+    max_minutes = max(
+        (
+            minutes
+            for row in rows_by_pid.values()
+            for minutes in row["minutes_by_gid"].values()
+        ),
+        default=0.0,
+    )
+    for row in rows_by_pid.values():
+        minutes_by_gid = row["minutes_by_gid"]
         window_minutes = [minutes_by_gid.get(gid, 0.0) for gid in gids]
         total = sum(window_minutes)
         if total <= 0:
             continue
-        cells = [td(player_link(player, "../", show_number=False), cls="name-cell")]
+        cells = [td(row["label"], sort=row["name"], cls="name-cell")]
         for minutes in window_minutes:
             if minutes <= 0:
                 cells.append(td('<span class="muted">·</span>', sort=0, cls="rot-cell"))
             else:
-                alpha = 0.08 + 0.6 * min(1.0, minutes / 40.0)
-                cells.append(td(fmt_number(minutes, 0), sort=minutes, cls="rot-cell", style=f"background-color: rgba(91,157,255,{alpha:.2f})"))
-        rows.append((total, "".join(cells)))
+                frac = min(1.0, minutes / max_minutes) if max_minutes > 0 else 0.0
+                hue = 4 + 126 * frac
+                alpha = 0.18 + 0.34 * frac
+                style = f"background-color: hsla({hue:.0f}, 58%, 42%, {alpha:.2f})"
+                cells.append(td(fmt_number(minutes, 0), sort=minutes, cls="rot-cell", style=style))
+        rows.append((total, row["name"], "".join(cells)))
     if not rows:
         return ""
-    rows.sort(key=lambda pair: -pair[0])
-    body_html = "".join(f"<tr>{cells}</tr>" for _, cells in rows)
+    rows.sort(key=lambda pair: (-pair[0], pair[1]))
+    body_html = "".join(f"<tr>{cells}</tr>" for _, _, cells in rows)
     return f"""
     <section class="card">
-      <div class="section-title-row"><h2>Rotation Map</h2><span class="muted small-copy">minutes per game, last {len(window)} games · green day = win, red = loss · · = DNP</span></div>
+      <div class="section-title-row"><h2>Rotation Map</h2><span class="muted small-copy">{len(window)} completed games this season · red to green = minutes load · · = DNP</span></div>
       <div class="table-wrap fit-table">
         <table class="rotation-map">
           <thead><tr>{''.join(header_cells)}</tr></thead>
@@ -1354,21 +1500,6 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
     picks = draft_picks_card(data, team, teams_by_tid) if data else ""
     profile = team_quarter_profile(team, data, season, teams_by_tid) if data else ""
     rotation = rotation_map_card(team, sorted_roster, game_items or [], game_logs or {}, season, teams_by_tid) if game_items and game_logs else ""
-    # Forward-looking "Outlook": projected team strength, narrative tags, and the
-    # contract horizon. Wrapped so the team's color flows into the on-brand charts.
-    # team_proj may be precomputed by the caller (shared with the projections page).
-    if team_proj is None:
-        team_proj = _team_projection(team, sorted_roster, season, league_proj_ctx)
-    outlook = ""
-    if team_proj is not None:
-        outlook = (
-            f'<h2 class="block-title">Outlook</h2>'
-            f'<div class="team-outlook" style="--team-primary:{esc(primary)}">'
-            + team_trajectory_html(team, team_proj, "../")
-            + team_outlook_tags_html(team, sorted_roster, season, team_proj)
-            + contract_horizon_html(team, sorted_roster, season, team_proj)
-            + "</div>"
-        )
     body = f"""
     <section class="page-hero team-hero" style="--team-primary:{esc(primary)};--team-secondary:{esc(secondary)}">
       <div>
@@ -1378,23 +1509,28 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
       </div>
       {salary_cap_html(payroll, cap)}
     </section>
-    {strip}
-    {profile}
-    {rotation}
     <h2 class="block-title">Roster</h2>
     {roster_table("Starters", starters, season, start_season, "../", f"team-{team.get('tid')}-starters", teams_by_tid, game_logs)}
     {roster_table("Bench", bench, season, start_season, "../", f"team-{team.get('tid')}-bench", teams_by_tid, game_logs)}
     {roster_table("Reserve", reserves, season, start_season, "../", f"team-{team.get('tid')}-reserve", teams_by_tid, game_logs)}
     {depth_chart_card(sorted_roster, season)}
-    {outlook}
+    {strip}
+    {profile}
     <h2 class="block-title">Finances</h2>
     {team_finances_table(sorted_roster, season, cap, data=data, tid=safe_int(team.get("tid")))}
     {picks}
+    {rotation}
     """
     return page_html(team_full, body, teams, root="../", active=f"team-{team.get('tid')}")
 
 
 RATING_GROUP_STARTS = {"hgt", "ins", "oiq"}
+
+
+def cap_fit_count(asking: float, cap_space_by_team: dict[int, float]) -> int:
+    if not cap_space_by_team or asking <= 0:
+        return 0
+    return sum(1 for space in cap_space_by_team.values() if space >= asking)
 
 
 def fits_under_cap_html(asking: float, cap_space_by_team: dict[int, float], teams_by_tid: dict[int, dict[str, Any]]) -> str:
@@ -1411,6 +1547,8 @@ def fits_under_cap_html(asking: float, cap_space_by_team: dict[int, float], team
 def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]], cap_space_by_team: dict[int, float] | None = None, teams_by_tid: dict[int, dict[str, Any]] | None = None) -> str:
     rating = latest_rating(player, season)
     contract = player.get("contract") or {}
+    amount = safe_float(contract.get("amount"))
+    fit_count = cap_fit_count(amount, cap_space_by_team or {})
     cells = [
         td(player_link(player, root, show_number=False), sort=player_name(player), cls="name-cell"),
         td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
@@ -1418,7 +1556,32 @@ def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges
         td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
         td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
         td(fmt_money(contract.get("amount")), sort=contract.get("amount")),
-        td(fits_under_cap_html(safe_float(contract.get("amount")), cap_space_by_team or {}, teams_by_tid or {}), sort=safe_float(contract.get("amount"))),
+        td(fits_under_cap_html(amount, cap_space_by_team or {}, teams_by_tid or {}), sort=fit_count),
+    ]
+    for key, _ in TEAM_RATING_RANK_KEYS:
+        value = rating.get(key)
+        lo, hi = rating_ranges.get(key, (0.0, 0.0))
+        cls = "group-start" if key in RATING_GROUP_STARTS else ""
+        cells.append(td(esc(value if value is not None else "—"), sort=value, cls=cls, style=heat_style(value, lo, hi, 1)))
+    cells.append(td(mood_html(player), sort=" ".join(player.get("moodTraits") or []), cls="group-start"))
+    return "".join(cells)
+
+
+def expiring_contract_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]], teams_by_tid: dict[int, dict[str, Any]], cap: float | None = None) -> str:
+    rating = latest_rating(player, season)
+    contract = player.get("contract") or {}
+    amount = safe_float(contract.get("amount"), 0.0)
+    cap_pct = 100.0 * amount / cap if cap and cap > 0 else None
+    contract_html = f'{fmt_money(amount)} <span class="expiry-badge">exp {esc(contract.get("exp", season))}</span>'
+    cells = [
+        td(player_link(player, root, show_number=False), sort=player_name(player), cls="name-cell"),
+        td(team_label(player.get("tid"), teams_by_tid, root), sort=team_label(player.get("tid"), teams_by_tid, root="", as_link=False)),
+        td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
+        td(age(player, season), sort=(season - (player.get("born") or {}).get("year", season) if isinstance((player.get("born") or {}).get("year"), int) else None)),
+        td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
+        td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
+        td(contract_html, sort=amount),
+        td(fmt_number(cap_pct, 1) if cap_pct is not None else "—", sort=cap_pct, cls="capcell"),
     ]
     for key, _ in TEAM_RATING_RANK_KEYS:
         value = rating.get(key)
@@ -1430,7 +1593,12 @@ def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges
 
 
 def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, all_players: list[dict[str, Any]] | None = None, cap: float | None = None) -> str:
-    sorted_players = sorted(players, key=lambda p: (-latest_rating(p, season).get("ovr", 0), -latest_rating(p, season).get("pot", 0), player_name(p)))
+    def market_sort_key(player: dict[str, Any]) -> tuple[int, int, str]:
+        rating = latest_rating(player, season)
+        return (-safe_int(rating.get("ovr")), -safe_int(rating.get("pot")), player_name(player))
+
+    sorted_players = sorted(players, key=market_sort_key)
+    expiring_players = sorted(contract_expiring_players(all_players or [], season, rostered_only=True), key=market_sort_key)
     cap_space_by_team: dict[int, float] = {}
     if all_players is not None and cap:
         for team in teams:
@@ -1438,36 +1606,60 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
             roster = [p for p in all_players if safe_int(p.get("tid"), -9) == tid]
             cap_space_by_team[tid] = cap - team_payroll(roster, season)
 
-    rating_ranges: dict[str, tuple[float, float]] = {}
-    for key, _ in TEAM_RATING_RANK_KEYS:
-        values = []
-        for p in sorted_players:
-            value = latest_rating(p, season).get(key)
-            if value is not None and math.isfinite(safe_float(value, float("nan"))):
-                values.append(float(value))
-        rating_ranges[key] = (min(values), max(values)) if values else (0.0, 0.0)
+    def ranges_for(pool: list[dict[str, Any]]) -> dict[str, tuple[float, float]]:
+        ranges: dict[str, tuple[float, float]] = {}
+        for key, _ in TEAM_RATING_RANK_KEYS:
+            values = []
+            for p in pool:
+                value = latest_rating(p, season).get(key)
+                if value is not None and math.isfinite(safe_float(value, float("nan"))):
+                    values.append(float(value))
+            ranges[key] = (min(values), max(values)) if values else (0.0, 0.0)
+        return ranges
+
+    rating_ranges = ranges_for(sorted_players)
+    expiring_ranges = ranges_for(expiring_players)
 
     headers: list = ["Name", "Pos", "Age", "Ovr", "Pot", "Asking For", "Fits"]
+    expiring_headers: list = ["Name", "Team", "Pos", "Age", "Ovr", "Pot", "Contract", "Cap%"]
     for key, label in TEAM_RATING_RANK_KEYS:
         headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
+        expiring_headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
     headers.append(("Mood", "group-start"))
+    expiring_headers.append(("Mood", "group-start"))
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     rows = [free_agent_row(p, season, "", rating_ranges, cap_space_by_team, teams_by_tid) for p in sorted_players]
+    expiring_rows = [expiring_contract_row(p, season, "", expiring_ranges, teams_by_tid, cap=cap) for p in expiring_players]
+
     body = f"""
     <section class="page-hero">
       <div>
-        <h1>Free Agency</h1>
-        <p class="muted">{len(sorted_players)} available players · Physical / Shooting / Skill ratings · color scaled against this class</p>
+        <p class="eyebrow">Free Agent Market</p>
+        <h1>Free Agent Market</h1>
+        <p class="muted">Available players now plus rostered {season} expiring contracts, kept distinct so market supply is not double-counted.</p>
       </div>
     </section>
     <section class="card">
-      <div class="toolbar">
-        <input class="table-search" data-table-filter="free-agents" placeholder="Filter free agents…" aria-label="Filter free agents">
+      <div class="tabs" role="tablist" aria-label="Free agent market views" data-tabs>
+        <button type="button" class="active" role="tab" id="tab-available-now" aria-controls="panel-available-now" aria-selected="true" tabindex="0" data-tab-target="panel-available-now">Available Now <span>{len(sorted_players)}</span></button>
+        <button type="button" role="tab" id="tab-expiring" aria-controls="panel-expiring" aria-selected="false" tabindex="-1" data-tab-target="panel-expiring">{season} Expiring <span>{len(expiring_players)}</span></button>
       </div>
-      {table_html(headers, rows, table_id="free-agents", empty_message="No free agents found.")}
+      <div id="panel-available-now" role="tabpanel" aria-labelledby="tab-available-now" data-tab-panel>
+        <div class="toolbar">
+          <input class="table-search" data-table-filter="free-agents-available" placeholder="Filter available players…" aria-label="Filter available players">
+        </div>
+        {table_html(headers, rows, table_id="free-agents-available", empty_message="No free agents found.", caption="Available now free agents")}
+      </div>
+      <div id="panel-expiring" role="tabpanel" aria-labelledby="tab-expiring" data-tab-panel hidden>
+        <div class="toolbar">
+          <input class="table-search" data-table-filter="free-agents-expiring" placeholder="Filter expiring contracts…" aria-label="Filter expiring contracts">
+        </div>
+        {table_html(expiring_headers, expiring_rows, table_id="free-agents-expiring", empty_message="No rostered expiring contracts found.", caption=f"Rostered players with contracts expiring in {season}")}
+      </div>
     </section>
     """
-    return page_html("Free Agency", body, teams, root="", active="free-agency")
+    return page_html("Free Agent Market", body, teams, root="", active="free-agency")
+
 
 
 def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None) -> str:
@@ -2052,6 +2244,7 @@ def build_game_logs(data: dict[str, Any], season: int) -> dict[int, list[dict[st
                 logs[pid].append({
                     "day": safe_int(item.get("day")),
                     "gid": item.get("gid"),
+                    "tid": own.get("tid"),
                     "opp_tid": opp.get("tid"),
                     "home": own_key == "home_box",
                     "team_pts": own.get("pts"),
@@ -2061,7 +2254,7 @@ def build_game_logs(data: dict[str, Any], season: int) -> dict[int, list[dict[st
                     "playoffs": bool(game.get("playoffs")),
                 })
     for entries in logs.values():
-        entries.sort(key=lambda e: (e["day"], str(e["gid"])))
+        entries.sort(key=game_sort_key)
     return logs
 
 
@@ -2587,7 +2780,7 @@ def power_ranking_bump_html(league_proj):
             label_svg.append('<line class="bump-leader" x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/>'
                              % (ML + plot_w + 5.0, anchor_y, ML + plot_w + 3.0, ny))
 
-    # ---- Legend chips (colored, with rank-change delta) ----------------
+    # ---- Legend chips (colored, intentionally quiet) -------------------
     legend = []
     for t in ordered:
         tid = safe_int(t.get("tid"), 0)
@@ -2596,30 +2789,21 @@ def power_ranking_bump_html(league_proj):
             color = "#939ca7"
         abbrev = esc(t.get("abbrev") or "")
         name = esc(t.get("name") or "")
-        cur_rank = safe_int((t.get("ranks") or [rows])[0], rows)
-        end_rank = safe_int((t.get("ranks") or [rows])[-1], rows)
-        delta = cur_rank - end_rank  # positive == climbed (lower rank number)
-        if delta > 0:
-            arrow, dcls = "▲%d" % delta, "bump-chip-up"
-        elif delta < 0:
-            arrow, dcls = "▼%d" % (-delta), "bump-chip-down"
-        else:
-            arrow, dcls = "▬", "bump-chip-flat"
         legend.append(
             '<button type="button" class="bump-chip" data-bump-chip data-tid="%d" '
-            'style="--bump-color:%s" title="%s">'
+            'style="--bump-color:%s" title="%s" aria-label="Highlight %s" aria-pressed="false">'
             '<span class="bump-chip-dot"></span>'
             '<span class="bump-chip-ab">%s</span>'
-            '<span class="bump-chip-delta %s">%s</span>'
             '</button>'
-            % (tid, esc(color), name, abbrev, dcls, arrow))
+            % (tid, esc(color), name, name, abbrev))
 
     ref = league_proj.get("league") or {}
     sub_bits = []
+    ref_season = seasons[0] if seasons else ""
     if ref.get("contender") is not None:
-        sub_bits.append("contender ≈ %d OVR" % int(round(safe_float(ref.get("contender")))))
+        sub_bits.append("%s contender ≈ %d OVR" % (ref_season, int(round(safe_float(ref.get("contender"))))))
     if ref.get("avg") is not None:
-        sub_bits.append("league avg ≈ %d" % int(round(safe_float(ref.get("avg")))))
+        sub_bits.append("%s league avg ≈ %d" % (ref_season, int(round(safe_float(ref.get("avg"))))))
     sub = " · ".join(sub_bits)
 
     payload = {
@@ -2633,6 +2817,37 @@ def power_ranking_bump_html(league_proj):
     payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
 
     n_label = "%d teams" % len(teams)
+
+    summary_rows = []
+    for t in payload_teams:
+        ranks = [safe_int(r, rows) for r in t.get("ranks", [])]
+        if not ranks:
+            continue
+        start_rank = ranks[0]
+        end_rank = ranks[-1]
+        best_rank = min(ranks)
+        games = safe_int((t.get("games") or [0])[-1], 0)
+        wins = safe_int((t.get("rec") or [0])[-1], 0)
+        rec = "%d-%d" % (wins, max(0, games - wins)) if games > 0 else "n/a"
+        move = start_rank - end_rank
+        move_label = "Up %d" % move if move > 0 else "Down %d" % (-move) if move < 0 else "Steady"
+        color = esc(t.get("color") or "#939ca7")
+        url = esc(t.get("url") or "#")
+        summary_rows.append(
+            '<a class="bump-summary-row" href="%s" style="--bump-color:%s">'
+            '<span class="bump-chip-dot"></span>'
+            '<strong>%s</strong>'
+            '<span>Now #%d</span>'
+            '<span>Best #%d</span>'
+            '<span>%s #%d</span>'
+            '<span>%s %s</span>'
+            '</a>'
+            % (
+                url, color, esc(t.get("abbrev") or t.get("name") or "Team"),
+                start_rank, best_rank, move_label, end_rank,
+                esc(str(seasons[-1])), esc(rec),
+            )
+        )
 
     return (
         '<section class="card bump-card">'
@@ -2654,6 +2869,7 @@ def power_ranking_bump_html(league_proj):
         '</svg>'
         '<div class="chart-tooltip bump-tooltip" data-bump-tooltip hidden></div>'
         '</div>'
+        '<div class="bump-summary">%s</div>'
         '<script type="application/json" id="bump-data">%s</script>'
         '</section>'
         % (n_label,
@@ -2663,6 +2879,7 @@ def power_ranking_bump_html(league_proj):
            ML - 56.0, MT - 14.0,
            ML - 56.0, MT + plot_h + 18.0,
            "".join(grid), "".join(lines), "".join(label_svg),
+           "".join(summary_rows),
            payload_json)
     )
 
@@ -2674,13 +2891,10 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
     cell shows that team's projected strength (p50, rounded int) with a small
     league-rank badge for that season, plus an estimated record
     (round(win_pct * numGames)) on a secondary line / hover title. Cells are
-    tinted by strength relative to the current-league avg/contender reference
-    lines (>= contender -> greenish, ~avg -> neutral, well below -> reddish). The
-    current season (seasons[0]) is anchored with an accent left border since it
-    is actual, not projected. This is the continuity ("proj") scenario -- talent
-    ages forward, no trades / draft / re-signings -- so the signal is the
-    relative order. Returns "" when no projection is available or fewer than two
-    teams. Never raises.
+    softly tinted by strength relative to the current-league avg/contender
+    reference lines. The first season is the current-roster anchor, then the
+    same roster ages forward with no trades, draft, or re-signings. Returns ""
+    when no projection is available or fewer than two teams. Never raises.
     """
     if not league_proj:
         return ""
@@ -2708,11 +2922,11 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
         span = contender - avg
         if val >= avg:
             frac = min(1.0, (val - avg) / span)
-            pct = int(round(8 + frac * 26))  # 8%..34% toward --good
+            pct = int(round(4 + frac * 12))  # 4%..16% toward --good
             return ("background: var(--panel-2);"
                     f"background: color-mix(in srgb, var(--good) {pct}%, transparent);")
         frac = min(1.0, (avg - val) / span)
-        pct = int(round(6 + frac * 28))  # 6%..34% toward --bad
+        pct = int(round(4 + frac * 12))  # 4%..16% toward --bad
         return ("background: var(--panel-2);"
                 f"background: color-mix(in srgb, var(--bad) {pct}%, transparent);")
 
@@ -2721,7 +2935,7 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
     for si, s in enumerate(seasons):
         anchor = " pstand-now" if si == 0 else ""
         tag = "now" if si == 0 else "proj"
-        sub = "actual" if si == 0 else "proj"
+        sub = "now" if si == 0 else "proj"
         head_cells.append(
             f'<th class="pstand-yr{anchor}" scope="col">'
             f'<span class="pstand-yr-num">{esc(s)}</span>'
@@ -2731,6 +2945,7 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
     head_html = "".join(head_cells)
 
     body_rows = []
+    mobile_cards = []
     for e in rows_data:
         color = esc(e.get("color") or "#5b9dff")
         name = esc(e.get("name") or e.get("abbrev") or "Team")
@@ -2750,6 +2965,7 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
         )
 
         cells = [team_cell]
+        mobile_bits = []
         for si in range(n_seasons):
             raw = safe_float(p50[si]) if si < len(p50) else 0.0
             val = int(round(raw))
@@ -2763,12 +2979,8 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
             else:
                 rec = f"{int(round(wp * 100))}%"
             anchor = " pstand-now" if si == 0 else ""
-            rank_cls = ""
-            if rank == 1:
-                rank_cls = " pstand-rank--top"
-            elif rank <= 3:
-                rank_cls = " pstand-rank--hi"
-            title = f"{name} — {seasons[si]}: strength {val}, rank #{rank}, est. record {rec}"
+            rank_cls = " pstand-rank--hi" if 1 <= rank <= 3 else ""
+            title = f"{name} — {seasons[si]}: median team OVR {val}, rank #{rank}, est. record {rec}"
             cells.append(
                 f'<td class="pstand-cell{anchor}" style="{_tint(raw)}" title="{esc(title)}">'
                 f'<span class="pstand-val">{esc(val)}</span>'
@@ -2776,9 +2988,24 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
                 f'<span class="pstand-rec">{esc(rec)}</span>'
                 f"</td>"
             )
+            mobile_bits.append(
+                f'<span class="pstand-mobile-season">'
+                f'<em>{esc(seasons[si])}</em>'
+                f'<strong>{esc(val)}</strong>'
+                f'<small>#{esc(rank)} · {esc(rec)}</small>'
+                f'</span>'
+            )
         body_rows.append("<tr>" + "".join(cells) + "</tr>")
+        mobile_cards.append(
+            f'<article class="pstand-mobile-card">'
+            f'<a class="pstand-name" href="{url}"><span class="pstand-dot" style="background:{color}"></span>'
+            f'<span class="pstand-name-txt">{name}</span><span class="pstand-abbr">{abbrev}</span></a>'
+            f'<div class="pstand-mobile-seasons">{"".join(mobile_bits)}</div>'
+            f'</article>'
+        )
 
     body_html = "\n".join(body_rows)
+    mobile_html = "\n".join(mobile_cards)
     n_proj = max(0, n_seasons - 1)
     caption = (
         "Continuity scenario: every roster ages forward as-is — no trades, "
@@ -2795,200 +3022,23 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
       <p class="muted small-copy pstand-caption">{esc(caption)}</p>
       <div class="table-wrap pstand-wrap">
         <table class="pstand-table">
+          <caption class="sr-only">Projected standings continuity table by team and season</caption>
           <thead><tr>{head_html}</tr></thead>
           <tbody>
             {body_html}
           </tbody>
         </table>
       </div>
+      <div class="pstand-mobile" aria-label="Projected standings compact cards">
+        {mobile_html}
+      </div>
       <div class="scout-tags pstand-legend" aria-hidden="true">
         <span class="scout-tag scout-tag--good">at / above contender</span>
-        <span class="scout-tag scout-tag--neutral">near league avg</span>
-        <span class="scout-tag scout-tag--bad">well below</span>
+        <span class="scout-tag scout-tag--neutral">near {esc(seasons[0])} league avg</span>
+        <span class="scout-tag scout-tag--bad">below {esc(seasons[0])} league avg</span>
       </div>
     </section>
     """
-
-
-def league_storylines_html(league_proj: dict[str, Any] | None) -> str:
-    """Editorial "Projected Storylines" chip strip for projections.html.
-
-    League-level parallel to the per-team Team Outlook tags: auto-derives the
-    handful of takeaways a reader should grab at a glance from the continuity
-    ("proj") projection. Each chip names ONE team + a data-backed storyline with
-    a numeric title= tooltip, reusing the ``.scout-tag`` chip vocabulary inside a
-    titled ``.card``. Diversifies so (where possible) each chip names a different
-    team. Returns "" when the projection is missing or has too few teams; never
-    raises.
-    """
-    if not league_proj:
-        return ""
-    teams = league_proj.get("teams") or []
-    if len(teams) < 2:
-        return ""
-
-    seasons = league_proj.get("seasons") or []
-    n_seasons = len(seasons)
-    if n_seasons < 2:
-        return ""
-    n_teams = len(teams)
-    last = n_seasons - 1
-    mid = min(3, last)  # mid/late window index for "future" judgements
-
-    def rank_at(t, i):
-        ranks = t.get("ranks") or []
-        return safe_int(ranks[i], n_teams) if i < len(ranks) else n_teams
-
-    def p50_at(t, i):
-        arr = t.get("p50") or []
-        return safe_float(arr[i], 0.0) if i < len(arr) else 0.0
-
-    def win_at(t, i):
-        arr = t.get("win_pct") or []
-        return safe_float(arr[i], 0.0) if i < len(arr) else 0.0
-
-    def avg_rank(t):
-        ranks = t.get("ranks") or []
-        vals = [safe_int(r, n_teams) for r in ranks[:n_seasons]]
-        return sum(vals) / len(vals) if vals else float(n_teams)
-
-    def best_future_rank(t):
-        # best (lowest) rank in any future season (excludes current season 0)
-        ranks = t.get("ranks") or []
-        fut = [safe_int(ranks[i], n_teams) for i in range(1, n_seasons) if i < len(ranks)]
-        return min(fut) if fut else rank_at(t, 0)
-
-    def peak_future_season(t, target_rank):
-        ranks = t.get("ranks") or []
-        for i in range(1, n_seasons):
-            if i < len(ranks) and safe_int(ranks[i], n_teams) == target_rank:
-                return seasons[i]
-        return seasons[last]
-
-    def dot(t):
-        # real base fill (never color-mix-only); inline so the league view is multi-colored
-        color = esc(t.get("color") or "var(--muted)")
-        return ('<span class="story-dot" style="background:%s"></span>' % color)
-
-    def name(t):
-        return esc(t.get("name") or t.get("abbrev") or "Team")
-
-    chips = []          # (priority, tone, team, label, title)
-    used = set()        # id(team) already named, to diversify
-
-    # ---- TITLE FAVORITE: rank 1 now (tie-break highest current OVR) ----
-    now_leaders = sorted(teams, key=lambda t: (rank_at(t, 0), -p50_at(t, 0)))
-    fav = now_leaders[0]
-    fav_is_top_now = rank_at(fav, 0) == 1
-    if fav_is_top_now:
-        chips.append((100, "good", fav, "Title favorite",
-            "Projects #1 in %d at %d OVR (%d%% expected win rate) -- the team to beat."
-            % (seasons[0], round(p50_at(fav, 0)), round(win_at(fav, 0) * 100))))
-
-    # ---- FUTURE #1 / DYNASTY: holds or takes the top rank at horizon end ----
-    fut_leaders = sorted(teams, key=lambda t: (rank_at(t, last), -p50_at(t, last)))
-    future_top = fut_leaders[0]
-    if rank_at(future_top, last) == 1:
-        if future_top is fav:
-            chips.append((95, "good", future_top, "Dynasty arc",
-                "Holds #1 from %d through %d -- no challenger overtakes them across the horizon."
-                % (seasons[0], seasons[last])))
-            used.add(id(future_top))
-        elif id(future_top) not in used:
-            chips.append((90, "info", future_top, "Future #1",
-                "Rises to #1 by %d (from #%d now) -- the projected next dynasty."
-                % (seasons[last], rank_at(future_top, 0))))
-            used.add(id(future_top))
-    if fav_is_top_now:
-        used.add(id(fav))
-
-    # ---- BIGGEST RISER / ON THE CLIMB: most rank places gained -> best future rank ----
-    risers = []
-    for t in teams:
-        gain = rank_at(t, 0) - best_future_rank(t)
-        if gain > 0:
-            risers.append((gain, t))
-    risers.sort(key=lambda g: (-g[0], rank_at(g[1], 0)))
-    for gain, t in risers:
-        if id(t) in used:
-            continue
-        bfr = best_future_rank(t)
-        tone = "good" if gain >= 3 else "info"
-        label = "Biggest riser" if gain >= 3 else "On the climb"
-        chips.append((88, tone, t, label,
-            "Climbs from #%d (%d) to a projected #%d by %s -- gains %d place%s as its young core holds."
-            % (rank_at(t, 0), seasons[0], bfr, peak_future_season(t, bfr), gain,
-               "" if gain == 1 else "s")))
-        used.add(id(t))
-        break
-
-    # ---- BIGGEST FALLER / WINDOW CLOSING: largest rank drop now -> horizon end ----
-    fallers = []
-    for t in teams:
-        drop = rank_at(t, last) - rank_at(t, 0)
-        if drop > 0:
-            fallers.append((drop, t))
-    fallers.sort(key=lambda g: (-g[0], rank_at(g[1], 0)))
-    for drop, t in fallers:
-        if id(t) in used:
-            continue
-        was_contender = rank_at(t, 0) <= max(1, round(n_teams * 0.3))
-        if was_contender:
-            tone, label = "warn", "Window closing"
-            title = ("Contender now (#%d) but slides to #%d by %s -- an aging core, %d place%s lost."
-                     % (rank_at(t, 0), rank_at(t, last), seasons[last], drop,
-                        "" if drop == 1 else "s"))
-        else:
-            tone, label = "bad", "Biggest faller"
-            title = ("Falls #%d -> #%d (%s to %s), shedding %d place%s as the roster ages out."
-                     % (rank_at(t, 0), rank_at(t, last), seasons[0], seasons[last], drop,
-                        "" if drop == 1 else "s"))
-        chips.append((84, tone, t, label, title))
-        used.add(id(t))
-        break
-
-    # ---- STAYING POWER: best average projected rank across the horizon ----
-    by_avg = sorted(teams, key=lambda t: (avg_rank(t), rank_at(t, 0)))
-    for t in by_avg:
-        if id(t) in used:
-            continue
-        ar = avg_rank(t)
-        if ar <= max(2.5, n_teams * 0.35):
-            chips.append((70, "good", t, "Staying power",
-                "Best average projected rank (#%.1f over %d seasons) -- contends every year, never fades."
-                % (ar, n_seasons)))
-            used.add(id(t))
-        break
-
-    # ---- REBUILD WATCH: bottom-third now but climbing relative to peers ----
-    by_now_worst = sorted(teams, key=lambda t: (-rank_at(t, 0), rank_at(t, last)))
-    for t in by_now_worst:
-        if id(t) in used:
-            continue
-        bottom_now = rank_at(t, 0) >= round(n_teams * 0.7)
-        bfr = best_future_rank(t)
-        gain = rank_at(t, 0) - bfr
-        if bottom_now and gain >= 1:
-            chips.append((60, "info", t, "Rebuild watch",
-                "Near the bottom now (#%d) but climbing to #%d by %s -- youth trending the right way."
-                % (rank_at(t, 0), bfr, peak_future_season(t, bfr))))
-            used.add(id(t))
-        break
-
-    chips.sort(key=lambda c: c[0], reverse=True)
-    chips = chips[:6]
-
-    n_chips = len(chips)
-    if n_chips == 0:
-        return ""
-    count_label = "%d storyline" % n_chips if n_chips == 1 else "%d storylines" % n_chips
-    out = ['<section class="card"><div class="section-title-row"><h2>Projected Storylines</h2>'
-           '<span class="count-pill">%s</span></div><div class="scout-tags">' % count_label]
-    for _, tone, t, label, title in chips:
-        out.append('<span class="scout-tag scout-tag--%s scout-tag--story" title="%s">%s%s: %s</span>'
-                   % (esc(tone), esc(title), dot(t), name(t), esc(label)))
-    out.append('</div></section>')
-    return "".join(out)
 
 
 def team_trajectory_html(team: dict[str, Any], team_proj: dict[str, Any] | None, root: str = "../") -> str:
@@ -5016,88 +5066,6 @@ def srs_by_tid(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -
     return srs
 
 
-def elo_history(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> tuple[list[int], dict[int, list[float]]]:
-    tids = [safe_int(t.get("tid")) for t in teams if t.get("tid") is not None]
-    elo = {tid: 1500.0 for tid in tids}
-    items = completed_game_items(data, season, playoffs=False)
-    if not items:
-        return [], {}
-    days = sorted({safe_int(item.get("day")) for item in items})
-    series: dict[int, list[float]] = {tid: [1500.0] for tid in tids}
-    by_day: dict[int, list[dict[str, Any]]] = defaultdict(list)
-    for item in items:
-        by_day[safe_int(item.get("day"))].append(item)
-    for day in days:
-        for item in by_day[day]:
-            home, away = safe_int(item.get("home_tid")), safe_int(item.get("away_tid"))
-            if home not in elo or away not in elo:
-                continue
-            expected_home = 1.0 / (1.0 + 10 ** (-((elo[home] + 60) - elo[away]) / 400))
-            home_won = 1.0 if safe_float(item.get("home_pts")) > safe_float(item.get("away_pts")) else 0.0
-            elo[home] += 24 * (home_won - expected_home)
-            elo[away] -= 24 * (home_won - expected_home)
-        for tid in tids:
-            series[tid].append(elo[tid])
-    return [0] + days, series
-
-
-def elo_chart_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
-    days, series = elo_history(data, teams, season)
-    if not days or len(days) < 3:
-        return ""
-    palette = team_palette_by_tid(teams)
-    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
-    all_values = [v for values in series.values() for v in values]
-    lo, hi = min(all_values) - 12, max(all_values) + 12
-    width, height = 960, 300
-    ml, mr, mt, mb = 40, 56, 10, 22
-    plot_w, plot_h = width - ml - mr, height - mt - mb
-
-    def x(i: int) -> float:
-        return ml + (i / max(1, len(days) - 1)) * plot_w
-
-    def y(v: float) -> float:
-        return mt + plot_h - ((v - lo) / max(1e-9, hi - lo)) * plot_h
-
-    grid = []
-    step = 25 if hi - lo < 180 else 50
-    tick = math.ceil(lo / step) * step
-    while tick <= hi:
-        gy = y(tick)
-        grid.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w}" y2="{gy:.1f}" class="chart-grid"/>')
-        grid.append(f'<text x="{ml - 6}" y="{gy + 3.5:.1f}" class="chart-tick" text-anchor="end">{int(tick)}</text>')
-        tick += step
-    for i, day in enumerate(days):
-        if day % 2 == 0 or len(days) <= 12:
-            grid.append(f'<text x="{x(i):.1f}" y="{height - 6}" class="chart-tick" text-anchor="middle">{day}</text>')
-
-    lines = []
-    labels = []
-    final_positions = sorted(series.items(), key=lambda kv: -kv[1][-1])
-    used_y: list[float] = []
-    for tid, values in final_positions:
-        color = palette.get(tid, "#888")
-        points = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(values))
-        lines.append(f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="2" opacity=".9"/>')
-        label_y = y(values[-1]) + 3.5
-        while any(abs(label_y - other) < 11 for other in used_y):
-            label_y += 11
-        used_y.append(label_y)
-        abbrev = team_abbrev(teams_by_tid.get(tid))
-        labels.append(f'<text x="{ml + plot_w + 6}" y="{label_y:.1f}" fill="{color}" class="chart-label">{esc(abbrev)} {int(values[-1])}</text>')
-
-    return f"""
-    <section class="card home-section">
-      <div class="section-title-row"><h2>Season Trajectory</h2><span class="muted small-copy">Elo rating after each game day (start 1500, K=24, home court +60)</span></div>
-      <svg viewBox="0 0 {width} {height}" class="dev-chart elo-chart" role="img" aria-label="Team Elo ratings by day">
-        {''.join(grid)}
-        {''.join(lines)}
-        {''.join(labels)}
-      </svg>
-    </section>
-    """
-
-
 def heat_style(value: Any, lo: float, hi: float, direction: int) -> str:
     """Background tint from red (worst) to green (best) across a column's range."""
     if direction == 0 or value is None:
@@ -5419,6 +5387,15 @@ def safe_int(value: Any, default: int = 0) -> int:
         return default
 
 
+def game_sort_key(item: dict[str, Any]) -> tuple[int, int, int, Any]:
+    gid = item.get("gid")
+    try:
+        gid_key: tuple[int, Any] = (0, int(gid))
+    except (TypeError, ValueError):
+        gid_key = (1, "" if gid is None else str(gid))
+    return (safe_int(item.get("day")), 1 if item.get("playoffs") else 0, gid_key[0], gid_key[1])
+
+
 def active_team_ids(teams: list[dict[str, Any]]) -> list[int]:
     return [int(team.get("tid")) for team in sorted(teams, key=team_sort_key) if team.get("tid") is not None and not team.get("disabled")]
 
@@ -5508,7 +5485,7 @@ def completed_game_items(data: dict[str, Any], season: int | None = None, playof
         if playoffs is not None and bool(item.get("playoffs")) is not playoffs:
             continue
         items.append(item)
-    items.sort(key=lambda item: (safe_int(item.get("day")), 1 if item.get("playoffs") else 0, str(item.get("gid"))))
+    items.sort(key=game_sort_key)
     return items
 
 
@@ -5588,7 +5565,7 @@ def raw_schedule_items(data: dict[str, Any], teams: list[dict[str, Any]]) -> lis
         item = normalize_schedule_entry(entry, i, default_season)
         if item is not None:
             items.append(item)
-    items.sort(key=lambda item: (safe_int(item.get("day")), str(item.get("gid"))))
+    items.sort(key=game_sort_key)
     return items
 
 
@@ -5720,7 +5697,7 @@ def merge_schedule_and_completed(schedule_items: list[dict[str, Any]], completed
         if matchup in seen_matchups:
             continue
         merged.append(item)
-    merged.sort(key=lambda item: (safe_int(item.get("day")), 1 if item.get("playoffs") else 0, str(item.get("gid"))))
+    merged.sort(key=game_sort_key)
     return merged
 
 
@@ -6101,6 +6078,7 @@ def projected_team_box(tid: Any, players: list[dict[str, Any]], season: int) -> 
 
 def box_score_team_table(team_box: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], players_by_pid: dict[int, dict[str, Any]], root: str) -> str:
     tid = safe_int(team_box.get("tid"))
+    team_name = team_full_for_tid(tid, teams_by_tid)
     selected, bench_index = selected_box_players(team_box)
     rows: list[str] = []
     for i, player_box in enumerate(selected):
@@ -6117,6 +6095,7 @@ def box_score_team_table(team_box: dict[str, Any], teams_by_tid: dict[int, dict[
       {note}
       <div class="table-wrap box-table-wrap">
         <table data-sortable class="box-score-table">
+          <caption class="sr-only">{esc(team_name)} box score</caption>
           <thead><tr>{header_html}</tr></thead>
           <tbody>{''.join(rows)}</tbody>
         </table>
@@ -6684,11 +6663,13 @@ def league_leaders_card(data: dict[str, Any], players: list[dict[str, Any]], tea
         rows = []
         for rank, (value, player, stat) in enumerate(scored[:5], 1):
             rows.append(
-                f'<li><span class="leader-rank">{rank}</span>'
-                f'{team_dot(player.get("tid"), palette)}'
-                f'<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
-                f'<span class="leader-team">{esc(team_abbrev_for_tid(player.get("tid"), teams_by_tid))}</span>'
-                f'<span class="leader-value">{fmt_number(value, fmt_digits)}</span></li>'
+                "<tr>"
+                f'<td class="leader-rank">{rank}</td>'
+                f'<td class="leader-player-cell"><span class="leader-player-wrap">{team_dot(player.get("tid"), palette)}'
+                f'<span class="leader-name-block"><a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
+                f'<span class="leader-team">{esc(team_abbrev_for_tid(player.get("tid"), teams_by_tid))}</span></span></span></td>'
+                f'<td class="leader-value">{fmt_number(value, fmt_digits)}</td>'
+                "</tr>"
             )
         return "".join(rows)
 
@@ -6706,7 +6687,13 @@ def league_leaders_card(data: dict[str, Any], players: list[dict[str, Any]], tea
     for title, fn in categories:
         body = leaders(fn)
         if body:
-            boxes.append(f'<div class="leader-box"><h3>{esc(title)}</h3><ol class="leader-list">{body}</ol></div>')
+            boxes.append(
+                f'<div class="leader-box"><h3>{esc(title)}</h3>'
+                f'<table class="leader-mini-table"><caption class="sr-only">{esc(title)} leaders</caption>'
+                '<colgroup><col class="leader-col-rank"><col><col class="leader-col-value"></colgroup>'
+                '<thead class="sr-only"><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Value</th></tr></thead>'
+                f'<tbody>{body}</tbody></table></div>'
+            )
     return f"""
     <section class="card home-section">
       <div class="section-title-row"><h2>League Leaders</h2><span class="muted small-copy">min {fmt_number(min_gp, 0)} games played</span></div>
@@ -6887,7 +6874,6 @@ def render_projections_page(data: dict[str, Any], teams: list[dict[str, Any]], p
     body = (
         intro
         + power_ranking_bump_html(league_proj)
-        + league_storylines_html(league_proj)
         + projected_standings_html(league_proj)
     )
     return page_html("Projections", body, teams, root="", active="projections")
@@ -6896,6 +6882,7 @@ def render_projections_page(data: dict[str, Any], teams: list[dict[str, Any]], p
 def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, start_season: int) -> str:
     chart_teams = active_teams_for_season(teams, season)
     body = f"""
+    <h1 class="sr-only">SMP Basketball League</h1>
     {latest_results_strip(data, chart_teams, season)}
     <div class="home-columns">
       <div class="home-main">
@@ -6911,7 +6898,6 @@ def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players:
         {milestone_watch_card(players, teams)}
       </div>
     </div>
-    {elo_chart_card(data, chart_teams, season)}
     {team_stats_table(chart_teams, season)}
     {four_factors_table(data, chart_teams, season)}
     {awards_voting_table(data, players, teams, season)}
@@ -7151,9 +7137,11 @@ def draft_class_panel(data: dict[str, Any], teams: list[dict[str, Any]], season:
     table_id = f"prospects-{draft_year}"
     hidden_attr = " hidden" if hidden else ""
     return f"""
-    <div data-draft-panel="{draft_year}"{hidden_attr}>
-      {projected_lottery_html(data, teams, season, draft_year)}
-      {mock_draft_card(data, teams, season, draft_year, class_prospects)}
+    <div id="draft-panel-{draft_year}" role="tabpanel" aria-labelledby="draft-tab-{draft_year}" data-draft-panel="{draft_year}"{hidden_attr}>
+      <div class="draft-overview-row">
+        {projected_lottery_html(data, teams, season, draft_year)}
+        {mock_draft_card(data, teams, season, draft_year, class_prospects)}
+      </div>
       <section class="card">
         <div class="section-title-row"><h2>Class of {draft_year}</h2><span class="count-pill">{len(sorted_prospects)} prospects</span></div>
         <div class="toolbar">
@@ -7213,7 +7201,7 @@ def render_draft_page(data: dict[str, Any], teams: list[dict[str, Any]], season:
     if not draft_years:
         draft_years = [season]
     tabs = "".join(
-        f'<button type="button" class="{"active" if i == 0 else ""}" data-draft-tab="{year}">{year}</button>'
+        f'<button type="button" id="draft-tab-{year}" role="tab" aria-controls="draft-panel-{year}" aria-selected="{"true" if i == 0 else "false"}" class="{"active" if i == 0 else ""}" data-draft-tab="{year}">{year}</button>'
         for i, year in enumerate(draft_years)
     )
     panels = "".join(
@@ -7226,7 +7214,7 @@ def render_draft_page(data: dict[str, Any], teams: list[dict[str, Any]], season:
         <h1>Draft</h1>
         <p class="muted">Upcoming classes · sorted by potential · ratings color-scaled within each class · pick slots from current standings</p>
       </div>
-      <div class="view-toggle draft-tabs" data-draft-tabs>{tabs}</div>
+      <div class="view-toggle draft-tabs" role="tablist" aria-label="Draft classes" data-draft-tabs>{tabs}</div>
     </section>
     {panels}
     """
@@ -7876,8 +7864,14 @@ def stylesheet() -> str:
   --text: #e8ecf1;
   --muted: #939ca7;
   --accent: #5b9dff;
+  --accent-soft: rgba(91, 157, 255, .14);
   --good: #3fbf72;
+  --good-soft: rgba(63, 191, 114, .14);
   --bad: #e2566b;
+  --bad-soft: rgba(226, 86, 107, .14);
+  --warn: #d9a441;
+  --warn-soft: rgba(217, 164, 65, .14);
+  --focus: #9bc5ff;
   color-scheme: dark;
 }
 html[data-theme="light"] {
@@ -7891,7 +7885,12 @@ html[data-theme="light"] {
   --accent: #2f6fd0;
   --accent-soft: rgba(47, 111, 208, .1);
   --good: #1e9e5a;
+  --good-soft: rgba(30, 158, 90, .12);
   --bad: #cd3d55;
+  --bad-soft: rgba(205, 61, 85, .12);
+  --warn: #a96f00;
+  --warn-soft: rgba(169, 111, 0, .12);
+  --focus: #174ea6;
   color-scheme: light;
 }
 html[data-theme="light"] .site-header { background: rgba(242, 243, 245, .96); }
@@ -7909,6 +7908,30 @@ body {
 }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
 
 /* ---------- header / nav ---------- */
 .site-header {
@@ -8015,6 +8038,16 @@ a:hover { text-decoration: underline; }
 .page-hero { margin-bottom: .75rem; padding: .8rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .draft-tabs button { padding: .45rem 1rem; font-size: .9rem; }
 [data-draft-panel][hidden] { display: none; }
+.draft-overview-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+  align-items: start;
+}
+.draft-overview-row > .card { min-width: 0; }
+@media (max-width: 1100px) {
+  .draft-overview-row { grid-template-columns: 1fr; }
+}
 .eyebrow {
   margin: 0 0 .15rem;
   color: var(--muted);
@@ -8069,11 +8102,13 @@ thead th {
   font-weight: 600;
   letter-spacing: .04em;
   text-transform: uppercase;
-  cursor: pointer;
+  cursor: default;
   user-select: none;
   border-bottom: 1px solid var(--line);
 }
+table[data-sortable] thead th { cursor: pointer; }
 table[data-sortable] thead th:hover { color: var(--text); }
+table[data-sortable] thead th:focus-visible { color: var(--text); background: var(--panel-3); }
 thead th.sort-asc::after { content: " ↑"; color: var(--accent); }
 thead th.sort-desc::after { content: " ↓"; color: var(--accent); }
 tbody tr:nth-child(odd) { background: #1a1f26; }
@@ -8133,6 +8168,28 @@ tr.avg-row > td { border-top: 1px solid var(--line); color: var(--muted); font-s
 }
 .view-toggle button + button { border-left: 1px solid var(--line); }
 .view-toggle button.active { background: var(--panel-3); color: var(--text); }
+.tabs {
+  display: inline-flex;
+  max-width: 100%;
+  margin-bottom: .7rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  overflow: hidden;
+}
+.tabs button {
+  padding: .45rem .75rem;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tabs button:first-child { border-left: 0; }
+.tabs button[aria-selected="true"] { background: var(--panel-3); color: var(--text); }
+[data-tab-panel][hidden] { display: none; }
 #players-index .col-adv, #players-index .col-p36, #players-index .col-rate { display: none; }
 #players-index.show-adv .col-adv { display: table-cell; }
 #players-index.show-adv .col-basic, #players-index.show-adv .col-p36, #players-index.show-adv .col-rate { display: none; }
@@ -8452,14 +8509,46 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
   line-height: 1.4;
 }
 .news-list li:last-child { border-bottom: 0; }
-.leader-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .6rem; }
+.leader-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .6rem; }
 .leader-box { padding: .5rem .6rem; border: 1px solid rgba(255,255,255,.05); border-radius: .15rem; background: var(--panel-2); }
 .leader-box h3 { margin: 0 0 .35rem; font-size: .7rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.leader-mini-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.leader-col-rank { width: 1.45rem; }
+.leader-col-value { width: 3.4rem; }
+.leader-mini-table td {
+  padding: .16rem 0;
+  border: 0;
+  vertical-align: baseline;
+  font-size: .8rem;
+  line-height: 1.35;
+}
+.leader-mini-table .leader-rank { padding-right: .35rem; }
+.leader-player-cell { width: auto; min-width: 0; text-align: left; }
+.leader-player-wrap {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .4rem;
+  align-items: baseline;
+  min-width: 0;
+}
+.leader-name-block { display: block; min-width: 0; text-align: left; }
+.leader-name-block .player-link {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.25;
+}
+.leader-mini-table .team-dot { margin-right: 0; }
+.leader-mini-table .leader-team { display: block; width: auto; padding-left: 0; white-space: nowrap; margin-top: .05rem; }
+.leader-mini-table .leader-value { padding-left: .4rem; }
 .leader-list { list-style: none; margin: 0; padding: 0; }
 .leader-list li { display: flex; align-items: center; gap: .4rem; padding: .16rem 0; font-size: .8rem; }
 .leader-rank { color: var(--muted); min-width: .9rem; text-align: right; font-variant-numeric: tabular-nums; }
 .leader-team { color: var(--muted); font-size: .7rem; }
-.leader-value { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
+.leader-value { margin-left: auto; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
 .team-dot { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; margin-right: .4rem; vertical-align: baseline; }
 .group-head { text-align: center !important; border-left: 1px solid var(--line); }
 #four-factors th, #four-factors td { text-align: right; }
@@ -8476,6 +8565,20 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
 .salary-bar { position: relative; }
 .floor-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--muted); opacity: .8; }
 .salary-note { margin: .35rem 0 0; font-size: .74rem; }
+.expiry-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: .28rem;
+  padding: .03rem .32rem;
+  border: 1px solid color-mix(in srgb, var(--warn) 42%, var(--line));
+  border-radius: .15rem;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  vertical-align: middle;
+}
 
 /* ---------- schedule extras ---------- */
 tr.next-day > td { background: rgba(91,157,255,.10); }
@@ -8515,6 +8618,18 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .chip-win strong { color: var(--good); }
 .chip-loss strong { color: var(--bad); }
 .chip-next strong { color: var(--text); }
+.game-log-win > td:first-child { box-shadow: inset 3px 0 0 var(--good); }
+.game-log-loss > td:first-child { box-shadow: inset 3px 0 0 var(--bad); }
+.game-log-next > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.game-note {
+  max-width: 30rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-link {
+  padding: .18rem .45rem;
+  font-size: .72rem;
+}
 .depth-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .6rem; }
 @media (max-width: 900px) { .depth-grid { grid-template-columns: repeat(2, 1fr); } }
 .depth-col { padding: .5rem .6rem; border: 1px solid rgba(255,255,255,.05); border-radius: .15rem; background: var(--panel-2); }
@@ -8816,17 +8931,13 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .bump-legend { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .65rem; }
 .bump-chip {
   display: inline-flex; align-items: center; gap: .35rem;
-  padding: .22rem .5rem; border: 1px solid var(--line); border-radius: .15rem;
+  padding: .24rem .46rem; border: 1px solid var(--line); border-radius: .15rem;
   background: var(--panel-2); color: var(--text); font: inherit; font-size: .74rem;
   font-weight: 600; line-height: 1; cursor: pointer;
   transition: opacity .12s ease, border-color .12s ease, box-shadow .12s ease;
 }
 .bump-chip-dot { width: .6rem; height: .6rem; border-radius: 50%; background: var(--bump-color, var(--muted)); flex: none; }
-.bump-chip-ab { letter-spacing: .02em; }
-.bump-chip-delta { font-size: .68rem; font-weight: 700; }
-.bump-chip-up { color: var(--good); }
-.bump-chip-down { color: var(--bad); }
-.bump-chip-flat { color: var(--muted); }
+.bump-chip-ab { letter-spacing: 0; }
 .bump-chip.is-active { border-color: var(--bump-color, var(--accent)); box-shadow: 0 0 0 1px var(--bump-color, var(--accent)) inset; }
 .bump-chip.is-dim { opacity: .38; }
 
@@ -8865,6 +8976,29 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .bump-tooltip { min-width: 8.5rem; max-width: 12rem; white-space: normal; }
 .bump-tooltip strong { display: block; font-size: .82rem; }
 .bump-tooltip span { display: block; color: var(--muted); }
+.bump-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: .4rem;
+  margin-top: .65rem;
+}
+.bump-summary-row {
+  display: grid;
+  grid-template-columns: auto minmax(2.8rem, auto) repeat(4, minmax(0, 1fr));
+  gap: .25rem .45rem;
+  align-items: center;
+  padding: .42rem .5rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  color: var(--text);
+  text-decoration: none;
+  font-size: .74rem;
+  min-width: 0;
+}
+.bump-summary-row:hover { border-color: var(--bump-color, var(--accent)); text-decoration: none; }
+.bump-summary-row strong { color: var(--text); }
+.bump-summary-row span:not(.bump-chip-dot) { color: var(--muted); }
 
 @media (max-width: 560px) {
   .bump-chart { min-width: 480px; }
@@ -8978,11 +9112,6 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
   background: color-mix(in srgb, var(--text) 9%, transparent);
 }
 .pstand-rank--hi { color: var(--text); }
-.pstand-rank--top {
-  color: #1a1208;
-  background: var(--accent);
-  background: color-mix(in srgb, #ffcf5c 80%, var(--accent));
-}
 .pstand-rec {
   display: block;
   margin-top: 1px;
@@ -8990,7 +9119,7 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
   color: var(--muted);
 }
 
-/* Current-season anchor: accent left border, since it's actual not projected */
+/* Current-season anchor for the continuity scenario. */
 .pstand-now {
   border-left: 2px solid var(--accent);
   border-left: 2px solid color-mix(in srgb, var(--accent) 70%, transparent);
@@ -9003,28 +9132,42 @@ thead .pstand-now { border-left: 2px solid var(--accent); }
 }
 
 .pstand-legend { margin-top: 12px; }
+.pstand-mobile { display: none; }
+.pstand-mobile-card {
+  display: grid;
+  gap: .45rem;
+  padding: .55rem .65rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+}
+.pstand-mobile-seasons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.8rem, 1fr));
+  gap: .35rem;
+}
+.pstand-mobile-season {
+  display: grid;
+  gap: .05rem;
+  padding: .35rem .4rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel);
+  text-align: center;
+}
+.pstand-mobile-season em {
+  color: var(--muted);
+  font-size: .66rem;
+  font-style: normal;
+  font-weight: 700;
+}
+.pstand-mobile-season strong { font-size: .95rem; }
+.pstand-mobile-season small { color: var(--muted); font-size: .68rem; }
 
 @media (max-width: 560px) {
-  .pstand-table th, .pstand-table td { padding: 6px 6px; }
-  .pstand-name-txt { display: none; }
-  .pstand-abbr { display: inline; }
-  .pstand-team-h, .pstand-team { min-width: 64px; }
-  .pstand-val { font-size: 0.95rem; }
+  .pstand-wrap { display: none; }
+  .pstand-mobile { display: grid; gap: .5rem; }
 }
-/* Projected Storylines -- league-level chip strip (reuses .scout-tag*) */
-.scout-tag--story { align-items: baseline; }
-.scout-tag--story::before { display: none; }  /* the team-colored .story-dot replaces the tone dot */
-.story-dot {
-  display: inline-block;
-  width: .6rem;
-  height: .6rem;
-  border-radius: 50%;
-  margin-right: .4rem;
-  flex: 0 0 auto;
-  background: var(--muted); /* real fallback; never color-mix-only */
-  box-shadow: 0 0 0 1px var(--line);
-}
-
 /* ---------- contract horizon (team page) ---------- */
 .tcon-wrap { margin-top: .35rem; }
 .tcon-chart { display: block; width: 100%; height: auto; }
@@ -9078,8 +9221,6 @@ thead .pstand-now { border-left: 2px solid var(--accent); }
   .tcon-name { font-size: 11px; }
   .tcon-axis, .tcon-ovr { font-size: 10px; }
 }
-.elo-chart { max-width: 100%; }
-.chart-label { font-size: 11px; font-weight: 600; }
 .rotation-map td.rot-cell { text-align: center; min-width: 2.1rem; font-variant-numeric: tabular-nums; }
 .rotation-map th.rot-w { color: var(--good); }
 .rotation-map th.rot-l { color: var(--bad); }
@@ -9254,7 +9395,9 @@ tr.dead-row > td { opacity: .65; }
   opacity: 0;
   transition: opacity .15s;
 }
-.table-wrap:hover .copy-table { opacity: 1; }
+.table-wrap:hover .copy-table,
+.table-wrap:focus-within .copy-table,
+.copy-table:focus-visible { opacity: 1; }
 .copy-table:hover { color: var(--text); border-color: var(--accent); }
 .nav-burger { display: none; }
 .score-stack .recap { width: 100%; line-height: 1.35; }
@@ -9298,20 +9441,40 @@ def javascript() -> str:
     return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
   }
 
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"]/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+
   document.querySelectorAll("table[data-sortable]").forEach((table) => {
-    const headers = table.querySelectorAll("thead th");
+    const headers = Array.from(table.querySelectorAll("thead th"));
+    const caption = table.querySelector('caption');
+    if (caption) table.setAttribute('aria-label', caption.textContent.trim());
+    function activateSort(header, index) {
+      const tbody = table.tBodies[0];
+      if (!tbody) return;
+      const rows = Array.from(tbody.rows);
+      const descending = header.classList.contains("sort-asc");
+      headers.forEach((h) => {
+        h.classList.remove("sort-asc", "sort-desc");
+        h.setAttribute("aria-sort", "none");
+      });
+      header.classList.add(descending ? "sort-desc" : "sort-asc");
+      header.setAttribute("aria-sort", descending ? "descending" : "ascending");
+      rows.sort((ra, rb) => {
+        const result = compareValues(cellValue(ra, index), cellValue(rb, index));
+        return descending ? -result : result;
+      });
+      rows.forEach((row) => tbody.appendChild(row));
+    }
     headers.forEach((header, index) => {
-      header.addEventListener("click", () => {
-        const tbody = table.tBodies[0];
-        const rows = Array.from(tbody.rows);
-        const descending = header.classList.contains("sort-asc");
-        headers.forEach((h) => h.classList.remove("sort-asc", "sort-desc"));
-        header.classList.add(descending ? "sort-desc" : "sort-asc");
-        rows.sort((ra, rb) => {
-          const result = compareValues(cellValue(ra, index), cellValue(rb, index));
-          return descending ? -result : result;
-        });
-        rows.forEach((row) => tbody.appendChild(row));
+      header.tabIndex = 0;
+      header.setAttribute("aria-sort", "none");
+      header.addEventListener("click", () => activateSort(header, index));
+      header.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        activateSort(header, index);
       });
     });
   });
@@ -9362,9 +9525,14 @@ def javascript() -> str:
     const table = document.getElementById(wrap.dataset.viewToggle);
     if (!table) return;
     wrap.querySelectorAll('button').forEach((button) => {
+      button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false');
       button.addEventListener('click', () => {
-        wrap.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+        wrap.querySelectorAll('button').forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         button.classList.add('active');
+        button.setAttribute('aria-pressed', 'true');
         table.classList.remove('show-adv', 'show-p36', 'show-rate');
         if (button.dataset.view !== 'basic') table.classList.add('show-' + button.dataset.view);
       });
@@ -9384,8 +9552,10 @@ def javascript() -> str:
       });
     };
     wrap.querySelectorAll('button').forEach((button) => {
+      button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false');
       button.addEventListener('click', () => {
         button.classList.toggle('active');
+        button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false');
         apply();
       });
     });
@@ -9444,10 +9614,13 @@ def javascript() -> str:
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.style.setProperty('--dot', t.color);
+      btn.setAttribute('aria-label', 'Toggle ' + t.abbrev + ' players');
+      btn.setAttribute('aria-pressed', 'true');
       btn.innerHTML = '<span class=\"dot\"></span>' + t.abbrev;
       btn.addEventListener('click', () => {
         if (hidden.has(t.abbrev)) hidden.delete(t.abbrev); else hidden.add(t.abbrev);
         btn.classList.toggle('off', hidden.has(t.abbrev));
+        btn.setAttribute('aria-pressed', hidden.has(t.abbrev) ? 'false' : 'true');
         draw();
       });
       legend.appendChild(btn);
@@ -9652,17 +9825,34 @@ def javascript() -> str:
         .catch(() => ({ players: [], teams: [] }));
     }
 
-    function close() { searchResults.hidden = true; selected = -1; }
+    function close() {
+      searchResults.hidden = true;
+      selected = -1;
+      searchInput.setAttribute('aria-expanded', 'false');
+      searchInput.setAttribute('aria-activedescendant', '');
+    }
+
+    function syncSelected(links) {
+      links.forEach((l, i) => {
+        const on = i === selected;
+        l.classList.toggle('selected', on);
+        l.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      searchInput.setAttribute('aria-activedescendant', selected >= 0 && links[selected] ? links[selected].id : '');
+    }
 
     function renderResults(matches) {
       if (!matches.length) {
-        searchResults.innerHTML = '<div class="search-empty">No matches.</div>';
+        searchResults.innerHTML = '<div class="search-empty" role="option" aria-disabled="true">No matches.</div>';
         searchResults.hidden = false;
+        searchInput.setAttribute('aria-expanded', 'true');
+        searchInput.setAttribute('aria-activedescendant', '');
         return;
       }
-      searchResults.innerHTML = matches.map((m) =>
-        '<a href="' + root + m.u + '"><span>' + m.n + '</span><span class="muted">' + m.t + '</span></a>').join('');
+      searchResults.innerHTML = matches.map((m, i) =>
+        '<a id="search-option-' + i + '" role="option" aria-selected="false" href="' + root + escapeHtml(m.u) + '"><span>' + escapeHtml(m.n) + '</span><span class="muted">' + escapeHtml(m.t) + '</span></a>').join('');
       searchResults.hidden = false;
+      searchInput.setAttribute('aria-expanded', 'true');
       selected = -1;
     }
 
@@ -9699,7 +9889,7 @@ def javascript() -> str:
         if (target) window.location.href = target.href;
         return;
       } else { return; }
-      links.forEach((l, i) => l.classList.toggle('selected', i === selected));
+      syncSelected(links);
     });
     document.addEventListener('click', (event) => {
       if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) close();
@@ -9714,6 +9904,7 @@ def javascript() -> str:
     btn.type = 'button';
     btn.className = 'copy-table';
     btn.title = 'Copy table for spreadsheets';
+    btn.setAttribute('aria-label', 'Copy table for spreadsheets');
     btn.textContent = '⧉';
     btn.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -9721,7 +9912,11 @@ def javascript() -> str:
         Array.from(tr.cells).map((cell) => cell.textContent.trim().replace(/\s+/g, ' ')).join('\t'));
       navigator.clipboard.writeText(lines.join('\n')).then(() => {
         btn.textContent = '✓';
-        setTimeout(() => { btn.textContent = '⧉'; }, 1200);
+        btn.setAttribute('aria-label', 'Copied table');
+        setTimeout(() => {
+          btn.textContent = '⧉';
+          btn.setAttribute('aria-label', 'Copy table for spreadsheets');
+        }, 1200);
       });
     });
     wrap.appendChild(btn);
@@ -9730,25 +9925,86 @@ def javascript() -> str:
   // ---------- mobile nav toggle ----------
   const burger = document.querySelector('[data-nav-burger]');
   if (burger) {
-    const nav = document.querySelector('.primary-nav');
+    const nav = document.getElementById(burger.getAttribute('aria-controls')) || document.querySelector('.primary-nav');
     burger.addEventListener('click', () => {
-      nav.classList.toggle('open');
+      if (!nav) return;
+      const open = !nav.classList.contains('open');
+      nav.classList.toggle('open', open);
       burger.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !nav || !nav.classList.contains('open')) return;
+      nav.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
     });
   }
+
+  // ---------- generic tabs ----------
+  document.querySelectorAll('[data-tabs]').forEach((tablist) => {
+    const tabs = Array.from(tablist.querySelectorAll('[role="tab"][data-tab-target]'));
+    if (!tabs.length) return;
+    function activate(tab, focus) {
+      tabs.forEach((btn) => {
+        const on = btn === tab;
+        const panel = document.getElementById(btn.dataset.tabTarget || '');
+        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+        btn.tabIndex = on ? 0 : -1;
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+    }
+    tabs.forEach((tab, index) => {
+      tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+      tab.addEventListener('click', () => activate(tab, false));
+      tab.addEventListener('keydown', (event) => {
+        let next = null;
+        if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
+        if (event.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
+        if (event.key === 'Home') next = tabs[0];
+        if (event.key === 'End') next = tabs[tabs.length - 1];
+        if (!next) return;
+        event.preventDefault();
+        activate(next, true);
+      });
+    });
+    activate(tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') || tabs[0], false);
+  });
 
   // ---------- draft year tabs ----------
   const draftTabs = document.querySelector('[data-draft-tabs]');
   if (draftTabs) {
     const buttons = Array.from(draftTabs.querySelectorAll('button[data-draft-tab]'));
-    buttons.forEach((button) => {
+    function activateDraft(button, focus) {
+      buttons.forEach((b) => {
+        const on = b === button;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+        b.tabIndex = on ? 0 : -1;
+      });
+      document.querySelectorAll('[data-draft-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.draftPanel !== button.dataset.draftTab;
+      });
+      if (focus) button.focus();
+    }
+    buttons.forEach((button, index) => {
+      button.tabIndex = button.classList.contains('active') ? 0 : -1;
       button.addEventListener('click', () => {
-        buttons.forEach((b) => b.classList.toggle('active', b === button));
-        document.querySelectorAll('[data-draft-panel]').forEach((panel) => {
-          panel.hidden = panel.dataset.draftPanel !== button.dataset.draftTab;
-        });
+        activateDraft(button, false);
+      });
+      button.addEventListener('keydown', (event) => {
+        let next = null;
+        if (event.key === 'ArrowRight') next = buttons[(index + 1) % buttons.length];
+        if (event.key === 'ArrowLeft') next = buttons[(index - 1 + buttons.length) % buttons.length];
+        if (event.key === 'Home') next = buttons[0];
+        if (event.key === 'End') next = buttons[buttons.length - 1];
+        if (!next) return;
+        event.preventDefault();
+        activateDraft(next, true);
       });
     });
+    if (buttons.length) activateDraft(buttons.find((b) => b.classList.contains('active')) || buttons[0], false);
   }
 
   // ---------- keyboard shortcuts ----------
@@ -10095,12 +10351,14 @@ def javascript() -> str:
         const on = String(el.getAttribute('data-tid')) === tid;
         el.classList.toggle('is-active', on);
         el.classList.toggle('is-dim', !on);
+        if (el.matches && el.matches('.bump-chip')) el.setAttribute('aria-pressed', on ? 'true' : 'false');
       };
       groups.forEach(apply); labels.forEach(apply); chips.forEach(apply);
     }
     function clear() {
       card.classList.remove('bump-has-active');
       [].concat(groups, labels, chips).forEach((el) => el.classList.remove('is-active', 'is-dim'));
+      chips.forEach((el) => el.setAttribute('aria-pressed', 'false'));
       tip.hidden = true;
     }
 
@@ -10145,7 +10403,12 @@ def javascript() -> str:
       grp.addEventListener('mousemove', (e) => { setActive(tid); showTip(tid, seasonIndex(e), e); });
     });
     labels.forEach((l) => l.addEventListener('mouseenter', () => setActive(l.getAttribute('data-tid'))));
-    chips.forEach((c) => c.addEventListener('mouseenter', () => setActive(c.getAttribute('data-tid'))));
+    chips.forEach((c) => {
+      const tid = c.getAttribute('data-tid');
+      c.addEventListener('mouseenter', () => setActive(tid));
+      c.addEventListener('focus', () => setActive(tid));
+      c.addEventListener('click', () => setActive(tid));
+    });
     card.addEventListener('mouseleave', clear);
   });
 

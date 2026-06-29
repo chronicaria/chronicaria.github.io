@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "league-data/day*.json"
+      - "league-data/*.json"
       - "scripts/league_generator.py"
       - "scripts/projections.py"
   workflow_dispatch:
@@ -31,7 +31,28 @@ jobs:
 
       - name: Generate league site from the newest export
         run: |
-          NEWEST=$(ls league-data/day*.json | sort -V | tail -1)
+          # Pick the export with the highest (season, phase). Robust across the
+          # day*/playoff*/preseason naming and season rollovers, unlike a filename glob.
+          NEWEST=$(python3 - <<'PY'
+          import glob, json
+          best = None
+          for p in glob.glob("league-data/*.json"):
+              try:
+                  ga = json.load(open(p)).get("gameAttributes", {})
+              except Exception:
+                  continue
+              if isinstance(ga, list):
+                  ga = {x["key"]: x["value"] for x in ga if isinstance(x, dict) and "key" in x}
+              season, phase = ga.get("season"), ga.get("phase")
+              if not isinstance(season, int):
+                  continue
+              key = (season, phase if isinstance(phase, int) else -1, p)
+              if best is None or key > best[0]:
+                  best = (key, p)
+          print(best[1] if best else "")
+          PY
+          )
+          if [ -z "$NEWEST" ]; then echo "No usable export found"; exit 1; fi
           echo "Building from $NEWEST"
           rm -rf assets games players teams
           rm -f compare.html draft.html free-agency.html history.html index.html projections.html records.html schedule.html trade.html

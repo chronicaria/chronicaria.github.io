@@ -317,25 +317,10 @@ def team_payroll(roster: Iterable[dict[str, Any]], season: int | None = None) ->
 
 
 def salary_cap_html(payroll: float, cap: float) -> str:
-    pct = 0.0 if cap <= 0 else max(0.0, min(100.0, 100.0 * payroll / cap))
-    floor = SITE_META.get("min_payroll")
-    status = "over" if cap > 0 and payroll > cap else "under"
-    note = ""
-    floor_mark = ""
-    if floor and cap > 0:
-        floor_pct = max(0.0, min(100.0, 100.0 * floor / cap))
-        floor_mark = f'<i class="floor-mark" style="left: {floor_pct:.1f}%" title="Salary floor {fmt_money(floor)}"></i>'
-        if payroll < floor:
-            note = f'<p class="salary-note delta-down">{fmt_money(floor - payroll)} below the {fmt_money(floor)} salary floor</p>'
-    if cap > 0 and payroll > cap:
-        note = f'<p class="salary-note delta-down">{fmt_money(payroll - cap)} over the cap</p>'
-    elif not note and cap > 0:
-        note = f'<p class="salary-note muted">{fmt_money(cap - payroll)} in cap space</p>'
+    # No salary cap in this league: show payroll as a plain number, no bar/floor.
     return f"""
-    <div class="salary-summary {status}">
-      <div class="salary-copy"><span>Payroll</span><strong>{fmt_money(payroll)} / {fmt_money(cap)}</strong></div>
-      <div class="salary-bar" aria-hidden="true"><span style="width: {pct:.1f}%"></span>{floor_mark}</div>
-      {note}
+    <div class="salary-summary">
+      <div class="salary-copy"><span>Payroll</span><strong>{fmt_money(payroll)}</strong></div>
     </div>
     """
 
@@ -915,7 +900,7 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
         roster,
         key=lambda p: (-safe_float((p.get("contract") or {}).get("amount"), 0.0), player_name(p)),
     )
-    headers = ["Pos", "Name", "Cap%"] + [(str(s), "cur-season" if s == season else "") for s in seasons]
+    headers = ["Pos", "Name"] + [(str(s), "cur-season" if s == season else "") for s in seasons]
     rows = []
     totals = {s: 0.0 for s in seasons}
     under_contract = {s: 0 for s in seasons}
@@ -937,16 +922,9 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
         contract = player.get("contract") or {}
         exp = safe_int(contract.get("exp"), season)
         rating = latest_rating(player, season)
-        amount = salary_for(player, season)
-        cap_pct = 100.0 * amount / cap if cap > 0 else None
-        cap_bar = ""
-        if cap_pct is not None:
-            bar_w = max(0.0, min(100.0, cap_pct * 4))  # 25% of cap fills the mini bar
-            cap_bar = f'<span class="capbar" aria-hidden="true"><i style="width:{bar_w:.0f}%"></i></span>'
         cells = [
             td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
             td(player_link(player, "../"), sort=player_name(player), cls="name-cell"),
-            td(f"{cap_bar}{fmt_number(cap_pct, 1)}", sort=cap_pct, cls="capcell"),
         ]
         for s in seasons:
             season_amount = salary_for(player, s)
@@ -968,11 +946,9 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
             exp = safe_int(contract.get("exp"), season)
             ghost = ALL_PLAYERS_BY_PID.get(safe_int(released.get("pid"), -10))
             name = player_name(ghost) if ghost else f"Released player {released.get('pid')}"
-            cap_pct = 100.0 * amount / cap if cap > 0 else None
             cells = [
                 td('<span class="muted">—</span>'),
-                td(f'<span class="dead-money" title="Waived; contract still counts against the cap">{esc(name)} <span class="muted small-copy">(dead money)</span></span>', sort=name, cls="name-cell"),
-                td(fmt_number(cap_pct, 1), sort=cap_pct, cls="capcell"),
+                td(f'<span class="dead-money" title="Waived; contract still owed">{esc(name)} <span class="muted small-copy">(dead money)</span></span>', sort=name, cls="name-cell"),
             ]
             for s in seasons:
                 if s <= exp and amount > 0:
@@ -982,25 +958,20 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
                     cells.append(td("", sort=-1, cls="cur-season" if s == season else ""))
             rows.append(f'<tr class="dead-row">{"".join(cells)}</tr>')
 
-    counts_cells = [td(""), td("Under Contract", cls="name-cell total-label"), td("")]
-    totals_cells = [td(""), td("Committed Salary", cls="name-cell total-label"), td("")]
-    space_cells = [td(""), td("Free Cap Space", cls="name-cell total-label"), td("")]
+    counts_cells = [td(""), td("Under Contract", cls="name-cell total-label")]
+    totals_cells = [td(""), td("Committed Salary", cls="name-cell total-label")]
     for s in seasons:
         cur = " cur-season" if s == season else ""
         counts_cells.append(td(fmt_number(under_contract[s], 0), sort=under_contract[s], cls=cur.strip()))
         totals_cells.append(td(fmt_money(totals[s]), sort=totals[s], cls=cur.strip()))
-        space = cap - totals[s]
-        space_cls = ("delta-up" if space > 0 else "delta-down" if space < 0 else "") + cur
-        space_cells.append(td(fmt_money(space), sort=space, cls=space_cls.strip()))
     rows.append(f'<tr class="total-row">{"".join(counts_cells)}</tr>')
     rows.append(f'<tr class="total-row">{"".join(totals_cells)}</tr>')
-    rows.append(f'<tr class="total-row">{"".join(space_cells)}</tr>')
 
     return f"""
     <section class="card">
       <div class="section-title-row">
         <h2>Salaries</h2>
-        <span class="muted small-copy">Salary cap {fmt_money(cap)} · through {seasons[-1]}</span>
+        <span class="muted small-copy">Salary commitments through {seasons[-1]}</span>
       </div>
       {table_html(headers, rows, table_id="team-finances", empty_message="No contracts found.", wrap_cls="fit-table")}
     </section>
@@ -1527,28 +1498,9 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
 RATING_GROUP_STARTS = {"hgt", "ins", "oiq"}
 
 
-def cap_fit_count(asking: float, cap_space_by_team: dict[int, float]) -> int:
-    if not cap_space_by_team or asking <= 0:
-        return 0
-    return sum(1 for space in cap_space_by_team.values() if space >= asking)
-
-
-def fits_under_cap_html(asking: float, cap_space_by_team: dict[int, float], teams_by_tid: dict[int, dict[str, Any]]) -> str:
-    if not cap_space_by_team or asking <= 0:
-        return '<span class="muted">—</span>'
-    fits = sorted(
-        (team_abbrev(teams_by_tid.get(tid)) for tid, space in cap_space_by_team.items() if space >= asking),
-    )
-    if not fits:
-        return '<span class="delta-down" title="No team has this much cap space">0</span>'
-    return f'<span title="{esc(", ".join(fits))}">{len(fits)}</span>'
-
-
 def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]], cap_space_by_team: dict[int, float] | None = None, teams_by_tid: dict[int, dict[str, Any]] | None = None) -> str:
     rating = latest_rating(player, season)
     contract = player.get("contract") or {}
-    amount = safe_float(contract.get("amount"))
-    fit_count = cap_fit_count(amount, cap_space_by_team or {})
     cells = [
         td(player_link(player, root, show_number=False), sort=player_name(player), cls="name-cell"),
         td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
@@ -1556,7 +1508,6 @@ def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges
         td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
         td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
         td(fmt_money(contract.get("amount")), sort=contract.get("amount")),
-        td(fits_under_cap_html(amount, cap_space_by_team or {}, teams_by_tid or {}), sort=fit_count),
     ]
     for key, _ in TEAM_RATING_RANK_KEYS:
         value = rating.get(key)
@@ -1571,7 +1522,6 @@ def expiring_contract_row(player: dict[str, Any], season: int, root: str, rating
     rating = latest_rating(player, season)
     contract = player.get("contract") or {}
     amount = safe_float(contract.get("amount"), 0.0)
-    cap_pct = 100.0 * amount / cap if cap and cap > 0 else None
     contract_html = f'{fmt_money(amount)} <span class="expiry-badge">exp {esc(contract.get("exp", season))}</span>'
     cells = [
         td(player_link(player, root, show_number=False), sort=player_name(player), cls="name-cell"),
@@ -1581,7 +1531,6 @@ def expiring_contract_row(player: dict[str, Any], season: int, root: str, rating
         td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
         td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
         td(contract_html, sort=amount),
-        td(fmt_number(cap_pct, 1) if cap_pct is not None else "—", sort=cap_pct, cls="capcell"),
     ]
     for key, _ in TEAM_RATING_RANK_KEYS:
         value = rating.get(key)
@@ -1599,12 +1548,6 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
 
     sorted_players = sorted(players, key=market_sort_key)
     expiring_players = sorted(contract_expiring_players(all_players or [], season, rostered_only=True), key=market_sort_key)
-    cap_space_by_team: dict[int, float] = {}
-    if all_players is not None and cap:
-        for team in teams:
-            tid = safe_int(team.get("tid"))
-            roster = [p for p in all_players if safe_int(p.get("tid"), -9) == tid]
-            cap_space_by_team[tid] = cap - team_payroll(roster, season)
 
     def ranges_for(pool: list[dict[str, Any]]) -> dict[str, tuple[float, float]]:
         ranges: dict[str, tuple[float, float]] = {}
@@ -1620,15 +1563,15 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
     rating_ranges = ranges_for(sorted_players)
     expiring_ranges = ranges_for(expiring_players)
 
-    headers: list = ["Name", "Pos", "Age", "Ovr", "Pot", "Asking For", "Fits"]
-    expiring_headers: list = ["Name", "Team", "Pos", "Age", "Ovr", "Pot", "Contract", "Cap%"]
+    headers: list = ["Name", "Pos", "Age", "Ovr", "Pot", "Asking For"]
+    expiring_headers: list = ["Name", "Team", "Pos", "Age", "Ovr", "Pot", "Contract"]
     for key, label in TEAM_RATING_RANK_KEYS:
         headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
         expiring_headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
     headers.append(("Mood", "group-start"))
     expiring_headers.append(("Mood", "group-start"))
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
-    rows = [free_agent_row(p, season, "", rating_ranges, cap_space_by_team, teams_by_tid) for p in sorted_players]
+    rows = [free_agent_row(p, season, "", rating_ranges, None, teams_by_tid) for p in sorted_players]
     expiring_rows = [expiring_contract_row(p, season, "", expiring_ranges, teams_by_tid, cap=cap) for p in expiring_players]
 
     body = f"""
@@ -7308,7 +7251,7 @@ def trade_machine_payload(data: dict[str, Any], teams: list[dict[str, Any]], pla
             ],
             "picks": picks,
         })
-    payload = {"cap": cap, "teams": out_teams}
+    payload = {"teams": out_teams}
     return json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
 
 
@@ -7396,9 +7339,6 @@ TRADE_MACHINE_JS = r"""
     }
     const newPayrollA = a.team.payroll - a.salary + b.salary;
     const newPayrollB = b.team.payroll - b.salary + a.salary;
-    const capFlag = (payroll) => payroll > data.cap
-      ? ' <span class="delta-down">(' + fmtM(payroll - data.cap) + ' over the cap)</span>'
-      : ' <span class="delta-up">(' + fmtM(data.cap - payroll) + ' under)</span>';
     const diff = a.value - b.value;
     let verdict = 'Even value trade.';
     if (Math.abs(diff) > 1) {
@@ -7413,12 +7353,8 @@ TRADE_MACHINE_JS = r"""
     };
     lines.push(describe(a, b));
     lines.push(describe(b, a));
-    lines.push('<p><strong>' + a.team.abbrev + '</strong> payroll after: ' + fmtM(newPayrollA) + capFlag(newPayrollA) + '</p>');
-    lines.push('<p><strong>' + b.team.abbrev + '</strong> payroll after: ' + fmtM(newPayrollB) + capFlag(newPayrollB) + '</p>');
-    const blocked = (newPayrollA > data.cap && b.salary > a.salary) || (newPayrollB > data.cap && a.salary > b.salary);
-    if (blocked) {
-      lines.push('<p class="delta-down"><strong>⚠ Likely blocked:</strong> a team over the hard cap cannot take back more salary than it sends out.</p>');
-    }
+    lines.push('<p><strong>' + a.team.abbrev + '</strong> payroll after: ' + fmtM(newPayrollA) + '</p>');
+    lines.push('<p><strong>' + b.team.abbrev + '</strong> payroll after: ' + fmtM(newPayrollB) + '</p>');
     lines.push('<p class="trade-verdict">' + verdict + '</p>');
     summary.innerHTML = lines.join('');
   }
@@ -7434,7 +7370,7 @@ def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players
     payload = trade_machine_payload(data, teams, players, season, cap)
     machine = f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy">check assets on both sides · salaries vs the {fmt_money(cap)} hard cap · BBGM trade values</span></div>
+      <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy">check assets on both sides · BBGM trade values</span></div>
       <div class="trade-grid">
         <div class="trade-side">
           <label class="select-label">Team A <select data-trade-team="0"></select></label>

@@ -85,8 +85,6 @@ AWARD_ROWS = [
     ("mip", "MIP", "Most Improved Player"),
 ]
 
-DEFAULT_SALARY_CAP = 225000
-
 SCATTER_METRICS = [
     ("pts", "PTS/G"), ("trb", "TRB/G"), ("ast", "AST/G"), ("stl", "STL/G"), ("blk", "BLK/G"),
     ("tov", "TOV/G"), ("min", "MP/G"), ("fgp", "FG%"), ("tpp", "3P%"), ("ftp", "FT%"),
@@ -274,15 +272,6 @@ def safe_float(value: Any, default: float = 0.0) -> float:
     return number if math.isfinite(number) else default
 
 
-def get_salary_cap(data: dict[str, Any]) -> float:
-    cap = (data.get("gameAttributes") or {}).get("salaryCap")
-    try:
-        cap = float(cap)
-    except (TypeError, ValueError):
-        cap = DEFAULT_SALARY_CAP
-    return cap if cap > 0 else DEFAULT_SALARY_CAP
-
-
 def player_current_salary(player: dict[str, Any], season: int | None = None) -> float:
     """Return the player's current annual salary in Basketball GM salary units."""
     contract = player.get("contract") or {}
@@ -316,7 +305,7 @@ def team_payroll(roster: Iterable[dict[str, Any]], season: int | None = None) ->
     return sum(player_current_salary(player, season) for player in roster)
 
 
-def salary_cap_html(payroll: float, cap: float) -> str:
+def salary_cap_html(payroll: float) -> str:
     # No salary cap in this league: show payroll as a plain number, no bar/floor.
     return f"""
     <div class="salary-summary">
@@ -657,8 +646,6 @@ GLOSSARY = {
     "Magic#": "Wins (or 5th-place losses) needed to clinch a playoff spot",
     "Elim#": "Losses (or 4th-place wins) until playoff elimination",
     "Value": "Basketball GM trade value (higher = more coveted)",
-    "Cap%": "Share of the salary cap",
-    "Fits": "How many teams could sign this player under the cap (hover for the list)",
     "Form": "Last 5 games vs season average, by Game Score",
     "WS/$M": "Win Shares per million of current salary",
     "YWT": "Years with team",
@@ -893,7 +880,7 @@ def roster_table(title: str, players: list[dict[str, Any]], season: int, start_s
     """
 
 
-def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, data: dict[str, Any] | None = None, tid: int | None = None) -> str:
+def team_finances_table(roster: list[dict[str, Any]], season: int, data: dict[str, Any] | None = None, tid: int | None = None) -> str:
     finance_end_season = max(season, min(2033, season + PROJ_SEASONS_AHEAD))
     seasons = list(range(season, finance_end_season + 1))
     players = sorted(
@@ -936,7 +923,7 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, cap: float, d
                 cells.append(td("", sort=-1, cls="cur-season" if s == season else ""))
         rows.append("".join(cells))
 
-    # Dead money: released players whose contracts still count against the cap.
+    # Dead money: released players whose contracts are still owed.
     if data is not None and tid is not None:
         for released in data.get("releasedPlayers", []):
             if safe_int(released.get("tid"), -10) != tid:
@@ -1447,7 +1434,7 @@ def draft_picks_card(data: dict[str, Any], team: dict[str, Any], teams_by_tid: d
     """
 
 
-def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, cap: float, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, league_proj_ctx: dict[str, Any] | None = None, team_proj: dict[str, Any] | None = None) -> str:
+def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, league_proj_ctx: dict[str, Any] | None = None, team_proj: dict[str, Any] | None = None) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     sorted_roster = sorted(roster, key=lambda p: (p.get("rosterOrder", 10**9), -latest_rating(p, season).get("ovr", 0), player_name(p)))
     starters = sorted_roster[:5]
@@ -1478,7 +1465,7 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
         <h1>{esc(team_full)}</h1>
         <p class="muted">{' · '.join(record_bits)}</p>
       </div>
-      {salary_cap_html(payroll, cap)}
+      {salary_cap_html(payroll)}
     </section>
     <h2 class="block-title">Roster</h2>
     {roster_table("Starters", starters, season, start_season, "../", f"team-{team.get('tid')}-starters", teams_by_tid, game_logs)}
@@ -1488,7 +1475,7 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
     {strip}
     {profile}
     <h2 class="block-title">Finances</h2>
-    {team_finances_table(sorted_roster, season, cap, data=data, tid=safe_int(team.get("tid")))}
+    {team_finances_table(sorted_roster, season, data=data, tid=safe_int(team.get("tid")))}
     {picks}
     {rotation}
     """
@@ -1498,7 +1485,7 @@ def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: 
 RATING_GROUP_STARTS = {"hgt", "ins", "oiq"}
 
 
-def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]], cap_space_by_team: dict[int, float] | None = None, teams_by_tid: dict[int, dict[str, Any]] | None = None) -> str:
+def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]]) -> str:
     rating = latest_rating(player, season)
     contract = player.get("contract") or {}
     cells = [
@@ -1518,7 +1505,7 @@ def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges
     return "".join(cells)
 
 
-def expiring_contract_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]], teams_by_tid: dict[int, dict[str, Any]], cap: float | None = None) -> str:
+def expiring_contract_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]], teams_by_tid: dict[int, dict[str, Any]]) -> str:
     rating = latest_rating(player, season)
     contract = player.get("contract") or {}
     amount = safe_float(contract.get("amount"), 0.0)
@@ -1541,7 +1528,7 @@ def expiring_contract_row(player: dict[str, Any], season: int, root: str, rating
     return "".join(cells)
 
 
-def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, all_players: list[dict[str, Any]] | None = None, cap: float | None = None) -> str:
+def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, all_players: list[dict[str, Any]] | None = None) -> str:
     def market_sort_key(player: dict[str, Any]) -> tuple[int, int, str]:
         rating = latest_rating(player, season)
         return (-safe_int(rating.get("ovr")), -safe_int(rating.get("pot")), player_name(player))
@@ -1571,8 +1558,8 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
     headers.append(("Mood", "group-start"))
     expiring_headers.append(("Mood", "group-start"))
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
-    rows = [free_agent_row(p, season, "", rating_ranges, None, teams_by_tid) for p in sorted_players]
-    expiring_rows = [expiring_contract_row(p, season, "", expiring_ranges, teams_by_tid, cap=cap) for p in expiring_players]
+    rows = [free_agent_row(p, season, "", rating_ranges) for p in sorted_players]
+    expiring_rows = [expiring_contract_row(p, season, "", expiring_ranges, teams_by_tid) for p in expiring_players]
 
     body = f"""
     <section class="page-hero">
@@ -4489,7 +4476,7 @@ def player_game_impact(player: dict[str, Any], season: int) -> float:
     return max(-2.0, min(10.0, impact))
 
 
-def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, sims: int = 5000) -> dict[str, Any]:
+def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, sims: int = 10000) -> dict[str, Any]:
     """Monte Carlo the rest of the season and the playoffs.
 
     Team strength blends regressed scoring margin with current-roster quality.
@@ -4806,7 +4793,7 @@ def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season:
     headers = ["Team", "Proj W-L", "PO%", "Finals%", "Title%"] + [str(i) for i in range(1, n_seeds + 1)]
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>Playoff Odds</h2><span class="muted small-copy">5,000 sims · injury-aware: sidelined players hurt their team until their expected return · playoffs simulated as 1v4 / 2v3 best-of-sevens</span></div>
+      <div class="section-title-row"><h2>Playoff Odds</h2><span class="muted small-copy">10,000 sims · injury-aware: sidelined players hurt their team until their expected return · playoffs simulated as 1v4 / 2v3 best-of-sevens</span></div>
       {table_html(headers, rows, table_id="playoff-odds", empty_message="Season complete.")}
     </section>
     """
@@ -7211,7 +7198,7 @@ def contract_efficiency_table(players: list[dict[str, Any]], teams: list[dict[st
     """
 
 
-def trade_machine_payload(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, cap: float) -> str:
+def trade_machine_payload(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     out_teams = []
     for team in sorted(teams, key=team_abbrev):
@@ -7366,8 +7353,8 @@ TRADE_MACHINE_JS = r"""
 """
 
 
-def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, cap: float) -> str:
-    payload = trade_machine_payload(data, teams, players, season, cap)
+def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> str:
+    payload = trade_machine_payload(data, teams, players, season)
     machine = f"""
     <section class="card home-section">
       <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy">check assets on both sides · BBGM trade values</span></div>
@@ -8338,9 +8325,6 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
 .salary-copy { display: flex; justify-content: space-between; gap: .6rem; margin-bottom: .35rem; font-size: .8rem; }
 .salary-copy span { color: var(--muted); font-weight: 500; }
 .salary-copy strong { color: var(--text); }
-.salary-bar { height: .45rem; border-radius: .15rem; overflow: hidden; background: var(--bg); border: 1px solid rgba(255,255,255,.07); }
-.salary-bar span { display: block; height: 100%; background: var(--accent); }
-.salary-summary.over .salary-copy strong { color: var(--bad); }
 
 /* ---------- game pages ---------- */
 .click-row { cursor: pointer; }
@@ -8495,12 +8479,6 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
 /* ---------- finances ---------- */
 .fit-table { width: max-content; max-width: 100%; }
 .fit-table table { width: auto; }
-.capcell { min-width: 6.5rem; }
-.capbar { display: inline-block; width: 3rem; height: .4rem; margin-right: .45rem; border-radius: .15rem; background: rgba(255,255,255,.07); overflow: hidden; vertical-align: middle; }
-.capbar i { display: block; height: 100%; background: var(--accent); }
-.salary-bar { position: relative; }
-.floor-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--muted); opacity: .8; }
-.salary-note { margin: .35rem 0 0; font-size: .74rem; }
 .expiry-badge {
   display: inline-flex;
   align-items: center;
@@ -10379,7 +10357,6 @@ def generate_site(
     teams = sorted(data.get("teams", []), key=team_sort_key)
     players = active_players(data)
     fa_players = free_agents(data)
-    cap = get_salary_cap(data)
     ga = data.get("gameAttributes") or {}
     ALL_PLAYERS_BY_PID.clear()
     ALL_PLAYERS_BY_PID.update({safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None})
@@ -10398,8 +10375,6 @@ def generate_site(
         SITE_META["prev_ranks"] = None
     SITE_META["season"] = season
     SITE_META["day"] = max((safe_int(g.get("day")) for g in data.get("games", []) if g.get("season") == season), default=0)
-    SITE_META["cap"] = cap
-    SITE_META["min_payroll"] = safe_float(get_attr_value(ga.get("minPayroll"), season), 0.0) or None
     game_items, score_label = score_items_for_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
     schedule_items, schedule_label = schedule_items_for_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
 
@@ -10434,12 +10409,12 @@ def generate_site(
 
     write_text(out_dir / "index.html", render_home_page(data, teams, players, season, start_season))
     write_text(out_dir / "schedule.html", render_schedule_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days))
-    write_text(out_dir / "free-agency.html", render_free_agency_page(fa_players, teams, season, start_season, all_players=players, cap=cap))
+    write_text(out_dir / "free-agency.html", render_free_agency_page(fa_players, teams, season, start_season, all_players=players))
     write_text(out_dir / "players" / "index.html", render_players_index(players, teams, season, start_season, data=data))
     write_text(out_dir / "history.html", render_history_page(data, teams))
     write_text(out_dir / "records.html", render_records_page(data, teams, season, start_season=start_season))
     write_text(out_dir / "draft.html", render_draft_page(data, teams, season))
-    write_text(out_dir / "trade.html", render_trade_page(data, teams, players, season, cap))
+    write_text(out_dir / "trade.html", render_trade_page(data, teams, players, season))
     write_text(out_dir / "compare.html", render_compare_page(data, teams, players, season, start_season))
 
     game_logs = build_game_logs(data, season)
@@ -10457,7 +10432,7 @@ def generate_site(
             team_projections[tid] = proj
     for team in teams:
         roster = [player for player in players if player.get("tid") == team.get("tid")]
-        write_text(out_dir / "teams" / f"{team_slug(team)}.html", render_team_page(team, roster, teams, season, start_season, cap, data=data, game_items=game_items, game_logs=game_logs, league_proj_ctx=league_proj_ctx, team_proj=team_projections.get(safe_int(team.get("tid"), -99))))
+        write_text(out_dir / "teams" / f"{team_slug(team)}.html", render_team_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, league_proj_ctx=league_proj_ctx, team_proj=team_projections.get(safe_int(team.get("tid"), -99))))
 
     write_text(out_dir / "projections.html", render_projections_page(data, teams, players, season, league_proj_ctx=league_proj_ctx, team_projections=team_projections))
 

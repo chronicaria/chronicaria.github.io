@@ -44,31 +44,12 @@ class TestContractExpiryMarket(unittest.TestCase):
 
         self.assertEqual([p["pid"] for p in rows], [1])
 
-    def test_free_agent_fits_column_sorts_by_fit_count(self):
-        player = _player(9, "Cap", "Target", tid=lg.FREE_AGENT_TID, amount=10)
-        teams_by_tid = {
-            0: _team(0, "AAA"),
-            1: _team(1, "BBB"),
-            2: _team(2, "CCC"),
-        }
-        row = lg.free_agent_row(
-            player,
-            2029,
-            "",
-            {},
-            cap_space_by_team={0: 20, 1: 5, 2: 10},
-            teams_by_tid=teams_by_tid,
-        )
-
-        self.assertIn('<td data-sort="2"><span title="AAA, CCC">2</span></td>', row)
-
-
 class TestTeamGameViews(unittest.TestCase):
     def test_team_finances_limit_years_and_omit_expiry_badges(self):
         short = _player(21, "Short", "Deal", tid=0, exp=2029, amount=5000)
         long = _player(22, "Long", "Deal", tid=0, exp=2034, amount=7000)
 
-        html = lg.team_finances_table([short, long], 2029, 100000)
+        html = lg.team_finances_table([short, long], 2029)
 
         self.assertIn("2033", html)
         self.assertNotIn("2034", html)
@@ -80,7 +61,7 @@ class TestTeamGameViews(unittest.TestCase):
     def test_team_finances_after_2033_still_includes_current_season(self):
         player = _player(23, "Future", "Season", tid=0, exp=2035, amount=5000)
 
-        html = lg.team_finances_table([player], 2034, 100000)
+        html = lg.team_finances_table([player], 2034)
 
         self.assertIn("2034", html)
         self.assertNotIn("2035", html)

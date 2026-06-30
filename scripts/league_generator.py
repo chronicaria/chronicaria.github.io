@@ -807,20 +807,54 @@ def page_html(title: str, body: str, teams: list[dict[str, Any]], root: str = ""
 """
 
 
+def prior_team_tid(player: dict[str, Any], season: int) -> int | None:
+    """The team the player last suited up for BEFORE ``season`` (most recent prior
+    regular-season stat on a real team), or None if they have no prior history.
+
+    Sort is by season only; for a mid-season trade (two rows in the same prior season)
+    this relies on Basketball GM storing stat rows chronologically, so the stable sort
+    keeps the later team last. That holds for these exports.
+    """
+    rows = sorted(
+        (s for s in player.get("stats", []) if isinstance(s, dict) and not s.get("playoffs")
+         and isinstance(s.get("season"), int) and s["season"] < season and safe_int(s.get("tid"), -9) >= 0),
+        key=lambda s: s["season"],
+    )
+    return safe_int(rows[-1].get("tid")) if rows else None
+
+
 def acquisition_html(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    season = SITE_META.get("season")
+    blank = '<span class="muted">—</span>'
     transactions = [t for t in (player.get("transactions") or []) if isinstance(t, dict)]
+    cur_tid = safe_int(player.get("tid"), -9)
+    prev_tid = prior_team_tid(player, season) if isinstance(season, int) else None
+
+    # (A) Changed teams since last season -> acquired this offseason. A recorded trade
+    # into the current team reads as a trade; otherwise it was a free-agent signing.
+    if isinstance(season, int) and cur_tid >= 0 and prev_tid is not None and prev_tid != cur_tid:
+        trades = [t for t in transactions if t.get("type") == "trade" and safe_int(t.get("tid"), -9) == cur_tid]
+        if trades:
+            from_team = teams_by_tid.get(safe_int(trades[-1].get("fromTid"), -10))
+            return f"Trade '{str(season)[-2:]}" + (f" from {esc(team_abbrev(from_team))}" if from_team else "")
+        return f"FA '{str(season)[-2:]}"
+
+    # (B) Same team (or no history) -> read the most recent draft/trade/FA transaction.
     relevant = [t for t in transactions if t.get("type") in ("draft", "trade", "freeAgent")]
     if not relevant:
-        # No recorded move: these players were signed in current-season free agency.
-        season = SITE_META.get("season")
-        return f"FA '{str(season)[-2:]}" if season else '<span class="muted">—</span>'
+        # No recorded move: a brand-new arrival reads as a current-season signing;
+        # a long-tenured player with no transaction just shows blank.
+        return (f"FA '{str(season)[-2:]}" if season and prev_tid is None else blank)
     tx = relevant[-1]
     tx_type = tx.get("type")
     season_short = f"'{str(tx.get('season'))[-2:]}" if tx.get("season") else ""
     if tx_type == "draft":
-        # The league started in 2026; the inaugural draft just seeded rosters.
-        if safe_int(tx.get("season")) == 2026:
-            return '<span class="muted">—</span>'
+        # The 2026 inaugural draft only seeded rosters, and a "draft" whose season does
+        # not match the player's actual draft year is an expansion/dispersal assignment
+        # (e.g. Ithaca's 2028 expansion draft) -- neither is a real draft, so show nothing.
+        tx_season = safe_int(tx.get("season"))
+        if tx_season == 2026 or tx_season != safe_int((player.get("draft") or {}).get("year"), -1):
+            return blank
         pick = tx.get("pickNum")
         pick_text = f" #{pick}" if pick else ""
         return f"Draft {esc(season_short)}{esc(pick_text)}"
@@ -2197,7 +2231,7 @@ def portrait_html(player: dict[str, Any]) -> str:
     return f'<div class="portrait placeholder" aria-hidden="true">{initials(player)}</div>'
 
 
-def render_player_hero(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], season: int, start_season: int) -> str:
+def render_player_hero(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], season: int, start_season: int, compact: bool = False) -> str:
     rating = latest_rating(player, season)
     team_html = team_label(player.get("tid"), teams_by_tid, "../")
     born = player.get("born") or {}
@@ -2229,20 +2263,30 @@ def render_player_hero(player: dict[str, Any], teams_by_tid: dict[int, dict[str,
         else:
             family_bits.append(f"{esc(rel_type)}: {esc(name)}")
     family_html = detail_item("Family", " · ".join(family_bits)) if family_bits else ""
-    details = "".join([
-        detail_item("Team", team_html),
-        detail_item("Position", esc(rating.get("pos", "—"))),
-        detail_item("Age", age(player, season)),
-        detail_item("Height", fmt_height(player.get("hgt"))),
-        detail_item("Weight", f'{esc(player.get("weight", "—"))} lbs' if player.get("weight") else "—"),
-        detail_item("Born", born_html),
-        detail_item("College", esc(player.get("college") or "—")),
-        detail_item("Draft", esc(draft_html)),
-        detail_item("Contract", fmt_contract(player)),
-        detail_item("Injury", injury_html(player)),
-        detail_item("Mood", mood_html(player)),
-        family_html,
-    ])
+    if compact:
+        # Sub-page header: just the essentials, since the full bio lives on Overview.
+        details = "".join([
+            detail_item("Team", team_html),
+            detail_item("Position", esc(rating.get("pos", "—"))),
+            detail_item("Age", age(player, season)),
+            detail_item("Contract", fmt_contract(player)),
+            detail_item("Injury", injury_html(player)),
+        ])
+    else:
+        details = "".join([
+            detail_item("Team", team_html),
+            detail_item("Position", esc(rating.get("pos", "—"))),
+            detail_item("Age", age(player, season)),
+            detail_item("Height", fmt_height(player.get("hgt"))),
+            detail_item("Weight", f'{esc(player.get("weight", "—"))} lbs' if player.get("weight") else "—"),
+            detail_item("Born", born_html),
+            detail_item("College", esc(player.get("college") or "—")),
+            detail_item("Draft", esc(draft_html)),
+            detail_item("Contract", fmt_contract(player)),
+            detail_item("Injury", injury_html(player)),
+            detail_item("Mood", mood_html(player)),
+            family_html,
+        ])
 
     rating_groups_html = []
     for title, keys in RATING_GROUPS:
@@ -2270,13 +2314,12 @@ def render_player_hero(player: dict[str, Any], teams_by_tid: dict[int, dict[str,
         <p class="muted">#{esc(player.get('jerseyNumber', '—'))} · {team_html}</p>
         <div class="details-grid">{details}</div>
       </div>
-      <div class="rating-panel full-rating-panel">
+      <div class="rating-panel{'' if compact else ' full-rating-panel'}">
         <div class="rating-topline">
           <div class="big-rating"><span>Overall</span><strong>{rating_delta_html(player, 'ovr', rating)}</strong></div>
           <div class="big-rating"><span>Potential</span><strong>{rating_delta_html(player, 'pot', rating)}</strong></div>
         </div>
-        <div class="rating-groups">{''.join(rating_groups_html)}</div>
-        <div class="awards-strip">{awards_html}</div>
+        {'' if compact else f'<div class="rating-groups">{"".join(rating_groups_html)}</div><div class="awards-strip">{awards_html}</div>'}
       </div>
     </section>
     """
@@ -2297,7 +2340,6 @@ def per_game_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_
         year_cell = esc(season)
         age_sort = None
         if isinstance(season, int):
-            year_cell = f'<a href="#ratings">{season}</a>'
             born_year = (player.get("born") or {}).get("year")
             if isinstance(born_year, int):
                 age_sort = season - born_year
@@ -4171,34 +4213,79 @@ def injury_history_html(player: dict[str, Any]) -> str:
     """
 
 
-def render_player_page(player: dict[str, Any], teams: list[dict[str, Any]], season: int, start_season: int, log_entries: list[dict[str, Any]] | None = None) -> str:
+def player_subnav(player: dict[str, Any], active_sub: str, available: set[str]) -> str:
+    slug = player_slug(player)
+    items = [("overview", "Overview", f"{slug}.html")]
+    if "stats" in available:
+        items.append(("stats", "Stats", f"{slug}-stats.html"))
+    if "log" in available:
+        items.append(("log", "Game Log", f"{slug}-log.html"))
+    items.append(("ratings", "Ratings", f"{slug}-ratings.html"))
+    links = []
+    for key, label, href in items:
+        active = " active" if key == active_sub else ""
+        cur = ' aria-current="page"' if key == active_sub else ""
+        links.append(f'<a class="subnav-link{active}" href="{href}"{cur}>{esc(label)}</a>')
+    return f'<nav class="team-subnav" aria-label="Player sections">{"".join(links)}</nav>'
+
+
+def render_player_pages(player: dict[str, Any], teams: list[dict[str, Any]], season: int, start_season: int, log_entries: list[dict[str, Any]] | None = None) -> dict[str, str]:
+    """Build the player's sub-pages. Returns ``{suffix: html}`` (suffix "" is the
+    Overview / canonical page). Only sub-pages that have data are generated.
+
+    The Monte Carlo projection is computed once and shared across the projection-backed
+    sections (development chart, scouting tags, trajectory grid, projection table)."""
     teams_by_tid = {t["tid"]: t for t in teams}
     regular = regular_stats_since(player, start_season)
     playoffs = playoff_stats_since(player, start_season)
-    # Compute the Monte Carlo projection once and share it across every
-    # projection-backed section (chart, scouting tags, trajectory grid, table).
+    logs = log_entries or []
     proj = _player_projection(player, season)
-    body = "".join([
-        render_player_hero(player, teams_by_tid, season, start_season),
+
+    # Gate sub-pages on whether the sections would actually render content: the stat
+    # tables skip seasons with no games and the game log / vs-opponent tables skip
+    # 0-minute (DNP) appearances, so gating on the raw lists would leave dead tabs.
+    available: set[str] = set()
+    if any(stat_gp(s) > 0 for s in regular):
+        available.add("stats")
+    if any(safe_float((e.get("box") or {}).get("min")) > 0 for e in logs):
+        available.add("log")
+    full_hero = render_player_hero(player, teams_by_tid, season, start_season)
+    compact_hero = render_player_hero(player, teams_by_tid, season, start_season, compact=True)
+
+    def page(active: str, title_suffix: str, hero: str, sections: list[str]) -> str:
+        body = hero + player_subnav(player, active, available) + "".join(sections)
+        return page_html(player_name(player) + title_suffix, body, teams, root="../", active="players")
+
+    pages: dict[str, str] = {}
+    pages[""] = page("overview", "", full_hero, [
         player_summary_rows(player, teams_by_tid, season, start_season),
-        season_highs_html(player, log_entries or [], teams_by_tid, season, "../"),
-        form_card_html(player, log_entries or []),
+        season_highs_html(player, logs, teams_by_tid, season, "../"),
+        form_card_html(player, logs),
         development_chart_html(player, season, proj),
         narrative_tags_html(player, proj, season),
         subrating_grid_html(player, proj),
-        game_log_table(player, log_entries or [], teams_by_tid, season, "../"),
-        vs_opponent_table(player, log_entries or [], teams_by_tid, "../"),
-        per_game_table(player, regular, teams_by_tid, "../", "Per Game · Regular Season", f"regular-{player.get('pid')}"),
-        shot_table(player, regular, teams_by_tid, "../", "Shot Locations and Feats · Regular Season", f"shots-{player.get('pid')}"),
-        advanced_table(player, regular, teams_by_tid, "../", "Advanced · Regular Season", f"advanced-{player.get('pid')}"),
+    ])
+    if "stats" in available:
+        stats_sections = [
+            per_game_table(player, regular, teams_by_tid, "../", "Per Game · Regular Season", f"regular-{player.get('pid')}"),
+            shot_table(player, regular, teams_by_tid, "../", "Shot Locations and Feats · Regular Season", f"shots-{player.get('pid')}"),
+            advanced_table(player, regular, teams_by_tid, "../", "Advanced · Regular Season", f"advanced-{player.get('pid')}"),
+        ]
+        if playoffs:
+            stats_sections.append(per_game_table(player, playoffs, teams_by_tid, "../", "Per Game · Playoffs", f"playoffs-{player.get('pid')}"))
+            stats_sections.append(advanced_table(player, playoffs, teams_by_tid, "../", "Advanced · Playoffs", f"playoff-advanced-{player.get('pid')}"))
+        pages["-stats"] = page("stats", " — Stats", compact_hero, stats_sections)
+    if "log" in available:
+        pages["-log"] = page("log", " — Game Log", compact_hero, [
+            game_log_table(player, logs, teams_by_tid, season, "../"),
+            vs_opponent_table(player, logs, teams_by_tid, "../"),
+        ])
+    pages["-ratings"] = page("ratings", " — Ratings", compact_hero, [
         ratings_table(player, start_season),
         projection_table_html(player, proj),
         '<div class="history-row">' + salary_history_html(player) + injury_history_html(player) + "</div>",
     ])
-    if playoffs:
-        body += per_game_table(player, playoffs, teams_by_tid, "../", "Per Game · Playoffs", f"playoffs-{player.get('pid')}")
-        body += advanced_table(player, playoffs, teams_by_tid, "../", "Advanced · Playoffs", f"playoff-advanced-{player.get('pid')}")
-    return page_html(player_name(player), body, teams, root="../", active="players")
+    return pages
 
 
 def team_stat_per_game(stat: dict[str, Any], key: str) -> float | None:
@@ -10227,15 +10314,17 @@ def generate_site(
         write_text(out_dir / "teams" / f"{slug}-games.html", render_team_games_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
         write_text(out_dir / "teams" / f"{slug}-finances.html", render_team_finances_page(team, roster, teams, season, start_season, data=data, tfin=tfin, league_fin=league_fin))
 
+    def write_player_pages(p: dict[str, Any], log_entries: list[dict[str, Any]] | None) -> None:
+        slug = player_slug(p)
+        for suffix, html in render_player_pages(p, teams, season, start_season, log_entries=log_entries).items():
+            write_text(out_dir / "players" / f"{slug}{suffix}.html", html)
+
     prospects = draft_prospects(data)
     for prospect in prospects:
-        write_text(out_dir / "players" / f"{player_slug(prospect)}.html", render_player_page(prospect, teams, season, start_season))
+        write_player_pages(prospect, None)
 
     for player in players:
-        write_text(
-            out_dir / "players" / f"{player_slug(player)}.html",
-            render_player_page(player, teams, season, start_season, log_entries=game_logs.get(safe_int(player.get("pid"), -1))),
-        )
+        write_player_pages(player, game_logs.get(safe_int(player.get("pid"), -1)))
 
     for item in game_items:
         write_text(out_dir / "games" / f"{game_slug_from_gid(item.get('gid'))}.html", render_game_page(item, game_items, teams, players, safe_int(item.get("season"), season)))

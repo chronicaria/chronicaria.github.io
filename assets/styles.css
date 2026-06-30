@@ -566,6 +566,9 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
 @media (max-width: 700px) { .fin-rules { grid-template-columns: 1fr; } }
 .fin-rules h3 { margin: 0 0 .4rem; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 .fin-list { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .25rem; font-size: .86rem; }
+/* roster role dividers: heavier line after Starters (5) and Bench (10) on the default Stats table */
+#roster-stats tbody tr:nth-child(5) > *,
+#roster-stats tbody tr:nth-child(10) > * { border-bottom: 2px solid var(--line); }
 
 /* ---------- game pages ---------- */
 .click-row { cursor: pointer; }

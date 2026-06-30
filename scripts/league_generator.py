@@ -755,7 +755,6 @@ def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
         link("Trade", f"{root}trade.html", "trade"),
         link("History", f"{root}history.html", "history"),
         link("Records", f"{root}records.html", "records"),
-        link("Projections", f"{root}projections.html", "projections"),
     ]
     team_links = []
     for team in sorted(teams, key=team_sort_key):
@@ -1511,10 +1510,10 @@ def draft_picks_card(data: dict[str, Any], team: dict[str, Any], teams_by_tid: d
     picks.sort(key=lambda dp: (dp.get("season"), safe_int(dp.get("round"))))
     chips = []
     for dp in picks:
-        rnd = "1st" if safe_int(dp.get("round")) == 1 else "2nd"
+        rnd = "" if safe_int(dp.get("round")) == 1 else " 2nd"  # single-round league: no "1st"
         own = safe_int(dp.get("originalTid"), -10) == tid
         via = "" if own else f' <span class="muted">via {esc(team_abbrev(teams_by_tid.get(safe_int(dp.get("originalTid"), -10))))}</span>'
-        chips.append(f'<span class="pick-chip{" pick-own" if own else " pick-acquired"}">{esc(dp.get("season"))} {rnd}{via}</span>')
+        chips.append(f'<span class="pick-chip{" pick-own" if own else " pick-acquired"}">{esc(dp.get("season"))}{rnd}{via}</span>')
     traded_away = [
         dp for dp in data.get("draftPicks", [])
         if isinstance(dp, dict) and safe_int(dp.get("originalTid"), -10) == tid and safe_int(dp.get("tid"), -10) != tid
@@ -1523,9 +1522,9 @@ def draft_picks_card(data: dict[str, Any], team: dict[str, Any], teams_by_tid: d
     if traded_away:
         away_bits = []
         for dp in sorted(traded_away, key=lambda dp: (dp.get("season"), safe_int(dp.get("round")))):
-            rnd = "1st" if safe_int(dp.get("round")) == 1 else "2nd"
+            rnd = "" if safe_int(dp.get("round")) == 1 else " 2nd"
             holder = team_abbrev(teams_by_tid.get(safe_int(dp.get("tid"), -10)))
-            away_bits.append(f"{dp.get('season')} {rnd} → {holder}")
+            away_bits.append(f"{dp.get('season')}{rnd} → {holder}")
         away_note = f'<p class="muted small-copy">Traded away: {esc(" · ".join(away_bits))}</p>'
     return f"""
     <section class="card">
@@ -1925,7 +1924,6 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
     </section>
     """
     return page_html("Free Agent Market", body, teams, root="", active="free-agency")
-
 
 
 def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None) -> str:
@@ -2701,188 +2699,6 @@ def current_team_ovr(roster: list[dict[str, Any]], season: int) -> int | None:
     return _proj.team_ovr(ovrs)
 
 
-def league_team_ovr_context(teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> dict[str, Any] | None:
-    """Current team-OVR for every active team, plus league reference points.
-
-    This league's player ratings run hot, so absolute team OVR sits well above the
-    formula's nominal "50 == even"; we therefore present team strength relative to
-    the current league (median == average line, 75th pct == contender line).
-    """
-    if _proj is None:
-        return None
-    by_tid: dict[int, list[dict[str, Any]]] = {}
-    for p in players:
-        tid = p.get("tid")
-        if isinstance(tid, int) and tid >= 0:
-            by_tid.setdefault(tid, []).append(p)
-    ovrs: dict[int, int] = {}
-    for t in teams:
-        tid = safe_int(t.get("tid"), -99)
-        if tid < 0 or t.get("disabled"):
-            continue
-        o = current_team_ovr(by_tid.get(tid, []), season)
-        if o is not None:
-            ovrs[tid] = o
-    if not ovrs:
-        return None
-    vals = sorted(ovrs.values())
-    n = len(vals)
-
-    def pct(q: float) -> float:
-        if n == 1:
-            return float(vals[0])
-        idx = q * (n - 1)
-        lo = int(math.floor(idx))
-        hi = int(math.ceil(idx))
-        return vals[lo] * (1 - (idx - lo)) + vals[hi] * (idx - lo)
-
-    return {"team_ovrs": ovrs, "avg": pct(0.5), "contender": pct(0.75), "n_teams": n}
-
-
-def _team_projection(team: dict[str, Any], roster: list[dict[str, Any]], season: int, league_ctx: dict[str, Any] | None = None) -> dict[str, Any] | None:
-    """Coupled Monte Carlo team-OVR projection (guaranteed-core & projected-roster).
-
-    Builds each current roster player's per-sim OVR paths (same per-pid seed as
-    the player pages) and aggregates them with the engine's team-OVR formula under
-    both roster scenarios. Returns None when projections are unavailable.
-    """
-    if _proj is None:
-        return None
-    seasons = list(range(season, season + PROJ_SEASONS_AHEAD + 1))
-    arrays = []
-    exps = []
-    for p in roster:
-        if p.get("retiredYear") is not None:
-            continue
-        born = (p.get("born") or {}).get("year")
-        if born is None:
-            continue
-        rows = [r for r in p.get("ratings", []) if isinstance(r.get("season"), int)]
-        if not rows:
-            continue
-        rows.sort(key=lambda r: r["season"])
-        cur = next((r for r in rows if r["season"] == season), rows[-1])
-        if not all(k in cur for k in _proj.RATINGS):
-            continue
-        age = int(cur["season"]) - int(born)
-        if age < 14 or age > 50:
-            continue
-        seed = PROJ_MASTER_SEED * 100003 + safe_int(p.get("pid"), 0)
-        try:
-            arr = _proj.player_ovr_paths(cur, age, PROJ_SEASONS_AHEAD, PROJ_N_SIMS, seed=seed)
-        except Exception:
-            continue
-        arrays.append(arr)
-        contract = p.get("contract") or {}
-        exps.append(safe_int(contract.get("exp"), season))
-    if not arrays:
-        return None
-    try:
-        res = _proj.simulate_team(arrays, exps, seasons, replacement_ovr=REPLACEMENT_OVR)
-    except Exception:
-        return None
-    if res is None:
-        return None
-    res["season"] = season
-    res["seasons"] = seasons
-    if league_ctx:
-        tid = safe_int(team.get("tid"), -99)
-        rank = None
-        if tid in league_ctx.get("team_ovrs", {}):
-            cur_o = league_ctx["team_ovrs"][tid]
-            rank = 1 + sum(1 for o in league_ctx["team_ovrs"].values() if o > cur_o)
-        res["league"] = {
-            "avg": league_ctx["avg"],
-            "contender": league_ctx["contender"],
-            "n_teams": league_ctx["n_teams"],
-            "rank": rank,
-        }
-    return res
-
-
-def league_projection(teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, league_ctx: dict[str, Any] | None = None, team_projections: dict[int, dict[str, Any]] | None = None, game_attrs: dict[str, Any] | None = None) -> dict[str, Any] | None:
-    """League-wide forward projection (the continuity "proj" scenario) for the
-    projections page: every team's projected median/80% band, plus per-season
-    rank and estimated round-robin win% (and games-per-season for record math).
-
-    Uses the continuity scenario because in the guaranteed-core scenario every
-    team collapses toward replacement as contracts lapse, which makes league ranks
-    meaningless; under continuity the differential aging IS the signal. Returns
-    None when projections are unavailable.
-    """
-    if _proj is None:
-        return None
-    if league_ctx is None:
-        league_ctx = league_team_ovr_context(teams, players, season)
-    by_tid: dict[int, list[dict[str, Any]]] = {}
-    for p in players:
-        tid = p.get("tid")
-        if isinstance(tid, int) and tid >= 0:
-            by_tid.setdefault(tid, []).append(p)
-    seasons = list(range(season, season + PROJ_SEASONS_AHEAD + 1))
-    palette = team_palette_by_tid(teams)
-
-    entries: list[dict[str, Any]] = []
-    for t in teams:
-        tid = safe_int(t.get("tid"), -99)
-        if tid < 0 or t.get("disabled"):
-            continue
-        tp = (team_projections or {}).get(tid)
-        if tp is None:
-            tp = _team_projection(t, by_tid.get(tid, []), season, league_ctx)
-        if tp is None:
-            continue
-        proj = tp.get("proj") or {}
-
-        def _clamp(arr: Any) -> list[float]:
-            return [max(0.0, round(float(v), 1)) for v in (arr or [])]
-
-        entries.append({
-            "tid": tid,
-            "name": team_full_name(t),
-            "abbrev": team_abbrev(t),
-            "color": palette.get(tid, "#5b9dff"),
-            "url": team_url(t, ""),
-            "current": safe_int(tp.get("current")),
-            "p10": _clamp(proj.get("p10")),
-            "p50": _clamp(proj.get("p50")),
-            "p90": _clamp(proj.get("p90")),
-        })
-    if len(entries) < 2:
-        return None
-    n_seasons = len(seasons)
-
-    # Per-season ranks (by projected median, desc) and round-robin win%.
-    for e in entries:
-        e["ranks"] = [0] * n_seasons
-        e["win_pct"] = [0.0] * n_seasons
-    for si in range(n_seasons):
-        ovrs = {e["tid"]: (e["p50"][si] if si < len(e["p50"]) else 0.0) for e in entries}
-        for rank, tid in enumerate(sorted(ovrs, key=lambda k: -ovrs[k]), 1):
-            for e in entries:
-                if e["tid"] == tid:
-                    e["ranks"][si] = rank
-                    break
-        wp = _proj.projected_win_pct(ovrs)
-        for e in entries:
-            e["win_pct"][si] = round(wp.get(e["tid"], 0.5), 4)
-
-    ga = game_attrs or {}
-    num_games = [safe_int(get_attr_value(ga.get("numGames"), s), 0) or 0 for s in seasons]
-
-    league_block = None
-    if league_ctx:
-        league_block = {"avg": league_ctx.get("avg"), "contender": league_ctx.get("contender")}
-    return {
-        "season": season,
-        "seasons": seasons,
-        "num_games": num_games,
-        "teams": entries,
-        "n_teams": len(entries),
-        "league": league_block,
-    }
-
-
 def power_ranking_bump_html(league_proj):
     """Projected Power Rankings -- the page centerpiece bump chart.
 
@@ -3307,219 +3123,6 @@ def projected_standings_html(league_proj: dict[str, Any] | None) -> str:
     """
 
 
-def team_trajectory_html(team: dict[str, Any], team_proj: dict[str, Any] | None, root: str = "../") -> str:
-    """Projected Team Strength fan chart -- the TEAM-PAGE centerpiece.
-
-    Interactive fan chart of projected team OVR over the next 6 seasons with two
-    toggleable scenarios ("Projected roster" default, "Guaranteed core"). For the
-    active scenario it draws a median line, shaded 80% (P10-P90) and 50% (P25-P75)
-    confidence bands, a marker at the current season, and labelled horizontal
-    reference lines at the league average and contender thresholds so relative
-    strength and the contention window read at a glance. The default scenario is
-    rendered statically in the SVG (progressive enhancement); the embedded JSON +
-    JS module redraws on toggle and powers a hover readout. Returns "" when no
-    projection is available. Never raises.
-    """
-    if team_proj is None:
-        return ""
-    seasons = [safe_int(s) for s in team_proj.get("seasons", [])]
-    if len(seasons) < 2:
-        return ""
-    league = team_proj.get("league") or {}
-    cur_season = safe_int(team_proj.get("season"), seasons[0])
-    current = safe_int(team_proj.get("current"))
-    core_counts = [safe_int(c) for c in team_proj.get("core_counts", [])]
-
-    # Clamp displayed values to >= 0 (a fully-lapsed core legitimately reads as
-    # rock bottom -- nobody under contract).
-    def bands(scn: str) -> dict[str, list[float]] | None:
-        src = team_proj.get(scn) or {}
-        keys = ("p10", "p25", "p50", "p75", "p90")
-        if not all(k in src for k in keys):
-            return None
-        out: dict[str, list[float]] = {}
-        for k in keys:
-            vals = src.get(k) or []
-            if len(vals) != len(seasons):
-                return None
-            out[k] = [max(0.0, round(float(v), 1)) for v in vals]
-        return out
-
-    proj_b = bands("proj")
-    core_b = bands("core")
-    if proj_b is None:
-        return ""
-    scenarios: dict[str, dict[str, list[float]]] = {"proj": proj_b}
-    if core_b is not None:
-        scenarios["core"] = core_b
-
-    avg = safe_float(league.get("avg")) if league.get("avg") is not None else None
-    contender = safe_float(league.get("contender")) if league.get("contender") is not None else None
-    rank = league.get("rank")
-    n_teams = safe_int(league.get("n_teams"))
-
-    # y-axis spans up to the data max (may exceed 100) plus the reference lines.
-    all_vals: list[float] = [float(current)]
-    for b in scenarios.values():
-        all_vals += b["p10"] + b["p90"]
-    for ref in (avg, contender):
-        if ref is not None:
-            all_vals.append(ref)
-    hi = math.ceil(max(all_vals) / 5.0) * 5 + 4
-    lo = max(0.0, math.floor(min(all_vals) / 5.0) * 5 - 4)
-    if hi <= lo:
-        hi = lo + 10
-
-    width, height = 660, 230
-    ml, mr, mt, mb = 34, 14, 12, 26
-    plot_w, plot_h = width - ml - mr, height - mt - mb
-    s_min, s_max = seasons[0], seasons[-1]
-    span = max(1, s_max - s_min)
-
-    def xs(s: float) -> float:
-        return ml + (s - s_min) / span * plot_w
-
-    def yv(v: float) -> float:
-        return mt + plot_h - (v - lo) / (hi - lo) * plot_h
-
-    # --- grid + axis ticks ---
-    grid: list[str] = []
-    ystep = 10 if (hi - lo) > 40 else 5
-    ytick = math.ceil(lo / ystep) * ystep
-    while ytick <= hi:
-        gy = yv(ytick)
-        grid.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w}" y2="{gy:.1f}" class="chart-grid"/>')
-        grid.append(f'<text x="{ml - 6}" y="{gy + 3.5:.1f}" class="chart-tick" text-anchor="end">{int(ytick)}</text>')
-        ytick += ystep
-    for s in seasons:
-        grid.append(f'<text x="{xs(s):.1f}" y="{height - 8}" class="chart-tick" text-anchor="middle">{s}</text>')
-
-    # --- reference lines (scenario-independent) ---
-    refs: list[str] = []
-
-    def ref_line(val: float | None, cls: str, label: str) -> None:
-        if val is None:
-            return
-        gy = yv(max(0.0, val))
-        refs.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w}" y2="{gy:.1f}" class="ttraj-ref {cls}"/>')
-        refs.append(f'<text x="{ml + plot_w - 3}" y="{gy - 3:.1f}" class="ttraj-ref-label" text-anchor="end">{esc(label)} {int(round(val))}</text>')
-
-    ref_line(avg, "ttraj-ref-avg", "Lg avg")
-    ref_line(contender, "ttraj-ref-cont", "Contender")
-
-    # --- scenario geometry (static default = proj) ---
-    def band(upper: list[float], lower: list[float], cls: str) -> str:
-        fwd = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(seasons, upper))
-        back = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(reversed(seasons), reversed(lower)))
-        return f'<polygon points="{fwd} {back}" class="{cls}"/>'
-
-    def median_line(p50: list[float]) -> str:
-        pts = " ".join(f"{xs(s):.1f},{yv(v):.1f}" for s, v in zip(seasons, p50))
-        return f'<polyline points="{pts}" class="ttraj-median"/>'
-
-    band80 = band(proj_b["p90"], proj_b["p10"], "ttraj-band-80")
-    band50 = band(proj_b["p75"], proj_b["p25"], "ttraj-band-50")
-    median = median_line(proj_b["p50"])
-    cur_marker = f'<circle cx="{xs(s_min):.1f}" cy="{yv(float(current)):.1f}" r="3.6" class="ttraj-cur"/>'
-
-    # --- contention window: contiguous run from the first season where proj median >= contender ---
-    def contention_window(p50: list[float]) -> str:
-        if contender is None:
-            return ""
-        thr = round(contender, 1)  # match the rounded value the JS recompute uses
-        hit = [seasons[i] for i, v in enumerate(p50) if v >= thr]
-        if not hit:
-            return "none in window"
-        run = [hit[0]]
-        for s in hit[1:]:
-            if s == run[-1] + 1:
-                run.append(s)
-            else:
-                break
-        return str(run[0]) if run[0] == run[-1] else f"{run[0]}–{run[-1]}"
-
-    window_proj = contention_window(proj_b["p50"])
-
-    # --- summary line bits ---
-    rank_txt = ""
-    if isinstance(rank, int) and n_teams:
-        rank_txt = f'<span class="ttraj-rank">#{rank} of {n_teams}</span>'
-    window_html = ""
-    if contender is not None:
-        window_html = (
-            f'<span class="ttraj-window" data-ttraj-window>Contender window: '
-            f'<strong>{esc(window_proj)}</strong></span>'
-        )
-
-    # --- toggle button group (default proj) ---
-    has_core = "core" in scenarios
-    toggle = ['<div class="ttraj-toggle" role="group" aria-label="Projection scenario">']
-    toggle.append('<button type="button" class="ttraj-btn active" data-ttraj-scn="proj" aria-pressed="true">Projected roster</button>')
-    if has_core:
-        toggle.append('<button type="button" class="ttraj-btn" data-ttraj-scn="core" aria-pressed="false">Guaranteed core</button>')
-    toggle.append('</div>')
-
-    tid = safe_int(team.get("tid"), 0)
-    payload = {
-        "cur": cur_season,
-        "current": current,
-        "seasons": seasons,
-        "counts": core_counts,
-        "avg": round(avg, 1) if avg is not None else None,
-        "contender": round(contender, 1) if contender is not None else None,
-        "scn": {k: {kk: vv for kk, vv in b.items()} for k, b in scenarios.items()},
-        "labels": {"proj": "Projected roster", "core": "Guaranteed core"},
-        "g": {"ml": ml, "mt": mt, "pw": plot_w, "ph": plot_h,
-              "lo": lo, "hi": hi, "smin": s_min, "smax": s_max, "w": width, "h": height},
-    }
-    payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
-
-    sims_note = ""
-    n_players = safe_int(team_proj.get("n_players"))
-    if n_players:
-        sims_note = f" from {n_players} current players"
-
-    return f"""
-    <section class="card">
-      <div class="section-title-row">
-        <h2>Projected Team Strength</h2>
-        {rank_txt}
-      </div>
-      <div class="ttraj-controls">
-        {''.join(toggle)}
-        <span class="muted small-copy ttraj-key">
-          <span class="ttraj-k ttraj-k-band"></span> 80% / 50% range &middot;
-          <span class="ttraj-k ttraj-k-median"></span> Median
-        </span>
-      </div>
-      <div class="chart-wrap ttraj-wrap" data-team-traj data-ttraj-tid="{tid}">
-        <svg viewBox="0 0 {width} {height}" class="ttraj-chart" role="img" aria-label="Projected team overall for the next {PROJ_SEASONS_AHEAD} seasons">
-          {''.join(grid)}
-          <g data-ttraj-bands>
-            {band80}
-            {band50}
-          </g>
-          {''.join(refs)}
-          <g data-ttraj-line>
-            {median}
-          </g>
-          {cur_marker}
-          <line class="ttraj-hover-line" data-ttraj-hover-line y1="{mt}" y2="{mt + plot_h}" style="display:none"/>
-          <circle class="ttraj-hover-dot" data-ttraj-hover-dot r="3.5" style="display:none"/>
-        </svg>
-        <div class="chart-tooltip" data-ttraj-tooltip hidden></div>
-      </div>
-      <p class="muted small-copy">
-        Projected team overall for the next {PROJ_SEASONS_AHEAD} seasons{sims_note}, median with shaded
-        80% (P10&ndash;P90) and 50% (P25&ndash;P75) bands. <em>Projected roster</em> keeps every current player and
-        ages them forward; <em>Guaranteed core</em> counts only players still under contract that season (departed
-        slots fall to replacement level). {window_html}
-      </p>
-      <script type="application/json" id="team-traj-{tid}">{payload_json}</script>
-    </section>
-    """
-
-
 def contract_horizon_html(team: dict[str, Any], roster: list[dict[str, Any]], season: int,
                           team_proj: dict[str, Any] | None = None) -> str:
     """A "Contract Horizon" Gantt timeline of guaranteed-core decline.
@@ -3692,139 +3295,6 @@ def contract_horizon_html(team: dict[str, Any], roster: list[dict[str, Any]], se
       {truncated}
     </section>
     """
-
-
-def team_outlook_tags_html(team: dict[str, Any], roster: list[dict[str, Any]], season: int, team_proj: dict[str, Any] | None) -> str:
-    """Deterministic narrative "Team Outlook" chips (the team-level parallel to the
-    player "Scouting Outlook"). Reuses the ``.scout-tag`` chip vocabulary inside a
-    titled ``card`` section. Returns "" when no projection is available, and never
-    raises.
-
-    Trajectory reads the *near-term* (3-season) median slope of the projected-roster
-    ("proj") scenario rather than the full horizon: this league's proj band fades
-    steeply over six years for every roster as players age out (league-wide 6-yr
-    slopes observed ~ -19..-62), so the near-term slope is what actually
-    discriminates teams holding serve from teams sliding. Displayed medians are
-    clamped to >= 0 per the scale note.
-    """
-    if not team_proj:
-        return ""
-    proj = team_proj.get("proj") or {}
-    p50 = proj.get("p50") or []
-    if len(p50) < 7:
-        return ""
-    league = team_proj.get("league") or {}
-    avg = safe_float(league.get("avg"), 98.0)
-    contender = safe_float(league.get("contender"), 104.0)
-    n_teams = safe_int(league.get("n_teams"), 0)
-    rank = league.get("rank")
-    rank = safe_int(rank, 0) if rank is not None else None
-    counts = team_proj.get("core_counts") or []
-    n_players = safe_int(team_proj.get("n_players"), 0)
-
-    band = [max(0.0, float(v)) for v in p50]   # clamp displayed medians to >= 0
-    now = band[0]
-    near = band[3] - now      # 3-yr slope -- the discriminating trajectory signal
-    far = band[6] - now       # 6-yr slope -- cited for context only
-
-    # Roster ages in the current season.
-    ages = []
-    for p in roster or []:
-        if p.get("retiredYear") is not None:
-            continue
-        born = (p.get("born") or {}).get("year")
-        if born is None:
-            continue
-        a = season - safe_int(born, season)
-        if 14 <= a <= 50:
-            ages.append(a)
-    avg_age = sum(ages) / len(ages) if ages else 0.0
-    n_old = sum(1 for a in ages if a >= 30)
-    n_young = sum(1 for a in ages if a <= 23)
-    old_core = avg_age >= 26.5 or n_old >= 4
-
-    chips: list[tuple] = []   # (priority, tone, label, title); higher prints first
-
-    # ---- STANDING (current strength / rank) ----
-    if (rank is not None and rank <= 2) or now >= contender + 6:
-        chips.append((100, "good", "League favorite",
-            "Rank %s of %d; current team OVR %d sits at/above the contender line (%d)."
-            % (rank if rank else "-", n_teams, round(now), round(contender))))
-    elif now >= contender or (rank is not None and rank <= 4):
-        chips.append((95, "good", "Contender",
-            "Current team OVR %d vs contender line %d (league avg %d); rank %s of %d."
-            % (round(now), round(contender), round(avg), rank if rank else "-", n_teams)))
-    elif rank is not None and n_teams and rank >= n_teams - 1:
-        chips.append((90, "bad", "Cellar dweller",
-            "Rank %d of %d; current team OVR %d below league avg %d."
-            % (rank, n_teams, round(now), round(avg))))
-    else:
-        chips.append((60, "neutral", "Mid-pack",
-            "Current team OVR %d near league avg %d%s."
-            % (round(now), round(avg), (" (rank %d of %d)" % (rank, n_teams)) if rank else "")))
-
-    # ---- TRAJECTORY (near-term proj median slope) ----
-    strong_now = now >= contender
-    if near <= -10 and strong_now:
-        chips.append((88, "warn", "Win-now window",
-            "Contender now (OVR %d >= %d) but projected to slide %+d over 3 yrs (%+d over 6) -- contend now."
-            % (round(now), round(contender), round(near), round(far))))
-    elif near <= -10 and old_core:
-        chips.append((82, "bad", "Aging core",
-            "Projected median falls %+d over 3 yrs; avg roster age %.1f (%d players 30+)."
-            % (round(near), avg_age, n_old)))
-    elif near <= -10:
-        chips.append((70, "warn", "Sliding back",
-            "Projected median declines %+d over 3 yrs (now %d -> %d)."
-            % (round(near), round(now), round(band[3]))))
-    elif near >= -1:
-        chips.append((78, "good", "On the rise",
-            "Projected median holds/climbs (%+d over 3 yrs) while peers age -- now %d, %d in 3 yrs."
-            % (round(near), round(now), round(band[3]))))
-    else:
-        chips.append((45, "neutral", "Treading water",
-            "Projected median roughly steady near-term (%+d over 3 yrs)." % round(near)))
-
-    # ---- CONTRACT horizon (core_counts) ----
-    if len(counts) >= 7 and n_players:
-        c0 = safe_int(counts[0], n_players) or n_players
-        c2 = safe_int(counts[2], c0)
-        c3 = safe_int(counts[3], 0)
-        c5 = safe_int(counts[5], 0)
-        window_closing = strong_now and c3 <= max(1, round(c0 * 0.35))
-        if window_closing:
-            chips.append((85, "warn", "Contention window closing",
-                "Contender now (OVR %d) but only %d of %d players still under contract in 3 yrs."
-                % (round(now), c3, c0)))
-        if c2 <= max(1, round(c0 * 0.5)) and not window_closing:
-            chips.append((58, "info", "Roster turnover looming",
-                "Players under contract drops from %d to %d within 2 yrs -- heavy free agency ahead."
-                % (c0, c2)))
-        if c5 >= max(3, round(c0 * 0.5)):
-            chips.append((56, "info", "Locked-in core",
-                "%d of %d players still under contract 5 yrs out -- long-term continuity secured."
-                % (c5, c0)))
-
-    # ---- DEPTH / age ----
-    if avg_age and (avg_age >= 29 or n_old >= 5):
-        chips.append((50, "warn", "Veteran-heavy",
-            "Avg roster age %.1f across %d players (%d aged 30+)." % (avg_age, len(ages), n_old)))
-    elif avg_age and avg_age <= 24.0 and n_young >= 4:
-        chips.append((52, "good", "Young core",
-            "Avg roster age %.1f across %d players (%d aged 23 or under)." % (avg_age, len(ages), n_young)))
-
-    chips.sort(key=lambda t: t[0], reverse=True)
-    chips = chips[:5]
-
-    n_chips = len(chips)
-    count_label = "%d tag" % n_chips if n_chips == 1 else "%d tags" % n_chips
-    out = ['<section class="card"><div class="section-title-row"><h2>Team Outlook</h2>'
-           '<span class="count-pill">%s</span></div><div class="scout-tags">' % count_label]
-    for _, tone, label, title in chips:
-        out.append('<span class="scout-tag scout-tag--%s" title="%s">%s</span>'
-                   % (esc(tone), esc(title), esc(label)))
-    out.append('</div></section>')
-    return "".join(out)
 
 
 def development_chart_html(player: dict[str, Any], season: int, proj: dict[str, Any] | None = None) -> str:
@@ -4760,7 +4230,6 @@ def last_ten_dots(last_ten: Any) -> str:
     dots = "".join(f'<i class="l10-dot {"l10-w" if result else "l10-l"}"></i>' for result in ordered)
     title = f"Last {len(ordered)}: {last_ten_text(last_ten)}"
     return f'<span class="l10-dots" title="{title}">{dots}</span>'
-
 
 
 def streak_text(streak: Any) -> str:
@@ -6685,7 +6154,6 @@ def render_game_page(item: dict[str, Any], all_items: list[dict[str, Any]], team
     return page_html(title, body, teams, root="../", active="schedule")
 
 
-
 def game_recap_text(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]]) -> str:
     winner_tid = game_winner_tid(item)
     if winner_tid is None:
@@ -6827,8 +6295,8 @@ def compose_event_html(event: dict[str, Any], all_players_by_pid: dict[int, dict
                         got.append(event_player_link(asset.get("pid"), all_players_by_pid, root, label=asset.get("name")))
                     elif asset.get("round") is not None:
                         origin = team_abbrev(teams_by_tid.get(safe_int(asset.get("originalTid"), -10)))
-                        rnd = "1st" if safe_int(asset.get("round")) == 1 else "2nd"
-                        got.append(f"{esc(asset.get('season'))} {rnd} ({esc(origin)})")
+                        rnd = "" if safe_int(asset.get("round")) == 1 else " 2nd"
+                        got.append(f"{esc(asset.get('season'))}{rnd} ({esc(origin)})")
                 parts.append(f"{team_link(tid)} receive {', '.join(got) or 'nothing'}")
             return "; ".join(parts) + "."
         if len(tids) >= 2:
@@ -7115,34 +6583,6 @@ def four_factors_table(data: dict[str, Any], teams: list[dict[str, Any]], season
       </div>
     </section>
     """
-
-
-def render_projections_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, league_proj_ctx: dict[str, Any] | None = None, team_projections: dict[int, dict[str, Any]] | None = None) -> str:
-    """League-wide projections page: power-ranking bump chart, storylines, and a
-    projected standings table -- all from the continuity ("proj") scenario."""
-    league_proj = league_projection(
-        teams, players, season,
-        league_ctx=league_proj_ctx, team_projections=team_projections,
-        game_attrs=data.get("gameAttributes") or {},
-    )
-    intro = f"""
-    <section class="page-hero">
-      <div>
-        <p class="eyebrow">League</p>
-        <h1>Projections</h1>
-        <p class="muted">Where every roster is headed over the next {PROJ_SEASONS_AHEAD} seasons — {PROJ_N_SIMS:,} Monte Carlo simulations of the game's aging model per player, aggregated into team strength. <strong>Talent only</strong>: every team keeps its current roster and ages it forward (no trades, draft, or re-signings), so the signal is the relative pecking order. Strength is shown relative to the current league.</p>
-      </div>
-    </section>
-    """
-    if league_proj is None:
-        body = intro + '<section class="card"><p class="muted">Projections are unavailable for this league.</p></section>'
-        return page_html("Projections", body, teams, root="", active="projections")
-    body = (
-        intro
-        + power_ranking_bump_html(league_proj)
-        + projected_standings_html(league_proj)
-    )
-    return page_html("Projections", body, teams, root="", active="projections")
 
 
 def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, start_season: int) -> str:
@@ -7551,7 +6991,7 @@ def trade_machine_payload(data: dict[str, Any], teams: list[dict[str, Any]], pla
                 via = team_abbrev(teams_by_tid.get(safe_int(dp.get("originalTid"), -10)))
             picks.append({
                 "id": dp.get("dpid"),
-                "label": f"{dp.get('season')} {'1st' if safe_int(dp.get('round')) == 1 else '2nd'}" + (f" (via {via})" if via else ""),
+                "label": f"{dp.get('season')}{'' if safe_int(dp.get('round')) == 1 else ' 2nd'}" + (f" (via {via})" if via else ""),
             })
         out_teams.append({
             "tid": tid,
@@ -8682,6 +8122,9 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
 @media (max-width: 700px) { .fin-rules { grid-template-columns: 1fr; } }
 .fin-rules h3 { margin: 0 0 .4rem; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 .fin-list { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .25rem; font-size: .86rem; }
+/* roster role dividers: heavier line after Starters (5) and Bench (10) on the default Stats table */
+#roster-stats tbody tr:nth-child(5) > *,
+#roster-stats tbody tr:nth-child(10) > * { border-bottom: 2px solid var(--line); }
 
 /* ---------- game pages ---------- */
 .click-row { cursor: pointer; }
@@ -10775,18 +10218,6 @@ def generate_site(
     write_text(out_dir / "compare.html", render_compare_page(data, teams, players, season, start_season))
 
     game_logs = build_game_logs(data, season)
-    league_proj_ctx = league_team_ovr_context(teams, players, season)
-    # Compute each team's projection once and reuse on the team pages AND the
-    # league projections page (the costly Monte Carlo runs only once per team).
-    team_projections: dict[int, dict[str, Any]] = {}
-    for team in teams:
-        tid = safe_int(team.get("tid"), -99)
-        if tid < 0 or team.get("disabled"):
-            continue
-        roster = [player for player in players if player.get("tid") == team.get("tid")]
-        proj = _team_projection(team, roster, season, league_proj_ctx)
-        if proj is not None:
-            team_projections[tid] = proj
     league_fin = compute_league_finances(data, teams, players, season, (league_sim(data, teams, season) or {}).get("teams"))
     for team in teams:
         roster = [player for player in players if player.get("tid") == team.get("tid")]
@@ -10795,8 +10226,6 @@ def generate_site(
         write_text(out_dir / "teams" / f"{slug}.html", render_team_roster_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
         write_text(out_dir / "teams" / f"{slug}-games.html", render_team_games_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
         write_text(out_dir / "teams" / f"{slug}-finances.html", render_team_finances_page(team, roster, teams, season, start_season, data=data, tfin=tfin, league_fin=league_fin))
-
-    write_text(out_dir / "projections.html", render_projections_page(data, teams, players, season, league_proj_ctx=league_proj_ctx, team_projections=team_projections))
 
     prospects = draft_prospects(data)
     for prospect in prospects:

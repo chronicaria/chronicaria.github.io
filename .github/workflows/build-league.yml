@@ -59,14 +59,14 @@ jobs:
           if [ -z "$NEWEST" ]; then echo "No usable export found"; exit 1; fi
           echo "Building from $NEWEST"
           rm -rf assets games players teams
-          rm -f compare.html draft.html free-agency.html history.html index.html projections.html records.html schedule.html trade.html
+          rm -f compare.html draft.html free-agency.html history.html index.html records.html schedule.html trade.html
           python3 scripts/league_generator.py "$NEWEST" --out .
 
       - name: Commit regenerated site
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets games players teams compare.html draft.html free-agency.html history.html index.html projections.html records.html schedule.html trade.html
+          git add assets games players teams compare.html draft.html free-agency.html history.html index.html records.html schedule.html trade.html
           if git diff --cached --quiet; then
             echo "No league changes."
           else

@@ -857,20 +857,6 @@ def roster_row(player: dict[str, Any], season: int, start_season: int, root: str
     ])
 
 
-def roster_table(title: str, players: list[dict[str, Any]], season: int, start_season: int, root: str, table_id: str, teams_by_tid: dict[int, dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None) -> str:
-    headers = ["Name", "Pos", "Age", "Ovr", "Pot", "Contract", "Health", "G", "MP", "PTS", "TRB", "AST", "PER", "Form", "Value", "Acquired", "Mood"]
-    rows = [roster_row(p, season, start_season, root, teams_by_tid, game_logs) for p in players]
-    return f"""
-    <section class="card roster-section">
-      <div class="section-title-row">
-        <h2>{esc(title)}</h2>
-        <span class="count-pill">{len(players)}</span>
-      </div>
-      {table_html(headers, rows, table_id=table_id, empty_message="No players in this group.")}
-    </section>
-    """
-
-
 def team_finances_table(roster: list[dict[str, Any]], season: int, data: dict[str, Any] | None = None, tid: int | None = None) -> str:
     finance_end_season = max(season, min(2033, season + PROJ_SEASONS_AHEAD))
     seasons = list(range(season, finance_end_season + 1))
@@ -960,10 +946,10 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, data: dict[st
 # All amounts in Basketball GM "thousands" units (300000 == $300M). No hard cap.
 FIN_START = 75000       # every team starts the season with $75M
 FIN_BASE = 160000       # base league payout: +$160M
-FIN_PER_WIN = 4000      # +$4M per regular-season win
-FIN_PLAYOFF = 25000     # +$25M for a playoff appearance
-FIN_FINALS = 30000      # +$30M for a finals appearance
-FIN_CHAMP = 40000       # +$40M for a championship
+FIN_PER_WIN = 2000      # +$2M per regular-season win
+FIN_PLAYOFF = 15000     # +$15M for a playoff appearance
+FIN_FINALS = 15000      # +$15M for a finals appearance
+FIN_CHAMP = 15000       # +$15M for a championship (bonuses stack: champion earns 15+15+15=$45M)
 FIN_SOFT_CAP = 300000   # soft cap: $1 luxury tax per $1 of payroll over $300M
 
 
@@ -1011,6 +997,23 @@ def playoff_status(data: dict[str, Any], tid: int, season: int) -> tuple[bool, b
     return (made, made_finals, won_champ)
 
 
+def team_dead_money(data: dict[str, Any] | None, tid: int, season: int) -> float:
+    """Salary still owed to this team's waived players in ``season`` (dead money).
+
+    A released player keeps being paid through their contract's ``exp`` year, so it
+    counts against payroll/luxury tax even though they're off the roster.
+    """
+    total = 0.0
+    for released in ((data or {}).get("releasedPlayers") or []):
+        if safe_int(released.get("tid"), -10) != tid:
+            continue
+        contract = released.get("contract") or {}
+        amount = safe_float(contract.get("amount"), 0.0)
+        if amount > 0 and season <= safe_int(contract.get("exp"), season):
+            total += amount
+    return total
+
+
 def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, odds: dict[int, dict[str, Any]] | None = None) -> dict[str, Any]:
     """Per-team cash-flow ledger for the season, recomputed each build from game results.
 
@@ -1026,7 +1029,8 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
         if tid < 0 or team.get("disabled"):
             continue
         roster = [p for p in players if safe_int(p.get("tid"), -98) == tid]
-        payroll = team_payroll(roster, season)
+        dead = team_dead_money(data, tid, season)
+        payroll = team_payroll(roster, season) + dead  # waived players still get paid
         ts = latest_team_season(team, season)
         won, lost = safe_int(ts.get("won"), 0), safe_int(ts.get("lost"), 0)
         luxtax = max(0.0, payroll - FIN_SOFT_CAP)
@@ -1037,7 +1041,7 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
         po_p, fin_p, champ_p = safe_float(o.get("po")), safe_float(o.get("finals")), safe_float(o.get("champ"))
         proj_playoff = FIN_PLAYOFF * po_p + FIN_FINALS * fin_p + FIN_CHAMP * champ_p
         fin[tid] = {
-            "payroll": payroll, "won": won, "lost": lost, "luxtax": luxtax,
+            "payroll": payroll, "dead": dead, "won": won, "lost": lost, "luxtax": luxtax,
             "under_cap": payroll < FIN_SOFT_CAP, "over_cap": payroll > FIN_SOFT_CAP,
             "win_rev_now": FIN_PER_WIN * won, "win_rev_proj": FIN_PER_WIN * proj_w,
             "earned_playoff": earned_playoff, "proj_playoff": proj_playoff,
@@ -1595,12 +1599,12 @@ def finance_ledger_card(tfin: dict[str, Any] | None) -> str:
     rows = [
         row("Starting balance", fmt_money(FIN_START), fmt_money(FIN_START)),
         row("Base league payout", fmt_money_pm(FIN_BASE), fmt_money_pm(FIN_BASE)),
-        row('Win bonus <span class="muted small-copy">($4M × W)</span>',
+        row(f'Win bonus <span class="muted small-copy">({fmt_money(FIN_PER_WIN)} × W)</span>',
             f'{fmt_money_pm(f["win_rev_now"])} <span class="muted small-copy">({f["won"]} W)</span>',
             f'{fmt_money_pm(f["win_rev_proj"])} <span class="muted small-copy">(proj {fmt_number(f["proj_w"], 1)} W)</span>'),
         row('Playoff bonuses <span class="muted small-copy">(EV projected)</span>', fmt_money_pm(f["earned_playoff"]), fmt_money_pm(f["proj_playoff"])),
         row("Total revenue", f'<strong>{fmt_money(f["rev_now"])}</strong>', f'<strong>{fmt_money(f["rev_proj"])}</strong>', cls="ledger-subtotal"),
-        row("Player payroll", payroll_cell, payroll_cell),
+        row("Player payroll" + (f' <span class="muted small-copy">(incl. {fmt_money(f["dead"])} dead money)</span>' if f.get("dead") else ""), payroll_cell, payroll_cell),
         row('Luxury tax <span class="muted small-copy">(over $300M)</span>', luxtax_cell, luxtax_cell),
         row('Tax distribution <span class="muted small-copy">(under-cap share)</span>', share_cell, share_cell),
         row("Cash on hand", cash_now, cash_proj, cls="ledger-total"),
@@ -1643,29 +1647,123 @@ def luxury_tax_card(tfin: dict[str, Any] | None, league_fin: dict[str, Any]) -> 
 
 
 def finance_rules_card() -> str:
-    return """
+    return f"""
     <section class="card">
       <div class="section-title-row"><h2>How Finances Work</h2></div>
       <div class="fin-rules">
         <div>
           <h3>Revenue</h3>
           <ul class="fin-list">
-            <li>Starting balance <strong>$75M</strong></li>
-            <li>Base league payout <strong>+$160M</strong></li>
-            <li>Per win <strong>+$4M</strong></li>
-            <li>Playoff appearance <strong>+$25M</strong></li>
-            <li>Finals appearance <strong>+$30M</strong></li>
-            <li>Championship <strong>+$40M</strong></li>
+            <li>Starting balance <strong>{fmt_money(FIN_START)}</strong></li>
+            <li>Base league payout <strong>+{fmt_money(FIN_BASE)}</strong></li>
+            <li>Per win <strong>+{fmt_money(FIN_PER_WIN)}</strong></li>
+            <li>Playoff appearance <strong>+{fmt_money(FIN_PLAYOFF)}</strong></li>
+            <li>Finals appearance <strong>+{fmt_money(FIN_FINALS)}</strong></li>
+            <li>Championship <strong>+{fmt_money(FIN_CHAMP)}</strong></li>
           </ul>
         </div>
         <div>
           <h3>Spending</h3>
           <ul class="fin-list">
-            <li>Player payroll <span class="muted small-copy">(full-season salaries)</span></li>
-            <li>Luxury tax <strong>$1 per $1</strong> over the <strong>$300M</strong> soft cap</li>
+            <li>Player payroll <span class="muted small-copy">(full-season salaries + dead money)</span></li>
+            <li>Luxury tax <strong>$1 per $1</strong> over the <strong>{fmt_money(FIN_SOFT_CAP)}</strong> soft cap</li>
             <li>Collected tax is split equally among the teams under the cap</li>
           </ul>
         </div>
+      </div>
+    </section>"""
+
+
+def _age_sort(player: dict[str, Any], season: int) -> int | None:
+    yr = (player.get("born") or {}).get("year")
+    return (season - yr) if isinstance(yr, int) else None
+
+
+def roster_advanced_row(player: dict[str, Any], season: int, start_season: int, root: str) -> str:
+    rating = latest_rating(player, season)
+    stat = latest_regular_stat(player, start_season, season)
+    gp = stat_gp(stat)
+    fga, fta = safe_float(stat.get("fga")), safe_float(stat.get("fta"))
+    fg, tp, pts = safe_float(stat.get("fg")), safe_float(stat.get("tp")), safe_float(stat.get("pts"))
+    ts = (pts / (2.0 * (fga + 0.44 * fta))) if (fga + 0.44 * fta) > 0 else None
+    efg = ((fg + 0.5 * tp) / fga) if fga > 0 else None
+    has_bpm = stat.get("obpm") is not None or stat.get("dbpm") is not None
+    bpm = (safe_float(stat.get("obpm")) + safe_float(stat.get("dbpm"))) if has_bpm else None
+    has_ws = stat.get("ows") is not None or stat.get("dws") is not None
+    ws = (safe_float(stat.get("ows")) + safe_float(stat.get("dws"))) if has_ws else None
+    return "".join([
+        td(player_link(player, root), sort=player_name(player), cls="name-cell"),
+        td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
+        td(age(player, season), sort=_age_sort(player, season)),
+        td(fmt_number(gp, 0), sort=gp),
+        td(fmt_number(per_game(stat, "min"), 1), sort=per_game(stat, "min")),
+        td(fmt_number(ts * 100, 1) if ts is not None else "—", sort=ts),
+        td(fmt_number(efg * 100, 1) if efg is not None else "—", sort=efg),
+        td(fmt_number(stat.get("per"), 1), sort=stat.get("per")),
+        td(fmt_number(stat.get("ortg"), 1), sort=stat.get("ortg")),
+        td(fmt_number(stat.get("drtg"), 1), sort=stat.get("drtg")),
+        td(fmt_signed(stat.get("obpm"), 1) if stat.get("obpm") is not None else "—", sort=stat.get("obpm")),
+        td(fmt_signed(stat.get("dbpm"), 1) if stat.get("dbpm") is not None else "—", sort=stat.get("dbpm")),
+        td(fmt_signed(bpm, 1) if bpm is not None else "—", sort=bpm),
+        td(fmt_number(stat.get("vorp"), 1), sort=stat.get("vorp")),
+        td(fmt_number(ws, 1) if ws is not None else "—", sort=ws),
+        td(fmt_signed(stat.get("pm"), 0) if stat.get("pm") is not None else "—", sort=stat.get("pm")),
+    ])
+
+
+def roster_ratings_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]]) -> str:
+    rating = latest_rating(player, season)
+    cells = [
+        td(player_link(player, root), sort=player_name(player), cls="name-cell"),
+        td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
+        td(age(player, season), sort=_age_sort(player, season)),
+        td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
+        td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
+    ]
+    for key, _ in TEAM_RATING_RANK_KEYS:
+        value = rating.get(key)
+        lo, hi = rating_ranges.get(key, (0.0, 0.0))
+        cls = "group-start" if key in RATING_GROUP_STARTS else ""
+        cells.append(td(esc(value if value is not None else "—"), sort=value, cls=cls, style=heat_style(value, lo, hi, 1)))
+    return "".join(cells)
+
+
+def roster_tabs(sorted_roster: list[dict[str, Any]], season: int, start_season: int, root: str, teams_by_tid: dict[int, dict[str, Any]], game_logs: dict[int, list[dict[str, Any]]] | None) -> str:
+    """One sortable spreadsheet of the whole roster, toggled between three column sets."""
+    ranges: dict[str, tuple[float, float]] = {}
+    for key, _ in TEAM_RATING_RANK_KEYS:
+        vals = [float(latest_rating(p, season)[key]) for p in sorted_roster
+                if isinstance(latest_rating(p, season).get(key), (int, float))]
+        ranges[key] = (min(vals), max(vals)) if vals else (0.0, 0.0)
+
+    stats_headers = ["Name", "Pos", "Age", "Ovr", "Pot", "Contract", "Health", "G", "MP", "PTS", "TRB", "AST", "PER", "Form", "Value", "Acquired", "Mood"]
+    stats_rows = [roster_row(p, season, start_season, root, teams_by_tid, game_logs) for p in sorted_roster]
+    adv_headers = ["Name", "Pos", "Age", "G", "MP", "TS%", "eFG%", "PER", "ORtg", "DRtg", "OBPM", "DBPM", "BPM", "VORP", "WS", "+/-"]
+    adv_rows = [roster_advanced_row(p, season, start_season, root) for p in sorted_roster]
+    rat_headers: list = ["Name", "Pos", "Age", "Ovr", "Pot"]
+    for key, label in TEAM_RATING_RANK_KEYS:
+        rat_headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
+    rat_rows = [roster_ratings_row(p, season, root, ranges) for p in sorted_roster]
+
+    def tab(tid: str, label: str, first: bool) -> str:
+        return (f'<button type="button" class="{"active" if first else ""}" role="tab" id="tab-{tid}" '
+                f'aria-controls="panel-{tid}" aria-selected="{"true" if first else "false"}" '
+                f'tabindex="{"0" if first else "-1"}" data-tab-target="panel-{tid}">{esc(label)}</button>')
+
+    return f"""
+    <section class="card">
+      <div class="section-title-row"><h2>Players</h2><span class="muted small-copy">click a column header to sort · {len(sorted_roster)} players</span></div>
+      <div class="tabs" role="tablist" aria-label="Roster stat views" data-tabs>
+        {tab("rstats", "Stats", True)}{tab("radv", "Advanced", False)}{tab("rrat", "Ratings", False)}
+      </div>
+      <div id="panel-rstats" role="tabpanel" aria-labelledby="tab-rstats" data-tab-panel>
+        {table_html(stats_headers, stats_rows, table_id="roster-stats", empty_message="No players found.", wrap_cls="fit-table")}
+      </div>
+      <div id="panel-radv" role="tabpanel" aria-labelledby="tab-radv" data-tab-panel hidden>
+        {table_html(adv_headers, adv_rows, table_id="roster-advanced", empty_message="No players found.", wrap_cls="fit-table")}
+      </div>
+      <div id="panel-rrat" role="tabpanel" aria-labelledby="tab-rrat" data-tab-panel hidden>
+        {table_html(rat_headers, rat_rows, table_id="roster-ratings", empty_message="No players found.", wrap_cls="fit-table")}
       </div>
     </section>"""
 
@@ -1677,16 +1775,12 @@ def _sorted_team_roster(roster: list[dict[str, Any]], season: int) -> list[dict[
 def render_team_roster_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, tfin: dict[str, Any] | None = None) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     sorted_roster = _sorted_team_roster(roster, season)
-    starters, bench, reserves = sorted_roster[:5], sorted_roster[5:10], sorted_roster[10:]
     rotation = rotation_map_card(team, sorted_roster, game_items or [], game_logs or {}, season, teams_by_tid) if game_items and game_logs else ""
     picks = draft_picks_card(data, team, teams_by_tid) if data else ""
     body = f"""
     {team_hero_html(team, season, sorted_roster, teams, tfin)}
     {team_subnav(team, "roster")}
-    <h2 class="block-title">Roster</h2>
-    {roster_table("Starters", starters, season, start_season, "../", f"team-{team.get('tid')}-starters", teams_by_tid, game_logs)}
-    {roster_table("Bench", bench, season, start_season, "../", f"team-{team.get('tid')}-bench", teams_by_tid, game_logs)}
-    {roster_table("Reserve", reserves, season, start_season, "../", f"team-{team.get('tid')}-reserve", teams_by_tid, game_logs)}
+    {roster_tabs(sorted_roster, season, start_season, "../", teams_by_tid, game_logs)}
     {depth_chart_card(sorted_roster, season)}
     {rotation}
     {picks}

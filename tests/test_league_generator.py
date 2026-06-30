@@ -192,5 +192,68 @@ class TestTeamGameViews(unittest.TestCase):
         self.assertIn("red to green = minutes load", html)
 
 
+class TestTeamFinances(unittest.TestCase):
+    def _team_s(self, tid, abbrev, won, lost):
+        return {"tid": tid, "abbrev": abbrev, "region": "City", "name": abbrev,
+                "seasons": [{"season": 2030, "won": won, "lost": lost}]}
+
+    def _pl(self, tid, amount):
+        return {"pid": tid * 100, "firstName": "P", "lastName": str(tid), "tid": tid,
+                "contract": {"amount": amount, "exp": 2031},
+                "ratings": [{"season": 2030, "ovr": 60}]}
+
+    def test_regular_season_ledger_and_luxury_tax_redistribution(self):
+        teams = [self._team_s(0, "AAA", 10, 0), self._team_s(1, "BBB", 5, 5)]
+        players = [self._pl(0, 320000), self._pl(1, 200000)]  # A over the $300M cap, B under
+        data = {"teams": teams, "players": players, "playoffSeries": [], "releasedPlayers": []}
+        lf = lg.compute_league_finances(data, teams, players, 2030, odds={})
+        a, b = lf["teams"][0], lf["teams"][1]
+        # A over cap: pays luxury tax, no playoff bonus during the regular season
+        self.assertEqual(a["luxtax"], 20000)
+        self.assertEqual(a["earned_playoff"], 0)
+        self.assertEqual(a["rev_now"], lg.FIN_BASE + lg.FIN_PER_WIN * 10)
+        self.assertEqual(a["tax_share"], 0)
+        self.assertAlmostEqual(a["cash_now"], lg.FIN_START + a["rev_now"] - 320000 - 20000)
+        # B under cap: collects the whole pool (only under-cap team)
+        self.assertEqual(b["luxtax"], 0)
+        self.assertEqual(b["tax_share"], 20000)
+        self.assertAlmostEqual(b["cash_now"], lg.FIN_START + (lg.FIN_BASE + lg.FIN_PER_WIN * 5) - 200000 + 20000)
+        # luxury-tax pool is conserved: collected == redistributed
+        self.assertEqual(lf["pool"], 20000)
+        self.assertAlmostEqual(sum(t["tax_share"] for t in lf["teams"].values()), lf["pool"])
+
+    def test_playoff_bonuses_stack_only_when_earned(self):
+        complete = {"season": 2030, "series": [
+            [{"home": {"tid": 0, "won": 4}, "away": {"tid": 3, "won": 1}},
+             {"home": {"tid": 1, "won": 4}, "away": {"tid": 2, "won": 2}}],
+            [{"home": {"tid": 0, "won": 4}, "away": {"tid": 1, "won": 2}}],
+        ]}
+        data = {"playoffSeries": [complete]}
+        self.assertEqual(lg.playoff_status(data, 0, 2030), (True, True, True))    # champion -> 25+30+40
+        self.assertEqual(lg.playoff_status(data, 1, 2030), (True, True, False))   # finalist -> 25+30
+        self.assertEqual(lg.playoff_status(data, 2, 2030), (True, False, False))  # 1st-round out -> 25
+
+    def test_no_false_finalists_mid_round_one(self):
+        # Only round 1 exists; tid0 has already clinched its series 4-1. The Finals
+        # round does not exist yet, so nobody may be crowned finalist/champion.
+        midway = {"season": 2030, "series": [
+            [{"home": {"tid": 0, "won": 4}, "away": {"tid": 3, "won": 1}},
+             {"home": {"tid": 1, "won": 2}, "away": {"tid": 2, "won": 1}}],
+        ]}
+        data = {"playoffSeries": [midway]}
+        self.assertEqual(lg.playoff_status(data, 0, 2030), (True, False, False))
+        self.assertEqual(lg.playoff_status(data, 1, 2030), (True, False, False))
+
+    def test_finals_in_progress_is_not_yet_a_championship(self):
+        inprog = {"season": 2030, "series": [
+            [{"home": {"tid": 0, "won": 4}, "away": {"tid": 3, "won": 0}},
+             {"home": {"tid": 1, "won": 4}, "away": {"tid": 2, "won": 1}}],
+            [{"home": {"tid": 0, "won": 3}, "away": {"tid": 1, "won": 2}}],  # 3-2, unclinched
+        ]}
+        data = {"playoffSeries": [inprog]}
+        self.assertEqual(lg.playoff_status(data, 0, 2030), (True, True, False))
+        self.assertEqual(lg.playoff_status(data, 1, 2030), (True, True, False))
+
+
 if __name__ == "__main__":
     unittest.main()

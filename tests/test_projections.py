@@ -46,22 +46,11 @@ def _export_path():
         return override if os.path.isabs(override) else os.path.join(_REPO, override)
 
     data_dir = os.path.join(_REPO, "league-data")
-    stable = os.path.join(data_dir, "day30.json")
-    if os.path.exists(stable):
-        return stable
-
-    candidates = []
-    for name in os.listdir(data_dir):
-        if not (name.startswith("day") and name.endswith(".json")):
-            continue
-        try:
-            day = int(name[len("day") : -len(".json")])
-        except ValueError:
-            continue
-        candidates.append((day, os.path.join(data_dir, name)))
+    candidates = [os.path.join(data_dir, n) for n in os.listdir(data_dir) if n.endswith(".json")]
     if not candidates:
-        raise FileNotFoundError("no league-data/day*.json fixtures found")
-    return max(candidates)[1]
+        raise FileNotFoundError("no league-data/*.json fixtures found")
+    # Largest export ~= furthest along (most games played); robust to file naming.
+    return max(candidates, key=os.path.getsize)
 
 
 _EXPORT_PATH = _export_path()

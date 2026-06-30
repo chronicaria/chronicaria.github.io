@@ -305,15 +305,6 @@ def team_payroll(roster: Iterable[dict[str, Any]], season: int | None = None) ->
     return sum(player_current_salary(player, season) for player in roster)
 
 
-def salary_cap_html(payroll: float) -> str:
-    # No salary cap in this league: show payroll as a plain number, no bar/floor.
-    return f"""
-    <div class="salary-summary">
-      <div class="salary-copy"><span>Payroll</span><strong>{fmt_money(payroll)}</strong></div>
-    </div>
-    """
-
-
 def latest_team_season(team: dict[str, Any], season: int | None = None) -> dict[str, Any]:
     seasons = [row for row in team.get("seasons", []) if isinstance(row, dict)]
     if season is not None:
@@ -965,6 +956,113 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, data: dict[st
     """
 
 
+# ---------- league finance model ----------
+# All amounts in Basketball GM "thousands" units (300000 == $300M). No hard cap.
+FIN_START = 75000       # every team starts the season with $75M
+FIN_BASE = 160000       # base league payout: +$160M
+FIN_PER_WIN = 4000      # +$4M per regular-season win
+FIN_PLAYOFF = 25000     # +$25M for a playoff appearance
+FIN_FINALS = 30000      # +$30M for a finals appearance
+FIN_CHAMP = 40000       # +$40M for a championship
+FIN_SOFT_CAP = 300000   # soft cap: $1 luxury tax per $1 of payroll over $300M
+
+
+FIN_FINALS_GAMES_TO_WIN = 4  # ponytail: best-of-7 finals (this league); read games-to-win if the format changes
+
+
+def playoff_status(data: dict[str, Any], tid: int, season: int) -> tuple[bool, bool, bool]:
+    """(made_playoffs, made_finals, won_championship) for a team in a season.
+
+    Read from ``playoffSeries``; during the regular season there is no series yet,
+    so this returns all-False and the playoff bonuses stay $0 until earned.
+
+    ``playoffSeries.series`` GROWS one round at a time, so ``rounds[-1]`` is only the
+    Finals once the bracket reaches its last round. The Finals is round index
+    ``expected_rounds - 1`` (= log2(first-round matchups) + 1 total rounds); until that
+    round exists no team has "made the finals", and the title is awarded only once the
+    Finals series is clinched. This keeps the bonuses honest mid-playoff.
+    """
+    series_by_season = {safe_int(ps.get("season")): ps for ps in (data.get("playoffSeries") or []) if isinstance(ps, dict)}
+    rounds = [rnd for rnd in ((series_by_season.get(season) or {}).get("series") or []) if rnd]
+    if not rounds:
+        return (False, False, False)
+
+    matchups = lambda rnd: [m for m in (rnd or []) if isinstance(m, dict)]
+
+    def in_matchup(m: dict[str, Any]) -> bool:
+        return tid in (safe_int((m.get("home") or {}).get("tid"), -91), safe_int((m.get("away") or {}).get("tid"), -92))
+
+    made = any(in_matchup(m) for rnd in rounds for m in matchups(rnd))
+    first_round = matchups(rounds[0])
+    expected_rounds = (int(round(math.log2(len(first_round)))) + 1) if first_round else len(rounds)
+
+    made_finals = won_champ = False
+    if len(rounds) >= expected_rounds:
+        finals = matchups(rounds[expected_rounds - 1])
+        made_finals = any(in_matchup(m) for m in finals)
+        for m in finals:
+            home, away = m.get("home") or {}, m.get("away") or {}
+            hw, aw = safe_int(home.get("won")), safe_int(away.get("won"))
+            if max(hw, aw) < FIN_FINALS_GAMES_TO_WIN:
+                continue  # Finals series not clinched yet
+            winner = safe_int(home.get("tid")) if hw > aw else safe_int(away.get("tid"))
+            if winner == tid:
+                won_champ = True
+    return (made, made_finals, won_champ)
+
+
+def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, odds: dict[int, dict[str, Any]] | None = None) -> dict[str, Any]:
+    """Per-team cash-flow ledger for the season, recomputed each build from game results.
+
+    Returns ``{"teams": {tid: ledger}, "pool", "share", "n_under", "soft_cap"}``.
+    Luxury tax (payroll over the soft cap) is pooled and split equally among the
+    teams under the cap. "Projected" figures use the 10k-sim projected wins and the
+    expected value of the playoff bonuses (prob-weighted).
+    """
+    odds = odds or {}
+    fin: dict[int, dict[str, Any]] = {}
+    for team in teams:
+        tid = safe_int(team.get("tid"), -99)
+        if tid < 0 or team.get("disabled"):
+            continue
+        roster = [p for p in players if safe_int(p.get("tid"), -98) == tid]
+        payroll = team_payroll(roster, season)
+        ts = latest_team_season(team, season)
+        won, lost = safe_int(ts.get("won"), 0), safe_int(ts.get("lost"), 0)
+        luxtax = max(0.0, payroll - FIN_SOFT_CAP)
+        made_po, made_finals, won_champ = playoff_status(data, tid, season)
+        earned_playoff = (FIN_PLAYOFF if made_po else 0) + (FIN_FINALS if made_finals else 0) + (FIN_CHAMP if won_champ else 0)
+        o = odds.get(tid) or {}
+        proj_w = safe_float(o.get("proj_w"), float(won))
+        po_p, fin_p, champ_p = safe_float(o.get("po")), safe_float(o.get("finals")), safe_float(o.get("champ"))
+        proj_playoff = FIN_PLAYOFF * po_p + FIN_FINALS * fin_p + FIN_CHAMP * champ_p
+        fin[tid] = {
+            "payroll": payroll, "won": won, "lost": lost, "luxtax": luxtax,
+            "under_cap": payroll < FIN_SOFT_CAP, "over_cap": payroll > FIN_SOFT_CAP,
+            "win_rev_now": FIN_PER_WIN * won, "win_rev_proj": FIN_PER_WIN * proj_w,
+            "earned_playoff": earned_playoff, "proj_playoff": proj_playoff,
+            "proj_w": proj_w, "po": po_p, "finals": fin_p, "champ": champ_p,
+            "rev_now": FIN_BASE + FIN_PER_WIN * won + earned_playoff,
+            "rev_proj": FIN_BASE + FIN_PER_WIN * proj_w + proj_playoff,
+        }
+    pool = sum(f["luxtax"] for f in fin.values())
+    under = [t for t, f in fin.items() if f["under_cap"]]
+    share = pool / len(under) if under else 0.0
+    for f in fin.values():
+        f["tax_share"] = share if f["under_cap"] else 0.0
+        f["cash_now"] = FIN_START + f["rev_now"] - f["payroll"] - f["luxtax"] + f["tax_share"]
+        f["cash_proj"] = FIN_START + f["rev_proj"] - f["payroll"] - f["luxtax"] + f["tax_share"]
+    return {"teams": fin, "pool": pool, "share": share, "n_under": len(under), "soft_cap": FIN_SOFT_CAP}
+
+
+def fmt_money_pm(amount: Any) -> str:
+    """Money with an explicit +/- sign; $0 for zero."""
+    a = safe_float(amount, 0.0)
+    if abs(a) < 1e-9:
+        return "$0"
+    return ("+" + fmt_money(a)) if a > 0 else fmt_money(a)
+
+
 def team_vitals_html(team: dict[str, Any], season: int) -> str:
     team_season = latest_team_season(team, season)
     hype = safe_float(team_season.get("hype"), float("nan"))
@@ -1434,52 +1532,196 @@ def draft_picks_card(data: dict[str, Any], team: dict[str, Any], teams_by_tid: d
     """
 
 
-def render_team_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, league_proj_ctx: dict[str, Any] | None = None, team_proj: dict[str, Any] | None = None) -> str:
-    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
-    sorted_roster = sorted(roster, key=lambda p: (p.get("rosterOrder", 10**9), -latest_rating(p, season).get("ovr", 0), player_name(p)))
-    starters = sorted_roster[:5]
-    bench = sorted_roster[5:10]
-    reserves = sorted_roster[10:]
-    team_full = team_full_name(team)
-    palette = team_palette_by_tid(teams)
-    primary = palette.get(safe_int(team.get("tid"), -1), "#5b9dff")
-    secondary = primary
-    payroll = team_payroll(sorted_roster, season)
-    team_season = latest_team_season(team, season)
-    record = fmt_record(team_season.get("won"), team_season.get("lost"))
-    streak = streak_text(team_season.get("streak"))
-    record_bits = [esc(team.get("abbrev", ""))]
+def hero_finance_chip(tfin: dict[str, Any] | None) -> str:
+    if not tfin:
+        return ""
+    now, proj = tfin["cash_now"], tfin["cash_proj"]
+    nc = "delta-up" if now >= 0 else "delta-down"
+    pc = "delta-up" if proj >= 0 else "delta-down"
+    return f"""
+    <div class="hero-finance">
+      <div class="hero-fin-row"><span>Cash on hand</span><strong class="{nc}">{fmt_money(now)}</strong></div>
+      <div class="hero-fin-row"><span>Projected EOS</span><strong class="{pc}">{fmt_money(proj)}</strong></div>
+    </div>"""
+
+
+def team_subnav(team: dict[str, Any], active_sub: str) -> str:
+    slug = team_slug(team)
+    items = [("roster", "Roster", f"{slug}.html"), ("games", "Games", f"{slug}-games.html"), ("finances", "Finances", f"{slug}-finances.html")]
+    links = []
+    for key, label, href in items:
+        active = " active" if key == active_sub else ""
+        cur = ' aria-current="page"' if key == active_sub else ""
+        links.append(f'<a class="subnav-link{active}" href="{href}"{cur}>{esc(label)}</a>')
+    return f'<nav class="team-subnav" aria-label="Team sections">{"".join(links)}</nav>'
+
+
+def team_hero_html(team: dict[str, Any], season: int, sorted_roster: list[dict[str, Any]], teams: list[dict[str, Any]], tfin: dict[str, Any] | None) -> str:
+    primary = team_palette_by_tid(teams).get(safe_int(team.get("tid"), -1), "#5b9dff")
+    ts = latest_team_season(team, season)
+    record = fmt_record(ts.get("won"), ts.get("lost"))
+    streak = streak_text(ts.get("streak"))
+    bits = [esc(team.get("abbrev", ""))]
     if record != "—":
-        record_bits.append(f"{record}")
+        bits.append(record)
     if streak != "—":
-        record_bits.append(streak)
-    record_bits.append(f"{len(sorted_roster)} players")
-    strip = team_games_strip(team, game_items or [], teams_by_tid) if game_items else ""
-    picks = draft_picks_card(data, team, teams_by_tid) if data else ""
-    profile = team_quarter_profile(team, data, season, teams_by_tid) if data else ""
-    rotation = rotation_map_card(team, sorted_roster, game_items or [], game_logs or {}, season, teams_by_tid) if game_items and game_logs else ""
-    body = f"""
-    <section class="page-hero team-hero" style="--team-primary:{esc(primary)};--team-secondary:{esc(secondary)}">
+        bits.append(streak)
+    bits.append(f"{len(sorted_roster)} players")
+    return f"""
+    <section class="page-hero team-hero" style="--team-primary:{esc(primary)};--team-secondary:{esc(primary)}">
       <div>
         <p class="eyebrow">Team</p>
-        <h1>{esc(team_full)}</h1>
-        <p class="muted">{' · '.join(record_bits)}</p>
+        <h1>{esc(team_full_name(team))}</h1>
+        <p class="muted">{' · '.join(bits)}</p>
       </div>
-      {salary_cap_html(payroll)}
-    </section>
+      {hero_finance_chip(tfin)}
+    </section>"""
+
+
+def finance_ledger_card(tfin: dict[str, Any] | None) -> str:
+    if not tfin:
+        return ""
+    f = tfin
+
+    def row(label: str, now: str, proj: str, cls: str = "") -> str:
+        cls_attr = f' class="{cls}"' if cls else ""
+        return f'<tr{cls_attr}><td class="ledger-label">{label}</td><td class="ledger-num">{now}</td><td class="ledger-num">{proj}</td></tr>'
+
+    payroll_cell = f'<span class="delta-down">{fmt_money(-f["payroll"])}</span>'
+    luxtax_cell = f'<span class="delta-down">{fmt_money(-f["luxtax"])}</span>' if f["luxtax"] > 0 else "$0"
+    share_cell = f'<span class="delta-up">{fmt_money_pm(f["tax_share"])}</span>' if f["tax_share"] > 0 else "$0"
+    cash_now = f'<strong class="{"delta-up" if f["cash_now"] >= 0 else "delta-down"}">{fmt_money(f["cash_now"])}</strong>'
+    cash_proj = f'<strong class="{"delta-up" if f["cash_proj"] >= 0 else "delta-down"}">{fmt_money(f["cash_proj"])}</strong>'
+    rows = [
+        row("Starting balance", fmt_money(FIN_START), fmt_money(FIN_START)),
+        row("Base league payout", fmt_money_pm(FIN_BASE), fmt_money_pm(FIN_BASE)),
+        row('Win bonus <span class="muted small-copy">($4M × W)</span>',
+            f'{fmt_money_pm(f["win_rev_now"])} <span class="muted small-copy">({f["won"]} W)</span>',
+            f'{fmt_money_pm(f["win_rev_proj"])} <span class="muted small-copy">(proj {fmt_number(f["proj_w"], 1)} W)</span>'),
+        row('Playoff bonuses <span class="muted small-copy">(EV projected)</span>', fmt_money_pm(f["earned_playoff"]), fmt_money_pm(f["proj_playoff"])),
+        row("Total revenue", f'<strong>{fmt_money(f["rev_now"])}</strong>', f'<strong>{fmt_money(f["rev_proj"])}</strong>', cls="ledger-subtotal"),
+        row("Player payroll", payroll_cell, payroll_cell),
+        row('Luxury tax <span class="muted small-copy">(over $300M)</span>', luxtax_cell, luxtax_cell),
+        row('Tax distribution <span class="muted small-copy">(under-cap share)</span>', share_cell, share_cell),
+        row("Cash on hand", cash_now, cash_proj, cls="ledger-total"),
+    ]
+    return f"""
+    <section class="card">
+      <div class="section-title-row"><h2>Cash Flow</h2><span class="muted small-copy">live ledger · projected = 10k-sim wins + playoff EV</span></div>
+      <div class="table-wrap">
+        <table class="ledger-table">
+          <thead><tr><th>Item</th><th>Now</th><th>Projected (EOS)</th></tr></thead>
+          <tbody>{"".join(rows)}</tbody>
+        </table>
+      </div>
+    </section>"""
+
+
+def luxury_tax_card(tfin: dict[str, Any] | None, league_fin: dict[str, Any]) -> str:
+    if not tfin:
+        return ""
+    f = tfin
+    cap = league_fin.get("soft_cap", FIN_SOFT_CAP)
+    tiles = [("Payroll", fmt_money(f["payroll"]), "")]
+    if f["over_cap"]:
+        tiles.append(("Over cap by", fmt_money(f["payroll"] - cap), "delta-down"))
+        tiles.append(("Luxury tax paid", fmt_money(-f["luxtax"]), "delta-down"))
+    elif f["under_cap"]:
+        tiles.append(("Under cap by", fmt_money(cap - f["payroll"]), "delta-up"))
+        tiles.append(("Tax distribution", fmt_money_pm(f["tax_share"]), "delta-up"))
+    else:
+        tiles.append(("At the cap", "$0", ""))
+    tile_html = "".join(f'<div class="vital-tile"><span>{esc(l)}</span><strong class="{c}">{v}</strong></div>' for l, v, c in tiles)
+    n_under = safe_int(league_fin.get("n_under"), 0)
+    note = f'League luxury-tax pool {fmt_money(league_fin.get("pool", 0))} split equally among {n_under} under-cap team{"" if n_under == 1 else "s"} ({fmt_money(league_fin.get("share", 0))} each).'
+    return f"""
+    <section class="card">
+      <div class="section-title-row"><h2>Luxury Tax</h2><span class="muted small-copy">soft cap {fmt_money(cap)} · $1 per $1 over · redistributed to under-cap teams</span></div>
+      <div class="vitals-row">{tile_html}</div>
+      <p class="muted small-copy">{note}</p>
+    </section>"""
+
+
+def finance_rules_card() -> str:
+    return """
+    <section class="card">
+      <div class="section-title-row"><h2>How Finances Work</h2></div>
+      <div class="fin-rules">
+        <div>
+          <h3>Revenue</h3>
+          <ul class="fin-list">
+            <li>Starting balance <strong>$75M</strong></li>
+            <li>Base league payout <strong>+$160M</strong></li>
+            <li>Per win <strong>+$4M</strong></li>
+            <li>Playoff appearance <strong>+$25M</strong></li>
+            <li>Finals appearance <strong>+$30M</strong></li>
+            <li>Championship <strong>+$40M</strong></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Spending</h3>
+          <ul class="fin-list">
+            <li>Player payroll <span class="muted small-copy">(full-season salaries)</span></li>
+            <li>Luxury tax <strong>$1 per $1</strong> over the <strong>$300M</strong> soft cap</li>
+            <li>Collected tax is split equally among the teams under the cap</li>
+          </ul>
+        </div>
+      </div>
+    </section>"""
+
+
+def _sorted_team_roster(roster: list[dict[str, Any]], season: int) -> list[dict[str, Any]]:
+    return sorted(roster, key=lambda p: (p.get("rosterOrder", 10**9), -latest_rating(p, season).get("ovr", 0), player_name(p)))
+
+
+def render_team_roster_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, tfin: dict[str, Any] | None = None) -> str:
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    sorted_roster = _sorted_team_roster(roster, season)
+    starters, bench, reserves = sorted_roster[:5], sorted_roster[5:10], sorted_roster[10:]
+    rotation = rotation_map_card(team, sorted_roster, game_items or [], game_logs or {}, season, teams_by_tid) if game_items and game_logs else ""
+    picks = draft_picks_card(data, team, teams_by_tid) if data else ""
+    body = f"""
+    {team_hero_html(team, season, sorted_roster, teams, tfin)}
+    {team_subnav(team, "roster")}
     <h2 class="block-title">Roster</h2>
     {roster_table("Starters", starters, season, start_season, "../", f"team-{team.get('tid')}-starters", teams_by_tid, game_logs)}
     {roster_table("Bench", bench, season, start_season, "../", f"team-{team.get('tid')}-bench", teams_by_tid, game_logs)}
     {roster_table("Reserve", reserves, season, start_season, "../", f"team-{team.get('tid')}-reserve", teams_by_tid, game_logs)}
     {depth_chart_card(sorted_roster, season)}
-    {strip}
-    {profile}
-    <h2 class="block-title">Finances</h2>
-    {team_finances_table(sorted_roster, season, data=data, tid=safe_int(team.get("tid")))}
-    {picks}
     {rotation}
+    {picks}
     """
-    return page_html(team_full, body, teams, root="../", active=f"team-{team.get('tid')}")
+    return page_html(team_full_name(team), body, teams, root="../", active=f"team-{team.get('tid')}")
+
+
+def render_team_games_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, tfin: dict[str, Any] | None = None) -> str:
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    sorted_roster = _sorted_team_roster(roster, season)
+    strip = team_games_strip(team, game_items or [], teams_by_tid) if game_items else ""
+    games_table = team_games_table(team, game_items or [], teams_by_tid, season) if game_items else ""
+    profile = team_quarter_profile(team, data, season, teams_by_tid) if data else ""
+    body = f"""
+    {team_hero_html(team, season, sorted_roster, teams, tfin)}
+    {team_subnav(team, "games")}
+    {strip}
+    {games_table}
+    {profile}
+    """
+    return page_html(f"{team_full_name(team)} — Games", body, teams, root="../", active=f"team-{team.get('tid')}")
+
+
+def render_team_finances_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, tfin: dict[str, Any] | None = None, league_fin: dict[str, Any] | None = None) -> str:
+    sorted_roster = _sorted_team_roster(roster, season)
+    body = f"""
+    {team_hero_html(team, season, sorted_roster, teams, tfin)}
+    {team_subnav(team, "finances")}
+    {finance_ledger_card(tfin)}
+    {luxury_tax_card(tfin, league_fin or {})}
+    <h2 class="block-title">Owed Payroll</h2>
+    {team_finances_table(sorted_roster, season, data=data, tid=safe_int(team.get("tid")))}
+    {finance_rules_card()}
+    """
+    return page_html(f"{team_full_name(team)} — Finances", body, teams, root="../", active=f"team-{team.get('tid')}")
 
 
 RATING_GROUP_STARTS = {"hgt", "ins", "oiq"}
@@ -8315,16 +8557,37 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
   width: .25rem;
   background: var(--accent);
 }
-.salary-summary {
-  width: min(100%, 20rem);
+/* ---------- team subnav + hero finance chip ---------- */
+.hero-finance {
+  display: flex; flex-direction: column; gap: .3rem;
+  min-width: min(100%, 14rem);
   padding: .55rem .7rem;
-  border: 1px solid var(--line);
-  border-radius: .15rem;
-  background: var(--panel-2);
+  border: 1px solid var(--line); border-radius: .15rem; background: var(--panel-2);
 }
-.salary-copy { display: flex; justify-content: space-between; gap: .6rem; margin-bottom: .35rem; font-size: .8rem; }
-.salary-copy span { color: var(--muted); font-weight: 500; }
-.salary-copy strong { color: var(--text); }
+.hero-fin-row { display: flex; justify-content: space-between; gap: .8rem; font-size: .82rem; }
+.hero-fin-row span { color: var(--muted); font-weight: 500; }
+.team-subnav { display: inline-flex; margin: 0 0 1rem; border: 1px solid var(--line); border-radius: .2rem; overflow: hidden; }
+.subnav-link {
+  padding: .5rem .95rem; font-size: .82rem; font-weight: 600; text-decoration: none;
+  color: var(--muted); background: var(--bg); border-left: 1px solid var(--line);
+}
+.subnav-link:first-child { border-left: 0; }
+.subnav-link:hover { color: var(--text); background: var(--panel-2); }
+.subnav-link.active { color: var(--text); background: var(--panel-3); font-weight: 800; box-shadow: inset 0 -2px 0 var(--accent); }
+
+/* ---------- finance ledger ---------- */
+.ledger-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+.ledger-table th { text-align: right; color: var(--muted); font-weight: 600; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; padding: .35rem .5rem; border-bottom: 1px solid var(--line); }
+.ledger-table th:first-child { text-align: left; }
+.ledger-table td { padding: .3rem .5rem; border-bottom: 1px solid rgba(255,255,255,.04); }
+.ledger-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ledger-table tr.ledger-subtotal td { border-top: 1px solid var(--line); font-weight: 600; }
+.ledger-table tr.ledger-total td { border-top: 2px solid var(--line); font-size: 1rem; padding-top: .5rem; }
+.ledger-table tr.ledger-total .ledger-label { font-weight: 700; }
+.fin-rules { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+@media (max-width: 700px) { .fin-rules { grid-template-columns: 1fr; } }
+.fin-rules h3 { margin: 0 0 .4rem; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.fin-list { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .25rem; font-size: .86rem; }
 
 /* ---------- game pages ---------- */
 .click-row { cursor: pointer; }
@@ -8388,7 +8651,7 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
   .rating-groups { grid-template-columns: 1fr; }
   .rating-topline { grid-template-columns: 1fr; }
   .team-hero { display: block; }
-  .salary-summary { margin-top: .75rem; }
+  .hero-finance { margin-top: .75rem; }
   .team-dropdown { width: 100%; }
   .team-menu { position: static; width: 100%; max-height: 14rem; margin-top: .3rem; box-shadow: none; }
   .box-score-hero { grid-template-columns: 1fr; text-align: left; }
@@ -10430,9 +10693,14 @@ def generate_site(
         proj = _team_projection(team, roster, season, league_proj_ctx)
         if proj is not None:
             team_projections[tid] = proj
+    league_fin = compute_league_finances(data, teams, players, season, (league_sim(data, teams, season) or {}).get("teams"))
     for team in teams:
         roster = [player for player in players if player.get("tid") == team.get("tid")]
-        write_text(out_dir / "teams" / f"{team_slug(team)}.html", render_team_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, league_proj_ctx=league_proj_ctx, team_proj=team_projections.get(safe_int(team.get("tid"), -99))))
+        slug = team_slug(team)
+        tfin = league_fin["teams"].get(safe_int(team.get("tid"), -99))
+        write_text(out_dir / "teams" / f"{slug}.html", render_team_roster_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
+        write_text(out_dir / "teams" / f"{slug}-games.html", render_team_games_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
+        write_text(out_dir / "teams" / f"{slug}-finances.html", render_team_finances_page(team, roster, teams, season, start_season, data=data, tfin=tfin, league_fin=league_fin))
 
     write_text(out_dir / "projections.html", render_projections_page(data, teams, players, season, league_proj_ctx=league_proj_ctx, team_projections=team_projections))
 

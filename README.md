@@ -22,7 +22,7 @@ scripts/            League site generator
 ## Regenerate
 
 ```sh
-python3 scripts/league_generator.py league-data/2030_day13.json --out .
+python3 scripts/league_generator.py league-data/2030_day14.json --out .
 ```
 
 The `Build SMP league site` GitHub Action regenerates the root site from the

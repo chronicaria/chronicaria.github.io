@@ -31,6 +31,25 @@ def _player(pid, first, last, tid=0, exp=2030, amount=10000, ovr=60):
     }
 
 
+class TestFreeAgentSalary(unittest.TestCase):
+    def test_worked_examples_from_formula(self):
+        # 1-year asking salary ($M) must match the formula's worked examples.
+        self.assertEqual(lg.fa_salary_millions(67, 73, 24), 31)  # Cody Williams -> $31M
+        self.assertEqual(lg.fa_salary_millions(72, 72, 28), 37)  # Tyrese Maxey -> $37M
+        self.assertEqual(lg.fa_salary_millions(79, 87, 22), 50)  # AJ Dybantsa (80+ capped) -> $50M
+
+    def test_bounds_and_curve_ends(self):
+        self.assertEqual(lg.fa_salary_millions(40, 40, 30), 1)   # score <= 52 -> $1M floor
+        self.assertEqual(lg.fa_salary_millions(90, 90, 27), 50)  # score >= 80 -> $50M cap
+
+    def test_by_length_first_year_matches_single(self):
+        vals = lg.fa_salary_by_length(67, 73, 24)
+        self.assertEqual(len(vals), 5)
+        self.assertEqual(vals[0], lg.fa_salary_millions(67, 73, 24))  # 1-yr == pure formula
+        # aging a 24yo whose upside premium fades should not raise the annual on longer deals
+        self.assertLessEqual(vals[4], vals[0])
+
+
 class TestContractExpiryMarket(unittest.TestCase):
     def test_rostered_expiring_contracts_exclude_free_agents_and_retired_players(self):
         players = [

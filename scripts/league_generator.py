@@ -1967,17 +1967,81 @@ def render_team_finances_page(team: dict[str, Any], roster: list[dict[str, Any]]
 RATING_GROUP_STARTS = {"hgt", "ins", "oiq"}
 
 
+# Free-agent asking-salary model (from the user's UFA formula). Maps a player's
+# ovr/pot/age to a "salary score", then interpolates that score on an anchor curve
+# to a dollar figure. All salary values are in $M; BBGM stores thousands (×1000).
+FA_SALARY_ANCHORS = [
+    (52, 1), (55, 3), (58, 8), (60, 12), (62, 16), (64, 20), (66, 24),
+    (68, 28), (70, 32), (72, 35), (74, 39), (76, 43), (78, 47), (80, 50),
+]
+
+
+def _round_half_up(x: float) -> int:
+    return math.floor(x + 0.5)
+
+
+def fa_salary_score(ovr: int, pot: int, age: int) -> float:
+    """UFA salary score: ovr adjusted for upside, decline risk, prime, and age."""
+    upside_gap = max(pot - ovr, 0)
+    if age <= 21:
+        upside_bonus = min(0.38 * upside_gap, 8.0)
+    elif age <= 24:
+        upside_bonus = min(0.28 * upside_gap, 6.0)
+    elif age <= 27:
+        upside_bonus = min(0.15 * upside_gap, 3.5)
+    elif age <= 30:
+        upside_bonus = min(0.05 * upside_gap, 1.5)
+    else:
+        upside_bonus = 0.0
+    decline_gap = max(ovr - pot, 0)
+    decline_penalty = min((0.12 if age <= 30 else 0.22) * decline_gap, 4.0)
+    prime_bonus = 1.0 if 24 <= age <= 29 else 0.0
+    veteran_penalty = 1.25 * max(age - 32, 0)
+    return ovr + upside_bonus - decline_penalty + prime_bonus - veteran_penalty
+
+
+def _salary_score_to_millions(score: float) -> float:
+    anchors = FA_SALARY_ANCHORS
+    if score <= anchors[0][0]:
+        return float(anchors[0][1])
+    if score >= anchors[-1][0]:
+        return float(anchors[-1][1])
+    for (s0, m0), (s1, m1) in zip(anchors, anchors[1:]):
+        if s0 <= score <= s1:
+            return m0 + (score - s0) / (s1 - s0) * (m1 - m0)
+    return float(anchors[-1][1])
+
+
+def fa_salary_millions(ovr: int, pot: int, age: int) -> int:
+    """Single-year UFA asking salary in $M (rounded half-up, clamped to 1..50)."""
+    raw = _salary_score_to_millions(fa_salary_score(ovr, pot, age))
+    return max(1, min(50, _round_half_up(raw)))
+
+
+def fa_salary_by_length(ovr: int, pot: int, age: int) -> list[int]:
+    """Annual asking salary ($M) for 1..5-year deals. The formula is age-based, so a
+    longer deal averages the yearly figure as the player ages across it (ovr/pot held)."""
+    out = []
+    for length in range(1, 6):
+        raws = [_salary_score_to_millions(fa_salary_score(ovr, pot, age + i)) for i in range(length)]
+        out.append(max(1, min(50, _round_half_up(sum(raws) / len(raws)))))
+    return out
+
+
 def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]]) -> str:
     rating = latest_rating(player, season)
-    contract = player.get("contract") or {}
+    born = (player.get("born") or {}).get("year")
+    age_val = (season - born) if isinstance(born, int) else 25
+    salaries = fa_salary_by_length(safe_int(rating.get("ovr")), safe_int(rating.get("pot")), age_val)
     cells = [
         td(player_link(player, root, show_number=False), sort=player_name(player), cls="name-cell"),
         td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
-        td(age(player, season), sort=(season - (player.get("born") or {}).get("year", season) if isinstance((player.get("born") or {}).get("year"), int) else None)),
+        td(age(player, season), sort=(season - born if isinstance(born, int) else None)),
         td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
         td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
-        td(fmt_money(contract.get("amount")), sort=contract.get("amount")),
     ]
+    for i, sal in enumerate(salaries):
+        cells.append(td(fmt_money(sal * 1000), sort=sal, cls="group-start" if i == 0 else ""))
     for key, _ in TEAM_RATING_RANK_KEYS:
         value = rating.get(key)
         lo, hi = rating_ranges.get(key, (0.0, 0.0))
@@ -2032,7 +2096,8 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
     rating_ranges = ranges_for(sorted_players)
     expiring_ranges = ranges_for(expiring_players)
 
-    headers: list = ["Name", "Pos", "Age", "Ovr", "Pot", "Asking For"]
+    headers: list = ["Name", "Pos", "Age", "Ovr", "Pot",
+                     ("1 yr", "group-start"), "2 yr", "3 yr", "4 yr", "5 yr"]
     expiring_headers: list = ["Name", "Team", "Pos", "Age", "Ovr", "Pot", "Contract"]
     for key, label in TEAM_RATING_RANK_KEYS:
         headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
@@ -2057,6 +2122,7 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
         <button type="button" role="tab" id="tab-expiring" aria-controls="panel-expiring" aria-selected="false" tabindex="-1" data-tab-target="panel-expiring">{season} Expiring <span>{len(expiring_players)}</span></button>
       </div>
       <div id="panel-available-now" role="tabpanel" aria-labelledby="tab-available-now" data-tab-panel>
+        <p class="muted small-copy">Asking salary (annual $) by contract length, from the player's overall, potential, and age. Longer deals average the yearly figure as the player ages.</p>
         <div class="toolbar">
           <input class="table-search" data-table-filter="free-agents-available" placeholder="Filter available players…" aria-label="Filter available players">
         </div>

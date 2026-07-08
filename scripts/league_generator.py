@@ -985,6 +985,14 @@ FIN_FINALS = 15000      # +$15M for a finals appearance
 FIN_CHAMP = 15000       # +$15M for a championship (bonuses stack: champion earns 15+15+15=$45M)
 FIN_SOFT_CAP = 300000   # soft cap: $1 luxury tax per $1 of payroll over $300M
 
+# Manual cash adjustments outside the auto-computed ledger (thousands), keyed by tid.
+# Cash that changes hands in a trade, since BBGM exports don't record it. Signed:
+# negative = cash out, positive = cash in. ponytail: hand-maintained; add rows as trades happen.
+FIN_ADJUSTMENTS: dict[int, dict[str, Any]] = {
+    2: {"amount": -1000, "note": "Cash to Waltham (trade)"},    # Cambridge Platypuses
+    6: {"amount":  1000, "note": "Cash from Cambridge (trade)"},  # Waltham Bears
+}
+
 
 FIN_FINALS_GAMES_TO_WIN = 4  # ponytail: best-of-7 finals (this league); read games-to-win if the format changes
 
@@ -1073,7 +1081,9 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
         proj_w = safe_float(o.get("proj_w"), float(won))
         po_p, fin_p, champ_p = safe_float(o.get("po")), safe_float(o.get("finals")), safe_float(o.get("champ"))
         proj_playoff = FIN_PLAYOFF * po_p + FIN_FINALS * fin_p + FIN_CHAMP * champ_p
+        adj_info = FIN_ADJUSTMENTS.get(tid) or {}
         fin[tid] = {
+            "adj": safe_float(adj_info.get("amount"), 0.0), "adj_note": adj_info.get("note", ""),
             "payroll": payroll, "dead": dead, "won": won, "lost": lost, "luxtax": luxtax,
             "under_cap": payroll < FIN_SOFT_CAP, "over_cap": payroll > FIN_SOFT_CAP,
             "win_rev_now": FIN_PER_WIN * won, "win_rev_proj": FIN_PER_WIN * proj_w,
@@ -1087,8 +1097,8 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
     share = pool / len(under) if under else 0.0
     for f in fin.values():
         f["tax_share"] = share if f["under_cap"] else 0.0
-        f["cash_now"] = FIN_START + f["rev_now"] - f["payroll"] - f["luxtax"] + f["tax_share"]
-        f["cash_proj"] = FIN_START + f["rev_proj"] - f["payroll"] - f["luxtax"] + f["tax_share"]
+        f["cash_now"] = FIN_START + f["rev_now"] - f["payroll"] - f["luxtax"] + f["tax_share"] + f["adj"]
+        f["cash_proj"] = FIN_START + f["rev_proj"] - f["payroll"] - f["luxtax"] + f["tax_share"] + f["adj"]
     return {"teams": fin, "pool": pool, "share": share, "n_under": len(under), "soft_cap": FIN_SOFT_CAP}
 
 
@@ -1640,8 +1650,15 @@ def finance_ledger_card(tfin: dict[str, Any] | None) -> str:
         row("Player payroll" + (f' <span class="muted small-copy">(incl. {fmt_money(f["dead"])} dead money)</span>' if f.get("dead") else ""), payroll_cell, payroll_cell),
         row('Luxury tax <span class="muted small-copy">(over $300M)</span>', luxtax_cell, luxtax_cell),
         row('Tax distribution <span class="muted small-copy">(under-cap share)</span>', share_cell, share_cell),
-        row("Cash on hand", cash_now, cash_proj, cls="ledger-total"),
     ]
+    if abs(f.get("adj", 0)) > 1e-9:
+        adj_cls = "delta-up" if f["adj"] > 0 else "delta-down"
+        adj_label = "Trade adjustment"
+        if f.get("adj_note"):
+            adj_label += f' <span class="muted small-copy">({esc(f["adj_note"])})</span>'
+        adj_cell = f'<span class="{adj_cls}">{fmt_money_pm(f["adj"])}</span>'
+        rows.append(row(adj_label, adj_cell, adj_cell))
+    rows.append(row("Cash on hand", cash_now, cash_proj, cls="ledger-total"))
     return f"""
     <section class="card">
       <div class="section-title-row"><h2>Cash Flow</h2><span class="muted small-copy">live ledger · projected = 10k-sim wins + playoff EV</span></div>

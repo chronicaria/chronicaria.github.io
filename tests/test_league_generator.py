@@ -222,6 +222,20 @@ class TestTeamFinances(unittest.TestCase):
         self.assertEqual(lf["pool"], 20000)
         self.assertAlmostEqual(sum(t["tax_share"] for t in lf["teams"].values()), lf["pool"])
 
+    def test_manual_adjustment_moves_cash_and_nets_to_zero(self):
+        # Cambridge (tid 2) sends $1M to Waltham (tid 6) via FIN_ADJUSTMENTS.
+        teams = [self._team_s(2, "CAM", 5, 5), self._team_s(6, "WAL", 5, 5)]
+        players = [self._pl(2, 100000), self._pl(6, 100000)]
+        data = {"teams": teams, "players": players, "playoffSeries": [], "releasedPlayers": []}
+        lf = lg.compute_league_finances(data, teams, players, 2030, odds={})
+        cam, wal = lf["teams"][2], lf["teams"][6]
+        self.assertEqual(cam["adj"], -1000)
+        self.assertEqual(wal["adj"], 1000)
+        # adjustment is included in cash on hand and conserved across the two teams
+        self.assertAlmostEqual(cam["cash_now"] + wal["cash_now"],
+                               lf["teams"][2]["cash_proj"] + lf["teams"][6]["cash_proj"])
+        self.assertAlmostEqual(cam["adj"] + wal["adj"], 0)
+
     def test_playoff_bonuses_stack_only_when_earned(self):
         complete = {"season": 2030, "series": [
             [{"home": {"tid": 0, "won": 4}, "away": {"tid": 3, "won": 1}},

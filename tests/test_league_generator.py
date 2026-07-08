@@ -52,7 +52,7 @@ class TestTeamGameViews(unittest.TestCase):
         html = lg.team_finances_table([short, long], 2029)
 
         self.assertIn("2033", html)
-        self.assertNotIn("2034", html)
+        self.assertIn("2034", html)  # salary charts now extend through 2034
         self.assertNotIn("2035", html)
         self.assertNotIn("2029 expiring", html)
         self.assertNotIn(">exp</span>", html)

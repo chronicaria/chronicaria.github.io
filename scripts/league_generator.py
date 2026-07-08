@@ -447,7 +447,16 @@ def active_players(data: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def free_agents(data: dict[str, Any]) -> list[dict[str, Any]]:
-    return [p for p in active_players(data) if p.get("tid") == FREE_AGENT_TID]
+    # Hide scrub free agents: drop anyone below 50 ovr or below 50 pot.
+    out = []
+    for p in active_players(data):
+        if p.get("tid") != FREE_AGENT_TID:
+            continue
+        rating = latest_rating(p)
+        if safe_int(rating.get("ovr")) < 50 or safe_int(rating.get("pot")) < 50:
+            continue
+        out.append(p)
+    return out
 
 
 def contract_expiring_players(players: list[dict[str, Any]], exp_year: int, rostered_only: bool = True) -> list[dict[str, Any]]:
@@ -653,7 +662,13 @@ def th(label: str, cls: str = "", scope: str = "col") -> str:
     return f"<th{scope_attr}{cls_attr}{title_attr}>{esc(label)}</th>"
 
 
-def table_html(headers: list, rows: list[str], table_id: str | None = None, empty_message: str = "No players found.", wrap_cls: str = "", caption: str | None = None) -> str:
+POS_FILTER_OPTIONS = [
+    ("all", "All positions"), ("G", "Guards"), ("F", "Forwards"), ("C", "Centers"),
+    ("PG", "PG"), ("SG", "SG"), ("SF", "SF"), ("PF", "PF"),
+]
+
+
+def table_html(headers: list, rows: list[str], table_id: str | None = None, empty_message: str = "No players found.", wrap_cls: str = "", caption: str | None = None, pos_filter: bool = False) -> str:
     table_id_attr = f' id="{esc(table_id)}"' if table_id else ""
     if not rows:
         return f'<p class="empty-state">{esc(empty_message)}</p>'
@@ -662,9 +677,19 @@ def table_html(headers: list, rows: list[str], table_id: str | None = None, empt
     wrap_cls_attr = f" {wrap_cls}" if wrap_cls else ""
     caption_text = caption or (table_id.replace("-", " ").title() if table_id else "")
     caption_html = f'<caption class="sr-only">{esc(caption_text)}</caption>' if caption_text else ""
+    # Optional position filter: only when a "Pos" column exists and the table has an id (for JS wiring).
+    pos_bar, pos_attr = "", ""
+    if pos_filter and table_id:
+        labels = [label if isinstance(label, str) else label[0] for label in headers]
+        if "Pos" in labels:
+            pos_attr = f' data-pos-col="{labels.index("Pos")}"'
+            options = "".join(f'<option value="{esc(v)}">{esc(l)}</option>' for v, l in POS_FILTER_OPTIONS)
+            pos_bar = (f'<div class="toolbar pos-filter-bar"><label class="select-label">Position '
+                       f'<select data-pos-filter="{esc(table_id)}">{options}</select></label></div>')
     return f"""
+    {pos_bar}
     <div class="table-wrap{wrap_cls_attr}">
-      <table{table_id_attr} data-sortable>
+      <table{table_id_attr}{pos_attr} data-sortable>
         {caption_html}
         <thead><tr>{header_html}</tr></thead>
         <tbody>
@@ -882,7 +907,7 @@ def roster_row(player: dict[str, Any], season: int, start_season: int, root: str
         td(fmt_number(per_game(stat, "pts"), 1), sort=per_game(stat, "pts")),
         td(fmt_number((float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0, 1), sort=((float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0)),
         td(fmt_number(per_game(stat, "ast"), 1), sort=per_game(stat, "ast")),
-        td(fmt_number(stat.get("per"), 1), sort=stat.get("per")),
+        td(fmt_signed(stat.get("obpm"), 1) if stat.get("obpm") is not None else "—", sort=stat.get("obpm")),
         td(form_arrow((game_logs or {}).get(safe_int(player.get("pid"), -1))), sort=0),
         td(fmt_number(player.get("value"), 1), sort=player.get("value")),
         td(acquisition_html(player, teams_by_tid or {}), sort=((player.get("transactions") or [{}])[-1] or {}).get("season")),
@@ -891,7 +916,7 @@ def roster_row(player: dict[str, Any], season: int, start_season: int, root: str
 
 
 def team_finances_table(roster: list[dict[str, Any]], season: int, data: dict[str, Any] | None = None, tid: int | None = None) -> str:
-    finance_end_season = max(season, min(2033, season + PROJ_SEASONS_AHEAD))
+    finance_end_season = max(season, min(2034, season + PROJ_SEASONS_AHEAD))
     seasons = list(range(season, finance_end_season + 1))
     players = sorted(
         roster,
@@ -1251,7 +1276,6 @@ def team_games_table(team: dict[str, Any], game_items: list[dict[str, Any]], tea
     for item in involved:
         home = safe_int(item.get("home_tid")) == tid
         opp_tid = item.get("away_tid") if home else item.get("home_tid")
-        loc = "Home" if home else "Road"
         completed = is_completed_game_item(item)
         result = team_schedule_result(item, tid)
         ot = game_ot_label(item)
@@ -1259,24 +1283,28 @@ def team_games_table(team: dict[str, Any], game_items: list[dict[str, Any]], tea
             result += f" {ot}"
         team_pts = item_team_points(item, tid)
         opp_pts = item_team_points(item, safe_int(opp_tid))
-        score = f"{fmt_number(team_pts, 0)}-{fmt_number(opp_pts, 0)}" if completed else "Upcoming"
+        # Opponent + home/away in one cell: "vs. GOO" at home, "@ GOO" on the road.
+        opp_prefix = "vs." if home else "@"
+        opp_cell = f'{opp_prefix} {team_label(opp_tid, teams_by_tid, "../")}'
+        # `result` already includes the score (e.g. "W 112-108"), which is why the old
+        # Result and Score columns were redundant — collapse to just this one.
+        result_cell = esc(result) if completed else "Upcoming"
+        margin = (safe_float(team_pts) - safe_float(opp_pts)) if completed else -999
         note = game_recap_text(item, teams_by_tid) if completed else "Scheduled"
         cls = "game-log-win" if result.startswith("W") else "game-log-loss" if result.startswith("L") else "game-log-next"
         rows.append(
             f'<tr class="click-row {cls}" data-href="{esc(game_url(item, "../"))}">'
             + "".join([
                 td(fmt_number(item.get("day"), 0), sort=safe_int(item.get("day"))),
-                td(team_label(opp_tid, teams_by_tid, "../"), sort=team_abbrev_for_tid(opp_tid, teams_by_tid), cls="name-cell"),
-                td(loc, sort=0 if home else 1),
-                td(esc(result), sort=result),
-                td(esc(score), sort=safe_float(team_pts) if completed else -1),
+                td(opp_cell, sort=team_abbrev_for_tid(opp_tid, teams_by_tid), cls="name-cell"),
+                td(result_cell, sort=margin),
                 td(esc(note), sort=note, cls="game-note"),
                 td(f'<a class="button-link table-link" href="{esc(game_url(item, "../"))}">View</a>', sort=safe_int(item.get("day"))),
             ])
             + "</tr>"
         )
     completed_count = sum(1 for item in involved if is_completed_game_item(item))
-    headers = ["Day", "Opponent", "H/R", "Result", "Score", "Note", "Link"]
+    headers = ["Day", "Opponent", "Result", "Note", "Link"]
     return f"""
     <section class="card">
       <div class="section-title-row"><h2>All Games</h2><span class="muted small-copy">{completed_count} completed · {len(involved) - completed_count} upcoming</span></div>
@@ -1811,8 +1839,6 @@ def roster_advanced_row(player: dict[str, Any], season: int, start_season: int, 
     efg = ((fg + 0.5 * tp) / fga) if fga > 0 else None
     has_bpm = stat.get("obpm") is not None or stat.get("dbpm") is not None
     bpm = (safe_float(stat.get("obpm")) + safe_float(stat.get("dbpm"))) if has_bpm else None
-    has_ws = stat.get("ows") is not None or stat.get("dws") is not None
-    ws = (safe_float(stat.get("ows")) + safe_float(stat.get("dws"))) if has_ws else None
     return "".join([
         td(player_link(player, root), sort=player_name(player), cls="name-cell"),
         td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
@@ -1821,14 +1847,12 @@ def roster_advanced_row(player: dict[str, Any], season: int, start_season: int, 
         td(fmt_number(per_game(stat, "min"), 1), sort=per_game(stat, "min")),
         td(fmt_number(ts * 100, 1) if ts is not None else "—", sort=ts),
         td(fmt_number(efg * 100, 1) if efg is not None else "—", sort=efg),
-        td(fmt_number(stat.get("per"), 1), sort=stat.get("per")),
         td(fmt_number(stat.get("ortg"), 1), sort=stat.get("ortg")),
         td(fmt_number(stat.get("drtg"), 1), sort=stat.get("drtg")),
         td(fmt_signed(stat.get("obpm"), 1) if stat.get("obpm") is not None else "—", sort=stat.get("obpm")),
         td(fmt_signed(stat.get("dbpm"), 1) if stat.get("dbpm") is not None else "—", sort=stat.get("dbpm")),
         td(fmt_signed(bpm, 1) if bpm is not None else "—", sort=bpm),
         td(fmt_number(stat.get("vorp"), 1), sort=stat.get("vorp")),
-        td(fmt_number(ws, 1) if ws is not None else "—", sort=ws),
         td(fmt_signed(stat.get("pm"), 0) if stat.get("pm") is not None else "—", sort=stat.get("pm")),
     ])
 
@@ -1858,9 +1882,9 @@ def roster_tabs(sorted_roster: list[dict[str, Any]], season: int, start_season: 
                 if isinstance(latest_rating(p, season).get(key), (int, float))]
         ranges[key] = (min(vals), max(vals)) if vals else (0.0, 0.0)
 
-    stats_headers = ["Name", "Pos", "Age", "Ovr", "Pot", "Contract", "Health", "G", "MP", "PTS", "TRB", "AST", "PER", "Form", "Value", "Acquired", "Mood"]
+    stats_headers = ["Name", "Pos", "Age", "Ovr", "Pot", "Contract", "Health", "G", "MP", "PTS", "TRB", "AST", "OBPM", "Form", "Value", "Acquired", "Mood"]
     stats_rows = [roster_row(p, season, start_season, root, teams_by_tid, game_logs) for p in sorted_roster]
-    adv_headers = ["Name", "Pos", "Age", "G", "MP", "TS%", "eFG%", "PER", "ORtg", "DRtg", "OBPM", "DBPM", "BPM", "VORP", "WS", "+/-"]
+    adv_headers = ["Name", "Pos", "Age", "G", "MP", "TS%", "eFG%", "ORtg", "DRtg", "OBPM", "DBPM", "BPM", "VORP", "+/-"]
     adv_rows = [roster_advanced_row(p, season, start_season, root) for p in sorted_roster]
     rat_headers: list = ["Name", "Pos", "Age", "Ovr", "Pot"]
     for key, label in TEAM_RATING_RANK_KEYS:
@@ -1879,13 +1903,13 @@ def roster_tabs(sorted_roster: list[dict[str, Any]], season: int, start_season: 
         {tab("rstats", "Stats", True)}{tab("radv", "Advanced", False)}{tab("rrat", "Ratings", False)}
       </div>
       <div id="panel-rstats" role="tabpanel" aria-labelledby="tab-rstats" data-tab-panel>
-        {table_html(stats_headers, stats_rows, table_id="roster-stats", empty_message="No players found.", wrap_cls="fit-table")}
+        {table_html(stats_headers, stats_rows, table_id="roster-stats", empty_message="No players found.", wrap_cls="fit-table", pos_filter=True)}
       </div>
       <div id="panel-radv" role="tabpanel" aria-labelledby="tab-radv" data-tab-panel hidden>
-        {table_html(adv_headers, adv_rows, table_id="roster-advanced", empty_message="No players found.", wrap_cls="fit-table")}
+        {table_html(adv_headers, adv_rows, table_id="roster-advanced", empty_message="No players found.", wrap_cls="fit-table", pos_filter=True)}
       </div>
       <div id="panel-rrat" role="tabpanel" aria-labelledby="tab-rrat" data-tab-panel hidden>
-        {table_html(rat_headers, rat_rows, table_id="roster-ratings", empty_message="No players found.", wrap_cls="fit-table")}
+        {table_html(rat_headers, rat_rows, table_id="roster-ratings", empty_message="No players found.", wrap_cls="fit-table", pos_filter=True)}
       </div>
     </section>"""
 
@@ -2036,13 +2060,13 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
         <div class="toolbar">
           <input class="table-search" data-table-filter="free-agents-available" placeholder="Filter available players…" aria-label="Filter available players">
         </div>
-        {table_html(headers, rows, table_id="free-agents-available", empty_message="No free agents found.", caption="Available now free agents")}
+        {table_html(headers, rows, table_id="free-agents-available", empty_message="No free agents found.", caption="Available now free agents", pos_filter=True)}
       </div>
       <div id="panel-expiring" role="tabpanel" aria-labelledby="tab-expiring" data-tab-panel hidden>
         <div class="toolbar">
           <input class="table-search" data-table-filter="free-agents-expiring" placeholder="Filter expiring contracts…" aria-label="Filter expiring contracts">
         </div>
-        {table_html(expiring_headers, expiring_rows, table_id="free-agents-expiring", empty_message="No rostered expiring contracts found.", caption=f"Rostered players with contracts expiring in {season}")}
+        {table_html(expiring_headers, expiring_rows, table_id="free-agents-expiring", empty_message="No rostered expiring contracts found.", caption=f"Rostered players with contracts expiring in {season}", pos_filter=True)}
       </div>
     </section>
     """
@@ -2054,7 +2078,10 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
     rostered = [p for p in players if isinstance(p.get("tid"), int) and p.get("tid") >= 0]
     sorted_players = sorted(rostered, key=lambda p: (p.get("tid", 999), p.get("rosterOrder", 9999), player_name(p)))
     fa_players = sorted(
-        [p for p in players if p.get("tid") == FREE_AGENT_TID],
+        # Match the free-agency page: hide scrub FAs below 50 ovr or 50 pot.
+        [p for p in players if p.get("tid") == FREE_AGENT_TID
+         and safe_int(latest_rating(p, season).get("ovr")) >= 50
+         and safe_int(latest_rating(p, season).get("pot")) >= 50],
         key=lambda p: (-safe_int(latest_rating(p, season).get("ovr")), -safe_int(latest_rating(p, season).get("pot")), player_name(p)),
     )
     prospects = sorted(
@@ -2080,9 +2107,9 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
 
     headers = [
         "Name", "Team", "Pos", "Age", "Ovr", "Pot", "G", "MP",
-        ("Contract", "col-basic"), ("PTS", "col-basic"), ("TRB", "col-basic"), ("AST", "col-basic"), ("PER", "col-basic"),
+        ("Contract", "col-basic"), ("PTS", "col-basic"), ("TRB", "col-basic"), ("AST", "col-basic"),
         ("TS%", "col-adv"), ("USG%", "col-adv"), ("ORtg", "col-adv"), ("DRtg", "col-adv"),
-        ("OBPM", "col-adv"), ("DBPM", "col-adv"), ("BPM", "col-adv"), ("VORP", "col-adv"), ("WS", "col-adv"),
+        ("OBPM", "col-adv"), ("DBPM", "col-adv"), ("BPM", "col-adv"), ("VORP", "col-adv"),
         ("Value", "col-adv"),
         ("PTS/36", "col-p36"), ("TRB/36", "col-p36"), ("AST/36", "col-p36"),
         ("STL/36", "col-p36"), ("BLK/36", "col-p36"), ("TOV/36", "col-p36"),
@@ -2097,7 +2124,6 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
         trb_pg = (float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0
         obpm = safe_float(stat.get("obpm"), 0.0)
         dbpm = safe_float(stat.get("dbpm"), 0.0)
-        ws = safe_float(stat.get("ows"), 0.0) + safe_float(stat.get("dws"), 0.0)
         if group == "fa":
             team_cell = td('<span class="muted">FA</span>', sort="FA")
         elif group == "draft":
@@ -2119,7 +2145,6 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
             td(fmt_number(per_game(stat, "pts"), 1), sort=per_game(stat, "pts"), cls="col-basic"),
             td(fmt_number(trb_pg, 1), sort=trb_pg, cls="col-basic"),
             td(fmt_number(per_game(stat, "ast"), 1), sort=per_game(stat, "ast"), cls="col-basic"),
-            td(fmt_number(stat.get("per"), 1), sort=stat.get("per"), cls="col-basic"),
             td(fmt_pct(ts_pct(stat)), sort=ts_pct(stat), cls="col-adv"),
             td(fmt_number(stat.get("usgp"), 1), sort=stat.get("usgp"), cls="col-adv"),
             td(fmt_number(stat.get("ortg"), 1), sort=stat.get("ortg"), cls="col-adv"),
@@ -2128,7 +2153,6 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
             td(fmt_number(dbpm, 1), sort=dbpm, cls="col-adv"),
             td(fmt_number(obpm + dbpm, 1), sort=obpm + dbpm, cls="col-adv"),
             td(fmt_number(stat.get("vorp"), 1), sort=stat.get("vorp"), cls="col-adv"),
-            td(fmt_number(ws, 1), sort=ws, cls="col-adv"),
             td(fmt_number(p.get("value"), 1), sort=p.get("value"), cls="col-adv"),
             td(fmt_number(per36(stat, "pts"), 1), sort=per36(stat, "pts"), cls="col-p36"),
             td(fmt_number(per36_trb(stat), 1), sort=per36_trb(stat), cls="col-p36"),
@@ -2166,7 +2190,7 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
             "bpm": safe_float(stat.get("obpm"), 0.0) + safe_float(stat.get("dbpm"), 0.0),
             "vorp": stat.get("vorp"), "ws": safe_float(stat.get("ows"), 0.0) + safe_float(stat.get("dws"), 0.0),
             "age": (season - born_year) if isinstance(born_year, int) else None,
-            "ovr": rating.get("ovr"), "pot": rating.get("pot"),
+            "ovr": rating.get("ovr"), "pot": rating.get("pot"), "gp": gp,
         }
         clean = {}
         for key, value in values.items():
@@ -2216,6 +2240,9 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
           <label class="select-label">Min MP/G
             <input type="number" data-chart-minmin value="0" min="0" max="48" step="2">
           </label>
+          <label class="select-label">Min GP
+            <input type="number" data-chart-mingp value="0" min="0" step="1">
+          </label>
           <label class="select-label check-label">Labels
             <input type="checkbox" data-chart-labels>
           </label>
@@ -2257,7 +2284,7 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
           <button type="button" data-view="rate">Ratings</button>
         </div>
       </div>
-      {table_html(headers, rows, table_id="players-index", empty_message="No players found.")}
+      {table_html(headers, rows, table_id="players-index", empty_message="No players found.", pos_filter=True)}
     </section>
     """
     return page_html("Players", body, teams, root="../", active="players")
@@ -4132,60 +4159,6 @@ def vs_opponent_table(player: dict[str, Any], log_entries: list[dict[str, Any]],
     """
 
 
-MILESTONE_SPECS = [
-    ("pts", "career points", 1000, 150),
-    ("ast", "career assists", 500, 60),
-    ("stl", "career steals", 250, 25),
-    ("blk", "career blocks", 250, 25),
-    ("tp", "career threes", 250, 40),
-]
-
-
-def career_total(player: dict[str, Any], key: str, start_season: int = 2026) -> float:
-    total = 0.0
-    for stat in player.get("stats", []):
-        if isinstance(stat, dict) and not stat.get("playoffs") and safe_int(stat.get("season")) >= start_season:
-            if key == "trb":
-                total += total_rebounds(stat)
-            else:
-                total += safe_float(stat.get(key))
-    return total
-
-
-def milestone_watch_card(players: list[dict[str, Any]], teams: list[dict[str, Any]], root: str = "") -> str:
-    teams_by_tid = {t["tid"]: t for t in teams}
-    palette = team_palette_by_tid(teams)
-    upcoming = []
-    rebounds_spec = ("trb", "career rebounds", 500, 60)
-    for player in players:
-        if safe_int(player.get("tid"), -9) < 0:
-            continue
-        for key, label, step, window in MILESTONE_SPECS + [rebounds_spec]:
-            total = career_total(player, key)
-            if total < step * 0.5:
-                continue
-            next_mark = math.ceil((total + 1) / step) * step
-            need = next_mark - total
-            if 0 < need <= window:
-                upcoming.append((need / window, player, need, next_mark, label))
-    if not upcoming:
-        return ""
-    upcoming.sort(key=lambda x: x[0])
-    items = []
-    for _, player, need, mark, label in upcoming[:8]:
-        items.append(
-            f'<li>{team_dot(player.get("tid"), palette)}'
-            f'<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
-            f'<span class="muted small-copy">needs {fmt_number(need, 0)} for {mark:,} {esc(label)}</span></li>'
-        )
-    return f"""
-    <section class="card home-section">
-      <div class="section-title-row"><h2>Milestone Watch</h2><span class="muted small-copy">since 2026</span></div>
-      <ul class="leader-list milestone-list">{''.join(items)}</ul>
-    </section>
-    """
-
-
 def best_performances_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int, root: str = "") -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     logs = build_game_logs(data, season)
@@ -4371,7 +4344,6 @@ def render_player_pages(player: dict[str, Any], teams: list[dict[str, Any]], sea
         ])
     pages["-ratings"] = page("ratings", " — Ratings", compact_hero, [
         ratings_table(player, start_season),
-        projection_table_html(player, proj),
         '<div class="history-row">' + salary_history_html(player) + injury_history_html(player) + "</div>",
     ])
     return pages
@@ -6528,17 +6500,19 @@ def injury_report_card(players: list[dict[str, Any]], teams: list[dict[str, Any]
     rows = []
     for player, injury in injured:
         rating = latest_rating(player, season)
+        games_left = injury.get("gamesRemaining")
+        injury_cell = esc(injury.get("type", "—"))
+        if safe_int(games_left) > 0:
+            injury_cell += f' <span class="muted small-copy">· {fmt_number(games_left, 0)}g</span>'
         rows.append("".join([
             td(player_link(player, root, show_number=False), sort=player_name(player), cls="name-cell"),
-            td(team_label(player.get("tid"), teams_by_tid, root), sort=team_label(player.get("tid"), teams_by_tid, as_link=False)),
             td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
             td(esc(rating.get("ovr", "—")), sort=rating.get("ovr")),
-            td(esc(injury.get("type", "—")), sort=injury.get("type", "")),
-            td(fmt_number(injury.get("gamesRemaining"), 0), sort=injury.get("gamesRemaining")),
+            td(injury_cell, sort=safe_int(games_left)),
         ]))
     if not rows:
         return ""
-    headers = ["Player", "Team", "Pos", "Ovr", "Injury", "Games left"]
+    headers = ["Player", "Pos", "Ovr", "Injury"]
     return f"""
     <section class="card home-section">
       <div class="section-title-row"><h2>Injury Report</h2><span class="count-pill">{len(rows)} out</span></div>
@@ -6589,9 +6563,9 @@ def league_leaders_card(data: dict[str, Any], players: list[dict[str, Any]], tea
         ("Assists", lambda s: per_game(s, "ast")),
         ("Steals", lambda s: per_game(s, "stl")),
         ("Blocks", lambda s: per_game(s, "blk")),
-        ("PER", lambda s: s.get("per")),
+        ("OBPM", lambda s: s.get("obpm")),
+        ("DBPM", lambda s: s.get("dbpm")),
         ("BPM", lambda s: safe_float(s.get("obpm")) + safe_float(s.get("dbpm"))),
-        ("Win Shares", lambda s: safe_float(s.get("ows")) + safe_float(s.get("dws"))),
     ]
     boxes = []
     for title, fn in categories:
@@ -6650,117 +6624,6 @@ def rookie_watch_card(data: dict[str, Any], players: list[dict[str, Any]], teams
     """
 
 
-def four_factors_table(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
-    palette = team_palette_by_tid(teams)
-    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
-    acc: dict[int, dict[str, float]] = defaultdict(lambda: defaultdict(float))
-    games_count: dict[int, int] = defaultdict(int)
-    keys = ["fg", "fga", "tp", "ft", "fta", "tov", "orb", "drb", "pts"]
-    for item in completed_game_items(data, season, playoffs=False):
-        for own_key, opp_key in (("home_box", "away_box"), ("away_box", "home_box")):
-            own = item.get(own_key) or {}
-            opp = item.get(opp_key) or {}
-            tid = safe_int(own.get("tid"), -1)
-            if tid not in teams_by_tid:
-                continue
-            games_count[tid] += 1
-            for key in keys:
-                acc[tid][key] += safe_float(own.get(key))
-                acc[tid]["opp_" + key] += safe_float(opp.get(key))
-    if not acc:
-        return ""
-
-    def factors(t: dict[str, float], prefix: str = "") -> dict[str, float | None]:
-        fg, fga = t[prefix + "fg"], t[prefix + "fga"]
-        tp, ft, fta = t[prefix + "tp"], t[prefix + "ft"], t[prefix + "fta"]
-        tov, orb = t[prefix + "tov"], t[prefix + "orb"]
-        opp_drb = t[("" if prefix else "opp_") + "drb"]
-        efg = 100 * (fg + 0.5 * tp) / fga if fga else None
-        tovp = 100 * tov / (fga + 0.44 * fta + tov) if (fga + 0.44 * fta + tov) else None
-        orbp = 100 * orb / (orb + opp_drb) if (orb + opp_drb) else None
-        ftr = ft / fga if fga else None
-        return {"efg": efg, "tov": tovp, "orb": orbp, "ftr": ftr}
-
-    infos = []
-    for tid, totals in acc.items():
-        gp = games_count[tid]
-        poss = totals["fga"] + 0.44 * totals["fta"] - totals["orb"] + totals["tov"]
-        opp_poss = totals["opp_fga"] + 0.44 * totals["opp_fta"] - totals["opp_orb"] + totals["opp_tov"]
-        avg_poss = (poss + opp_poss) / 2
-        pace = avg_poss / gp if gp else None
-        ortg = 100 * totals["pts"] / avg_poss if avg_poss else None
-        drtg = 100 * totals["opp_pts"] / avg_poss if avg_poss else None
-        off = factors(totals)
-        defense = factors(totals, "opp_")
-        infos.append({
-            "tid": tid, "pace": pace, "ortg": ortg, "drtg": drtg,
-            "net": (ortg - drtg) if ortg is not None and drtg is not None else None,
-            "off": off, "def": defense,
-        })
-    infos.sort(key=lambda info: -(info["net"] if info["net"] is not None else -999))
-
-    columns = [
-        ("Pace", lambda i: i["pace"], "num", 0),
-        ("ORtg", lambda i: i["ortg"], "num", 1),
-        ("DRtg", lambda i: i["drtg"], "num", -1),
-        ("Net", lambda i: i["net"], "signed", 1),
-        ("eFG%", lambda i: i["off"]["efg"], "num", 1),
-        ("TOV%", lambda i: i["off"]["tov"], "num", -1),
-        ("ORB%", lambda i: i["off"]["orb"], "num", 1),
-        ("FT/FGA", lambda i: i["off"]["ftr"], "ratio", 1),
-        ("eFG%", lambda i: i["def"]["efg"], "num", -1),
-        ("TOV%", lambda i: i["def"]["tov"], "num", 1),
-        ("ORB%", lambda i: i["def"]["orb"], "num", -1),
-        ("FT/FGA", lambda i: i["def"]["ftr"], "ratio", -1),
-    ]
-    col_values = []
-    for _, getter, _, _ in columns:
-        values = [float(getter(i)) for i in infos if getter(i) is not None and math.isfinite(safe_float(getter(i), float("nan")))]
-        col_values.append(values)
-
-    def fmt_cell(value, fmt):
-        if value is None:
-            return "—"
-        if fmt == "ratio":
-            return fmt_ratio(value, 3)
-        if fmt == "signed":
-            return fmt_signed(value, 1)
-        return fmt_number(value, 1)
-
-    rows = []
-    for rank, info in enumerate(infos, 1):
-        team = teams_by_tid.get(info["tid"], {})
-        cells = [
-            td(rank, sort=rank),
-            td(f'{team_dot(info["tid"], palette)}{team_anchor(team)}', sort=team_full_name(team), cls="name-cell"),
-        ]
-        for (label, getter, fmt, direction), values in zip(columns, col_values):
-            value = getter(info)
-            lo = min(values) if values else 0.0
-            hi = max(values) if values else 0.0
-            cells.append(td(fmt_cell(value, fmt), sort=value, style=heat_style(value, lo, hi, direction)))
-        rows.append(f'<tr data-tid="{esc(info["tid"])}">{"".join(cells)}</tr>')
-
-    header_html = (
-        '<tr><th rowspan="2">#</th><th rowspan="2">Team</th>'
-        '<th rowspan="2">Pace</th><th rowspan="2">ORtg</th><th rowspan="2">DRtg</th><th rowspan="2">Net</th>'
-        '<th colspan="4" class="group-head">Offense</th><th colspan="4" class="group-head">Defense</th></tr>'
-        "<tr>" + "".join(th(label) for label in ["eFG%", "TOV%", "ORB%", "FT/FGA", "eFG%", "TOV%", "ORB%", "FT/FGA"]) + "</tr>"
-    )
-    body_html = "".join(rows)
-    return f"""
-    <section class="card home-section">
-      <div class="section-title-row"><h2>Four Factors</h2><span class="muted small-copy">Per-possession profile · defense = what opponents do against you</span></div>
-      <div class="table-wrap">
-        <table id="four-factors">
-          <thead>{header_html}</thead>
-          <tbody>{body_html}</tbody>
-        </table>
-      </div>
-    </section>
-    """
-
-
 def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, start_season: int) -> str:
     chart_teams = active_teams_for_season(teams, season)
     body = f"""
@@ -6777,11 +6640,9 @@ def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players:
         {news_feed_card(data, teams, season)}
         {injury_report_card(players, teams, season)}
         {rookie_watch_card(data, players, teams, season)}
-        {milestone_watch_card(players, teams)}
       </div>
     </div>
     {team_stats_table(chart_teams, season)}
-    {four_factors_table(data, chart_teams, season)}
     {awards_voting_table(data, players, teams, season)}
     """
     return page_html("Home", body, teams, root="", active="home")
@@ -6813,12 +6674,14 @@ def award_winner_html(winner: dict[str, Any] | None, all_players_by_pid: dict[in
 def honors_html(award: dict[str, Any], all_players_by_pid: dict[int, dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str) -> str:
     table_rows = []
     max_players = 0
-    for key, title in (("allLeague", "All-League"), ("allDefensive", "All-Defensive"), ("allRookie", "All-Rookie")):
+    for key, title in (("allLeague", "All-League"), ("allDefensive", "All-Defensive")):
         groups = award.get(key)
         if not isinstance(groups, list) or not groups:
             continue
         if groups and isinstance(groups[0], dict) and "players" not in groups[0]:
             groups = [{"title": "", "players": groups}]
+        if key == "allDefensive":
+            groups = groups[:1]  # 1st team only
         for group in groups:
             if not isinstance(group, dict):
                 continue
@@ -7635,10 +7498,6 @@ def all_time_leaders_html(data: dict[str, Any], teams: list[dict[str, Any]], roo
         box("Career Assists", lambda s: s.get("ast")),
         box("Career Steals", lambda s: s.get("stl")),
         box("Career Blocks", lambda s: s.get("blk")),
-        box("Career Threes", lambda s: s.get("tp")),
-        box("Career Win Shares", lambda s: safe_float(s.get("ows")) + safe_float(s.get("dws")), digits=1),
-        box("Career VORP", lambda s: s.get("vorp"), digits=1),
-        box("Games Played", lambda s: s.get("gp")),
     ]
     return f"""
     <section class="card home-section">
@@ -7675,12 +7534,29 @@ def feat_badges(stats: dict[str, Any]) -> list[str]:
     return badges or ["Feat"]
 
 
+def feat_rank(stats: dict[str, Any]) -> int:
+    """Sort priority for a single-game feat, so the feats table groups by feat type."""
+    pts = safe_int(stats.get("pts"))
+    trb = safe_int(stats.get("orb")) + safe_int(stats.get("drb"))
+    if safe_int(stats.get("qd")):         return 0   # quadruple-double
+    if safe_int(stats.get("td")):         return 1   # triple-double
+    if safe_int(stats.get("fxf")):        return 2   # 5x5
+    if pts >= 60:                         return 3
+    if pts >= 50:                         return 4
+    if trb >= 25:                         return 5
+    if safe_int(stats.get("ast")) >= 20:  return 6
+    if safe_int(stats.get("tp")) >= 10:   return 7
+    if safe_int(stats.get("blk")) >= 10:  return 8
+    if safe_int(stats.get("stl")) >= 10:  return 9
+    return 10
+
+
 def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], season: int, start_season: int = 2026) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
     current_gids = {str(g.get("gid")) for g in data.get("games", []) if g.get("season") == season}
     feats = [f for f in data.get("playerFeats", []) if isinstance(f, dict)]
-    feats.sort(key=lambda f: (-safe_int(f.get("season")), -safe_int((f.get("stats") or {}).get("pts"))))
+    feats.sort(key=lambda f: (feat_rank(f.get("stats") or {}), -safe_int((f.get("stats") or {}).get("pts")), -safe_int(f.get("season"))))
     rows = []
     for feat in feats:
         stats = feat.get("stats") or {}
@@ -7700,7 +7576,7 @@ def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], seaso
             td(team_label(feat.get("oppTid"), teams_by_tid), sort=team_abbrev_for_tid(feat.get("oppTid"), teams_by_tid)),
             td(result_text, sort=feat.get("score")),
             td(line, sort=safe_int(stats.get("pts"))),
-            td(badges, sort=" ".join(feat_badges(stats))),
+            td(badges, sort=feat_rank(stats)),
         ]))
     headers = ["Season", "Player", "Team", "Opp", "Result", "Line", "Feat"]
     body = f"""
@@ -8073,6 +7949,8 @@ tr.avg-row > td { border-top: 1px solid var(--line); color: var(--muted); font-s
 #players-index.show-rate .col-rate { display: table-cell; }
 #players-index.show-rate .col-basic, #players-index.show-rate .col-adv, #players-index.show-rate .col-p36 { display: none; }
 tr.group-hidden { display: none; }
+tr.pos-hidden { display: none; }
+.pos-filter-bar { margin-bottom: .4rem; }
 
 /* ---------- scores ---------- */
 .score-list {
@@ -8440,17 +8318,16 @@ tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
 .leader-mini-table .team-dot { margin-right: 0; }
 .leader-mini-table .leader-team { display: block; width: auto; padding-left: 0; white-space: nowrap; margin-top: .05rem; }
 .leader-mini-table .leader-value { padding-left: .4rem; }
+.leader-mini-table tbody tr, .leader-mini-table tbody tr:nth-child(odd), .leader-mini-table tbody tr:nth-child(even) { background: transparent; }
 .leader-list { list-style: none; margin: 0; padding: 0; }
 .leader-list li { display: flex; align-items: center; gap: .4rem; padding: .16rem 0; font-size: .8rem; }
 .leader-rank { color: var(--muted); min-width: .9rem; text-align: right; font-variant-numeric: tabular-nums; }
 .leader-team { color: var(--muted); font-size: .7rem; }
 .leader-value { margin-left: auto; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
 .team-dot { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; margin-right: .4rem; vertical-align: baseline; }
+#injury-report { width: 100%; table-layout: auto; }
+#injury-report th, #injury-report td { white-space: normal; word-break: break-word; }
 .group-head { text-align: center !important; border-left: 1px solid var(--line); }
-#four-factors th, #four-factors td { text-align: right; }
-#four-factors th:first-child, #four-factors td:first-child { text-align: left; }
-#four-factors td:nth-child(7), #four-factors th:nth-child(7) { border-left: 1px solid var(--line); }
-#four-factors td:nth-child(11), #four-factors th:nth-child(11) { border-left: 1px solid var(--line); }
 
 /* ---------- finances ---------- */
 .fit-table { width: max-content; max-width: 100%; }
@@ -9379,6 +9256,24 @@ def javascript() -> str:
       });
     });
   });
+
+  document.querySelectorAll('[data-pos-filter]').forEach((select) => {
+    const table = document.getElementById(select.dataset.posFilter);
+    if (!table || table.dataset.posCol === undefined) return;
+    const col = Number(table.dataset.posCol);
+    const apply = () => {
+      const f = select.value;
+      Array.from(table.tBodies[0].rows).forEach((row) => {
+        const cell = row.cells[col];
+        const pos = cell ? cell.textContent.trim() : '';
+        // single-letter groups (G/F/C) match by substring; two-letter picks match exactly
+        const match = f === 'all' || (f.length === 1 ? pos.indexOf(f) !== -1 : pos === f);
+        row.classList.toggle('pos-hidden', !match);
+      });
+    };
+    select.addEventListener('change', apply);
+    apply();
+  });
   document.querySelectorAll('[data-schedule-filter]').forEach((select) => {
     const table = document.getElementById(select.dataset.scheduleFilter);
     if (!table) return;
@@ -9474,6 +9369,7 @@ def javascript() -> str:
     const selY = document.querySelector('[data-chart-axis=\"y\"]');
     const selPos = document.querySelector('[data-chart-pos]');
     const minMinInput = document.querySelector('[data-chart-minmin]');
+    const minGpInput = document.querySelector('[data-chart-mingp]');
     const labelsInput = document.querySelector('[data-chart-labels]');
     let xKey = data.defaultX;
     let yKey = data.defaultY;
@@ -9488,6 +9384,7 @@ def javascript() -> str:
     if (selY) selY.value = yKey;
     if (selPos && ['G', 'F', 'C'].includes(hashParams.get('pos'))) selPos.value = hashParams.get('pos');
     if (minMinInput && hashParams.get('min')) minMinInput.value = hashParams.get('min');
+    if (minGpInput && hashParams.get('mingp')) minGpInput.value = hashParams.get('mingp');
     if (labelsInput && hashParams.get('labels') === '1') labelsInput.checked = true;
 
     function syncHash() {
@@ -9496,6 +9393,7 @@ def javascript() -> str:
       params.set('y', yKey);
       if (selPos && selPos.value !== 'all') params.set('pos', selPos.value);
       if (minMinInput && Number(minMinInput.value) > 0) params.set('min', minMinInput.value);
+      if (minGpInput && Number(minGpInput.value) > 0) params.set('mingp', minGpInput.value);
       if (labelsInput && labelsInput.checked) params.set('labels', '1');
       history.replaceState(null, '', '#' + params.toString());
     }
@@ -9546,11 +9444,13 @@ def javascript() -> str:
 
       const posFilter = selPos ? selPos.value : 'all';
       const minMin = minMinInput ? Number(minMinInput.value) || 0 : 0;
+      const minGp = minGpInput ? Number(minGpInput.value) || 0 : 0;
       const pts = data.players.filter((p) =>
         !hidden.has(p.team)
         && Number.isFinite(p.v[xKey]) && Number.isFinite(p.v[yKey])
         && (posFilter === 'all' || (p.pos || '').includes(posFilter))
-        && (!minMin || (Number.isFinite(p.v.min) && p.v.min >= minMin)));
+        && (!minMin || (Number.isFinite(p.v.min) && p.v.min >= minMin))
+        && (!minGp || (Number.isFinite(p.v.gp) && p.v.gp >= minGp)));
       drawn = [];
       if (!pts.length) {
         ctx.fillStyle = '#939ca7';
@@ -9673,6 +9573,7 @@ def javascript() -> str:
     if (selY) selY.addEventListener('change', () => { yKey = selY.value; syncHash(); draw(); });
     if (selPos) selPos.addEventListener('change', () => { syncHash(); draw(); });
     if (minMinInput) minMinInput.addEventListener('input', () => { syncHash(); draw(); });
+    if (minGpInput) minGpInput.addEventListener('input', () => { syncHash(); draw(); });
     if (labelsInput) labelsInput.addEventListener('change', () => { syncHash(); draw(); });
     window.addEventListener('resize', draw);
     draw();

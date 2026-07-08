@@ -62,6 +62,24 @@
       });
     });
   });
+
+  document.querySelectorAll('[data-pos-filter]').forEach((select) => {
+    const table = document.getElementById(select.dataset.posFilter);
+    if (!table || table.dataset.posCol === undefined) return;
+    const col = Number(table.dataset.posCol);
+    const apply = () => {
+      const f = select.value;
+      Array.from(table.tBodies[0].rows).forEach((row) => {
+        const cell = row.cells[col];
+        const pos = cell ? cell.textContent.trim() : '';
+        // single-letter groups (G/F/C) match by substring; two-letter picks match exactly
+        const match = f === 'all' || (f.length === 1 ? pos.indexOf(f) !== -1 : pos === f);
+        row.classList.toggle('pos-hidden', !match);
+      });
+    };
+    select.addEventListener('change', apply);
+    apply();
+  });
   document.querySelectorAll('[data-schedule-filter]').forEach((select) => {
     const table = document.getElementById(select.dataset.scheduleFilter);
     if (!table) return;
@@ -157,6 +175,7 @@
     const selY = document.querySelector('[data-chart-axis=\"y\"]');
     const selPos = document.querySelector('[data-chart-pos]');
     const minMinInput = document.querySelector('[data-chart-minmin]');
+    const minGpInput = document.querySelector('[data-chart-mingp]');
     const labelsInput = document.querySelector('[data-chart-labels]');
     let xKey = data.defaultX;
     let yKey = data.defaultY;
@@ -171,6 +190,7 @@
     if (selY) selY.value = yKey;
     if (selPos && ['G', 'F', 'C'].includes(hashParams.get('pos'))) selPos.value = hashParams.get('pos');
     if (minMinInput && hashParams.get('min')) minMinInput.value = hashParams.get('min');
+    if (minGpInput && hashParams.get('mingp')) minGpInput.value = hashParams.get('mingp');
     if (labelsInput && hashParams.get('labels') === '1') labelsInput.checked = true;
 
     function syncHash() {
@@ -179,6 +199,7 @@
       params.set('y', yKey);
       if (selPos && selPos.value !== 'all') params.set('pos', selPos.value);
       if (minMinInput && Number(minMinInput.value) > 0) params.set('min', minMinInput.value);
+      if (minGpInput && Number(minGpInput.value) > 0) params.set('mingp', minGpInput.value);
       if (labelsInput && labelsInput.checked) params.set('labels', '1');
       history.replaceState(null, '', '#' + params.toString());
     }
@@ -229,11 +250,13 @@
 
       const posFilter = selPos ? selPos.value : 'all';
       const minMin = minMinInput ? Number(minMinInput.value) || 0 : 0;
+      const minGp = minGpInput ? Number(minGpInput.value) || 0 : 0;
       const pts = data.players.filter((p) =>
         !hidden.has(p.team)
         && Number.isFinite(p.v[xKey]) && Number.isFinite(p.v[yKey])
         && (posFilter === 'all' || (p.pos || '').includes(posFilter))
-        && (!minMin || (Number.isFinite(p.v.min) && p.v.min >= minMin)));
+        && (!minMin || (Number.isFinite(p.v.min) && p.v.min >= minMin))
+        && (!minGp || (Number.isFinite(p.v.gp) && p.v.gp >= minGp)));
       drawn = [];
       if (!pts.length) {
         ctx.fillStyle = '#939ca7';
@@ -356,6 +379,7 @@
     if (selY) selY.addEventListener('change', () => { yKey = selY.value; syncHash(); draw(); });
     if (selPos) selPos.addEventListener('change', () => { syncHash(); draw(); });
     if (minMinInput) minMinInput.addEventListener('input', () => { syncHash(); draw(); });
+    if (minGpInput) minGpInput.addEventListener('input', () => { syncHash(); draw(); });
     if (labelsInput) labelsInput.addEventListener('change', () => { syncHash(); draw(); });
     window.addEventListener('resize', draw);
     draw();

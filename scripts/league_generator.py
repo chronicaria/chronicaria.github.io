@@ -955,6 +955,32 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, data: dict[st
                     cells.append(td("", sort=-1, cls="cur-season" if s == season else ""))
             rows.append(f'<tr class="dead-row">{"".join(cells)}</tr>')
 
+    # Retained salary from trades: the payer keeps its share (+); the roster team gets a credit (−).
+    if tid is not None:
+        for pid, r in FIN_RETENTION.items():
+            retained_player = ALL_PLAYERS_BY_PID.get(pid)
+            if retained_player is None:
+                continue
+            held_by = safe_int(r.get("held_by"), -10)
+            roster_tid = safe_int(retained_player.get("tid"), -11)
+            if tid not in (held_by, roster_tid):
+                continue
+            signed = safe_float(r.get("amount"), 0.0) * (1 if tid == held_by else -1)
+            exp = safe_int((retained_player.get("contract") or {}).get("exp"), season)
+            name = player_name(retained_player)
+            tag = "retained salary" if tid == held_by else f'retained by {r.get("note", "another team")}'
+            cells = [
+                td('<span class="muted">—</span>'),
+                td(f'<span class="dead-money" title="Salary retained in a trade">{esc(name)} <span class="muted small-copy">({tag})</span></span>', sort=name, cls="name-cell"),
+            ]
+            for s in seasons:
+                if s <= exp and abs(signed) > 1e-9:
+                    totals[s] += signed
+                    cells.append(td(fmt_money(signed), sort=signed, cls=("cur-season dead-cell" if s == season else "dead-cell")))
+                else:
+                    cells.append(td("", sort=-1, cls="cur-season" if s == season else ""))
+            rows.append(f'<tr class="dead-row">{"".join(cells)}</tr>')
+
     counts_cells = [td(""), td("Under Contract", cls="name-cell total-label")]
     totals_cells = [td(""), td("Committed Salary", cls="name-cell total-label")]
     for s in seasons:
@@ -992,6 +1018,38 @@ FIN_ADJUSTMENTS: dict[int, dict[str, Any]] = {
     2: {"amount": -1000, "note": "Cash to Waltham (trade)"},    # Cambridge Platypuses
     6: {"amount":  1000, "note": "Cash from Cambridge (trade)"},  # Waltham Bears
 }
+
+# Salary retained in a trade: the original team keeps paying part of a traded player's
+# salary while the player sits on the new roster at full contract. BBGM exports don't
+# record retention, so we move the retained share (thousands/yr) off the roster team's
+# books onto the payer's — for payroll, luxury tax, and the salaries table — every season
+# through the contract's exp. Keyed by pid. ponytail: hand-maintained; add rows as trades happen.
+FIN_RETENTION: dict[int, dict[str, Any]] = {
+    # 2030 trade: Cody Williams to the Gooners ($42M/yr thru 2034); Waltham retains $17M/yr.
+    1789: {"held_by": 6, "amount": 17000, "note": "Waltham (trade)"},  # Cody Williams (roster tid 5)
+}
+
+
+def team_retention_delta(tid: int, season: int) -> float:
+    """Net salary-retention adjustment to a team's payroll for ``season`` (thousands).
+
+    The payer (``held_by``) carries its retained share; the roster team is relieved of it.
+    Only counts while the player is still under contract (``season <= exp``).
+    """
+    delta = 0.0
+    for pid, r in FIN_RETENTION.items():
+        player = ALL_PLAYERS_BY_PID.get(pid)
+        if not player:
+            continue
+        exp = safe_int((player.get("contract") or {}).get("exp"), season)
+        if season > exp:
+            continue
+        amount = safe_float(r.get("amount"), 0.0)
+        if safe_int(r.get("held_by"), -10) == tid:
+            delta += amount                       # payer keeps this on their books
+        if safe_int(player.get("tid"), -10) == tid:
+            delta -= amount                       # roster team is relieved of it
+    return delta
 
 
 FIN_FINALS_GAMES_TO_WIN = 4  # ponytail: best-of-7 finals (this league); read games-to-win if the format changes
@@ -1071,7 +1129,8 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
             continue
         roster = [p for p in players if safe_int(p.get("tid"), -98) == tid]
         dead = team_dead_money(data, tid, season)
-        payroll = team_payroll(roster, season) + dead  # waived players still get paid
+        retained = team_retention_delta(tid, season)  # traded-away salary kept on the books
+        payroll = team_payroll(roster, season) + dead + retained  # waived + retained still get paid
         ts = latest_team_season(team, season)
         won, lost = safe_int(ts.get("won"), 0), safe_int(ts.get("lost"), 0)
         luxtax = max(0.0, payroll - FIN_SOFT_CAP)
@@ -1084,7 +1143,7 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
         adj_info = FIN_ADJUSTMENTS.get(tid) or {}
         fin[tid] = {
             "adj": safe_float(adj_info.get("amount"), 0.0), "adj_note": adj_info.get("note", ""),
-            "payroll": payroll, "dead": dead, "won": won, "lost": lost, "luxtax": luxtax,
+            "payroll": payroll, "dead": dead, "retained": retained, "won": won, "lost": lost, "luxtax": luxtax,
             "under_cap": payroll < FIN_SOFT_CAP, "over_cap": payroll > FIN_SOFT_CAP,
             "win_rev_now": FIN_PER_WIN * won, "win_rev_proj": FIN_PER_WIN * proj_w,
             "earned_playoff": earned_playoff, "proj_playoff": proj_playoff,
@@ -1625,6 +1684,19 @@ def team_hero_html(team: dict[str, Any], season: int, sorted_roster: list[dict[s
     </section>"""
 
 
+def _payroll_note(f: dict[str, Any]) -> str:
+    """Small-copy parenthetical explaining what's baked into the payroll figure."""
+    parts = []
+    if f.get("dead"):
+        parts.append(f'incl. {fmt_money(f["dead"])} dead money')
+    retained = safe_float(f.get("retained"), 0.0)
+    if retained > 1e-9:
+        parts.append(f'incl. {fmt_money(retained)} retained salary')
+    elif retained < -1e-9:
+        parts.append(f'net of {fmt_money(-retained)} retained elsewhere')
+    return f' <span class="muted small-copy">({"; ".join(parts)})</span>' if parts else ""
+
+
 def finance_ledger_card(tfin: dict[str, Any] | None) -> str:
     if not tfin:
         return ""
@@ -1647,7 +1719,7 @@ def finance_ledger_card(tfin: dict[str, Any] | None) -> str:
             f'{fmt_money_pm(f["win_rev_proj"])} <span class="muted small-copy">(proj {fmt_number(f["proj_w"], 1)} W)</span>'),
         row('Playoff bonuses <span class="muted small-copy">(EV projected)</span>', fmt_money_pm(f["earned_playoff"]), fmt_money_pm(f["proj_playoff"])),
         row("Total revenue", f'<strong>{fmt_money(f["rev_now"])}</strong>', f'<strong>{fmt_money(f["rev_proj"])}</strong>', cls="ledger-subtotal"),
-        row("Player payroll" + (f' <span class="muted small-copy">(incl. {fmt_money(f["dead"])} dead money)</span>' if f.get("dead") else ""), payroll_cell, payroll_cell),
+        row("Player payroll" + _payroll_note(f), payroll_cell, payroll_cell),
         row('Luxury tax <span class="muted small-copy">(over $300M)</span>', luxtax_cell, luxtax_cell),
         row('Tax distribution <span class="muted small-copy">(under-cap share)</span>', share_cell, share_cell),
     ]

@@ -236,6 +236,31 @@ class TestTeamFinances(unittest.TestCase):
                                lf["teams"][2]["cash_proj"] + lf["teams"][6]["cash_proj"])
         self.assertAlmostEqual(cam["adj"] + wal["adj"], 0)
 
+    def test_salary_retention_moves_payroll_between_teams(self):
+        # Cody Williams (pid 1789) sits on the Gooners (tid 5) at $42M; Waltham (tid 6) retains $17M.
+        cody = {"pid": 1789, "firstName": "Cody", "lastName": "Williams", "tid": 5,
+                "contract": {"amount": 42000, "exp": 2034}, "ratings": [{"season": 2030, "ovr": 65}]}
+        teams = [self._team_s(5, "GOO", 5, 5), self._team_s(6, "WAL", 5, 5)]
+        players = [cody, self._pl(6, 50000)]
+        data = {"teams": teams, "players": players, "playoffSeries": [], "releasedPlayers": []}
+        saved = dict(lg.ALL_PLAYERS_BY_PID)
+        lg.ALL_PLAYERS_BY_PID.clear()
+        lg.ALL_PLAYERS_BY_PID.update({1789: cody})
+        try:
+            lf = lg.compute_league_finances(data, teams, players, 2030, odds={})
+        finally:
+            lg.ALL_PLAYERS_BY_PID.clear()
+            lg.ALL_PLAYERS_BY_PID.update(saved)
+        goo, wal = lf["teams"][5], lf["teams"][6]
+        # Gooners are relieved of $17M: they pay $25M of Cody's $42M
+        self.assertAlmostEqual(goo["retained"], -17000)
+        self.assertAlmostEqual(goo["payroll"], 42000 - 17000)
+        # Waltham carries the retained $17M on top of its own $50M roster
+        self.assertAlmostEqual(wal["retained"], 17000)
+        self.assertAlmostEqual(wal["payroll"], 50000 + 17000)
+        # retention nets to zero across the league
+        self.assertAlmostEqual(sum(t["retained"] for t in lf["teams"].values()), 0)
+
     def test_playoff_bonuses_stack_only_when_earned(self):
         complete = {"season": 2030, "series": [
             [{"home": {"tid": 0, "won": 4}, "away": {"tid": 3, "won": 1}},

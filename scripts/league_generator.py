@@ -1054,6 +1054,22 @@ FIN_RETENTION: dict[int, dict[str, Any]] = {
     1789: {"held_by": 6, "amount": 17000, "note": "Waltham (trade)"},  # Cody Williams (roster tid 5)
 }
 
+# Cumulative bankroll each team carries into next season (thousands), keyed by tid.
+# The auto ledger resets to FIN_START each year, so in the offseason (phase >= 8) we show
+# this hand-kept balance instead. ponytail: hand-maintained; refresh once per offseason.
+FIN_NEXT_BALANCE: dict[int, int] = {
+    7: 396000,  # Stony Brook Stingrays
+    4: 365000,  # Toronto Jays
+    2: 345000,  # Cambridge Platypuses
+    3: 336000,  # Queens Pigeons
+    0: 331000,  # Durham Destroyers
+    6: 310000,  # Waltham Bears
+    1: 308000,  # Rochester Dragons
+    8: 287000,  # Manhattan Elephants
+    9: 245000,  # Ithaca Thunder
+    5: 78000,   # Gooning Gooners
+}
+
 
 def team_retention_delta(tid: int, season: int) -> float:
     """Net salary-retention adjustment to a team's payroll for ``season`` (thousands).
@@ -1179,10 +1195,17 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
     pool = sum(f["luxtax"] for f in fin.values())
     under = [t for t, f in fin.items() if f["under_cap"]]
     share = pool / len(under) if under else 0.0
-    for f in fin.values():
+    offseason = phase_value(data) >= 8
+    for tid, f in fin.items():
         f["tax_share"] = share if f["under_cap"] else 0.0
         f["cash_now"] = FIN_START + f["rev_now"] - f["payroll"] - f["luxtax"] + f["tax_share"] + f["adj"]
         f["cash_proj"] = FIN_START + f["rev_proj"] - f["payroll"] - f["luxtax"] + f["tax_share"] + f["adj"]
+        if offseason and tid in FIN_NEXT_BALANCE:
+            # Offseason: the single-season ledger is over, so show the hand-kept cumulative
+            # bankroll carried into next season (available to spend in free agency).
+            f["cash_now"] = f["cash_proj"] = float(FIN_NEXT_BALANCE[tid])
+            f["offseason"] = True
+            f["bankroll_year"] = season + 1
     return {"teams": fin, "pool": pool, "share": share, "n_under": len(under), "soft_cap": FIN_SOFT_CAP}
 
 
@@ -1671,6 +1694,11 @@ def hero_finance_chip(tfin: dict[str, Any] | None) -> str:
         return ""
     now, proj = tfin["cash_now"], tfin["cash_proj"]
     nc = "delta-up" if now >= 0 else "delta-down"
+    if tfin.get("offseason"):
+        return f"""
+    <div class="hero-finance">
+      <div class="hero-fin-row"><span>Cash on hand</span><strong class="{nc}">{fmt_money(now)}</strong></div>
+    </div>"""
     pc = "delta-up" if proj >= 0 else "delta-down"
     return f"""
     <div class="hero-finance">
@@ -1729,6 +1757,19 @@ def finance_ledger_card(tfin: dict[str, Any] | None) -> str:
     if not tfin:
         return ""
     f = tfin
+
+    if f.get("offseason"):
+        # Offseason: the season ledger has closed, so headline the carried-over bankroll.
+        bal = f["cash_now"]
+        year = f.get("bankroll_year", "")
+        nc = "delta-up" if bal >= 0 else "delta-down"
+        return f"""
+    <section class="card">
+      <div class="section-title-row"><h2>Cash on Hand</h2><span class="muted small-copy">available to spend in free agency</span></div>
+      <div class="vitals-row">
+        <div class="vital-tile"><span>Balance entering {year}</span><strong class="{nc}">{fmt_money(bal)}</strong></div>
+      </div>
+    </section>"""
 
     def row(label: str, now: str, proj: str, cls: str = "") -> str:
         cls_attr = f' class="{cls}"' if cls else ""
@@ -2040,8 +2081,8 @@ def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges
         td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
         td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
     ]
-    for i, sal in enumerate(salaries):
-        cells.append(td(fmt_money(sal * 1000), sort=sal, cls="group-start" if i == 0 else ""))
+    bid = salaries[0]  # starting bid = annual value of a 1-year deal
+    cells.append(td(fmt_money(bid * 1000), sort=bid, cls="group-start"))
     for key, _ in TEAM_RATING_RANK_KEYS:
         value = rating.get(key)
         lo, hi = rating_ranges.get(key, (0.0, 0.0))
@@ -2051,92 +2092,47 @@ def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges
     return "".join(cells)
 
 
-def expiring_contract_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]], teams_by_tid: dict[int, dict[str, Any]]) -> str:
-    rating = latest_rating(player, season)
-    contract = player.get("contract") or {}
-    amount = safe_float(contract.get("amount"), 0.0)
-    contract_html = f'{fmt_money(amount)} <span class="expiry-badge">exp {esc(contract.get("exp", season))}</span>'
-    cells = [
-        td(player_link(player, root, show_number=False), sort=player_name(player), cls="name-cell"),
-        td(team_label(player.get("tid"), teams_by_tid, root), sort=team_label(player.get("tid"), teams_by_tid, root="", as_link=False)),
-        td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
-        td(age(player, season), sort=(season - (player.get("born") or {}).get("year", season) if isinstance((player.get("born") or {}).get("year"), int) else None)),
-        td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
-        td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
-        td(contract_html, sort=amount),
-    ]
-    for key, _ in TEAM_RATING_RANK_KEYS:
-        value = rating.get(key)
-        lo, hi = rating_ranges.get(key, (0.0, 0.0))
-        cls = "group-start" if key in RATING_GROUP_STARTS else ""
-        cells.append(td(esc(value if value is not None else "—"), sort=value, cls=cls, style=heat_style(value, lo, hi, 1)))
-    cells.append(td(mood_html(player), sort=" ".join(player.get("moodTraits") or []), cls="group-start"))
-    return "".join(cells)
+def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, all_players: list[dict[str, Any]] | None = None, market_year: int | None = None) -> str:
+    market_year = market_year if market_year is not None else season
 
-
-def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, all_players: list[dict[str, Any]] | None = None) -> str:
     def market_sort_key(player: dict[str, Any]) -> tuple[int, int, str]:
         rating = latest_rating(player, season)
         return (-safe_int(rating.get("ovr")), -safe_int(rating.get("pot")), player_name(player))
 
     sorted_players = sorted(players, key=market_sort_key)
-    expiring_players = sorted(contract_expiring_players(all_players or [], season, rostered_only=True), key=market_sort_key)
 
-    def ranges_for(pool: list[dict[str, Any]]) -> dict[str, tuple[float, float]]:
-        ranges: dict[str, tuple[float, float]] = {}
-        for key, _ in TEAM_RATING_RANK_KEYS:
-            values = []
-            for p in pool:
-                value = latest_rating(p, season).get(key)
-                if value is not None and math.isfinite(safe_float(value, float("nan"))):
-                    values.append(float(value))
-            ranges[key] = (min(values), max(values)) if values else (0.0, 0.0)
-        return ranges
+    rating_ranges: dict[str, tuple[float, float]] = {}
+    for key, _ in TEAM_RATING_RANK_KEYS:
+        values = []
+        for p in sorted_players:
+            value = latest_rating(p, season).get(key)
+            if value is not None and math.isfinite(safe_float(value, float("nan"))):
+                values.append(float(value))
+        rating_ranges[key] = (min(values), max(values)) if values else (0.0, 0.0)
 
-    rating_ranges = ranges_for(sorted_players)
-    expiring_ranges = ranges_for(expiring_players)
-
-    headers: list = ["Name", "Pos", "Age", "Ovr", "Pot",
-                     ("1 yr", "group-start"), "2 yr", "3 yr", "4 yr", "5 yr"]
-    expiring_headers: list = ["Name", "Team", "Pos", "Age", "Ovr", "Pot", "Contract"]
+    headers: list = ["Name", "Pos", "Age", "Ovr", "Pot", ("Starting Bid", "group-start")]
     for key, label in TEAM_RATING_RANK_KEYS:
         headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
-        expiring_headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
     headers.append(("Mood", "group-start"))
-    expiring_headers.append(("Mood", "group-start"))
-    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     rows = [free_agent_row(p, season, "", rating_ranges) for p in sorted_players]
-    expiring_rows = [expiring_contract_row(p, season, "", expiring_ranges, teams_by_tid) for p in expiring_players]
 
     body = f"""
     <section class="page-hero">
       <div>
-        <p class="eyebrow">Free Agent Market</p>
-        <h1>Free Agent Market</h1>
-        <p class="muted">Available players now plus rostered {season} expiring contracts, kept distinct so market supply is not double-counted.</p>
+        <p class="eyebrow">Free Agency</p>
+        <h1>{market_year} Free Agents</h1>
+        <p class="muted">Every unsigned player available this offseason. Starting bid is the annual value of a one-year deal, derived from the player's overall, potential, and age.</p>
       </div>
     </section>
     <section class="card">
-      <div class="tabs" role="tablist" aria-label="Free agent market views" data-tabs>
-        <button type="button" class="active" role="tab" id="tab-available-now" aria-controls="panel-available-now" aria-selected="true" tabindex="0" data-tab-target="panel-available-now">Available Now <span>{len(sorted_players)}</span></button>
-        <button type="button" role="tab" id="tab-expiring" aria-controls="panel-expiring" aria-selected="false" tabindex="-1" data-tab-target="panel-expiring">{season} Expiring <span>{len(expiring_players)}</span></button>
+      <div class="section-title-row"><h2>Available Players</h2><span class="count-pill">{len(sorted_players)}</span></div>
+      <div class="toolbar">
+        <input class="table-search" data-table-filter="free-agents" placeholder="Filter free agents…" aria-label="Filter free agents">
       </div>
-      <div id="panel-available-now" role="tabpanel" aria-labelledby="tab-available-now" data-tab-panel>
-        <p class="muted small-copy">Asking salary (annual $) by contract length, from the player's overall, potential, and age. Longer deals average the yearly figure as the player ages.</p>
-        <div class="toolbar">
-          <input class="table-search" data-table-filter="free-agents-available" placeholder="Filter available players…" aria-label="Filter available players">
-        </div>
-        {table_html(headers, rows, table_id="free-agents-available", empty_message="No free agents found.", caption="Available now free agents", pos_filter=True)}
-      </div>
-      <div id="panel-expiring" role="tabpanel" aria-labelledby="tab-expiring" data-tab-panel hidden>
-        <div class="toolbar">
-          <input class="table-search" data-table-filter="free-agents-expiring" placeholder="Filter expiring contracts…" aria-label="Filter expiring contracts">
-        </div>
-        {table_html(expiring_headers, expiring_rows, table_id="free-agents-expiring", empty_message="No rostered expiring contracts found.", caption=f"Rostered players with contracts expiring in {season}", pos_filter=True)}
-      </div>
+      {table_html(headers, rows, table_id="free-agents", empty_message="No free agents found.", caption=f"{market_year} free agents", pos_filter=True)}
     </section>
     """
-    return page_html("Free Agent Market", body, teams, root="", active="free-agency")
+    return page_html("Free Agents", body, teams, root="", active="free-agency")
 
 
 def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None) -> str:
@@ -3995,147 +3991,6 @@ def projection_table_html(player: dict[str, Any], proj: dict[str, Any] | None) -
     """
 
 
-def narrative_tags_html(player: dict[str, Any], proj: dict[str, Any] | None, season: int) -> str:
-    """Deterministic "Scouting Outlook" strip: 2-5 tone-colored chips auto-derived
-    from the Monte Carlo projection + age. One trajectory chip is always emitted;
-    ceiling/uncertainty and archetype-drift chips follow, capped at 5 and ordered by
-    importance. Each chip carries a title= tooltip stating the numbers behind it.
-    Returns "" when proj is None or the projection lacks the needed bands.
-    """
-    if proj is None:
-        return ""
-    sim = proj.get("sim") or {}
-    ovr = sim.get("ovr") or {}
-    subs = sim.get("subratings") or {}
-    p10 = ovr.get("p10")
-    p50 = ovr.get("p50")
-    p90 = ovr.get("p90")
-    if not (p10 and p50 and p90) or len(p50) < 7 or len(p10) < 7 or len(p90) < 7:
-        return ""
-
-    def f(value: Any) -> float:
-        try:
-            x = float(value)
-        except (TypeError, ValueError):
-            return 0.0
-        if x != x or x in (float("inf"), float("-inf")):
-            return 0.0
-        return x
-
-    age = safe_int(proj.get("age"), 0)
-    cur = f(p50[0])                          # today's median OVR (index 0 == current)
-    fin = f(p50[6])                          # median OVR at the 6-season horizon
-    slope = fin - cur                        # projected median OVR change over horizon
-    band_now = f(p90[0]) - f(p10[0])
-    band_fin = f(p90[6]) - f(p10[6])
-    band = max(band_now, band_fin)           # widest P10-P90 outcome spread
-    pot_peak = safe_int(sim.get("pot_p75_peak"), int(round(cur)))
-    ceiling_gap = pot_peak - cur             # engine 75th-pct peak above today
-
-    # Display-only integers, derived from the rounded endpoints so a tooltip's
-    # delta and its "(start to end)" parenthetical always reconcile exactly.
-    # (Thresholds below still use the float slope / ceiling_gap / band.)
-    rcur = int(round(cur))
-    rfin = int(round(fin))
-    dslope = rfin - rcur
-    dceiling = pot_peak - rcur
-
-    # (priority, tone, label, title). Lower priority sorts first.
-    chips: list[tuple] = []
-
-    # --- TRAJECTORY (always emit exactly one) -------------------------------
-    if age <= 23 and slope >= 14:
-        chips.append((0, "good", "Ascending",
-            "Projected median OVR climbs %+d over 6 seasons (%d to %d) at age %d -- steep early-career growth."
-            % (dslope, rcur, rfin, age)))
-    elif slope >= 6:
-        chips.append((0, "good", "Rising",
-            "Projected median OVR rises %+d over 6 seasons (%d to %d)." % (dslope, rcur, rfin)))
-    elif slope <= -16 and age >= 30:
-        chips.append((0, "bad", "Cliff risk",
-            "Median OVR projected to fall %d over 6 seasons (%d to %d) at age %d -- sharp age-driven decline."
-            % (-dslope, rcur, rfin, age)))
-    elif slope <= -6:
-        chips.append((0, "bad", "Declining" if age >= 30 else "Sliding",
-            "Projected median OVR drops %d over 6 seasons (%d to %d)." % (-dslope, rcur, rfin)))
-    elif age >= 31:
-        chips.append((0, "warn", "Aging veteran",
-            "Median OVR roughly flat (%+d over 6 seasons) but at age %d, regression risk grows." % (dslope, age)))
-    else:
-        chips.append((0, "neutral", "Steady",
-            "Projected median OVR holds near %d (%+d over 6 seasons)." % (rcur, dslope)))
-
-    # --- CEILING / UNCERTAINTY ---------------------------------------------
-    if ceiling_gap >= 12 and age <= 24:
-        chips.append((1, "good", "Star upside",
-            "Engine peak ceiling (75th pct) of %d sits %+d above today's %d at age %d."
-            % (pot_peak, dceiling, rcur, age)))
-    elif ceiling_gap >= 7:
-        chips.append((1, "info", "High ceiling",
-            "Engine peak ceiling (75th pct) of %d is %+d above today's %d." % (pot_peak, dceiling, rcur)))
-
-    if band >= 16:
-        chips.append((2, "warn", "Boom-or-bust",
-            "Wide outcome spread: P10-P90 OVR band reaches %d points -- high variance." % round(band)))
-    elif band <= 7 and age <= 30:
-        chips.append((2, "info", "Low variance",
-            "Tight outcome spread: P10-P90 OVR band only %d points -- a safe, predictable profile." % round(band)))
-
-    # --- ARCHETYPE EVOLUTION (subrating drift, p50[6] vs p50[0]) -----------
-    drift: dict[str, float] = {}
-    for k in RATING_LABELS:
-        arr = (subs.get(k) or {}).get("p50")
-        if arr and len(arr) >= 7:
-            drift[k] = f(arr[6]) - f(arr[0])
-
-    def grp(keys: list) -> float:
-        vals = [drift[k] for k in keys if k in drift]
-        return sum(vals) / len(vals) if vals else 0.0
-
-    def detail(keys: list) -> str:
-        return ", ".join("%s %+d" % (RATING_LABELS[k], round(drift[k])) for k in keys if k in drift)
-
-    arche: list[tuple] = []  # (gain_magnitude, tone, label, title)
-    if drift:
-        shoot = grp(["tp", "fg", "ft"])
-        play = grp(["pss", "oiq"])
-        defn = grp(["diq", "reb"])
-        burst = grp(["spd", "jmp"])
-        strength = drift.get("stre", 0.0)
-
-        if shoot >= 4:
-            arche.append((shoot, "good", "Developing shooter",
-                "Shooting subratings trending up over the horizon: %s." % detail(["tp", "fg", "ft"])))
-        if play >= 4:
-            arche.append((play, "good", "Emerging playmaker",
-                "Passing / offensive IQ trending up: %s." % detail(["pss", "oiq"])))
-        if defn >= 4:
-            arche.append((defn, "good", "Defensive riser",
-                "Defensive IQ / rebounding trending up: %s." % detail(["diq", "reb"])))
-        if burst <= -5:
-            arche.append((-burst, "bad", "Losing burst",
-                "Athleticism projected to fade: %s." % detail(["spd", "jmp"])))
-        if strength >= 4:
-            arche.append((strength, "info", "Adding strength",
-                "Strength projected to rise %+d over the horizon." % round(strength)))
-
-        arche.sort(key=lambda t: t[0], reverse=True)
-        for _, tone, label, title in arche[:2]:
-            chips.append((3, tone, label, title))
-
-    chips = chips[:5]
-
-    n_chips = len(chips)
-    count_label = "%d tag" % n_chips if n_chips == 1 else "%d tags" % n_chips
-    out = ['<section class="card scout-card"><div class="section-title-row"><h2>Scouting Outlook</h2>'
-           '<span class="count-pill">%s</span></div><div class="scout-tags">' % count_label]
-    for _, tone, label, title in chips:
-        out.append('<span class="scout-tag scout-tag--%s" title="%s">%s</span>'
-                   % (esc(tone), esc(title), esc(label)))
-    out.append('</div></section>')
-    return "".join(out)
-
-
 def player_form(log_entries: list[dict[str, Any]]) -> dict[str, Any] | None:
     played = [e for e in (log_entries or []) if safe_float((e.get("box") or {}).get("min")) > 0]
     if len(played) < 6:
@@ -4390,7 +4245,6 @@ def render_player_pages(player: dict[str, Any], teams: list[dict[str, Any]], sea
         season_highs_html(player, logs, teams_by_tid, season, "../"),
         form_card_html(player, logs),
         development_chart_html(player, season, proj),
-        narrative_tags_html(player, proj, season),
         subrating_grid_html(player, proj),
     ])
     if "stats" in available:
@@ -8643,7 +8497,7 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
   .projtab-table td { padding: 0.3rem 0.4rem; }
   .projtab-range { font-size: 0.62rem; }
 }
-/* ---------- scouting outlook tags ---------- */
+/* ---------- tone tags (projected-standings legend) ---------- */
 .scout-tags {
   display: flex;
   flex-wrap: wrap;
@@ -8676,13 +8530,8 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .scout-tag--good::before { background: var(--good); }
 .scout-tag--bad { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
 .scout-tag--bad::before { background: var(--bad); }
-.scout-tag--warn { border-color: color-mix(in srgb, var(--bad) 30%, var(--line)); }
-.scout-tag--warn::before { background: color-mix(in srgb, var(--bad) 60%, var(--accent)); }
-.scout-tag--info { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
-.scout-tag--info::before { background: var(--accent); }
 .scout-tag--neutral { color: var(--muted); }
 .scout-tag--neutral::before { background: var(--muted); }
-
 /* ---------- team trajectory (projected team strength fan chart) ---------- */
 /* Uses --team-primary as the on-brand band/line accent, falling back to --accent. */
 .ttraj-wrap { max-width: 700px; --ttraj-accent: var(--team-primary, var(--accent)); }
@@ -10352,7 +10201,8 @@ def generate_site(
 
     write_text(out_dir / "index.html", render_home_page(data, teams, players, season, start_season))
     write_text(out_dir / "schedule.html", render_schedule_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days))
-    write_text(out_dir / "free-agency.html", render_free_agency_page(fa_players, teams, season, start_season, all_players=players))
+    fa_market_year = season + 1 if phase_value(data) >= 8 else season
+    write_text(out_dir / "free-agency.html", render_free_agency_page(fa_players, teams, season, start_season, all_players=players, market_year=fa_market_year))
     write_text(out_dir / "players" / "index.html", render_players_index(players, teams, season, start_season, data=data))
     write_text(out_dir / "history.html", render_history_page(data, teams))
     write_text(out_dir / "records.html", render_records_page(data, teams, season, start_season=start_season))

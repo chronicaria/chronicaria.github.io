@@ -969,7 +969,7 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
   .projtab-table td { padding: 0.3rem 0.4rem; }
   .projtab-range { font-size: 0.62rem; }
 }
-/* ---------- scouting outlook tags ---------- */
+/* ---------- tone tags (projected-standings legend) ---------- */
 .scout-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1002,13 +1002,8 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .scout-tag--good::before { background: var(--good); }
 .scout-tag--bad { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
 .scout-tag--bad::before { background: var(--bad); }
-.scout-tag--warn { border-color: color-mix(in srgb, var(--bad) 30%, var(--line)); }
-.scout-tag--warn::before { background: color-mix(in srgb, var(--bad) 60%, var(--accent)); }
-.scout-tag--info { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
-.scout-tag--info::before { background: var(--accent); }
 .scout-tag--neutral { color: var(--muted); }
 .scout-tag--neutral::before { background: var(--muted); }
-
 /* ---------- team trajectory (projected team strength fan chart) ---------- */
 /* Uses --team-primary as the on-brand band/line accent, falling back to --accent. */
 .ttraj-wrap { max-width: 700px; --ttraj-accent: var(--team-primary, var(--accent)); }

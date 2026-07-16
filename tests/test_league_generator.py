@@ -77,13 +77,15 @@ class TestTeamGameViews(unittest.TestCase):
         self.assertNotIn(">exp</span>", html)
         self.assertNotIn("expiring-cell", html)
 
-    def test_team_finances_after_2033_still_includes_current_season(self):
+    def test_team_finances_shows_next_five_seasons(self):
         player = _player(23, "Future", "Season", tid=0, exp=2035, amount=5000)
 
         html = lg.team_finances_table([player], 2034)
 
-        self.assertIn("2034", html)
-        self.assertNotIn("2035", html)
+        self.assertNotIn("2034", html)  # the finished season column is dropped
+        self.assertIn("2035", html)     # window is season+1 .. season+5
+        self.assertIn("2039", html)
+        self.assertNotIn("2040", html)
 
     def test_depth_chart_assigns_each_player_once(self):
         players = [
@@ -256,20 +258,26 @@ class TestTeamFinances(unittest.TestCase):
         self.assertAlmostEqual(cam["adj"] + wal["adj"], 0)
 
     def test_salary_retention_moves_payroll_between_teams(self):
-        # Cody Williams (pid 1789) sits on the Gooners (tid 5) at $42M; Waltham (tid 6) retains $17M.
+        # Mechanism test: a player (pid 1789) sits on tid 5 at $42M; tid 6 retains $17M.
+        # FIN_RETENTION is injected here so the test doesn't depend on live trade data.
         cody = {"pid": 1789, "firstName": "Cody", "lastName": "Williams", "tid": 5,
                 "contract": {"amount": 42000, "exp": 2034}, "ratings": [{"season": 2030, "ovr": 65}]}
         teams = [self._team_s(5, "GOO", 5, 5), self._team_s(6, "WAL", 5, 5)]
         players = [cody, self._pl(6, 50000)]
         data = {"teams": teams, "players": players, "playoffSeries": [], "releasedPlayers": []}
         saved = dict(lg.ALL_PLAYERS_BY_PID)
+        saved_ret = dict(lg.FIN_RETENTION)
         lg.ALL_PLAYERS_BY_PID.clear()
         lg.ALL_PLAYERS_BY_PID.update({1789: cody})
+        lg.FIN_RETENTION.clear()
+        lg.FIN_RETENTION.update({1789: {"held_by": 6, "amount": 17000, "note": "Waltham (trade)"}})
         try:
             lf = lg.compute_league_finances(data, teams, players, 2030, odds={})
         finally:
             lg.ALL_PLAYERS_BY_PID.clear()
             lg.ALL_PLAYERS_BY_PID.update(saved)
+            lg.FIN_RETENTION.clear()
+            lg.FIN_RETENTION.update(saved_ret)
         goo, wal = lf["teams"][5], lf["teams"][6]
         # Gooners are relieved of $17M: they pay $25M of Cody's $42M
         self.assertAlmostEqual(goo["retained"], -17000)

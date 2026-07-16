@@ -322,18 +322,11 @@
         drawn.push({ x, y, p });
       });
 
-      // optionally label the most extreme points on the current axes
+      // label every visible point (overlap allowed)
       if (labelsInput && labelsInput.checked && pts.length) {
-        const meanX = pts.reduce((s, p) => s + p.v[xKey], 0) / pts.length;
-        const meanY = pts.reduce((s, p) => s + p.v[yKey], 0) / pts.length;
-        const sdX = Math.sqrt(pts.reduce((s, p) => s + (p.v[xKey] - meanX) ** 2, 0) / pts.length) || 1;
-        const sdY = Math.sqrt(pts.reduce((s, p) => s + (p.v[yKey] - meanY) ** 2, 0) / pts.length) || 1;
-        const ranked = pts.slice().sort((a, b) =>
-          (Math.abs((b.v[xKey] - meanX) / sdX) + Math.abs((b.v[yKey] - meanY) / sdY))
-          - (Math.abs((a.v[xKey] - meanX) / sdX) + Math.abs((a.v[yKey] - meanY) / sdY)));
         ctx.fillStyle = '#c6cdd5';
         ctx.textAlign = 'left';
-        ranked.slice(0, Math.min(14, ranked.length)).forEach((p) => {
+        pts.forEach((p) => {
           const lx = px(p.v[xKey]) + 7;
           const ly = py(p.v[yKey]) + 3;
           ctx.fillText(p.name.split(' ').slice(-1)[0], lx, ly);

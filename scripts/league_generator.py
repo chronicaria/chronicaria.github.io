@@ -1054,8 +1054,12 @@ FIN_ADJUSTMENTS: dict[int, dict[str, Any]] = {
 # books onto the payer's — for payroll, luxury tax, and the salaries table — every season
 # through the contract's exp. Keyed by pid. ponytail: hand-maintained; add rows as trades happen.
 FIN_RETENTION: dict[int, dict[str, Any]] = {
-    # Cody Williams (pid 1789) was waived to free agency in the 2031 offseason, so Waltham's
-    # $17M retention no longer applies — entry removed. Add rows here as new trades happen.
+    # (Cody Williams pid 1789 was waived to free agency in the 2031 offseason, so Waltham's
+    # old $17M retention no longer applies — that entry was removed.)
+    # 2031 trade: Ajay Mitchell + Trae Young to the Gooners with Waltham paying them in FULL,
+    # so the retained share equals each contract and the Gooners carry $0 for both.
+    1765: {"held_by": 6, "amount": 21000, "note": "Waltham (trade)"},  # Ajay Mitchell (roster tid 5)
+    1325: {"held_by": 6, "amount": 18000, "note": "Waltham (trade)"},  # Trae Young (roster tid 5)
 }
 
 # Cumulative bankroll each team carries into next season (thousands), keyed by tid.
@@ -1067,17 +1071,29 @@ FIN_NEXT_BALANCE: dict[int, int] = {
     2: 345000,  # Cambridge Platypuses
     3: 336000,  # Queens Pigeons
     0: 331000,  # Durham Destroyers
-    6: 310000,  # Waltham Bears
+    6: 290000,  # Waltham Bears      (310 − 20 sent to the Gooners in the 2031 Mitchell/Young trade)
     1: 308000,  # Rochester Dragons
     8: 287000,  # Manhattan Elephants
     9: 245000,  # Ithaca Thunder
-    5: 78000,   # Gooning Gooners
+    5: 98000,   # Gooning Gooners    (78 + 20 received from Waltham in that trade)
 }
 
 # 2031 offseason roster move: the Gooners (tid 5) waive everyone but these keepers. Each waived
 # player enters free agency asking their current contract price. ponytail: hand-maintained.
 GOONERS_TID = 5
 GOONERS_KEEP_PIDS = {113, 1284, 1293, 1663, 1729}  # Ruutli, Tyson, Smith Jr., Edgecombe, Avdalas
+
+# 2031 offseason trades (hand-maintained). Applied AFTER the Gooners waive pass so incoming
+# players aren't swept back out by it. Contracts already match the agreed terms, so only the
+# roster team changes; salary that stays with the old team is handled by FIN_RETENTION above.
+TRADE_MOVES: dict[int, int] = {   # pid -> destination tid
+    118: 5,   # Espoir Ndinga: Toronto -> Gooners ($1M thru 2031)
+    1765: 5,  # Ajay Mitchell: Waltham -> Gooners ($21M thru 2033, paid by Waltham)
+    1325: 5,  # Trae Young:    Waltham -> Gooners ($18M thru 2032, paid by Waltham)
+}
+TRADE_PICKS: dict[tuple[int, int], int] = {   # (draft season, originalTid) -> new owning tid
+    (2032, 5): 6,  # Gooners' 2032 pick -> Waltham
+}
 
 
 def apply_roster_moves(data: dict[str, Any]) -> None:
@@ -1086,7 +1102,10 @@ def apply_roster_moves(data: dict[str, Any]) -> None:
     - Send the non-keeper Gooners to free agency (tid -1) and tag each with the contract price
       it should ask for (`_fa_bid`, thousands) so the FA page shows that instead of the formula.
     - Reprice this year's drafted rookies onto the salary formula (BBGM rookie-scale contracts
-      don't match our economy). Runs before active_players/free_agents are computed.
+      don't match our economy).
+    - Apply hand-entered trades (TRADE_MOVES / TRADE_PICKS), last so incoming players stick.
+
+    Runs before active_players/free_agents are computed.
     """
     season = current_season(data)
     for p in data.get("players", []):
@@ -1107,6 +1126,21 @@ def apply_roster_moves(data: dict[str, Any]) -> None:
             for salary in p.get("salaries", []):
                 if isinstance(salary, dict):
                     salary["amount"] = priced
+
+    by_pid = {safe_int(p.get("pid"), -1): p for p in data.get("players", [])}
+    for pid, new_tid in TRADE_MOVES.items():
+        traded = by_pid.get(pid)
+        if traded is not None:
+            from_tid = safe_int(traded.get("tid"), -1)
+            traded["tid"] = new_tid
+            # Log the move so the roster's "Acquired" column reads as a trade, not a signing.
+            traded.setdefault("transactions", []).append(
+                {"season": season, "phase": phase_value(data), "tid": new_tid, "type": "trade", "fromTid": from_tid}
+            )
+    for dp in data.get("draftPicks", []):
+        new_tid = TRADE_PICKS.get((safe_int(dp.get("season"), -1), safe_int(dp.get("originalTid"), -1)))
+        if new_tid is not None:
+            dp["tid"] = new_tid
 
 
 def team_retention_delta(tid: int, season: int) -> float:

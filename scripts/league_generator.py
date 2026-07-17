@@ -1081,7 +1081,8 @@ FIN_NEXT_BALANCE: dict[int, int] = {
 # 2031 offseason roster move: the Gooners (tid 5) waive everyone but these keepers. Each waived
 # player enters free agency asking their current contract price. ponytail: hand-maintained.
 GOONERS_TID = 5
-GOONERS_KEEP_PIDS = {113, 1284, 1293, 1663, 1729}  # Ruutli, Tyson, Smith Jr., Edgecombe, Avdalas
+# Cason Wallace (1304) is kept at his existing $16M-thru-2031 deal.
+GOONERS_KEEP_PIDS = {113, 1284, 1293, 1304, 1663, 1729}  # Ruutli, Tyson, Smith Jr., Wallace, Edgecombe, Avdalas
 
 # 2031 offseason trades (hand-maintained). Applied AFTER the Gooners waive pass so incoming
 # players aren't swept back out by it. Contracts already match the agreed terms, so only the
@@ -4441,7 +4442,12 @@ def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: 
     Players who are injured subtract their impact until their expected return,
     so odds dip while stars are out and recover as they heal. Trades are picked
     up automatically because strength comes from the roster as it stands today.
+
+    A season that hasn't been played yet (an offseason projection) starts every team at 0-0
+    and runs over a projected round-robin schedule; last season's scoring margin still seeds
+    team strength, so the projection reflects both prior form and the current roster.
     """
+    fresh = not completed_game_items(data, season, playoffs=False)
     tids = [safe_int(t.get("tid")) for t in teams if t.get("tid") is not None]
     wins0: dict[int, float] = {}
     mov_strength: dict[int, float] = {}
@@ -4449,7 +4455,7 @@ def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: 
         tid = safe_int(team.get("tid"))
         team_season = latest_team_season(team, season)
         stat = latest_team_stat(team, season)
-        wins0[tid] = safe_float(team_season.get("won"))
+        wins0[tid] = 0.0 if fresh else safe_float(team_season.get("won"))
         gp = safe_float(stat.get("gp"))
         mov = team_mov(stat) or 0.0
         mov_strength[tid] = mov * gp / (gp + 10.0)
@@ -4479,9 +4485,13 @@ def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: 
         for tid in tids
     }
 
-    # Remaining schedule in chronological order.
+    # Remaining schedule in chronological order. An unplayed season has no exported schedule,
+    # so project it over a generated round-robin instead.
     remaining: list[tuple[int, int, int, str]] = []
-    items, _ = score_items_for_page(data, teams)
+    if fresh:
+        items = generated_schedule_items(data, teams, schedule_season=season)
+    else:
+        items, _ = score_items_for_page(data, teams)
     for item in items:
         if is_completed_game_item(item) or safe_int(item.get("season")) != season:
             continue
@@ -4608,16 +4618,15 @@ def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: 
         if rate("away_win") is not None and rate("away_loss") is not None:
             away_swing = rate("away_win") - rate("away_loss")
         stakes.append({"gid": gid, "day": day, "home_tid": home, "away_tid": away, "home_swing": home_swing, "away_swing": away_swing})
-    return {"teams": results, "stakes": stakes, "day": first_day}
+    return {"teams": results, "stakes": stakes, "day": first_day, "fresh": fresh}
 
 
 def league_sim(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> dict[str, Any]:
-    """Cached league simulation (computed once per build)."""
-    cached = SITE_META.get("sim")
-    if cached is None:
-        cached = simulate_league(data, teams, active_players(data), season)
-        SITE_META["sim"] = cached
-    return cached
+    """League simulation, cached per season (each season is simulated once per build)."""
+    cache = SITE_META.setdefault("sim", {})
+    if season not in cache:
+        cache[season] = simulate_league(data, teams, active_players(data), season)
+    return cache[season]
 
 
 def magic_elimination(teams: list[dict[str, Any]], season: int, season_len: int = 45) -> dict[int, str]:
@@ -4749,9 +4758,17 @@ def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season:
             cells.append(td(text, sort=pct, style=seed_cell_style(pct), cls=cls))
         rows.append(f'<tr data-tid="{tid}">{"".join(cells)}</tr>')
     headers = ["Team", "Proj W-L", "PO%", "Finals%", "Title%"] + [str(i) for i in range(1, n_seeds + 1)]
+    if sim.get("fresh"):
+        title = f"{season} Playoff Odds"
+        note = (f"10,000 sims of the {season} season from current rosters over a projected schedule · "
+                "last season's scoring margin seeds team strength · playoffs simulated as 1v4 / 2v3 best-of-sevens")
+    else:
+        title = "Playoff Odds"
+        note = ("10,000 sims · injury-aware: sidelined players hurt their team until their expected return · "
+                "playoffs simulated as 1v4 / 2v3 best-of-sevens")
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>Playoff Odds</h2><span class="muted small-copy">10,000 sims · injury-aware: sidelined players hurt their team until their expected return · playoffs simulated as 1v4 / 2v3 best-of-sevens</span></div>
+      <div class="section-title-row"><h2>{title}</h2><span class="muted small-copy">{note}</span></div>
       {table_html(headers, rows, table_id="playoff-odds", empty_message="Season complete.")}
     </section>
     """
@@ -5479,9 +5496,11 @@ def round_robin_rounds(team_ids: list[int]) -> list[list[tuple[int, int]]]:
 
 
 def generated_schedule_items(data: dict[str, Any], teams: list[dict[str, Any]], schedule_season: int | None = None, schedule_days: int | None = None) -> list[dict[str, Any]]:
-    # ponytail: synthetic schedule disabled — show an empty schedule until a real one is exported,
-    # rather than faking next season's matchups. Delete this line to restore round-robin generation.
-    return []
+    """Round-robin schedule for a season with no exported schedule.
+
+    Only the projection model consumes this (see simulate_league) — the schedule page, team
+    pages and game pages deliberately never show synthetic matchups.
+    """
     team_ids = active_team_ids(teams)
     if len(team_ids) < 2:
         return []
@@ -5549,11 +5568,8 @@ def schedule_items_for_page(data: dict[str, Any], teams: list[dict[str, Any]], s
         if completed_regular:
             return completed_regular, f"Season {schedule_season} completed schedule"
 
-    generated = generated_schedule_items(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
-    if generated:
-        season = max(safe_int(item.get("season")) for item in generated)
-        return generated, f"Generated Season {season} schedule"
-
+    # No synthetic fallback here on purpose: pages only ever show real games. The projected
+    # schedule lives inside simulate_league.
     latest = latest_game_season(data)
     if latest is not None:
         return completed_game_items(data, latest, playoffs=False), f"Season {latest} completed schedule"
@@ -6680,13 +6696,16 @@ def home_finances_table(data: dict[str, Any], teams: list[dict[str, Any]], playe
 
 def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, start_season: int) -> str:
     chart_teams = active_teams_for_season(teams, season)
+    # Once a season is over, the projection worth showing is the upcoming one (simulated from
+    # current rosters); mid-season this is just the current season, so the card is unchanged.
+    proj_season = inferred_upcoming_schedule_season(data)
     body = f"""
     <h1 class="sr-only">SMP Basketball League</h1>
     {latest_results_strip(data, chart_teams, season)}
     <div class="home-columns">
       <div class="home-main">
         {standings_table(data, chart_teams, season)}
-        {playoff_odds_card(data, chart_teams, season)}
+        {playoff_odds_card(data, chart_teams, proj_season)}
         {stakes_card(data, chart_teams, season)}
         {league_leaders_card(data, players, teams, season)}
       </div>

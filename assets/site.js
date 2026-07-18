@@ -1414,111 +1414,6 @@
     svg.addEventListener('mouseleave', hide);
   });
 
-  // subrating grid hover-sync: one scrubber drives all 15 mini-charts.
-  document.querySelectorAll('[data-subrating-grid]').forEach((grid) => {
-    const pid = grid.getAttribute('data-subg-pid');
-    const dataEl = grid.parentElement &&
-      grid.parentElement.querySelector('script[id="subrating-data-' + pid + '"]');
-    if (!dataEl) return;
-    let d;
-    try { d = JSON.parse(dataEl.textContent); } catch (e) { return; }
-    const g = d.g;
-    const sSpan = Math.max(1, d.smax - d.smin);
-    const xs = (s) => g.ml + (s - d.smin) / sSpan * g.pw;
-
-    const cells = [];
-    grid.querySelectorAll('.subg-cell[data-subg-key]').forEach((cell) => {
-      const key = cell.getAttribute('data-subg-key');
-      const chart = d.charts[key];
-      if (!chart) return;
-      cells.push({
-        cell: cell,
-        chart: chart,
-        svg: cell.querySelector('svg.subg-svg'),
-        hline: cell.querySelector('.subg-hline'),
-        hdot: cell.querySelector('.subg-hdot'),
-        valEl: cell.querySelector('[data-subg-val]'),
-        capEl: cell.querySelector('[data-subg-cap]'),
-        curVal: cell.querySelector('[data-subg-val]')
-          ? cell.querySelector('[data-subg-val]').textContent : ''
-      });
-    });
-    if (!cells.length) return;
-
-    function yv(v, lo, hi) {
-      return g.mt + g.ph - (v - lo) / Math.max(1e-9, hi - lo) * g.ph;
-    }
-
-    function seasonFromEvent(svg, evt) {
-      const ctm = svg.getScreenCTM();
-      if (!ctm) return null;
-      const pt = svg.createSVGPoint();
-      pt.x = evt.clientX; pt.y = evt.clientY;
-      const loc = pt.matrixTransform(ctm.inverse());
-      let season = Math.round(d.smin + (loc.x - g.ml) / g.pw * sSpan);
-      if (season < d.smin) season = d.smin;
-      if (season > d.smax) season = d.smax;
-      return season;
-    }
-
-    function clear() {
-      cells.forEach((c) => {
-        c.cell.classList.remove('subg-active');
-        if (c.hline) c.hline.style.display = 'none';
-        if (c.hdot) c.hdot.style.display = 'none';
-        if (c.valEl) c.valEl.textContent = c.curVal;
-        if (c.capEl) c.capEl.textContent = 'now';
-      });
-    }
-
-    function sync(season) {
-      const cx = xs(season);
-      const future = season > d.cur;
-      cells.forEach((c) => {
-        const ch = c.chart;
-        let v = null;
-        if (season <= d.cur) {
-          const hi = ch.hist.s.indexOf(season);
-          if (hi >= 0) v = ch.hist.v[hi];
-        } else {
-          const pi = ch.proj.s.indexOf(season);
-          if (pi >= 0) v = ch.proj.p50[pi];
-        }
-        if (v === null) {
-          c.cell.classList.remove('subg-active');
-          if (c.hline) c.hline.style.display = 'none';
-          if (c.hdot) c.hdot.style.display = 'none';
-          if (c.valEl) c.valEl.textContent = c.curVal;
-          if (c.capEl) c.capEl.textContent = 'now';
-          return;
-        }
-        c.cell.classList.add('subg-active');
-        const cy = yv(v, ch.g.lo, ch.g.hi);
-        if (c.hline) {
-          c.hline.setAttribute('x1', cx);
-          c.hline.setAttribute('x2', cx);
-          c.hline.style.display = '';
-        }
-        if (c.hdot) {
-          c.hdot.setAttribute('cx', cx);
-          c.hdot.setAttribute('cy', cy);
-          c.hdot.style.display = '';
-        }
-        if (c.valEl) c.valEl.textContent = Math.round(v);
-        if (c.capEl) c.capEl.textContent = season + (future ? ' · proj' : (season === d.cur ? ' · now' : ''));
-      });
-    }
-
-    cells.forEach((c) => {
-      if (!c.svg) return;
-      c.svg.addEventListener('mousemove', (evt) => {
-        const s = seasonFromEvent(c.svg, evt);
-        if (s !== null) sync(s);
-      });
-    });
-    grid.addEventListener('mouseleave', clear);
-  });
-
   // ---------- team trajectory (projected team strength fan chart) ----------
   document.querySelectorAll('[data-team-traj]').forEach((wrap) => {
     const svg = wrap.querySelector('svg.ttraj-chart');
@@ -1760,124 +1655,27 @@
     buttons.forEach((button) => button.addEventListener('click', () => activate(button)));
   });
 
-  // rotation river: hover readout synced with the rotation heat table
-  document.querySelectorAll('[data-river]').forEach((wrap) => {
-    const svg = wrap.querySelector('svg.river-chart');
-    const guide = wrap.querySelector('[data-river-guide]');
-    const tip = wrap.querySelector('[data-river-tooltip]');
-    const dataEl = document.getElementById(wrap.dataset.river);
-    if (!svg || !guide || !tip || !dataEl) return;
-    let d;
-    try { d = JSON.parse(dataEl.textContent); } catch (e) { return; }
-    const g = d.g;
-    const n = d.games.length;
-    if (n < 2) return;
-    const table = document.querySelector('[data-rotation-table="' + d.tid + '"]');
-    const bands = Array.from(svg.querySelectorAll('.river-band'));
-    const chips = Array.from(document.querySelectorAll('.river-chip[data-pid]'));
-
-    const xs = (i) => g.ml + g.pw * i / (n - 1);
-
-    function toViewBox(evt) {
-      const ctm = svg.getScreenCTM();
-      if (!ctm) return null;
-      const pt = svg.createSVGPoint();
-      pt.x = evt.clientX; pt.y = evt.clientY;
-      return pt.matrixTransform(ctm.inverse());
-    }
-
-    function clearTable() {
-      if (!table) return;
+  // rotation map: hover crosshair — highlight the hovered row and game column
+  document.querySelectorAll('table.rotation-map').forEach((table) => {
+    function clear() {
       table.querySelectorAll('.col-hl').forEach((c) => c.classList.remove('col-hl'));
       table.querySelectorAll('.row-hl').forEach((r) => r.classList.remove('row-hl'));
     }
-
-    function highlightTable(gid, pid) {
-      if (!table) return;
-      clearTable();
-      const th = table.querySelector('th[data-gid="' + gid + '"]');
-      if (th) {
-        const idx = th.cellIndex;
+    table.addEventListener('mouseover', (evt) => {
+      const cell = evt.target.closest('td, th');
+      if (!cell || !table.contains(cell)) return;
+      clear();
+      const idx = cell.cellIndex;
+      if (idx > 0) {
         table.querySelectorAll('tr').forEach((tr) => {
-          const cell = tr.cells[idx];
-          if (cell) cell.classList.add('col-hl');
+          const c = tr.cells[idx];
+          if (c) c.classList.add('col-hl');
         });
       }
-      if (pid !== null) {
-        const row = table.querySelector('tr[data-pid="' + pid + '"]');
-        if (row) row.classList.add('row-hl');
-      }
-    }
-
-    function highlightBand(pid) {
-      bands.forEach((b) => b.classList.toggle('river-dim', pid !== null && Number(b.dataset.pid) !== pid));
-      chips.forEach((c) => c.classList.toggle('active', Number(c.dataset.pid) === pid));
-    }
-
-    function hide() {
-      tip.hidden = true;
-      guide.style.display = 'none';
-      highlightBand(null);
-      clearTable();
-    }
-
-    function show(evt) {
-      const loc = toViewBox(evt);
-      if (!loc) return;
-      let i = Math.round((loc.x - g.ml) / g.pw * (n - 1));
-      if (i < 0) i = 0;
-      if (i > n - 1) i = n - 1;
-      const game = d.games[i];
-      // which band is under the cursor: invert y to minutes, walk the stack
-      const mins = (g.mt + g.ph - loc.y) / g.ph * g.ymax;
-      let pid = null;
-      let name = '';
-      let bandMin = 0;
-      let cum = 0;
-      for (let p = 0; p < d.players.length; p += 1) {
-        cum += d.players[p].mins[i];
-        if (mins <= cum) {
-          pid = d.players[p].pid;
-          name = d.players[p].name;
-          bandMin = d.players[p].mins[i];
-          break;
-        }
-      }
-      guide.setAttribute('x1', xs(i));
-      guide.setAttribute('x2', xs(i));
-      guide.style.display = '';
-      let html = '<strong>Day ' + game.day + ' ' + game.opp + '</strong><span>' + game.res + '</span>';
-      if (pid !== null) html += '<span>' + name + ' — ' + Math.round(bandMin) + ' min</span>';
-      tip.innerHTML = html;
-      tip.hidden = false;
-      const rect = wrap.getBoundingClientRect();
-      const tw = tip.offsetWidth;
-      let left = evt.clientX - rect.left + 14;
-      if (left + tw > rect.width) left = evt.clientX - rect.left - tw - 14;
-      if (left + tw > rect.width) left = rect.width - tw - 4;
-      if (left < 0) left = 4;
-      tip.style.left = left + 'px';
-      tip.style.top = (evt.clientY - rect.top + 12) + 'px';
-      highlightBand(pid);
-      highlightTable(game.gid, pid);
-    }
-
-    svg.addEventListener('mousemove', show);
-    svg.addEventListener('mouseleave', hide);
-
-    // reverse sync: hovering a game column header in the heat table moves the guide
-    if (table) {
-      table.addEventListener('mouseover', (evt) => {
-        const th = evt.target.closest('th[data-gid]');
-        if (!th || !table.contains(th)) return;
-        const i = d.games.findIndex((game) => game.gid === th.dataset.gid);
-        if (i < 0) return;
-        guide.setAttribute('x1', xs(i));
-        guide.setAttribute('x2', xs(i));
-        guide.style.display = '';
-      });
-      table.addEventListener('mouseleave', () => { guide.style.display = 'none'; });
-    }
+      const row = cell.closest('tbody tr');
+      if (row) row.classList.add('row-hl');
+    });
+    table.addEventListener('mouseleave', clear);
   });
 })();
 // league.js — records all-time-leaders totals/per-game toggle + history
@@ -2274,7 +2072,7 @@
         ['FG%', pgRow('fg_pct'), {}],
         ['3P%', pgRow('tp_pct'), {}],
         ['FT%', pgRow('ft_pct'), {}],
-        ['FPTS/G', pgRow('fpts'), {}],
+        ['FPTS/G', pgRow('fpts'), { int: true }],
         ['TS%', exRow(1), {}],
         ['PER', exRow(2), {}],
         ['BPM', exRow(3), {}],
@@ -2300,13 +2098,15 @@
       const row = (label, values, options) => {
         const withBar = options && options.bar;
         const lower = options && options.lower;
+        const asInt = options && options.int; // display rounded; best-value ties break on the raw float
         html += '<tr><td class="cmp-label">' + label + '</td>';
         const nums = values.map(Number).filter(Number.isFinite);
         const best = nums.length > 1 ? (lower ? Math.min(...nums) : Math.max(...nums)) : null;
         values.forEach((v) => {
           const num = Number(v);
           const isBest = Number.isFinite(num) && best !== null && num === best;
-          let cell = (v === null || v === undefined || v === '') ? '—' : escapeHtml(v);
+          let cell = (v === null || v === undefined || v === '') ? '—'
+            : (asInt && Number.isFinite(num) ? String(Math.round(num)) : escapeHtml(v));
           if (withBar && Number.isFinite(num)) {
             cell = '<span class="cmp-bar"><i style="width:' + Math.max(2, Math.min(100, num)) + '%"></i></span>' + cell;
           }
@@ -2646,14 +2446,21 @@
   // ADAPTATION for a hand-picked group: team_ovr rates a full roster, so a bare
   // five would drag five literal 0.0 bench slots into the weighting and every
   // lineup would grade absurdly negative. Instead the missing roster spots are
-  // filled at replacement level — simmodel.REPLACEMENT_OVR (40.0), the repo's
-  // "freely-available filler" constant — i.e. your five plus a replacement
-  // bench. The weighting itself is untouched: lineupOvrRaw(five) is exactly
-  // projections.team_ovr(five + [40.0] * 5), which tests assert.
+  // filled with app-data.sim.bench_ovrs — the league-average 6th..10th-best OVR
+  // across the ten current rosters (5 floats, sorted desc) — i.e. your five
+  // plus a league-average bench. The weighting itself is untouched:
+  // lineupOvrRaw(five) is exactly projections.team_ovr(five + bench_ovrs).
+  // Safety net for a stale app-data.json without bench_ovrs: pad with
+  // simmodel.REPLACEMENT_OVR (40.0), the repo's "freely-available filler"
+  // constant, which tests assert against projections.team_ovr.
   const REPLACEMENT_OVR = 40.0;
+  let benchOvrs = null; // payload.sim.bench_ovrs when present, else null
+  function benchAt(i) {
+    return benchOvrs && Number.isFinite(benchOvrs[i]) ? benchOvrs[i] : REPLACEMENT_OVR;
+  }
   function lineupOvrRaw(ovrs) {
     const padded = ovrs.slice(0, 10);
-    while (padded.length < 10) padded.push(REPLACEMENT_OVR);
+    for (let i = 0; padded.length < 10; i += 1) padded.push(benchAt(i));
     return teamOvrRaw(padded);
   }
   // team_ovr anchors its scale to scoring margin (raw = MOV * 50/15 + 50), so the
@@ -2857,9 +2664,10 @@
     const tile = (label, value, sub, cls) =>
       '<div class="ll-tile' + (cls ? ' ' + cls : '') + '"><span class="ll-tile-label">' + label + '</span>'
       + '<strong>' + value + '</strong><span class="muted">' + sub + '</span></div>';
+    const benchLabel = benchOvrs ? 'a league-average bench' : 'a replacement-level bench';
     summaryEl.innerHTML = '<div class="ll-tiles">'
       + tile('Lineup OVR', ovr === null ? '—' : String(ovr),
-             (count === 5 ? 'your five' : count + ' of 5 picked — open spots') + ' + a replacement-level bench', '')
+             (count === 5 ? 'your five' : count + ' of 5 picked') + ' + ' + benchLabel, '')
       + tile('Total salary', fmtMoney(salary),
              fmtMoney(gap) + (overTax ? ' over' : ' under') + ' the ' + fmtMoney(taxLine) + ' tax line',
              overTax ? 'll-over-tax' : '')
@@ -2921,6 +2729,10 @@
     .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then((data) => {
       payload = data;
+      const bench = data.sim && data.sim.bench_ovrs;
+      if (Array.isArray(bench) && bench.length === 5 && bench.every((v) => Number.isFinite(v))) {
+        benchOvrs = bench;
+      }
       data.players.forEach((p) => { byPid[p.pid] = p; });
       data.teams.forEach((t) => { byTid[t.tid] = t; });
       inputs.forEach(comboFor);

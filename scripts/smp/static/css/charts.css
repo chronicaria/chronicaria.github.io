@@ -1,0 +1,551 @@
+/* ---------- dev chart ---------- */
+.dev-chart { width: 100%; max-width: 680px; height: auto; display: block; }
+.chart-grid { stroke: rgba(255,255,255,.07); stroke-width: 1; }
+.chart-tick { fill: var(--muted); font-size: 10px; }
+.line-ovr { fill: none; stroke: var(--accent); stroke-width: 2; }
+.line-ovr-dot { fill: var(--accent); }
+.line-pot { fill: none; stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 4 3; }
+.line-pot-dot { fill: var(--muted); }
+.chart-key { display: inline-block; width: .8rem; height: 2px; vertical-align: middle; margin-right: .25rem; }
+.chart-key-ovr { background: var(--accent); height: 3px; }
+.chart-key-pot { background: var(--muted); }
+/* projection (fan) chart */
+.proj-wrap { max-width: 700px; }
+.proj-chart { width: 100%; max-width: 700px; height: auto; display: block; cursor: crosshair; }
+.proj-band-80 { fill: var(--accent); opacity: .12; stroke: none; }
+.proj-band-50 { fill: var(--accent); opacity: .20; stroke: none; }
+.proj-median { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 3; }
+.proj-median-dot { fill: var(--accent); }
+.proj-divider { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; opacity: .55; }
+.proj-hover-line { stroke: var(--muted); stroke-width: 1; pointer-events: none; }
+.proj-hover-dot { fill: var(--accent); stroke: var(--bg, #0f1318); stroke-width: 1.5; pointer-events: none; }
+.proj-key-band { background: var(--accent); opacity: .35; height: 8px; border-radius: 1px; }
+.proj-wrap .chart-tooltip { min-width: 9.5rem; max-width: 13rem; white-space: normal; }
+.proj-wrap .chart-tooltip span { display: block; }
+
+/* ---------- rating trajectories (subrating fan-sparkline grid) ---------- */
+.subg-grid { display: flex; flex-direction: column; gap: 1rem; }
+.subg-group-title {
+  margin: 0 0 .4rem; font-size: .68rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--muted);
+}
+.subg-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; }
+.subg-cell {
+  border: 1px solid var(--line); border-radius: .25rem;
+  background: var(--panel-2, var(--bg)); padding: .4rem .45rem .3rem;
+  display: flex; flex-direction: column; gap: .15rem;
+  transition: border-color .12s ease, background .12s ease;
+}
+.subg-cell.subg-active { border-color: var(--accent); }
+.subg-head { display: flex; align-items: baseline; justify-content: space-between; gap: .35rem; }
+.subg-label {
+  font-size: .66rem; font-weight: 600; letter-spacing: .02em;
+  color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.subg-delta {
+  font-size: .6rem; font-weight: 700; line-height: 1; flex: none;
+  padding: .12rem .3rem; border-radius: .6rem; border: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+}
+.subg-up { color: var(--good); border-color: var(--good); }
+.subg-down { color: var(--bad); border-color: var(--bad); }
+.subg-flat { color: var(--muted); }
+.subg-cur { display: flex; align-items: baseline; gap: .25rem; }
+.subg-cur-val { font-size: 1.15rem; font-weight: 700; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
+.subg-cur-cap { font-size: .58rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.subg-svg { width: 100%; height: 42px; display: block; margin-top: .1rem; overflow: visible; }
+.subg-band { fill: var(--accent); opacity: .14; stroke: none; }
+.subg-hist { fill: none; stroke: var(--text); stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.subg-hist-dot { fill: var(--text); }
+.subg-median { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 3 2; vector-effect: non-scaling-stroke; }
+.subg-divider { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 2; opacity: .5; vector-effect: non-scaling-stroke; }
+.subg-hline { stroke: var(--accent); stroke-width: 1; opacity: .6; vector-effect: non-scaling-stroke; pointer-events: none; }
+.subg-hdot { fill: var(--accent); stroke: var(--bg); stroke-width: 1; pointer-events: none; }
+.subg-empty { opacity: .55; }
+.subg-empty .subg-cur-val { font-size: .95rem; color: var(--muted); }
+.subg-key { display: inline-block; width: .8rem; vertical-align: middle; margin-right: .25rem; }
+.subg-key-hist { height: 2px; background: var(--text); }
+.subg-key-med { height: 0; border-top: 2px dashed var(--accent); }
+.subg-key-band { height: 8px; border-radius: 1px; background: var(--accent); opacity: .35; }
+@media (max-width: 760px) { .subg-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 420px) { .subg-row { grid-template-columns: 1fr; } }
+/* --- Projection table (#projection-table) ------------------------------- */
+.projtab-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.4em;
+  padding: 0.1em 0.55em;
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  border-radius: 999px;
+}
+.projtab-caption { margin: 0.15rem 0 0.6rem; }
+.projtab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.projtab-table th,
+.projtab-table td {
+  padding: 0.35rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.projtab-table th {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+/* Sticky Year column so the row stays anchored while scrolling horizontally. */
+.projtab-table .projtab-sticky {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--bg);
+  text-align: left;
+}
+.projtab-table thead .projtab-sticky { z-index: 2; }
+.projtab-year { font-weight: 600; color: var(--text); }
+.projtab-age { color: var(--muted); }
+/* Slight emphasis on the Ovr column to anchor the eye. */
+.projtab-ovr-col {
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+.projtab-table td.projtab-ovr-col .projtab-med { font-weight: 700; }
+.projtab-cell { line-height: 1.15; }
+.projtab-med {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+/* Muted, italic, smaller range text marks the projected/uncertain nature. */
+.projtab-range {
+  display: block;
+  margin-top: 0.05rem;
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--muted);
+}
+@media (max-width: 720px) {
+  .projtab-table th,
+  .projtab-table td { padding: 0.3rem 0.4rem; }
+  .projtab-range { font-size: 0.62rem; }
+}
+/* ---------- tone tags (projected-standings legend) ---------- */
+.scout-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem;
+}
+.scout-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: .15rem;
+  border: 1px solid var(--line);
+  background: var(--panel-3);
+  color: var(--text);
+  font-weight: 500;
+  font-size: .75rem;
+  padding: .1rem .5rem;
+  cursor: default;
+  position: relative;
+}
+.scout-tag::before {
+  content: "";
+  width: .42rem;
+  height: .42rem;
+  border-radius: 50%;
+  margin-right: .4rem;
+  background: var(--muted);
+  flex: none;
+}
+.scout-tag--good { border-color: color-mix(in srgb, var(--good) 45%, var(--line)); }
+.scout-tag--good::before { background: var(--good); }
+.scout-tag--bad { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
+.scout-tag--bad::before { background: var(--bad); }
+.scout-tag--neutral { color: var(--muted); }
+.scout-tag--neutral::before { background: var(--muted); }
+/* ---------- team trajectory (projected team strength fan chart) ---------- */
+/* Uses --team-primary as the on-brand band/line accent, falling back to --accent. */
+.ttraj-wrap { max-width: 700px; --ttraj-accent: var(--team-primary, var(--accent)); }
+.ttraj-chart { width: 100%; max-width: 700px; height: auto; display: block; cursor: crosshair; }
+.ttraj-controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem;
+  margin: .15rem 0 .55rem;
+}
+.ttraj-toggle {
+  display: inline-flex; border: 1px solid var(--line); border-radius: .2rem;
+  overflow: hidden; background: var(--panel-2);
+}
+.ttraj-btn {
+  appearance: none; border: 0; background: transparent; cursor: pointer;
+  color: var(--muted); font: inherit; font-size: .76rem; font-weight: 600;
+  padding: .32rem .7rem; border-right: 1px solid var(--line);
+  letter-spacing: .02em; transition: background .12s, color .12s;
+}
+.ttraj-btn:last-child { border-right: 0; }
+.ttraj-btn:hover { color: var(--text); }
+.ttraj-btn.active {
+  color: var(--text);
+  background: color-mix(in srgb, var(--team-primary, var(--accent)) 22%, var(--panel-2));
+  box-shadow: inset 0 -2px 0 var(--team-primary, var(--accent));
+}
+.ttraj-rank {
+  font-size: .78rem; font-weight: 700; letter-spacing: .03em;
+  color: var(--text); padding: .12rem .5rem; border-radius: .15rem;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--team-primary, var(--accent)) 14%, transparent);
+}
+.ttraj-key { display: inline-flex; align-items: center; gap: .35rem; }
+.ttraj-k { display: inline-block; width: .9rem; vertical-align: middle; }
+.ttraj-k-band {
+  height: 8px; border-radius: 1px;
+  background: var(--team-primary, var(--accent));  /* solid fallback for no color-mix */
+  background: color-mix(in srgb, var(--team-primary, var(--accent)) 38%, transparent);
+}
+.ttraj-k-median { height: 2px; background: var(--team-primary, var(--accent)); }
+.ttraj-window {
+  display: inline-block; margin-left: .15rem;
+  color: var(--muted);
+}
+.ttraj-window strong { color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* fan bands + median in the team's color */
+.ttraj-band-80 { fill: var(--team-primary, var(--accent)); opacity: .12; stroke: none; }
+.ttraj-band-50 { fill: var(--team-primary, var(--accent)); opacity: .22; stroke: none; }
+.ttraj-median { fill: none; stroke: var(--team-primary, var(--accent)); stroke-width: 2.2; }
+.ttraj-cur {
+  fill: var(--team-primary, var(--accent));
+  stroke: var(--bg, #0f1318); stroke-width: 1.6;
+}
+/* reference lines */
+.ttraj-ref { stroke-width: 1; stroke-dasharray: 4 4; fill: none; }
+.ttraj-ref-avg { stroke: var(--muted); opacity: .7; }
+.ttraj-ref-cont { stroke: var(--good); opacity: .75; }
+.ttraj-ref-label {
+  fill: var(--muted); font-size: 9.5px; font-weight: 600;
+  letter-spacing: .02em; opacity: .85;
+}
+/* hover scrubber */
+.ttraj-hover-line { stroke: var(--muted); stroke-width: 1; pointer-events: none; }
+.ttraj-hover-dot {
+  fill: var(--team-primary, var(--accent));
+  stroke: var(--bg, #0f1318); stroke-width: 1.5; pointer-events: none;
+}
+.ttraj-wrap .chart-tooltip { min-width: 9.5rem; max-width: 13rem; white-space: normal; }
+.ttraj-wrap .chart-tooltip span { display: block; }
+
+@media (max-width: 600px) {
+  .ttraj-controls { gap: .45rem .7rem; }
+  .ttraj-btn { padding: .3rem .55rem; font-size: .72rem; }
+}
+
+/* ---------- projected power-ranking bump chart ---------- */
+.bump-card .bump-sub { margin: .1rem 0 .7rem; }
+
+.bump-legend { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .65rem; }
+.bump-chip {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .24rem .46rem; border: 1px solid var(--line); border-radius: .15rem;
+  background: var(--panel-2); color: var(--text); font: inherit; font-size: .74rem;
+  font-weight: 600; line-height: 1; cursor: pointer;
+  transition: opacity .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.bump-chip-dot { width: .6rem; height: .6rem; border-radius: 50%; background: var(--bump-color, var(--muted)); flex: none; }
+.bump-chip-ab { letter-spacing: 0; }
+.bump-chip.is-active { border-color: var(--bump-color, var(--accent)); box-shadow: 0 0 0 1px var(--bump-color, var(--accent)) inset; }
+.bump-chip.is-dim { opacity: .38; }
+
+.bump-wrap { overflow-x: auto; }
+.bump-chart { display: block; width: 100%; min-width: 540px; height: auto; font-family: inherit; }
+
+.bump-rowline { stroke: var(--line); stroke-width: 1; opacity: .5; }
+.bump-collline { stroke: var(--line); stroke-width: 1; opacity: .35; }
+.bump-rankaxis { fill: var(--muted); font-size: 11px; text-anchor: middle; font-weight: 600; }
+.bump-seasontick { fill: var(--text); font-size: 11px; text-anchor: middle; font-weight: 700; }
+.bump-seasonyr { fill: var(--muted); font-size: 10px; text-anchor: middle; }
+.bump-axislabel { fill: var(--muted); font-size: 9px; text-anchor: middle; text-transform: uppercase; letter-spacing: .08em; opacity: .8; }
+
+/* The halo carries a real base fill (--bg) so it never falls back to opaque
+   black; the colored line carries team identity. */
+.bump-halo { fill: none; stroke: var(--bg); stroke-width: 5.5; stroke-linejoin: round; stroke-linecap: round; opacity: .85; }
+.bump-line { fill: none; stroke: var(--bump-color, var(--muted)); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; transition: opacity .12s ease, stroke-width .12s ease; }
+.bump-node { fill: var(--bump-color, var(--muted)); stroke: var(--bg); stroke-width: 1.4; transition: opacity .12s ease; }
+.bump-hit { fill: none; stroke: transparent; stroke-width: 16; stroke-linejoin: round; stroke-linecap: round; cursor: pointer; }
+.bump-link { cursor: pointer; }
+
+/* End/start abbrev labels: team-colored, with a --bg halo (paint-order:stroke)
+   so they stay legible where lines cross behind them. */
+.bump-endlabel { fill: var(--bump-color, var(--text)); font-size: 11px; font-weight: 800; paint-order: stroke; stroke: var(--bg); stroke-width: 2.6px; stroke-linejoin: round; transition: opacity .12s ease; }
+.bump-endlabel--start { text-anchor: end; }
+.bump-endlabel--end { text-anchor: start; }
+.bump-leader { stroke: var(--line); stroke-width: 1; opacity: .6; }
+
+/* Highlight: dim everything except the active team. */
+.bump-has-active .bump-team.is-dim .bump-line { opacity: .14; }
+.bump-has-active .bump-team.is-dim .bump-node { opacity: .14; }
+.bump-has-active .bump-team.is-dim .bump-halo { opacity: .2; }
+.bump-has-active .bump-team.is-active .bump-line { stroke-width: 3.4; }
+.bump-has-active .bump-endlabel.is-dim { opacity: .2; }
+
+.bump-tooltip { min-width: 8.5rem; max-width: 12rem; white-space: normal; }
+.bump-tooltip strong { display: block; font-size: .82rem; }
+.bump-tooltip span { display: block; color: var(--muted); }
+.bump-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: .4rem;
+  margin-top: .65rem;
+}
+.bump-summary-row {
+  display: grid;
+  grid-template-columns: auto minmax(2.8rem, auto) repeat(4, minmax(0, 1fr));
+  gap: .25rem .45rem;
+  align-items: center;
+  padding: .42rem .5rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  color: var(--text);
+  text-decoration: none;
+  font-size: .74rem;
+  min-width: 0;
+}
+.bump-summary-row:hover { border-color: var(--bump-color, var(--accent)); text-decoration: none; }
+.bump-summary-row strong { color: var(--text); }
+.bump-summary-row span:not(.bump-chip-dot) { color: var(--muted); }
+
+@media (max-width: 560px) {
+  .bump-chart { min-width: 480px; }
+}
+/* Projected Standings (league projections page) -- .pstand- namespace */
+.pstand .pstand-caption { margin: 2px 0 12px; max-width: 70ch; }
+
+.pstand-wrap { -webkit-overflow-scrolling: touch; }
+
+.pstand-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+
+.pstand-table th,
+.pstand-table td {
+  padding: 7px 9px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+/* Year header */
+.pstand-yr {
+  font-weight: 600;
+  color: var(--muted);
+  vertical-align: bottom;
+}
+.pstand-yr-num { display: block; color: var(--text); font-size: 0.95em; }
+.pstand-yr-tag {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.75;
+}
+.pstand-yr-tag--now { color: var(--accent); }
+.pstand-yr-tag--proj { color: var(--muted); }
+
+/* Sticky first column (team) */
+.pstand-team-h,
+.pstand-team {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  text-align: left;
+  background: var(--panel);
+  min-width: 140px;
+}
+.pstand-team-h { z-index: 3; color: var(--muted); font-weight: 600; }
+/* soft edge so scrolled cells don't bleed into the sticky column */
+.pstand-team::after,
+.pstand-team-h::after {
+  content: "";
+  position: absolute;
+  top: 0; right: -10px; bottom: 0;
+  width: 10px;
+  pointer-events: none;
+  background: linear-gradient(to right, var(--line), transparent);
+  opacity: 0.5;
+}
+
+.pstand-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+}
+.pstand-name:hover .pstand-name-txt { color: var(--accent); }
+.pstand-dot {
+  flex: 0 0 auto;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px rgba(0,0,0,0.35), 0 0 0 2.5px rgba(255,255,255,0.12);
+}
+.pstand-name-txt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+.pstand-abbr {
+  display: none;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* Data cell */
+.pstand-cell { line-height: 1.25; }
+.pstand-val {
+  display: block;
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: var(--text);
+}
+.pstand-rank {
+  display: inline-block;
+  margin-top: 1px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--panel-3);
+  background: color-mix(in srgb, var(--text) 9%, transparent);
+}
+.pstand-rank--hi { color: var(--text); }
+.pstand-rec {
+  display: block;
+  margin-top: 1px;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+/* Current-season anchor for the continuity scenario (structural gray, not a colored bar). */
+.pstand-now { border-left: 2px solid var(--line); }
+thead .pstand-now { border-left: 2px solid var(--line); }
+
+.pstand-table tbody tr:hover .pstand-cell {
+  box-shadow: inset 0 0 0 999px rgba(255,255,255,0.03);  /* dark-theme fallback */
+  box-shadow: inset 0 0 0 999px color-mix(in srgb, var(--text) 5%, transparent);  /* theme-aware */
+}
+
+.pstand-legend { margin-top: 12px; }
+.pstand-mobile { display: none; }
+.pstand-mobile-card {
+  display: grid;
+  gap: .45rem;
+  padding: .55rem .65rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+}
+.pstand-mobile-seasons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.8rem, 1fr));
+  gap: .35rem;
+}
+.pstand-mobile-season {
+  display: grid;
+  gap: .05rem;
+  padding: .35rem .4rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel);
+  text-align: center;
+}
+.pstand-mobile-season em {
+  color: var(--muted);
+  font-size: .66rem;
+  font-style: normal;
+  font-weight: 700;
+}
+.pstand-mobile-season strong { font-size: .95rem; }
+.pstand-mobile-season small { color: var(--muted); font-size: .68rem; }
+
+@media (max-width: 560px) {
+  .pstand-wrap { display: none; }
+  .pstand-mobile { display: grid; gap: .5rem; }
+}
+/* ---------- contract horizon (team page) ---------- */
+.tcon-wrap { margin-top: .35rem; }
+.tcon-chart { display: block; width: 100%; height: auto; }
+.tcon-col { fill: transparent; stroke: none; }  /* transparent base: without color-mix, never opaque black */
+.tcon-gridline { stroke: var(--line); stroke-width: 1; opacity: .5; }
+.tcon-axis {
+  fill: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.tcon-bar {
+  fill: var(--team-primary, var(--accent));
+  stroke: color-mix(in srgb, var(--team-primary, var(--accent)) 70%, var(--line));
+  stroke-width: 1;
+}
+.tcon-overflow { fill: var(--team-primary, var(--accent)); }
+.tcon-name {
+  fill: var(--text);
+  font-size: 12px;
+}
+.tcon-ovr {
+  fill: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.tcon-expiry {
+  fill: var(--bg);
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  paint-order: stroke;
+  stroke: #000;  /* legible halo fallback where color-mix is unsupported */
+  stroke: color-mix(in srgb, var(--team-primary, var(--accent)) 55%, #000);
+  stroke-width: 2.4px;
+  pointer-events: none;
+}
+.tcon-foot-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+.tcon-foot-count {
+  fill: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.tcon-row:hover .tcon-bar { stroke-width: 1.5; }
+.tcon-caption { margin-top: .5rem; }
+.tcon-note { margin-top: .25rem; }
+@media (max-width: 520px) {
+  .tcon-name { font-size: 11px; }
+  .tcon-axis, .tcon-ovr { font-size: 10px; }
+}
+.rotation-map td.rot-cell { text-align: center; min-width: 2.1rem; font-variant-numeric: tabular-nums; }
+.rotation-map th.rot-w { color: var(--good); }
+.rotation-map th.rot-l { color: var(--bad); }
+.rotation-map th { text-align: center; }
+.milestone-list li { gap: .5rem; }
+.milestone-list .small-copy { margin-left: auto; text-align: right; }
+

@@ -1,0 +1,465 @@
+from __future__ import annotations
+
+import argparse
+import html
+import json
+import random
+import math
+import re
+import shutil
+import unicodedata
+from collections import defaultdict
+from pathlib import Path
+from typing import Any, Iterable
+
+# Projection engine (faithful zengm port + Monte Carlo). Imported defensively so
+# the site still builds if numpy / projections.py is unavailable -- in that case
+# projection charts gracefully fall back to the static development chart.
+try:
+    import projections as _proj
+except Exception:  # pragma: no cover - degraded build path
+    _proj = None
+
+from .core import (
+    SITE_META,
+    active_players,
+    completed_game_items,
+    fmt_number,
+    generated_schedule_items,
+    is_completed_game_item,
+    latest_rating,
+    latest_team_season,
+    latest_team_stat,
+    raw_schedule_items,
+    regular_season_length,
+    safe_float,
+    safe_int,
+    score_items_for_page,
+    season_regular_stat,
+    standings_order,
+    stat_gp,
+    team_mov,
+)
+
+
+# Free-agent asking-salary model (from the user's UFA formula). Maps a player's
+# ovr/pot/age to a "salary score", then interpolates that score on an anchor curve
+# to a dollar figure. All salary values are in $M; BBGM stores thousands (×1000).
+FA_SALARY_ANCHORS = [
+    (52, 1), (55, 3), (58, 8), (60, 12), (62, 16), (64, 20), (66, 24),
+    (68, 28), (70, 32), (72, 35), (74, 39), (76, 43), (78, 47), (80, 50),
+]
+
+
+def _round_half_up(x: float) -> int:
+    return math.floor(x + 0.5)
+
+
+def fa_salary_score(ovr: int, pot: int, age: int) -> float:
+    """UFA salary score: ovr adjusted for upside, decline risk, prime, and age."""
+    upside_gap = max(pot - ovr, 0)
+    if age <= 21:
+        upside_bonus = min(0.38 * upside_gap, 8.0)
+    elif age <= 24:
+        upside_bonus = min(0.28 * upside_gap, 6.0)
+    elif age <= 27:
+        upside_bonus = min(0.15 * upside_gap, 3.5)
+    elif age <= 30:
+        upside_bonus = min(0.05 * upside_gap, 1.5)
+    else:
+        upside_bonus = 0.0
+    decline_gap = max(ovr - pot, 0)
+    decline_penalty = min((0.12 if age <= 30 else 0.22) * decline_gap, 4.0)
+    prime_bonus = 1.0 if 24 <= age <= 29 else 0.0
+    veteran_penalty = 1.25 * max(age - 32, 0)
+    return ovr + upside_bonus - decline_penalty + prime_bonus - veteran_penalty
+
+
+def _salary_score_to_millions(score: float) -> float:
+    anchors = FA_SALARY_ANCHORS
+    if score <= anchors[0][0]:
+        return float(anchors[0][1])
+    if score >= anchors[-1][0]:
+        return float(anchors[-1][1])
+    for (s0, m0), (s1, m1) in zip(anchors, anchors[1:]):
+        if s0 <= score <= s1:
+            return m0 + (score - s0) / (s1 - s0) * (m1 - m0)
+    return float(anchors[-1][1])
+
+
+def fa_salary_millions(ovr: int, pot: int, age: int) -> int:
+    """Single-year UFA asking salary in $M (rounded half-up, clamped to 1..50)."""
+    raw = _salary_score_to_millions(fa_salary_score(ovr, pot, age))
+    return max(1, min(50, _round_half_up(raw)))
+
+
+def fa_salary_by_length(ovr: int, pot: int, age: int) -> list[int]:
+    """Annual asking salary ($M) for 1..5-year deals. The formula is age-based, so a
+    longer deal averages the yearly figure as the player ages across it (ovr/pot held)."""
+    out = []
+    for length in range(1, 6):
+        raws = [_salary_score_to_millions(fa_salary_score(ovr, pot, age + i)) for i in range(length)]
+        out.append(max(1, min(50, _round_half_up(sum(raws) / len(raws)))))
+    return out
+
+
+# --- projection-backed development chart ------------------------------------
+PROJ_SEASONS_AHEAD = 6
+PROJ_N_SIMS = 1000
+PROJ_MASTER_SEED = 8675309
+
+
+def _player_projection(player: dict[str, Any], season: int) -> dict[str, Any] | None:
+    """Monte Carlo OVR projection for a player from the current season forward.
+
+    Returns None (caller falls back to the static chart) when projections are
+    unavailable: the projection engine/numpy is not importable, the player is
+    retired, or there is no current rating row carrying all 15 subratings.
+    The seed is derived from the pid so rebuilds are byte-identical.
+    """
+    if _proj is None:
+        return None
+    if player.get("retiredYear") is not None:
+        return None
+    born_year = (player.get("born") or {}).get("year")
+    if born_year is None:
+        return None
+    rows = [r for r in player.get("ratings", []) if isinstance(r.get("season"), int)]
+    if not rows:
+        return None
+    rows.sort(key=lambda r: r["season"])
+    cur = next((r for r in rows if r["season"] == season), rows[-1])
+    if not all(k in cur for k in _proj.RATINGS):
+        return None
+    cur_season = int(cur["season"])
+    age = cur_season - int(born_year)
+    if age < 14 or age > 50:
+        return None
+    seed = PROJ_MASTER_SEED * 100003 + safe_int(player.get("pid"), 0)
+    try:
+        sim = _proj.simulate_player(
+            cur, age, cur_season,
+            seasons_ahead=PROJ_SEASONS_AHEAD, n_sims=PROJ_N_SIMS, seed=seed,
+        )
+    except Exception:
+        return None
+    return {"cur_season": cur_season, "age": age, "sim": sim}
+
+
+# --- team projection --------------------------------------------------------
+REPLACEMENT_OVR = 40.0  # roster-construction floor: a freely-available filler
+
+
+def _player_current_ovr(player: dict[str, Any], season: int) -> int | None:
+    """The player's overall this season (the stored value, == player_ovr)."""
+    rows = [r for r in player.get("ratings", []) if isinstance(r.get("season"), int)]
+    if not rows:
+        return None
+    rows.sort(key=lambda r: r["season"])
+    cur = next((r for r in rows if r["season"] == season), rows[-1])
+    v = cur.get("ovr")
+    return safe_int(v) if v is not None else None
+
+
+def current_team_ovr(roster: list[dict[str, Any]], season: int) -> int | None:
+    """Raw engine team OVR from a roster's current player overalls (unclamped)."""
+    if _proj is None:
+        return None
+    ovrs = [o for o in (_player_current_ovr(p, season) for p in roster) if o is not None]
+    if not ovrs:
+        return None
+    return _proj.team_ovr(ovrs)
+
+
+def player_game_impact(player: dict[str, Any], season: int) -> float:
+    """Estimated per-game scoring-margin impact versus a replacement player."""
+    stat = season_regular_stat(player, season)
+    gp = stat_gp(stat)
+    mpg = (safe_float(stat.get("min")) / gp) if gp else 0.0
+    if gp >= 3 and mpg >= 8:
+        bpm = safe_float(stat.get("obpm")) + safe_float(stat.get("dbpm"))
+        impact = (bpm + 2.0) * (mpg / 48.0)  # replacement level is roughly -2 BPM
+    else:
+        rating = latest_rating(player, season)
+        impact = max(0.0, (safe_float(rating.get("ovr"), 40.0) - 50.0) * 0.12)
+    return max(-2.0, min(10.0, impact))
+
+
+def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, sims: int = 10000) -> dict[str, Any]:
+    """Monte Carlo the rest of the season and the playoffs.
+
+    Team strength blends regressed scoring margin with current-roster quality.
+    Players who are injured subtract their impact until their expected return,
+    so odds dip while stars are out and recover as they heal. Trades are picked
+    up automatically because strength comes from the roster as it stands today.
+
+    A season that hasn't been played yet (an offseason projection) starts every team at 0-0
+    and runs over a projected round-robin schedule; last season's scoring margin still seeds
+    team strength, so the projection reflects both prior form and the current roster.
+    """
+    fresh = not completed_game_items(data, season, playoffs=False)
+    tids = [safe_int(t.get("tid")) for t in teams if t.get("tid") is not None]
+    wins0: dict[int, float] = {}
+    mov_strength: dict[int, float] = {}
+    for team in teams:
+        tid = safe_int(team.get("tid"))
+        team_season = latest_team_season(team, season)
+        stat = latest_team_stat(team, season)
+        wins0[tid] = 0.0 if fresh else safe_float(team_season.get("won"))
+        gp = safe_float(stat.get("gp"))
+        mov = team_mov(stat) or 0.0
+        mov_strength[tid] = mov * gp / (gp + 10.0)
+
+    # Roster strength (healthy) and per-team injured list (impact, games remaining).
+    roster_by_tid: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for player in players:
+        tid = safe_int(player.get("tid"), -9)
+        if tid >= 0:
+            roster_by_tid[tid].append(player)
+    roster_strength: dict[int, float] = {}
+    injured_by_tid: dict[int, list[tuple[float, int]]] = defaultdict(list)
+    for tid in tids:
+        roster = roster_by_tid.get(tid, [])
+        rotation = sorted(roster, key=lambda p: -player_game_impact(p, season))[:10]
+        roster_strength[tid] = sum(player_game_impact(p, season) for p in rotation)
+        for player in roster:
+            injury = player.get("injury") or {}
+            games_out = safe_int(injury.get("gamesRemaining"))
+            if injury.get("type") and injury.get("type") != "Healthy" and games_out > 0:
+                impact = player_game_impact(player, season)
+                if impact > 0.2:
+                    injured_by_tid[tid].append((impact, games_out))
+    mean_roster = sum(roster_strength.values()) / len(roster_strength) if roster_strength else 0.0
+    base_strength = {
+        tid: 0.5 * mov_strength.get(tid, 0.0) + 0.5 * (roster_strength.get(tid, 0.0) - mean_roster)
+        for tid in tids
+    }
+
+    # Remaining schedule in chronological order. An unplayed season has no exported schedule,
+    # so project it over a generated round-robin instead.
+    remaining: list[tuple[int, int, int, str]] = []
+    if fresh:
+        items = generated_schedule_items(data, teams, schedule_season=season)
+    else:
+        items, _ = score_items_for_page(data, teams)
+    for item in items:
+        if is_completed_game_item(item) or safe_int(item.get("season")) != season:
+            continue
+        home, away = safe_int(item.get("home_tid")), safe_int(item.get("away_tid"))
+        if home in wins0 and away in wins0:
+            remaining.append((safe_int(item.get("day")), home, away, str(item.get("gid"))))
+    remaining.sort(key=lambda g: (g[0], g[3]))
+    games_left = defaultdict(int)
+    for _, home, away, _ in remaining:
+        games_left[home] += 1
+        games_left[away] += 1
+
+    # Injury penalty by "games into the rest of the season" — deterministic per team.
+    max_left = max(games_left.values()) if games_left else 0
+    penalty_at: dict[int, list[float]] = {}
+    for tid in tids:
+        series = []
+        for k in range(max_left + 1):
+            series.append(sum(impact for impact, games_out in injured_by_tid.get(tid, []) if k < games_out))
+        penalty_at[tid] = series
+
+    first_day = remaining[0][0] if remaining else None
+    stakes_games = [g for g in remaining if g[0] == first_day] if first_day is not None else []
+    stake_counts: dict[str, dict[str, list[int]]] = {
+        gid: {"home_win": [0, 0], "home_loss": [0, 0], "away_win": [0, 0], "away_loss": [0, 0]}
+        for _, _, _, gid in stakes_games
+    }
+
+    def win_prob(home: int, away: int, k_home: int, k_away: int) -> float:
+        diff = (base_strength[home] - penalty_at[home][min(k_home, max_left)]) - (
+            base_strength[away] - penalty_at[away][min(k_away, max_left)]
+        ) + 1.5
+        return 1.0 / (1.0 + math.exp(-diff * 0.16))
+
+    rng = random.Random(20290101)
+    playoff_count = defaultdict(int)
+    finals_count = defaultdict(int)
+    champ_count = defaultdict(int)
+    seed_counts: dict[int, list[int]] = {tid: [0] * len(tids) for tid in tids}
+    win_total = defaultdict(float)
+
+    def sim_series(a: int, b: int, length: int = 7) -> int:
+        """Best-of-`length`; team `a` has home court. Returns the winner."""
+        needed = length // 2 + 1
+        a_wins = b_wins = 0
+        home_pattern = [True, True, False, False, True, False, True]
+        for game_index in range(length):
+            a_home = home_pattern[game_index % 7]
+            prob = win_prob(a, b, max_left, max_left) if a_home else 1.0 - win_prob(b, a, max_left, max_left)
+            if rng.random() < prob:
+                a_wins += 1
+            else:
+                b_wins += 1
+            if a_wins == needed:
+                return a
+            if b_wins == needed:
+                return b
+        return a if a_wins > b_wins else b
+
+    for _ in range(sims):
+        wins = dict(wins0)
+        played = {tid: 0 for tid in tids}
+        results_first_day: dict[str, bool] = {}
+        for day, home, away, gid in remaining:
+            home_won = rng.random() < win_prob(home, away, played[home], played[away])
+            if home_won:
+                wins[home] += 1
+            else:
+                wins[away] += 1
+            played[home] += 1
+            played[away] += 1
+            if gid in stake_counts:
+                results_first_day[gid] = home_won
+        order = sorted(tids, key=lambda tid: (-wins[tid], rng.random()))
+        made_playoffs = set(order[:4])
+        for seed, tid in enumerate(order, 1):
+            if seed <= 4:
+                playoff_count[tid] += 1
+            seed_counts[tid][seed - 1] += 1
+        for tid in tids:
+            win_total[tid] += wins[tid]
+        # playoffs: 1v4 and 2v3, then the final; higher seed has home court
+        finalist_a = sim_series(order[0], order[3])
+        finalist_b = sim_series(order[1], order[2])
+        finals_count[finalist_a] += 1
+        finals_count[finalist_b] += 1
+        if order.index(finalist_a) <= order.index(finalist_b):
+            champ = sim_series(finalist_a, finalist_b)
+        else:
+            champ = sim_series(finalist_b, finalist_a)
+        champ_count[champ] += 1
+        # what's-at-stake bookkeeping for the next game day
+        for _, home, away, gid in stakes_games:
+            home_won = results_first_day.get(gid, False)
+            key_home = "home_win" if home_won else "home_loss"
+            key_away = "away_loss" if home_won else "away_win"
+            stake_counts[gid][key_home][0] += 1
+            stake_counts[gid][key_home][1] += 1 if home in made_playoffs else 0
+            stake_counts[gid][key_away][0] += 1
+            stake_counts[gid][key_away][1] += 1 if away in made_playoffs else 0
+
+    results: dict[int, dict[str, Any]] = {}
+    for tid in tids:
+        results[tid] = {
+            "po": playoff_count[tid] / sims,
+            "finals": finals_count[tid] / sims,
+            "champ": champ_count[tid] / sims,
+            "seeds": [count / sims for count in seed_counts[tid]],
+            "proj_w": win_total[tid] / sims,
+            "games_left": games_left[tid],
+        }
+
+    stakes = []
+    for day, home, away, gid in stakes_games:
+        counts = stake_counts[gid]
+
+        def rate(key: str) -> float | None:
+            total, made = counts[key][0], counts[key][1]
+            return made / total if total else None
+
+        home_swing = away_swing = None
+        if rate("home_win") is not None and rate("home_loss") is not None:
+            home_swing = rate("home_win") - rate("home_loss")
+        if rate("away_win") is not None and rate("away_loss") is not None:
+            away_swing = rate("away_win") - rate("away_loss")
+        stakes.append({"gid": gid, "day": day, "home_tid": home, "away_tid": away, "home_swing": home_swing, "away_swing": away_swing})
+    return {"teams": results, "stakes": stakes, "day": first_day, "fresh": fresh}
+
+
+def league_sim(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> dict[str, Any]:
+    """League simulation, cached per season (each season is simulated once per build)."""
+    cache = SITE_META.setdefault("sim", {})
+    if season not in cache:
+        cache[season] = simulate_league(data, teams, active_players(data), season)
+    return cache[season]
+
+
+def magic_elimination(teams: list[dict[str, Any]], season: int, season_len: int = 45) -> dict[int, str]:
+    """Magic number to clinch top 4, or elimination number, per team."""
+    rows = []
+    for team in teams:
+        tid = safe_int(team.get("tid"))
+        team_season = latest_team_season(team, season)
+        stat = latest_team_stat(team, season)
+        won = safe_float(team_season.get("won"))
+        lost = safe_float(team_season.get("lost"))
+        gp = safe_float(stat.get("gp"))
+        rows.append({"tid": tid, "won": won, "lost": lost, "gp": gp})
+    if not rows:
+        return {}
+    order = standings_order(teams, season)
+    by_tid = {row["tid"]: row for row in rows}
+    out: dict[int, str] = {}
+    if len(order) < 5:
+        return {tid: "—" for tid in order}
+    fourth = by_tid[order[3]]
+    fifth = by_tid[order[4]]
+    for rank, tid in enumerate(order, 1):
+        row = by_tid[tid]
+        remaining = max(0.0, season_len - row["won"] - row["lost"])
+        if rank <= 4:
+            rival = fifth
+            rival_remaining = max(0.0, season_len - rival["won"] - rival["lost"])
+            magic = rival["won"] + rival_remaining - row["won"] + 1
+            out[tid] = "Clinched" if magic <= 0 else f"M {fmt_number(magic, 0)}"
+        else:
+            rival = fourth
+            tragic = row["won"] + remaining - rival["won"] + 1
+            out[tid] = "Eliminated" if tragic <= 0 else f"E {fmt_number(tragic, 0)}"
+    return out
+
+
+def playoff_clinch_marks(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> dict[int, str]:
+    """Computed clinch ("x") / elimination ("e") marks for a top-4 playoff cut.
+
+    Uses each team's record plus its remaining schedule (games not yet played).
+    Conservative pairwise math: a team is marked clinched only when fewer than
+    four rivals can still reach its current win total, and eliminated only when
+    at least four rivals already exceed its maximum possible win total. Ties
+    count against clinching and for survival, so ambiguous cases get no mark.
+    """
+    rows: dict[int, dict[str, float]] = {}
+    for team in teams:
+        tid = safe_int(team.get("tid"))
+        team_season = latest_team_season(team, season)
+        rows[tid] = {
+            "won": safe_float(team_season.get("won")),
+            "lost": safe_float(team_season.get("lost")),
+            "rem": 0.0,
+        }
+    if len(rows) < 5:
+        return {}
+
+    # Remaining games per team, counted from the exported schedule.
+    scheduled = 0
+    for item in raw_schedule_items(data, teams):
+        if is_completed_game_item(item) or item.get("playoffs") or safe_int(item.get("season"), season) != season:
+            continue
+        home, away = safe_int(item.get("home_tid")), safe_int(item.get("away_tid"))
+        if home in rows and away in rows:
+            rows[home]["rem"] += 1
+            rows[away]["rem"] += 1
+            scheduled += 1
+    if not scheduled:
+        # No schedule export: fall back to the season length, or skip if unknown.
+        season_len = regular_season_length(data, season)
+        if season_len <= 0:
+            return {}
+        for row in rows.values():
+            row["rem"] = max(0.0, season_len - row["won"] - row["lost"])
+
+    out: dict[int, str] = {}
+    for tid, row in rows.items():
+        max_wins = row["won"] + row["rem"]
+        can_catch = sum(1 for o_tid, o in rows.items() if o_tid != tid and o["won"] + o["rem"] >= row["won"])
+        already_ahead = sum(1 for o_tid, o in rows.items() if o_tid != tid and o["won"] > max_wins)
+        if can_catch <= 3:
+            out[tid] = "x"
+        elif already_ahead >= 4:
+            out[tid] = "e"
+    return out

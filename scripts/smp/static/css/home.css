@@ -1,0 +1,103 @@
+/* ---------- home dashboard ---------- */
+.home-columns { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); gap: .75rem; align-items: start; }
+.home-main, .home-side { min-width: 0; }
+@media (max-width: 1150px) { .home-columns { grid-template-columns: 1fr; } }
+.badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: .08rem .42rem;
+  border-radius: .15rem;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  margin-right: .5rem;
+  white-space: nowrap;
+}
+.badge-bad { background: rgba(226,86,107,.16); color: var(--bad); }
+.badge-good { background: rgba(63,191,114,.16); color: var(--good); }
+.badge-accent { background: rgba(91,157,255,.16); color: var(--accent); }
+.badge-muted { background: rgba(147,162,173,.16); color: var(--muted); }
+.news-list { list-style: none; margin: 0; padding: 0; }
+.news-list li {
+  display: flex;
+  align-items: baseline;
+  gap: .1rem;
+  padding: .42rem .1rem;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  font-size: .8rem;
+  line-height: 1.4;
+}
+.news-list li:last-child { border-bottom: 0; }
+.leader-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .6rem; }
+.leader-box { padding: .5rem .6rem; border: 1px solid rgba(255,255,255,.05); border-radius: .15rem; background: var(--bg); }
+.leader-box h3 { margin: 0 0 .35rem; font-size: .7rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.leader-mini-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.leader-col-rank { width: 1.45rem; }
+.leader-col-value { width: 3.4rem; }
+.leader-mini-table td {
+  padding: .16rem 0;
+  border: 0;
+  vertical-align: baseline;
+  font-size: .8rem;
+  line-height: 1.35;
+}
+.leader-mini-table .leader-rank { padding-right: .35rem; }
+.leader-player-cell { width: auto; min-width: 0; text-align: left; }
+.leader-player-wrap {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .4rem;
+  align-items: baseline;
+  min-width: 0;
+}
+.leader-name-block { display: block; min-width: 0; text-align: left; }
+.leader-name-block .player-link {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.25;
+}
+.leader-mini-table .team-dot { margin-right: 0; }
+.leader-mini-table .leader-team { display: block; width: auto; padding-left: 0; white-space: nowrap; margin-top: .05rem; }
+.leader-mini-table .leader-value { padding-left: .4rem; }
+.leader-mini-table tbody tr, .leader-mini-table tbody tr:nth-child(odd), .leader-mini-table tbody tr:nth-child(even) { background: transparent; }
+.leader-list { list-style: none; margin: 0; padding: 0; }
+.leader-list li { display: flex; align-items: center; gap: .4rem; padding: .16rem 0; font-size: .8rem; }
+.leader-rank { color: var(--muted); min-width: .9rem; text-align: right; font-variant-numeric: tabular-nums; }
+.leader-team { color: var(--muted); font-size: .7rem; }
+.leader-value { margin-left: auto; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.team-dot { display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; margin-right: .4rem; vertical-align: baseline; }
+#injury-report { width: 100%; table-layout: auto; }
+#injury-report th, #injury-report td { white-space: normal; word-break: break-word; }
+.group-head { text-align: center !important; border-left: 1px solid var(--line); }
+
+/* ---------- finances ---------- */
+.fit-table { width: max-content; max-width: 100%; }
+.fit-table table { width: auto; }
+.expiry-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: .28rem;
+  padding: .03rem .32rem;
+  border: 1px solid color-mix(in srgb, var(--warn) 42%, var(--line));
+  border-radius: .15rem;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  vertical-align: middle;
+}
+
+/* ---------- schedule extras ---------- */
+tr.next-day > td { background: rgba(91,157,255,.10); }
+tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.col-hl { background: rgba(255,255,255,.05); }
+.h2h-grid th, .h2h-grid td { text-align: center; }
+.h2h-grid th:first-child, .h2h-grid td:first-child { text-align: left; }
+.h2h-self { background: rgba(255,255,255,.03); }
+

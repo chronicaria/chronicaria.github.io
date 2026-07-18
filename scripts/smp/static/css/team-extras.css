@@ -1,0 +1,79 @@
+/* ---------- team page ---------- */
+.vitals-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
+.vital-tile {
+  display: grid;
+  gap: .05rem;
+  padding: .4rem .65rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+}
+.vital-tile span { color: var(--muted); font-size: .66rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.vital-tile strong { font-size: .92rem; }
+.game-strip { display: flex; flex-wrap: wrap; gap: .45rem; }
+.game-chip {
+  display: grid;
+  gap: .05rem;
+  min-width: 6.2rem;
+  padding: .4rem .6rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  color: var(--text);
+  text-decoration: none;
+  font-size: .76rem;
+}
+.game-chip:hover { border-color: var(--accent); text-decoration: none; }
+.game-chip span { color: var(--muted); font-size: .68rem; }
+.chip-win strong { color: var(--good); }
+.chip-loss strong { color: var(--bad); }
+.chip-next strong { color: var(--text); }
+.game-log-win > td:first-child { box-shadow: inset 3px 0 0 var(--good); }
+.game-log-loss > td:first-child { box-shadow: inset 3px 0 0 var(--bad); }
+.game-log-next > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.game-note {
+  max-width: 30rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-link {
+  padding: .18rem .45rem;
+  font-size: .72rem;
+}
+.depth-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .6rem; }
+@media (max-width: 900px) { .depth-grid { grid-template-columns: repeat(2, 1fr); } }
+.depth-col { padding: .5rem .6rem; border: 1px solid rgba(255,255,255,.05); border-radius: .15rem; background: var(--panel-2); }
+.depth-col h3 { margin: 0 0 .35rem; font-size: .7rem; font-weight: 700; letter-spacing: .07em; color: var(--muted); }
+.pick-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .4rem; }
+.pick-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .26rem .55rem;
+  border-radius: .15rem;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+/* ---------- game pages ---------- */
+.series-row { display: flex; flex-wrap: wrap; gap: .45rem; }
+.series-chip {
+  padding: .35rem .6rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: .78rem;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.series-chip:hover { border-color: var(--accent); text-decoration: none; }
+.series-chip.current { border-color: var(--accent); }
+.cmp-table th, .cmp-table td { text-align: center; min-width: 7rem; }
+.cmp-table .cmp-label { color: var(--muted); font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.preview-injuries { margin-top: .6rem; }
+.preview-injuries h3 { margin: 0 0 .25rem; letter-spacing: .07em; }
+.preview-injuries p { margin: .15rem 0; }
+

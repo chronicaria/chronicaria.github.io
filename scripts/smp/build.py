@@ -1,0 +1,299 @@
+from __future__ import annotations
+
+import argparse
+import html
+import json
+import random
+import math
+import re
+import shutil
+import unicodedata
+from collections import defaultdict
+from pathlib import Path
+from typing import Any, Iterable
+
+from .core import (
+    ALL_PLAYERS_BY_PID,
+    SITE_META,
+    active_players,
+    active_teams_for_season,
+    build_game_logs,
+    completed_game_items,
+    current_season,
+    draft_prospects,
+    free_agents,
+    game_slug_from_gid,
+    is_completed_game_item,
+    normalize_positions,
+    phase_value,
+    player_name,
+    player_slug,
+    player_url,
+    safe_int,
+    schedule_items_for_page,
+    score_items_for_page,
+    standings_order,
+    team_abbrev,
+    team_abbrev_for_tid,
+    team_full_name,
+    team_slug,
+    team_sort_key,
+    team_url,
+)
+
+from .finance import compute_league_finances
+
+from .simmodel import league_sim
+
+from .pages.home import render_home_page
+
+from .pages.team import render_team_finances_page, render_team_games_page, render_team_roster_page
+
+from .pages.player import render_player_pages
+
+from .pages.game import render_game_page
+
+from .pages.league import (
+    render_draft_page,
+    render_free_agency_page,
+    render_history_page,
+    render_players_index,
+    render_records_page,
+    render_schedule_page,
+)
+
+from .pages.compare import render_compare_page
+
+from .pages.trade import render_trade_page
+
+# Static assets: split from the old inline stylesheet()/javascript() strings.
+# Concatenated in this exact order; the result is byte-identical to the old output.
+_STATIC_DIR = Path(__file__).resolve().parent / "static"
+
+CSS_FILES = [
+    "base.css",
+    "nav.css",
+    "layout.css",
+    "tables.css",
+    "cards.css",
+    "scatter.css",
+    "player.css",
+    "team.css",
+    "game.css",
+    "home.css",
+    "team-extras.css",
+    "charts.css",
+    "history.css",
+    "search.css",
+    "misc.css",
+]
+
+JS_FILES = [
+    "core.js",
+    "scatter.js",
+    "hover.js",
+    "search.js",
+    "tables.js",
+    "nav.js",
+    "tabs.js",
+    "charts.js",
+]
+
+
+def stylesheet() -> str:
+    return "".join((_STATIC_DIR / "css" / name).read_text(encoding="utf-8") for name in CSS_FILES)
+
+
+def javascript() -> str:
+    return "".join((_STATIC_DIR / "js" / name).read_text(encoding="utf-8") for name in JS_FILES)
+
+
+
+def write_text(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+def previous_day_json(json_path: Path) -> Path | None:
+    """Find the closest earlier day*.json next to the given export."""
+    match = re.fullmatch(r"day(\d+)", json_path.stem)
+    if not match:
+        return None
+    day = int(match.group(1))
+    for prev_day in range(day - 1, max(-1, day - 15), -1):
+        candidate = json_path.with_name(f"day{prev_day}.json")
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def generate_site(
+    json_path: Path,
+    out_dir: Path,
+    start_season: int = 2026,
+    clean: bool = False,
+    schedule_season: int | None = None,
+    schedule_days: int | None = None,
+    prev_json_path: Path | None = None,
+) -> dict[str, int | str]:
+    data = json.loads(json_path.read_text(encoding="utf-8"))
+    normalize_positions(data)
+    season = current_season(data)
+    teams = sorted(data.get("teams", []), key=team_sort_key)
+    players = active_players(data)
+    fa_players = free_agents(data)
+    ga = data.get("gameAttributes") or {}
+    ALL_PLAYERS_BY_PID.clear()
+    ALL_PLAYERS_BY_PID.update({safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None})
+    if prev_json_path is None:
+        prev_json_path = previous_day_json(json_path)
+    if prev_json_path and prev_json_path.exists():
+        try:
+            prev_data = json.loads(prev_json_path.read_text(encoding="utf-8"))
+            prev_season = current_season(prev_data)
+            prev_teams = sorted(prev_data.get("teams", []), key=team_sort_key)
+            order = standings_order(active_teams_for_season(prev_teams, prev_season), prev_season)
+            SITE_META["prev_ranks"] = {tid: rank for rank, tid in enumerate(order, 1)}
+        except Exception:
+            SITE_META["prev_ranks"] = None
+    else:
+        SITE_META["prev_ranks"] = None
+    SITE_META["season"] = season
+    SITE_META["day"] = max((safe_int(g.get("day")) for g in data.get("games", []) if g.get("season") == season), default=0)
+    game_items, score_label = score_items_for_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
+    schedule_items, schedule_label = schedule_items_for_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
+
+    if clean and out_dir.exists():
+        if out_dir.resolve() in {Path("/").resolve(), Path.cwd().resolve()}:
+            raise RuntimeError(f"Refusing to clean unsafe output directory: {out_dir}")
+        shutil.rmtree(out_dir)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    write_text(out_dir / "assets" / "styles.css", stylesheet())
+    write_text(out_dir / "assets" / "site.js", javascript())
+
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    search_index = {
+        "teams": [
+            {"n": team_full_name(t), "t": team_abbrev(t), "u": team_url(t)}
+            for t in teams
+        ],
+        "players": [
+            {
+                "n": player_name(p),
+                "t": team_abbrev_for_tid(p.get("tid"), teams_by_tid) if safe_int(p.get("tid"), -1) >= 0 else "FA",
+                "u": player_url(p),
+            }
+            for p in sorted(players, key=player_name)
+        ] + [
+            {"n": player_name(p), "t": "Draft", "u": player_url(p)}
+            for p in sorted(draft_prospects(data), key=player_name)
+        ],
+    }
+    write_text(out_dir / "assets" / "search-index.json", json.dumps(search_index, separators=(",", ":")))
+
+    write_text(out_dir / "index.html", render_home_page(data, teams, players, season, start_season))
+    write_text(out_dir / "schedule.html", render_schedule_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days))
+    fa_market_year = season + 1 if phase_value(data) >= 8 else season
+    write_text(out_dir / "free-agency.html", render_free_agency_page(fa_players, teams, season, start_season, all_players=players, market_year=fa_market_year))
+    write_text(out_dir / "players" / "index.html", render_players_index(players, teams, season, start_season, data=data))
+    write_text(out_dir / "history.html", render_history_page(data, teams))
+    write_text(out_dir / "records.html", render_records_page(data, teams, season, start_season=start_season))
+    write_text(out_dir / "draft.html", render_draft_page(data, teams, season))
+    write_text(out_dir / "trade.html", render_trade_page(data, teams, players, season))
+    write_text(out_dir / "compare.html", render_compare_page(data, teams, players, season, start_season))
+
+    game_logs = build_game_logs(data, season)
+    league_fin = compute_league_finances(data, teams, players, season, (league_sim(data, teams, season) or {}).get("teams"))
+    for team in teams:
+        roster = [player for player in players if player.get("tid") == team.get("tid")]
+        slug = team_slug(team)
+        tfin = league_fin["teams"].get(safe_int(team.get("tid"), -99))
+        write_text(out_dir / "teams" / f"{slug}.html", render_team_roster_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
+        write_text(out_dir / "teams" / f"{slug}-games.html", render_team_games_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
+        write_text(out_dir / "teams" / f"{slug}-finances.html", render_team_finances_page(team, roster, teams, season, start_season, data=data, tfin=tfin, league_fin=league_fin))
+
+    def write_player_pages(p: dict[str, Any], log_entries: list[dict[str, Any]] | None) -> None:
+        slug = player_slug(p)
+        for suffix, html in render_player_pages(p, teams, season, start_season, log_entries=log_entries).items():
+            write_text(out_dir / "players" / f"{slug}{suffix}.html", html)
+
+    prospects = draft_prospects(data)
+    for prospect in prospects:
+        write_player_pages(prospect, None)
+
+    for player in players:
+        write_player_pages(player, game_logs.get(safe_int(player.get("pid"), -1)))
+
+    # Write a page for every game linked from the site: the schedule/team slate (game_items)
+    # plus the current season's completed games incl. playoffs (home "Latest Results", the
+    # playoff bracket, and records feats all link to these gids).
+    page_items = {str(item.get("gid")): item for item in game_items if item.get("gid") is not None}
+    for item in completed_game_items(data, season, playoffs=None):
+        page_items.setdefault(str(item.get("gid")), item)
+    all_game_pages = list(page_items.values())
+    for item in all_game_pages:
+        write_text(out_dir / "games" / f"{game_slug_from_gid(item.get('gid'))}.html", render_game_page(item, all_game_pages, teams, players, safe_int(item.get("season"), season)))
+
+    completed_scores = [item for item in game_items if is_completed_game_item(item)]
+    return {
+        "season": season,
+        "teams": len(teams),
+        "players": len(players),
+        "free_agents": len(fa_players),
+        "team_pages": len(teams),
+        "player_pages": len(players),
+        "schedule_games": len(schedule_items),
+        "score_games": len(game_items),
+        "completed_scores": len(completed_scores),
+        "game_pages": len(game_items),
+        "schedule_label": schedule_label,
+        "score_label": score_label,
+    }
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Generate a static HTML basketball league site from a JSON export.")
+    parser.add_argument("json_file", type=Path, nargs="?", default=None, help="Path to the Basketball GM-style JSON file. Defaults to the newest day*.json in the current directory.")
+    parser.add_argument("--out", type=Path, default=Path("site"), help="Output directory for the generated website")
+    parser.add_argument("--start-season", type=int, default=2026, help="First season to show on player stat pages")
+    parser.add_argument("--schedule-season", type=int, default=None, help="Season to use for Schedule/Scores pages. Defaults to an exported schedule, or the upcoming season during offseason exports.")
+    parser.add_argument("--schedule-days", type=int, default=None, help="Optional target number of calendar days for a generated schedule, such as 46.")
+    parser.add_argument("--clean", action="store_true", help="Delete the output directory before generating")
+    parser.add_argument("--prev", type=Path, default=None, help="Previous export for day-over-day standings movement. Defaults to the closest earlier day*.json.")
+    return parser.parse_args()
+
+
+def newest_day_json() -> Path | None:
+    candidates = []
+    for path in Path.cwd().glob("day*.json"):
+        match = re.fullmatch(r"day(\d+)", path.stem)
+        if match:
+            candidates.append((int(match.group(1)), path))
+    if not candidates:
+        return None
+    return max(candidates)[1]
+
+
+def main() -> None:
+    args = parse_args()
+    if args.json_file is None:
+        args.json_file = newest_day_json()
+        if args.json_file is None:
+            raise SystemExit("No JSON file given and no day*.json found in the current directory.")
+        print(f"Using newest export: {args.json_file.name}")
+    summary = generate_site(
+        args.json_file,
+        args.out,
+        start_season=args.start_season,
+        clean=args.clean,
+        schedule_season=args.schedule_season,
+        schedule_days=args.schedule_days,
+        prev_json_path=args.prev,
+    )
+    print(f"Generated site in {args.out.resolve()}")
+    print(f"Season: {summary['season']}")
+    print(f"Schedule/Scores: {summary['schedule_label']} / {summary['score_label']}")
+    print(f"Teams: {summary['teams']}; team pages: {summary['team_pages']}")
+    print(f"Players: {summary['players']}; player pages: {summary['player_pages']}; free agents: {summary['free_agents']}")
+    print(f"Schedule games: {summary['schedule_games']}; score rows: {summary['score_games']}; completed scores: {summary['completed_scores']}; game pages: {summary['game_pages']}")

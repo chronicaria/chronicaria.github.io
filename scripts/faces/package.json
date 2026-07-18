@@ -1,0 +1,9 @@
+{
+  "name": "smp-faces-render",
+  "private": true,
+  "type": "module",
+  "description": "One-off pre-render of faces.js player portraits to assets/faces/*.svg",
+  "dependencies": {
+    "facesjs": "^5.0.3"
+  }
+}

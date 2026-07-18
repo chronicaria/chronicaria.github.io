@@ -1,0 +1,58 @@
+/* ---------- scores ---------- */
+.score-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: .5rem;
+}
+.score-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem .7rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  color: var(--text);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.score-line:hover { border-color: var(--accent); text-decoration: none; }
+.score-match { font-size: .9rem; color: var(--muted); }
+.score-match strong { color: var(--text); font-weight: 700; }
+.score-match em { font-style: normal; color: var(--muted); font-size: .78rem; }
+.score-status { font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.score-status.final { color: var(--accent); }
+.day-panel[hidden] { display: none; }
+.score-stack { flex-direction: column; align-items: stretch; gap: .15rem; }
+.score-row { display: flex; justify-content: space-between; gap: .8rem; color: var(--muted); font-size: .85rem; }
+.score-row strong { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+.score-row.score-won, .score-row.score-won strong { color: var(--text); font-weight: 700; }
+.score-stack .score-status { align-self: flex-end; }
+
+/* ---------- schedule grid ---------- */
+.schedule-grid th, .schedule-grid td { text-align: center; }
+.schedule-grid td:first-child, .schedule-grid th:first-child { text-align: center; }
+.schedule-grid td { padding: .18rem .3rem; }
+.day-label { color: var(--muted); font-variant-numeric: tabular-nums; }
+.off-day { background: rgba(255,255,255,.015); }
+.sched-cell { display: block; padding: .12rem .25rem; border-radius: .15rem; color: var(--text); font-size: .76rem; line-height: 1.25; text-decoration: none; }
+.sched-cell:hover { background: var(--panel-3); text-decoration: none; }
+.sched-result { display: block; font-size: .68rem; font-variant-numeric: tabular-nums; }
+.sched-win .sched-result { color: var(--good); }
+.sched-loss .sched-result { color: var(--bad); }
+
+/* ---------- section blocks ---------- */
+.block-title {
+  margin: 1.1rem 0 .5rem;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: none;
+  color: var(--text);
+}
+th.group-start, td.group-start { border-left: 2px solid rgba(255,255,255,.18); }
+td.cur-season, th.cur-season { background: rgba(91,157,255,.07); }
+thead th.cur-season { background: rgba(91,157,255,.14); color: var(--text); }
+tr.total-row td.cur-season { background: rgba(91,157,255,.12); }
+

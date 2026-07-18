@@ -1,0 +1,19 @@
+/* ---------- history ---------- */
+.bracket { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: .6rem; }
+.bracket-round h4 { margin: 0 0 .3rem; font-size: .68rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.bracket-series {
+  min-width: 11rem;
+  margin-bottom: .45rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+.bracket-series > div { display: flex; justify-content: space-between; gap: .8rem; padding: .32rem .6rem; font-size: .8rem; }
+.bracket-win { background: rgba(63,191,114,.08); font-weight: 600; }
+.bracket-loss { color: var(--muted); }
+.leaders-inline { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; margin-bottom: .6rem; }
+.leader-inline { font-size: .78rem; color: var(--muted); }
+.leader-inline strong { color: var(--text); margin-right: .25rem; }
+.history-awards { margin-top: .35rem; }
+

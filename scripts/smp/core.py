@@ -1,0 +1,1708 @@
+from __future__ import annotations
+
+import argparse
+import html
+import json
+import random
+import math
+import re
+import shutil
+import unicodedata
+from collections import defaultdict
+from pathlib import Path
+from typing import Any, Iterable
+
+FREE_AGENT_TID = -1
+DRAFT_PROSPECT_TID = -2
+RETIRED_TID = -3
+TOTALS_TID = -7
+
+RATING_LABELS = {
+    "hgt": "Height",
+    "stre": "Strength",
+    "spd": "Speed",
+    "jmp": "Jumping",
+    "endu": "Endurance",
+    "ins": "Inside",
+    "dnk": "Dunks/Layups",
+    "ft": "Free Throws",
+    "fg": "Mid Range",
+    "tp": "Three Pointers",
+    "oiq": "Offensive IQ",
+    "diq": "Defensive IQ",
+    "drb": "Dribbling",
+    "pss": "Passing",
+    "reb": "Rebounding",
+}
+
+RATING_GROUPS = [
+    ("Physical", ["hgt", "stre", "spd", "jmp", "endu"]),
+    ("Shooting", ["ins", "dnk", "ft", "fg", "tp"]),
+    ("Skill", ["oiq", "diq", "drb", "pss", "reb"]),
+]
+
+TEAM_RATING_RANK_KEYS = [
+    ("hgt", "Hgt"),
+    ("stre", "Str"),
+    ("spd", "Spd"),
+    ("jmp", "Jmp"),
+    ("endu", "End"),
+    ("ins", "Ins"),
+    ("dnk", "Dnk"),
+    ("ft", "FT"),
+    ("fg", "2Pt"),
+    ("tp", "3Pt"),
+    ("oiq", "oIQ"),
+    ("diq", "dIQ"),
+    ("drb", "Drb"),
+    ("pss", "Pss"),
+    ("reb", "Reb"),
+]
+
+AWARD_ROWS = [
+    ("mvp", "MVP", "Most Valuable Player"),
+    ("dpoy", "DPOY", "Defensive Player of the Year"),
+    ("smoy", "6MOY", "Sixth Man of the Year"),
+    ("roy", "ROY", "Rookie of the Year"),
+    ("mip", "MIP", "Most Improved Player"),
+]
+
+SCATTER_METRICS = [
+    ("pts", "PTS/G"), ("trb", "TRB/G"), ("ast", "AST/G"), ("stl", "STL/G"), ("blk", "BLK/G"),
+    ("tov", "TOV/G"), ("min", "MP/G"), ("fgp", "FG%"), ("tpp", "3P%"), ("ftp", "FT%"),
+    ("ts", "TS%"), ("efg", "eFG%"), ("usg", "USG%"), ("per", "PER"), ("ortg", "ORtg"), ("drtg", "DRtg"),
+    ("obpm", "OBPM"), ("dbpm", "DBPM"), ("bpm", "BPM"), ("vorp", "VORP"), ("ws", "WS"),
+    ("age", "Age"), ("ovr", "Ovr"), ("pot", "Pot"),
+]
+
+TEAM_PALETTE = [
+    "#5b9dff", "#ff7e67", "#3fbf72", "#f2c14e", "#b78aff",
+    "#4fd8d2", "#ff8ad4", "#c0d860", "#ff9f40", "#9aa7ff",
+]
+
+# Set by generate_site; used for footers and page chrome.
+SITE_META: dict[str, Any] = {"season": None, "day": None}
+
+# Set by generate_site; lets deep render helpers resolve any pid (incl. retired/prospects).
+ALL_PLAYERS_BY_PID: dict[int, dict[str, Any]] = {}
+
+FAVICON = (
+    "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>"
+    "<text y='.9em' font-size='90'>🏀</text></svg>"
+)
+
+THEME_SNIPPET = (
+    '<script>document.documentElement.dataset.theme = '
+    'localStorage.getItem("theme") || '
+    '(matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");'
+    "</script>"
+)
+
+
+def team_palette_by_tid(teams: list[dict[str, Any]]) -> dict[int, str]:
+    """Stable distinct color per team (the JSON's own colors are not distinct)."""
+    ordered = sorted(
+        (t for t in teams if t.get("tid") is not None and not t.get("disabled")),
+        key=lambda t: team_abbrev(t),
+    )
+    return {int(t["tid"]): TEAM_PALETTE[i % len(TEAM_PALETTE)] for i, t in enumerate(ordered)}
+
+def team_dot(tid: Any, palette: dict[int, str]) -> str:
+    color = palette.get(safe_int(tid, -1), "#666")
+    return f'<span class="team-dot" style="background:{color}" aria-hidden="true"></span>'
+
+
+PER_GAME_FIELDS = [
+    "fg", "fga", "tp", "tpa", "ft", "fta", "orb", "drb", "ast", "tov",
+    "stl", "blk", "ba", "pf", "pts",
+]
+
+SHOT_FIELDS = [
+    "fgAtRim", "fgaAtRim", "fgLowPost", "fgaLowPost", "fgMidRange", "fgaMidRange",
+    "tp", "tpa", "dd", "td", "qd", "fxf",
+]
+
+TOTAL_STAT_FIELDS = sorted(set(PER_GAME_FIELDS + SHOT_FIELDS + ["gp", "gs", "min", "pm"]))
+
+
+def esc(value: Any) -> str:
+    return html.escape("" if value is None else str(value), quote=True)
+
+
+def slugify(value: str, fallback: str = "item") -> str:
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
+    value = re.sub(r"[^a-zA-Z0-9]+", "-", value.strip().lower()).strip("-")
+    return value or fallback
+
+
+def get_attr_value(value: Any, season: int | None = None) -> Any:
+    """Basketball GM exports sometimes store attributes as [{start, value}, ...]."""
+    if isinstance(value, list) and value and all(isinstance(x, dict) and "value" in x for x in value):
+        chosen = value[0].get("value")
+        chosen_start = -10**9
+        for item in value:
+            start = item.get("start")
+            start_cmp = -10**9 if start is None else int(start)
+            if season is None or start_cmp <= season:
+                if start_cmp >= chosen_start:
+                    chosen = item.get("value")
+                    chosen_start = start_cmp
+        return chosen
+    return value
+
+
+def current_season(data: dict[str, Any]) -> int:
+    ga = data.get("gameAttributes", {})
+    if isinstance(ga.get("season"), int):
+        return ga["season"]
+
+    seasons: list[int] = []
+    for player in data.get("players", []):
+        seasons.extend(r.get("season") for r in player.get("ratings", []) if isinstance(r.get("season"), int))
+        seasons.extend(s.get("season") for s in player.get("stats", []) if isinstance(s.get("season"), int))
+    return max(seasons) if seasons else 0
+
+
+def fmt_number(value: Any, digits: int = 1, blank_zero: bool = False) -> str:
+    if value is None:
+        return "—"
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return esc(value)
+    if not math.isfinite(number):
+        return "—"
+    if blank_zero and abs(number) < 1e-12:
+        return "—"
+    if digits == 0:
+        return f"{number:.0f}"
+    return f"{number:.{digits}f}"
+
+
+def fmt_pct(value: float | None, digits: int = 1) -> str:
+    return "—" if value is None else fmt_number(value, digits)
+
+
+def fmt_ratio(value: float | None, digits: int = 3) -> str:
+    if value is None or not math.isfinite(value):
+        return "—"
+    out = f"{value:.{digits}f}"
+    if out.startswith("0"):
+        out = out[1:]
+    elif out.startswith("-0"):
+        out = "-" + out[2:]
+    return out
+
+
+def fmt_money(amount: Any) -> str:
+    if amount is None:
+        return "—"
+    try:
+        amount = float(amount)
+    except (TypeError, ValueError):
+        return esc(amount)
+
+    # Basketball GM salaries are stored in thousands of dollars: 26000 -> $26M.
+    sign = "-" if amount < 0 else ""
+    magnitude = abs(amount)
+    if magnitude >= 1000:
+        millions = magnitude / 1000
+        if abs(millions - round(millions)) < 1e-9:
+            return f"{sign}${int(round(millions))}M"
+        return sign + f"${millions:.2f}M".rstrip("0").rstrip(".")
+    return f"{sign}${int(round(magnitude))}K"
+
+
+def fmt_contract(player: dict[str, Any], compact: bool = False) -> str:
+    contract = player.get("contract") or {}
+    amount = contract.get("amount")
+    exp = contract.get("exp")
+    if amount is None and exp is None:
+        return "—"
+    if compact:
+        return fmt_money(amount)
+    if exp is None:
+        return fmt_money(amount)
+    return f"{fmt_money(amount)}/{esc(exp)}"
+
+
+def fmt_height(inches: Any) -> str:
+    try:
+        inches = int(inches)
+    except (TypeError, ValueError):
+        return "—"
+    return f"{inches // 12}'{inches % 12}\""
+
+
+def player_name(player: dict[str, Any]) -> str:
+    return f"{player.get('firstName', '').strip()} {player.get('lastName', '').strip()}".strip() or f"Player {player.get('pid', '')}"
+
+
+def team_full_name(team: dict[str, Any]) -> str:
+    return f"{team.get('region', '').strip()} {team.get('name', '').strip()}".strip() or f"Team {team.get('tid', '')}"
+
+
+def team_sort_key(team: dict[str, Any]) -> tuple[str, int]:
+    return (team_full_name(team).lower(), int(team.get("tid", 10**9)))
+
+
+def safe_float(value: Any, default: float = 0.0) -> float:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return default
+    return number if math.isfinite(number) else default
+
+
+def player_current_salary(player: dict[str, Any], season: int | None = None) -> float:
+    """Return the player's current annual salary in Basketball GM salary units."""
+    contract = player.get("contract") or {}
+    amount = contract.get("amount")
+    if amount is not None:
+        try:
+            return float(amount)
+        except (TypeError, ValueError):
+            pass
+
+    salaries = [x for x in player.get("salaries", []) if isinstance(x, dict)]
+    if salaries:
+        chosen = None
+        if season is not None:
+            exact = [salary for salary in salaries if salary.get("season") == season]
+            if exact:
+                chosen = exact[-1]
+            else:
+                future = [salary for salary in salaries if isinstance(salary.get("season"), int) and salary.get("season") >= season]
+                chosen = min(future, key=lambda salary: salary.get("season", 10**9), default=None)
+        if chosen is None:
+            chosen = max(salaries, key=lambda salary: salary.get("season", -10**9))
+        try:
+            return float(chosen.get("amount") or 0)
+        except (TypeError, ValueError):
+            return 0.0
+    return 0.0
+
+
+def team_payroll(roster: Iterable[dict[str, Any]], season: int | None = None) -> float:
+    return sum(player_current_salary(player, season) for player in roster)
+
+
+def latest_team_season(team: dict[str, Any], season: int | None = None) -> dict[str, Any]:
+    seasons = [row for row in team.get("seasons", []) if isinstance(row, dict)]
+    if season is not None:
+        same = [row for row in seasons if row.get("season") == season]
+        if same:
+            return same[-1]
+        eligible = [row for row in seasons if isinstance(row.get("season"), int) and row.get("season") <= season]
+        if eligible:
+            seasons = eligible
+    return max(seasons, key=lambda row: row.get("season", -10**9), default={})
+
+
+def latest_team_stat(team: dict[str, Any], season: int | None = None, playoffs: bool = False) -> dict[str, Any]:
+    rows = [row for row in team.get("stats", []) if isinstance(row, dict) and bool(row.get("playoffs")) == playoffs]
+    if season is not None:
+        same = [row for row in rows if row.get("season") == season]
+        if same:
+            return same[-1]
+        eligible = [row for row in rows if isinstance(row.get("season"), int) and row.get("season") <= season]
+        if eligible:
+            rows = eligible
+    return max(rows, key=lambda row: row.get("season", -10**9), default={})
+
+
+def team_has_exact_season_data(team: dict[str, Any], season: int) -> bool:
+    has_season_row = any(isinstance(row, dict) and row.get("season") == season for row in team.get("seasons", []))
+    has_stat_row = any(
+        isinstance(row, dict) and row.get("season") == season and not row.get("playoffs")
+        for row in team.get("stats", [])
+    )
+    return has_season_row or has_stat_row
+
+
+def active_teams_for_season(teams: list[dict[str, Any]], season: int) -> list[dict[str, Any]]:
+    active = [team for team in teams if team_has_exact_season_data(team, season)]
+    return active or teams
+
+
+def win_pct(won: Any, lost: Any) -> float | None:
+    try:
+        won = float(won or 0)
+        lost = float(lost or 0)
+    except (TypeError, ValueError):
+        return None
+    games = won + lost
+    if games <= 0:
+        return None
+    return won / games
+
+
+def fmt_win_pct(value: float | None) -> str:
+    if value is None or not math.isfinite(value):
+        return "—"
+    text = f"{value:.3f}"
+    if text.startswith("0"):
+        text = text[1:]
+    return text
+
+
+def fmt_record(won: Any, lost: Any) -> str:
+    if won is None and lost is None:
+        return "—"
+    return f"{fmt_number(safe_float(won), 0)}-{fmt_number(safe_float(lost), 0)}"
+
+
+def plus_minus_class(value: Any) -> str:
+    number = safe_float(value, 0.0)
+    if number > 0:
+        return "delta-up"
+    if number < 0:
+        return "delta-down"
+    return ""
+
+
+def fmt_signed(value: Any, digits: int = 1) -> str:
+    number = safe_float(value, float("nan"))
+    if not math.isfinite(number):
+        return "—"
+    sign = "+" if number > 0 else ""
+    return f"{sign}{number:.{digits}f}"
+
+
+def team_conference_name(team_or_season: dict[str, Any], confs_by_cid: dict[int, str]) -> str:
+    cid = team_or_season.get("cid")
+    return confs_by_cid.get(cid, f"Conference {cid}" if cid is not None else "Independent")
+
+
+def team_division_name(team_or_season: dict[str, Any], divs_by_did: dict[int, str]) -> str:
+    did = team_or_season.get("did")
+    return divs_by_did.get(did, f"Division {did}" if did is not None else "Division")
+
+
+def initials(player: dict[str, Any]) -> str:
+    parts = [player.get("firstName", ""), player.get("lastName", "")]
+    letters = "".join(part[:1] for part in parts if part)
+    return esc((letters or "?").upper())
+
+
+def latest_rating(player: dict[str, Any], season: int | None = None) -> dict[str, Any]:
+    ratings = [r for r in player.get("ratings", []) if isinstance(r, dict)]
+    if season is not None:
+        eligible = [r for r in ratings if r.get("season", -10**9) <= season]
+        if eligible:
+            ratings = eligible
+    return max(ratings, key=lambda r: r.get("season", -10**9), default={})
+
+
+def previous_rating(player: dict[str, Any], rating: dict[str, Any]) -> dict[str, Any]:
+    season = rating.get("season")
+    ratings = [r for r in player.get("ratings", []) if isinstance(r, dict) and r.get("season", -10**9) < season]
+    return max(ratings, key=lambda r: r.get("season", -10**9), default={})
+
+
+def rating_delta_html(player: dict[str, Any], key: str, rating: dict[str, Any]) -> str:
+    value = rating.get(key)
+    if value is None:
+        return "—"
+    prev = previous_rating(player, rating).get(key)
+    delta = None if prev is None else value - prev
+    body = esc(value)
+    if delta:
+        klass = "delta-up" if delta > 0 else "delta-down"
+        sign = "+" if delta > 0 else ""
+        body += f" <span class=\"{klass}\">({sign}{delta})</span>"
+    return body
+
+
+def age(player: dict[str, Any], season: int) -> str:
+    year = (player.get("born") or {}).get("year")
+    if not isinstance(year, int):
+        return "—"
+    return str(season - year)
+
+
+def active_players(data: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        p for p in data.get("players", [])
+        if p.get("retiredYear") is None and p.get("tid", RETIRED_TID) >= FREE_AGENT_TID
+    ]
+
+
+def free_agents(data: dict[str, Any]) -> list[dict[str, Any]]:
+    # Hide scrub free agents: drop anyone below 50 ovr or below 50 pot.
+    out = []
+    for p in active_players(data):
+        if p.get("tid") != FREE_AGENT_TID:
+            continue
+        if p.get("_fa_bid") is None:  # forced-release players (Gooners waive) always show
+            rating = latest_rating(p)
+            if safe_int(rating.get("ovr")) < 50 or safe_int(rating.get("pot")) < 50:
+                continue
+        out.append(p)
+    return out
+
+
+CANONICAL_POS = ("PG", "SG", "SF", "PF", "C")
+
+
+def canonical_pos(player: dict[str, Any], rating: dict[str, Any]) -> str:
+    """Round BBGM's 9 position labels down to one of the 5 canonical slots.
+    The middle labels (G/GF/F/FC) sit at *.5 on the PG=0..C=4 axis; break the
+    tie with the player's build (playmaking for guards, height elsewhere) — the
+    same rule the depth chart has always used for its single-slot fit."""
+    pos = (rating or {}).get("pos") or ""
+    if pos in CANONICAL_POS:
+        return pos
+    height = safe_int(player.get("hgt"), 0)  # inches
+    if pos == "G":
+        playmaking = safe_int(rating.get("pss")) + safe_int(rating.get("drb"))
+        scoring = safe_int(rating.get("tp")) + safe_int(rating.get("fg"))
+        return "PG" if playmaking >= scoring else "SG"
+    if pos == "GF":
+        return "SG" if height and height < 79 else "SF"
+    if pos == "F":
+        return "SF" if height and height < 81 else "PF"
+    if pos == "FC":
+        return "PF" if height and height < 83 else "C"
+    # ponytail: unlabeled fallback — pure height buckets; never fires on real BBGM data.
+    if height:
+        if height < 76:
+            return "PG"
+        if height < 79:
+            return "SG"
+        if height < 81:
+            return "SF"
+        if height < 83:
+            return "PF"
+    return "C"
+
+
+def normalize_positions(data: dict[str, Any]) -> None:
+    """VISUAL-only: collapse the 9 BBGM position labels to the 5 canonical slots
+    in-memory, so every rendered surface shows a single position per player. The
+    source JSON on disk is never modified."""
+    canon_by_pid: dict[int, str] = {}
+    for p in data.get("players", []):
+        latest = None
+        for r in p.get("ratings") or []:
+            r["pos"] = canonical_pos(p, r)
+            latest = r["pos"]
+        if latest and p.get("pid") is not None:
+            canon_by_pid[safe_int(p.get("pid"))] = latest
+    # Box scores carry their own denormalized pos snapshot — map by pid to match.
+    for g in data.get("games", []):
+        for t in g.get("teams", []):
+            for pb in t.get("players", []):
+                c = canon_by_pid.get(safe_int(pb.get("pid")))
+                if c:
+                    pb["pos"] = c
+
+
+def contract_expiring_players(players: list[dict[str, Any]], exp_year: int, rostered_only: bool = True) -> list[dict[str, Any]]:
+    rows = []
+    for player in players:
+        if player.get("retiredYear") is not None:
+            continue
+        tid = safe_int(player.get("tid"), RETIRED_TID)
+        if rostered_only and tid < 0:
+            continue
+        if not rostered_only and tid < FREE_AGENT_TID:
+            continue
+        if safe_int((player.get("contract") or {}).get("exp"), -1) == exp_year:
+            rows.append(player)
+    return rows
+
+
+def regular_stats_since(player: dict[str, Any], start_season: int) -> list[dict[str, Any]]:
+    return sorted(
+        [s for s in player.get("stats", []) if not s.get("playoffs") and s.get("season", -10**9) >= start_season],
+        key=lambda s: (s.get("season", 0), s.get("tid", 0)),
+    )
+
+
+def playoff_stats_since(player: dict[str, Any], start_season: int) -> list[dict[str, Any]]:
+    return sorted(
+        [s for s in player.get("stats", []) if s.get("playoffs") and s.get("season", -10**9) >= start_season],
+        key=lambda s: (s.get("season", 0), s.get("tid", 0)),
+    )
+
+
+def latest_regular_stat(player: dict[str, Any], start_season: int, season: int | None = None) -> dict[str, Any]:
+    rows = regular_stats_since(player, start_season)
+    if season is not None:
+        same_season = [s for s in rows if s.get("season") == season]
+        if same_season:
+            rows = same_season
+    return max(rows, key=lambda s: (s.get("season", -10**9), s.get("gp", 0)), default={})
+
+
+def stat_gp(stat: dict[str, Any]) -> float:
+    try:
+        return float(stat.get("gp") or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def per_game(stat: dict[str, Any], key: str) -> float | None:
+    gp = stat_gp(stat)
+    if gp <= 0:
+        return 0.0
+    return float(stat.get(key) or 0) / gp
+
+
+def per36(stat: dict[str, Any], key: str) -> float | None:
+    minutes = safe_float(stat.get("min"))
+    if minutes <= 0:
+        return None
+    return 36.0 * safe_float(stat.get(key)) / minutes
+
+
+def per36_trb(stat: dict[str, Any]) -> float | None:
+    minutes = safe_float(stat.get("min"))
+    if minutes <= 0:
+        return None
+    return 36.0 * total_rebounds(stat) / minutes
+
+
+def made_pct(made: Any, attempts: Any) -> float | None:
+    try:
+        made = float(made or 0)
+        attempts = float(attempts or 0)
+    except (TypeError, ValueError):
+        return None
+    if attempts <= 0:
+        return None
+    return 100 * made / attempts
+
+
+def efg_pct(stat: dict[str, Any]) -> float | None:
+    fga = float(stat.get("fga") or 0)
+    if fga <= 0:
+        return None
+    return 100 * (float(stat.get("fg") or 0) + 0.5 * float(stat.get("tp") or 0)) / fga
+
+
+def ts_pct(stat: dict[str, Any]) -> float | None:
+    denom = 2 * (float(stat.get("fga") or 0) + 0.44 * float(stat.get("fta") or 0))
+    if denom <= 0:
+        return None
+    return 100 * float(stat.get("pts") or 0) / denom
+
+
+def ratio(numerator: Any, denominator: Any) -> float | None:
+    try:
+        numerator = float(numerator or 0)
+        denominator = float(denominator or 0)
+    except (TypeError, ValueError):
+        return None
+    if denominator <= 0:
+        return None
+    return numerator / denominator
+
+
+def turnover_pct(stat: dict[str, Any]) -> float | None:
+    denom = float(stat.get("fga") or 0) + 0.44 * float(stat.get("fta") or 0) + float(stat.get("tov") or 0)
+    if denom <= 0:
+        return None
+    return 100 * float(stat.get("tov") or 0) / denom
+
+
+def total_rebounds(stat: dict[str, Any]) -> float:
+    return float(stat.get("orb") or 0) + float(stat.get("drb") or 0)
+
+
+def total_2p(stat: dict[str, Any]) -> float:
+    return float(stat.get("fg") or 0) - float(stat.get("tp") or 0)
+
+
+def total_2pa(stat: dict[str, Any]) -> float:
+    return float(stat.get("fga") or 0) - float(stat.get("tpa") or 0)
+
+
+def combine_stat_rows(rows: Iterable[dict[str, Any]]) -> dict[str, Any]:
+    rows = list(rows)
+    combined: dict[str, Any] = {"season": "Career", "tid": TOTALS_TID, "playoffs": rows[0].get("playoffs") if rows else False}
+    for key in TOTAL_STAT_FIELDS:
+        combined[key] = sum(float(s.get(key) or 0) for s in rows)
+
+    total_min = float(combined.get("min") or 0)
+    weighted = ["per", "astp", "blkp", "drbp", "orbp", "stlp", "trbp", "usgp", "drtg", "ortg", "pm100", "onOff100", "obpm", "dbpm"]
+    for key in weighted:
+        if total_min > 0:
+            combined[key] = sum(float(s.get(key) or 0) * float(s.get("min") or 0) for s in rows) / total_min
+        else:
+            combined[key] = 0
+
+    for key in ["ewa", "ows", "dws", "vorp"]:
+        combined[key] = sum(float(s.get(key) or 0) for s in rows)
+    return combined
+
+
+def sort_value(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, (int, float)) and math.isfinite(float(value)):
+        return str(value)
+    return esc(value)
+
+
+def td(content: Any, sort: Any = None, cls: str = "", html_content: bool = True, style: str = "") -> str:
+    sort_attr = f' data-sort="{sort_value(sort)}"' if sort is not None else ""
+    cls_attr = f' class="{esc(cls)}"' if cls else ""
+    style_attr = f' style="{esc(style)}"' if style else ""
+    body = str(content) if html_content else esc(content)
+    return f"<td{cls_attr}{sort_attr}{style_attr}>{body}</td>"
+
+
+GLOSSARY = {
+    "SOS": "Strength of schedule: average win% of remaining opponents",
+    "MOV": "Margin of victory per game",
+    "SRS": "Simple Rating System: scoring margin adjusted for opponent strength",
+    "Finals%": "Simulated chance of reaching the Finals",
+    "Title%": "Simulated chance of winning the championship",
+    "GB": "Games behind the leader",
+    "PS": "Points scored per game",
+    "PA": "Points allowed per game",
+    "PER": "Player Efficiency Rating (league average is 15)",
+    "WS": "Win Shares: estimated wins contributed",
+    "VORP": "Value Over Replacement Player",
+    "OBPM": "Offensive Box Plus/Minus per 100 possessions",
+    "DBPM": "Defensive Box Plus/Minus per 100 possessions",
+    "BPM": "Box Plus/Minus per 100 possessions vs league average",
+    "STL": "Steals per game",
+    "BLK": "Blocks per game",
+    "USG%": "Usage: share of team possessions used while on the floor",
+    "ORtg": "Points produced per 100 possessions",
+    "DRtg": "Points allowed per 100 possessions",
+    "eFG%": "Effective FG%: counts threes as 1.5 field goals",
+    "TS%": "True shooting: efficiency including threes and free throws",
+    "TOV%": "Turnovers per 100 plays",
+    "ORB%": "Share of available offensive rebounds grabbed",
+    "FT/FGA": "Free throws made per field-goal attempt",
+    "GmSc": "Game Score: single-game performance rating",
+    "Pace": "Possessions per game",
+    "Net": "Net rating: ORtg minus DRtg",
+    "PO%": "Simulated chance to finish top 4 and make the playoffs",
+    "Seed 1%": "Simulated chance to finish with the best record",
+    "Magic#": "Wins (or 5th-place losses) needed to clinch a playoff spot",
+    "Elim#": "Losses (or 4th-place wins) until playoff elimination",
+    "Value": "Basketball GM trade value (higher = more coveted)",
+    "Form": "Last 5 games vs season average, by Game Score",
+    "WS/$M": "Win Shares per million of current salary",
+    "YWT": "Years with team",
+    "Ovr": "Current overall rating",
+    "Pot": "Potential rating ceiling",
+}
+
+
+def th(label: str, cls: str = "", scope: str = "col") -> str:
+    cls_attr = f' class="{esc(cls)}"' if cls else ""
+    scope_attr = f' scope="{esc(scope)}"' if scope else ""
+    title = GLOSSARY.get(label)
+    title_attr = f' title="{esc(title)}"' if title else ""
+    return f"<th{scope_attr}{cls_attr}{title_attr}>{esc(label)}</th>"
+
+
+POS_FILTER_OPTIONS = [
+    ("all", "All positions"), ("G", "Guards"), ("F", "Forwards"), ("C", "Centers"),
+    ("PG", "PG"), ("SG", "SG"), ("SF", "SF"), ("PF", "PF"),
+]
+
+
+def table_html(headers: list, rows: list[str], table_id: str | None = None, empty_message: str = "No players found.", wrap_cls: str = "", caption: str | None = None, pos_filter: bool = False) -> str:
+    table_id_attr = f' id="{esc(table_id)}"' if table_id else ""
+    if not rows:
+        return f'<p class="empty-state">{esc(empty_message)}</p>'
+    header_html = "".join(th(label) if isinstance(label, str) else th(label[0], label[1]) for label in headers)
+    body_html = "\n".join(row if row.lstrip().startswith("<tr") else f"<tr>{row}</tr>" for row in rows)
+    wrap_cls_attr = f" {wrap_cls}" if wrap_cls else ""
+    caption_text = caption or (table_id.replace("-", " ").title() if table_id else "")
+    caption_html = f'<caption class="sr-only">{esc(caption_text)}</caption>' if caption_text else ""
+    # Optional position filter: only when a "Pos" column exists and the table has an id (for JS wiring).
+    pos_bar, pos_attr = "", ""
+    if pos_filter and table_id:
+        labels = [label if isinstance(label, str) else label[0] for label in headers]
+        if "Pos" in labels:
+            pos_attr = f' data-pos-col="{labels.index("Pos")}"'
+            options = "".join(f'<option value="{esc(v)}">{esc(l)}</option>' for v, l in POS_FILTER_OPTIONS)
+            pos_bar = (f'<div class="toolbar pos-filter-bar"><label class="select-label">Position '
+                       f'<select data-pos-filter="{esc(table_id)}">{options}</select></label></div>')
+    return f"""
+    {pos_bar}
+    <div class="table-wrap{wrap_cls_attr}">
+      <table{table_id_attr}{pos_attr} data-sortable>
+        {caption_html}
+        <thead><tr>{header_html}</tr></thead>
+        <tbody>
+          {body_html}
+        </tbody>
+      </table>
+    </div>
+    """
+
+
+def team_slug(team: dict[str, Any]) -> str:
+    return f"{slugify(team.get('region', 'team'))}-{slugify(team.get('name', str(team.get('tid', ''))))}-{team.get('tid')}"
+
+
+def player_slug(player: dict[str, Any]) -> str:
+    return f"{slugify(player_name(player), 'player')}-{player.get('pid')}"
+
+
+def team_url(team: dict[str, Any], root: str = "") -> str:
+    return f"{root}teams/{team_slug(team)}.html"
+
+
+def player_url(player: dict[str, Any], root: str = "") -> str:
+    return f"{root}players/{player_slug(player)}.html"
+
+
+def team_label(tid: Any, teams_by_tid: dict[int, dict[str, Any]], root: str = "", as_link: bool = True) -> str:
+    if tid == FREE_AGENT_TID:
+        return f'<a href="{root}free-agency.html">FA</a>' if as_link else "FA"
+    if tid == DRAFT_PROSPECT_TID:
+        return "Draft"
+    if tid == RETIRED_TID:
+        return "Retired"
+    if tid == TOTALS_TID:
+        return "TOT"
+    team = teams_by_tid.get(tid)
+    if not team:
+        return esc(tid)
+    label = esc(team.get("abbrev") or team.get("name") or tid)
+    if not as_link:
+        return label
+    return f'<a href="{team_url(team, root)}">{label}</a>'
+
+
+def player_link(player: dict[str, Any], root: str = "", show_number: bool = True) -> str:
+    number = player.get("jerseyNumber")
+    number_html = f'<span class="muted number">{esc(number)}</span> ' if show_number and number not in (None, "") else ""
+    skills = latest_rating(player).get("skills") or []
+    skill_html = "".join(f'<span class="mini-skill">{esc(skill)}</span>' for skill in skills)
+    return f'{number_html}<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a> {skill_html}'
+
+
+MOOD_LABELS = {"F": "Fame", "L": "Loyalty", "W": "Winning", "$": "Money"}
+
+
+def mood_html(player: dict[str, Any]) -> str:
+    mood = player.get("moodTraits") or []
+    if not mood:
+        return "—"
+    return " ".join(
+        f'<span class="mood-chip" title="Values {esc(MOOD_LABELS.get(m, m))}">{esc(m)}</span>'
+        for m in mood
+    )
+
+
+def injury_html(player: dict[str, Any]) -> str:
+    injury = player.get("injury") or {}
+    injury_type = injury.get("type") or "Healthy"
+    games = injury.get("gamesRemaining")
+    if injury_type == "Healthy" or not injury_type:
+        return '<span class="healthy">Healthy</span>'
+    games_text = f" ({games} games)" if games else ""
+    return f'<span class="injured">{esc(injury_type)}{esc(games_text)}</span>'
+
+
+def nav_html(teams: list[dict[str, Any]], root: str, active: str = "") -> str:
+    def link(label: str, href: str, key: str) -> str:
+        klass = "active" if key == active else ""
+        current = ' aria-current="page"' if key == active else ""
+        return f'<a class="{klass}" href="{href}"{current}>{esc(label)}</a>'
+
+    main_links = [
+        link("Home", f"{root}index.html", "home"),
+        link("Schedule", f"{root}schedule.html", "schedule"),
+        link("Players", f"{root}players/index.html", "players"),
+        link("Free Agency", f"{root}free-agency.html", "free-agency"),
+        link("Draft", f"{root}draft.html", "draft"),
+        link("Trade", f"{root}trade.html", "trade"),
+        link("History", f"{root}history.html", "history"),
+        link("Records", f"{root}records.html", "records"),
+    ]
+    team_links = []
+    for team in sorted(teams, key=team_sort_key):
+        key = f"team-{team.get('tid')}"
+        klass = "active" if key == active else ""
+        current = ' aria-current="page"' if key == active else ""
+        team_links.append(
+            f'<a class="{klass}" data-tid="{esc(team.get("tid"))}" data-abbrev="{esc(team.get("abbrev", ""))}" '
+            f'href="{team_url(team, root)}"{current}>{esc(team_full_name(team))}</a>'
+        )
+
+    dropdown_class = "team-dropdown active" if active.startswith("team-") else "team-dropdown"
+    return f"""
+    <header class="site-header">
+      <div class="brand"><a href="{root}index.html">SMP Basketball League</a></div>
+      <div class="nav-search">
+        <input type="search" placeholder="Search players &amp; teams…" data-global-search autocomplete="off" aria-label="Search players and teams" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="global-search-results" aria-activedescendant="">
+        <div class="search-results" id="global-search-results" data-search-results role="listbox" hidden></div>
+      </div>
+      <button class="nav-burger" type="button" aria-label="Toggle menu" aria-controls="primary-nav" aria-expanded="false" data-nav-burger>☰ Menu</button>
+      <nav class="primary-nav" id="primary-nav">
+        {''.join(main_links)}
+        <details class="{dropdown_class}">
+          <summary>Teams</summary>
+          <div class="team-menu" aria-label="Teams">{''.join(team_links)}</div>
+        </details>
+      </nav>
+    </header>
+    """
+
+
+def page_html(title: str, body: str, teams: list[dict[str, Any]], root: str = "", active: str = "") -> str:
+    return f"""<!doctype html>
+<html lang="en">
+<head>{THEME_SNIPPET}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{esc(title)} — SMP Basketball League</title>
+  <link rel="icon" href="{FAVICON}">
+  <link rel="stylesheet" href="{root}assets/styles.css">
+  <script defer src="{root}assets/site.js"></script>
+</head>
+<body data-root="{esc(root)}">
+  {nav_html(teams, root, active)}
+  <main class="page-shell">
+    {body}
+  </main>
+</body>
+</html>
+"""
+
+
+def prior_team_tid(player: dict[str, Any], season: int) -> int | None:
+    """The team the player last suited up for BEFORE ``season`` (most recent prior
+    regular-season stat on a real team), or None if they have no prior history.
+
+    Sort is by season only; for a mid-season trade (two rows in the same prior season)
+    this relies on Basketball GM storing stat rows chronologically, so the stable sort
+    keeps the later team last. That holds for these exports.
+    """
+    rows = sorted(
+        (s for s in player.get("stats", []) if isinstance(s, dict) and not s.get("playoffs")
+         and isinstance(s.get("season"), int) and s["season"] < season and safe_int(s.get("tid"), -9) >= 0),
+        key=lambda s: s["season"],
+    )
+    return safe_int(rows[-1].get("tid")) if rows else None
+
+
+def acquisition_html(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    season = SITE_META.get("season")
+    blank = '<span class="muted">—</span>'
+    transactions = [t for t in (player.get("transactions") or []) if isinstance(t, dict)]
+    cur_tid = safe_int(player.get("tid"), -9)
+    prev_tid = prior_team_tid(player, season) if isinstance(season, int) else None
+
+    # (A) Changed teams since last season -> acquired this offseason. A recorded trade
+    # into the current team reads as a trade; otherwise it was a free-agent signing.
+    if isinstance(season, int) and cur_tid >= 0 and prev_tid is not None and prev_tid != cur_tid:
+        trades = [t for t in transactions if t.get("type") == "trade" and safe_int(t.get("tid"), -9) == cur_tid]
+        if trades:
+            from_team = teams_by_tid.get(safe_int(trades[-1].get("fromTid"), -10))
+            return f"Trade '{str(season)[-2:]}" + (f" from {esc(team_abbrev(from_team))}" if from_team else "")
+        return f"FA '{str(season)[-2:]}"
+
+    # (B) Same team (or no history) -> read the most recent draft/trade/FA transaction.
+    relevant = [t for t in transactions if t.get("type") in ("draft", "trade", "freeAgent")]
+    if not relevant:
+        # No recorded move: a brand-new arrival reads as a current-season signing;
+        # a long-tenured player with no transaction just shows blank.
+        return (f"FA '{str(season)[-2:]}" if season and prev_tid is None else blank)
+    tx = relevant[-1]
+    tx_type = tx.get("type")
+    season_short = f"'{str(tx.get('season'))[-2:]}" if tx.get("season") else ""
+    if tx_type == "draft":
+        # The 2026 inaugural draft only seeded rosters, and a "draft" whose season does
+        # not match the player's actual draft year is an expansion/dispersal assignment
+        # (e.g. Ithaca's 2028 expansion draft) -- neither is a real draft, so show nothing.
+        tx_season = safe_int(tx.get("season"))
+        if tx_season == 2026 or tx_season != safe_int((player.get("draft") or {}).get("year"), -1):
+            return blank
+        pick = tx.get("pickNum")
+        pick_text = f" #{pick}" if pick else ""
+        return f"Draft {esc(season_short)}{esc(pick_text)}"
+    if tx_type == "trade":
+        from_team = teams_by_tid.get(safe_int(tx.get("fromTid"), -10))
+        from_text = f" from {team_abbrev(from_team)}" if from_team else ""
+        return f"Trade {esc(season_short)}{esc(from_text)}"
+    return f"FA {esc(season_short)}"
+
+
+def roster_row(player: dict[str, Any], season: int, start_season: int, root: str, teams_by_tid: dict[int, dict[str, Any]] | None = None) -> str:
+    rating = latest_rating(player, season)
+    stat = latest_regular_stat(player, start_season, season)
+    gp = stat_gp(stat)
+    has_bpm = stat.get("obpm") is not None or stat.get("dbpm") is not None
+    bpm = (safe_float(stat.get("obpm")) + safe_float(stat.get("dbpm"))) if has_bpm else None
+    return "".join([
+        td(player_link(player, root), sort=player_name(player), cls="name-cell"),
+        td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
+        td(age(player, season), sort=(season - (player.get("born") or {}).get("year", season) if isinstance((player.get("born") or {}).get("year"), int) else None)),
+        td(rating_delta_html(player, "ovr", rating), sort=rating.get("ovr")),
+        td(rating_delta_html(player, "pot", rating), sort=rating.get("pot")),
+        td(fmt_contract(player), sort=(player.get("contract") or {}).get("amount")),
+        td(injury_html(player), sort=(player.get("injury") or {}).get("gamesRemaining") or 0),
+        td(fmt_number(gp, 0), sort=gp),
+        td(fmt_number(per_game(stat, "min"), 1), sort=per_game(stat, "min")),
+        td(fmt_number(per_game(stat, "pts"), 1), sort=per_game(stat, "pts")),
+        td(fmt_number((float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0, 1), sort=((float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0)),
+        td(fmt_number(per_game(stat, "ast"), 1), sort=per_game(stat, "ast")),
+        td(fmt_number(per_game(stat, "stl"), 1), sort=per_game(stat, "stl")),
+        td(fmt_number(per_game(stat, "blk"), 1), sort=per_game(stat, "blk")),
+        td(fmt_signed(bpm, 1) if bpm is not None else "—", sort=bpm),
+        td(acquisition_html(player, teams_by_tid or {}), sort=((player.get("transactions") or [{}])[-1] or {}).get("season")),
+    ])
+
+
+RATING_GROUP_STARTS = {"hgt", "ins", "oiq"}
+
+
+def build_game_logs(data: dict[str, Any], season: int) -> dict[int, list[dict[str, Any]]]:
+    """pid -> chronological list of single-game entries for the season."""
+    logs: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for game in data.get("games", []):
+        if game.get("season") != season:
+            continue
+        item = normalize_game_item(game)
+        if item is None:
+            continue
+        for own_key, opp_key in (("home_box", "away_box"), ("away_box", "home_box")):
+            own = item.get(own_key) or {}
+            opp = item.get(opp_key) or {}
+            for box in own.get("players") or []:
+                pid = safe_int(box.get("pid"), -1)
+                if pid < 0:
+                    continue
+                logs[pid].append({
+                    "day": safe_int(item.get("day")),
+                    "gid": item.get("gid"),
+                    "tid": own.get("tid"),
+                    "opp_tid": opp.get("tid"),
+                    "home": own_key == "home_box",
+                    "team_pts": own.get("pts"),
+                    "opp_pts": opp.get("pts"),
+                    "box": box,
+                    "overtimes": safe_int(game.get("overtimes")),
+                    "playoffs": bool(game.get("playoffs")),
+                })
+    for entries in logs.values():
+        entries.sort(key=game_sort_key)
+    return logs
+
+
+def team_stat_per_game(stat: dict[str, Any], key: str) -> float | None:
+    gp = safe_float(stat.get("gp"), 0.0)
+    if gp <= 0:
+        return None
+    return safe_float(stat.get(key), 0.0) / gp
+
+
+def team_mov(stat: dict[str, Any]) -> float | None:
+    gp = safe_float(stat.get("gp"), 0.0)
+    if gp <= 0:
+        return None
+    return (safe_float(stat.get("pts"), 0.0) - safe_float(stat.get("oppPts"), 0.0)) / gp
+
+
+def last_ten_text(last_ten: Any) -> str:
+    if not isinstance(last_ten, list) or not last_ten:
+        return "—"
+    wins = sum(1 for result in last_ten if result)
+    return f"{wins}-{len(last_ten) - wins}"
+
+
+def last_ten_dots(last_ten: Any) -> str:
+    if not isinstance(last_ten, list) or not last_ten:
+        return "—"
+    # BBGM stores most-recent first; show oldest -> newest left to right.
+    ordered = list(reversed(last_ten))
+    dots = "".join(f'<i class="l10-dot {"l10-w" if result else "l10-l"}"></i>' for result in ordered)
+    title = f"Last {len(ordered)}: {last_ten_text(last_ten)}"
+    return f'<span class="l10-dots" title="{title}">{dots}</span>'
+
+
+def streak_text(streak: Any) -> str:
+    try:
+        streak = int(streak)
+    except (TypeError, ValueError):
+        return "—"
+    if streak > 0:
+        return f"Won {streak}"
+    if streak < 0:
+        return f"Lost {abs(streak)}"
+    return "—"
+
+
+def clinch_html(team_season: dict[str, Any]) -> str:
+    marker = team_season.get("clinchedPlayoffs")
+    if not marker:
+        return ""
+    return f' <span class="clinch">{esc(marker)}</span>'
+
+
+def team_anchor(team: dict[str, Any], root: str = "") -> str:
+    return f'<a href="{team_url(team, root)}">{esc(team_full_name(team))}</a>'
+
+
+def standings_order(teams: list[dict[str, Any]], season: int) -> list[int]:
+    rows = []
+    for team in teams:
+        team_season = latest_team_season(team, season)
+        won = safe_float(team_season.get("won"))
+        lost = safe_float(team_season.get("lost"))
+        pct = win_pct(won, lost)
+        rows.append((-(pct if pct is not None else -1), -won, lost, team_full_name(team), safe_int(team.get("tid"))))
+    rows.sort()
+    return [row[4] for row in rows]
+
+
+def seed_cell_style(pct: float) -> str:
+    """Single-hue intensity: faint for unlikely seeds, strong for likely ones."""
+    if pct < 0.5:
+        return ""
+    alpha = 0.06 + 0.55 * min(1.0, pct / 100.0)
+    return f"background-color: rgba(91,157,255,{alpha:.2f})"
+
+
+def heat_style(value: Any, lo: float, hi: float, direction: int) -> str:
+    """Background tint from red (worst) to green (best) across a column's range."""
+    if direction == 0 or value is None:
+        return ""
+    value = safe_float(value, float("nan"))
+    if not math.isfinite(value) or hi - lo <= 1e-12:
+        return ""
+    frac = max(0.0, min(1.0, (value - lo) / (hi - lo)))
+    if direction < 0:
+        frac = 1.0 - frac
+    hue = 4 + frac * 126
+    return f"background-color: hsla({hue:.0f}, 55%, 41%, .45)"
+
+
+def season_regular_stat(player: dict[str, Any], season: int) -> dict[str, Any]:
+    rows = [s for s in player.get("stats", []) if isinstance(s, dict) and not s.get("playoffs") and s.get("season") == season]
+    if not rows:
+        return {}
+    if len(rows) == 1:
+        return dict(rows[0])
+    combined = combine_stat_rows(rows)
+    combined["season"] = season
+    combined["tid"] = rows[-1].get("tid", player.get("tid"))
+    return combined
+
+
+def previous_regular_stat(player: dict[str, Any], season: int) -> dict[str, Any]:
+    rows = [s for s in player.get("stats", []) if isinstance(s, dict) and not s.get("playoffs") and isinstance(s.get("season"), int) and s.get("season") < season]
+    if not rows:
+        return {}
+    latest = max(s.get("season", -10**9) for s in rows)
+    latest_rows = [s for s in rows if s.get("season") == latest]
+    if len(latest_rows) == 1:
+        return dict(latest_rows[0])
+    combined = combine_stat_rows(latest_rows)
+    combined["season"] = latest
+    combined["tid"] = latest_rows[-1].get("tid", player.get("tid"))
+    return combined
+
+
+def team_abbrev(team: dict[str, Any] | None, fallback_tid: Any = None) -> str:
+    if team:
+        return str(team.get("abbrev") or team.get("region") or team.get("name") or fallback_tid or "—")
+    return f"T{fallback_tid}" if fallback_tid is not None else "—"
+
+
+def team_abbrev_for_tid(tid: Any, teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    try:
+        tid_int = int(tid)
+    except (TypeError, ValueError):
+        return "—"
+    return team_abbrev(teams_by_tid.get(tid_int), tid_int)
+
+
+def team_full_for_tid(tid: Any, teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    try:
+        tid_int = int(tid)
+    except (TypeError, ValueError):
+        return "Unknown Team"
+    return team_full_name(teams_by_tid.get(tid_int, {"region": f"Team {tid_int}", "name": ""})).strip()
+
+
+def safe_int(value: Any, default: int = 0) -> int:
+    try:
+        if value is None or value == "":
+            return default
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def game_sort_key(item: dict[str, Any]) -> tuple[int, int, int, Any]:
+    gid = item.get("gid")
+    try:
+        gid_key: tuple[int, Any] = (0, int(gid))
+    except (TypeError, ValueError):
+        gid_key = (1, "" if gid is None else str(gid))
+    return (safe_int(item.get("day")), 1 if item.get("playoffs") else 0, gid_key[0], gid_key[1])
+
+
+def active_team_ids(teams: list[dict[str, Any]]) -> list[int]:
+    return [int(team.get("tid")) for team in sorted(teams, key=team_sort_key) if team.get("tid") is not None and not team.get("disabled")]
+
+
+def phase_value(data: dict[str, Any]) -> int:
+    return safe_int((data.get("gameAttributes") or {}).get("phase"), 0)
+
+
+def regular_season_length(data: dict[str, Any], season: int) -> int:
+    value = get_attr_value((data.get("gameAttributes") or {}).get("numGames"), season)
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def latest_game_season(data: dict[str, Any]) -> int | None:
+    seasons = [g.get("season") for g in data.get("games", []) if isinstance(g.get("season"), int)]
+    return max(seasons) if seasons else None
+
+
+def scheduled_season_from_raw(data: dict[str, Any]) -> int | None:
+    raw = data.get("schedule") or data.get("scheduledGames") or []
+    seasons = [g.get("season") for g in raw if isinstance(g, dict) and isinstance(g.get("season"), int)]
+    return max(seasons) if seasons else None
+
+
+def inferred_upcoming_schedule_season(data: dict[str, Any]) -> int:
+    raw_season = scheduled_season_from_raw(data)
+    if raw_season is not None:
+        return raw_season
+    season = current_season(data)
+    # Basketball GM phase 8 is after re-signing/free agency. At that point the next useful
+    # regular-season hub is usually the upcoming season rather than the completed season.
+    if phase_value(data) >= 8:
+        return season + 1
+    return season
+
+
+def game_slug_from_gid(gid: Any) -> str:
+    return slugify(str(gid), "game")
+
+
+def game_url(item: dict[str, Any], root: str = "") -> str:
+    return f"{root}games/{game_slug_from_gid(item.get('gid'))}.html"
+
+
+def is_completed_game_item(item: dict[str, Any]) -> bool:
+    return bool(item.get("game")) and item.get("home_pts") is not None and item.get("away_pts") is not None
+
+
+def normalize_game_item(game: dict[str, Any]) -> dict[str, Any] | None:
+    teams_box = game.get("teams") or []
+    if len(teams_box) < 2:
+        return None
+    # Basketball GM stores the home team first in game box-score objects.
+    home_box = teams_box[0]
+    away_box = teams_box[1]
+    home_tid = home_box.get("tid")
+    away_tid = away_box.get("tid")
+    if home_tid is None or away_tid is None:
+        return None
+    return {
+        "gid": game.get("gid"),
+        "day": safe_int(game.get("day"), 0),
+        "season": safe_int(game.get("season"), current_season({})),
+        "home_tid": safe_int(home_tid),
+        "away_tid": safe_int(away_tid),
+        "home_pts": home_box.get("pts"),
+        "away_pts": away_box.get("pts"),
+        "home_box": home_box,
+        "away_box": away_box,
+        "game": game,
+        "source": "game",
+        "playoffs": bool(game.get("playoffs")),
+    }
+
+
+def completed_game_items(data: dict[str, Any], season: int | None = None, playoffs: bool | None = None) -> list[dict[str, Any]]:
+    items: list[dict[str, Any]] = []
+    for game in data.get("games", []):
+        if season is not None and game.get("season") != season:
+            continue
+        item = normalize_game_item(game)
+        if item is None:
+            continue
+        if playoffs is not None and bool(item.get("playoffs")) is not playoffs:
+            continue
+        items.append(item)
+    items.sort(key=game_sort_key)
+    return items
+
+
+def extract_tid_from_team_obj(obj: Any) -> int | None:
+    if isinstance(obj, dict):
+        for key in ["tid", "id", "teamId"]:
+            if obj.get(key) is not None:
+                return safe_int(obj.get(key))
+    elif obj is not None:
+        return safe_int(obj)
+    return None
+
+
+def normalize_schedule_entry(entry: dict[str, Any], index: int, default_season: int) -> dict[str, Any] | None:
+    home_tid = None
+    away_tid = None
+    for home_key in ["homeTid", "home", "homeTeam", "homeTeamId"]:
+        if entry.get(home_key) is not None:
+            home_tid = extract_tid_from_team_obj(entry.get(home_key))
+            break
+    for away_key in ["awayTid", "away", "awayTeam", "awayTeamId"]:
+        if entry.get(away_key) is not None:
+            away_tid = extract_tid_from_team_obj(entry.get(away_key))
+            break
+
+    teams_list = entry.get("teams") or []
+    if (home_tid is None or away_tid is None) and isinstance(teams_list, list) and len(teams_list) >= 2:
+        home_candidates = [t for t in teams_list if isinstance(t, dict) and t.get("home") is True]
+        away_candidates = [t for t in teams_list if isinstance(t, dict) and t.get("home") is False]
+        if home_candidates and away_candidates:
+            home_tid = extract_tid_from_team_obj(home_candidates[0])
+            away_tid = extract_tid_from_team_obj(away_candidates[0])
+        else:
+            # Match Basketball GM box-score ordering: first team is home, second team is away.
+            home_tid = extract_tid_from_team_obj(teams_list[0])
+            away_tid = extract_tid_from_team_obj(teams_list[1])
+
+    if home_tid is None or away_tid is None:
+        return None
+
+    home_pts = entry.get("homePts")
+    away_pts = entry.get("awayPts")
+    if home_pts is None or away_pts is None:
+        # Some exports store scheduled games in the same shape as completed games.
+        try:
+            if isinstance(teams_list, list) and len(teams_list) >= 2:
+                home_pts = teams_list[0].get("pts") if isinstance(teams_list[0], dict) else home_pts
+                away_pts = teams_list[1].get("pts") if isinstance(teams_list[1], dict) else away_pts
+        except Exception:
+            pass
+
+    return {
+        "gid": entry.get("gid") or f"schedule-{default_season}-{index}",
+        "day": safe_int(entry.get("day"), index + 1),
+        "season": safe_int(entry.get("season"), default_season),
+        "home_tid": home_tid,
+        "away_tid": away_tid,
+        "home_pts": home_pts,
+        "away_pts": away_pts,
+        "home_box": None,
+        "away_box": None,
+        "game": None,
+        "source": "schedule",
+        "playoffs": bool(entry.get("playoffs")),
+    }
+
+
+def raw_schedule_items(data: dict[str, Any], teams: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    raw = data.get("schedule") or data.get("scheduledGames") or []
+    if not isinstance(raw, list) or not raw:
+        return []
+    default_season = scheduled_season_from_raw(data) or inferred_upcoming_schedule_season(data)
+    items: list[dict[str, Any]] = []
+    for i, entry in enumerate(raw):
+        if not isinstance(entry, dict):
+            continue
+        item = normalize_schedule_entry(entry, i, default_season)
+        if item is not None:
+            items.append(item)
+    items.sort(key=game_sort_key)
+    return items
+
+
+def round_robin_rounds(team_ids: list[int]) -> list[list[tuple[int, int]]]:
+    if not team_ids:
+        return []
+    ids: list[int | None] = list(team_ids)
+    if len(ids) % 2:
+        ids.append(None)
+    n = len(ids)
+    arr = ids[:]
+    rounds: list[list[tuple[int, int]]] = []
+    for _ in range(n - 1):
+        pairs: list[tuple[int, int]] = []
+        for i in range(n // 2):
+            a = arr[i]
+            b = arr[n - 1 - i]
+            if a is not None and b is not None:
+                pairs.append((int(a), int(b)))
+        rounds.append(pairs)
+        arr = [arr[0], arr[-1], *arr[1:-1]]
+    return rounds
+
+
+def generated_schedule_items(data: dict[str, Any], teams: list[dict[str, Any]], schedule_season: int | None = None, schedule_days: int | None = None) -> list[dict[str, Any]]:
+    """Round-robin schedule for a season with no exported schedule.
+
+    Only the projection model consumes this (see simulate_league) — the schedule page, team
+    pages and game pages deliberately never show synthetic matchups.
+    """
+    team_ids = active_team_ids(teams)
+    if len(team_ids) < 2:
+        return []
+    season = schedule_season if schedule_season is not None else inferred_upcoming_schedule_season(data)
+    games_per_team = regular_season_length(data, season)
+    if games_per_team <= 0:
+        games_per_team = regular_season_length(data, current_season(data))
+    if games_per_team <= 0:
+        games_per_team = max(1, len(team_ids) - 1)
+    series_count = max(1, round(games_per_team / max(1, len(team_ids) - 1)))
+    rounds = round_robin_rounds(team_ids)
+    if not rounds:
+        return []
+
+    items: list[dict[str, Any]] = []
+    raw_day = 1
+    total_game_days = len(rounds) * series_count
+    if schedule_days is None and games_per_team == 45 and len(team_ids) == 10:
+        schedule_days = 46
+    off_days = max(0, safe_int(schedule_days, total_game_days) - total_game_days) if schedule_days else 0
+    off_after = [math.ceil(total_game_days * (i + 1) / (off_days + 1)) for i in range(off_days)]
+
+    gid_counter = 1
+    for series_index in range(series_count):
+        for round_index, pairs in enumerate(rounds):
+            day = raw_day + sum(1 for cutoff in off_after if raw_day > cutoff)
+            for pair_index, (a, b) in enumerate(pairs):
+                if (round_index + series_index + pair_index) % 2 == 0:
+                    home_tid, away_tid = b, a
+                else:
+                    home_tid, away_tid = a, b
+                items.append({
+                    "gid": f"generated-{season}-{gid_counter}",
+                    "day": day,
+                    "season": season,
+                    "home_tid": home_tid,
+                    "away_tid": away_tid,
+                    "home_pts": None,
+                    "away_pts": None,
+                    "home_box": None,
+                    "away_box": None,
+                    "game": None,
+                    "source": "generated",
+                    "playoffs": False,
+                })
+                gid_counter += 1
+            raw_day += 1
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    items.sort(key=lambda item: (safe_int(item.get("day")), team_abbrev_for_tid(item.get("home_tid"), teams_by_tid), team_abbrev_for_tid(item.get("away_tid"), teams_by_tid)))
+    return items
+
+
+def schedule_items_for_page(data: dict[str, Any], teams: list[dict[str, Any]], schedule_season: int | None = None, schedule_days: int | None = None) -> tuple[list[dict[str, Any]], str]:
+    raw_items = raw_schedule_items(data, teams)
+    if schedule_season is not None and raw_items:
+        raw_items = [item for item in raw_items if safe_int(item.get("season")) == schedule_season]
+    if raw_items:
+        season = max(safe_int(item.get("season")) for item in raw_items)
+        return raw_items, f"Season {season} schedule"
+
+    # When the caller explicitly asks for a past season, prefer the completed
+    # regular-season game log over a synthetic schedule.
+    if schedule_season is not None:
+        completed_regular = completed_game_items(data, schedule_season, playoffs=False)
+        if completed_regular:
+            return completed_regular, f"Season {schedule_season} completed schedule"
+
+    # No synthetic fallback here on purpose: pages only ever show real games. The projected
+    # schedule lives inside simulate_league.
+    latest = latest_game_season(data)
+    if latest is not None:
+        return completed_game_items(data, latest, playoffs=False), f"Season {latest} completed schedule"
+    return [], "Schedule"
+
+
+def merge_schedule_and_completed(schedule_items: list[dict[str, Any]], completed_items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    completed_by_gid = {str(item.get("gid")): item for item in completed_items if item.get("gid") is not None}
+    completed_by_matchup = {
+        (item.get("day"), item.get("home_tid"), item.get("away_tid")): item
+        for item in completed_items
+    }
+    merged: list[dict[str, Any]] = []
+    seen_completed_gids: set[str] = set()
+    seen_matchups: set[tuple[Any, Any, Any]] = set()
+    for item in schedule_items:
+        replacement = None
+        if item.get("gid") is not None:
+            replacement = completed_by_gid.get(str(item.get("gid")))
+        if replacement is None:
+            replacement = completed_by_matchup.get((item.get("day"), item.get("home_tid"), item.get("away_tid")))
+        chosen = replacement or item
+        merged.append(chosen)
+        seen_matchups.add((chosen.get("day"), chosen.get("home_tid"), chosen.get("away_tid")))
+        if replacement is not None and replacement.get("gid") is not None:
+            seen_completed_gids.add(str(replacement.get("gid")))
+    for item in completed_items:
+        gid = str(item.get("gid")) if item.get("gid") is not None else ""
+        matchup = (item.get("day"), item.get("home_tid"), item.get("away_tid"))
+        if gid and gid in seen_completed_gids:
+            continue
+        if matchup in seen_matchups:
+            continue
+        merged.append(item)
+    merged.sort(key=game_sort_key)
+    return merged
+
+
+def score_items_for_page(data: dict[str, Any], teams: list[dict[str, Any]], schedule_season: int | None = None, schedule_days: int | None = None) -> tuple[list[dict[str, Any]], str]:
+    schedule_items, schedule_label = schedule_items_for_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
+    if schedule_items:
+        season = max(safe_int(item.get("season")) for item in schedule_items)
+        completed = completed_game_items(data, season, playoffs=False)
+        return merge_schedule_and_completed(schedule_items, completed), schedule_label.replace("schedule", "scores")
+    latest = latest_game_season(data)
+    if latest is not None:
+        return completed_game_items(data, latest, playoffs=False), f"Season {latest} scores"
+    return [], "Scores"
+
+
+def item_team_box(item: dict[str, Any], tid: int) -> dict[str, Any] | None:
+    if item.get("home_tid") == tid:
+        return item.get("home_box")
+    if item.get("away_tid") == tid:
+        return item.get("away_box")
+    return None
+
+
+def item_team_points(item: dict[str, Any], tid: int) -> Any:
+    if item.get("home_tid") == tid:
+        return item.get("home_pts")
+    if item.get("away_tid") == tid:
+        return item.get("away_pts")
+    return None
+
+
+def game_winner_tid(item: dict[str, Any]) -> int | None:
+    try:
+        home_pts = float(item.get("home_pts"))
+        away_pts = float(item.get("away_pts"))
+    except (TypeError, ValueError):
+        return None
+    if home_pts > away_pts:
+        return int(item.get("home_tid"))
+    if away_pts > home_pts:
+        return int(item.get("away_tid"))
+    return None
+
+
+def game_ot_label(item: dict[str, Any]) -> str:
+    game = item.get("game") or {}
+    boxes = game.get("teams") or []
+    periods = max((len(box.get("ptsQtrs") or []) for box in boxes), default=0)
+    if periods <= 4:
+        return ""
+    extra = periods - 4
+    return "OT" if extra == 1 else f"{extra}OT"
+
+
+def team_schedule_result(item: dict[str, Any], tid: int) -> str:
+    if not is_completed_game_item(item):
+        return "Scheduled"
+    team_pts = item_team_points(item, tid)
+    opp_tid = item.get("away_tid") if item.get("home_tid") == tid else item.get("home_tid")
+    opp_pts = item_team_points(item, opp_tid)
+    if team_pts is None or opp_pts is None:
+        return "Scheduled"
+    result = "W" if safe_float(team_pts) > safe_float(opp_pts) else "L"
+    return f"{result} {fmt_number(team_pts, 0)}-{fmt_number(opp_pts, 0)}"
+
+
+def schedule_matchup_label(item: dict[str, Any], tid: int, teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    home_tid = item.get("home_tid")
+    away_tid = item.get("away_tid")
+    if tid == home_tid:
+        return f"vs. {esc(team_abbrev_for_tid(away_tid, teams_by_tid))}"
+    if tid == away_tid:
+        return f"@ {esc(team_abbrev_for_tid(home_tid, teams_by_tid))}"
+    return "—"
+
+
+def full_matchup_label(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], root: str = "") -> str:
+    away = team_label(item.get("away_tid"), teams_by_tid, root=root, as_link=True)
+    home = team_label(item.get("home_tid"), teams_by_tid, root=root, as_link=True)
+    return f"{away} <span class=\"muted\">@</span> {home}"
+
+
+def compact_score_label(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    if not is_completed_game_item(item):
+        return '<span class="muted">Scheduled</span>'
+    away = team_abbrev_for_tid(item.get("away_tid"), teams_by_tid)
+    home = team_abbrev_for_tid(item.get("home_tid"), teams_by_tid)
+    away_pts = fmt_number(item.get("away_pts"), 0)
+    home_pts = fmt_number(item.get("home_pts"), 0)
+    winner = game_winner_tid(item)
+    away_html = f'<strong>{esc(away)} {away_pts}</strong>' if winner == item.get("away_tid") else f'{esc(away)} {away_pts}'
+    home_html = f'<strong>{esc(home)} {home_pts}</strong>' if winner == item.get("home_tid") else f'{esc(home)} {home_pts}'
+    return f"{away_html} <span class=\"muted\">@</span> {home_html}"
+
+
+def fmt_minutes(value: Any) -> str:
+    try:
+        minutes_float = float(value or 0)
+    except (TypeError, ValueError):
+        return "0:00"
+    if minutes_float <= 0:
+        return "0:00"
+    minutes = int(minutes_float)
+    seconds = int(round((minutes_float - minutes) * 60))
+    if seconds >= 60:
+        minutes += 1
+        seconds -= 60
+    return f"{minutes}:{seconds:02d}"
+
+
+def made_attempted(made: Any, attempted: Any) -> str:
+    return f"{fmt_number(made or 0, 0)}-{fmt_number(attempted or 0, 0)}"
+
+
+def game_score_value(player_box: dict[str, Any]) -> float:
+    fg = safe_float(player_box.get("fg"))
+    fga = safe_float(player_box.get("fga"))
+    ft = safe_float(player_box.get("ft"))
+    fta = safe_float(player_box.get("fta"))
+    orb = safe_float(player_box.get("orb"))
+    drb = safe_float(player_box.get("drb"))
+    stl = safe_float(player_box.get("stl"))
+    ast = safe_float(player_box.get("ast"))
+    blk = safe_float(player_box.get("blk"))
+    pf = safe_float(player_box.get("pf"))
+    tov = safe_float(player_box.get("tov"))
+    pts = safe_float(player_box.get("pts"))
+    return pts + 0.4 * fg - 0.7 * fga - 0.4 * (fta - ft) + 0.7 * orb + 0.3 * drb + stl + 0.7 * ast + 0.7 * blk - 0.4 * pf - tov
+
+
+def game_recap_text(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    winner_tid = game_winner_tid(item)
+    if winner_tid is None:
+        return ""
+    loser_tid = item.get("away_tid") if winner_tid == item.get("home_tid") else item.get("home_tid")
+    margin = abs(safe_float(item.get("home_pts")) - safe_float(item.get("away_pts")))
+    win_box = item.get("home_box") if winner_tid == item.get("home_tid") else item.get("away_box")
+    star = None
+    best = -999.0
+    for box in (win_box or {}).get("players") or []:
+        if safe_float(box.get("min")) <= 0:
+            continue
+        gmsc = game_score_value(box)
+        if gmsc > best:
+            best = gmsc
+            star = box
+    if star is None:
+        return ""
+    star_name = str(star.get("name") or "").split(" ")[-1]
+    pts = fmt_number(star.get("pts"), 0)
+    winner = teams_by_tid.get(safe_int(winner_tid), {}).get("region") or team_abbrev_for_tid(winner_tid, teams_by_tid)
+    loser = teams_by_tid.get(safe_int(loser_tid), {}).get("region") or team_abbrev_for_tid(loser_tid, teams_by_tid)
+    overtimes = safe_int((item.get("game") or {}).get("overtimes"))
+    if overtimes:
+        ot = "OT" if overtimes == 1 else f"{overtimes}OT"
+        return f"{winner} outlasted {loser} in {ot}; {star_name} had {pts}."
+    if margin >= 15:
+        return f"{winner} cruised past {loser} behind {star_name}'s {pts}."
+    if margin <= 5:
+        return f"{winner} edged {loser}; {star_name} led with {pts}."
+    return f"{star_name} led {winner} past {loser} with {pts}."
+
+
+EVENT_BADGES = {
+    "injured": ("INJ", "badge-bad"),
+    "healed": ("FIT", "badge-good"),
+    "playerFeat": ("FEAT", "badge-accent"),
+    "award": ("AWARD", "badge-accent"),
+    "freeAgent": ("SIGN", "badge-good"),
+    "reSigned": ("RE-SIGN", "badge-good"),
+    "release": ("WAIVE", "badge-bad"),
+    "trade": ("TRADE", "badge-accent"),
+    "hallOfFame": ("HOF", "badge-accent"),
+    "retired": ("RETIRE", "badge-muted"),
+    "playoffs": ("RACE", "badge-muted"),
+    "madePlayoffs": ("CLINCH", "badge-good"),
+}
+
+
+def event_player_link(pid: Any, all_players_by_pid: dict[int, dict[str, Any]], root: str, label: str | None = None) -> str:
+    player = all_players_by_pid.get(safe_int(pid, -10))
+    if not player:
+        return esc(label or f"Player {pid}")
+    text = esc(label or player_name(player))
+    # Pages exist only for active (non-retired, rostered or FA) players.
+    if player.get("retiredYear") is None and safe_int(player.get("tid"), RETIRED_TID) >= FREE_AGENT_TID:
+        return f'<a href="{player_url(player, root)}">{text}</a>'
+    return text
+
+
+def rewrite_event_text(text: str, all_players_by_pid: dict[int, dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], season: int, current_gids: set[str], root: str) -> str:
+    def repl(match: re.Match) -> str:
+        href, label = match.group(1), match.group(2)
+        player_match = re.search(r"/player/(\d+)", href)
+        if player_match:
+            return event_player_link(player_match.group(1), all_players_by_pid, root, label=re.sub(r"<[^>]+>", "", label))
+        roster_match = re.search(r"/roster/[A-Za-z]+_(\d+)", href)
+        if roster_match:
+            team = teams_by_tid.get(safe_int(roster_match.group(1)))
+            if team:
+                return f'<a href="{team_url(team, root)}">{esc(re.sub(r"<[^>]+>", "", label))}</a>'
+        game_match = re.search(r"/game_log/[^/]+/(\d+)/(\d+)", href)
+        if game_match and safe_int(game_match.group(1)) == season and game_match.group(2) in current_gids:
+            return f'<a href="{root}games/{game_match.group(2)}.html">{esc(re.sub(r"<[^>]+>", "", label))}</a>'
+        return esc(re.sub(r"<[^>]+>", "", label))
+    return re.sub(r'<a href="([^"]*)">(.*?)</a>', repl, text)
+
+
+def compose_event_html(event: dict[str, Any], all_players_by_pid: dict[int, dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], season: int, current_gids: set[str], root: str) -> str:
+    etype = event.get("type")
+    pids = event.get("pids") or []
+    tids = event.get("tids") or []
+
+    def team_link(tid: Any) -> str:
+        team = teams_by_tid.get(safe_int(tid, -10))
+        if not team:
+            return "FA"
+        return f'<a href="{team_url(team, root)}">{esc(team_abbrev(team))}</a>'
+
+    if etype == "trade":
+        sides = event.get("teams") or []
+        if len(sides) >= 2 and len(tids) >= 2:
+            parts = []
+            for tid, side in zip(tids[:2], sides[:2]):
+                got = []
+                for asset in side.get("assets") or []:
+                    if asset.get("pid") is not None:
+                        got.append(event_player_link(asset.get("pid"), all_players_by_pid, root, label=asset.get("name")))
+                    elif asset.get("round") is not None:
+                        origin = team_abbrev(teams_by_tid.get(safe_int(asset.get("originalTid"), -10)))
+                        rnd = "" if safe_int(asset.get("round")) == 1 else " 2nd"
+                        got.append(f"{esc(asset.get('season'))}{rnd} ({esc(origin)})")
+                parts.append(f"{team_link(tid)} receive {', '.join(got) or 'nothing'}")
+            return "; ".join(parts) + "."
+        if len(tids) >= 2:
+            return f"{team_link(tids[0])} and {team_link(tids[1])} completed a trade."
+        return "Trade completed."
+    if etype in ("freeAgent", "reSigned") and pids:
+        contract = event.get("contract") or {}
+        deal = fmt_money(contract.get("amount"))
+        if contract.get("exp") is not None:
+            deal += f"/{esc(contract.get('exp'))}"
+        verb = "re-signed with" if etype == "reSigned" else "signed with"
+        return f"{event_player_link(pids[0], all_players_by_pid, root)} {verb} {team_link(tids[0]) if tids else 'a team'} for {deal}."
+    text = event.get("text") or ""
+    if text:
+        return rewrite_event_text(text, all_players_by_pid, teams_by_tid, season, current_gids, root)
+    return ""
+
+
+def draft_prospects(data: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        p for p in data.get("players", [])
+        if p.get("tid") == DRAFT_PROSPECT_TID and p.get("retiredYear") is None
+    ]

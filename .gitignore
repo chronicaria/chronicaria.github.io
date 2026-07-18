@@ -5,3 +5,6 @@ __pycache__/
 
 # local editor/preview config
 .claude/
+
+.pytest_cache/
+node_modules/

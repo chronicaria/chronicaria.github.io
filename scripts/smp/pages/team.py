@@ -78,8 +78,8 @@ from ..finance import (
     FIN_FINALS,
     FIN_PER_WIN,
     FIN_PLAYOFF,
+    FIN_SHARE,
     FIN_SOFT_CAP,
-    FIN_START,
     fmt_money_pm,
     team_finances_table,
 )
@@ -395,8 +395,7 @@ DEPTH_SLOTS = ["PG", "SG", "SF", "PF", "C"]
 
 
 def _position_buckets(roster: list[dict[str, Any]], season: int) -> dict[str, list[dict[str, Any]]]:
-    """Each player once, in his single best canonical slot, sorted by OVR desc.
-    Shared by the depth chart and the Starting Five court."""
+    """Each player once, in his single best canonical slot, sorted by OVR desc."""
     buckets: dict[str, list[dict[str, Any]]] = {slot: [] for slot in DEPTH_SLOTS}
     for player in roster:
         buckets[canonical_pos(player, latest_rating(player, season))].append(player)
@@ -410,97 +409,6 @@ def _injury_cross(player: dict[str, Any]) -> str:
     if injury.get("type") and injury.get("type") != "Healthy":
         return ' <span class="injured" title="' + esc(injury.get("type", "")) + '">✚</span>'
     return ""
-
-
-# Slot anchor points on the half court, in % of the court container (x, y).
-SFIVE_SLOTS = [
-    ("PG", 50.0, 14.0),
-    ("SG", 79.0, 32.0),
-    ("SF", 21.0, 32.0),
-    ("PF", 31.5, 64.0),
-    ("C", 66.5, 61.0),
-]
-
-
-def half_court_svg() -> str:
-    """Decorative half court painted with the scope's team colors: key and arcs
-    in the primary/secondary, lines mixed toward the page palette so both
-    themes keep contrast. Pure geometry — the player roundels are HTML overlaid
-    on top (portrait chain stays portraits.portrait_html)."""
-    # viewBox is 500x470 = 50ft x 47ft half court, baseline at the bottom.
-    hoop_x, hoop_y = 250.0, 417.5
-    r3 = 237.5
-    corner_dx = 220.0
-    dy = math.sqrt(r3 * r3 - corner_dx * corner_dx)
-    corner_y = hoop_y - dy
-    return f"""
-      <svg class="sfive-court-svg" viewBox="0 0 500 470" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid meet">
-        <rect x="1.5" y="1.5" width="497" height="467" class="sfive-floor"/>
-        <circle cx="250" cy="2" r="60" class="sfive-line"/>
-        <circle cx="250" cy="2" r="24" class="sfive-paintline"/>
-        <rect x="170" y="280" width="160" height="190" class="sfive-paint"/>
-        <circle cx="250" cy="280" r="60" class="sfive-line"/>
-        <path d="M{hoop_x - corner_dx:.0f},470 L{hoop_x - corner_dx:.0f},{corner_y:.1f} A{r3:.1f} {r3:.1f} 0 0 1 {hoop_x + corner_dx:.0f},{corner_y:.1f} L{hoop_x + corner_dx:.0f},470" class="sfive-arc"/>
-        <line x1="215" y1="437" x2="285" y2="437" class="sfive-paintline"/>
-        <circle cx="{hoop_x:.0f}" cy="{hoop_y:.1f}" r="9" class="sfive-rim"/>
-      </svg>"""
-
-
-def starting_five_card(team: dict[str, Any], roster: list[dict[str, Any]], season: int) -> str:
-    """Starting Five on a half-court: portrait roundels at PG-C from the depth
-    chart's single-best-fit computation, dashed vacancy roundels for empty
-    slots, and the bench rail underneath sorted by overall."""
-    if not roster:
-        return ""
-    buckets = _position_buckets(roster, season)
-    starters = {slot: (buckets[slot][0] if buckets[slot] else None) for slot in DEPTH_SLOTS}
-    starter_pids = {safe_int(p.get("pid"), -1) for p in starters.values() if p}
-    slots_html = []
-    for slot, x, y in SFIVE_SLOTS:
-        player = starters.get(slot)
-        if player is None:
-            slots_html.append(
-                f'<div class="sfive-slot sfive-slot--vacant" style="left:{x:.1f}%;top:{y:.1f}%">'
-                f'<span class="sfive-roundel sfive-vacant" role="img" aria-label="No natural {slot} on the roster">{slot}</span>'
-                f'<span class="sfive-tag"><span class="sfive-pos">{slot}</span><span class="muted">Vacant</span></span>'
-                "</div>"
-            )
-            continue
-        rating = latest_rating(player, season)
-        jersey = player.get("jerseyNumber")
-        jersey_bit = f'<span class="sfive-num">#{esc(jersey)}</span>' if jersey not in (None, "") else ""
-        slots_html.append(
-            f'<div class="sfive-slot" style="left:{x:.1f}%;top:{y:.1f}%">'
-            f'<span class="sfive-roundel">{_roundel(player, "sfive-portrait", "../")}</span>'
-            f'<span class="sfive-tag"><span class="sfive-pos">{slot}</span>'
-            f'<a class="sfive-name" href="{player_url(player, "../")}">{esc(player_name(player))}</a>{_injury_cross(player)}'
-            f'<span class="sfive-meta">{jersey_bit}<span class="sfive-ovr">{esc(rating.get("ovr", "—"))} OVR</span></span>'
-            "</span></div>"
-        )
-    bench = sorted(
-        (p for p in roster if safe_int(p.get("pid"), -1) not in starter_pids),
-        key=lambda p: (-safe_int(latest_rating(p, season).get("ovr")), player_name(p)),
-    )
-    bench_chips = "".join(
-        f'<a class="sfive-bench-chip" href="{player_url(p, "../")}">'
-        f'<span class="sfive-bench-roundel">{_roundel(p, "sfive-bench-portrait", "../")}</span>'
-        f'<span class="sfive-bench-name">{esc(player_name(p))}{_injury_cross(p)}</span>'
-        f'<span class="sfive-bench-ovr">{esc(latest_rating(p, season).get("ovr", "—"))}</span></a>'
-        for p in bench
-    )
-    bench_rail = (
-        f'<div class="sfive-bench" aria-label="Bench"><span class="sfive-bench-label">Bench</span>{bench_chips}</div>'
-        if bench_chips else ""
-    )
-    return f"""
-    <section class="card sfive-card">
-      <div class="section-title-row"><h2>Starting Five</h2><span class="muted small-copy">best fit by overall · ✚ injured</span></div>
-      <div class="sfive-court">
-        {half_court_svg()}
-        {''.join(slots_html)}
-      </div>
-      {bench_rail}
-    </section>"""
 
 
 DEPTH_STAT_KEYS = [("pts", "PTS"), ("trb", "REB"), ("ast", "AST"), ("stl", "STL"), ("blk", "BLK")]
@@ -1285,24 +1193,18 @@ def season_results_card(team: dict[str, Any], data: dict[str, Any], teams: list[
     </section>"""
 
 
-def hero_finance_chip(tfin: dict[str, Any] | None) -> str:
+def hero_finance_chip(tfin: dict[str, Any] | None, year: int) -> str:
+    """Hero chip: the team's projected budget for next season and how much of it
+    is still free after already-committed salaries."""
     if not tfin:
         return ""
-    now, proj = tfin["cash_now"], tfin["cash_proj"]
-    nc = "delta-up" if now >= 0 else "delta-down"
-    if tfin.get("offseason"):
-        avail = tfin.get("avail", now)
-        ac = "delta-up" if avail >= 0 else "delta-down"
-        return f"""
-    <div class="hero-finance">
-      <div class="hero-fin-row" title="Bankroll carried between seasons: accumulated revenues minus payroll and tax."><span>Cash on hand</span><strong class="{nc}">{fmt_money(now)}</strong></div>
-      <div class="hero-fin-row" title="Cash on hand minus next season's committed payroll (roster, dead money, retained salary)."><span>Available to spend</span><strong class="{ac}">{fmt_money(avail)}</strong></div>
-    </div>"""
-    pc = "delta-up" if proj >= 0 else "delta-down"
+    budget = tfin["net_revenue_proj"]
+    surplus = tfin["surplus_next"]
+    sc = "delta-up" if surplus >= 0 else "delta-down"
     return f"""
     <div class="hero-finance">
-      <div class="hero-fin-row" title="This season's ledger so far: starting balance plus revenues earned to date, minus payroll and luxury tax."><span>Cash on hand</span><strong class="{nc}">{fmt_money(now)}</strong></div>
-      <div class="hero-fin-row" title="Projected end-of-season balance using 10k-sim projected wins and playoff-bonus expected value."><span>Projected EOS</span><strong class="{pc}">{fmt_money(proj)}</strong></div>
+      <div class="hero-fin-row" title="Projected net revenue (league share + win payouts + playoff-bonus EV + adjustments − tax + tax share) — the whole {year} budget."><span>{year} budget</span><strong>{fmt_money(budget)}</strong></div>
+      <div class="hero-fin-row" title="Budget minus committed {year} payroll (roster, dead money, retained salary). Negative = must shed salary."><span>Surplus vs committed</span><strong class="{sc}">{fmt_money_pm(surplus)}</strong></div>
     </div>"""
 
 
@@ -1476,88 +1378,72 @@ def team_hero_html(team: dict[str, Any], season: int, sorted_roster: list[dict[s
         <h1>{esc(team_full_name(team))}</h1>
         <p class="muted">{' · '.join(bits)}</p>
       </div>
-      {hero_finance_chip(tfin)}
+      {hero_finance_chip(tfin, season + 1)}
     </section>"""
 
 
-def _payroll_note(f: dict[str, Any]) -> str:
-    """Small-copy parenthetical explaining what's baked into the payroll figure."""
-    parts = []
-    if f.get("dead"):
-        parts.append(f'incl. {fmt_money(f["dead"])} dead money')
-    retained = safe_float(f.get("retained"), 0.0)
-    if retained > 1e-9:
-        parts.append(f'incl. {fmt_money(retained)} retained salary')
-    elif retained < -1e-9:
-        parts.append(f'net of {fmt_money(-retained)} retained elsewhere')
-    return f' <span class="muted small-copy">({"; ".join(parts)})</span>' if parts else ""
-
-
-def finance_ledger_card(tfin: dict[str, Any] | None) -> str:
+def finance_ledger_card(tfin: dict[str, Any] | None, year: int) -> str:
+    """Revenue ledger: league share + win payouts + bonuses + adjustments, minus
+    tax plus tax share = net revenue, the team's whole budget for ``year``. Then
+    tiles: season balance vs this season's payroll, and committed-``year``
+    payroll vs the budget (surplus)."""
     if not tfin:
         return ""
     f = tfin
-
-    if f.get("offseason"):
-        # Offseason: the season ledger has closed, so headline the carried-over bankroll and
-        # how much of it is still free once next season's roster is paid.
-        bal = f["cash_now"]
-        committed = f.get("payroll_next", 0.0)
-        avail = f.get("avail", bal - committed)
-        year = f.get("bankroll_year", "")
-        nc = "delta-up" if bal >= 0 else "delta-down"
-        ac = "delta-up" if avail >= 0 else "delta-down"
-        tiles = "".join([
-            _tile(f"Balance entering {year}", fmt_money(bal), cls=nc,
-                  tip="Cumulative bankroll carried between seasons: all past revenues minus payroll and tax."),
-            _tile(f"{year} payroll", fmt_money(committed),
-                  tip=f"Committed {year} salaries for the current roster, plus dead money and retained salary."),
-            _tile("Available to spend", fmt_money(avail), cls=ac,
-                  tip="Balance minus committed payroll — what's actually free for signings."),
-        ])
-        return f"""
-    <section class="card">
-      <div class="section-title-row"><h2>Cash on Hand</h2><span class="muted small-copy">hover a tile for detail</span></div>
-      <div class="vitals-row">{tiles}</div>
-    </section>"""
 
     def row(label: str, now: str, proj: str, cls: str = "") -> str:
         cls_attr = f' class="{cls}"' if cls else ""
         return f'<tr{cls_attr}><td class="ledger-label">{label}</td><td class="ledger-num">{now}</td><td class="ledger-num">{proj}</td></tr>'
 
-    payroll_cell = f'<span class="delta-down">{fmt_money(-f["payroll"])}</span>'
     luxtax_cell = f'<span class="delta-down">{fmt_money(-f["luxtax"])}</span>' if f["luxtax"] > 0 else "$0"
-    share_cell = f'<span class="delta-up">{fmt_money_pm(f["tax_share"])}</span>' if f["tax_share"] > 0 else "$0"
-    cash_now = f'<strong class="{"delta-up" if f["cash_now"] >= 0 else "delta-down"}">{fmt_money(f["cash_now"])}</strong>'
-    cash_proj = f'<strong class="{"delta-up" if f["cash_proj"] >= 0 else "delta-down"}">{fmt_money(f["cash_proj"])}</strong>'
+    share_cell = f'<span class="delta-up">{fmt_money_pm(f["tax_share_in"])}</span>' if f["tax_share_in"] > 0 else "$0"
+    budget_now = f'<strong>{fmt_money(f["net_revenue_now"])}</strong>'
+    budget_proj = f'<strong>{fmt_money(f["net_revenue_proj"])}</strong>'
     rows = [
-        row("Starting balance", fmt_money(FIN_START), fmt_money(FIN_START)),
-        row(f'Win bonus <span class="muted small-copy">({fmt_money(FIN_PER_WIN)} × W)</span>',
+        row("League share", fmt_money_pm(f["share_rev"]), fmt_money_pm(f["share_rev"])),
+        row(f'Win payouts <span class="muted small-copy">({fmt_money(FIN_PER_WIN)} × W)</span>',
             f'{fmt_money_pm(f["win_rev_now"])} <span class="muted small-copy">({f["won"]} W)</span>',
             f'{fmt_money_pm(f["win_rev_proj"])} <span class="muted small-copy">(proj {fmt_number(f["proj_w"], 1)} W)</span>'),
-        row('Playoff bonuses <span class="muted small-copy">(EV projected)</span>', fmt_money_pm(f["earned_playoff"]), fmt_money_pm(f["proj_playoff"])),
-        row("Total revenue", f'<strong>{fmt_money(f["rev_now"])}</strong>', f'<strong>{fmt_money(f["rev_proj"])}</strong>', cls="ledger-subtotal"),
-        row("Player payroll" + _payroll_note(f), payroll_cell, payroll_cell),
-        row('Luxury tax <span class="muted small-copy">(over $300M)</span>', luxtax_cell, luxtax_cell),
-        row('Tax distribution <span class="muted small-copy">(under-cap share)</span>', share_cell, share_cell),
+        row('Playoff bonuses <span class="muted small-copy">(earned · projected = EV)</span>', fmt_money_pm(f["earned_playoff"]), fmt_money_pm(f["proj_playoff"])),
     ]
     if abs(f.get("adj", 0)) > 1e-9:
         adj_cls = "delta-up" if f["adj"] > 0 else "delta-down"
-        adj_label = "Trade adjustment"
+        adj_label = "Trade cash"
         if f.get("adj_note"):
             adj_label += f' <span class="muted small-copy">({esc(f["adj_note"])})</span>'
         adj_cell = f'<span class="{adj_cls}">{fmt_money_pm(f["adj"])}</span>'
         rows.append(row(adj_label, adj_cell, adj_cell))
-    rows.append(row("Cash on hand", cash_now, cash_proj, cls="ledger-total"))
+    rows.extend([
+        row("Revenue", f'<strong>{fmt_money(f["revenue_now"])}</strong>', f'<strong>{fmt_money(f["revenue_proj"])}</strong>', cls="ledger-subtotal"),
+        row('Luxury tax <span class="muted small-copy">(over $300M)</span>', luxtax_cell, luxtax_cell),
+        row('Tax distribution <span class="muted small-copy">(under-cap share)</span>', share_cell, share_cell),
+        row(f"{year} budget <span class=\"muted small-copy\">(net revenue)</span>", budget_now, budget_proj, cls="ledger-total"),
+    ])
+
+    bal = f["season_balance_proj"]
+    surplus = f["surplus_next"]
+    bc = "delta-up" if bal >= 0 else "delta-down"
+    sc = "delta-up" if surplus >= 0 else "delta-down"
+    tiles = "".join([
+        _tile(f"{year - 1} payroll", fmt_money(f["payroll"]),
+              tip="This season's player salaries plus dead money and retained salary."),
+        _tile("Season balance", fmt_money_pm(bal), cls=bc,
+              tip="Projected net revenue minus this season's payroll. League average is about $0 by design."),
+        _tile(f"Committed {year} payroll", fmt_money(f["committed_next"]),
+              tip=f"Salaries already on the books for {year}, incl. dead money and retained salary."),
+        _tile("Budget surplus", fmt_money_pm(surplus), cls=sc,
+              tip=f"Projected {year} budget minus committed {year} payroll. Negative = must shed salary."),
+    ])
     return f"""
     <section class="card">
-      <div class="section-title-row"><h2>Cash Flow</h2><span class="muted small-copy">live ledger · projected = 10k-sim wins + playoff EV</span></div>
+      <div class="section-title-row"><h2>Revenue &amp; Budget</h2><span class="muted small-copy">projected = 10k-sim wins + playoff EV</span></div>
       <div class="table-wrap">
         <table class="ledger-table">
-          <thead><tr><th>Item</th><th>Now</th><th>Projected (EOS)</th></tr></thead>
+          <thead><tr><th>Item</th><th>Now</th><th>Projected</th></tr></thead>
           <tbody>{"".join(rows)}</tbody>
         </table>
       </div>
+      <div class="vitals-row">{tiles}</div>
     </section>"""
 
 
@@ -1600,21 +1486,20 @@ def finance_rules_card() -> str:
         <div>
           <h3>Revenue</h3>
           <ul class="fin-list">
-            <li>Start of season <strong>{fmt_money(FIN_START)}</strong></li>
+            <li>League share <strong>{fmt_money(FIN_SHARE)}</strong></li>
             <li>Per win <strong>+{fmt_money(FIN_PER_WIN)}</strong></li>
-            <li>Playoff berth <strong>+{fmt_money(FIN_PLAYOFF)}</strong></li>
-            <li>Finals berth <strong>+{fmt_money(FIN_FINALS)}</strong></li>
-            <li>Championship <strong>+{fmt_money(FIN_CHAMP)}</strong></li>
+            <li>Playoff berth <strong>+{fmt_money(FIN_PLAYOFF)}</strong> · Finals <strong>+{fmt_money(FIN_FINALS)}</strong> · Title <strong>+{fmt_money(FIN_CHAMP)}</strong></li>
           </ul>
-          <p class="muted small-copy">Bonuses stack once clinched — a title run banks +{fmt_money(stacked)}.</p>
+          <p class="muted small-copy">Bonuses stack once clinched — the champion banks +{fmt_money(stacked)}.</p>
         </div>
         <div>
-          <h3>Spending</h3>
+          <h3>Tax &amp; Budget</h3>
           <ul class="fin-list">
-            <li>Player payroll <span class="muted small-copy">(salaries + dead money)</span></li>
-            <li>Luxury tax <strong>$1 per $1</strong> over the <strong>{fmt_money(FIN_SOFT_CAP)}</strong> soft cap</li>
+            <li>Luxury tax <strong>$1 per $1</strong> of payroll over the <strong>{fmt_money(FIN_SOFT_CAP)}</strong> soft cap</li>
             <li>Collected tax is split equally among under-cap teams</li>
+            <li>Net revenue <span class="muted small-copy">(revenue − tax + tax share)</span> is the whole next-season budget — no carried cash</li>
           </ul>
+          <p class="muted small-copy">League-average budget is exactly {fmt_money(FIN_SOFT_CAP)}.</p>
         </div>
       </div>
     </section>"""
@@ -1759,7 +1644,6 @@ def render_team_roster_page(team: dict[str, Any], roster: list[dict[str, Any]], 
     body = f"""
     {team_hero_html(team, season, sorted_roster, teams, tfin, data=data)}
     {team_subnav(team, "roster")}
-    {starting_five_card(team, sorted_roster, season)}
     {roster_tabs(sorted_roster, season, start_season, "../", teams_by_tid, game_logs)}
     {depth_chart_card(sorted_roster, season, start_season)}
     {rotation}
@@ -1795,7 +1679,7 @@ def render_team_finances_page(team: dict[str, Any], roster: list[dict[str, Any]]
     body = f"""
     {team_hero_html(team, season, sorted_roster, teams, tfin, data=data)}
     {team_subnav(team, "finances")}
-    {finance_ledger_card(tfin)}
+    {finance_ledger_card(tfin, season + 1)}
     {luxury_tax_card(tfin, league_fin or {})}
     {team_finances_table(sorted_roster, season, data=data, tid=safe_int(team.get("tid")))}
     {finance_rules_card()}

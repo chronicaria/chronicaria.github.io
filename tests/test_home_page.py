@@ -313,6 +313,100 @@ class TestPreseasonComposition(unittest.TestCase):
         self.assertNotIn('<div class="home-side"></div>', html)
 
 
+class TestPlayoffOddsPrecision(unittest.TestCase):
+    """PO% / Finals% / Title% show one decimal; per-seed cells stay integers."""
+
+    def setUp(self):
+        self._real_league_sim = home.league_sim
+        home.league_sim = lambda data, teams, season: {
+            "teams": {
+                0: {"po": 0.745, "finals": 0.475, "champ": 0.301, "seeds": [0.62, 0.38], "proj_w": 24.0, "games_left": 40},
+                1: {"po": 0.2551, "finals": 0.0004, "champ": 0.0, "seeds": [0.38, 0.62], "proj_w": 21.0, "games_left": 40},
+            },
+            "stakes": [], "day": 5, "fresh": False,
+        }
+
+    def tearDown(self):
+        home.league_sim = self._real_league_sim
+
+    def test_headline_odds_have_one_decimal(self):
+        teams = [_team(0, "AAA"), _team(1, "BBB")]
+        data = {"gameAttributes": {"season": 2031, "phase": 1, "numGames": 45}, "games": []}
+        html = home.playoff_odds_card(data, teams, 2031)
+        self.assertIn("74.5%", html)
+        self.assertIn("47.5%", html)
+        self.assertIn("30.1%", html)
+        self.assertIn("25.5%", html)     # rounds to one decimal, not an int
+        self.assertIn("&lt;0.1%", html)  # trace odds floor, not "0.0%"
+        self.assertIn(">—<", html)       # exactly zero stays a dash
+        # Seed-distribution cells stay integers.
+        self.assertIn(">62<", html)
+        self.assertIn(">38<", html)
+        self.assertNotIn(">62.0<", html)
+
+    def test_odds_pct_formatter(self):
+        self.assertEqual(home._odds_pct(0.0), "—")
+        self.assertEqual(home._odds_pct(0.04), "&lt;0.1%")
+        self.assertEqual(home._odds_pct(0.05), "0.1%")
+        self.assertEqual(home._odds_pct(74.5), "74.5%")
+        self.assertEqual(home._odds_pct(100.0), "100.0%")
+
+
+class TestHomeFinancesTable(unittest.TestCase):
+    """The home finance table reads the ledger defensively and shows the
+    budget/committed/surplus columns (new finance semantics)."""
+
+    def setUp(self):
+        self._real_fin = home.compute_league_finances
+        self._real_sim = home.league_sim
+        home.league_sim = lambda data, teams, season: {"teams": {}}
+        self.ledger = {
+            "teams": {
+                0: {"won": 30, "lost": 15, "revenue_proj": 340000, "net_proj": 330000,
+                    "committed_next": 290000, "surplus_next": 40000},
+                1: {"won": 15, "lost": 30, "revenue_proj": 260000, "net_proj": 270000,
+                    "committed_next": 305000, "surplus_next": -35000},
+            }
+        }
+        home.compute_league_finances = lambda *args: self.ledger
+
+    def tearDown(self):
+        home.compute_league_finances = self._real_fin
+        home.league_sim = self._real_sim
+
+    def _teams(self):
+        return [_team(0, "AAA"), _team(1, "BBB")]
+
+    def test_new_columns_and_color_coded_surplus(self):
+        html = home.home_finances_table({}, self._teams(), [], 2031)
+        self.assertIn('id="home-finances"', html)
+        for header in ("Proj revenue", "2032 budget", "2032 committed payroll", "Surplus"):
+            self.assertIn(header, html)
+        # No cash-on-hand language in the new model.
+        self.assertNotIn("Cash on Hand", html)
+        self.assertNotIn("bankroll", html)
+        # Signed, color-coded surplus.
+        self.assertIn('<span class="delta-up">+$40M</span>', html)
+        self.assertIn('<span class="delta-down">-$35M</span>', html)
+        # Sorted by budget, biggest first.
+        self.assertLess(html.find("Region0"), html.find("Region1"))
+
+    def test_falls_back_to_legacy_ledger_keys(self):
+        # Old finance.py shape (rev_proj / luxtax / tax_share / payroll_next): the
+        # table must still compose sane budget and surplus figures.
+        self.ledger = {
+            "teams": {
+                0: {"won": 20, "lost": 25, "rev_proj": 320000, "luxtax": 10000,
+                    "tax_share": 0.0, "adj": 0.0, "payroll_next": 280000},
+            }
+        }
+        html = home.home_finances_table({}, [_team(0, "AAA")], [], 2031)
+        self.assertIn("$320M", html)                                # projected revenue
+        self.assertIn("$310M", html)                                # budget = 320 − 10 tax
+        self.assertIn("$280M", html)                                # committed payroll
+        self.assertIn('<span class="delta-up">+$30M</span>', html)  # surplus = 310 − 280
+
+
 class TestHomeColumns(unittest.TestCase):
     def test_empty_side_collapses_wrapper(self):
         out = home._home_columns(["<section>a</section>"], ["", ""])

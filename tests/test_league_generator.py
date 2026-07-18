@@ -232,18 +232,24 @@ class TestTeamFinances(unittest.TestCase):
         # A over cap: pays luxury tax, no playoff bonus during the regular season
         self.assertEqual(a["luxtax"], 20000)
         self.assertEqual(a["earned_playoff"], 0)
-        # revenue is all performance-based: no base payout, $20M per win
-        self.assertEqual(a["rev_now"], lg.FIN_PER_WIN * 10)
-        self.assertEqual(a["rev_now"], 200000)
-        self.assertEqual(a["tax_share"], 0)
-        self.assertAlmostEqual(a["cash_now"], lg.FIN_START + a["rev_now"] - 320000 - 20000)
+        # revenue = $180M league share + $5M per win (+ bonuses/adjustments)
+        self.assertEqual(a["revenue_now"], lg.FIN_SHARE + lg.FIN_PER_WIN * 10)
+        self.assertEqual(a["revenue_now"], 230000)
+        self.assertEqual(a["tax_share_in"], 0)
+        # net revenue = the whole next-season budget: revenue − tax + tax share
+        self.assertAlmostEqual(a["net_revenue_now"], 230000 - 20000)
+        self.assertAlmostEqual(a["season_balance_now"], a["net_revenue_now"] - 320000)
         # B under cap: collects the whole pool (only under-cap team)
         self.assertEqual(b["luxtax"], 0)
-        self.assertEqual(b["tax_share"], 20000)
-        self.assertAlmostEqual(b["cash_now"], lg.FIN_START + lg.FIN_PER_WIN * 5 - 200000 + 20000)
+        self.assertEqual(b["tax_share_in"], 20000)
+        self.assertAlmostEqual(b["net_revenue_now"],
+                               lg.FIN_SHARE + lg.FIN_PER_WIN * 5 + 20000)
+        # surplus vs committed 2031 payroll (contracts run through exp 2031)
+        self.assertAlmostEqual(b["committed_next"], 200000)
+        self.assertAlmostEqual(b["surplus_next"], b["net_revenue_proj"] - 200000)
         # luxury-tax pool is conserved: collected == redistributed
         self.assertEqual(lf["pool"], 20000)
-        self.assertAlmostEqual(sum(t["tax_share"] for t in lf["teams"].values()), lf["pool"])
+        self.assertAlmostEqual(sum(t["tax_share_in"] for t in lf["teams"].values()), lf["pool"])
 
     def test_manual_adjustment_moves_cash_and_nets_to_zero(self):
         # 2030: Cambridge (tid 2) sends $1M to Waltham (tid 6) via FIN_ADJUSTMENTS.
@@ -254,9 +260,11 @@ class TestTeamFinances(unittest.TestCase):
         cam, wal = lf["teams"][2], lf["teams"][6]
         self.assertEqual(cam["adj"], -1000)
         self.assertEqual(wal["adj"], 1000)
-        # adjustment is included in cash on hand and conserved across the two teams
-        self.assertAlmostEqual(cam["cash_now"] + wal["cash_now"],
-                               lf["teams"][2]["cash_proj"] + lf["teams"][6]["cash_proj"])
+        # adjustment is baked into revenue/net revenue and conserved across the two teams
+        self.assertAlmostEqual(cam["revenue_now"],
+                               lg.FIN_SHARE + lg.FIN_PER_WIN * 5 - 1000)
+        self.assertAlmostEqual(cam["net_revenue_now"] + wal["net_revenue_now"],
+                               2 * (lg.FIN_SHARE + lg.FIN_PER_WIN * 5))
         self.assertAlmostEqual(cam["adj"] + wal["adj"], 0)
 
     def test_2031_peterson_trade_cash(self):
@@ -317,9 +325,9 @@ class TestTeamFinances(unittest.TestCase):
             [{"home": {"tid": 0, "won": 4}, "away": {"tid": 1, "won": 2}}],
         ]}
         data = {"playoffSeries": [complete]}
-        self.assertEqual(lg.playoff_status(data, 0, 2030), (True, True, True))    # champion -> 70+100+99
-        self.assertEqual(lg.playoff_status(data, 1, 2030), (True, True, False))   # finalist -> 70+100
-        self.assertEqual(lg.playoff_status(data, 2, 2030), (True, False, False))  # 1st-round out -> 70
+        self.assertEqual(lg.playoff_status(data, 0, 2030), (True, True, True))    # champion -> 10+10+15
+        self.assertEqual(lg.playoff_status(data, 1, 2030), (True, True, False))   # finalist -> 10+10
+        self.assertEqual(lg.playoff_status(data, 2, 2030), (True, False, False))  # 1st-round out -> 10
 
     def test_no_false_finalists_mid_round_one(self):
         # Only round 1 exists; tid0 has already clinched its series 4-1. The Finals
@@ -342,11 +350,11 @@ class TestTeamFinances(unittest.TestCase):
         self.assertEqual(lg.playoff_status(data, 0, 2030), (True, True, False))
         self.assertEqual(lg.playoff_status(data, 1, 2030), (True, True, False))
 
-    def test_average_end_bankroll_identity_is_300m(self):
+    def test_average_net_revenue_identity_is_300m(self):
         # Synthetic full league: 225 total wins, 4 playoff teams, 2 finalists,
-        # 1 champion, average payroll $282.9M. Average end-of-year bankroll must be
-        # exactly $300.0M: 75 + (225*20 + 4*70 + 2*100 + 99)/10 - 282.9 = 300.0
-        # (luxury tax and manual adjustments net to zero league-wide).
+        # 1 champion. Average net revenue (= next-season budget) must be exactly
+        # $300.0M: (10*180 + 225*5 + 4*10 + 2*10 + 15)/10 = 300.0 (luxury tax and
+        # manual adjustments net to zero league-wide).
         wins = [30, 28, 26, 25, 24, 22, 20, 18, 17, 15]  # sums to 225
         self.assertEqual(sum(wins), 225)
         teams = [self._team_s(tid, f"T{tid}", w, 45 - w) for tid, w in enumerate(wins)]
@@ -359,12 +367,15 @@ class TestTeamFinances(unittest.TestCase):
         data = {"teams": teams, "players": players, "playoffSeries": [finished], "releasedPlayers": []}
         lf = lg.compute_league_finances(data, teams, players, 2030, odds={})
         self.assertEqual(len(lf["teams"]), 10)
-        # champion stacks berth + finals + title = $269M
+        # champion stacks berth + finals + title = $35M
         self.assertEqual(lf["teams"][0]["earned_playoff"],
                          lg.FIN_PLAYOFF + lg.FIN_FINALS + lg.FIN_CHAMP)
-        self.assertEqual(lf["teams"][0]["earned_playoff"], 269000)
-        avg_cash = sum(f["cash_now"] for f in lf["teams"].values()) / 10
-        self.assertAlmostEqual(avg_cash, 300000.0)
+        self.assertEqual(lf["teams"][0]["earned_playoff"], 35000)
+        avg_net = sum(f["net_revenue_now"] for f in lf["teams"].values()) / 10
+        self.assertAlmostEqual(avg_net, 300000.0)
+        # season balance = net revenue − payroll; league-average ≈ +$17.1M here
+        avg_balance = sum(f["season_balance_now"] for f in lf["teams"].values()) / 10
+        self.assertAlmostEqual(avg_balance, 300000.0 - 282900.0)
 
 
 class TestCanonicalPositions(unittest.TestCase):

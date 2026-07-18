@@ -3,12 +3,11 @@
 
 Rules (deterministic, idempotent — safe to rerun on its own output):
 
-* Real NBA players (non-empty ``imgURL``) keep their existing number when it is
-  a plain 0–99 numeral and does not collide with a teammate's kept number.
-* Fictional players (no ``imgURL``) — and any real player whose number is
-  missing, malformed, or collides — draw a number from a realistic weighted
+* EVERY player gets a league-custom number — real NBA players do not keep
+  their real-world numbers.  Each player draws from a realistic weighted
   pool (0–35 common, 36–45 less so, 50–55 occasional, "00"/77/88/91/95/98/99
-  rare), seeded per-pid so the same export always renumbers identically.
+  rare novelty), seeded per-pid so the same export always renumbers
+  identically regardless of the numbers already present.
 * Numbers are unique within each roster (``tid >= 0``).  Free agents,
   prospects and retired players (``tid < 0``) carry no uniqueness constraint.
 * The new number is propagated to ``player.jerseyNumber``, to every one of the
@@ -44,13 +43,6 @@ POOL_VALUES = [v for v, _w in _POOL]
 POOL_WEIGHTS = [_w for _v, _w in _POOL]
 
 
-def is_keepable(number) -> bool:
-    """True when an existing number is a plain 0-99 numeral (incl. '00')."""
-    if not isinstance(number, str) or not number.isdigit():
-        return False
-    return 0 <= int(number) <= 99
-
-
 def draw(pid: int, used) -> str:
     """Deterministically draw a realistic number for pid, avoiding `used`."""
     rng = random.Random("smp-jersey-%d" % pid)
@@ -74,32 +66,20 @@ def renumber(data: dict) -> dict:
         by_team[player.get("tid", -1)].append(player)
 
     assigned = {}  # pid -> new number (str)
-    kept_real = reassigned_real = drawn_fictional = 0
+    drawn_real = drawn_fictional = 0
 
     for tid in sorted(by_team):
         roster = sorted(by_team[tid], key=lambda p: p["pid"])
         unique = tid >= 0
         used = set()
-        pending = []
-        # Pass 1: real players claim their existing numbers.
+        # Everyone draws from the pid-seeded pool, in pid order.
         for player in roster:
-            current = player.get("jerseyNumber")
-            if player.get("imgURL") and is_keepable(current) and (
-                    not unique or current not in used):
-                assigned[player["pid"]] = current
-                if unique:
-                    used.add(current)
-                kept_real += 1
-            else:
-                pending.append(player)
-        # Pass 2: everyone else draws, in pid order.
-        for player in pending:
             number = draw(player["pid"], used if unique else set())
             assigned[player["pid"]] = number
             if unique:
                 used.add(number)
             if player.get("imgURL"):
-                reassigned_real += 1
+                drawn_real += 1
             else:
                 drawn_fictional += 1
 
@@ -125,8 +105,7 @@ def renumber(data: dict) -> dict:
     return {
         "players": len(players),
         "changed": changed,
-        "kept_real": kept_real,
-        "reassigned_real": reassigned_real,
+        "drawn_real": drawn_real,
         "drawn_fictional": drawn_fictional,
         "box_rows": box_rows,
         "distribution": Counter(assigned.values()),

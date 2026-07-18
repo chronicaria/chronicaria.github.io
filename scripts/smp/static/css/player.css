@@ -218,17 +218,21 @@
   letter-spacing: .07em;
 }
 .plate-ask strong { font-size: .95rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-/* Headline per-game stat tiles. */
+/* Headline per-game stat tiles: counting row over shooting-splits row. */
 .player-card-tiles {
+  display: grid;
+  gap: .4rem;
+  padding: .55rem 1.1rem .6rem;
+}
+.card-tile-row {
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
-  gap: .5rem;
-  padding: .55rem 1.1rem .6rem;
+  gap: .4rem;
 }
 .card-tile {
   flex: 1 1 0;
-  min-width: 4.2rem;
+  min-width: 3.4rem;
   display: grid;
   gap: .08rem;
   justify-items: center;
@@ -245,13 +249,16 @@
   text-transform: uppercase;
   letter-spacing: .08em;
 }
+/* Shooting splits sit a step quieter than the counting line. */
+.card-tile-row--shooting .card-tile strong { font-size: 1.02rem; }
+.card-tile-row--shooting .card-tile { background: var(--panel-3); }
 .card-tile--fpts { border-color: color-mix(in srgb, var(--team-secondary) 60%, var(--line)); }
 .card-tiles-cap {
-  align-self: center;
-  flex: 0 0 auto;
-  margin-left: .25rem;
   color: var(--muted);
-  font-size: .7rem;
+  font-size: .66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
 .player-card-foot {
   display: flex;

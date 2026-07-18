@@ -19,7 +19,6 @@ from .core import (
     fmt_number,
     latest_rating,
     latest_team_season,
-    phase_value,
     player_link,
     player_name,
     safe_float,
@@ -143,15 +142,16 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, data: dict[st
 
 # ---------- league finance model ----------
 # All amounts in Basketball GM "thousands" units (300000 == $300M). No hard cap.
-# Revenue is all performance-based (no base payout as of 2031). Derivation:
-# 225 league wins/season -> per-team avg revenue = (225*20 + 4*70 + 2*100 + 99)/10
-# = $507.9M, so the average end-of-year bankroll is 75 + 507.9 - 282.9 (avg payroll)
-# = exactly $300.0M (luxury tax and trade cash net to zero league-wide).
-FIN_START = 75000       # every team starts the season with $75M
-FIN_PER_WIN = 20000     # +$20M per regular-season win
-FIN_PLAYOFF = 70000     # +$70M for a playoff appearance
-FIN_FINALS = 100000     # +$100M for a finals appearance
-FIN_CHAMP = 99000       # +$99M for a championship (bonuses stack: champion earns 70+100+99=$269M)
+# There is NO carried cash: each season's net revenue IS the team's budget for the
+# next season. Derivation: 225 league wins/season -> league-average revenue =
+# (10*180 + 225*5 + 4*10 + 2*10 + 15)/10 = exactly $300.0M — the same number as the
+# soft cap on purpose (luxury tax and trade cash net to zero league-wide, so the
+# league-average BUDGET is exactly $300.0M too). Typical team range ~$255-360M.
+FIN_SHARE = 180000      # flat league share, every team, every season ($180M)
+FIN_PER_WIN = 5000      # +$5M per regular-season win
+FIN_PLAYOFF = 10000     # +$10M for a playoff berth (clinch-gated)
+FIN_FINALS = 10000      # +$10M for a finals berth (clinch-gated)
+FIN_CHAMP = 15000       # +$15M for the championship (bonuses stack: champion banks 10+10+15=$35M)
 FIN_SOFT_CAP = 300000   # soft cap: $1 luxury tax per $1 of payroll over $300M
 
 # Manual cash adjustments outside the auto-computed ledger (thousands), keyed by
@@ -181,22 +181,6 @@ FIN_RETENTION: dict[int, dict[str, Any]] = {
     # so the retained share equals each contract and the Gooners carry $0 for both.
     1765: {"held_by": 6, "amount": 21000, "note": "Waltham (trade)"},  # Ajay Mitchell (roster tid 5)
     1325: {"held_by": 6, "amount": 18000, "note": "Waltham (trade)"},  # Trae Young (roster tid 5)
-}
-
-# Cumulative bankroll each team carries into next season (thousands), keyed by tid.
-# The auto ledger resets to FIN_START each year, so in the offseason (phase >= 8) we show
-# this hand-kept balance instead. ponytail: hand-maintained; refresh once per offseason.
-FIN_NEXT_BALANCE: dict[int, int] = {
-    7: 396000,  # Stony Brook Stingrays
-    4: 365000,  # Toronto Jays
-    2: 345000,  # Cambridge Platypuses
-    3: 336000,  # Queens Pigeons
-    0: 331000,  # Durham Destroyers
-    6: 290000,  # Waltham Bears      (310 − 20 sent to the Gooners in the 2031 Mitchell/Young trade)
-    1: 308000,  # Rochester Dragons
-    8: 287000,  # Manhattan Elephants
-    9: 245000,  # Ithaca Thunder
-    5: 98000,   # Gooning Gooners    (78 + 20 received from Waltham in that trade)
 }
 
 # The 2031 waivers, rookie repricing, and trades are now materialized in the
@@ -287,12 +271,17 @@ def team_dead_money(data: dict[str, Any] | None, tid: int, season: int) -> float
 
 
 def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, odds: dict[int, dict[str, Any]] | None = None) -> dict[str, Any]:
-    """Per-team cash-flow ledger for the season, recomputed each build from game results.
+    """Per-team revenue ledger for the season, recomputed each build from game results.
 
     Returns ``{"teams": {tid: ledger}, "pool", "share", "n_under", "soft_cap"}``.
-    Luxury tax (payroll over the soft cap) is pooled and split equally among the
-    teams under the cap. "Projected" figures use the 10k-sim projected wins and the
-    expected value of the playoff bonuses (prob-weighted).
+    There is no carried cash: revenue (league share + win payouts + clinch-gated
+    bonuses + trade adjustments) minus luxury tax plus the under-cap tax share is
+    the team's NET REVENUE — its whole budget for next season. Extra keys:
+    ``season_balance_*`` (net revenue minus this season's payroll, ~$0 league-wide),
+    ``committed_next`` (next season's payroll incl. dead money/retention) and
+    ``surplus_next`` (projected net revenue minus committed_next; negative means
+    the team must shed salary). "Projected" figures use the 10k-sim projected wins
+    and the expected value of the playoff bonuses (prob-weighted).
     """
     odds = odds or {}
     fin: dict[int, dict[str, Any]] = {}
@@ -319,32 +308,37 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
         po_p, fin_p, champ_p = safe_float(o.get("po")), safe_float(o.get("finals")), safe_float(o.get("champ"))
         proj_playoff = FIN_PLAYOFF * po_p + FIN_FINALS * fin_p + FIN_CHAMP * champ_p
         adj_info = (FIN_ADJUSTMENTS.get(season) or {}).get(tid) or {}
+        adj = safe_float(adj_info.get("amount"), 0.0)
         fin[tid] = {
-            "adj": safe_float(adj_info.get("amount"), 0.0), "adj_note": adj_info.get("note", ""),
-            "payroll": payroll, "payroll_next": payroll_next, "dead": dead, "retained": retained, "won": won, "lost": lost, "luxtax": luxtax,
+            "adj": adj, "adj_note": adj_info.get("note", ""),
+            "payroll": payroll, "committed_next": payroll_next, "dead": dead, "retained": retained, "won": won, "lost": lost,
+            "luxtax": luxtax, "tax_now": luxtax, "tax_proj": luxtax,
             "under_cap": payroll < FIN_SOFT_CAP, "over_cap": payroll > FIN_SOFT_CAP,
+            "share_rev": float(FIN_SHARE),
             "win_rev_now": FIN_PER_WIN * won, "win_rev_proj": FIN_PER_WIN * proj_w,
             "earned_playoff": earned_playoff, "proj_playoff": proj_playoff,
             "proj_w": proj_w, "po": po_p, "finals": fin_p, "champ": champ_p,
-            "rev_now": FIN_PER_WIN * won + earned_playoff,
-            "rev_proj": FIN_PER_WIN * proj_w + proj_playoff,
+            "revenue_now": FIN_SHARE + FIN_PER_WIN * won + earned_playoff + adj,
+            "revenue_proj": FIN_SHARE + FIN_PER_WIN * proj_w + proj_playoff + adj,
         }
     pool = sum(f["luxtax"] for f in fin.values())
     under = [t for t, f in fin.items() if f["under_cap"]]
     share = pool / len(under) if under else 0.0
-    offseason = phase_value(data) >= 8
     for tid, f in fin.items():
-        f["tax_share"] = share if f["under_cap"] else 0.0
-        f["cash_now"] = FIN_START + f["rev_now"] - f["payroll"] - f["luxtax"] + f["tax_share"] + f["adj"]
-        f["cash_proj"] = FIN_START + f["rev_proj"] - f["payroll"] - f["luxtax"] + f["tax_share"] + f["adj"]
-        if offseason and tid in FIN_NEXT_BALANCE:
-            # Offseason: the single-season ledger is over, so show the hand-kept cumulative
-            # bankroll carried into next season (available to spend in free agency).
-            f["cash_now"] = f["cash_proj"] = float(FIN_NEXT_BALANCE[tid])
-            f["offseason"] = True
-            f["bankroll_year"] = season + 1
-        # Cash left after next season's committed roster salaries are paid.
-        f["avail"] = f["cash_now"] - f["payroll_next"]
+        f["tax_share_in"] = f["tax_share"] = share if f["under_cap"] else 0.0
+        # Net revenue = the team's whole budget for next season (no carried cash).
+        f["net_revenue_now"] = f["revenue_now"] - f["luxtax"] + f["tax_share_in"]
+        f["net_revenue_proj"] = f["revenue_proj"] - f["luxtax"] + f["tax_share_in"]
+        # Sanity line: net revenue vs this season's payroll (league-average ~ +$17M).
+        f["season_balance_now"] = f["net_revenue_now"] - f["payroll"]
+        f["season_balance_proj"] = f["net_revenue_proj"] - f["payroll"]
+        # Budget left after next season's already-committed salaries are paid.
+        f["surplus_next"] = f["net_revenue_proj"] - f["committed_next"]
+        # Legacy aliases (home.py finance table reads these).
+        f["cash_now"] = f["net_revenue_now"]
+        f["cash_proj"] = f["net_revenue_proj"]
+        f["payroll_next"] = f["committed_next"]
+        f["avail"] = f["surplus_next"]
     return {"teams": fin, "pool": pool, "share": share, "n_under": len(under), "soft_cap": FIN_SOFT_CAP}
 
 

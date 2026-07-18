@@ -103,36 +103,6 @@ class TestChampionsAndBanners(unittest.TestCase):
         self.assertIn("tm-rafters", team_page.team_rafters_html(data, _team(2, "CAM")))
 
 
-class TestStartingFive(unittest.TestCase):
-    def test_vacancy_roundels_for_missing_positions(self):
-        roster = [
-            _player(1, "Point", "Guard", pos="PG"),
-            _player(2, "Shooting", "Guard", pos="SG"),
-            _player(3, "Big", "Center", pos="C"),
-        ]
-        html = team_page.starting_five_card(_team(0, "AAA"), roster, 2029)
-        self.assertEqual(html.count("sfive-vacant"), 2)  # SF + PF empty
-        self.assertIn("No natural SF", html)
-        self.assertIn("No natural PF", html)
-        self.assertIn("Point Guard", html)
-
-    def test_bench_excludes_starters_and_sorts_by_overall(self):
-        roster = [
-            _player(1, "Star", "Point", pos="PG", ovr=80),
-            _player(2, "Backup", "Point", pos="PG", ovr=60),
-            _player(3, "Deep", "Point", pos="PG", ovr=50),
-        ]
-        html = team_page.starting_five_card(_team(0, "AAA"), roster, 2029)
-        bench = html.split("sfive-bench-label")[1]
-        self.assertNotIn("Star Point", bench)
-        self.assertLess(bench.index("Backup Point"), bench.index("Deep Point"))
-
-    def test_court_svg_is_present_and_decorative(self):
-        html = team_page.starting_five_card(_team(0, "AAA"), [_player(1, "A", "B")], 2029)
-        self.assertIn("sfive-court-svg", html)
-        self.assertIn('aria-hidden="true"', html)
-
-
 class TestHonestSeasonFallbacks(unittest.TestCase):
     def _items_2030(self):
         return [{
@@ -361,7 +331,7 @@ class TestImmersionAndPolish(unittest.TestCase):
 
     def test_luxury_tax_tiles_have_explainers(self):
         tfin = {"payroll": 310000.0, "luxtax": 10000.0, "over_cap": True, "under_cap": False,
-                "tax_share": 0.0, "cash_now": 0.0, "cash_proj": 0.0}
+                "tax_share": 0.0}
         html = team_page.luxury_tax_card(tfin, {"soft_cap": 300000, "pool": 10000,
                                                 "share": 1250.0, "n_under": 8})
         self.assertIn("has-tip", html)
@@ -372,6 +342,72 @@ class TestImmersionAndPolish(unittest.TestCase):
         ramp2 = team_page.team_color_ramp(2, 8)
         self.assertEqual(ramp1, ramp2)
         self.assertEqual(len(set(ramp1)), 8)
+
+    def test_starting_five_court_is_gone_from_the_roster_page(self):
+        team = dict(_team(0, "AAA"), seasons=[], stats=[])
+        html = lg.render_team_roster_page(team, [_player(1, "Point", "Guard")], [team], 2031, 2026)
+        self.assertNotIn("sfive", html)
+        self.assertNotIn("Starting Five", html)
+        self.assertIn("Depth Chart", html)  # the card-based depth chart stays the anchor
+
+
+class TestFinanceDisplay(unittest.TestCase):
+    """New model: net revenue is the whole next-season budget — no carried cash."""
+
+    def _league(self):
+        teams = [
+            {"tid": 0, "abbrev": "AAA", "region": "City", "name": "AAA",
+             "seasons": [{"season": 2031, "won": 10, "lost": 2}]},
+            {"tid": 1, "abbrev": "BBB", "region": "City", "name": "BBB",
+             "seasons": [{"season": 2031, "won": 2, "lost": 10}]},
+        ]
+        players = [
+            {"pid": 1, "firstName": "P", "lastName": "0", "tid": 0,
+             "contract": {"amount": 320000, "exp": 2032}, "ratings": [{"season": 2031, "ovr": 60}]},
+            {"pid": 2, "firstName": "P", "lastName": "1", "tid": 1,
+             "contract": {"amount": 200000, "exp": 2032}, "ratings": [{"season": 2031, "ovr": 60}]},
+        ]
+        data = {"teams": teams, "players": players, "playoffSeries": [], "releasedPlayers": []}
+        return lg.compute_league_finances(data, teams, players, 2031, odds={})
+
+    def test_ledger_presents_budget_not_cash(self):
+        lf = self._league()
+        html = team_page.finance_ledger_card(lf["teams"][0], 2032)
+        self.assertIn("League share", html)
+        self.assertIn("Win payouts", html)
+        self.assertIn("Playoff bonuses", html)
+        self.assertIn("2032 budget", html)
+        self.assertIn("Season balance", html)
+        self.assertIn("Committed 2032 payroll", html)
+        self.assertIn("Budget surplus", html)
+        self.assertNotIn("Cash on hand", html)
+        self.assertNotIn("Starting balance", html)
+
+    def test_hero_chip_shows_budget_and_surplus(self):
+        lf = self._league()
+        over, under = lf["teams"][0], lf["teams"][1]
+        html = team_page.hero_finance_chip(over, 2032)
+        self.assertIn("2032 budget", html)
+        self.assertIn("Surplus vs committed", html)
+        self.assertNotIn("Cash on hand", html)
+        # over-cap team: budget 180+50-20+0=210 < committed 320 -> red surplus
+        self.assertAlmostEqual(over["net_revenue_proj"], 210000)
+        self.assertAlmostEqual(over["surplus_next"], 210000 - 320000)
+        self.assertIn("delta-down", html)
+        # under-cap team collects the pool and has a positive surplus
+        self.assertAlmostEqual(under["net_revenue_proj"], 180000 + 10000 + 20000)
+        self.assertIn("delta-up", team_page.hero_finance_chip(under, 2032))
+
+    def test_rules_card_states_the_new_numbers(self):
+        html = team_page.finance_rules_card()
+        self.assertIn("$180M", html)   # league share
+        self.assertIn("+$5M", html)    # per win
+        self.assertIn("+$10M", html)   # berth / finals
+        self.assertIn("+$15M", html)   # title
+        self.assertIn("+$35M", html)   # champion's stacked bonus
+        self.assertIn("$300M", html)   # soft cap / average budget
+        self.assertNotIn("$75", html)  # no starting cash
+        self.assertNotIn("carried cash", html.replace("no carried cash", ""))
 
 
 if __name__ == "__main__":

@@ -220,9 +220,11 @@ def _career_team_dots(player: dict[str, Any], teams_by_tid: dict[int, dict[str, 
 
 
 def _card_stat_tiles(player: dict[str, Any], season: int) -> str:
-    """Headline per-game tiles (PTS/REB/AST + integer FPTS) from the player's
-    most recent regular season with games played. Combines multi-team rows so a
-    midseason trade still reads as one line. Returns "" when nothing was played."""
+    """Headline per-game tiles from the player's most recent regular season
+    with games played: a counting row (PTS/REB/AST/STL/BLK) over a shooting
+    row (FG%/3P%/FT% + FPTS). The hero FPTS average keeps one decimal —
+    single-game FPTS stays integer everywhere else. Combines multi-team rows
+    so a midseason trade still reads as one line; "" when nothing was played."""
     rows = [
         s for s in player.get("stats", [])
         if not s.get("playoffs") and isinstance(s.get("season"), int)
@@ -238,20 +240,30 @@ def _card_stat_tiles(player: dict[str, Any], season: int) -> str:
         return ""
     trb_pg = (safe_float(stat.get("orb")) + safe_float(stat.get("drb"))) / gp
     fpts = fantasy_pts(stat)
-    tiles = [
-        ("PTS", fmt_number(per_game(stat, "pts"), 1), ""),
-        ("REB", fmt_number(trb_pg, 1), ""),
-        ("AST", fmt_number(per_game(stat, "ast"), 1), ""),
-    ]
+
+    def tile(label: str, value: str, cls: str = "") -> str:
+        return f'<div class="card-tile{cls}"><strong>{value}</strong><span>{esc(label)}</span></div>'
+
+    counting = "".join(tile(label, fmt_number(value, 1)) for label, value in [
+        ("PTS", per_game(stat, "pts")),
+        ("REB", trb_pg),
+        ("AST", per_game(stat, "ast")),
+        ("STL", per_game(stat, "stl")),
+        ("BLK", per_game(stat, "blk")),
+    ])
+    shooting = "".join(tile(label, fmt_pct(made_pct(stat.get(m), stat.get(a)))) for label, m, a in [
+        ("FG%", "fg", "fga"),
+        ("3P%", "tp", "tpa"),
+        ("FT%", "ft", "fta"),
+    ])
     if fpts is not None:
-        tiles.append(("FPTS", fmt_number(fpts / gp, 0), " card-tile--fpts"))
-    tiles_html = "".join(
-        f'<div class="card-tile{cls}"><strong>{value}</strong><span>{esc(label)}</span></div>'
-        for label, value, cls in tiles
-    )
+        shooting += tile("FPTS", fmt_number(fpts / gp, 1), " card-tile--fpts")
     return (
         f'<div class="player-card-tiles" role="group" aria-label="Per-game averages, {last_season} season">'
-        f'{tiles_html}<span class="card-tiles-cap">{last_season} per game</span></div>'
+        f'<span class="card-tiles-cap">{last_season} per game</span>'
+        f'<div class="card-tile-row card-tile-row--counting">{counting}</div>'
+        f'<div class="card-tile-row card-tile-row--shooting">{shooting}</div>'
+        f'</div>'
     )
 
 

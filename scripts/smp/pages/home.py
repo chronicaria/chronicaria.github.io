@@ -81,7 +81,7 @@ from ..core import (
 
 from ..derived import fantasy_pts, four_factors
 
-from ..finance import compute_league_finances
+from ..finance import compute_league_finances, fmt_money_pm
 
 from ..identity import team_chart_color
 
@@ -90,6 +90,15 @@ from ..ledger import load_odds_history
 from ..simmodel import league_sim, playoff_clinch_marks
 
 from .league import playoff_bracket_html
+
+
+def _odds_pct(pct: float) -> str:
+    """Odds percentage at one-decimal precision; dash for zero, floor for traces."""
+    if pct == 0:
+        return "—"
+    if pct < 0.05:
+        return "&lt;0.1%"
+    return fmt_number(pct, 1) + "%"
 
 
 def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
@@ -113,9 +122,9 @@ def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season:
         cells = [
             td(f'{team_dot(tid, palette)}{team_anchor(team)}', sort=team_full_name(team), cls="name-cell"),
             td(f"{fmt_number(proj_w, 1)}-{fmt_number(proj_l, 1)}", sort=proj_w),
-            td(fmt_number(po_pct, 0) + "%", sort=po_pct, style=heat_style(po_pct, 0, 100, 1)),
-            td((fmt_number(finals_pct, 0) if finals_pct >= 0.5 else ("—" if finals_pct == 0 else "<1")) + ("%" if finals_pct >= 0.5 else ""), sort=finals_pct),
-            td((fmt_number(champ_pct, 0) if champ_pct >= 0.5 else ("—" if champ_pct == 0 else "<1")) + ("%" if champ_pct >= 0.5 else ""), sort=champ_pct, style=heat_style(champ_pct, 0, max(1.0, max(100 * x[1]["champ"] for x in infos)), 1)),
+            td(_odds_pct(po_pct), sort=po_pct, style=heat_style(po_pct, 0, 100, 1)),
+            td(_odds_pct(finals_pct), sort=finals_pct),
+            td(_odds_pct(champ_pct), sort=champ_pct, style=heat_style(champ_pct, 0, max(1.0, max(100 * x[1]["champ"] for x in infos)), 1)),
         ]
         for seed_index in range(n_seeds):
             pct = 100 * o["seeds"][seed_index]
@@ -814,35 +823,59 @@ def rookie_watch_card(data: dict[str, Any], players: list[dict[str, Any]], teams
     """
 
 
+def _fin_pick(f: dict[str, Any], keys: tuple[str, ...], default: float = 0.0) -> float:
+    """First present key from the finance ledger; keeps the merge with finance.py defensive."""
+    for key in keys:
+        if key in f:
+            return safe_float(f.get(key), default)
+    return default
+
+
 def home_finances_table(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> str:
-    """League-wide finance snapshot for the home page: one row per team, richest first."""
-    fin = compute_league_finances(data, teams, players, season)["teams"]
+    """League-wide finance snapshot for the home page: one row per team, biggest budget first."""
+    odds = (league_sim(data, teams, season) or {}).get("teams") or None
+    try:
+        fin = compute_league_finances(data, teams, players, season, odds)["teams"]
+    except TypeError:  # defensive: finance.py signature may evolve in the parallel merge
+        fin = compute_league_finances(data, teams, players, season)["teams"]
     palette = team_palette_by_tid(teams)
-    rows_data = sorted(
-        ((t, fin[safe_int(t.get("tid"), -99)]) for t in teams if safe_int(t.get("tid"), -99) in fin),
-        key=lambda tf: -tf[1]["cash_now"],
-    )
+    year = season + 1
+    rows_data = []
+    for t in teams:
+        f = fin.get(safe_int(t.get("tid"), -99))
+        if f is None:
+            continue
+        rev_proj = _fin_pick(f, ("revenue_proj", "rev_proj"))
+        tax_proj = _fin_pick(f, ("tax_proj", "luxtax"))
+        tax_share = _fin_pick(f, ("tax_share_in", "tax_share"))
+        # Budget = projected net revenue (revenue − luxury tax + tax redistribution + adjustments).
+        budget = _fin_pick(f, ("net_proj", "net_revenue_proj", "net_revenue"),
+                           rev_proj - tax_proj + tax_share + _fin_pick(f, ("adj",)))
+        committed = _fin_pick(f, ("committed_next", "payroll_next"))
+        surplus = _fin_pick(f, ("surplus_next",), budget - committed)
+        rows_data.append((t, f, rev_proj, budget, committed, surplus))
     if not rows_data:
         return ""
-    year = season + 1
-    headers = ["Team", "Record", "Cash on Hand", f"{year} Payroll", "Available to Spend"]
+    rows_data.sort(key=lambda r: (-r[3], team_full_name(r[0])))
+    headers = ["Team", "Record", "Proj revenue", f"{year} budget", f"{year} committed payroll", "Surplus"]
     rows = []
-    for t, f in rows_data:
+    for t, f, rev_proj, budget, committed, surplus in rows_data:
         tid = safe_int(t.get("tid"))
-        avail = f.get("avail", f["cash_now"] - f.get("payroll_next", 0.0))
-        ac = "delta-up" if avail >= 0 else "delta-down"
+        sc = "delta-up" if surplus >= 0 else "delta-down"
         rows.append("".join([
             td(f'{team_dot(tid, palette)}<a class="player-link" href="teams/{team_slug(t)}-finances.html">{esc(team_full_name(t))}</a>',
                sort=team_full_name(t), cls="name-cell"),
-            td(fmt_record(f["won"], f["lost"]), sort=safe_int(f["won"])),
-            td(fmt_money(f["cash_now"]), sort=f["cash_now"]),
-            td(fmt_money(f.get("payroll_next", 0.0)), sort=f.get("payroll_next", 0.0)),
-            td(f'<span class="{ac}">{fmt_money(avail)}</span>', sort=avail),
+            td(fmt_record(f.get("won", 0), f.get("lost", 0)), sort=safe_int(f.get("won", 0))),
+            td(fmt_money(rev_proj), sort=rev_proj),
+            td(fmt_money(budget), sort=budget),
+            td(fmt_money(committed), sort=committed),
+            td(f'<span class="{sc}">{fmt_money_pm(surplus)}</span>', sort=surplus),
         ]))
+    detail = (f"Budget = projected revenue − luxury tax + tax redistribution. "
+              f"Surplus = {year} budget − {year} committed payroll (roster, dead money, retention).")
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>Team Finances</h2><span class="muted small-copy" title="Available to spend = cash on hand − {year} payroll">bankroll entering {year}</span></div>
-
+      <div class="section-title-row"><h2>Team Finances</h2><span class="muted small-copy" title="{esc(detail)}">{year} budget vs committed payroll</span></div>
       {table_html(headers, rows, table_id="home-finances")}
     </section>
     """

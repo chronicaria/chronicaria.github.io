@@ -121,18 +121,30 @@ class TestTradingCard(unittest.TestCase):
         self.assertEqual(n_dots, 2)
         self.assertIn("career-dot career-dot--now", html)
 
-    def test_stat_tiles_show_per_game_line_with_integer_fpts(self):
+    def test_stat_tiles_have_counting_row_and_shooting_row(self):
         teams_by_tid = {t["tid"]: t for t in TEAMS}
         player = _player(30)
         html = pp.trading_card_html(player, teams_by_tid, 2031)
         self.assertIn("player-card-tiles", html)
-        self.assertIn(">PTS<", html)
+        self.assertIn("card-tile-row--counting", html)
+        self.assertIn("card-tile-row--shooting", html)
+        for label in ("PTS", "REB", "AST", "STL", "BLK", "FG%", "3P%", "FT%", "FPTS"):
+            self.assertIn(f">{label}<", html)
         self.assertIn(">30.0<", html)  # 300 pts / 10 gp
-        # FPTS tile is per-game, integer: 502 fantasy pts / 10 gp -> 50.
-        expected = lg.fantasy_pts(player["stats"][0]) / 10.0
-        self.assertIn(f">{expected:.0f}<", html)
-        self.assertNotIn(f">{expected:.1f}<", html)
+        self.assertIn(">1.0<", html)   # 10 stl / 10 gp
+        self.assertIn(">0.8<", html)   # 8 blk / 10 gp
+        self.assertIn(">50.0<", html)  # 100/200 FG
+        self.assertIn(">33.3<", html)  # 20/60 3P
+        self.assertIn(">83.3<", html)  # 50/60 FT
         self.assertIn("2030 per game", html)
+
+    def test_hero_fpts_average_keeps_one_decimal(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        player = _player(33)
+        html = pp.trading_card_html(player, teams_by_tid, 2031)
+        # 502 fantasy pts / 10 gp -> 50.2 (one decimal on the hero card only).
+        expected = lg.fantasy_pts(player["stats"][0]) / 10.0
+        self.assertIn(f">{expected:.1f}<", html)
 
     def test_no_games_played_renders_no_tiles(self):
         teams_by_tid = {t["tid"]: t for t in TEAMS}

@@ -38,7 +38,6 @@ from ..core import (
     fmt_pct,
     fmt_record,
     game_ot_label,
-    game_score_value,
     game_slug_from_gid,
     game_url,
     game_winner_tid,
@@ -84,7 +83,7 @@ from ..core import (
 
 from ..simmodel import fa_salary_by_length, league_sim
 
-from ..derived import led_league
+from ..derived import fantasy_pts, led_league
 
 from ..identity import crest_svg, monogram_svg, team_css_vars
 
@@ -316,7 +315,7 @@ def rafters_strip_html(data: dict[str, Any], teams: list[dict[str, Any]]) -> str
         )
     return f"""
     <section class="card rafters-card">
-      <div class="section-title-row"><h2>The Rafters</h2><span class="muted small-copy">every championship banner in league history · click a pennant for that season</span></div>
+      <div class="section-title-row"><h2>The Rafters</h2><span class="muted small-copy">click a pennant for that season</span></div>
       <div class="rafters" role="list">{''.join(slots)}</div>
     </section>
     """
@@ -396,7 +395,7 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
     if fa_cards:
         fa_card_strip = f"""
     <section class="card">
-      <div class="section-title-row"><h2>Top of the Market</h2><span class="muted small-copy">best available by overall · chip shows the asking price</span></div>
+      <div class="section-title-row"><h2>Top of the Market</h2><span class="muted small-copy">best available by overall · chip = asking price</span></div>
       <div class="fa-card-strip">{''.join(fa_cards)}</div>
     </section>
     """
@@ -406,7 +405,7 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
       <div>
         <p class="eyebrow">Free Agency</p>
         <h1>{market_year} Free Agents</h1>
-        <p class="muted">Every unsigned player available this offseason. Starting bid is the annual value of a one-year deal, derived from the player's overall, potential, and age.</p>
+        <p class="muted">Starting bid is the annual value of a one-year deal, set by overall, potential, and age.</p>
       </div>
     </section>
     {fa_card_strip}
@@ -607,7 +606,7 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
         <canvas id="player-chart" data-player-chart height="460"></canvas>
         <div class="chart-tooltip" data-chart-tooltip hidden></div>
       </div>
-      <p class="muted small-copy">Players with at least one game played. Click a team in the legend to hide or show it; click a dot to open the player.</p>
+      <p class="muted small-copy">Min 1 GP · click a legend team to toggle it · click a dot to open the player</p>
     </section>
     <script type="application/json" id="player-chart-data">{payload_json}</script>
     """
@@ -616,7 +615,7 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
     <section class="page-hero">
       <div>
         <h1>Players</h1>
-        <p class="muted">{len(sorted_players)} rostered · {len(fa_players)} free agents · {len(prospects)} draft prospects · deeper signing tools in the <a href="../free-agency.html">Free Agency</a> tab</p>
+        <p class="muted">{len(sorted_players)} rostered · {len(fa_players)} free agents · {len(prospects)} prospects · signings live in <a href="../free-agency.html">Free Agency</a></p>
       </div>
       <div>
         <a class="button-link compare-cta" href="../compare.html">⇄ Compare Players</a>
@@ -653,12 +652,15 @@ def best_performances_card(data: dict[str, Any], teams: list[dict[str, Any]], se
             box = entry.get("box") or {}
             if safe_float(box.get("min")) <= 0:
                 continue
-            scored.append((game_score_value(box), pid, entry))
+            fpts = fantasy_pts(box)
+            if fpts is None:
+                continue
+            scored.append((fpts, pid, entry))
     if not scored:
         return ""
     scored.sort(key=lambda x: -x[0])
     rows = []
-    for gmsc, pid, entry in scored[:10]:
+    for fpts, pid, entry in scored[:10]:
         player = ALL_PLAYERS_BY_PID.get(pid)
         box = entry["box"]
         trb = safe_float(box.get("orb")) + safe_float(box.get("drb"))
@@ -668,12 +670,12 @@ def best_performances_card(data: dict[str, Any], teams: list[dict[str, Any]], se
             td(name_html, sort=player_name(player) if player else "", cls="name-cell"),
             td(f'<a href="{root}games/{esc(game_slug_from_gid(entry.get("gid")))}.html">Day {safe_int(entry.get("day"))} vs {esc(team_abbrev_for_tid(entry.get("opp_tid"), teams_by_tid))}</a>', sort=entry.get("day")),
             td(line, sort=safe_float(box.get("pts"))),
-            td(fmt_number(gmsc, 1), sort=gmsc),
+            td(fmt_number(int(round(fpts)), 0), sort=fpts, cls="lg-fpts-cell"),
         ]))
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>Best Performances · Season {season}</h2><span class="muted small-copy">by Game Score</span></div>
-      {table_html(["Player", "Game", "Line", "GmSc"], rows, table_id="best-perf", empty_message="No games yet.", wrap_cls="fit-table")}
+      <div class="section-title-row"><h2>Best Performances · Season {season}</h2><span class="muted small-copy">by fantasy points</span></div>
+      {table_html(["Player", "Game", "Line", "FPTS"], rows, table_id="best-perf", empty_message="No games yet.", wrap_cls="fit-table")}
     </section>
     """
 
@@ -720,7 +722,7 @@ def head_to_head_matrix(data: dict[str, Any], teams: list[dict[str, Any]], seaso
 
     return f"""
     <section class="card">
-      <div class="section-title-row"><h2>Head-to-Head</h2><span class="muted small-copy">Season {season} · read across: row team's record vs column team</span></div>
+      <div class="section-title-row"><h2>Head-to-Head</h2><span class="muted small-copy">Season {season} · row team's record vs column team</span></div>
       <div class="table-wrap fit-table">
         <table id="h2h-grid" class="h2h-grid">
           <thead><tr><th>Team</th>{header}</tr></thead>
@@ -798,13 +800,13 @@ def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], sche
         table = f"""
         <div class="sched-empty">
           <p class="sched-empty-title">The {upcoming} schedule hasn't been released yet.</p>
-          <p class="muted">Game days will appear here as soon as the league office publishes the slate.
-          Until then, the <a href="index.html">home page</a> carries the projected {upcoming} standings and title odds.</p>
+          <p class="muted">Projected {upcoming} standings and title odds live on the <a href="index.html">home page</a>.</p>
         </div>
         """
 
     season_for_h2h = max((safe_int(item.get("season")) for item in items), default=upcoming)
-    hero_copy = (f"{esc(label)} · <strong>vs.</strong> home · <strong>@</strong> road · the highlighted row is the next game day"
+    hero_copy = (f'{esc(label)} · <strong>vs.</strong> home · <strong>@</strong> road · '
+                 f'<span title="The highlighted row is the next game day">highlight = next day</span>'
                  if rows else esc(label))
     body = f"""
     <section class="page-hero">
@@ -1026,10 +1028,10 @@ def projected_lottery_html(data: dict[str, Any], teams: list[dict[str, Any]], se
     if not rows:
         return ""
     headers = ["Pick", "Slot (record)", "Owned by"]
-    note = "reverse of current standings · green badge = pick changed hands"
+    note = "reverse of current standings · green badge = traded pick"
     if slot_odds:
         headers += ["#1 slot %", "Top-3 %"]
-        note = "reverse of current standings · slot odds from the season simulation · green badge = pick changed hands"
+        note = "reverse of current standings · simulated slot odds · green badge = traded pick"
     return f"""
     <section class="card home-section">
       <div class="section-title-row"><h2>Projected Draft Order</h2><span class="muted small-copy">{note}</span></div>
@@ -1203,7 +1205,7 @@ def draft_regrades_section(data: dict[str, Any], teams: list[dict[str, Any]], se
         if class_played:
             note_copy = f"re-graded by career regular-season Win Shares · through {latest_completed}"
         else:
-            note_copy = f"drafted after the {year} season · the class debuts in {year + 1}, so there is nothing to re-grade yet"
+            note_copy = f"class debuts in {year + 1} · nothing to re-grade yet"
         headers = ["Pick", "Player", "Pos", "Drafted by", "Now", ("GP", "group-start"), "PPG", "WS", "EWA",
                    ("Honors", "group-start"), "Note"]
         table_id = f"regrade-{year}"
@@ -1220,7 +1222,7 @@ def draft_regrades_section(data: dict[str, Any], teams: list[dict[str, Any]], se
 
     return f"""
     <section class="card regrade-card">
-      <div class="section-title-row"><h2>Draft Re-Grades</h2><span class="muted small-copy">how every past pick panned out · steal and bust calls compare draft slot with career Win Shares</span></div>
+      <div class="section-title-row"><h2>Draft Re-Grades</h2><span class="muted small-copy" title="Steal and bust calls compare draft slot with career Win Shares">every past pick, re-graded by career Win Shares</span></div>
       <div class="tabs" role="tablist" aria-label="Past draft classes" data-tabs>
         {''.join(tabs)}
       </div>
@@ -1251,7 +1253,7 @@ def render_draft_page(data: dict[str, Any], teams: list[dict[str, Any]], season:
     <section class="page-hero">
       <div>
         <h1>Draft</h1>
-        <p class="muted">Upcoming classes · sorted by potential · ratings color-scaled within each class · pick slots from current standings</p>
+        <p class="muted">Upcoming classes sorted by potential · pick slots from current standings</p>
       </div>
       <div class="view-toggle draft-tabs" role="tablist" aria-label="Draft classes" data-draft-tabs>{tabs}</div>
     </section>
@@ -1399,7 +1401,7 @@ def render_history_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> st
     <section class="page-hero">
       <div>
         <h1>League History</h1>
-        <p class="muted">Champions, awards, and playoff brackets from past seasons · <span class="led-league" title="Gold marks a stat that led the league that season">gold ★</span> = led the league</p>
+        <p class="muted">Champions, awards, and brackets · <span class="led-league" title="Gold marks a stat that led the league that season">gold ★</span> = led the league</p>
       </div>
     </section>
     {rafters_strip_html(data, teams)}
@@ -1536,7 +1538,7 @@ def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], seaso
     feats = [f for f in data.get("playerFeats", []) if isinstance(f, dict)]
     feats.sort(key=lambda f: (feat_rank(f.get("stats") or {}), -safe_int((f.get("stats") or {}).get("pts")), -safe_int(f.get("season"))))
     # No Season column: the feats tables live inside per-season tabs already.
-    headers = ["Player", "Team", "Opp", "Result", "Line", "Feat"]
+    headers = ["Player", "Team", "Opp", "Result", "Line", "FPTS", "Feat"]
 
     def feat_row(feat: dict[str, Any]) -> str:
         stats = feat.get("stats") or {}
@@ -1556,12 +1558,14 @@ def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], seaso
             if lead is not None and abs(value - lead) <= 1e-6:
                 bit = led_league_mark(bit, f"Best single-game {label} total of {feat_season}")
             line_bits.append(bit)
+        fpts = fantasy_pts(stats)
         return "".join([
             td(event_player_link(feat.get("pid"), all_players_by_pid, "", label=feat.get("name")), sort=feat.get("name"), cls="name-cell"),
             td(team_label(feat.get("tid"), teams_by_tid), sort=team_abbrev_for_tid(feat.get("tid"), teams_by_tid)),
             td(team_label(feat.get("oppTid"), teams_by_tid), sort=team_abbrev_for_tid(feat.get("oppTid"), teams_by_tid)),
             td(result_text, sort=feat.get("score")),
             td(" · ".join(line_bits), sort=safe_int(stats.get("pts"))),
+            td(fmt_number(int(round(fpts)), 0) if fpts is not None else "—", sort=fpts, cls="lg-fpts-cell"),
             td(badges, sort=feat_rank(stats)),
         ])
 

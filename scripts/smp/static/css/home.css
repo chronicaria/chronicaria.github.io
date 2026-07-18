@@ -178,6 +178,14 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .oddsr-tip-row .oddsr-tip-val { margin-left: auto; font-weight: 600; color: var(--text); }
 .oddsr-tip-dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 50%; flex: 0 0 auto; }
 
+/* ---------- caption tooltips ---------- */
+.home-section .section-title-row span.small-copy[title] {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-decoration-color: color-mix(in srgb, var(--muted) 55%, transparent);
+  text-underline-offset: 3px;
+}
+
 /* ---------- fantasy leaders (fanl-) ---------- */
 .fanl-list li { gap: .35rem; }
 .fanl-track {

@@ -143,20 +143,30 @@ def team_finances_table(roster: list[dict[str, Any]], season: int, data: dict[st
 
 # ---------- league finance model ----------
 # All amounts in Basketball GM "thousands" units (300000 == $300M). No hard cap.
+# Revenue is all performance-based (no base payout as of 2031). Derivation:
+# 225 league wins/season -> per-team avg revenue = (225*20 + 4*70 + 2*100 + 99)/10
+# = $507.9M, so the average end-of-year bankroll is 75 + 507.9 - 282.9 (avg payroll)
+# = exactly $300.0M (luxury tax and trade cash net to zero league-wide).
 FIN_START = 75000       # every team starts the season with $75M
-FIN_BASE = 160000       # base league payout: +$160M
-FIN_PER_WIN = 2000      # +$2M per regular-season win
-FIN_PLAYOFF = 15000     # +$15M for a playoff appearance
-FIN_FINALS = 15000      # +$15M for a finals appearance
-FIN_CHAMP = 15000       # +$15M for a championship (bonuses stack: champion earns 15+15+15=$45M)
+FIN_PER_WIN = 20000     # +$20M per regular-season win
+FIN_PLAYOFF = 70000     # +$70M for a playoff appearance
+FIN_FINALS = 100000     # +$100M for a finals appearance
+FIN_CHAMP = 99000       # +$99M for a championship (bonuses stack: champion earns 70+100+99=$269M)
 FIN_SOFT_CAP = 300000   # soft cap: $1 luxury tax per $1 of payroll over $300M
 
-# Manual cash adjustments outside the auto-computed ledger (thousands), keyed by tid.
-# Cash that changes hands in a trade, since BBGM exports don't record it. Signed:
-# negative = cash out, positive = cash in. ponytail: hand-maintained; add rows as trades happen.
-FIN_ADJUSTMENTS: dict[int, dict[str, Any]] = {
-    2: {"amount": -1000, "note": "Cash to Waltham (trade)"},    # Cambridge Platypuses
-    6: {"amount":  1000, "note": "Cash from Cambridge (trade)"},  # Waltham Bears
+# Manual cash adjustments outside the auto-computed ledger (thousands), keyed by
+# season -> tid. Cash that changes hands in a trade, since BBGM exports don't record
+# it. Signed: negative = cash out, positive = cash in; each season's entries must net
+# to zero. ponytail: hand-maintained; add rows as trades happen.
+FIN_ADJUSTMENTS: dict[int, dict[int, dict[str, Any]]] = {
+    2030: {
+        2: {"amount": -1000, "note": "Cash to Waltham (trade)"},    # Cambridge Platypuses
+        6: {"amount":  1000, "note": "Cash from Cambridge (trade)"},  # Waltham Bears
+    },
+    2031: {
+        5: {"amount": -30000, "note": "Darryn Peterson trade"},  # Gooning Gooners
+        6: {"amount":  30000, "note": "Darryn Peterson trade"},  # Waltham Bears
+    },
 }
 
 # Salary retained in a trade: the original team keeps paying part of a traded player's
@@ -308,7 +318,7 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
         proj_w = safe_float(o.get("proj_w"), float(won))
         po_p, fin_p, champ_p = safe_float(o.get("po")), safe_float(o.get("finals")), safe_float(o.get("champ"))
         proj_playoff = FIN_PLAYOFF * po_p + FIN_FINALS * fin_p + FIN_CHAMP * champ_p
-        adj_info = FIN_ADJUSTMENTS.get(tid) or {}
+        adj_info = (FIN_ADJUSTMENTS.get(season) or {}).get(tid) or {}
         fin[tid] = {
             "adj": safe_float(adj_info.get("amount"), 0.0), "adj_note": adj_info.get("note", ""),
             "payroll": payroll, "payroll_next": payroll_next, "dead": dead, "retained": retained, "won": won, "lost": lost, "luxtax": luxtax,
@@ -316,8 +326,8 @@ def compute_league_finances(data: dict[str, Any], teams: list[dict[str, Any]], p
             "win_rev_now": FIN_PER_WIN * won, "win_rev_proj": FIN_PER_WIN * proj_w,
             "earned_playoff": earned_playoff, "proj_playoff": proj_playoff,
             "proj_w": proj_w, "po": po_p, "finals": fin_p, "champ": champ_p,
-            "rev_now": FIN_BASE + FIN_PER_WIN * won + earned_playoff,
-            "rev_proj": FIN_BASE + FIN_PER_WIN * proj_w + proj_playoff,
+            "rev_now": FIN_PER_WIN * won + earned_playoff,
+            "rev_proj": FIN_PER_WIN * proj_w + proj_playoff,
         }
     pool = sum(f["luxtax"] for f in fin.values())
     under = [t for t, f in fin.items() if f["under_cap"]]

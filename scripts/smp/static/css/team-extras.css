@@ -40,10 +40,89 @@
   padding: .18rem .45rem;
   font-size: .72rem;
 }
-.depth-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .6rem; }
-@media (max-width: 900px) { .depth-grid { grid-template-columns: repeat(2, 1fr); } }
-.depth-col { padding: .5rem .6rem; border: 1px solid rgba(255,255,255,.05); border-radius: .15rem; background: var(--panel-2); }
-.depth-col h3 { margin: 0 0 .35rem; font-size: .7rem; font-weight: 700; letter-spacing: .07em; color: var(--muted); }
+/* ---------- depth chart card rows (Starters / 2nd String / 3rd String) ---------- */
+.depth-rows { display: grid; gap: .8rem; }
+.depth-row-label {
+  margin: 0 0 .35rem;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.depth-row-cards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; }
+@media (max-width: 980px) { .depth-row-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .depth-row-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.depth-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  min-width: 0;
+  padding: .5rem .45rem .55rem;
+  border: 1px solid var(--line);
+  border-radius: .2rem;
+  background: var(--panel-2);
+  background: color-mix(in srgb, var(--team-primary) 6%, var(--panel-2));
+  color: var(--text);
+  text-decoration: none;
+  text-align: center;
+}
+a.depth-card:hover { border-color: var(--team-secondary, var(--accent)); text-decoration: none; }
+.depth-card-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.depth-pos { color: var(--muted); font-size: .64rem; font-weight: 700; letter-spacing: .08em; }
+.depth-ovr {
+  padding: .04rem .34rem;
+  border-radius: .15rem;
+  background: var(--panel-3);
+  background: color-mix(in srgb, var(--team-primary) 22%, var(--panel-3));
+  font-size: .72rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  cursor: help;
+}
+.depth-portrait-wrap { position: relative; display: block; width: 3rem; height: 3rem; }
+.depth-portrait-wrap .monogram,
+.depth-portrait-wrap .depth-portrait {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.depth-portrait-wrap .depth-portrait {
+  z-index: 1;
+  background: var(--panel);
+  border: 2px solid var(--team-secondary, var(--line));
+}
+.depth-portrait-wrap .tm-under { z-index: 0; border: 0; }
+.depth-id {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: .3rem;
+  max-width: 100%;
+  font-size: .78rem;
+  line-height: 1.2;
+}
+.depth-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.depth-num { color: var(--muted); font-size: .68rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.depth-line { display: flex; justify-content: center; gap: .55rem; margin-top: .05rem; }
+.depth-stat { display: grid; gap: 0; justify-items: center; line-height: 1.15; }
+.depth-stat strong { font-size: .74rem; font-variant-numeric: tabular-nums; }
+.depth-stat small { color: var(--muted); font-size: .56rem; font-weight: 700; letter-spacing: .05em; }
+.depth-card--vacant {
+  justify-content: center;
+  border-style: dashed;
+  border-color: var(--muted);
+  background: var(--panel);
+  opacity: .7;
+  min-height: 7.6rem;
+}
+.depth-card--vacant .depth-pos { font-size: .78rem; }
+.depth-vacant-label { color: var(--muted); font-size: .72rem; }
 .pick-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .4rem; }
 .pick-chip {
   display: inline-flex;
@@ -78,29 +157,7 @@
 .preview-injuries p { margin: .15rem 0; }
 
 
-/* ---------- W2 rotation river (stacked minutes streamgraph) ---------- */
-.river-wrap { max-width: 760px; }
-.river-chart { width: 100%; height: auto; display: block; cursor: crosshair; }
-.river-band { stroke: var(--bg); stroke-width: .8; }
-.river-band.river-dim { opacity: .25; }
-.river-guide { stroke: var(--text); stroke-width: 1; opacity: .6; pointer-events: none; }
-.river-legend { display: flex; flex-wrap: wrap; gap: .3rem .45rem; margin-top: .5rem; }
-.river-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: .3rem;
-  padding: .1rem .45rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--panel-2);
-  color: var(--text);
-  font-size: .7rem;
-  text-decoration: none;
-}
-.river-chip:hover { border-color: var(--river-color, var(--accent)); text-decoration: none; }
-.river-chip-dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--river-color, var(--muted)); flex: 0 0 auto; }
-.river-tooltip { min-width: 9rem; max-width: 14rem; white-space: normal; }
-.river-tooltip span { display: block; }
+/* ---------- rotation map hover crosshair ---------- */
 .rotation-map .col-hl { background: rgba(255, 255, 255, .07); }
 .rotation-map tr.row-hl > td { box-shadow: inset 0 0 0 999px rgba(255, 255, 255, .05); }
 
@@ -152,7 +209,21 @@
   text-overflow: ellipsis;
   padding: 0 .3rem;
 }
-.share-legend { margin-top: .45rem; }
+.share-legend { display: flex; flex-wrap: wrap; gap: .3rem .45rem; margin-top: .45rem; }
+.share-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .1rem .45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: .7rem;
+  text-decoration: none;
+}
+.share-chip:hover { border-color: var(--share-color, var(--accent)); text-decoration: none; }
+.share-chip-dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--share-color, var(--muted)); flex: 0 0 auto; }
 
 /* ---------- W2 four factors diverging strip ---------- */
 .ff-wrap { max-width: 720px; }
@@ -190,6 +261,5 @@
 .arc-pin-more { fill: var(--muted); font-size: 9.5px; font-weight: 700; }
 .arc-legend { margin-top: .35rem; }
 .arc-col:hover .arc-win { opacity: .85; }
-.river-chip.active { border-color: var(--river-color, var(--accent)); box-shadow: inset 0 0 0 1px var(--river-color, var(--accent)); }
 html[data-theme="light"] .rotation-map .col-hl { background: rgba(0, 0, 0, .07); }
 html[data-theme="light"] .rotation-map tr.row-hl > td { box-shadow: inset 0 0 0 999px rgba(0, 0, 0, .05); }

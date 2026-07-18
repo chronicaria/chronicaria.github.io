@@ -171,7 +171,12 @@ class TestBoxScoreTables(unittest.TestCase):
     def test_totals_row_carries_team_fpts(self):
         team_fpts = fantasy_pts(self.item["home_box"])
         self.assertIsNotNone(team_fpts)
-        self.assertIn("%.1f" % team_fpts, self.html)
+        # FPTS displays as a whole number; the raw float stays as the sort key.
+        self.assertIn(">%d</td>" % int(round(team_fpts)), self.html)
+
+    def test_gmsc_column_replaced_by_fpts(self):
+        self.assertNotIn(">GmSc<", self.html)
+        self.assertNotIn("ESPN", self.html)
 
 
 class TestGameStars(unittest.TestCase):

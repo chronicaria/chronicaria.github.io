@@ -48,8 +48,8 @@ def render_lineup_page(
     <section class="page-hero">
       <div>
         <h1>Lineup Lab</h1>
-        <p class="muted">Pick any five players — rostered, free agent, or draft prospect · projected lineup overall,
-        win odds against all ten rosters, and the salary bill vs the {esc(tax_m)} tax line · the URL tracks your five, so copy it to share</p>
+        <p class="muted">Pick any five players · projected overall, win odds vs every roster, salary vs the
+        {esc(tax_m)} tax line · the URL tracks your five</p>
       </div>
       <div class="muted">{esc(season)} ratings</div>
     </section>
@@ -72,10 +72,8 @@ def render_lineup_page(
       </section>
       <section class="card">
         <h2>Matchups</h2>
-        <p class="tool-note muted">Both sides are rated by the engine's team-overall formula — your five plus a
-        replacement-level bench vs each team's top-ten roster — and the rating gap feeds the same logistic
-        win-probability model as the home page's playoff odds. Home and road odds differ by the model's
-        home-court edge.</p>
+        <p class="tool-note muted" title="Both sides use the engine's team-overall formula; the rating gap feeds the same logistic win-probability model as the home page's playoff odds, with home and road split by the model's home-court edge.">Your
+        five + a league-average bench vs each full roster, scored by the home page's win-probability model.</p>
         <div data-ll-matchups>
           <p class="muted">Pick five players to see the matchup board.</p>
         </div>

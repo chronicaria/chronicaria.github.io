@@ -134,7 +134,7 @@ class TestOddsRiverCard(unittest.TestCase):
         history = [_snapshot(2031, 0, 0, {0: 0.55, 1: 0.45})]
         html = home.odds_river_card(self.data, self.teams, 2031, history=history)
         self.assertNotIn("<polyline", html)
-        self.assertIn("odds history accumulates as the season progresses", html)
+        self.assertIn("one snapshot so far", html)
         self.assertIn('class="oddsr-dot"', html)
         self.assertIn(">AAA</text>", html)  # labels sit next to the dots
         self.assertNotIn("data-oddsr", html)  # no hover plumbing for one point
@@ -176,16 +176,18 @@ class TestFantasyLeadersCard(unittest.TestCase):
         self.assertIn("Role Guy", html)
         self.assertNotIn("Small Sample", html)
         self.assertLess(html.find("Big Star"), html.find("Role Guy"))
-        # Preseason fallback is labeled honestly.
+        # Preseason fallback is labeled honestly; the stat is plain FPTS.
         self.assertIn("2030 · last completed season", html)
-        self.assertIn("ESPN points scoring", html)
+        self.assertIn("FPTS/G", html)
+        self.assertNotIn("ESPN", html)
 
-    def test_espn_scoring_value(self):
+    def test_fantasy_scoring_value_is_integer(self):
         # Per game: pts20 fg8 fga16 tp2 ft2 fta3 trb8 ast5 stl1 blk1 tov2
-        # = 20 + 2 + 16 - 16 + 2 - 3 + 8 + 10 + 4 + 4 - 4 = 43.0 FPTS/G
+        # = 20 + 2 + 16 - 16 + 2 - 3 + 8 + 10 + 4 + 4 - 4 = 43 FPTS/G, shown as an int
         player = self._player(1, "Known Line", 0, 2030, 40)
         html = home.fantasy_leaders_card(self.data, [player], self.teams, 2030, 2031)
-        self.assertIn(">43.0</span>", html)
+        self.assertIn(">43</span>", html)
+        self.assertNotIn(">43.0</span>", html)
 
     def test_no_team_games_renders_nothing(self):
         teams = [_team(0, "AAA"), _team(1, "BBB")]  # no 2030 stat rows
@@ -227,13 +229,14 @@ class TestOffseasonEvents(unittest.TestCase):
                 {"type": "playoffs", "season": 2030, "eid": 10},               # boundary marker
                 {"type": "freeAgent", "season": 2030, "eid": 12},              # offseason signing
                 {"type": "draft", "season": 2030, "eid": 3},                   # draft is always offseason
-                {"type": "retired", "season": 2030, "eid": 4},
+                {"type": "retired", "season": 2030, "eid": 4},                 # retirement news is excluded
+                {"type": "hallOfFame", "season": 2030, "eid": 8},              # HoF news is excluded
                 {"type": "freeAgent", "season": 2029, "eid": 99},              # wrong season
                 {"type": "injured", "season": 2030, "eid": 13},                # not a transaction
             ]
         }
         eids = [e["eid"] for e in home.offseason_events(data, 2030)]
-        self.assertEqual(eids, [3, 4, 7, 12])
+        self.assertEqual(eids, [3, 7, 12])
 
 
 class TestPreseasonComposition(unittest.TestCase):

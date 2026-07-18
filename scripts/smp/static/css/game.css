@@ -46,8 +46,10 @@
 .box-team-section { margin-bottom: .9rem; }
 .box-team-section h2 { margin: 0 0 .4rem; font-size: .95rem; text-transform: none; letter-spacing: 0; color: var(--text); }
 .box-score-table { min-width: 1080px; }
-.bench-start td { border-top: 2px solid rgba(255,255,255,.25); }
+.bench-start td { border-top: 2px solid color-mix(in srgb, var(--text) 25%, transparent); }
 .total-row td, .pct-row td { font-weight: 700; background: var(--panel-2); }
+.total-row td { border-top: 1px solid var(--line); }
+.box-score-table td:last-child, .box-score-table th:last-child { font-variant-numeric: tabular-nums; }
 .total-label { color: var(--text); }
 .pct-row td { border-bottom: 0; }
 

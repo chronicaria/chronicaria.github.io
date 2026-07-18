@@ -17,6 +17,7 @@ from __future__ import annotations
 import functools
 import json
 from pathlib import Path
+from urllib.parse import quote
 from typing import Any, Iterable, Union
 
 from .core import esc, initials, player_name
@@ -143,7 +144,13 @@ def portrait_html(
         if face_src:
             onerror = f"this.onerror=null;this.classList.add('portrait-broken');this.src='{face_src}'"
         else:
-            onerror = "this.onerror=null;this.classList.add('portrait-broken');this.style.visibility='hidden'"
+            # Dead photo with no face: swap in the monogram markup so the slot
+            # never renders as an empty ring.
+            mono_markup = _monogram_span(player, cls, name)
+            onerror = (
+                "this.onerror=null;"
+                f"this.outerHTML=decodeURIComponent('{quote(mono_markup)}')"
+            )
         return (
             f'<img class="{esc(cls)}" src="{esc(img.strip())}" alt="{esc(name)}"'
             f' loading="lazy" decoding="async" width="{int(size)}" height="{int(size)}"'
@@ -156,6 +163,10 @@ def portrait_html(
             f' loading="lazy" decoding="async" width="{int(size)}" height="{int(size)}">'
         )
 
+    return _monogram_span(player, cls, name)
+
+
+def _monogram_span(player: dict[str, Any], cls: str, name: str) -> str:
     mono = _identity().monogram_svg(
         initials(player),
         player.get("tid"),

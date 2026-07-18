@@ -32,8 +32,8 @@ def render_simulator_page(
     <section class="page-hero">
       <div>
         <h1>Win-Out Machine</h1>
-        <p class="muted">Call any game on the board — the rest re-simulate 5,000 times and the playoff odds
-        update live · the URL tracks your picks, so copy it to share a scenario</p>
+        <p class="muted">Call any game — the rest re-simulate 5,000 times and the playoff odds update live ·
+        the URL tracks your picks</p>
       </div>
       <div class="muted">{esc(season)} season</div>
     </section>
@@ -47,9 +47,9 @@ def render_simulator_page(
     </noscript>
     <div data-wo-app>
       <section class="card">
-        <p class="tool-note muted">Odds use the same team-strength model and logistic win probability as the
-        home page's playoff odds. Locked games count as final; everything else is simulated 5,000 times with a
-        deterministic seed, so the same set of picks always produces the same odds. {esc(board_note)}</p>
+        <p class="tool-note muted" title="Simulations use a deterministic seed, so the same set of picks always produces the same odds.">Uses
+        the same team-strength model and win probability as the home page's playoff odds; locked games count as
+        final. {esc(board_note)}</p>
       </section>
       <div class="wo-layout">
         <section class="card wo-games-card">

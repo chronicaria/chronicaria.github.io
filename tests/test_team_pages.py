@@ -1,5 +1,5 @@
-"""W2 regression tests: team-page immersion, Starting Five, banners, rotation
-river, scoring share, four factors, honest preseason states, Franchise Arc."""
+"""W2 regression tests: team-page immersion, Starting Five, banners, depth
+chart, scoring share, four factors, honest preseason states, Franchise Arc."""
 
 import os
 import sys
@@ -146,7 +146,7 @@ class TestHonestSeasonFallbacks(unittest.TestCase):
         teams_by_tid = {0: _team(0, "AAA"), 1: _team(1, "BBB")}
         html = lg.team_games_table(_team(0, "AAA"), self._items_2030(), teams_by_tid, 2031)
         self.assertIn("2030 Season Log", html)
-        self.assertIn("hasn&#x27;t started", html)
+        self.assertIn("no 2031 games yet", html)
         self.assertIn("2030 season game log", html)
         self.assertNotIn("current-season game log", html)
 
@@ -169,44 +169,39 @@ class TestHonestSeasonFallbacks(unittest.TestCase):
         html = lg.rotation_map_card(_team(0, "AAA"), [], items, logs, 2031,
                                     {0: _team(0, "AAA"), 1: _team(1, "BBB")})
         self.assertIn("in 2030 (no 2031 games yet)", html)
-        self.assertIn("red to green = minutes load", html)
+        self.assertIn("red to green = minutes", html)
         self.assertIn('data-gid="10"', html)
 
 
-class TestRotationRiver(unittest.TestCase):
-    def test_river_bands_payload_and_table_hooks(self):
-        data = {"games": [
-            {"gid": g, "season": 2030, "day": g, "playoffs": False,
-             "teams": [
-                 {"tid": 0, "pts": 100, "players": [
-                     {"pid": 1, "name": "A Guard", "min": 30 + g},
-                     {"pid": 2, "name": "B Wing", "min": 20},
-                 ]},
-                 {"tid": 1, "pts": 90, "players": [{"pid": 3, "name": "Opp", "min": 40}]},
-             ]}
-            for g in (1, 2, 3)
-        ]}
-        items = lg.completed_game_items(data, season=2030, playoffs=False)
-        logs = lg.build_game_logs(data, 2030)
-        html = team_page.rotation_river_card(_team(0, "AAA"), items, logs, 2030,
-                                             {0: _team(0, "AAA"), 1: _team(1, "BBB")})
-        self.assertEqual(html.count('class="river-band"'), 2)  # one band per player
-        self.assertIn('id="river-data-0"', html)
-        self.assertIn('"mins":', html)
-        self.assertIn("data-river-guide", html)
+class TestDepthChartCards(unittest.TestCase):
+    def test_card_rows_labels_vacancies_and_stat_lines(self):
+        roster = [
+            _player(1, "Point", "Guard", pos="PG", ovr=70,
+                    stats=[_stat_row(gp=40, pts=800, ast=200)]),
+            _player(2, "Backup", "Guard", pos="PG", ovr=60),
+            _player(3, "Deep", "Guard", pos="PG", ovr=50),
+            _player(4, "Fourth", "Guard", pos="PG", ovr=45),
+            _player(5, "Big", "Center", pos="C", ovr=65),
+        ]
+        roster[0]["jerseyNumber"] = 7
+        html = team_page.depth_chart_card(roster, 2031, 2026)
+        for label in ("Starters", "2nd String", "3rd String", "4th String"):
+            self.assertIn(label, html)
+        self.assertNotIn("5th String", html)
+        # 4 rows x 5 slots = 20 cards; 15 are vacancies (dashed empty cards)
+        self.assertEqual(html.count("depth-card--vacant"), 15)
+        self.assertIn("#7", html)                      # jersey number shown
+        self.assertIn("depth-ovr", html)               # OVR chip
+        self.assertIn("<strong>20.0</strong><small>PTS</small>", html)  # 800/40
+        self.assertIn("<strong>—</strong><small>PTS</small>", html)     # no-stats line
+        for p in roster:
+            self.assertEqual(html.count(lg.player_url(p, "../")), 1)
 
-    def test_river_needs_two_games(self):
-        data = {"games": [{
-            "gid": 1, "season": 2030, "day": 1, "playoffs": False,
-            "teams": [
-                {"tid": 0, "pts": 100, "players": [{"pid": 1, "name": "A", "min": 30}]},
-                {"tid": 1, "pts": 90, "players": [{"pid": 2, "name": "B", "min": 30}]},
-            ]}]}
-        items = lg.completed_game_items(data, season=2030, playoffs=False)
-        logs = lg.build_game_logs(data, 2030)
-        html = team_page.rotation_river_card(_team(0, "AAA"), items, logs, 2030,
-                                             {0: _team(0, "AAA")})
-        self.assertEqual(html, "")
+    def test_minimum_three_rows_even_when_shallow(self):
+        roster = [_player(1, "Only", "Guy", pos="PG", ovr=70)]
+        html = team_page.depth_chart_card(roster, 2031, 2026)
+        self.assertIn("3rd String", html)
+        self.assertNotIn("4th String", html)
 
 
 class TestScoringShare(unittest.TestCase):

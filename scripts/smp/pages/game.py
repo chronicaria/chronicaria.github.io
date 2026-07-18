@@ -67,7 +67,12 @@ SHOT_ZONES = [("AtRim", "Rim"), ("LowPost", "Post"), ("MidRange", "Mid"), ("", "
 DRAMA_CLASSIC_MIN = 50.0
 
 # FPTS is a local header title because core.GLOSSARY is owned elsewhere.
-FPTS_TITLE = "Fantasy points (ESPN points scoring)"
+FPTS_TITLE = "Fantasy points"
+
+
+def fmt_fpts(fpts: float | None) -> str:
+    """Fantasy points display everywhere on game pages: whole numbers."""
+    return fmt_number(int(round(fpts)), 0) if fpts is not None else "—"
 
 
 def fpts_th() -> str:
@@ -164,13 +169,12 @@ def box_score_player_row(player_box: dict[str, Any], players_by_pid: dict[int, d
         row = "".join([
             td(box_player_link(player_box, players_by_pid, root), sort=player_box.get("name"), cls="name-cell"),
             td(esc(player_box.get("pos", "—")), sort=player_box.get("pos", "")),
-            *[td("—") for _ in range(16)],
+            *[td("—") for _ in range(15)],
         ])
         cls_attr = f' class="{cls}"' if cls else ""
         return f"<tr{cls_attr}>{row}</tr>"
 
     trb = safe_float(player_box.get("orb")) + safe_float(player_box.get("drb"))
-    gmsc = game_score_value(player_box)
     fpts = fantasy_pts(player_box)
     row = "".join([
         td(box_player_link(player_box, players_by_pid, root), sort=player_box.get("name"), cls="name-cell"),
@@ -189,8 +193,7 @@ def box_score_player_row(player_box: dict[str, Any], players_by_pid: dict[int, d
         td(fmt_number(player_box.get("pf") or 0, 0), sort=player_box.get("pf")),
         td(fmt_number(player_box.get("pts") or 0, 0), sort=player_box.get("pts")),
         td(fmt_signed(player_box.get("pm") or 0, 0), sort=player_box.get("pm"), cls=plus_minus_class(player_box.get("pm"))),
-        td(fmt_number(gmsc, 1), sort=gmsc),
-        td(fmt_number(fpts, 1) if fpts is not None else "—", sort=fpts),
+        td(fmt_fpts(fpts), sort=fpts),
     ])
     cls_attr = f' class="{cls}"' if cls else ""
     return f"<tr{cls_attr}>{row}</tr>"
@@ -216,8 +219,7 @@ def box_team_totals_row(team_box: dict[str, Any]) -> str:
         td(fmt_number(team_box.get("pf") or 0, 0), sort=team_box.get("pf")),
         td(fmt_number(team_box.get("pts") or 0, 0), sort=team_box.get("pts")),
         td(""),
-        td(""),
-        td(fmt_number(fpts, 1) if fpts is not None else "", sort=fpts),
+        td(fmt_fpts(fpts) if fpts is not None else "", sort=fpts),
     ]
     return f"<tr class=\"total-row\">{''.join(cells)}</tr>"
 
@@ -227,7 +229,7 @@ def box_team_percentages_row(team_box: dict[str, Any]) -> str:
     cells.append(td(fmt_pct(made_pct(team_box.get("fg"), team_box.get("fga")), 1), sort=made_pct(team_box.get("fg"), team_box.get("fga"))))
     cells.append(td(fmt_pct(made_pct(team_box.get("tp"), team_box.get("tpa")), 1), sort=made_pct(team_box.get("tp"), team_box.get("tpa"))))
     cells.append(td(fmt_pct(made_pct(team_box.get("ft"), team_box.get("fta")), 1), sort=made_pct(team_box.get("ft"), team_box.get("fta"))))
-    cells.extend(td("") for _ in range(12))
+    cells.extend(td("") for _ in range(11))
     return f"<tr class=\"pct-row\">{''.join(cells)}</tr>"
 
 
@@ -266,8 +268,8 @@ def box_score_team_table(team_box: dict[str, Any], teams_by_tid: dict[int, dict[
     if not team_box.get("_projected"):
         rows.append(box_team_totals_row(team_box))
         rows.append(box_team_percentages_row(team_box))
-    note = '<p class="muted small-copy">Projected active rotation. Stats will populate after the game is played.</p>' if team_box.get("_projected") else ""
-    header_html = "".join(th(label) for label in ["Name", "Pos", "MP", "FG", "3P", "FT", "ORB", "TRB", "AST", "TOV", "STL", "BLK", "BA", "PF", "PTS", "+/-", "GmSc"]) + fpts_th()
+    note = '<p class="muted small-copy">Projected active rotation · stats arrive after tip-off.</p>' if team_box.get("_projected") else ""
+    header_html = "".join(th(label) for label in ["Name", "Pos", "MP", "FG", "3P", "FT", "ORB", "TRB", "AST", "TOV", "STL", "BLK", "BA", "PF", "PTS", "+/-"]) + fpts_th()
     return f"""
     <section class="box-team-section">
       <h2>{team_label(tid, teams_by_tid, root=root)}</h2>
@@ -520,20 +522,21 @@ def game_stars_html(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]
                 best_fantasy = (fpts, player_box, box.get("tid"))
     if best is None:
         return ""
-    gmsc, player_box, tid = best
+    _, player_box, tid = best
     same_star = best_fantasy is not None and safe_int(player_box.get("pid"), -10) == safe_int(best_fantasy[1].get("pid"), -11)
-    fpts_note = f" · {fmt_number(best_fantasy[0], 1)} FPTS" if same_star else ""
+    potg_fpts = fantasy_pts(player_box)
+    fpts_note = f" · {fmt_fpts(potg_fpts)} FPTS" if potg_fpts is not None else ""
     out = [
         f'<p class="potg"><span class="badge badge-accent">POTG</span>{_star_name_html(player_box, root)} '
-        f'<span class="muted">({esc(team_abbrev_for_tid(tid, teams_by_tid))}) · {_star_stat_line(player_box)} · '
-        f'GmSc {fmt_number(gmsc, 1)}{fpts_note}</span></p>'
+        f'<span class="muted">({esc(team_abbrev_for_tid(tid, teams_by_tid))}) · {_star_stat_line(player_box)}'
+        f'{fpts_note}</span></p>'
     ]
     if best_fantasy is not None and not same_star:
         fpts, fantasy_box, fantasy_tid = best_fantasy
         out.append(
             f'<p class="potg"><span class="badge badge-good">Fantasy MVP</span>{_star_name_html(fantasy_box, root)} '
             f'<span class="muted">({esc(team_abbrev_for_tid(fantasy_tid, teams_by_tid))}) · {_star_stat_line(fantasy_box)} · '
-            f'{fmt_number(fpts, 1)} FPTS</span></p>'
+            f'{fmt_fpts(fpts)} FPTS</span></p>'
         )
     return "".join(out)
 
@@ -612,7 +615,7 @@ def box_score_header(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any
         {game_series_note(item, teams_by_tid)}
         """
     else:
-        extras = '<p class="scheduled-note">Scheduled game · box score will populate when the JSON includes this game result.</p>'
+        extras = '<p class="scheduled-note">Scheduled game · box score to come.</p>'
 
     return f"""
     <section class="box-score-hero card gx-hero" style="{hero_style_vars(home_tid, away_tid)}">

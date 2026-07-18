@@ -149,8 +149,8 @@ class TestRenderExtrasPages(unittest.TestCase):
         self.assertIn("margin 30", pair)
         self.assertIn("Closest game", pair)
         self.assertIn("margin 2", pair)
-        # honest retention note (single retained season)
-        self.assertIn("Box scores are only retained for seasons 2027", pair)
+        # honest retention note (single retained season, one sentence)
+        self.assertIn("Game details cover retained box scores (2027)", pair)
         # playoff series from playoffSeries with round name and result
         self.assertIn("2026 Finals", pair)
         self.assertIn("won 2-1", pair)
@@ -178,9 +178,10 @@ class TestRenderExtrasPages(unittest.TestCase):
         # drama badge + permalink anchor
         self.assertIn('class="cl-badge"', classics)
         self.assertIn('href="#g3"', classics)
-        # 4 completed games -> all featured, honorable mentions empty state
+        # 4 completed games -> all featured; no honorable-mentions section
         self.assertEqual(classics.count('<article class="cl-game"'), 4)
-        self.assertIn("No further games to mention.", classics)
+        self.assertNotIn("Honorable Mentions", classics)
+        self.assertIn("Top 4 of 4 retained games (2027) by drama index", classics)
         # box-score links for every game that gets a page (incl. last season's playoffs)
         self.assertIn('href="games/3.html"', classics)
         self.assertIn('href="games/4.html"', classics)

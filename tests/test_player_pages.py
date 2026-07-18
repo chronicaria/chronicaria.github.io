@@ -112,19 +112,48 @@ class TestTradingCard(unittest.TestCase):
         html = pp.trading_card_html(_player(3), teams_by_tid, 2031)
         self.assertIn("--team-primary:", html)
         self.assertNotIn("player-card--fa", html)
-        self.assertIn("player-card-num", html)  # giant jersey numeral
+        self.assertIn("player-card-num", html)  # corner jersey number
         self.assertIn('title="Three-point shooter"', html)  # skill chip
+        self.assertIn("player-card-plate", html)  # position/team nameplate
+        self.assertIn("plate-pos", html)
         # statsTids [-7, 0, 1] -> two real franchises, current one ringed.
         n_dots = html.count('class="career-dot"') + html.count('class="career-dot career-dot--now"')
         self.assertEqual(n_dots, 2)
         self.assertIn("career-dot career-dot--now", html)
 
-    def test_free_agent_gets_neutral_silver_card(self):
+    def test_stat_tiles_show_per_game_line_with_integer_fpts(self):
         teams_by_tid = {t["tid"]: t for t in TEAMS}
-        html = pp.trading_card_html(_player(4, tid=-1), teams_by_tid, 2031)
+        player = _player(30)
+        html = pp.trading_card_html(player, teams_by_tid, 2031)
+        self.assertIn("player-card-tiles", html)
+        self.assertIn(">PTS<", html)
+        self.assertIn(">30.0<", html)  # 300 pts / 10 gp
+        # FPTS tile is per-game, integer: 502 fantasy pts / 10 gp -> 50.
+        expected = lg.fantasy_pts(player["stats"][0]) / 10.0
+        self.assertIn(f">{expected:.0f}<", html)
+        self.assertNotIn(f">{expected:.1f}<", html)
+        self.assertIn("2030 per game", html)
+
+    def test_no_games_played_renders_no_tiles(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        html = pp.trading_card_html(_player(31, with_stats=False), teams_by_tid, 2031)
+        self.assertNotIn("player-card-tiles", html)
+
+    def test_free_agent_gets_neutral_silver_card_with_asking_price(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        player = _player(4, tid=-1)
+        html = pp.trading_card_html(player, teams_by_tid, 2031)
         # The card section itself carries no team style attr; silver comes from CSS.
         self.assertIn('<section class="player-card player-card--fa">', html)
         self.assertIn("Free Agent", html)
+        # Asking-price plate uses the free-agency board's model, not the contract stub.
+        self.assertIn("Asking price", html)
+        self.assertIn(lg.fmt_money(pp.fa_asking_price(player, 2031)), html)
+
+    def test_rostered_card_has_no_asking_price(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        html = pp.trading_card_html(_player(32), teams_by_tid, 2031)
+        self.assertNotIn("Asking price", html)
 
 
 class TestTrophyCase(unittest.TestCase):
@@ -147,24 +176,26 @@ class TestTrophyCase(unittest.TestCase):
 
 
 class TestFantasyPoints(unittest.TestCase):
-    def test_summary_and_per_game_tables_have_fpts_column(self):
+    def test_summary_and_per_game_tables_have_integer_fpts_column(self):
         teams_by_tid = {t["tid"]: t for t in TEAMS}
         player = _player(7)
         summary = pp.player_summary_rows(player, teams_by_tid, 2030, 2026)
         self.assertIn(">FPTS<", summary)
         table = pp.per_game_table(player, player["stats"], teams_by_tid, "../", "Per Game", "t7")
         self.assertIn(">FPTS<", table)
-        # Season aggregate: fantasy total / gp, one decimal.
+        # Season aggregate: fantasy total / gp, shown as an integer.
         expected = lg.fantasy_pts(player["stats"][0]) / 10.0
-        self.assertIn(f"{expected:.1f}", table)
+        self.assertIn(f">{expected:.0f}<", table)
+        self.assertNotIn(f">{expected:.1f}<", table)
 
-    def test_game_log_has_fpts_column(self):
+    def test_game_log_has_integer_fpts_and_no_gmsc(self):
         teams_by_tid = {t["tid"]: t for t in TEAMS}
         entry = _log_entry()
         html = pp.game_log_table(_player(8), [entry], teams_by_tid, 2031, "../")
         self.assertIn(">FPTS<", html)
+        self.assertNotIn("GmSc", html)
         expected = lg.fantasy_pts(entry["box"])
-        self.assertIn(f"{expected:.1f}", html)
+        self.assertIn(f">{expected:.0f}<", html)
 
 
 class TestLedLeague(unittest.TestCase):
@@ -242,7 +273,34 @@ class TestContractSection(unittest.TestCase):
         teams_by_tid = {t["tid"]: t for t in TEAMS}
         html = pp.player_bio_html(_player(18), teams_by_tid, 2031)
         self.assertIn("Change vs last season", html)
-        self.assertIn("vs last season's rating", html)
+        self.assertIn("vs last season", html)
+
+
+class TestRatingDeltas(unittest.TestCase):
+    def test_bio_panel_shows_green_deltas_for_all_rated_keys(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        ratings = [
+            {"season": 2030, "pos": "SG", "ovr": 60, "pot": 66, "hgt": 50, "stre": 40, "tp": 70},
+            {"season": 2031, "pos": "SG", "ovr": 63, "pot": 66, "hgt": 50, "stre": 44, "tp": 68},
+        ]
+        html = pp.player_bio_html(_player(20, ratings=ratings), teams_by_tid, 2031)
+        self.assertIn('delta-up">(+3)', html)   # ovr 60 -> 63
+        self.assertIn('delta-up">(+4)', html)   # stre 40 -> 44
+        self.assertIn('delta-down">(-2)', html)  # tp 70 -> 68
+
+    def test_rookie_single_season_shows_no_delta(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        ratings = [{"season": 2031, "pos": "SG", "ovr": 55, "pot": 70, "stre": 40}]
+        html = pp.player_bio_html(_player(21, ratings=ratings), teams_by_tid, 2031)
+        self.assertNotIn("delta-up", html)
+        self.assertNotIn("delta-down", html)
+
+
+class TestNoRatingTrajectories(unittest.TestCase):
+    def test_unified_page_has_no_trajectory_grid(self):
+        pages = pp.render_player_pages(_player(22), TEAMS, 2031, 2026, log_entries=[_log_entry()])
+        self.assertNotIn("Rating Trajectories", pages[""])
+        self.assertNotIn("data-subrating-grid", pages[""])
 
 
 if __name__ == "__main__":

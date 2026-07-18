@@ -130,7 +130,7 @@ def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players
     extras = trade_extras_payload(data, teams)
     machine = f"""
     <section class="card home-section" data-app="trade">
-      <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy">check assets on both sides · BBGM trade values · payrolls incl. dead money</span></div>
+      <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy">engine trade values · payrolls incl. dead money</span></div>
       <div class="trade-grid">{_trade_side(0, "Team A")}{_trade_side(1, "Team B")}
       </div>
       <div class="trade-summary" data-trade-summary aria-live="polite"></div>
@@ -142,7 +142,7 @@ def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players
     <section class="page-hero">
       <div>
         <h1>Trade Center</h1>
-        <p class="muted">Build and sanity-check trades, and find contract bargains</p>
+        <p class="muted">Build trades and find contract bargains</p>
       </div>
     </section>
     {machine}

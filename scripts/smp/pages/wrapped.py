@@ -9,10 +9,9 @@ finishes. While a season's playoffs are still undecided the page recaps the
 previous completed season; if no season has ever finished it renders an
 honest empty state instead.
 
-Slides: title → season in numbers → best single-game fantasy line → biggest
-development risers → league-leaders wall → playoff story (bracket recap +
-champion banner) → one card per team (record, playoff result, top performer)
-→ outro. Team slides link to standalone share-card SVGs written by
+Slides: title → season in numbers → best single-game fantasy line →
+league-leaders wall → playoff story (bracket recap + champion banner) →
+one card per team (record, playoff result, top performer) → outro. Team slides link to standalone share-card SVGs written by
 ``emit_wrapped_cards`` to ``assets/wrapped/{season}-{abbrev}.svg`` — those
 SVGs deliberately hardcode the identity colors (they leave the site's CSS
 when pasted into a group chat).
@@ -64,7 +63,6 @@ LEADER_KEYS = [
     ("ast", "APG", "Assists"),
     ("stl", "SPG", "Steals"),
     ("blk", "BPG", "Blocks"),
-    ("tp", "3PM/G", "Threes"),
 ]
 
 
@@ -177,12 +175,10 @@ def season_numbers(data: dict[str, Any], season: int) -> list[tuple[str, str, st
     """(value, label, sublabel) tiles for the "season in numbers" slide.
 
     Totals come from the regular-season team stat rows (retained for every
-    season), attendance from the team season rows; the overtime count needs
-    the game log so it only appears when those games are still in the export.
+    season); the overtime count needs the game log so it only appears when
+    those games are still in the export.
     """
     pts = threes = tds = gp = 0.0
-    att = 0.0
-    has_att = False
     for team in data.get("teams") or []:
         for row in team.get("stats") or []:
             if isinstance(row, dict) and row.get("season") == season and not row.get("playoffs"):
@@ -190,10 +186,6 @@ def season_numbers(data: dict[str, Any], season: int) -> list[tuple[str, str, st
                 threes += safe_float(row.get("tp"))
                 tds += safe_float(row.get("td"))
                 gp += safe_float(row.get("gp"))
-        for row in team.get("seasons") or []:
-            if isinstance(row, dict) and row.get("season") == season and row.get("att") is not None:
-                att += safe_float(row.get("att"))
-                has_att = True
     tiles: list[tuple[str, str, str]] = []
     if gp > 0:
         tiles.append((_fmt_big(gp / 2), "games played", "regular season"))
@@ -201,8 +193,6 @@ def season_numbers(data: dict[str, Any], season: int) -> list[tuple[str, str, st
         tiles.append((_fmt_big(pts), "points scored", "regular season"))
     if threes > 0:
         tiles.append((_fmt_big(threes), "threes made", "regular season"))
-    if has_att and att > 0:
-        tiles.append((_fmt_big(att), "fans in the stands", "total home attendance"))
     games = _season_games(data, season)
     if games:
         ot = sum(1 for g in games if safe_int(g.get("overtimes")) > 0)
@@ -213,7 +203,7 @@ def season_numbers(data: dict[str, Any], season: int) -> list[tuple[str, str, st
 
 
 def best_fantasy_line(data: dict[str, Any], season: int) -> dict[str, Any] | None:
-    """The season's best single-game fantasy line (ESPN points, incl. playoffs).
+    """The season's best single-game fantasy line (FPTS, incl. playoffs).
 
     Deterministic: games iterate in (day, gid) order and only a strictly
     better score replaces the champion line, so ties keep the earliest game.
@@ -238,54 +228,6 @@ def best_fantasy_line(data: dict[str, Any], season: int) -> dict[str, Any] | Non
                         "opp_tid": safe_int(opp_box.get("tid"), -1) if opp_box else -1,
                     }
     return best
-
-
-def _rating_row(player: dict[str, Any], season: int) -> dict[str, Any] | None:
-    rows = [r for r in player.get("ratings") or [] if isinstance(r, dict) and r.get("season") == season]
-    return rows[-1] if rows else None
-
-
-def _played_in_season(player: dict[str, Any], season: int) -> bool:
-    return any(
-        isinstance(s, dict) and s.get("season") == season and not s.get("playoffs") and safe_float(s.get("gp")) > 0
-        for s in player.get("stats") or []
-    )
-
-
-def dev_risers(data: dict[str, Any], season: int, limit: int = 5) -> tuple[list[dict[str, Any]], int, int]:
-    """Biggest overall-rating risers around the wrapped season.
-
-    Preferred read: ovr(season+1) − ovr(season) — how much better a player came
-    out of the season (available once the export rolls into the new year).
-    Straight-after-playoffs exports have no season+1 rows yet, so the fallback
-    compares ovr(season) to ovr(season−1). Returns (rows, from_season,
-    to_season); rows carry player/delta/from_ovr/to_ovr.
-    """
-    players = sorted(
-        (p for p in data.get("players") or [] if isinstance(p, dict)),
-        key=lambda p: (player_name(p), safe_int(p.get("pid"))),
-    )
-    has_next = any(_rating_row(p, season + 1) for p in players)
-    from_season, to_season = (season, season + 1) if has_next else (season - 1, season)
-    rows: list[dict[str, Any]] = []
-    for player in players:
-        if not _played_in_season(player, season):
-            continue
-        frm = _rating_row(player, from_season)
-        to = _rating_row(player, to_season)
-        if not frm or not to:
-            continue
-        delta = safe_int(to.get("ovr")) - safe_int(frm.get("ovr"))
-        if delta <= 0:
-            continue
-        rows.append({
-            "player": player,
-            "delta": delta,
-            "from_ovr": safe_int(frm.get("ovr")),
-            "to_ovr": safe_int(to.get("ovr")),
-        })
-    rows.sort(key=lambda r: (-r["delta"], player_name(r["player"]), safe_int(r["player"].get("pid"))))
-    return rows[:limit], from_season, to_season
 
 
 def _per_game_value(row: dict[str, Any], key: str) -> float | None:
@@ -432,19 +374,14 @@ def _pennant_svg(tid: Any, season: int) -> str:
     )
 
 
-def _title_slide(season: int, champion: dict[str, Any] | None) -> str:
-    tease = (
-        f'<p class="wr-sub">One champion. Ten stories. Scroll for the whole season.</p>'
-        if champion else ""
-    )
+def _title_slide(season: int) -> str:
     return _slide(
         "wr-title",
         f"SMP Wrapped {season}",
         f"""
         <p class="wr-eyebrow">SMP Basketball League</p>
         <h1 class="wr-huge">Wrapped<span class="wr-accent">’{str(season)[-2:]}</span></h1>
-        <p class="wr-sub">Season {season}, remembered in full.</p>
-        {tease}
+        <p class="wr-sub">The season {season} recap.</p>
         <p class="wr-scroll-hint" aria-hidden="true">↓</p>
         """,
         cls="wr-slide-title",
@@ -513,36 +450,7 @@ def _fantasy_slide(data: dict[str, Any], season: int, teams_by_tid: dict[int, di
           </div>
         </div>
         {game_link}
-        <p class="wr-footnote">ESPN points scoring over every box score of the season, playoffs included.</p>
-        """,
-    )
-
-
-def _risers_slide(data: dict[str, Any], season: int) -> str:
-    rows, from_season, to_season = dev_risers(data, season)
-    if not rows:
-        return ""
-    top = rows[0]
-    rest = "".join(
-        f'<li><span class="wr-delta">+{r["delta"]}</span> {_player_link(r["player"])} '
-        f'<span class="muted">{r["from_ovr"]} → {r["to_ovr"]} ovr</span></li>'
-        for r in rows[1:]
-    )
-    rest_html = f'<ol class="wr-riser-list">{rest}</ol>' if rest else ""
-    return _slide(
-        "wr-risers",
-        "Biggest risers",
-        f"""
-        <h2 class="wr-h2">Glow-up of the year</h2>
-        <div class="wr-feature">
-          {_portrait(top['player'], 'wr-portrait')}
-          <div class="wr-feature-copy">
-            <p class="wr-big wr-tabular">+{top['delta']} <span class="wr-unit">OVR</span></p>
-            <p class="wr-feature-name">{_player_link(top['player'])}</p>
-            <p class="wr-sub">{top['from_ovr']} → {top['to_ovr']} overall, {from_season} to {to_season}</p>
-          </div>
-        </div>
-        {rest_html}
+        <p class="wr-footnote">Fantasy points across every box score, playoffs included.</p>
         """,
     )
 
@@ -727,7 +635,7 @@ def _outro_slide(season: int) -> str:
         "That's a wrap",
         f"""
         <h2 class="wr-huge">That’s a wrap on {season}.</h2>
-        <p class="wr-sub">Every banner, award and box score lives on in the archives.</p>
+        <p class="wr-sub">The full record lives in the archives.</p>
         <p class="wr-share"><a class="button-link" href="history.html">Browse league history</a>
         <a class="button-link" href="index.html">Back to today</a></p>
         """,
@@ -744,8 +652,8 @@ def _empty_state_page(teams: list[dict[str, Any]], season: int) -> str:
       </div>
     </section>
     <section class="card">
-      <p class="empty-state">SMP Wrapped recaps a finished season — and season {season}’s
-      playoffs haven’t crowned a champion yet. Check back once the postseason wraps.</p>
+      <p class="empty-state">Wrapped covers finished seasons — season {season} hasn’t
+      crowned a champion yet.</p>
     </section>
     """
     return page_html("SMP Wrapped", body, teams, root="", active="wrapped")
@@ -771,14 +679,11 @@ def render_wrapped_page(data: dict[str, Any], teams: list[dict[str, Any]],
     order = standings_order(season_teams, season)
     ordered_teams = [teams_by_tid[tid] for tid in order if tid in teams_by_tid]
     n_rounds = len(playoff_rounds(data, season))
-    champ_tid = season_champion_tid(data, season)
-    champion = teams_by_tid.get(champ_tid) if champ_tid is not None else None
 
     slides = [
-        _title_slide(season, champion),
+        _title_slide(season),
         _numbers_slide(data, season),
         _fantasy_slide(data, season, teams_by_tid, all_players_by_pid, linkable_gids),
-        _risers_slide(data, season),
         _leaders_slide(data, season, teams_by_tid),
         _playoff_slide(data, season, teams_by_tid),
         _champion_slide(data, season, teams_by_tid, all_players_by_pid),

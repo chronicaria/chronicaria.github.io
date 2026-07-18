@@ -23,52 +23,6 @@
 .proj-wrap .chart-tooltip { min-width: 9.5rem; max-width: 13rem; white-space: normal; }
 .proj-wrap .chart-tooltip span { display: block; }
 
-/* ---------- rating trajectories (subrating fan-sparkline grid) ---------- */
-.subg-grid { display: flex; flex-direction: column; gap: 1rem; }
-.subg-group-title {
-  margin: 0 0 .4rem; font-size: .68rem; font-weight: 700;
-  letter-spacing: .07em; text-transform: uppercase; color: var(--muted);
-}
-.subg-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; }
-.subg-cell {
-  border: 1px solid var(--line); border-radius: .25rem;
-  background: var(--panel-2, var(--bg)); padding: .4rem .45rem .3rem;
-  display: flex; flex-direction: column; gap: .15rem;
-  transition: border-color .12s ease, background .12s ease;
-}
-.subg-cell.subg-active { border-color: var(--accent); }
-.subg-head { display: flex; align-items: baseline; justify-content: space-between; gap: .35rem; }
-.subg-label {
-  font-size: .66rem; font-weight: 600; letter-spacing: .02em;
-  color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.subg-delta {
-  font-size: .6rem; font-weight: 700; line-height: 1; flex: none;
-  padding: .12rem .3rem; border-radius: .6rem; border: 1px solid var(--line);
-  font-variant-numeric: tabular-nums;
-}
-.subg-up { color: var(--good); border-color: var(--good); }
-.subg-down { color: var(--bad); border-color: var(--bad); }
-.subg-flat { color: var(--muted); }
-.subg-cur { display: flex; align-items: baseline; gap: .25rem; }
-.subg-cur-val { font-size: 1.15rem; font-weight: 700; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
-.subg-cur-cap { font-size: .58rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-.subg-svg { width: 100%; height: 42px; display: block; margin-top: .1rem; overflow: visible; }
-.subg-band { fill: var(--accent); opacity: .14; stroke: none; }
-.subg-hist { fill: none; stroke: var(--text); stroke-width: 1.4; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-.subg-hist-dot { fill: var(--text); }
-.subg-median { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 3 2; vector-effect: non-scaling-stroke; }
-.subg-divider { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 2; opacity: .5; vector-effect: non-scaling-stroke; }
-.subg-hline { stroke: var(--accent); stroke-width: 1; opacity: .6; vector-effect: non-scaling-stroke; pointer-events: none; }
-.subg-hdot { fill: var(--accent); stroke: var(--bg); stroke-width: 1; pointer-events: none; }
-.subg-empty { opacity: .55; }
-.subg-empty .subg-cur-val { font-size: .95rem; color: var(--muted); }
-.subg-key { display: inline-block; width: .8rem; vertical-align: middle; margin-right: .25rem; }
-.subg-key-hist { height: 2px; background: var(--text); }
-.subg-key-med { height: 0; border-top: 2px dashed var(--accent); }
-.subg-key-band { height: 8px; border-radius: 1px; background: var(--accent); opacity: .35; }
-@media (max-width: 760px) { .subg-row { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 420px) { .subg-row { grid-template-columns: 1fr; } }
 /* --- Projection table (#projection-table) ------------------------------- */
 .projtab-badge {
   display: inline-block;

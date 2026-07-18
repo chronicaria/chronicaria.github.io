@@ -93,7 +93,7 @@ html.wr-snap { scroll-snap-type: y proximity; }
   background: var(--panel);
 }
 
-/* feature blocks (fantasy line, top riser) */
+/* feature blocks (fantasy line) */
 .wr-feature { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2rem); flex-wrap: wrap; }
 .wr-feature-copy { min-width: 0; }
 .wr-feature-name { margin: .5rem 0 0; font-size: clamp(1.3rem, 3.2vw, 2rem); font-weight: 700; }
@@ -109,10 +109,6 @@ html.wr-snap { scroll-snap-type: y proximity; }
 .wr-portrait-sm { width: 3.6rem; height: 3.6rem; border-width: 2px; }
 .wr-portrait.portrait-monogram { display: grid; place-items: center; border: 0; background: none; }
 .wr-portrait.portrait-monogram .monogram { width: 100%; height: 100%; }
-
-.wr-riser-list { margin: 1.6rem 0 0; padding: 0 0 0 1.2rem; }
-.wr-riser-list li { margin: .35rem 0; font-size: clamp(.95rem, 2vw, 1.15rem); }
-.wr-delta { font-weight: 800; color: var(--good); font-variant-numeric: tabular-nums; }
 
 /* leaders wall */
 .wr-leaders {

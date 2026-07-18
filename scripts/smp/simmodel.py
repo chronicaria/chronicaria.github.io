@@ -149,6 +149,11 @@ def _player_projection(player: dict[str, Any], season: int) -> dict[str, Any] | 
 # --- team projection --------------------------------------------------------
 REPLACEMENT_OVR = 40.0  # roster-construction floor: a freely-available filler
 
+# Games at which current-season scoring margin carries half the strength weight:
+# weight = gp / (gp + SIM_MOV_BLEND_K). At gp=0 (fresh season) strength is 100%
+# roster-based; by a full 45-game season MOV carries ~82%.
+SIM_MOV_BLEND_K = 10.0
+
 
 def _player_current_ovr(player: dict[str, Any], season: int) -> int | None:
     """The player's overall this season (the stored value, == player_ovr)."""
@@ -188,27 +193,37 @@ def player_game_impact(player: dict[str, Any], season: int) -> float:
 def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, sims: int = 10000) -> dict[str, Any]:
     """Monte Carlo the rest of the season and the playoffs.
 
-    Team strength blends regressed scoring margin with current-roster quality.
-    Players who are injured subtract their impact until their expected return,
-    so odds dip while stars are out and recover as they heal. Trades are picked
-    up automatically because strength comes from the roster as it stands today.
+    Team strength is a roster signal from the CURRENT roster — top-10 per-game
+    player impact, centered on the league mean — blended with THIS season's
+    scoring margin only as games accumulate (MOV weight = gp/(gp+SIM_MOV_BLEND_K)).
+    A season with no games played is 100% roster-based; last season's margin is
+    never used. Players who are injured subtract their impact until their
+    expected return, so odds dip while stars are out and recover as they heal.
+    Trades are picked up automatically because strength comes from the roster
+    as it stands today.
 
-    A season that hasn't been played yet (an offseason projection) starts every team at 0-0
-    and runs over a projected round-robin schedule; last season's scoring margin still seeds
-    team strength, so the projection reflects both prior form and the current roster.
+    A season that hasn't been played yet starts every team at 0-0 and runs over
+    the exported schedule when the export carries one, else a projected
+    round-robin.
     """
     fresh = not completed_game_items(data, season, playoffs=False)
     tids = [safe_int(t.get("tid")) for t in teams if t.get("tid") is not None]
     wins0: dict[int, float] = {}
-    mov_strength: dict[int, float] = {}
+    mov_now: dict[int, float] = {}
+    gp_now: dict[int, float] = {}
     for team in teams:
         tid = safe_int(team.get("tid"))
         team_season = latest_team_season(team, season)
         stat = latest_team_stat(team, season)
         wins0[tid] = 0.0 if fresh else safe_float(team_season.get("won"))
-        gp = safe_float(stat.get("gp"))
-        mov = team_mov(stat) or 0.0
-        mov_strength[tid] = mov * gp / (gp + 10.0)
+        # latest_team_stat falls back to an earlier season's row when this season
+        # has no stats yet — never seed strength from last season's margin.
+        if safe_int(stat.get("season")) == season:
+            gp_now[tid] = safe_float(stat.get("gp"))
+            mov_now[tid] = team_mov(stat) or 0.0
+        else:
+            gp_now[tid] = 0.0
+            mov_now[tid] = 0.0
 
     # Roster strength (healthy) and per-team injured list (impact, games remaining).
     roster_by_tid: dict[int, list[dict[str, Any]]] = defaultdict(list)
@@ -230,24 +245,27 @@ def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: 
                 if impact > 0.2:
                     injured_by_tid[tid].append((impact, games_out))
     mean_roster = sum(roster_strength.values()) / len(roster_strength) if roster_strength else 0.0
-    base_strength = {
-        tid: 0.5 * mov_strength.get(tid, 0.0) + 0.5 * (roster_strength.get(tid, 0.0) - mean_roster)
-        for tid in tids
-    }
+    base_strength: dict[int, float] = {}
+    for tid in tids:
+        mov_weight = gp_now[tid] / (gp_now[tid] + SIM_MOV_BLEND_K)
+        roster_signal = roster_strength.get(tid, 0.0) - mean_roster
+        base_strength[tid] = (1.0 - mov_weight) * roster_signal + mov_weight * mov_now[tid]
 
-    # Remaining schedule in chronological order. An unplayed season has no exported schedule,
-    # so project it over a generated round-robin instead.
+    # Remaining schedule in chronological order. Prefer the exported schedule;
+    # an unplayed season with none is projected over a generated round-robin.
     remaining: list[tuple[int, int, int, str]] = []
-    if fresh:
-        items = generated_schedule_items(data, teams, schedule_season=season)
-    else:
-        items, _ = score_items_for_page(data, teams)
-    for item in items:
-        if is_completed_game_item(item) or safe_int(item.get("season")) != season:
-            continue
-        home, away = safe_int(item.get("home_tid")), safe_int(item.get("away_tid"))
-        if home in wins0 and away in wins0:
-            remaining.append((safe_int(item.get("day")), home, away, str(item.get("gid"))))
+
+    def collect(items: Iterable[dict[str, Any]]) -> None:
+        for item in items:
+            if is_completed_game_item(item) or safe_int(item.get("season")) != season:
+                continue
+            home, away = safe_int(item.get("home_tid")), safe_int(item.get("away_tid"))
+            if home in wins0 and away in wins0:
+                remaining.append((safe_int(item.get("day")), home, away, str(item.get("gid"))))
+
+    collect(score_items_for_page(data, teams)[0])
+    if fresh and not remaining:
+        collect(generated_schedule_items(data, teams, schedule_season=season))
     remaining.sort(key=lambda g: (g[0], g[3]))
     games_left = defaultdict(int)
     for _, home, away, _ in remaining:
@@ -393,8 +411,9 @@ def sim_client_inputs(data: dict[str, Any], teams: list[dict[str, Any]], players
     """Team strengths + remaining schedule for the client-side simulator.
 
     Mirrors the strength model and remaining-schedule selection at the top of
-    simulate_league exactly (fresh-season detection, MOV regressed by gp/(gp+10),
-    top-10 roster impact centered on the league mean, 50/50 blend) so that a
+    simulate_league exactly (fresh-season detection, current-roster top-10
+    impact centered on the league mean, blended with CURRENT-season MOV at
+    weight gp/(gp+SIM_MOV_BLEND_K) — never last season's margin) so that a
     client sim over this payload agrees with the server-side Monte Carlo. Injury
     penalties are intentionally left out of the payload — they decay per game and
     matter only mid-season; the client sims the healthy baseline.
@@ -405,7 +424,8 @@ def sim_client_inputs(data: dict[str, Any], teams: list[dict[str, Any]], players
     """
     fresh = not completed_game_items(data, season, playoffs=False)
     tids = [safe_int(t.get("tid")) for t in teams if t.get("tid") is not None]
-    mov_strength: dict[int, float] = {}
+    mov_now: dict[int, float] = {}
+    gp_now: dict[int, float] = {}
     wins: dict[int, int] = {}
     losses: dict[int, int] = {}
     for team in teams:
@@ -414,9 +434,14 @@ def sim_client_inputs(data: dict[str, Any], teams: list[dict[str, Any]], players
         stat = latest_team_stat(team, season)
         wins[tid] = 0 if fresh else safe_int(team_season.get("won"))
         losses[tid] = 0 if fresh else safe_int(team_season.get("lost"))
-        gp = safe_float(stat.get("gp"))
-        mov = team_mov(stat) or 0.0
-        mov_strength[tid] = mov * gp / (gp + 10.0)
+        # latest_team_stat falls back to an earlier season's row when this season
+        # has no stats yet — never seed strength from last season's margin.
+        if safe_int(stat.get("season")) == season:
+            gp_now[tid] = safe_float(stat.get("gp"))
+            mov_now[tid] = team_mov(stat) or 0.0
+        else:
+            gp_now[tid] = 0.0
+            mov_now[tid] = 0.0
 
     roster_by_tid: dict[int, list[dict[str, Any]]] = defaultdict(list)
     for player in players:
@@ -428,22 +453,27 @@ def sim_client_inputs(data: dict[str, Any], teams: list[dict[str, Any]], players
         rotation = sorted(roster_by_tid.get(tid, []), key=lambda p: -player_game_impact(p, season))[:10]
         roster_strength[tid] = sum(player_game_impact(p, season) for p in rotation)
     mean_roster = sum(roster_strength.values()) / len(roster_strength) if roster_strength else 0.0
-    strengths = {
-        tid: 0.5 * mov_strength.get(tid, 0.0) + 0.5 * (roster_strength.get(tid, 0.0) - mean_roster)
-        for tid in tids
-    }
+    strengths: dict[int, float] = {}
+    for tid in tids:
+        mov_weight = gp_now[tid] / (gp_now[tid] + SIM_MOV_BLEND_K)
+        roster_signal = roster_strength.get(tid, 0.0) - mean_roster
+        strengths[tid] = (1.0 - mov_weight) * roster_signal + mov_weight * mov_now[tid]
 
-    if fresh:
-        items = generated_schedule_items(data, teams, schedule_season=season)
-    else:
-        items, _ = score_items_for_page(data, teams)
+    # Mirrors simulate_league: exported schedule first, generated round-robin
+    # only for an unplayed season with no exported schedule.
     remaining: list[tuple[int, int, int, str]] = []
-    for item in items:
-        if is_completed_game_item(item) or safe_int(item.get("season")) != season:
-            continue
-        home, away = safe_int(item.get("home_tid")), safe_int(item.get("away_tid"))
-        if home in strengths and away in strengths:
-            remaining.append((safe_int(item.get("day")), home, away, str(item.get("gid"))))
+
+    def collect(items: Iterable[dict[str, Any]]) -> None:
+        for item in items:
+            if is_completed_game_item(item) or safe_int(item.get("season")) != season:
+                continue
+            home, away = safe_int(item.get("home_tid")), safe_int(item.get("away_tid"))
+            if home in strengths and away in strengths:
+                remaining.append((safe_int(item.get("day")), home, away, str(item.get("gid"))))
+
+    collect(score_items_for_page(data, teams)[0])
+    if fresh and not remaining:
+        collect(generated_schedule_items(data, teams, schedule_season=season))
     remaining.sort(key=lambda g: (g[0], g[3]))
 
     return {
@@ -455,6 +485,32 @@ def sim_client_inputs(data: dict[str, Any], teams: list[dict[str, Any]], players
         "wins": wins,
         "losses": losses,
     }
+
+
+def league_bench_ovrs(players: list[dict[str, Any]], season: int) -> list[float]:
+    """League-average 6th..10th-best current-roster OVRs, sorted desc (5 floats, 1dp).
+
+    Emitted as app-data.json's sim.bench_ovrs; Lineup Lab pads a five-man
+    selection with these instead of a flat replacement OVR. Rank-wise mean
+    across the current rosters: a team with fewer than ten players simply
+    doesn't count toward the deeper ranks; a rank no team fills falls back
+    to REPLACEMENT_OVR.
+    """
+    by_tid: dict[int, list[int]] = defaultdict(list)
+    for player in players:
+        tid = safe_int(player.get("tid"), -9)
+        if tid < 0:
+            continue
+        ovr = latest_rating(player, season).get("ovr")
+        if ovr is not None:
+            by_tid[tid].append(safe_int(ovr))
+    rosters = [sorted(ovrs, reverse=True) for ovrs in by_tid.values()]
+    out: list[float] = []
+    for rank in range(5, 10):
+        values = [ovrs[rank] for ovrs in rosters if len(ovrs) > rank]
+        avg = sum(values) / len(values) if values else REPLACEMENT_OVR
+        out.append(round(avg, 1) + 0.0)
+    return sorted(out, reverse=True)
 
 
 def magic_elimination(teams: list[dict[str, Any]], season: int, season_len: int = 45) -> dict[int, str]:

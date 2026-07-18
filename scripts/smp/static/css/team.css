@@ -102,7 +102,6 @@ html[data-theme="light"] .tm-watermark { color: var(--team-primary, var(--muted)
 }
 .team-scope .vital-tile,
 .team-scope .game-chip,
-.team-scope .depth-col,
 .team-scope .pick-chip {
   background: var(--panel-2);
   background: color-mix(in srgb, var(--team-primary) 6%, var(--panel-2));

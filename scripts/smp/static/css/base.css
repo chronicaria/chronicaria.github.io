@@ -107,3 +107,12 @@ main.page-shell { flex: 1 0 auto; }
 h2:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
 .h-anchor:hover { color: var(--accent); text-decoration: none; }
 
+/* ---------- global polish: card-title + caption rhythm (P6-I) ---------- */
+/* Bare card titles get the same breathing room as .section-title-row titles. */
+.card > h2 { margin-bottom: .5rem; }
+/* Muted captions inside cards keep a quiet, even rhythm: no stray leading or
+   trailing whitespace from default <p> margins. */
+.card > p.muted { margin-top: .5rem; margin-bottom: .5rem; }
+.card > p.muted:first-child { margin-top: 0; }
+.card > p.muted:last-child { margin-bottom: 0; }
+

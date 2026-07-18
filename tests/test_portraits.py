@@ -181,9 +181,12 @@ class TestPortraitHtml(PortraitsFixtureCase):
         self.assertIn("portrait-broken", html)
         self.assertIn("this.src='../assets/faces/7.svg'", html)
 
-    def test_photo_without_face_hides_on_error(self):
+    def test_photo_without_face_swaps_to_monogram_on_error(self):
         html = portraits.portrait_html(_player(999, img="https://cdn.example/x.png"))
-        self.assertIn("portrait-broken", html)
+        # dead photo with no face SVG: onerror replaces the img with the
+        # percent-encoded monogram markup so the slot never renders empty
+        self.assertIn("this.outerHTML=decodeURIComponent(", html)
+        self.assertIn("portrait-monogram", html)  # encoded payload decodes to it
         self.assertNotIn("assets/faces/", html)
 
     def test_face_when_no_photo(self):

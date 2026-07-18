@@ -84,8 +84,9 @@
   --team-on-primary: #ffffff;
   position: relative;
   margin-bottom: .75rem;
-  border: 1px solid var(--line);
-  border-radius: .15rem;
+  border: 1px solid color-mix(in srgb, var(--team-secondary) 38%, var(--line));
+  border-top: 3px solid var(--team-secondary);
+  border-radius: .2rem;
   overflow: hidden;
   background: var(--panel);
 }
@@ -101,7 +102,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 1rem 0;
+  padding: 1.1rem 1.1rem 0;
   min-height: 150px;
   overflow: hidden;
   color: var(--team-on-primary);
@@ -112,34 +113,45 @@
     color-mix(in srgb, var(--team-primary) 70%, var(--team-secondary)) 100%
   );
 }
+/* Inner hairline frame: the classic card border-within-a-border. */
+.player-card-face::after {
+  content: "";
+  position: absolute;
+  inset: .5rem;
+  border: 1px solid color-mix(in srgb, var(--team-on-primary) 26%, transparent);
+  border-radius: .1rem;
+  pointer-events: none;
+}
+/* Corner jersey number. */
 .player-card-num {
   position: absolute;
-  right: 158px;
-  top: 50%;
-  transform: translateY(-52%);
-  font-size: 7.5rem;
+  top: .95rem;
+  left: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 1.45rem;
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -.04em;
+  letter-spacing: -.02em;
   color: var(--team-on-primary);
-  opacity: .16;
-  pointer-events: none;
-  user-select: none;
+  font-variant-numeric: tabular-nums;
 }
-.player-card-body { position: relative; padding-bottom: 1rem; }
-.player-card-eyebrow { color: color-mix(in srgb, var(--team-on-primary) 70%, transparent); }
-.player-card h1 { font-size: 1.65rem; color: var(--team-on-primary); }
-.player-card-facts {
-  margin: .3rem 0 0;
-  font-size: .85rem;
-  color: color-mix(in srgb, var(--team-on-primary) 88%, transparent);
-}
-.player-card-facts a.player-card-team {
-  color: var(--team-on-primary);
+.player-card-num::before {
+  content: "#";
+  font-size: .78rem;
   font-weight: 700;
-  text-decoration-color: var(--team-secondary);
+  margin-right: .06rem;
+  opacity: .65;
 }
-.player-card-sep { opacity: .55; }
+.player-card-body { position: relative; padding: 2.4rem 0 .9rem; }
+.player-card h1 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -.015em;
+  line-height: 1.05;
+  color: var(--team-on-primary);
+}
 .player-card-skills { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .55rem; }
 .player-card-skill {
   display: inline-flex;
@@ -154,7 +166,7 @@
   border: 1px solid color-mix(in srgb, var(--team-secondary) 55%, transparent);
 }
 /* Portrait anchored flush to the card's bottom edge. */
-.player-card-portrait { flex: 0 0 auto; align-self: flex-end; display: flex; }
+.player-card-portrait { flex: 0 0 auto; align-self: flex-end; display: flex; position: relative; z-index: 1; }
 .player-card-portrait .card-portrait {
   display: block;
   width: 132px;
@@ -165,12 +177,88 @@
   object-fit: cover;
   object-position: top;
 }
+/* Nameplate: position chip + team + age (+ FA asking price). */
+.player-card-plate {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .3rem .75rem;
+  padding: .5rem 1.1rem;
+  font-size: .85rem;
+  background: color-mix(in srgb, var(--team-primary) 12%, var(--panel-2));
+  border-top: 1px solid var(--team-secondary);
+  border-bottom: 1px solid var(--line);
+}
+.plate-pos {
+  display: inline-flex;
+  align-items: center;
+  padding: .08rem .45rem;
+  border: 1px solid color-mix(in srgb, var(--team-secondary) 70%, var(--line));
+  border-radius: .15rem;
+  background: color-mix(in srgb, var(--team-secondary) 16%, transparent);
+  color: var(--text);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+.plate-team { font-weight: 700; }
+.plate-team a { color: var(--text); }
+.plate-meta { font-size: .78rem; }
+.plate-ask {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .4rem;
+  margin-left: auto;
+}
+.plate-ask span {
+  color: var(--muted);
+  font-size: .66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.plate-ask strong { font-size: .95rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+/* Headline per-game stat tiles. */
+.player-card-tiles {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding: .55rem 1.1rem .6rem;
+}
+.card-tile {
+  flex: 1 1 0;
+  min-width: 4.2rem;
+  display: grid;
+  gap: .08rem;
+  justify-items: center;
+  padding: .4rem .5rem .35rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+}
+.card-tile strong { font-size: 1.2rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.card-tile span {
+  color: var(--muted);
+  font-size: .6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.card-tile--fpts { border-color: color-mix(in srgb, var(--team-secondary) 60%, var(--line)); }
+.card-tiles-cap {
+  align-self: center;
+  flex: 0 0 auto;
+  margin-left: .25rem;
+  color: var(--muted);
+  font-size: .7rem;
+}
 .player-card-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: .75rem;
-  padding: .45rem 1rem;
+  padding: .45rem 1.1rem;
   background: var(--panel-2);
   border-top: 1px solid var(--line);
 }
@@ -195,9 +283,11 @@
 a.career-dot:hover { transform: scale(1.18); }
 @media (max-width: 700px) {
   .player-card-face { flex-direction: column; align-items: flex-start; min-height: 0; }
+  .player-card-body { padding-top: 2.1rem; }
+  .player-card h1 { font-size: 1.5rem; }
   .player-card-portrait { align-self: flex-end; margin-top: -1.25rem; }
   .player-card-portrait .card-portrait { width: 104px; height: 104px; }
-  .player-card-num { right: .5rem; font-size: 5rem; }
+  .plate-ask { margin-left: 0; width: 100%; }
 }
 
 /* ---------- sticky section rail ---------- */

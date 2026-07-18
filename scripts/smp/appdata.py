@@ -13,12 +13,14 @@ embedding its own player JSON. Schema (see PLAN.md):
       "teams": [{tid,abbrev,region,name,colors:{primary,secondary,chart},
                  strength,payroll,record:{w,l}}],
       "sim": {"strengths":{tid:num}, "hca":num, "logistic_k":num,
-              "schedule":[[day,home_tid,away_tid],...]},
+              "schedule":[[day,home_tid,away_tid],...],
+              "bench_ovrs":[5 floats desc]},
       "finance": {"tax_line":300000, "notes":"thousands"} }
 
 All money is in Basketball GM "thousands" units. The sim block mirrors
 simulate_league's win-probability model (see simmodel.sim_client_inputs) so
-client sims agree with the server-side Monte Carlo.
+client sims agree with the server-side Monte Carlo; bench_ovrs is the
+league-average 6th..10th-best current-roster OVR (Lineup Lab's bench).
 """
 
 import json
@@ -45,7 +47,7 @@ from .core import (
 )
 from .derived import fantasy_pts
 from .finance import FIN_SOFT_CAP, team_dead_money, team_retention_delta
-from .simmodel import sim_client_inputs
+from .simmodel import league_bench_ovrs, sim_client_inputs
 
 # Fallback team identity colors (from the PLAN's hand-curated TEAM_IDENTITY
 # registry). identity.py is the canonical owner; appdata prefers importing it
@@ -202,6 +204,7 @@ def build_app_data(
             "hca": sim["hca"],
             "logistic_k": sim["logistic_k"],
             "schedule": [[safe_int(day), safe_int(home), safe_int(away)] for day, home, away in sim["schedule"]],
+            "bench_ovrs": league_bench_ovrs(players, season),
         },
         "finance": {"tax_line": FIN_SOFT_CAP, "notes": "thousands"},
     }

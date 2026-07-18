@@ -31,14 +31,21 @@
   // ADAPTATION for a hand-picked group: team_ovr rates a full roster, so a bare
   // five would drag five literal 0.0 bench slots into the weighting and every
   // lineup would grade absurdly negative. Instead the missing roster spots are
-  // filled at replacement level — simmodel.REPLACEMENT_OVR (40.0), the repo's
-  // "freely-available filler" constant — i.e. your five plus a replacement
-  // bench. The weighting itself is untouched: lineupOvrRaw(five) is exactly
-  // projections.team_ovr(five + [40.0] * 5), which tests assert.
+  // filled with app-data.sim.bench_ovrs — the league-average 6th..10th-best OVR
+  // across the ten current rosters (5 floats, sorted desc) — i.e. your five
+  // plus a league-average bench. The weighting itself is untouched:
+  // lineupOvrRaw(five) is exactly projections.team_ovr(five + bench_ovrs).
+  // Safety net for a stale app-data.json without bench_ovrs: pad with
+  // simmodel.REPLACEMENT_OVR (40.0), the repo's "freely-available filler"
+  // constant, which tests assert against projections.team_ovr.
   const REPLACEMENT_OVR = 40.0;
+  let benchOvrs = null; // payload.sim.bench_ovrs when present, else null
+  function benchAt(i) {
+    return benchOvrs && Number.isFinite(benchOvrs[i]) ? benchOvrs[i] : REPLACEMENT_OVR;
+  }
   function lineupOvrRaw(ovrs) {
     const padded = ovrs.slice(0, 10);
-    while (padded.length < 10) padded.push(REPLACEMENT_OVR);
+    for (let i = 0; padded.length < 10; i += 1) padded.push(benchAt(i));
     return teamOvrRaw(padded);
   }
   // team_ovr anchors its scale to scoring margin (raw = MOV * 50/15 + 50), so the
@@ -242,9 +249,10 @@
     const tile = (label, value, sub, cls) =>
       '<div class="ll-tile' + (cls ? ' ' + cls : '') + '"><span class="ll-tile-label">' + label + '</span>'
       + '<strong>' + value + '</strong><span class="muted">' + sub + '</span></div>';
+    const benchLabel = benchOvrs ? 'a league-average bench' : 'a replacement-level bench';
     summaryEl.innerHTML = '<div class="ll-tiles">'
       + tile('Lineup OVR', ovr === null ? '—' : String(ovr),
-             (count === 5 ? 'your five' : count + ' of 5 picked — open spots') + ' + a replacement-level bench', '')
+             (count === 5 ? 'your five' : count + ' of 5 picked') + ' + ' + benchLabel, '')
       + tile('Total salary', fmtMoney(salary),
              fmtMoney(gap) + (overTax ? ' over' : ' under') + ' the ' + fmtMoney(taxLine) + ' tax line',
              overTax ? 'll-over-tax' : '')
@@ -306,6 +314,10 @@
     .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then((data) => {
       payload = data;
+      const bench = data.sim && data.sim.bench_ovrs;
+      if (Array.isArray(bench) && bench.length === 5 && bench.every((v) => Number.isFinite(v))) {
+        benchOvrs = bench;
+      }
       data.players.forEach((p) => { byPid[p.pid] = p; });
       data.teams.forEach((t) => { byTid[t.tid] = t; });
       inputs.forEach(comboFor);

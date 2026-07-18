@@ -51,8 +51,7 @@ ROUND_NAMES = {
     3: ["Quarterfinals", "Semifinals", "Finals"],
 }
 
-CLASSICS_FEATURED = 25
-CLASSICS_MENTIONS = 25
+CLASSICS_FEATURED = 10
 
 
 # ---------------------------------------------------------------------------
@@ -261,11 +260,11 @@ def render_rivalry_grid_page(data: dict[str, Any], teams: list[dict[str, Any]]) 
     <section class="page-hero">
       <div>
         <h1>Rivalries</h1>
-        <p class="muted">All-time head-to-head records, regular season and playoffs, {esc(span)}</p>
+        <p class="muted">All-time head-to-head, playoffs included · {esc(span)}</p>
       </div>
     </section>
     <section class="card">
-      <div class="section-title-row"><h2>Head-to-Head Grid</h2><span class="muted small-copy">row team's record vs column team · tint = average point margin · click a cell for the full rivalry</span></div>
+      <div class="section-title-row"><h2>Head-to-Head Grid</h2><span class="muted small-copy">row record vs column · tint = point margin · click a cell</span></div>
       <div class="table-wrap rv-grid-wrap">
         <table class="rv-grid">
           <caption class="sr-only">All-time head-to-head records between every pair of teams</caption>
@@ -460,10 +459,8 @@ def render_rivalry_pair_page(data: dict[str, Any], teams: list[dict[str, Any]],
                 if {safe_int(it.get("home_tid")), safe_int(it.get("away_tid"))} == pair]
     retained_span = _retained_seasons_label(retained)
     retained_note = (
-        f"Box scores are only retained for seasons {retained_span}; the streak, blowout, "
-        "closest game, and meeting log below cover those seasons. All-time records above "
-        "include every season."
-    ) if retained_span else "No box scores are retained in this export."
+        f"Game details cover retained box scores ({retained_span}); all-time records cover every season."
+    ) if retained_span else "No box scores retained in this export."
 
     blowout_html = closest_html = ""
     if meetings:
@@ -668,7 +665,6 @@ def render_classics_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> s
     retained_span = _retained_seasons_label(_retained_items(data))
 
     featured = ranked[:CLASSICS_FEATURED]
-    mentions = ranked[CLASSICS_FEATURED:CLASSICS_FEATURED + CLASSICS_MENTIONS]
 
     articles = []
     for rank, (score, game) in enumerate(featured, 1):
@@ -694,26 +690,9 @@ def render_classics_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> s
         </article>
         """)
 
-    mention_rows = []
-    for rank, (score, game) in enumerate(mentions, CLASSICS_FEATURED + 1):
-        mention_rows.append("".join([
-            td(fmt_number(rank, 0), sort=rank),
-            td(fmt_number(score, 1), sort=score),
-            td(esc(game.get("season")), sort=game.get("season")),
-            td(fmt_number(game.get("day"), 0), sort=game.get("day")),
-            td("Playoffs" if game.get("playoffs") else "Regular", sort=1 if game.get("playoffs") else 0),
-            td(_matchup_score_html(game, teams_by_tid, linked_gids, ""), cls="name-cell", sort=str(game.get("gid"))),
-        ]))
-    mentions_html = table_html(
-        ["Rank", "Drama", "Season", "Day", "Type", "Score"], mention_rows,
-        table_id="honorable-mentions", empty_message="No further games to mention.",
-        caption="Honorable mentions ranked by drama index",
-    )
-
     span_note = (
-        f"Ranked by drama index across all {len(ranked)} retained box scores ({retained_span}). "
-        "Earlier seasons' games are not retained in the export."
-        if retained_span else "No completed games are retained in this export."
+        f"Top {min(CLASSICS_FEATURED, len(ranked))} of {len(ranked)} retained games ({retained_span}) by drama index"
+        if retained_span else "No completed games retained in this export"
     )
     body = f"""
     <section class="page-hero">
@@ -725,10 +704,6 @@ def render_classics_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> s
     <div class="cl-list">
       {''.join(articles) if articles else '<p class="empty-state">No completed games yet.</p>'}
     </div>
-    <section class="card">
-      <div class="section-title-row"><h2>Honorable Mentions</h2><span class="muted small-copy">the next {len(mention_rows)} by drama index</span></div>
-      {mentions_html}
-    </section>
     """
     return page_html("Greatest Games", body, teams, root="", active="classics")
 

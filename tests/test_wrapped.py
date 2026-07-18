@@ -114,9 +114,15 @@ class TestRenderedPage(unittest.TestCase):
 
     def test_one_slide_per_team_plus_story_slides(self):
         self.assertEqual(self.html.count("wr-slide-team"), 10)
-        for slide_id in ("wr-title", "wr-numbers", "wr-fantasy", "wr-risers",
+        for slide_id in ("wr-title", "wr-numbers", "wr-fantasy",
                         "wr-leaders", "wr-playoffs", "wr-champion", "wr-outro"):
             self.assertIn(f'id="{slide_id}"', self.html)
+        # P6-H3: attendance and development-riser slides were removed.
+        self.assertNotIn('id="wr-risers"', self.html)
+        self.assertNotIn("fans in the stands", self.html)
+        # Leaders wall no longer includes a Threes entry; no ESPN mentions.
+        self.assertNotIn("3PM/G", self.html)
+        self.assertNotIn("ESPN", self.html)
 
     def test_champion_and_share_cards_linked(self):
         self.assertIn("Cambridge Platypuses", self.html)

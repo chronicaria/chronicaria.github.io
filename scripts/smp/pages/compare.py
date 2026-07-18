@@ -88,7 +88,7 @@ def render_compare_page(data: dict[str, Any], teams: list[dict[str, Any]], playe
     <section class="page-hero">
       <div>
         <h1>Compare Players</h1>
-        <p class="muted">Pick two or three players · best value in each row is highlighted · share the URL to share the comparison</p>
+        <p class="muted">Pick two or three players · best value per row highlighted · the URL tracks your picks</p>
       </div>
     </section>
     <section class="card" data-app="compare">
@@ -96,7 +96,7 @@ def render_compare_page(data: dict[str, Any], teams: list[dict[str, Any]], playe
       </div>
       <div class="radar-block" data-compare-radar hidden>
         <div data-radar-out></div>
-        <p class="muted small-copy radar-note">Spokes average the 15 subratings — Shooting: 3PT · Mid · FT&ensp;·&ensp;Finishing: Inside · Dunks&ensp;·&ensp;Athleticism: Speed · Jump · Strength · Endurance&ensp;·&ensp;Playmaking: Passing · Dribbling · Off IQ&ensp;·&ensp;Defense: Def IQ · Rebounding · Height&ensp;·&ensp;IQ: Off IQ · Def IQ</p>
+        <p class="muted small-copy radar-note" title="Shooting: 3PT · Mid · FT — Finishing: Inside · Dunks — Athleticism: Speed · Jump · Strength · Endurance — Playmaking: Passing · Dribbling · Off IQ — Defense: Def IQ · Rebounding · Height — IQ: Off IQ · Def IQ">Spokes average the 15 subratings · hover a dot for exact values</p>
       </div>
       <div data-compare-out aria-live="polite">
         <p class="app-loading">Loading player data…</p>

@@ -323,7 +323,7 @@
         ['FG%', pgRow('fg_pct'), {}],
         ['3P%', pgRow('tp_pct'), {}],
         ['FT%', pgRow('ft_pct'), {}],
-        ['FPTS/G', pgRow('fpts'), {}],
+        ['FPTS/G', pgRow('fpts'), { int: true }],
         ['TS%', exRow(1), {}],
         ['PER', exRow(2), {}],
         ['BPM', exRow(3), {}],
@@ -349,13 +349,15 @@
       const row = (label, values, options) => {
         const withBar = options && options.bar;
         const lower = options && options.lower;
+        const asInt = options && options.int; // display rounded; best-value ties break on the raw float
         html += '<tr><td class="cmp-label">' + label + '</td>';
         const nums = values.map(Number).filter(Number.isFinite);
         const best = nums.length > 1 ? (lower ? Math.min(...nums) : Math.max(...nums)) : null;
         values.forEach((v) => {
           const num = Number(v);
           const isBest = Number.isFinite(num) && best !== null && num === best;
-          let cell = (v === null || v === undefined || v === '') ? '—' : escapeHtml(v);
+          let cell = (v === null || v === undefined || v === '') ? '—'
+            : (asInt && Number.isFinite(num) ? String(Math.round(num)) : escapeHtml(v));
           if (withBar && Number.isFinite(num)) {
             cell = '<span class="cmp-bar"><i style="width:' + Math.max(2, Math.min(100, num)) + '%"></i></span>' + cell;
           }

@@ -762,7 +762,6 @@ GLOSSARY = {
     "TOV%": "Turnovers per 100 plays",
     "ORB%": "Share of available offensive rebounds grabbed",
     "FT/FGA": "Free throws made per field-goal attempt",
-    "GmSc": "Game Score: single-game performance rating",
     "Pace": "Possessions per game",
     "Net": "Net rating: ORtg minus DRtg",
     "PO%": "Simulated chance to finish top 4 and make the playoffs",
@@ -770,12 +769,12 @@ GLOSSARY = {
     "Magic#": "Wins (or 5th-place losses) needed to clinch a playoff spot",
     "Elim#": "Losses (or 4th-place wins) until playoff elimination",
     "Value": "Basketball GM trade value (higher = more coveted)",
-    "Form": "Last 5 games vs season average, by Game Score",
+    "Form": "Last 5 games vs season average",
     "WS/$M": "Win Shares per million of current salary",
     "YWT": "Years with team",
     "Ovr": "Current overall rating",
     "Pot": "Potential rating ceiling",
-    "FPTS": "ESPN-style fantasy points",
+    "FPTS": "Fantasy points",
     "Skills": "Skill badges — tap a badge for its meaning",
 }
 
@@ -825,7 +824,7 @@ _STICKY_YEAR_LABELS = {"Season", "Year"}
 _STICKY_NAME_LABELS = {"Player", "Team", "Name"}
 
 
-def table_html(headers: list, rows: list[str], table_id: str | None = None, empty_message: str = "No players found.", wrap_cls: str = "", caption: str | None = None, pos_filter: bool = False, colgroups: Any = None, default_colgroup: str | None = None, sticky_year: bool | None = None) -> str:
+def table_html(headers: list, rows: list[str], table_id: str | None = None, empty_message: str = "No data yet.", wrap_cls: str = "", caption: str | None = None, pos_filter: bool = False, colgroups: Any = None, default_colgroup: str | None = None, sticky_year: bool | None = None) -> str:
     """Sortable table shell.
 
     Optional extras (all default-off, so existing call sites render unchanged):

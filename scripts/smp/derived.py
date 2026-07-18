@@ -6,7 +6,7 @@ Everything here is pure computation over the export dict — no HTML. Pages
 (player/game/classics/home) and the shared client payload (appdata.py) consume
 these helpers:
 
-    fantasy_pts(stat_row)                ESPN-points fantasy score for a raw-total row
+    fantasy_pts(stat_row)                fantasy-points score for a raw-total row
     player_shot_zones(data, pid, season) per-player-season shot-zone splits + league pct
     four_factors(team_stat_row)          Dean Oliver four factors (+ opp mirrors)
     drama_index(game, feats_by_gid)      0-100 "how dramatic was this game" score
@@ -21,10 +21,10 @@ from typing import Any
 from .core import safe_float, safe_int
 
 # ---------------------------------------------------------------------------
-# Fantasy points (ESPN points scoring)
+# Fantasy points
 # ---------------------------------------------------------------------------
 
-# ESPN points-league scoring weights, applied to raw totals:
+# Points-league scoring weights, applied to raw totals:
 #   PTS +1, 3PM +1, FGM +2, FGA -1, FTM +1, FTA -1, REB +1, AST +2,
 #   STL +4, BLK +4, TOV -2
 FANTASY_WEIGHTS = [
@@ -52,7 +52,7 @@ def _rebounds(stat_row: dict[str, Any]) -> float:
 
 
 def fantasy_pts(stat_row: dict[str, Any] | None) -> float | None:
-    """ESPN points-scoring fantasy total for a raw-total stat row.
+    """Fantasy-points total for a raw-total stat row.
 
     Works on both per-game box rows (games[].teams[].players) and season
     aggregate rows (players[].stats) — raw totals in, totals out. Returns

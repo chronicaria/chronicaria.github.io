@@ -128,3 +128,13 @@ tbody tr.my-team-row > td { background: color-mix(in srgb, var(--accent) 14%, va
 tbody tr.my-team-row > td:first-child { box-shadow: inset 2px 0 0 var(--accent); }
 tbody tr.my-team-row:hover > td { background: color-mix(in srgb, var(--accent) 24%, var(--panel)); }
 
+/* ---------- global polish: numerals + empty states (P6-I) ---------- */
+/* Digits line up down every stat column (no-op where the font lacks tnum). */
+tbody td { font-variant-numeric: tabular-nums; }
+/* Empty states read as a quiet placeholder panel instead of a bare sentence. */
+.empty-state {
+  padding: .55rem .7rem;
+  border: 1px dashed var(--line);
+  border-radius: .15rem;
+}
+

@@ -176,6 +176,8 @@
   line-height: 1.6;
 }
 .cl-game:nth-child(-n+3) .cl-rank { color: var(--warn); }
+.cl-list .cl-game:first-child { border-color: color-mix(in srgb, var(--warn) 45%, var(--line)); }
+.cl-list .cl-game:first-child .cl-rank { font-size: 1.5rem; line-height: 1.35; }
 .cl-body { flex: 1 1 auto; min-width: 0; }
 .cl-top-row {
   display: flex;

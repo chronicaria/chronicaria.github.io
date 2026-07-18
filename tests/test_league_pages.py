@@ -150,7 +150,7 @@ class TestDraftRegrades(_ExportCase):
         self.assertIn("regrade-crest", self.html)
 
     def test_rookie_class_states_no_games_honestly(self):
-        self.assertIn("the class debuts in 2031, so there is nothing to re-grade yet", self.html)
+        self.assertIn("class debuts in 2031 · nothing to re-grade yet", self.html)
 
 
 class TestHistoryPage(_ExportCase):

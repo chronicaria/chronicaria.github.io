@@ -127,17 +127,18 @@ def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season:
             cells.append(td(text, sort=pct, style=seed_cell_style(pct), cls=cls))
         rows.append(f'<tr data-tid="{tid}">{"".join(cells)}</tr>')
     headers = ["Team", "Proj W-L", "PO%", "Finals%", "Title%"] + [str(i) for i in range(1, n_seeds + 1)]
+    detail = ("Team strength is rated from each current roster (injury-aware), "
+              "blending in this season's results as games accumulate. "
+              "Playoffs are simulated as 1v4 / 2v3 best-of-sevens.")
     if sim.get("fresh"):
         title = f"{season} Playoff Odds"
-        note = (f"10,000 sims of the {season} season from current rosters over a projected schedule · "
-                "last season's scoring margin seeds team strength · playoffs simulated as 1v4 / 2v3 best-of-sevens")
+        note = "10,000 sims · roster-based strength · projected schedule"
     else:
         title = "Playoff Odds"
-        note = ("10,000 sims · injury-aware: sidelined players hurt their team until their expected return · "
-                "playoffs simulated as 1v4 / 2v3 best-of-sevens")
+        note = "10,000 sims · roster-based strength, injury-aware"
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>{title}</h2><span class="muted small-copy">{note}</span></div>
+      <div class="section-title-row"><h2>{title}</h2><span class="muted small-copy" title="{esc(detail)}">{esc(note)}</span></div>
       {table_html(headers, rows, table_id="playoff-odds", empty_message="Season complete.")}
     </section>
     """
@@ -181,10 +182,10 @@ def stakes_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) 
             cards.append(f'<div class="score-line score-stack hm-stake-static">{"".join(rows)}</div>')
     if sim.get("fresh"):
         title = "What's at Stake · Opening Day"
-        note = "playoff-odds swing between winning and losing the projected opening matchup"
+        note = "playoff-odds swing on the projected opener"
     else:
         title = f'What\'s at Stake · Day {sim.get("day")}'
-        note = "playoff-odds swing between winning and losing today's game"
+        note = "playoff-odds swing on today's game"
     return f"""
     <section class="card home-section">
       <div class="section-title-row"><h2>{title}</h2><span class="muted small-copy">{note}</span></div>
@@ -324,7 +325,7 @@ def standings_table(data: dict[str, Any], teams: list[dict[str, Any]], season: i
             clinch_note = '<p class="muted small-copy">x – clinched a playoff spot · e – eliminated from playoff contention</p>'
         sections.append(f'''
         <section class="card home-section standings-section">
-          <div class="section-title-row"><h2>{esc(title)}</h2><span class="muted small-copy">Top 4 make the playoffs · SOS = remaining opponents' win%</span></div>
+          <div class="section-title-row"><h2>{esc(title)}</h2><span class="muted small-copy" title="SOS = average current win% of remaining opponents">Top 4 make the playoffs</span></div>
           {table_html(headers, html_rows, table_id=f"standings-{esc(cid)}", empty_message="No standings data found.")}
           {clinch_note}
         </section>
@@ -464,7 +465,7 @@ def team_stats_table(teams: list[dict[str, Any]], season: int) -> str:
 
     return f'''
     <section class="card home-section">
-      <div class="section-title-row"><h2>Team Stats</h2><span class="muted small-copy">Per game · green is good, red is bad</span></div>
+      <div class="section-title-row"><h2>Team Stats</h2><span class="muted small-copy" title="Cells tinted green (good) to red (bad) within each column">Per game</span></div>
       {table_html(headers, rows, table_id="team-stats", empty_message="No team stats available.")}
     </section>
     '''
@@ -598,7 +599,7 @@ def awards_voting_table(data: dict[str, Any], players: list[dict[str, Any]], tea
         rows.append("".join(cells))
     return f'''
     <section class="card home-section">
-      <div class="section-title-row"><h2>Award Voting Sentiment</h2><span class="muted">Top five candidates by current-season production and award signals</span></div>
+      <div class="section-title-row"><h2>Award Voting Sentiment</h2><span class="muted small-copy" title="Ranked by current-season production and award signals">top five candidates</span></div>
       {table_html(headers, rows, table_id="award-sentiment", empty_message="No award candidates available.")}
     </section>
     '''
@@ -840,7 +841,7 @@ def home_finances_table(data: dict[str, Any], teams: list[dict[str, Any]], playe
         ]))
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>Team Finances</h2><span class="muted small-copy">bankroll entering {year} · available = cash on hand − {year} payroll</span></div>
+      <div class="section-title-row"><h2>Team Finances</h2><span class="muted small-copy" title="Available to spend = cash on hand − {year} payroll">bankroll entering {year}</span></div>
 
       {table_html(headers, rows, table_id="home-finances")}
     </section>
@@ -886,17 +887,20 @@ def _season_label(chart_season: int, page_season: int) -> str:
 
 
 def preseason_banner(data: dict[str, Any], season: int) -> str:
-    """One-card preseason lead-in. Its single explanation line replaces the
-    zero-data standings / team-stats / award-sentiment cards (no dash walls)."""
+    """One-card season lead-in for the games-not-yet-played state. Its single
+    explanation line replaces the zero-data standings / team-stats /
+    award-sentiment cards (no dash walls). A regular-season export with zero
+    completed games is labeled Opening Day rather than Preseason."""
     season_len = regular_season_length(data, season) or 45
+    pill = "Opening Day" if phase_value(data) >= 1 else "Preseason"
     return f"""
     <section class="card home-section hm-banner">
       <div class="hm-banner-row">
-        <span class="hm-phase-pill">Preseason</span>
+        <span class="hm-phase-pill">{esc(pill)}</span>
         <h2 class="hm-banner-title">The {esc(season)} season hasn't tipped off yet</h2>
         <span class="muted small-copy">{esc(season_len)} games ahead</span>
       </div>
-      <p class="hm-banner-note muted small-copy">Standings, team stats, and award voting go live with the first real games — until then, everything below is projected from current rosters.</p>
+      <p class="hm-banner-note muted small-copy">Standings and stats go live with the first results — everything below is projected from current rosters.</p>
     </section>
     """
 
@@ -928,21 +932,20 @@ _DIGEST_COUNT_LABELS = [
     ("sign", "signing", "signings"),
     ("draft", "draft pick", "draft picks"),
     ("release", "player waived", "players waived"),
-    ("retired", "retirement", "retirements"),
-    ("hallOfFame", "Hall of Fame induction", "Hall of Fame inductions"),
 ]
 
 
 def offseason_events(data: dict[str, Any], completed_season: int) -> list[dict[str, Any]]:
     """Transaction events from the offseason after ``completed_season``.
 
-    BBGM logs offseason moves (retirements, draft, signings) under the season
-    that just ended, after its playoff events. The boundary is the last
-    playoffs-type eid of that season; draft/retired/hallOfFame events only ever
-    happen in the offseason, and events carrying an explicit phase >= 4 count
-    regardless of eid. In-season trades and signings stay out of the digest.
+    BBGM logs offseason moves (draft, signings, trades) under the season that
+    just ended, after its playoff events. The boundary is the last
+    playoffs-type eid of that season; draft events only ever happen in the
+    offseason, and events carrying an explicit phase >= 4 count regardless of
+    eid. In-season trades and signings stay out of the digest, and
+    retirement / Hall of Fame news is excluded by design.
     """
-    wanted = {"trade", "freeAgent", "reSigned", "release", "draft", "retired", "hallOfFame"}
+    wanted = {"trade", "freeAgent", "reSigned", "release", "draft"}
     events = [e for e in data.get("events", []) or []
               if isinstance(e, dict) and safe_int(e.get("season"), -1) == completed_season and e.get("type") in wanted]
     po_eids = [safe_int(e.get("eid")) for e in data.get("events", []) or []
@@ -952,7 +955,7 @@ def offseason_events(data: dict[str, Any], completed_season: int) -> list[dict[s
     out = []
     for event in events:
         etype = event.get("type")
-        if etype in ("draft", "retired", "hallOfFame"):
+        if etype == "draft":
             out.append(event)
         elif safe_int(event.get("eid"), -1) > boundary or safe_int(event.get("phase"), -1) >= 4:
             out.append(event)
@@ -982,10 +985,8 @@ def offseason_digest_card(data: dict[str, Any], teams: list[dict[str, Any]], com
     def event_sort_amount(event: dict[str, Any]) -> float:
         return safe_float((event.get("contract") or {}).get("amount"))
 
-    # Notable slice, chronological by story arc: retirements -> draft -> signings/trades.
+    # Notable slice, chronological by story arc: draft -> trades -> signings.
     notable: list[dict[str, Any]] = []
-    notable += sorted(by_type.get("retired", []), key=lambda e: -safe_float(e.get("score")))[:2]
-    notable += sorted(by_type.get("hallOfFame", []), key=lambda e: safe_int(e.get("eid")))[:2]
     notable += sorted(by_type.get("draft", []), key=lambda e: safe_int(e.get("eid")))[:3]
     notable += sorted(by_type.get("trade", []), key=lambda e: safe_int(e.get("eid")))[:3]
     notable += sorted(by_type.get("sign", []), key=event_sort_amount, reverse=True)[:4]
@@ -1235,10 +1236,8 @@ def four_factors_scatter_card(data: dict[str, Any], teams: list[dict[str, Any]],
     parts.append(f'<text x="12" y="{mt + plot_h / 2:.1f}" class="ff4-axis" text-anchor="middle" transform="rotate(-90 12 {mt + plot_h / 2:.1f})">defense — fewer points allowed ↑</text>')
 
     sub = _season_label(chart_season, page_season)
-    sub_html = f'<span class="count-pill">{esc(sub)}</span>' if sub else '<span class="muted small-copy">points per 100 possessions · dashed lines = league average</span>'
-    caption = "Top-right is the winning quadrant: scoring efficiently while allowing little. Hover a dot for that team's four factors."
-    if sub:
-        caption = f"Final {chart_season} numbers — the freshest read on every roster until {page_season} games arrive. " + caption
+    sub_html = f'<span class="count-pill">{esc(sub)}</span>' if sub else '<span class="muted small-copy" title="Dashed lines mark the league average; top-right is the winning quadrant">points per 100 possessions</span>'
+    caption = f"{chart_season} four factors · hover a dot for detail"
     return f"""
     <section class="card home-section">
       <div class="section-title-row"><h2>Offense vs Defense</h2>{sub_html}</div>
@@ -1373,7 +1372,7 @@ def odds_river_card(data: dict[str, Any], teams: list[dict[str, Any]], season: i
 
     if n > 1:
         hover = (f'<line class="oddsr-hline" data-oddsr-hline y1="{mt}" y2="{mt + plot_h:.1f}" style="display:none"/>')
-        note = f"one line per team · {n} snapshots so far · hover for the full league at any point"
+        note = f"{n} snapshots · hover for detail"
         payload = {
             "labels": ticks, "names": tick_names,
             "teams": payload_teams,
@@ -1385,7 +1384,7 @@ def odds_river_card(data: dict[str, Any], teams: list[dict[str, Any]], season: i
         wrap_attr = " data-oddsr"
     else:
         hover = ""
-        note = "odds history accumulates as the season progresses — one snapshot so far"
+        note = "one snapshot so far · history accumulates each update"
         payload_html = ""
         tooltip_html = ""
         wrap_attr = ""
@@ -1406,7 +1405,7 @@ def odds_river_card(data: dict[str, Any], teams: list[dict[str, Any]], season: i
 
 def fantasy_leaders_card(data: dict[str, Any], players: list[dict[str, Any]], teams: list[dict[str, Any]],
                          fantasy_season: int, page_season: int, root: str = "") -> str:
-    """Top 8 by fantasy points per game (B11), ESPN points scoring via smp.derived."""
+    """Top 8 by fantasy points per game (B11), scored via smp.derived.fantasy_pts."""
     teams_by_tid = {t["tid"]: t for t in teams}
     palette = team_palette_by_tid(teams)
     max_team_gp = max((safe_float(_exact_team_stat(t, fantasy_season).get("gp")) for t in teams), default=0.0)
@@ -1438,18 +1437,19 @@ def fantasy_leaders_card(data: dict[str, Any], players: list[dict[str, Any]], te
         if disp_tid < 0:
             disp_tid = safe_int(player.get("tid"), -1)
         bar_w = max(4.0, 100.0 * fppg / best)
+        fppg_int = int(round(fppg))
         rows.append(
-            f'<li title="{esc(player_name(player))}: {fmt_number(fppg, 1)} fantasy points per game over {fmt_number(gp, 0)} games">'
+            f'<li title="{esc(player_name(player))}: {fppg_int} fantasy points per game over {fmt_number(gp, 0)} games">'
             f'<span class="leader-rank">{rank}</span>'
             f'{team_dot(disp_tid, palette)}'
             f'<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
             f'<span class="leader-team">{esc(team_abbrev_for_tid(disp_tid, teams_by_tid))}</span>'
             f'<span class="fanl-track"><span class="fanl-bar" style="width:{bar_w:.0f}%"></span></span>'
-            f'<span class="leader-value">{fmt_number(fppg, 1)}</span></li>'
+            f'<span class="leader-value">{fppg_int}</span></li>'
         )
     sub = _season_label(fantasy_season, page_season)
     note = f"{sub} · " if sub else ""
-    note += f"ESPN points scoring · FPTS/G · min {fmt_number(min_gp, 0)} GP"
+    note += f"FPTS/G · min {fmt_number(min_gp, 0)} GP"
     return f"""
     <section class="card home-section">
       <div class="section-title-row"><h2>Fantasy Leaders</h2><span class="muted small-copy">{esc(note)}</span></div>

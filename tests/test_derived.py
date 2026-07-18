@@ -15,7 +15,15 @@ if _SCRIPTS not in sys.path:
 
 from smp import appdata, derived  # noqa: E402
 from smp.core import ALL_PLAYERS_BY_PID, RATING_LABELS  # noqa: E402
-from smp.simmodel import SIM_HCA, SIM_LOGISTIC_K, sim_client_inputs, simulate_league  # noqa: E402
+from smp.simmodel import (  # noqa: E402
+    REPLACEMENT_OVR,
+    SIM_HCA,
+    SIM_LOGISTIC_K,
+    league_bench_ovrs,
+    player_game_impact,
+    sim_client_inputs,
+    simulate_league,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -229,6 +237,50 @@ def _league_export():
     }
 
 
+def _completed_game(gid, day, home_tid, away_tid, home_pts, away_pts, season=2030):
+    return {
+        "gid": gid, "day": day, "season": season, "playoffs": False,
+        "teams": [
+            {"tid": home_tid, "pts": home_pts, "players": []},
+            {"tid": away_tid, "pts": away_pts, "players": []},
+        ],
+    }
+
+
+def _league_export_in_season():
+    """The fresh fixture two game days in: completed 2030 games, 2030 team
+    season/stat rows, and an exported schedule with remaining games."""
+    data = _league_export()
+    data["gameAttributes"]["phase"] = 1
+    completed = [
+        (1, 1, 0, 1, 100, 90),
+        (2, 1, 2, 3, 110, 100),
+        (3, 2, 0, 2, 95, 105),
+        (4, 2, 1, 3, 101, 99),
+    ]
+    data["games"] = [
+        _completed_game(gid, day, h, a, hp, ap) for gid, day, h, a, hp, ap in completed
+    ]
+    records = {0: (1, 1), 1: (1, 1), 2: (2, 0), 3: (0, 2)}
+    totals = {0: (195, 195), 1: (191, 199), 2: (215, 195), 3: (199, 211)}
+    for team in data["teams"]:
+        tid = team["tid"]
+        won, lost = records[tid]
+        pts, opp = totals[tid]
+        team["seasons"].append({"season": 2030, "won": won, "lost": lost})
+        team["stats"].append({"season": 2030, "playoffs": False, "gp": 2,
+                              "pts": pts, "oppPts": opp})
+    remaining = [
+        (5, 3, 1, 0), (6, 3, 3, 2), (7, 4, 2, 0), (8, 4, 3, 1),
+    ]
+    all_entries = [(gid, day, h, a) for gid, day, h, a, _, _ in completed] + remaining
+    data["schedule"] = [
+        {"gid": gid, "day": day, "season": 2030, "homeTid": h, "awayTid": a}
+        for gid, day, h, a in all_entries
+    ]
+    return data
+
+
 class TestAppData(unittest.TestCase):
     def setUp(self):
         ALL_PLAYERS_BY_PID.clear()
@@ -271,7 +323,7 @@ class TestAppData(unittest.TestCase):
         self.assertEqual(team["payroll"], sum(10000 + 100 * p for p in range(6)))
 
         sim = app["sim"]
-        self.assertEqual(sorted(sim.keys()), ["hca", "logistic_k", "schedule", "strengths"])
+        self.assertEqual(sorted(sim.keys()), ["bench_ovrs", "hca", "logistic_k", "schedule", "strengths"])
         self.assertEqual(sim["hca"], SIM_HCA)
         self.assertEqual(sim["logistic_k"], SIM_LOGISTIC_K)
         self.assertEqual(sorted(sim["strengths"].keys()), ["0", "1", "2", "3"])
@@ -280,6 +332,10 @@ class TestAppData(unittest.TestCase):
             self.assertEqual(len(entry), 3)  # [day, home_tid, away_tid]
         # strongest roster should carry the highest strength
         self.assertEqual(max(sim["strengths"], key=lambda t: sim["strengths"][t]), "3")
+        # bench_ovrs: 6th-best is each 6-man team's flat ovr -> mean 64.0;
+        # no roster is deeper than 6, so ranks 7..10 fall back to replacement.
+        self.assertEqual(sim["bench_ovrs"], [64.0] + [REPLACEMENT_OVR] * 4)
+        self.assertEqual(sim["bench_ovrs"], sorted(sim["bench_ovrs"], reverse=True))
 
     def test_deterministic_double_build_and_write(self):
         data = _league_export()
@@ -301,6 +357,84 @@ class TestAppData(unittest.TestCase):
             self.assertEqual(parsed["season"], 2030)
 
 
+class TestSimStrength(unittest.TestCase):
+    """Team strength: current-roster signal, blended with CURRENT-season MOV only."""
+
+    def setUp(self):
+        ALL_PLAYERS_BY_PID.clear()
+
+    def tearDown(self):
+        ALL_PLAYERS_BY_PID.clear()
+
+    def _roster_signal(self, players, season):
+        totals = {}
+        for tid in range(4):
+            roster = [p for p in players if p["tid"] == tid]
+            rotation = sorted(roster, key=lambda p: -player_game_impact(p, season))[:10]
+            totals[tid] = sum(player_game_impact(p, season) for p in rotation)
+        mean = sum(totals.values()) / len(totals)
+        return {tid: value - mean for tid, value in totals.items()}
+
+    def test_fresh_season_is_pure_roster(self):
+        data = _league_export()
+        inputs = sim_client_inputs(data, data["teams"], data["players"], 2030)
+        self.assertTrue(inputs["fresh"])
+        expected = self._roster_signal(data["players"], 2030)
+        for tid, value in expected.items():
+            self.assertAlmostEqual(inputs["strengths"][tid], value, places=9)
+
+    def test_last_season_margin_never_seeds_strength(self):
+        # Inflate team 0's PREVIOUS-season scoring margin absurdly; a fresh
+        # season's strengths must not move at all.
+        data = _league_export()
+        base = sim_client_inputs(data, data["teams"], data["players"], 2030)["strengths"]
+        data["teams"][0]["stats"][0]["pts"] += 45 * 60  # +60 MOV in 2029
+        inflated = sim_client_inputs(data, data["teams"], data["players"], 2030)["strengths"]
+        self.assertEqual(base, inflated)
+
+    def test_in_season_blends_current_mov_by_gp(self):
+        # At gp=2 the MOV weight is 2/(2+K); strengths must equal the exact blend.
+        from smp.simmodel import SIM_MOV_BLEND_K
+
+        data = _league_export_in_season()
+        inputs = sim_client_inputs(data, data["teams"], data["players"], 2030)
+        self.assertFalse(inputs["fresh"])
+        self.assertEqual(inputs["wins"], {0: 1, 1: 1, 2: 2, 3: 0})
+        self.assertEqual(inputs["losses"], {0: 1, 1: 1, 2: 0, 3: 2})
+        # remaining schedule: only the four unplayed exported games
+        self.assertEqual(len(inputs["schedule"]), 4)
+        roster = self._roster_signal(data["players"], 2030)
+        movs = {0: 0.0, 1: -4.0, 2: 10.0, 3: -6.0}
+        w = 2.0 / (2.0 + SIM_MOV_BLEND_K)
+        for tid in range(4):
+            expected = (1.0 - w) * roster[tid] + w * movs[tid]
+            self.assertAlmostEqual(inputs["strengths"][tid], expected, places=9)
+
+
+class TestBenchOvrs(unittest.TestCase):
+    def _player(self, pid, tid, ovr):
+        return {"pid": pid, "tid": tid, "ratings": [{"season": 2030, "ovr": ovr}]}
+
+    def test_rank_wise_league_average(self):
+        players = []
+        pid = 0
+        for ovr in [80, 75, 70, 65, 60, 55, 50, 45, 42, 41]:  # 10-man roster
+            players.append(self._player(pid, 0, ovr))
+            pid += 1
+        for ovr in [70, 68, 66, 64, 62, 60, 58]:  # 7-man roster
+            players.append(self._player(pid, 1, ovr))
+            pid += 1
+        players.append(self._player(pid, -1, 99))  # free agent: ignored
+        bench = league_bench_ovrs(players, 2030)
+        # rank 6: (55+60)/2, rank 7: (50+58)/2, ranks 8-10: team 0 only
+        self.assertEqual(bench, [57.5, 54.0, 45.0, 42.0, 41.0])
+        self.assertEqual(bench, sorted(bench, reverse=True))
+        self.assertEqual(len(bench), 5)
+
+    def test_empty_league_falls_back_to_replacement(self):
+        self.assertEqual(league_bench_ovrs([], 2030), [REPLACEMENT_OVR] * 5)
+
+
 class TestSimParity(unittest.TestCase):
     """The client logistic model must agree with simulate_league's Monte Carlo."""
 
@@ -310,29 +444,33 @@ class TestSimParity(unittest.TestCase):
     def tearDown(self):
         ALL_PLAYERS_BY_PID.clear()
 
-    def test_expected_wins_match_server_sim(self):
-        data = _league_export()
+    def _assert_parity(self, data, season=2030, sims=4000):
         teams = data["teams"]
         players = data["players"]
-        season = 2030
         inputs = sim_client_inputs(data, teams, players, season)
         strengths = inputs["strengths"]
 
-        # Client-side expectation: sum of logistic win probs over the schedule.
-        expected = {tid: 0.0 for tid in strengths}
+        # Client-side expectation: banked wins + sum of logistic win probs
+        # over the remaining schedule.
+        expected = {tid: float(inputs["wins"].get(tid, 0)) for tid in strengths}
         for day, home, away in inputs["schedule"]:
             diff = (strengths[home] - strengths[away]) + inputs["hca"]
             p_home = 1.0 / (1.0 + math.exp(-diff * inputs["logistic_k"]))
             expected[home] += p_home
             expected[away] += 1.0 - p_home
 
-        sims = 4000
         results = simulate_league(data, teams, players, season, sims=sims)["teams"]
         for tid, exp_wins in expected.items():
             proj_w = results[tid]["proj_w"]
             # Monte Carlo std error over `sims` runs is well under 0.05 wins here.
             self.assertLess(abs(proj_w - exp_wins), 0.2,
                             msg=f"tid {tid}: client {exp_wins:.3f} vs server {proj_w:.3f}")
+
+    def test_expected_wins_match_server_sim_fresh_season(self):
+        self._assert_parity(_league_export())
+
+    def test_expected_wins_match_server_sim_in_season(self):
+        self._assert_parity(_league_export_in_season())
 
 
 if __name__ == "__main__":

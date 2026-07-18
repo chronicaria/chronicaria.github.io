@@ -4,13 +4,21 @@ on:
   push:
     paths:
       - "league-data/**"
-      - "scripts/league_generator.py"
+      - "scripts/**"
+      - "tests/**"
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install numpy
 
       - name: Validate JSON
         run: |
@@ -29,3 +37,6 @@ jobs:
 
       - name: Syntax-check the league generator
         run: python3 -m py_compile scripts/league_generator.py
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -v

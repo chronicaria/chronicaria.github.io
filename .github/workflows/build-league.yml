@@ -67,6 +67,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets games players teams compare.html draft.html free-agency.html history.html index.html records.html schedule.html trade.html
+          # Odds-history ledger (appended by the generator; may not exist yet on old checkouts)
+          git add --ignore-errors league-data/odds_history.json || true
           if git diff --cached --quiet; then
             echo "No league changes."
           else

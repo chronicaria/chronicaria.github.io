@@ -379,6 +379,84 @@ def league_sim(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -
     return cache[season]
 
 
+# --- client-sim parity (consumed by appdata.py) ------------------------------
+# simulate_league's per-game win probability is
+#     p(home) = 1 / (1 + exp(-(strength_diff + SIM_HCA) * SIM_LOGISTIC_K))
+# These constants mirror the literals inside win_prob above (1.5 and 0.16) so the
+# client-side simulator (Win-Out Machine / Lineup Lab) reproduces the exact same
+# model. Keep them in sync with win_prob; tests assert projected-win parity.
+SIM_HCA = 1.5
+SIM_LOGISTIC_K = 0.16
+
+
+def sim_client_inputs(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> dict[str, Any]:
+    """Team strengths + remaining schedule for the client-side simulator.
+
+    Mirrors the strength model and remaining-schedule selection at the top of
+    simulate_league exactly (fresh-season detection, MOV regressed by gp/(gp+10),
+    top-10 roster impact centered on the league mean, 50/50 blend) so that a
+    client sim over this payload agrees with the server-side Monte Carlo. Injury
+    penalties are intentionally left out of the payload — they decay per game and
+    matter only mid-season; the client sims the healthy baseline.
+
+    Returns {"strengths": {tid: float}, "hca", "logistic_k",
+             "schedule": [[day, home_tid, away_tid], ...], "fresh": bool,
+             "wins": {tid: int}, "losses": {tid: int}}.
+    """
+    fresh = not completed_game_items(data, season, playoffs=False)
+    tids = [safe_int(t.get("tid")) for t in teams if t.get("tid") is not None]
+    mov_strength: dict[int, float] = {}
+    wins: dict[int, int] = {}
+    losses: dict[int, int] = {}
+    for team in teams:
+        tid = safe_int(team.get("tid"))
+        team_season = latest_team_season(team, season)
+        stat = latest_team_stat(team, season)
+        wins[tid] = 0 if fresh else safe_int(team_season.get("won"))
+        losses[tid] = 0 if fresh else safe_int(team_season.get("lost"))
+        gp = safe_float(stat.get("gp"))
+        mov = team_mov(stat) or 0.0
+        mov_strength[tid] = mov * gp / (gp + 10.0)
+
+    roster_by_tid: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for player in players:
+        tid = safe_int(player.get("tid"), -9)
+        if tid >= 0:
+            roster_by_tid[tid].append(player)
+    roster_strength: dict[int, float] = {}
+    for tid in tids:
+        rotation = sorted(roster_by_tid.get(tid, []), key=lambda p: -player_game_impact(p, season))[:10]
+        roster_strength[tid] = sum(player_game_impact(p, season) for p in rotation)
+    mean_roster = sum(roster_strength.values()) / len(roster_strength) if roster_strength else 0.0
+    strengths = {
+        tid: 0.5 * mov_strength.get(tid, 0.0) + 0.5 * (roster_strength.get(tid, 0.0) - mean_roster)
+        for tid in tids
+    }
+
+    if fresh:
+        items = generated_schedule_items(data, teams, schedule_season=season)
+    else:
+        items, _ = score_items_for_page(data, teams)
+    remaining: list[tuple[int, int, int, str]] = []
+    for item in items:
+        if is_completed_game_item(item) or safe_int(item.get("season")) != season:
+            continue
+        home, away = safe_int(item.get("home_tid")), safe_int(item.get("away_tid"))
+        if home in strengths and away in strengths:
+            remaining.append((safe_int(item.get("day")), home, away, str(item.get("gid"))))
+    remaining.sort(key=lambda g: (g[0], g[3]))
+
+    return {
+        "strengths": strengths,
+        "hca": SIM_HCA,
+        "logistic_k": SIM_LOGISTIC_K,
+        "schedule": [[day, home, away] for day, home, away, _ in remaining],
+        "fresh": fresh,
+        "wins": wins,
+        "losses": losses,
+    }
+
+
 def magic_elimination(teams: list[dict[str, Any]], season: int, season_len: int = 45) -> dict[int, str]:
     """Magic number to clinch top 4, or elimination number, per team."""
     rows = []

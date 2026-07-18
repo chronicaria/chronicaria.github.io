@@ -1,0 +1,55 @@
+/* identity.css — shared team-identity primitives: monogram roundels,
+   award crests, team chips. Colors come from --team-* vars emitted by
+   smp.identity.team_css_vars(); crests tint via currentColor. */
+
+.monogram {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.monogram--sm {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.monogram--lg {
+  width: 4rem;
+  height: 4rem;
+}
+.monogram--xl {
+  width: 6.5rem;
+  height: 6.5rem;
+}
+
+.crest {
+  display: inline-block;
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.28em;
+  flex: 0 0 auto;
+}
+.crest--gold { color: var(--warn); }
+.crest--muted { color: var(--muted); }
+
+.team-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .12rem .55rem;
+  border-radius: 999px;
+  background: var(--team-primary, var(--panel-2));
+  color: var(--team-on-primary, var(--text));
+  border: 1px solid color-mix(in srgb, var(--team-secondary, var(--line)) 55%, transparent);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.team-chip .team-chip-dot {
+  width: .55rem;
+  height: .55rem;
+  border-radius: 50%;
+  background: var(--team-secondary, var(--muted));
+  flex: 0 0 auto;
+}

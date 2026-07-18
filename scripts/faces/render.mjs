@@ -6,11 +6,13 @@
 // carry a non-empty "face" object (deduped by pid; the newest export wins, using
 // the same (season, phase, games-played) ranking as the CI build), overwrites
 // face.teamColors with sentinel colors, renders each face with facesjs, and
-// writes assets/faces/{pid}.svg plus assets/faces/manifest.json.
+// writes scripts/faces/rendered/{pid}.svg plus scripts/faces/rendered/manifest.json.
 //
-// The Python site build string-swaps the sentinel hexes for real team colors,
-// so the SVGs themselves are team-agnostic. manifest.json records the EXACT
-// casing facesjs emitted so the swapper can match literally.
+// The Python site build (scripts/smp/portraits.py) string-swaps the sentinel
+// hexes for real team colors and emits the recolored copies to the build
+// output's assets/faces/ — assets/faces/ in the deployed site is OUTPUT ONLY.
+// manifest.json records the EXACT casing facesjs emitted so the swapper can
+// match literally.
 //
 // Idempotent: files are only rewritten when their content changes, and orphaned
 // {pid}.svg files (pids no longer in any export) are removed.
@@ -22,7 +24,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const LEAGUE_DIR = join(ROOT, "league-data");
-const OUT_DIR = join(ROOT, "assets", "faces");
+const OUT_DIR = join(ROOT, "scripts", "faces", "rendered");
 
 // Sentinels the Python build swaps for [team primary, secondary, on_primary].
 const SENTINELS = ["#F00BA1", "#F00BA2", "#F00BA3"];

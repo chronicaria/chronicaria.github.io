@@ -66,6 +66,12 @@ from .pages.compare import render_compare_page
 
 from .pages.trade import render_trade_page
 
+from .appdata import write_app_data
+
+from .ledger import update_odds_ledger
+
+from .portraits import emit_faces
+
 # Static assets: split from the old inline stylesheet()/javascript() strings.
 # Concatenated in this exact order; the result is byte-identical to the old output.
 _STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -76,6 +82,7 @@ CSS_FILES = [
     "layout.css",
     "tables.css",
     "cards.css",
+    "identity.css",
     "scatter.css",
     "player.css",
     "team.css",
@@ -191,6 +198,8 @@ def generate_site(
         ],
     }
     write_text(out_dir / "assets" / "search-index.json", json.dumps(search_index, separators=(",", ":")))
+    emit_faces(out_dir, data.get("players", []))
+    write_app_data(out_dir, data, teams=teams, players=players, season=season, start_season=start_season)
 
     write_text(out_dir / "index.html", render_home_page(data, teams, players, season, start_season))
     write_text(out_dir / "schedule.html", render_schedule_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days))
@@ -204,7 +213,9 @@ def generate_site(
     write_text(out_dir / "compare.html", render_compare_page(data, teams, players, season, start_season))
 
     game_logs = build_game_logs(data, season)
-    league_fin = compute_league_finances(data, teams, players, season, (league_sim(data, teams, season) or {}).get("teams"))
+    sim_result = league_sim(data, teams, season) or {}
+    update_odds_ledger(data, sim_result, path=json_path.parent / "odds_history.json")
+    league_fin = compute_league_finances(data, teams, players, season, sim_result.get("teams"))
     for team in teams:
         roster = [player for player in players if player.get("tid") == team.get("tid")]
         slug = team_slug(team)

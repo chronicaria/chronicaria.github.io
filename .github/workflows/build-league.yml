@@ -5,8 +5,7 @@ on:
     branches: [main]
     paths:
       - "league-data/*.json"
-      - "scripts/league_generator.py"
-      - "scripts/projections.py"
+      - "scripts/**"
   workflow_dispatch:
 
 permissions:

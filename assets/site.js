@@ -115,19 +115,26 @@
   document.querySelectorAll('[data-view-toggle]').forEach((wrap) => {
     const table = document.getElementById(wrap.dataset.viewToggle);
     if (!table) return;
+    const viewStoreKey = 'viewtoggle:' + wrap.dataset.viewToggle;
+    function activateView(button, persist) {
+      wrap.querySelectorAll('button').forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      button.classList.add('active');
+      button.setAttribute('aria-pressed', 'true');
+      table.classList.remove('show-adv', 'show-p36', 'show-rate');
+      if (button.dataset.view !== 'basic') table.classList.add('show-' + button.dataset.view);
+      if (persist) { try { localStorage.setItem(viewStoreKey, button.dataset.view); } catch (e) {} }
+    }
     wrap.querySelectorAll('button').forEach((button) => {
       button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false');
-      button.addEventListener('click', () => {
-        wrap.querySelectorAll('button').forEach((b) => {
-          b.classList.remove('active');
-          b.setAttribute('aria-pressed', 'false');
-        });
-        button.classList.add('active');
-        button.setAttribute('aria-pressed', 'true');
-        table.classList.remove('show-adv', 'show-p36', 'show-rate');
-        if (button.dataset.view !== 'basic') table.classList.add('show-' + button.dataset.view);
-      });
+      button.addEventListener('click', () => activateView(button, true));
     });
+    let storedView = null;
+    try { storedView = localStorage.getItem(viewStoreKey); } catch (e) {}
+    const savedButton = storedView && wrap.querySelector('button[data-view="' + storedView + '"]');
+    if (savedButton && !savedButton.classList.contains('active')) activateView(savedButton, false);
   });
 
   document.querySelectorAll('[data-group-toggle]').forEach((wrap) => {
@@ -154,9 +161,123 @@
   });
 
   document.addEventListener('click', (event) => {
-    document.querySelectorAll('details.team-dropdown[open]').forEach((details) => {
+    document.querySelectorAll('details.team-dropdown[open], details.nav-dropdown[open]').forEach((details) => {
       if (!details.contains(event.target)) details.removeAttribute('open');
     });
+  });
+
+  // ---------- platform config + storage (shared by later fragments) ----------
+  const smpConfigEl = document.getElementById('smp-config');
+  let siteConfig = {};
+  if (smpConfigEl) {
+    try { siteConfig = JSON.parse(smpConfigEl.textContent) || {}; } catch (e) { siteConfig = {}; }
+  }
+  const smpStore = {
+    get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
+    set(key, value) { try { localStorage.setItem(key, value); } catch (e) {} },
+    remove(key) { try { localStorage.removeItem(key); } catch (e) {} },
+  };
+
+  // ---------- three-state theme toggle (auto / dark / light) ----------
+  // Persisted as localStorage.theme = "dark"|"light"; auto = key absent, which is
+  // exactly what the pre-paint snippet in page_html reads before first render.
+  const themeBtn = document.querySelector('[data-theme-toggle]');
+  const themeMedia = matchMedia('(prefers-color-scheme: light)');
+  const THEME_LABELS = {
+    auto: 'Theme: auto (follows your system)',
+    dark: 'Theme: dark',
+    light: 'Theme: light',
+  };
+  function applyThemePref(pref, persist) {
+    document.documentElement.dataset.themePref = pref;
+    document.documentElement.dataset.theme = pref === 'auto' ? (themeMedia.matches ? 'light' : 'dark') : pref;
+    if (persist) {
+      if (pref === 'auto') smpStore.remove('theme');
+      else smpStore.set('theme', pref);
+    }
+    if (themeBtn) {
+      themeBtn.setAttribute('aria-label', THEME_LABELS[pref]);
+      themeBtn.title = THEME_LABELS[pref] + ' — click to change';
+    }
+  }
+  const savedTheme = smpStore.get('theme');
+  applyThemePref(savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'auto', false);
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const order = ['auto', 'dark', 'light'];
+      const current = document.documentElement.dataset.themePref || 'auto';
+      applyThemePref(order[(order.indexOf(current) + 1) % order.length], true);
+    });
+  }
+  const onThemeMediaChange = () => {
+    if ((document.documentElement.dataset.themePref || 'auto') === 'auto') applyThemePref('auto', false);
+  };
+  if (themeMedia.addEventListener) themeMedia.addEventListener('change', onThemeMediaChange);
+  else if (themeMedia.addListener) themeMedia.addListener(onThemeMediaChange);
+
+  // ---------- My Team mode ----------
+  // Picking a team stores the tid, retints --accent with the team's chart color
+  // (readable on both themes by design), tags body[data-my-team], highlights every
+  // row carrying data-tid, and pins the team to the top of the Teams menu.
+  const teamPicker = document.querySelector('[data-my-team-picker]');
+  const myTeamColors = siteConfig.teamColors || {};
+  function applyMyTeam(tid, persist) {
+    const rootStyle = document.documentElement.style;
+    const colors = tid ? myTeamColors[tid] : null;
+    document.querySelectorAll('tr.my-team-row').forEach((row) => row.classList.remove('my-team-row'));
+    document.querySelectorAll('.my-team-link').forEach((a) => a.classList.remove('my-team-link'));
+    if (!colors) {
+      delete document.body.dataset.myTeam;
+      rootStyle.removeProperty('--accent');
+      rootStyle.removeProperty('--accent-soft');
+      if (persist) { smpStore.remove('myTeam'); smpStore.remove('myTeamAccent'); }
+    } else {
+      document.body.dataset.myTeam = tid;
+      rootStyle.setProperty('--accent', colors.chart);
+      rootStyle.setProperty('--accent-soft', 'color-mix(in srgb, ' + colors.chart + ' 14%, transparent)');
+      document.querySelectorAll('tr[data-tid="' + tid + '"]').forEach((row) => row.classList.add('my-team-row'));
+      const navLink = document.querySelector('.team-menu a[data-tid="' + tid + '"]');
+      if (navLink) {
+        navLink.classList.add('my-team-link');
+        if (navLink.parentElement && navLink.parentElement.firstElementChild !== navLink) {
+          navLink.parentElement.insertBefore(navLink, navLink.parentElement.firstElementChild);
+        }
+      }
+      if (persist) { smpStore.set('myTeam', tid); smpStore.set('myTeamAccent', colors.chart); }
+    }
+    if (teamPicker && teamPicker.value !== tid) teamPicker.value = tid;
+  }
+  const savedTeam = smpStore.get('myTeam');
+  if (savedTeam && myTeamColors[savedTeam]) applyMyTeam(savedTeam, false);
+  else if (savedTeam) { smpStore.remove('myTeam'); smpStore.remove('myTeamAccent'); }
+  if (teamPicker) teamPicker.addEventListener('change', () => applyMyTeam(teamPicker.value, true));
+
+  // ---------- heading anchor links (hover #, click copies the URL) ----------
+  document.querySelectorAll('main.page-shell h2').forEach((heading) => {
+    const text = heading.textContent.trim();
+    if (!text) return;
+    if (!heading.id) {
+      const base = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'section';
+      let id = base;
+      let n = 2;
+      while (document.getElementById(id)) { id = base + '-' + n; n += 1; }
+      heading.id = id;
+    }
+    const anchor = document.createElement('a');
+    anchor.className = 'h-anchor';
+    anchor.href = '#' + heading.id;
+    anchor.setAttribute('aria-label', 'Link to section: ' + text);
+    anchor.textContent = '#';
+    anchor.addEventListener('click', () => {
+      if (!navigator.clipboard) return;
+      const url = location.origin + location.pathname + '#' + heading.id;
+      navigator.clipboard.writeText(url).then(() => {
+        anchor.textContent = '✓';
+        setTimeout(() => { anchor.textContent = '#'; }, 1200);
+      }).catch(() => {});
+    });
+    heading.appendChild(anchor);
   });
 
   // ---------- player scatter chart ----------
@@ -398,22 +519,98 @@
     });
   });
 
-  // ---------- global search ----------
+  // ---------- home page: playoff-odds river hover crosshair ----------
+  document.querySelectorAll('[data-oddsr]').forEach((wrap) => {
+    const svg = wrap.querySelector('svg.oddsr-chart');
+    const tip = wrap.querySelector('[data-oddsr-tooltip]');
+    const hLine = wrap.querySelector('[data-oddsr-hline]');
+    const dataEl = wrap.parentElement &&
+      wrap.parentElement.querySelector('script[type="application/json"]#oddsr-data');
+    if (!svg || !tip || !hLine || !dataEl) return;
+    let d;
+    try { d = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    const g = d.g;
+    if (!g || g.n < 2) return;
+    const xs = (i) => g.ml + g.pw * i / (g.n - 1);
+
+    function toViewBox(evt) {
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return null;
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX; pt.y = evt.clientY;
+      return pt.matrixTransform(ctm.inverse());
+    }
+
+    function hide() {
+      tip.hidden = true;
+      hLine.style.display = 'none';
+    }
+
+    function show(evt) {
+      const loc = toViewBox(evt);
+      if (!loc) return;
+      let i = Math.round((loc.x - g.ml) / g.pw * (g.n - 1));
+      if (i < 0) i = 0;
+      if (i > g.n - 1) i = g.n - 1;
+      const rows = d.teams
+        .map((t) => ({ ab: t.ab, color: t.color, po: t.po[i] }))
+        .filter((t) => t.po !== null && t.po !== undefined)
+        .sort((a, b) => b.po - a.po);
+      if (!rows.length) { hide(); return; }
+      let html = '<strong>' + escapeHtml(d.names[i] || d.labels[i] || '') + '</strong>';
+      rows.forEach((t) => {
+        html += '<span class="oddsr-tip-row">' +
+          '<span class="oddsr-tip-dot" style="background:' + escapeHtml(t.color) + '"></span>' +
+          escapeHtml(t.ab) +
+          '<span class="oddsr-tip-val">' + Math.round(t.po) + '%</span></span>';
+      });
+      const cx = xs(i);
+      hLine.setAttribute('x1', cx);
+      hLine.setAttribute('x2', cx);
+      hLine.style.display = '';
+      tip.innerHTML = html;
+      tip.hidden = false;
+      const rect = wrap.getBoundingClientRect();
+      const tw = tip.offsetWidth;
+      let left = evt.clientX - rect.left + 14;
+      if (left + tw > rect.width) left = evt.clientX - rect.left - tw - 14;  // flip left
+      if (left + tw > rect.width) left = rect.width - tw - 4;                // still over: pin right
+      if (left < 0) left = 4;                                               // never off the left
+      tip.style.left = left + 'px';
+      let top = evt.clientY - rect.top + 12;
+      if (top + tip.offsetHeight > rect.height) top = Math.max(4, rect.height - tip.offsetHeight - 4);
+      tip.style.top = top + 'px';
+    }
+
+    svg.addEventListener('mousemove', show);
+    svg.addEventListener('mouseleave', hide);
+  });
+
+  // ---------- shared search index ----------
+  const searchIndexRoot = document.body.dataset.root || '';
+  let smpSearchIndex = null;
+  function loadSearchIndex() {
+    if (smpSearchIndex) return Promise.resolve(smpSearchIndex);
+    return fetch(searchIndexRoot + 'assets/search-index.json')
+      .then((r) => r.json())
+      .then((data) => { smpSearchIndex = data; return smpSearchIndex; })
+      .catch(() => ({ players: [], teams: [] }));
+  }
+  const smpNorm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  function smpMatchScore(name, q) {
+    const n = smpNorm(name);
+    if (n.startsWith(q)) return 0;
+    if (n.split(' ').some((w) => w.startsWith(q))) return 1;
+    if (n.includes(q)) return 2;
+    return -1;
+  }
+
+  // ---------- global nav search ----------
   const searchInput = document.querySelector('[data-global-search]');
   const searchResults = document.querySelector('[data-search-results]');
   if (searchInput && searchResults) {
-    const root = document.body.dataset.root || '';
-    let index = null;
+    const root = searchIndexRoot;
     let selected = -1;
-    const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-    function load() {
-      if (index) return Promise.resolve(index);
-      return fetch(root + 'assets/search-index.json')
-        .then((r) => r.json())
-        .then((data) => { index = data; return index; })
-        .catch(() => ({ players: [], teams: [] }));
-    }
 
     function close() {
       searchResults.hidden = true;
@@ -447,26 +644,19 @@
     }
 
     function update() {
-      const q = norm(searchInput.value.trim());
+      const q = smpNorm(searchInput.value.trim());
       if (q.length < 2) { close(); return; }
-      load().then((data) => {
-        const score = (name) => {
-          const n = norm(name);
-          if (n.startsWith(q)) return 0;
-          if (n.split(' ').some((w) => w.startsWith(q))) return 1;
-          if (n.includes(q)) return 2;
-          return -1;
-        };
+      loadSearchIndex().then((data) => {
         const matches = [];
-        (data.teams || []).forEach((t) => { const s = score(t.n); if (s >= 0) matches.push({ ...t, s: s - 0.5 }); });
-        (data.players || []).forEach((p) => { const s = score(p.n); if (s >= 0) matches.push({ ...p, s }); });
+        (data.teams || []).forEach((t) => { const s = smpMatchScore(t.n, q); if (s >= 0) matches.push({ ...t, s: s - 0.5 }); });
+        (data.players || []).forEach((p) => { const s = smpMatchScore(p.n, q); if (s >= 0) matches.push({ ...p, s }); });
         matches.sort((a, b) => a.s - b.s || a.n.localeCompare(b.n));
         renderResults(matches.slice(0, 8));
       });
     }
 
     searchInput.addEventListener('input', update);
-    searchInput.addEventListener('focus', () => { load(); if (searchInput.value.trim().length >= 2) update(); });
+    searchInput.addEventListener('focus', () => { loadSearchIndex(); if (searchInput.value.trim().length >= 2) update(); });
     searchInput.addEventListener('keydown', (event) => {
       const links = Array.from(searchResults.querySelectorAll('a'));
       if (event.key === 'Escape') { close(); searchInput.blur(); return; }
@@ -485,6 +675,295 @@
       if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) close();
     });
   }
+
+  // ---------- command palette (Cmd+K / Ctrl+K / "/") ----------
+  // Searches the same index as the nav search, grouped into Pages / Teams /
+  // Players, with recent selections and t: / p: / g: prefix filters.
+  const PALETTE_GROUPS = [
+    { key: 'Pages', prefix: 'g' },
+    { key: 'Teams', prefix: 't' },
+    { key: 'Players', prefix: 'p' },
+  ];
+  let paletteOverlay = null;
+  let paletteInput = null;
+  let paletteResults = null;
+  let paletteSelected = -1;
+  let paletteReturnFocus = null;
+
+  function paletteRecents() {
+    try { return JSON.parse(smpStore.get('paletteRecents') || '[]') || []; } catch (e) { return []; }
+  }
+  function rememberRecent(item) {
+    const next = [item].concat(paletteRecents().filter((r) => r.u !== item.u)).slice(0, 8);
+    smpStore.set('paletteRecents', JSON.stringify(next));
+  }
+
+  function paletteEntries(data) {
+    const pages = ((siteConfig && siteConfig.pages) || []).map((p) => ({ n: p.label, u: p.url, t: 'Page', g: 'Pages' }));
+    const teams = (data.teams || []).map((t) => ({ n: t.n, u: t.u, t: t.t, g: 'Teams' }));
+    const players = (data.players || []).map((p) => ({ n: p.n, u: p.u, t: p.t, g: 'Players' }));
+    return { Pages: pages, Teams: teams, Players: players };
+  }
+
+  function renderPalette(groups) {
+    const options = [];
+    let html = '';
+    groups.forEach((group) => {
+      if (!group.items.length) return;
+      html += '<div class="palette-group" role="presentation">' + escapeHtml(group.label) + '</div>';
+      group.items.forEach((item) => {
+        const i = options.length;
+        options.push(item);
+        html += '<a class="pal-opt" id="pal-opt-' + i + '" role="option" aria-selected="false" href="' + searchIndexRoot + escapeHtml(item.u) + '">'
+          + '<span>' + escapeHtml(item.n) + '</span><span class="muted">' + escapeHtml(item.t || '') + '</span></a>';
+      });
+    });
+    if (!options.length) html = '<div class="palette-empty">No matches.</div>';
+    paletteResults.innerHTML = html;
+    paletteSelected = options.length ? 0 : -1;
+    syncPaletteSelected();
+    paletteResults.querySelectorAll('a.pal-opt').forEach((a, i) => {
+      a.addEventListener('click', () => rememberRecent(options[i]));
+    });
+    paletteResults._options = options;
+  }
+
+  function syncPaletteSelected() {
+    const links = Array.from(paletteResults.querySelectorAll('a.pal-opt'));
+    links.forEach((l, i) => {
+      const on = i === paletteSelected;
+      l.classList.toggle('selected', on);
+      l.setAttribute('aria-selected', on ? 'true' : 'false');
+      if (on) l.scrollIntoView({ block: 'nearest' });
+    });
+    paletteInput.setAttribute('aria-activedescendant', paletteSelected >= 0 && links[paletteSelected] ? links[paletteSelected].id : '');
+  }
+
+  function updatePalette() {
+    const raw = paletteInput.value.trim();
+    let only = null;
+    let q = raw;
+    const prefixMatch = raw.match(/^([gtp]):\s*(.*)$/i);
+    if (prefixMatch) {
+      const found = PALETTE_GROUPS.find((g) => g.prefix === prefixMatch[1].toLowerCase());
+      if (found) { only = found.key; q = prefixMatch[2]; }
+    }
+    q = smpNorm(q);
+    loadSearchIndex().then((data) => {
+      const entries = paletteEntries(data);
+      if (!q) {
+        const groups = [];
+        const recents = paletteRecents();
+        if (recents.length && !only) groups.push({ label: 'Recent', items: recents });
+        (only ? [only] : ['Pages']).forEach((key) => groups.push({ label: key, items: entries[key].slice(0, only ? 24 : 8) }));
+        renderPalette(groups);
+        return;
+      }
+      const caps = { Pages: 6, Teams: 6, Players: 9 };
+      const groups = PALETTE_GROUPS
+        .filter((g) => !only || g.key === only)
+        .map((g) => {
+          const items = entries[g.key]
+            .map((item) => ({ item, s: smpMatchScore(item.n, q) }))
+            .filter((x) => x.s >= 0)
+            .sort((a, b) => a.s - b.s || a.item.n.localeCompare(b.item.n))
+            .slice(0, only ? 24 : caps[g.key])
+            .map((x) => x.item);
+          return { label: g.key, items };
+        });
+      renderPalette(groups);
+    });
+  }
+
+  function closePalette() {
+    if (!paletteOverlay) return;
+    paletteOverlay.hidden = true;
+    if (paletteReturnFocus && paletteReturnFocus.focus) paletteReturnFocus.focus();
+    paletteReturnFocus = null;
+  }
+
+  function buildPalette() {
+    if (paletteOverlay) return;
+    paletteOverlay = document.createElement('div');
+    paletteOverlay.className = 'palette-overlay';
+    paletteOverlay.hidden = true;
+    paletteOverlay.innerHTML = '<div class="palette" role="dialog" aria-modal="true" aria-label="Site search">'
+      + '<input type="text" class="palette-input" placeholder="Search players, teams, pages…" '
+      + 'role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="palette-results" '
+      + 'aria-activedescendant="" autocomplete="off" spellcheck="false">'
+      + '<div class="palette-results" id="palette-results" role="listbox" aria-label="Search results"></div>'
+      + '<p class="palette-hint muted">↑↓ navigate · Enter open · Esc close · prefixes: t: teams · p: players · g: pages</p>'
+      + '</div>';
+    document.body.appendChild(paletteOverlay);
+    paletteInput = paletteOverlay.querySelector('.palette-input');
+    paletteResults = paletteOverlay.querySelector('.palette-results');
+    paletteOverlay.addEventListener('click', (event) => {
+      if (event.target === paletteOverlay) closePalette();
+    });
+    paletteInput.addEventListener('input', updatePalette);
+    paletteInput.addEventListener('keydown', (event) => {
+      const links = Array.from(paletteResults.querySelectorAll('a.pal-opt'));
+      if (event.key === 'Escape') { event.preventDefault(); closePalette(); return; }
+      if (event.key === 'Tab') { event.preventDefault(); return; }
+      if (!links.length) return;
+      if (event.key === 'ArrowDown') { event.preventDefault(); paletteSelected = Math.min(paletteSelected + 1, links.length - 1); }
+      else if (event.key === 'ArrowUp') { event.preventDefault(); paletteSelected = Math.max(paletteSelected - 1, 0); }
+      else if (event.key === 'Home' && paletteSelected > 0) { event.preventDefault(); paletteSelected = 0; }
+      else if (event.key === 'End') { event.preventDefault(); paletteSelected = links.length - 1; }
+      else if (event.key === 'Enter') {
+        event.preventDefault();
+        const target = links[Math.max(0, paletteSelected)];
+        if (target) {
+          const options = paletteResults._options || [];
+          const item = options[Math.max(0, paletteSelected)];
+          if (item) rememberRecent(item);
+          window.location.href = target.href;
+        }
+        return;
+      } else { return; }
+      syncPaletteSelected();
+    });
+  }
+
+  function openPalette() {
+    buildPalette();
+    paletteReturnFocus = document.activeElement;
+    paletteOverlay.hidden = false;
+    paletteInput.value = '';
+    paletteInput.focus();
+    updatePalette();
+  }
+
+  document.addEventListener('keydown', (event) => {
+    const isK = (event.key === 'k' || event.key === 'K') && (event.metaKey || event.ctrlKey) && !event.altKey && !event.shiftKey;
+    const isSlash = event.key === '/' && !event.metaKey && !event.ctrlKey && !event.altKey;
+    if (!isK && !isSlash) return;
+    if (isSlash) {
+      const active = document.activeElement;
+      if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable)) return;
+    }
+    if (paletteOverlay && !paletteOverlay.hidden) return;
+    event.preventDefault();
+    openPalette();
+  });
+
+  // =====================================================================
+  // SMP.combobox — reusable filterable combobox factory
+  //
+  //   SMP.combobox({
+  //     input:    HTMLInputElement (required). Gets combobox ARIA wiring; the
+  //               popup list is created as a sibling inside a positioning wrap.
+  //     items:    array of {label, sub?, value?} OR a function returning one.
+  //               `label` is matched and shown left; `sub` shown right, muted.
+  //     onSelect: function(item) called when the user picks an option (required).
+  //     maxItems: cap on rendered options (default 12).
+  //     minChars: minimum typed characters before the list opens (default 0;
+  //               0 shows the top of the list on focus, like a select).
+  //   }) -> { refresh(), close(), destroy() }
+  //
+  // Matching uses the same normalized prefix/word/substring scoring as site
+  // search. Keyboard: ArrowUp/Down, Enter selects, Escape closes. On select the
+  // input shows item.label and onSelect(item) fires.
+  // =====================================================================
+  window.SMP = window.SMP || {};
+  window.SMP.combobox = function (opts) {
+    const input = opts.input;
+    if (!input) return null;
+    const maxItems = opts.maxItems || 12;
+    const minChars = opts.minChars || 0;
+    const wrap = document.createElement('span');
+    wrap.className = 'smp-combobox';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+    const list = document.createElement('div');
+    list.className = 'smp-combobox-list';
+    list.setAttribute('role', 'listbox');
+    list.id = 'smp-cbx-' + Math.abs((input.id || input.name || 'cbx').split('').reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7));
+    list.hidden = true;
+    wrap.appendChild(list);
+    input.setAttribute('role', 'combobox');
+    input.setAttribute('aria-autocomplete', 'list');
+    input.setAttribute('aria-expanded', 'false');
+    input.setAttribute('aria-controls', list.id);
+    input.setAttribute('autocomplete', 'off');
+    let selected = -1;
+    let current = [];
+
+    function itemsNow() {
+      return (typeof opts.items === 'function' ? opts.items() : opts.items) || [];
+    }
+    function close() {
+      list.hidden = true;
+      selected = -1;
+      input.setAttribute('aria-expanded', 'false');
+      input.setAttribute('aria-activedescendant', '');
+    }
+    function choose(index) {
+      const item = current[index];
+      if (!item) return;
+      input.value = item.label;
+      close();
+      opts.onSelect(item);
+    }
+    function sync() {
+      Array.from(list.children).forEach((el, i) => {
+        const on = i === selected;
+        el.classList.toggle('selected', on);
+        el.setAttribute('aria-selected', on ? 'true' : 'false');
+        if (on) el.scrollIntoView({ block: 'nearest' });
+      });
+      input.setAttribute('aria-activedescendant', selected >= 0 && list.children[selected] ? list.children[selected].id : '');
+    }
+    function refresh() {
+      const q = smpNorm(input.value.trim());
+      if (q.length < minChars) { close(); return; }
+      const scored = itemsNow()
+        .map((item) => ({ item, s: q ? smpMatchScore(item.label, q) : 0 }))
+        .filter((x) => x.s >= 0);
+      if (q) scored.sort((a, b) => a.s - b.s || String(a.item.label).localeCompare(String(b.item.label)));
+      current = scored.slice(0, maxItems).map((x) => x.item);
+      if (!current.length) { close(); return; }
+      list.innerHTML = current.map((item, i) =>
+        '<div class="smp-cbx-opt" id="' + list.id + '-' + i + '" role="option" aria-selected="false">'
+        + '<span>' + escapeHtml(item.label) + '</span>'
+        + (item.sub ? '<span class="muted">' + escapeHtml(item.sub) + '</span>' : '')
+        + '</div>').join('');
+      Array.from(list.children).forEach((el, i) => {
+        el.addEventListener('mousedown', (event) => { event.preventDefault(); choose(i); });
+      });
+      list.hidden = false;
+      selected = -1;
+      input.setAttribute('aria-expanded', 'true');
+    }
+    function onKeydown(event) {
+      if (event.key === 'Escape') { close(); return; }
+      if (list.hidden) {
+        if (event.key === 'ArrowDown') { event.preventDefault(); refresh(); }
+        return;
+      }
+      if (event.key === 'ArrowDown') { event.preventDefault(); selected = Math.min(selected + 1, current.length - 1); sync(); }
+      else if (event.key === 'ArrowUp') { event.preventDefault(); selected = Math.max(selected - 1, 0); sync(); }
+      else if (event.key === 'Enter') { event.preventDefault(); choose(Math.max(0, selected)); }
+    }
+    function onDocClick(event) {
+      if (!wrap.contains(event.target)) close();
+    }
+    input.addEventListener('input', refresh);
+    input.addEventListener('focus', refresh);
+    input.addEventListener('keydown', onKeydown);
+    document.addEventListener('click', onDocClick);
+    return {
+      refresh,
+      close,
+      destroy() {
+        input.removeEventListener('input', refresh);
+        input.removeEventListener('focus', refresh);
+        input.removeEventListener('keydown', onKeydown);
+        document.removeEventListener('click', onDocClick);
+        list.remove();
+      },
+    };
+  };
 
   // ---------- copy table as TSV ----------
   document.querySelectorAll('.table-wrap').forEach((wrap) => {
@@ -512,6 +991,188 @@
     wrap.appendChild(btn);
   });
 
+  // ---------- sticky second column (Year alongside Name) ----------
+  const stickyTables = Array.from(document.querySelectorAll('table.sticky-col2'));
+  function smpMeasureSticky() {
+    stickyTables.forEach((table) => {
+      const first = table.tHead && table.tHead.rows[0] && table.tHead.rows[0].cells[0];
+      if (first) table.style.setProperty('--c1w', first.offsetWidth + 'px');
+    });
+  }
+  if (stickyTables.length) {
+    smpMeasureSticky();
+    let stickyTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(stickyTimer);
+      stickyTimer = setTimeout(smpMeasureSticky, 150);
+    });
+  }
+
+  // ---------- column-group toggles (table_html colgroups=) ----------
+  document.querySelectorAll('[data-colgroup-toggle]').forEach((wrap) => {
+    const table = document.getElementById(wrap.dataset.colgroupToggle);
+    if (!table) return;
+    const cgStoreKey = 'colgroup:' + wrap.dataset.colgroupToggle;
+    const buttons = Array.from(wrap.querySelectorAll('button[data-colgroup]'));
+    function applyColgroup(token, persist) {
+      buttons.forEach((b) => {
+        const on = b.dataset.colgroup === token;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      table.querySelectorAll('th[data-colgroup], td[data-colgroup]').forEach((cell) => {
+        cell.classList.toggle('cg-hidden', token !== 'all' && cell.dataset.colgroup.split(' ').indexOf(token) === -1);
+      });
+      if (persist) smpStore.set(cgStoreKey, token);
+      smpMeasureSticky();
+    }
+    buttons.forEach((b) => b.addEventListener('click', () => applyColgroup(b.dataset.colgroup, true)));
+    const storedGroup = smpStore.get(cgStoreKey);
+    const storedValid = storedGroup && buttons.some((b) => b.dataset.colgroup === storedGroup);
+    applyColgroup(storedValid ? storedGroup : (wrap.dataset.colgroupDefault || 'all'), false);
+  });
+
+  // ---------- glossary bottom sheet ----------
+  // On hover-less (touch) devices, tapping a stat header opens a sheet with the
+  // GLOSSARY definition plus a "sort" action (since the tap no longer sorts).
+  // Everywhere, tapping a mini-skill chip opens the sheet on the skill legend.
+  let glossarySheet = null;
+  let glossaryReturnFocus = null;
+  let glossarySortTh = null;
+  let glossaryBypass = false;
+  const coarsePointer = matchMedia('(hover: none)');
+
+  function glossaryLegendHtml() {
+    const skills = (siteConfig && siteConfig.skills) || {};
+    const entries = Object.keys(skills).map((code) =>
+      '<div class="gs-skill"><span class="mini-skill">' + escapeHtml(code) + '</span> ' + escapeHtml(skills[code]) + '</div>').join('');
+    if (!entries) return '';
+    return '<div class="gs-legend"><h4>Skill badges</h4>' + entries + '</div>';
+  }
+
+  function closeGlossarySheet() {
+    if (!glossarySheet) return;
+    glossarySheet.hidden = true;
+    if (glossaryReturnFocus && glossaryReturnFocus.focus) glossaryReturnFocus.focus();
+    glossaryReturnFocus = null;
+    glossarySortTh = null;
+  }
+
+  function buildGlossarySheet() {
+    if (glossarySheet) return glossarySheet;
+    const overlay = document.createElement('div');
+    overlay.className = 'gs-overlay';
+    overlay.hidden = true;
+    const sheet = document.createElement('div');
+    sheet.className = 'glossary-sheet';
+    sheet.setAttribute('role', 'dialog');
+    sheet.setAttribute('aria-modal', 'true');
+    sheet.setAttribute('aria-labelledby', 'gs-term');
+    sheet.innerHTML = '<div class="gs-grip" aria-hidden="true"></div>'
+      + '<h3 id="gs-term"></h3><p class="gs-def"></p>'
+      + '<div class="gs-actions">'
+      + '<button type="button" class="gs-sort">Sort by this column</button>'
+      + '<button type="button" class="gs-close">Close</button></div>'
+      + glossaryLegendHtml();
+    overlay.appendChild(sheet);
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (event) => { if (event.target === overlay) closeGlossarySheet(); });
+    sheet.querySelector('.gs-close').addEventListener('click', closeGlossarySheet);
+    sheet.querySelector('.gs-sort').addEventListener('click', () => {
+      const th = glossarySortTh;
+      closeGlossarySheet();
+      if (th) { glossaryBypass = true; th.click(); glossaryBypass = false; }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !overlay.hidden) closeGlossarySheet();
+    });
+    glossarySheet = overlay;
+    return overlay;
+  }
+
+  function openGlossarySheet(term, definition, sortTh) {
+    const overlay = buildGlossarySheet();
+    overlay.querySelector('#gs-term').textContent = term;
+    const def = overlay.querySelector('.gs-def');
+    def.textContent = definition || '';
+    def.hidden = !definition;
+    glossarySortTh = sortTh || null;
+    overlay.querySelector('.gs-sort').hidden = !sortTh;
+    overlay.hidden = false;
+    glossaryReturnFocus = document.activeElement;
+    overlay.querySelector('.gs-close').focus();
+  }
+
+  document.addEventListener('click', (event) => {
+    if (glossaryBypass) return;
+    const target = event.target;
+    if (!target || !target.closest) return;
+    const chip = target.closest('.mini-skill');
+    if (chip) {
+      const code = chip.textContent.trim();
+      const skills = (siteConfig && siteConfig.skills) || {};
+      openGlossarySheet('Skill: ' + code, skills[code] || chip.getAttribute('title') || '', null);
+      return;
+    }
+    if (!coarsePointer.matches) return;
+    const th = target.closest('table[data-sortable] thead th[title]');
+    if (!th) return;
+    event.preventDefault();
+    event.stopPropagation();
+    openGlossarySheet(th.textContent.trim(), th.getAttribute('title'), th);
+  }, true); // capture: runs (and stops) before the sort handler bound on the th
+
+  // ---------- generic card-list (mobile card view for opted-in tables) ----------
+  // Any table[data-card-list] is mirrored as a .card-list of stacked cards on
+  // narrow viewports: first cell becomes the card title, remaining cells become
+  // labeled stats (columns with empty values are skipped per card).
+  const cardListMq = matchMedia('(max-width: 700px)');
+  document.querySelectorAll('table[data-card-list]').forEach((table) => {
+    const wrap = table.closest('.table-wrap');
+    if (!wrap || !table.tHead || !table.tBodies[0]) return;
+    let list = null;
+    function buildCards() {
+      if (list) return list;
+      const headers = Array.from(table.tHead.rows[0].cells).map((cell) => cell.textContent.trim());
+      list = document.createElement('div');
+      list.className = 'card-list';
+      Array.from(table.tBodies[0].rows).forEach((row) => {
+        const item = document.createElement('article');
+        item.className = 'card-list-item';
+        if (row.dataset.tid) item.dataset.tid = row.dataset.tid;
+        const cells = Array.from(row.cells);
+        const title = document.createElement('div');
+        title.className = 'cl-title';
+        title.innerHTML = cells.length ? cells[0].innerHTML : '';
+        item.appendChild(title);
+        const stats = document.createElement('div');
+        stats.className = 'cl-stats';
+        cells.slice(1).forEach((cell, i) => {
+          const label = headers[i + 1] || '';
+          const value = cell.textContent.trim();
+          if (!label || value === '' || value === '—') return;
+          const stat = document.createElement('span');
+          stat.className = 'cl-stat';
+          stat.innerHTML = '<b>' + escapeHtml(label) + '</b>' + escapeHtml(value);
+          stats.appendChild(stat);
+        });
+        item.appendChild(stats);
+        list.appendChild(item);
+      });
+      wrap.after(list);
+      return list;
+    }
+    function syncCards() {
+      const on = cardListMq.matches;
+      if (on) buildCards();
+      if (list) list.hidden = !on;
+      wrap.classList.toggle('as-cards', on);
+    }
+    syncCards();
+    if (cardListMq.addEventListener) cardListMq.addEventListener('change', syncCards);
+    else if (cardListMq.addListener) cardListMq.addListener(syncCards);
+  });
+
   // ---------- mobile nav toggle ----------
   const burger = document.querySelector('[data-nav-burger]');
   if (burger) {
@@ -530,6 +1191,20 @@
       burger.setAttribute('aria-expanded', 'false');
     });
   }
+
+  // ---------- nav dropdowns: one open at a time + Escape to close ----------
+  const navDropdowns = Array.from(document.querySelectorAll('.primary-nav details.nav-dropdown'));
+  navDropdowns.forEach((details) => {
+    details.addEventListener('toggle', () => {
+      if (details.open) {
+        navDropdowns.forEach((other) => { if (other !== details) other.removeAttribute('open'); });
+      }
+    });
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    navDropdowns.forEach((details) => details.removeAttribute('open'));
+  });
 
   // ---------- generic tabs ----------
   document.querySelectorAll('[data-tabs]').forEach((tablist) => {
@@ -605,6 +1280,60 @@
     const input = document.querySelector('[data-global-search]');
     if (input) { event.preventDefault(); input.focus(); input.select(); }
   });
+
+  // ---------- player page: sticky section rail + scroll-spy ----------
+  const playerRail = document.querySelector('[data-player-rail]');
+  if (playerRail) {
+    const siteHeader = document.querySelector('.site-header');
+    const railLinks = Array.from(playerRail.querySelectorAll('a[href^="#"]'));
+    const railSections = railLinks
+      .map((link) => document.getElementById(link.getAttribute('href').slice(1)))
+      .filter(Boolean);
+
+    // The header wraps at narrow widths, so measure it instead of hardcoding:
+    // --rail-offset pins the rail below the sticky header; --anchor-offset keeps
+    // anchor jumps from landing underneath header + rail.
+    function setRailOffsets() {
+      const headerH = siteHeader ? siteHeader.offsetHeight : 0;
+      const root = document.documentElement;
+      root.style.setProperty('--rail-offset', headerH + 'px');
+      root.style.setProperty('--anchor-offset', headerH + playerRail.offsetHeight + 10 + 'px');
+    }
+    setRailOffsets();
+    window.addEventListener('resize', setRailOffsets);
+
+    let activeRailId = null;
+    function setRailActive(id) {
+      if (id === activeRailId) return;
+      activeRailId = id;
+      railLinks.forEach((link) => {
+        const on = link.getAttribute('href').slice(1) === id;
+        link.classList.toggle('active', on);
+        if (on) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    }
+
+    // Scroll-spy: the active section is the last one whose top has passed the
+    // rail's bottom edge. Runs directly on (already frame-throttled) scroll
+    // events — a handful of rect reads, cheap enough without rAF deferral.
+    function runSpy() {
+      if (!railSections.length) return;
+      const line = (siteHeader ? siteHeader.offsetHeight : 0) + playerRail.offsetHeight + 14;
+      let active = railSections[0];
+      railSections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= line) active = section;
+      });
+      // At the very bottom of the page the last section wins even if short.
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2) {
+        active = railSections[railSections.length - 1];
+      }
+      setRailActive(active.id);
+    }
+    window.addEventListener('scroll', runSpy, { passive: true });
+    window.addEventListener('resize', runSpy);
+    runSpy();
+  }
 
   // ---------- player development projection charts (interactive hover) ----------
   document.querySelectorAll('[data-proj-chart]').forEach((wrap) => {
@@ -1002,4 +1731,1565 @@
     card.addEventListener('mouseleave', clear);
   });
 
+})();
+(function () {
+  // ---------- team pages (W2): standalone module, appended after the core bundle ----------
+
+  // show/hide 0-GP roster rows behind the "show inactive" toggle
+  document.querySelectorAll('[data-toggle-inactive]').forEach((input) => {
+    const card = input.closest('[data-roster-card]');
+    if (!card) return;
+    const apply = () => card.classList.toggle('show-inactive', input.checked);
+    input.addEventListener('change', apply);
+    apply();
+  });
+
+  // scoring-share metric toggle (PTS / FGA / AST)
+  document.querySelectorAll('[data-share-card]').forEach((card) => {
+    const buttons = Array.from(card.querySelectorAll('button[data-share-metric]'));
+    const panels = Array.from(card.querySelectorAll('[data-share-panel]'));
+    if (!buttons.length) return;
+    function activate(button) {
+      buttons.forEach((b) => {
+        const on = b === button;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      panels.forEach((p) => { p.hidden = p.dataset.sharePanel !== button.dataset.shareMetric; });
+    }
+    buttons.forEach((button) => button.addEventListener('click', () => activate(button)));
+  });
+
+  // rotation river: hover readout synced with the rotation heat table
+  document.querySelectorAll('[data-river]').forEach((wrap) => {
+    const svg = wrap.querySelector('svg.river-chart');
+    const guide = wrap.querySelector('[data-river-guide]');
+    const tip = wrap.querySelector('[data-river-tooltip]');
+    const dataEl = document.getElementById(wrap.dataset.river);
+    if (!svg || !guide || !tip || !dataEl) return;
+    let d;
+    try { d = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    const g = d.g;
+    const n = d.games.length;
+    if (n < 2) return;
+    const table = document.querySelector('[data-rotation-table="' + d.tid + '"]');
+    const bands = Array.from(svg.querySelectorAll('.river-band'));
+    const chips = Array.from(document.querySelectorAll('.river-chip[data-pid]'));
+
+    const xs = (i) => g.ml + g.pw * i / (n - 1);
+
+    function toViewBox(evt) {
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return null;
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX; pt.y = evt.clientY;
+      return pt.matrixTransform(ctm.inverse());
+    }
+
+    function clearTable() {
+      if (!table) return;
+      table.querySelectorAll('.col-hl').forEach((c) => c.classList.remove('col-hl'));
+      table.querySelectorAll('.row-hl').forEach((r) => r.classList.remove('row-hl'));
+    }
+
+    function highlightTable(gid, pid) {
+      if (!table) return;
+      clearTable();
+      const th = table.querySelector('th[data-gid="' + gid + '"]');
+      if (th) {
+        const idx = th.cellIndex;
+        table.querySelectorAll('tr').forEach((tr) => {
+          const cell = tr.cells[idx];
+          if (cell) cell.classList.add('col-hl');
+        });
+      }
+      if (pid !== null) {
+        const row = table.querySelector('tr[data-pid="' + pid + '"]');
+        if (row) row.classList.add('row-hl');
+      }
+    }
+
+    function highlightBand(pid) {
+      bands.forEach((b) => b.classList.toggle('river-dim', pid !== null && Number(b.dataset.pid) !== pid));
+      chips.forEach((c) => c.classList.toggle('active', Number(c.dataset.pid) === pid));
+    }
+
+    function hide() {
+      tip.hidden = true;
+      guide.style.display = 'none';
+      highlightBand(null);
+      clearTable();
+    }
+
+    function show(evt) {
+      const loc = toViewBox(evt);
+      if (!loc) return;
+      let i = Math.round((loc.x - g.ml) / g.pw * (n - 1));
+      if (i < 0) i = 0;
+      if (i > n - 1) i = n - 1;
+      const game = d.games[i];
+      // which band is under the cursor: invert y to minutes, walk the stack
+      const mins = (g.mt + g.ph - loc.y) / g.ph * g.ymax;
+      let pid = null;
+      let name = '';
+      let bandMin = 0;
+      let cum = 0;
+      for (let p = 0; p < d.players.length; p += 1) {
+        cum += d.players[p].mins[i];
+        if (mins <= cum) {
+          pid = d.players[p].pid;
+          name = d.players[p].name;
+          bandMin = d.players[p].mins[i];
+          break;
+        }
+      }
+      guide.setAttribute('x1', xs(i));
+      guide.setAttribute('x2', xs(i));
+      guide.style.display = '';
+      let html = '<strong>Day ' + game.day + ' ' + game.opp + '</strong><span>' + game.res + '</span>';
+      if (pid !== null) html += '<span>' + name + ' — ' + Math.round(bandMin) + ' min</span>';
+      tip.innerHTML = html;
+      tip.hidden = false;
+      const rect = wrap.getBoundingClientRect();
+      const tw = tip.offsetWidth;
+      let left = evt.clientX - rect.left + 14;
+      if (left + tw > rect.width) left = evt.clientX - rect.left - tw - 14;
+      if (left + tw > rect.width) left = rect.width - tw - 4;
+      if (left < 0) left = 4;
+      tip.style.left = left + 'px';
+      tip.style.top = (evt.clientY - rect.top + 12) + 'px';
+      highlightBand(pid);
+      highlightTable(game.gid, pid);
+    }
+
+    svg.addEventListener('mousemove', show);
+    svg.addEventListener('mouseleave', hide);
+
+    // reverse sync: hovering a game column header in the heat table moves the guide
+    if (table) {
+      table.addEventListener('mouseover', (evt) => {
+        const th = evt.target.closest('th[data-gid]');
+        if (!th || !table.contains(th)) return;
+        const i = d.games.findIndex((game) => game.gid === th.dataset.gid);
+        if (i < 0) return;
+        guide.setAttribute('x1', xs(i));
+        guide.setAttribute('x2', xs(i));
+        guide.style.display = '';
+      });
+      table.addEventListener('mouseleave', () => { guide.style.display = 'none'; });
+    }
+  });
+})();
+// league.js — records all-time-leaders totals/per-game toggle + history
+// transaction-log type/team filters. Self-contained IIFE (site.js is deferred,
+// so the DOM is ready when this runs).
+(function () {
+  // ---------- all-time leaders: totals vs per-game ----------
+  document.querySelectorAll('[data-leaders-toggle]').forEach((wrap) => {
+    const section = wrap.closest('section');
+    if (!section) return;
+    const panels = Array.from(section.querySelectorAll('[data-leaders-panel]'));
+    const buttons = Array.from(wrap.querySelectorAll('button[data-leaders-view]'));
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((b) => {
+          const on = b === button;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.leadersPanel !== button.dataset.leadersView;
+        });
+      });
+    });
+  });
+
+  // ---------- transaction log: type + team filters ----------
+  document.querySelectorAll('[data-txlog]').forEach((card) => {
+    const typeButtons = Array.from(card.querySelectorAll('[data-tx-type-filter] button[data-tx-type]'));
+    const teamSelect = card.querySelector('[data-tx-team-filter]');
+    const seasons = Array.from(card.querySelectorAll('details.tx-season'));
+    const initiallyOpen = seasons.map((details) => details.open);
+    if (!typeButtons.length && !teamSelect) return;
+
+    function apply() {
+      const activeButton = typeButtons.find((b) => b.classList.contains('active'));
+      const type = activeButton ? activeButton.dataset.txType : 'all';
+      const team = teamSelect ? teamSelect.value : 'all';
+      const filtering = type !== 'all' || team !== 'all';
+      seasons.forEach((details, index) => {
+        let shown = 0;
+        details.querySelectorAll('li[data-tx-type]').forEach((item) => {
+          const typeOk = type === 'all' || item.dataset.txType === type;
+          const teamOk = team === 'all' || (item.dataset.txTids || '').indexOf(',' + team + ',') !== -1;
+          const ok = typeOk && teamOk;
+          item.classList.toggle('tx-hidden', !ok);
+          if (ok) shown += 1;
+        });
+        const pill = details.querySelector('[data-tx-count]');
+        if (pill) {
+          const total = Number(pill.dataset.txCount);
+          pill.textContent = filtering ? shown + ' of ' + total + ' moves' : total + ' moves';
+        }
+        details.classList.toggle('tx-season-empty', filtering && shown === 0);
+        details.open = filtering ? shown > 0 : initiallyOpen[index];
+      });
+    }
+
+    typeButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        typeButtons.forEach((b) => {
+          const on = b === button;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        apply();
+      });
+    });
+    if (teamSelect) teamSelect.addEventListener('change', apply);
+  });
+})();
+  // ---------- client apps: shared helpers + Compare page ----------
+  // compare.js owns window.SMPApps (app-data loader, combobox, portraits) and
+  // must be concatenated BEFORE trade-extras.js, which consumes it.
+(function () {
+  'use strict';
+
+  const rootPath = () => (document.body && document.body.dataset.root) || '';
+
+  let appDataPromise = null;
+  function loadAppData() {
+    if (!appDataPromise) {
+      appDataPromise = fetch(rootPath() + 'assets/app-data.json').then((r) => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      });
+    }
+    return appDataPromise;
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"]/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+
+  const norm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  // Mirrors core.fmt_money: thousands in, "$28M" / "$27.55M" / "$500K" out.
+  function fmtSalary(k) {
+    const num = Number(k);
+    if (k === null || k === undefined || !Number.isFinite(num)) return '—';
+    const sign = num < 0 ? '-' : '';
+    const mag = Math.abs(num);
+    if (mag >= 1000) {
+      const millions = mag / 1000;
+      if (Math.abs(millions - Math.round(millions)) < 1e-9) return sign + '$' + Math.round(millions) + 'M';
+      return sign + '$' + millions.toFixed(2).replace(/0+$/, '').replace(/\.$/, '') + 'M';
+    }
+    return sign + '$' + Math.round(mag) + 'K';
+  }
+
+  // Mirrors core.slugify + player_url for the ASCII/diacritic names in play.
+  function playerUrl(p) {
+    let slug = String(p.name || '').normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '').replace(/[^\x00-\x7F]/g, '')
+      .trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    return rootPath() + 'players/' + (slug || 'player') + '-' + p.pid + '.html';
+  }
+
+  function teamAbbrevFor(tid, teamsByTid) {
+    if (tid >= 0 && teamsByTid[tid]) return teamsByTid[tid].abbrev;
+    return tid === -2 ? 'Draft' : 'FA';
+  }
+
+  const NEUTRAL_COLORS = { primary: '#3a4048', secondary: '#8a93a0', chart: '#8A93A5' };
+
+  function teamColors(tid, teamsByTid) {
+    return (tid >= 0 && teamsByTid[tid] && teamsByTid[tid].colors) || NEUTRAL_COLORS;
+  }
+
+  // WCAG-ish text-on-disc pick: white or near-black, whichever contrasts more
+  // (mirrors identity._pick_on_color; app-data colors carry no on_primary).
+  function onColor(bg) {
+    const c = bg.replace('#', '');
+    const chan = (i) => {
+      const s = parseInt(c.slice(i, i + 2), 16) / 255;
+      return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    };
+    const lum = 0.2126 * chan(0) + 0.7152 * chan(2) + 0.0722 * chan(4);
+    return (1.05 / (lum + 0.05)) >= ((lum + 0.05) / 0.0565) ? '#FFFFFF' : '#10131A';
+  }
+
+  function initialsOf(name) {
+    const parts = String(name || '').trim().split(/\s+/);
+    const letters = (parts[0] ? parts[0][0] : '') + (parts.length > 1 ? parts[parts.length - 1][0] : '');
+    return (letters || '?').toUpperCase();
+  }
+
+  // Mirrors identity.monogram_svg with literal colors (client has no --team-* vars).
+  function monogramSvg(text, colors) {
+    const t = String(text || '?').slice(0, 3).toUpperCase();
+    const font = { 1: 26, 2: 22, 3: 17 }[t.length] || 17;
+    return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">'
+      + '<circle cx="32" cy="32" r="31" fill="' + colors.primary + '"/>'
+      + '<circle cx="32" cy="32" r="28.5" fill="none" stroke="' + colors.secondary + '" stroke-width="2"/>'
+      + '<text x="32" y="33.5" text-anchor="middle" dominant-baseline="central" '
+      + 'font-family="\'Helvetica Neue\',Helvetica,Arial,sans-serif" font-weight="700" '
+      + 'font-size="' + font + '" letter-spacing=".5" fill="' + onColor(colors.primary) + '">'
+      + escapeHtml(t) + '</text></svg>';
+  }
+
+  // Portrait chip chain for client apps: face SVG asset -> monogram roundel.
+  // (Photos/imgURL are not in app-data; the onerror hook keeps it unbreakable.)
+  function hydrateFaces(container, byPid, teamsByTid) {
+    container.querySelectorAll('[data-face-pid]').forEach((span) => {
+      const p = byPid[span.dataset.facePid];
+      if (!p) return;
+      const colors = teamColors(p.tid, teamsByTid);
+      const size = parseInt(span.dataset.faceSize || '24', 10);
+      const img = document.createElement('img');
+      img.src = rootPath() + 'assets/faces/' + p.pid + '.svg';
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.width = size;
+      img.height = size;
+      img.onerror = () => { span.innerHTML = monogramSvg(initialsOf(p.name), colors); };
+      span.appendChild(img);
+    });
+  }
+
+  function facePlaceholder(pid, size) {
+    return '<span class="app-face" data-face-pid="' + pid + '" data-face-size="' + size + '" aria-hidden="true"></span>';
+  }
+
+  // Filterable combobox (ARIA 1.2 combobox pattern, modeled on the header
+  // search). Expects the server-rendered skeleton: .combo > .combo-input +
+  // .combo-list. opts: { options() -> [{id,label,sub,search[]}], onSelect(id),
+  //                      committed(option) -> input text, maxResults }
+  function createCombobox(container, opts) {
+    const input = container.querySelector('.combo-input');
+    const list = container.querySelector('.combo-list');
+    const maxResults = opts.maxResults || 12;
+    let committedText = '';
+    let selected = -1;
+    let items = [];
+
+    function score(q, option) {
+      const terms = option.search && option.search.length ? option.search : [option.label];
+      let best = -1;
+      terms.forEach((term) => {
+        const n = norm(term);
+        let s = -1;
+        if (n.startsWith(q)) s = 0;
+        else if (n.split(' ').some((w) => w.startsWith(q))) s = 1;
+        else if (n.includes(q)) s = 2;
+        if (s >= 0 && (best < 0 || s < best)) best = s;
+      });
+      return best;
+    }
+
+    function matches(q) {
+      const options = opts.options();
+      if (!q) return options.slice(0, maxResults);
+      const scored = [];
+      options.forEach((o, i) => {
+        const s = score(q, o);
+        if (s >= 0) scored.push([s, i, o]);
+      });
+      scored.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+      return scored.slice(0, maxResults).map((x) => x[2]);
+    }
+
+    function close() {
+      list.hidden = true;
+      selected = -1;
+      input.setAttribute('aria-expanded', 'false');
+      input.setAttribute('aria-activedescendant', '');
+    }
+
+    function syncSelected() {
+      Array.from(list.querySelectorAll('[role="option"]')).forEach((el, i) => {
+        const on = i === selected;
+        el.classList.toggle('selected', on);
+        el.setAttribute('aria-selected', on ? 'true' : 'false');
+        if (on) el.scrollIntoView({ block: 'nearest' });
+      });
+      const active = selected >= 0 ? list.querySelectorAll('[role="option"]')[selected] : null;
+      input.setAttribute('aria-activedescendant', active ? active.id : '');
+    }
+
+    function pick(option) {
+      committedText = opts.committed ? opts.committed(option) : option.label;
+      input.value = committedText;
+      close();
+      opts.onSelect(option.id);
+    }
+
+    function openList() {
+      items = matches(norm(input.value.trim()));
+      if (!items.length) {
+        list.innerHTML = '<div class="combo-empty" role="option" aria-disabled="true">No matches.</div>';
+      } else {
+        list.innerHTML = items.map((o, i) =>
+          '<div class="combo-option" id="' + list.id + '-opt-' + i + '" role="option" aria-selected="false">'
+          + '<span>' + escapeHtml(o.label) + '</span>'
+          + (o.sub ? '<span class="muted">' + escapeHtml(o.sub) + '</span>' : '')
+          + '</div>').join('');
+        Array.from(list.querySelectorAll('.combo-option')).forEach((el, i) => {
+          // mousedown beats the input's focusout, so the pick lands first
+          el.addEventListener('mousedown', (event) => { event.preventDefault(); pick(items[i]); });
+        });
+      }
+      list.hidden = false;
+      selected = -1;
+      input.setAttribute('aria-expanded', 'true');
+    }
+
+    input.addEventListener('input', () => {
+      openList();
+      if (input.value.trim() === '' && committedText !== '') {
+        committedText = '';
+        opts.onSelect(null);
+      }
+    });
+    input.addEventListener('focus', () => { input.select(); openList(); });
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') { input.value = committedText; close(); return; }
+      if (event.key === 'Tab') { input.value = committedText; close(); return; }
+      if (list.hidden && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) { event.preventDefault(); openList(); return; }
+      if (list.hidden || !items.length) return;
+      if (event.key === 'ArrowDown') { event.preventDefault(); selected = Math.min(selected + 1, items.length - 1); syncSelected(); }
+      else if (event.key === 'ArrowUp') { event.preventDefault(); selected = Math.max(selected - 1, 0); syncSelected(); }
+      else if (event.key === 'Enter') {
+        event.preventDefault();
+        const target = items[Math.max(0, selected)];
+        if (target) pick(target);
+      }
+    });
+    input.addEventListener('blur', () => { input.value = committedText; close(); });
+
+    return {
+      input,
+      enable() { input.disabled = false; },
+      setSelection(option) {
+        committedText = option ? (opts.committed ? opts.committed(option) : option.label) : '';
+        input.value = committedText;
+      },
+    };
+  }
+
+  window.SMPApps = {
+    loadAppData, escapeHtml, norm, fmtSalary, playerUrl, teamAbbrevFor,
+    teamColors, monogramSvg, initialsOf, hydrateFaces, facePlaceholder,
+    createCombobox, rootPath,
+  };
+
+  // ---------- Compare page ----------
+  const out = document.querySelector('[data-compare-out]');
+  const comboEls = Array.from(document.querySelectorAll('[data-compare-combo]'));
+  if (!out || !comboEls.length) return;
+
+  const extraEl = document.getElementById('compare-extra');
+  const extras = extraEl ? JSON.parse(extraEl.textContent) : { ratingKeys: [], stats: {} };
+  const radarBlock = document.querySelector('[data-compare-radar]');
+  const radarOut = document.querySelector('[data-radar-out]');
+
+  // Spoke -> subrating mapping (keep in sync with the docstring in
+  // scripts/smp/pages/compare.py; oiq/diq intentionally feed two spokes each).
+  const SPOKES = [
+    ['Shooting', ['tp', 'fg', 'ft']],
+    ['Finishing', ['ins', 'dnk']],
+    ['Athleticism', ['spd', 'jmp', 'stre', 'endu']],
+    ['Playmaking', ['pss', 'drb', 'oiq']],
+    ['Defense', ['diq', 'reb', 'hgt']],
+    ['IQ', ['oiq', 'diq']],
+  ];
+
+  loadAppData().then((data) => {
+    const players = data.players;
+    const byPid = {};
+    players.forEach((p) => { byPid[p.pid] = p; });
+    const teamsByTid = {};
+    data.teams.forEach((t) => { teamsByTid[t.tid] = t; });
+
+    const picked = [null, null, null];
+
+    const comboOptions = players.map((p) => ({
+      id: p.pid,
+      label: p.name,
+      sub: teamAbbrevFor(p.tid, teamsByTid) + ' · ' + p.pos + ' · ' + p.ovr + ' ovr',
+      search: [p.name, teamAbbrevFor(p.tid, teamsByTid) + ' ' + p.name],
+    }));
+    const optionByPid = {};
+    comboOptions.forEach((o) => { optionByPid[o.id] = o; });
+
+    const combos = comboEls.map((el, i) => createCombobox(el, {
+      options: () => comboOptions,
+      onSelect: (pid) => { picked[i] = pid === null ? null : byPid[pid] || null; syncHash(); render(); },
+    }));
+
+    // Initial picks: the URL hash (share/permalink state, "#pid,pid,pid"),
+    // else two computed defaults — the top-overall rostered player vs the
+    // highest-potential rostered 23-and-under player.
+    const fromHash = (location.hash || '').replace(/^#/, '').split(',').filter(Boolean);
+    if (fromHash.length && fromHash.some((pid) => byPid[pid])) {
+      fromHash.slice(0, 3).forEach((pid, i) => { if (byPid[pid]) picked[i] = byPid[pid]; });
+    } else {
+      const topOvr = players.find((p) => p.tid >= 0) || players[0];
+      const young = players
+        .filter((p) => p !== topOvr && p.tid >= 0 && p.age !== null && p.age <= 23)
+        .sort((a, b) => (b.pot - a.pot) || (b.ovr - a.ovr) || (a.pid - b.pid))[0]
+        || players.find((p) => p !== topOvr);
+      picked[0] = topOvr || null;
+      picked[1] = young || null;
+    }
+    combos.forEach((combo, i) => {
+      combo.setSelection(picked[i] ? optionByPid[picked[i].pid] : null);
+      combo.enable();
+    });
+
+    function syncHash() {
+      const pids = picked.filter(Boolean).map((p) => p.pid);
+      history.replaceState(null, '', pids.length ? '#' + pids.join(',') : location.pathname + location.search);
+    }
+
+    function extraOf(p) {
+      return extras.stats[String(p.pid)] || [0, null, null, null, null];
+    }
+
+    function statRows(chosen) {
+      // [label, values, {pct: format as %, lower: lower is better}]
+      const pgRow = (key) => chosen.map((p) => p.pg[key]);
+      const exRow = (idx) => chosen.map((p) => extraOf(p)[idx]);
+      return [
+        ['Games', exRow(0), {}],
+        ['MP/G', pgRow('min'), {}],
+        ['PTS/G', pgRow('pts'), {}],
+        ['TRB/G', pgRow('trb'), {}],
+        ['AST/G', pgRow('ast'), {}],
+        ['STL/G', pgRow('stl'), {}],
+        ['BLK/G', pgRow('blk'), {}],
+        ['TOV/G', pgRow('tov'), { lower: true }],
+        ['FG%', pgRow('fg_pct'), {}],
+        ['3P%', pgRow('tp_pct'), {}],
+        ['FT%', pgRow('ft_pct'), {}],
+        ['FPTS/G', pgRow('fpts'), {}],
+        ['TS%', exRow(1), {}],
+        ['PER', exRow(2), {}],
+        ['BPM', exRow(3), {}],
+        ['WS', exRow(4), {}],
+      ];
+    }
+
+    function render() {
+      const chosen = picked.filter(Boolean);
+      if (chosen.length < 2) {
+        if (radarBlock) radarBlock.hidden = true;
+        out.innerHTML = '<p class="muted">Pick at least two players.</p>';
+        return;
+      }
+      let html = '<div class="table-wrap fit-table"><table class="cmp-players"><thead><tr><th scope="col"></th>';
+      chosen.forEach((p) => {
+        const ageText = p.age === null ? '—' : p.age + 'y';
+        html += '<th scope="col">' + facePlaceholder(p.pid, 26)
+          + '<a href="' + playerUrl(p) + '">' + escapeHtml(p.name) + '</a>'
+          + '<span class="muted"> ' + escapeHtml(teamAbbrevFor(p.tid, teamsByTid)) + ' · ' + escapeHtml(p.pos) + ' · ' + ageText + '</span></th>';
+      });
+      html += '</tr></thead><tbody>';
+      const row = (label, values, options) => {
+        const withBar = options && options.bar;
+        const lower = options && options.lower;
+        html += '<tr><td class="cmp-label">' + label + '</td>';
+        const nums = values.map(Number).filter(Number.isFinite);
+        const best = nums.length > 1 ? (lower ? Math.min(...nums) : Math.max(...nums)) : null;
+        values.forEach((v) => {
+          const num = Number(v);
+          const isBest = Number.isFinite(num) && best !== null && num === best;
+          let cell = (v === null || v === undefined || v === '') ? '—' : escapeHtml(v);
+          if (withBar && Number.isFinite(num)) {
+            cell = '<span class="cmp-bar"><i style="width:' + Math.max(2, Math.min(100, num)) + '%"></i></span>' + cell;
+          }
+          html += '<td class="' + (isBest ? 'cmp-best' : '') + '">' + cell + '</td>';
+        });
+        html += '</tr>';
+      };
+      row('Overall', chosen.map((p) => p.ovr), { bar: true });
+      row('Potential', chosen.map((p) => p.pot), { bar: true });
+      row('Contract', chosen.map((p) => fmtSalary(p.salary) + '/' + (p.exp === null ? '—' : p.exp)), {});
+      row('Trade value', chosen.map((p) => p.value), {});
+      extras.ratingKeys.forEach(([key, label]) => row(label, chosen.map((p) => p.ratings[key]), { bar: true }));
+      statRows(chosen).forEach(([label, values, options]) => row(label, values, options));
+      html += '</tbody></table></div>';
+      out.innerHTML = html;
+      hydrateFaces(out, byPid, teamsByTid);
+      renderRadar(chosen);
+    }
+
+    function spokeValues(p) {
+      return SPOKES.map(([, keys]) => Math.round(keys.reduce((s, k) => s + (p.ratings[k] || 0), 0) / keys.length));
+    }
+
+    function renderRadar(chosen) {
+      if (!radarBlock || !radarOut) return;
+      radarBlock.hidden = false;
+      const cx = 230, cy = 190, R = 130;
+      const pt = (i, v) => {
+        const ang = (Math.PI / 180) * (-90 + i * 60);
+        const r = (v / 100) * R;
+        return (cx + r * Math.cos(ang)).toFixed(1) + ',' + (cy + r * Math.sin(ang)).toFixed(1);
+      };
+      let svg = '<svg class="radar-svg" viewBox="0 0 460 400" role="img" aria-label="Skill radar comparing '
+        + escapeHtml(chosen.map((p) => p.name).join(', ')) + '">';
+      [20, 40, 60, 80, 100].forEach((ring) => {
+        svg += '<polygon class="radar-grid" points="' + SPOKES.map((_, i) => pt(i, ring)).join(' ') + '"/>';
+      });
+      SPOKES.forEach(([label], i) => {
+        svg += '<line class="radar-axis" x1="' + cx + '" y1="' + cy + '" x2="' + pt(i, 100).replace(',', '" y2="') + '"/>';
+        const ang = (Math.PI / 180) * (-90 + i * 60);
+        const lx = cx + (R + 16) * Math.cos(ang);
+        const ly = cy + (R + 16) * Math.sin(ang);
+        const anchor = Math.abs(Math.cos(ang)) < 0.3 ? 'middle' : (Math.cos(ang) > 0 ? 'start' : 'end');
+        svg += '<text class="radar-label" x="' + lx.toFixed(1) + '" y="' + (ly + 4).toFixed(1) + '" text-anchor="' + anchor + '">' + label + '</text>';
+      });
+      const seenColors = [];
+      chosen.forEach((p) => {
+        const color = teamColors(p.tid, teamsByTid).chart;
+        // repeat colors (teammates) get dashed outlines so polygons stay tellable-apart
+        const dupes = seenColors.filter((c) => c === color).length;
+        seenColors.push(color);
+        const dash = dupes === 0 ? '' : ' stroke-dasharray="' + (dupes === 1 ? '7 4' : '2 5') + '"';
+        const values = spokeValues(p);
+        const points = values.map((v, i) => pt(i, v)).join(' ');
+        svg += '<polygon class="radar-poly" points="' + points + '" fill="' + color + '" stroke="' + color + '"' + dash + '/>';
+        values.forEach((v, i) => {
+          const [x, y] = pt(i, v).split(',');
+          svg += '<circle class="radar-dot" cx="' + x + '" cy="' + y + '" r="3.2" fill="' + color + '">'
+            + '<title>' + escapeHtml(p.name) + ' — ' + SPOKES[i][0] + ' ' + v + '</title></circle>';
+        });
+      });
+      svg += '</svg>';
+      let legend = '<div class="radar-legend">';
+      chosen.forEach((p, idx) => {
+        const color = teamColors(p.tid, teamsByTid).chart;
+        legend += '<span class="radar-chip">'
+          + '<i class="radar-swatch' + (idx > 0 && seenColors.slice(0, idx).includes(color) ? ' radar-swatch--dashed' : '') + '" style="background:' + color + '"></i>'
+          + facePlaceholder(p.pid, 28)
+          + '<a href="' + playerUrl(p) + '">' + escapeHtml(p.name) + '</a>'
+          + '<span class="muted">' + escapeHtml(teamAbbrevFor(p.tid, teamsByTid)) + '</span>'
+          + '</span>';
+      });
+      legend += '</div>';
+      radarOut.innerHTML = svg + legend;
+      hydrateFaces(radarOut, byPid, teamsByTid);
+    }
+
+    if (location.hash) syncHash(); // normalize away any invalid pids; keep clean URLs clean
+    render();
+  }).catch(() => {
+    out.innerHTML = '<p class="app-error">Couldn’t load player data (assets/app-data.json). Check your connection and refresh to retry.</p>';
+  });
+})();
+  // ---------- trade machine (consumes window.SMPApps from compare.js) ----------
+(function () {
+  'use strict';
+
+  let bootTries = 0;
+  function boot() {
+    const machine = document.querySelector('[data-app="trade"]');
+    if (!machine) return;
+    const A = window.SMPApps;
+    if (!A) {
+      // compare.js should precede this file in the bundle; one deferred retry
+      // keeps a wrong concat order from silently killing the page.
+      if (bootTries++ < 3) setTimeout(boot, 0);
+      return;
+    }
+
+    const extraEl = document.getElementById('trade-extra');
+    const picksByTid = (extraEl ? JSON.parse(extraEl.textContent) : { picks: {} }).picks || {};
+    const summary = document.querySelector('[data-trade-summary]');
+    const sides = [0, 1].map((i) => ({
+      comboEl: document.querySelector('[data-trade-combo="' + i + '"]'),
+      filterEl: document.querySelector('[data-trade-filter="' + i + '"]'),
+      listEl: document.querySelector('[data-trade-list="' + i + '"]'),
+      tid: null,
+      picked: new Set(),
+      pickedPicks: new Set(),
+      filter: '',
+    }));
+
+    A.loadAppData().then((data) => init(data)).catch(() => {
+      const msg = '<p class="app-error">Couldn’t load roster data (assets/app-data.json). Check your connection and refresh to retry.</p>';
+      sides.forEach((side) => { side.listEl.innerHTML = msg; });
+      if (summary) summary.innerHTML = '';
+    });
+
+    function init(data) {
+      const esc = A.escapeHtml;
+      const fmtM = A.fmtSalary;
+      const teamsSorted = data.teams.slice().sort((a, b) => a.abbrev.localeCompare(b.abbrev));
+      const teamsByTid = {};
+      data.teams.forEach((t) => { teamsByTid[t.tid] = t; });
+      const rostersByTid = {};
+      data.players.forEach((p) => {
+        if (p.tid >= 0) (rostersByTid[p.tid] = rostersByTid[p.tid] || []).push(p);
+      });
+      Object.keys(rostersByTid).forEach((tid) => {
+        rostersByTid[tid].sort((a, b) => (b.salary - a.salary) || a.name.localeCompare(b.name) || (a.pid - b.pid));
+      });
+      const tax = data.finance.tax_line;
+      const fullName = (t) => (t.region ? t.region + ' ' : '') + t.name;
+
+      const comboOptions = teamsSorted.map((t) => ({
+        id: t.tid,
+        label: t.abbrev + ' — ' + fullName(t),
+        search: [t.abbrev, fullName(t)],
+      }));
+      const optionByTid = {};
+      comboOptions.forEach((o) => { optionByTid[o.id] = o; });
+
+      const combos = sides.map((side, index) => A.createCombobox(side.comboEl, {
+        options: () => comboOptions,
+        onSelect: (tid) => {
+          side.tid = tid;
+          side.picked.clear();
+          side.pickedPicks.clear();
+          side.filter = '';
+          side.filterEl.value = '';
+          renderSide(index);
+          syncHash();
+          renderSummary();
+        },
+      }));
+
+      // Initial state: the URL hash when present (a/b = tids, ap/bp = picked
+      // pids, ak/bk = picked dpids), else the first two teams by abbrev.
+      const params = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+      const defaults = [teamsSorted[0], teamsSorted[1]];
+      sides.forEach((side, index) => {
+        const key = index === 0 ? 'a' : 'b';
+        const fromHash = parseInt(params.get(key), 10);
+        side.tid = teamsByTid[fromHash] ? fromHash : (defaults[index] ? defaults[index].tid : null);
+        const roster = rostersByTid[side.tid] || [];
+        const pids = new Set(roster.map((p) => p.pid));
+        (params.get(key + 'p') || '').split('.').forEach((pid) => {
+          const num = parseInt(pid, 10);
+          if (pids.has(num)) side.picked.add(num);
+        });
+        const dpids = new Set((picksByTid[String(side.tid)] || []).map((pick) => pick.id));
+        (params.get(key + 'k') || '').split('.').forEach((id) => {
+          const num = parseInt(id, 10);
+          if (dpids.has(num)) side.pickedPicks.add(num);
+        });
+        combos[index].setSelection(side.tid !== null ? optionByTid[side.tid] : null);
+        combos[index].enable();
+        side.filterEl.disabled = false;
+        side.filterEl.addEventListener('input', () => {
+          side.filter = A.norm(side.filterEl.value.trim());
+          renderSide(index);
+        });
+      });
+
+      function syncHash() {
+        const params = new URLSearchParams();
+        let dirty = false;
+        sides.forEach((side, index) => {
+          const key = index === 0 ? 'a' : 'b';
+          params.set(key, side.tid);
+          if (side.picked.size) { params.set(key + 'p', Array.from(side.picked).sort((x, y) => x - y).join('.')); dirty = true; }
+          if (side.pickedPicks.size) { params.set(key + 'k', Array.from(side.pickedPicks).sort((x, y) => x - y).join('.')); dirty = true; }
+          if (!defaults[index] || side.tid !== defaults[index].tid) dirty = true;
+        });
+        if (!dirty && !location.hash) return; // untouched default state: keep the URL clean
+        history.replaceState(null, '', '#' + params.toString());
+      }
+
+      function renderSide(index) {
+        const side = sides[index];
+        const team = teamsByTid[side.tid];
+        if (!team) { side.listEl.innerHTML = '<p class="muted">Pick a team.</p>'; return; }
+        side.listEl.innerHTML = '';
+        let shown = 0;
+        (rostersByTid[side.tid] || []).forEach((p) => {
+          if (side.filter && !A.norm(p.name).includes(side.filter)) return;
+          shown += 1;
+          const row = document.createElement('label');
+          row.className = 'trade-row';
+          row.innerHTML = '<input type="checkbox"> <span class="trade-name">' + esc(p.name) + '</span>'
+            + '<span class="muted">' + esc(p.pos) + ' · ' + (p.age === null ? '—' : p.age + 'y') + ' · ' + p.ovr + ' ovr</span>'
+            + '<span class="trade-amt">' + fmtM(p.salary) + '/' + (p.exp === null ? '—' : p.exp) + '</span>'
+            + '<span class="trade-val">' + (p.value === null ? '—' : p.value) + '</span>';
+          const box = row.querySelector('input');
+          box.checked = side.picked.has(p.pid);
+          box.setAttribute('aria-label', 'Trade ' + p.name);
+          box.addEventListener('change', () => {
+            if (box.checked) side.picked.add(p.pid); else side.picked.delete(p.pid);
+            syncHash();
+            renderSummary();
+          });
+          side.listEl.appendChild(row);
+        });
+        (picksByTid[String(side.tid)] || []).forEach((pick) => {
+          if (side.filter && !A.norm(pick.label).includes(side.filter)) return;
+          shown += 1;
+          const row = document.createElement('label');
+          row.className = 'trade-row trade-pick';
+          row.innerHTML = '<input type="checkbox"> <span class="trade-name">' + esc(pick.label) + '</span><span class="muted">draft pick</span><span class="trade-amt"></span><span class="trade-val">—</span>';
+          const box = row.querySelector('input');
+          box.checked = side.pickedPicks.has(pick.id);
+          box.setAttribute('aria-label', 'Trade ' + pick.label + ' draft pick');
+          box.addEventListener('change', () => {
+            if (box.checked) side.pickedPicks.add(pick.id); else side.pickedPicks.delete(pick.id);
+            syncHash();
+            renderSummary();
+          });
+          side.listEl.appendChild(row);
+        });
+        if (!shown) {
+          side.listEl.innerHTML = '<p class="empty-state">No assets match the filter.</p>';
+        }
+      }
+
+      function sideAssets(side) {
+        const team = teamsByTid[side.tid];
+        const players = (rostersByTid[side.tid] || []).filter((p) => side.picked.has(p.pid));
+        const picks = (picksByTid[String(side.tid)] || []).filter((pick) => side.pickedPicks.has(pick.id));
+        const salary = players.reduce((s, p) => s + p.salary, 0);
+        const value = players.reduce((s, p) => s + (p.value || 0), 0);
+        return { team, players, picks, salary, value };
+      }
+
+      function taxReadout(team, salaryOut, salaryIn) {
+        const before = team.payroll;
+        const after = before - salaryOut + salaryIn;
+        const scale = Math.max(tax * 1.15, before, after);
+        const over = after > tax;
+        const room = tax - after;
+        const note = over
+          ? fmtM(-room) + ' over the ' + fmtM(tax) + ' tax line'
+          : fmtM(room) + ' under the ' + fmtM(tax) + ' tax line';
+        return '<div class="tfin-team' + (over ? ' tfin-team--over' : '') + '">'
+          + '<div class="tfin-head"><strong>' + esc(team.abbrev) + '</strong>'
+          + '<span class="tfin-nums">' + fmtM(before) + ' → <strong>' + fmtM(after) + '</strong></span></div>'
+          + '<div class="tfin-bar"><i class="tfin-fill" style="width:' + Math.min(100, (after / scale) * 100).toFixed(1) + '%"></i>'
+          + '<span class="tfin-tick" style="left:' + ((tax / scale) * 100).toFixed(1) + '%"></span></div>'
+          + '<div class="tfin-note' + (over ? ' tfin-note--over' : '') + '">' + note + '</div>'
+          + '</div>';
+      }
+
+      function renderSummary() {
+        const a = sideAssets(sides[0]);
+        const b = sideAssets(sides[1]);
+        if (!a.team || !b.team) { summary.innerHTML = '<p class="muted">Pick two teams.</p>'; return; }
+        if (a.team.tid === b.team.tid) {
+          summary.innerHTML = '<p class="muted">Pick two different teams.</p>';
+          return;
+        }
+        const diff = a.value - b.value;
+        let verdict = 'Even value trade.';
+        if (Math.abs(diff) > 1) {
+          const winner = diff > 0 ? b.team.abbrev : a.team.abbrev;
+          verdict = winner + ' wins this trade by ' + Math.abs(Math.round(diff * 10) / 10) + ' value' + (a.picks.length || b.picks.length ? ' (draft picks not valued)' : '');
+        }
+        const lines = [];
+        const describe = (from, to) => {
+          const bits = from.players.map((p) => esc(p.name)).concat(from.picks.map((pick) => esc(pick.label)));
+          return '<p><strong>' + esc(from.team.abbrev) + ' → ' + esc(to.team.abbrev) + ':</strong> ' + (bits.join(', ') || '<span class="muted">nothing</span>')
+            + ' <span class="muted">(salary ' + fmtM(from.salary) + ', value ' + (Math.round(from.value * 10) / 10) + ')</span></p>';
+        };
+        lines.push(describe(a, b));
+        lines.push(describe(b, a));
+        lines.push('<div class="tfin">' + taxReadout(a.team, a.salary, b.salary) + taxReadout(b.team, b.salary, a.salary) + '</div>');
+        lines.push('<p class="trade-verdict">' + verdict + '</p>');
+        summary.innerHTML = lines.join('');
+      }
+
+      renderSide(0);
+      renderSide(1);
+      renderSummary();
+    }
+  }
+
+  boot();
+})();
+// ---------- Lineup Lab (lineup.html) ----------
+// Self-contained IIFE: appended after the main site bundle's closing wrapper,
+// so it guards on its own root element and no-ops on every other page.
+(function () {
+  const app = document.querySelector('[data-lineup-app]');
+  if (!app) return;
+  const root = document.body.dataset.root || '';
+
+  const escapeHtml = (value) => String(value).replace(/[&<>"]/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  // Faithful JS port of scripts/projections.py team_ovr (regular-season branch),
+  // itself a port of zengm team/ovr.basketball.ts with numPlayersOnCourt == 5:
+  // sort OVRs descending, take the top 10, pad to 10 with 0.0, then
+  //   predictedMOV = -OVR_K + sum_i OVR_A * exp(OVR_B * i) * ovr[i]
+  //   raw = predictedMOV * 50 / 15 + 50, displayed rounded half-up.
+  // tests/test_tools_pages.py regenerates these constants from projections.py
+  // and asserts this formula matches projections.team_ovr on known groups.
+  const OVR_A = 0.3334;
+  const OVR_B = -0.1609;
+  const OVR_K = 102.98;
+  function teamOvrRaw(ovrs) {
+    const top = ovrs.map(Number).sort((a, b) => b - a).slice(0, 10);
+    while (top.length < 10) top.push(0);
+    let mov = -OVR_K;
+    for (let i = 0; i < 10; i += 1) mov += OVR_A * Math.exp(OVR_B * i) * top[i];
+    return mov * 50 / 15 + 50;
+  }
+  const roundOvr = (raw) => Math.floor(raw + 0.5); // Math.round, like Python's floor(x+.5)
+  // ADAPTATION for a hand-picked group: team_ovr rates a full roster, so a bare
+  // five would drag five literal 0.0 bench slots into the weighting and every
+  // lineup would grade absurdly negative. Instead the missing roster spots are
+  // filled at replacement level — simmodel.REPLACEMENT_OVR (40.0), the repo's
+  // "freely-available filler" constant — i.e. your five plus a replacement
+  // bench. The weighting itself is untouched: lineupOvrRaw(five) is exactly
+  // projections.team_ovr(five + [40.0] * 5), which tests assert.
+  const REPLACEMENT_OVR = 40.0;
+  function lineupOvrRaw(ovrs) {
+    const padded = ovrs.slice(0, 10);
+    while (padded.length < 10) padded.push(REPLACEMENT_OVR);
+    return teamOvrRaw(padded);
+  }
+  // team_ovr anchors its scale to scoring margin (raw = MOV * 50/15 + 50), so the
+  // inverse maps a rating back to predicted margin. A custom five has no MOV
+  // history, so BOTH matchup sides are rated this same way (five vs top-ten
+  // roster) and the margin gap feeds the payload's logistic model — the exact
+  // win-probability curve simulate_league uses (see simmodel.sim_client_inputs).
+  const ovrToMov = (raw) => (raw - 50) * 15 / 50;
+
+  // YIQ text-on-color pick (presentational only; server pages get the audited
+  // on_primary from identity.py — app-data carries primary/secondary only).
+  function textOn(hex) {
+    let c = String(hex || '').replace('#', '');
+    if (c.length === 3) c = c.split('').map((x) => x + x).join('');
+    const n = parseInt(c, 16);
+    if (!Number.isFinite(n)) return '#e8ecf1';
+    const yiq = (((n >> 16) & 255) * 299 + (((n >> 8) & 255)) * 587 + (n & 255) * 114) / 1000;
+    return yiq >= 140 ? '#101317' : '#e8ecf1';
+  }
+
+  const fmtMoney = (thousands) => '$' + (thousands / 1000).toFixed(1) + 'M';
+  const fmtPct = (p) => (p * 100).toFixed(1) + '%';
+
+  const slots = [null, null, null, null, null]; // pid or null per slot
+  const inputs = Array.from(app.querySelectorAll('[data-ll-input]'));
+  const summaryEl = app.querySelector('[data-ll-summary]');
+  const matchupsEl = app.querySelector('[data-ll-matchups]');
+
+  let payload = null;
+  let byPid = {};
+  let byTid = {};
+
+  function teamChip(tid) {
+    const team = byTid[tid];
+    if (!team) {
+      const label = tid === -2 ? 'Draft' : 'FA';
+      return '<span class="team-chip ll-chip ll-chip-neutral">' + label + '</span>';
+    }
+    const c = team.colors || {};
+    const style = '--team-primary:' + escapeHtml(c.primary || '#39424f')
+      + ';--team-secondary:' + escapeHtml(c.secondary || '#8899aa')
+      + ';--team-on-primary:' + escapeHtml(textOn(c.primary || '#39424f'));
+    return '<span class="team-chip ll-chip" style="' + style + '"><span class="team-chip-dot"></span>'
+      + escapeHtml(team.abbrev) + '</span>';
+  }
+
+  function optionLabel(p) {
+    const team = byTid[p.tid];
+    const t = team ? team.abbrev : (p.tid === -2 ? 'Draft' : 'FA');
+    return t + ' · ' + p.pos + ' · ' + p.ovr + ' ovr';
+  }
+
+  // --- filterable combobox per slot (ARIA pattern modeled on search.js) ------
+  function comboFor(input) {
+    const slot = Number(input.dataset.slot);
+    const list = document.getElementById(input.getAttribute('aria-controls'));
+    const clearBtn = app.querySelector('[data-ll-clear][data-slot="' + slot + '"]');
+    let selected = -1;
+
+    function close() {
+      list.hidden = true;
+      selected = -1;
+      input.setAttribute('aria-expanded', 'false');
+      input.setAttribute('aria-activedescendant', '');
+    }
+
+    function syncSelected(options) {
+      options.forEach((o, i) => {
+        const on = i === selected;
+        o.classList.toggle('selected', on);
+        o.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      input.setAttribute('aria-activedescendant', selected >= 0 && options[selected] ? options[selected].id : '');
+    }
+
+    function matches() {
+      if (!payload) return [];
+      const q = norm(input.value.trim());
+      const taken = new Set(slots.filter((pid, i) => pid !== null && i !== slot));
+      const pool = payload.players.filter((p) => !taken.has(p.pid));
+      if (!q) return pool.slice(0, 12); // payload is sorted by ovr desc
+      const score = (name) => {
+        const n = norm(name);
+        if (n.startsWith(q)) return 0;
+        if (n.split(' ').some((w) => w.startsWith(q))) return 1;
+        if (n.includes(q)) return 2;
+        return -1;
+      };
+      const found = [];
+      pool.forEach((p) => {
+        const s = score(p.name);
+        if (s >= 0) found.push([s, p]);
+      });
+      found.sort((a, b) => a[0] - b[0] || b[1].ovr - a[1].ovr || a[1].name.localeCompare(b[1].name));
+      return found.slice(0, 12).map((f) => f[1]);
+    }
+
+    function open() {
+      const found = matches();
+      if (!found.length) {
+        list.innerHTML = '<div class="search-empty" role="option" aria-disabled="true">No matches.</div>';
+      } else {
+        list.innerHTML = found.map((p, i) =>
+          '<button type="button" class="ll-option" id="ll-opt-' + slot + '-' + i + '" role="option" aria-selected="false" data-pid="' + p.pid + '">'
+          + '<span>' + escapeHtml(p.name) + '</span><span class="muted">' + escapeHtml(optionLabel(p)) + '</span></button>').join('');
+      }
+      list.hidden = false;
+      selected = -1;
+      input.setAttribute('aria-expanded', 'true');
+      input.setAttribute('aria-activedescendant', '');
+    }
+
+    function pickPid(pid) {
+      slots[slot] = pid;
+      if (byPid[pid]) input.value = byPid[pid].name; // even while focused (renderPicks skips the active input)
+      close();
+      syncHash();
+      render();
+    }
+
+    input.addEventListener('input', open);
+    input.addEventListener('focus', () => { if (payload) open(); });
+    input.addEventListener('keydown', (event) => {
+      const options = Array.from(list.querySelectorAll('[role="option"][data-pid]'));
+      if (event.key === 'Escape') { close(); return; }
+      if (event.key === 'ArrowDown' && list.hidden) { event.preventDefault(); open(); return; }
+      if (!options.length) return;
+      if (event.key === 'ArrowDown') { event.preventDefault(); selected = Math.min(selected + 1, options.length - 1); }
+      else if (event.key === 'ArrowUp') { event.preventDefault(); selected = Math.max(selected - 1, 0); }
+      else if (event.key === 'Enter') {
+        event.preventDefault();
+        const target = options[Math.max(0, selected)];
+        if (target) pickPid(Number(target.dataset.pid));
+        return;
+      } else { return; }
+      syncSelected(options);
+    });
+    list.addEventListener('click', (event) => {
+      const option = event.target.closest('[data-pid]');
+      if (option) pickPid(Number(option.dataset.pid));
+    });
+    document.addEventListener('click', (event) => {
+      if (!input.contains(event.target) && !list.contains(event.target)) close();
+    });
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        slots[slot] = null;
+        input.value = '';
+        syncHash();
+        render();
+        input.focus();
+      });
+    }
+  }
+
+  // --- shareable state: pids comma-joined in the hash (slot order kept) ------
+  function syncHash() {
+    const pids = slots.filter((pid) => pid !== null);
+    history.replaceState(null, '', pids.length ? '#' + pids.join(',') : location.pathname + location.search);
+  }
+
+  function readHash() {
+    const parts = (location.hash || '').replace(/^#/, '').split(',').filter(Boolean);
+    parts.slice(0, 5).forEach((raw, i) => {
+      const pid = Number(raw);
+      if (byPid[pid]) slots[i] = pid;
+    });
+  }
+
+  // --- rendering -------------------------------------------------------------
+  function renderPicks() {
+    slots.forEach((pid, i) => {
+      const pickEl = app.querySelector('[data-ll-pick="' + i + '"]');
+      const clearBtn = app.querySelector('[data-ll-clear][data-slot="' + i + '"]');
+      const p = pid !== null ? byPid[pid] : null;
+      if (!p) {
+        pickEl.innerHTML = '<span class="muted">Empty slot</span>';
+        if (clearBtn) clearBtn.hidden = true;
+        return;
+      }
+      if (inputs[i] && document.activeElement !== inputs[i]) inputs[i].value = p.name;
+      pickEl.innerHTML = teamChip(p.tid)
+        + ' <span class="ll-pick-meta">' + escapeHtml(p.pos) + ' · <strong>' + p.ovr + '</strong> ovr · '
+        + escapeHtml(fmtMoney(p.salary)) + (p.exp ? ' thru ' + p.exp : '') + '</span>';
+      if (clearBtn) clearBtn.hidden = false;
+    });
+  }
+
+  function renderSummary(picked, matchupRows) {
+    const count = picked.length;
+    const ovrs = picked.map((p) => p.ovr);
+    const ovr = count ? roundOvr(lineupOvrRaw(ovrs)) : null;
+    const salary = picked.reduce((sum, p) => sum + (p.salary || 0), 0);
+    const taxLine = payload.finance.tax_line;
+    const overTax = salary > taxLine;
+    const gap = Math.abs(salary - taxLine);
+    let avgWin = null;
+    if (matchupRows.length) {
+      avgWin = matchupRows.reduce((sum, r) => sum + (r.home + r.away) / 2, 0) / matchupRows.length;
+    }
+    const tile = (label, value, sub, cls) =>
+      '<div class="ll-tile' + (cls ? ' ' + cls : '') + '"><span class="ll-tile-label">' + label + '</span>'
+      + '<strong>' + value + '</strong><span class="muted">' + sub + '</span></div>';
+    summaryEl.innerHTML = '<div class="ll-tiles">'
+      + tile('Lineup OVR', ovr === null ? '—' : String(ovr),
+             (count === 5 ? 'your five' : count + ' of 5 picked — open spots') + ' + a replacement-level bench', '')
+      + tile('Total salary', fmtMoney(salary),
+             fmtMoney(gap) + (overTax ? ' over' : ' under') + ' the ' + fmtMoney(taxLine) + ' tax line',
+             overTax ? 'll-over-tax' : '')
+      + tile('Average win %', avgWin === null ? '—' : fmtPct(avgWin),
+             avgWin === null ? 'pick five players' : 'home/road average vs all ' + matchupRows.length + ' rosters', '')
+      + '</div>';
+  }
+
+  function matchupData(picked) {
+    if (picked.length < 5 || !payload) return [];
+    const k = payload.sim.logistic_k;
+    const hca = payload.sim.hca;
+    const mine = ovrToMov(lineupOvrRaw(picked.map((p) => p.ovr)));
+    return payload.teams.map((team) => {
+      const roster = payload.players.filter((p) => p.tid === team.tid);
+      const raw = teamOvrRaw(roster.map((p) => p.ovr));
+      const diff = mine - ovrToMov(raw);
+      return {
+        team: team,
+        ovr: roundOvr(raw),
+        home: 1 / (1 + Math.exp(-(diff + hca) * k)),
+        away: 1 / (1 + Math.exp(-(diff - hca) * k)),
+      };
+    }).sort((a, b) => b.ovr - a.ovr || a.team.tid - b.team.tid);
+  }
+
+  function renderMatchups(rows) {
+    if (!rows.length) {
+      matchupsEl.innerHTML = '<p class="muted">Pick five players to see the matchup board.</p>';
+      return;
+    }
+    const bar = (p) => '<span class="ll-bar" aria-hidden="true"><i style="width:'
+      + Math.max(2, Math.min(100, p * 100)).toFixed(1) + '%"></i></span>';
+    let html = '<div class="table-wrap"><table class="ll-table">'
+      + '<caption class="sr-only">Projected win probability for your lineup against each roster</caption>'
+      + '<thead><tr><th scope="col">Opponent</th><th scope="col">Their OVR</th>'
+      + '<th scope="col">Win % at home</th><th scope="col">Win % on road</th></tr></thead><tbody>';
+    rows.forEach((r) => {
+      html += '<tr><td>' + teamChip(r.team.tid) + ' <span class="ll-opp-name">'
+        + escapeHtml(r.team.region + ' ' + r.team.name) + '</span></td>'
+        + '<td>' + r.ovr + '</td>'
+        + '<td>' + bar(r.home) + ' ' + fmtPct(r.home) + '</td>'
+        + '<td>' + bar(r.away) + ' ' + fmtPct(r.away) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+    matchupsEl.innerHTML = html;
+  }
+
+  function render() {
+    if (!payload) return;
+    renderPicks();
+    const picked = slots.filter((pid) => pid !== null).map((pid) => byPid[pid]);
+    const rows = matchupData(picked);
+    renderSummary(picked, rows);
+    renderMatchups(rows);
+  }
+
+  fetch(root + 'assets/app-data.json')
+    .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then((data) => {
+      payload = data;
+      data.players.forEach((p) => { byPid[p.pid] = p; });
+      data.teams.forEach((t) => { byTid[t.tid] = t; });
+      inputs.forEach(comboFor);
+      readHash();
+      render();
+    })
+    .catch(() => {
+      summaryEl.innerHTML = '<p class="muted">Could not load player data (assets/app-data.json). Reload to try again.</p>';
+    });
+})();
+// ---------- Win-Out Machine (simulator.html) ----------
+// Self-contained IIFE: appended after the main site bundle's closing wrapper,
+// so it guards on its own root element and no-ops on every other page.
+(function () {
+  const app = document.querySelector('[data-wo-app]');
+  if (!app) return;
+  const root = document.body.dataset.root || '';
+
+  const N_SIMS = 5000;
+  // Deterministic PRNG. The stream is mulberry32 seeded with
+  //   seed = 20290101 ^ fnv1a(lockString)
+  // where 20290101 is the same constant the server-side Monte Carlo seeds with
+  // (simmodel.simulate_league) and lockString is the canonical picks encoding
+  // ("3h,17a", also the URL hash). Identical picks therefore always replay the
+  // identical 5,000 simulations; changing any pick starts a fresh but equally
+  // reproducible stream.
+  function fnv1a(str) {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < str.length; i += 1) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return h >>> 0;
+  }
+  function mulberry32(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Client-side port of core.heat_style: red (worst) -> green (best) tint.
+  // Same hsla convention as the server-rendered heat cells (exempt from theming).
+  function heatStyle(value, lo, hi, direction) {
+    if (!direction || value === null || value === undefined) return '';
+    const v = Number(value);
+    if (!Number.isFinite(v) || hi - lo <= 1e-12) return '';
+    let frac = Math.max(0, Math.min(1, (v - lo) / (hi - lo)));
+    if (direction < 0) frac = 1 - frac;
+    const hue = 4 + frac * 126;
+    return 'background-color: hsla(' + hue.toFixed(0) + ', 55%, 41%, .45)';
+  }
+
+  const escapeHtml = (value) => String(value).replace(/[&<>"]/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fmtPct = (p) => (p * 100).toFixed(1) + '%';
+
+  const gamesEl = app.querySelector('[data-wo-games]');
+  const oddsEl = app.querySelector('[data-wo-odds]');
+  const countEl = app.querySelector('[data-wo-count]');
+  const resetBtn = app.querySelector('[data-wo-reset]');
+
+  let payload = null;
+  let teams = [];        // payload team entries, index == tid order of tidList
+  let tidList = [];      // tids in payload order
+  let tidIndex = {};     // tid -> index into tidList
+  let schedule = [];     // [[day, homeTid, awayTid], ...] chronological
+  let pHome = [];        // per-game home-win probability (model, unlocked)
+  let state = [];        // per-game: 's' (simulate) | 'h' (home locked) | 'a' (away locked)
+  let pending = false;
+
+  // --- lock-state <-> URL hash ("3h,17a" — game index + winner) --------------
+  function lockString() {
+    const parts = [];
+    state.forEach((s, i) => { if (s !== 's') parts.push(i + s); });
+    return parts.join(',');
+  }
+
+  function syncHash() {
+    const str = lockString();
+    history.replaceState(null, '', str ? '#' + str : location.pathname + location.search);
+  }
+
+  function readHash() {
+    (location.hash || '').replace(/^#/, '').split(',').forEach((part) => {
+      const m = /^(\d+)([ha])$/.exec(part.trim());
+      if (m) {
+        const idx = Number(m[1]);
+        if (idx >= 0 && idx < state.length) state[idx] = m[2];
+      }
+    });
+  }
+
+  // --- Monte Carlo over the unlocked games -----------------------------------
+  // Mirrors simmodel.simulate_league's regular-season loop over the payload's
+  // strengths: p(home) = 1 / (1 + exp(-(diff + hca) * k)), random tie-break on
+  // equal win totals, top four seeds make the playoffs.
+  function runSims() {
+    const n = tidList.length;
+    const baseWins = new Float64Array(n);
+    teams.forEach((t, i) => { baseWins[i] = t.record.w; });
+    const open = [];
+    schedule.forEach((g, i) => {
+      const hi = tidIndex[g[1]];
+      const ai = tidIndex[g[2]];
+      if (state[i] === 'h') baseWins[hi] += 1;
+      else if (state[i] === 'a') baseWins[ai] += 1;
+      else open.push([hi, ai, pHome[i]]);
+    });
+
+    const rng = mulberry32((20290101 ^ fnv1a(lockString())) >>> 0);
+    const playoffCount = new Float64Array(n);
+    const winTotal = new Float64Array(n);
+    const seedCounts = [];
+    for (let i = 0; i < n; i += 1) seedCounts.push(new Float64Array(n));
+
+    const wins = new Float64Array(n);
+    const order = new Array(n);
+    const tie = new Float64Array(n);
+    for (let s = 0; s < N_SIMS; s += 1) {
+      wins.set(baseWins);
+      for (let g = 0; g < open.length; g += 1) {
+        if (rng() < open[g][2]) wins[open[g][0]] += 1;
+        else wins[open[g][1]] += 1;
+      }
+      for (let i = 0; i < n; i += 1) { order[i] = i; tie[i] = rng(); }
+      order.sort((a, b) => wins[b] - wins[a] || tie[a] - tie[b]);
+      for (let seed = 0; seed < n; seed += 1) {
+        const i = order[seed];
+        seedCounts[i][seed] += 1;
+        if (seed < 4) playoffCount[i] += 1;
+        winTotal[i] += wins[i];
+      }
+    }
+
+    return teams.map((t, i) => ({
+      team: t,
+      expWins: winTotal[i] / N_SIMS,
+      playoff: playoffCount[i] / N_SIMS,
+      seeds: Array.from(seedCounts[i], (c) => c / N_SIMS),
+    }));
+  }
+
+  // --- rendering -------------------------------------------------------------
+  function teamDot(tid) {
+    const t = teams[tidIndex[tid]];
+    const color = t && t.colors ? t.colors.chart : '#8899aa';
+    return '<i class="wo-dot" style="background:' + escapeHtml(color) + '" aria-hidden="true"></i>';
+  }
+
+  function abbrev(tid) {
+    const t = teams[tidIndex[tid]];
+    return t ? t.abbrev : 'T' + tid;
+  }
+
+  function renderBoard() {
+    if (!schedule.length) {
+      gamesEl.innerHTML = '<p class="muted">No remaining games — the regular season is decided.</p>';
+      return;
+    }
+    const byDay = new Map();
+    schedule.forEach((g, i) => {
+      if (!byDay.has(g[0])) byDay.set(g[0], []);
+      byDay.get(g[0]).push(i);
+    });
+    let html = '';
+    let first = true;
+    byDay.forEach((idxs, day) => {
+      html += '<details class="wo-day"' + (first ? ' open' : '') + '><summary>Day ' + day
+        + ' <span class="muted">' + idxs.length + (idxs.length === 1 ? ' game' : ' games') + '</span></summary>'
+        + '<div class="wo-day-games">';
+      idxs.forEach((i) => {
+        const g = schedule[i];
+        const away = abbrev(g[2]);
+        const home = abbrev(g[1]);
+        const seg = (value, label, aria) =>
+          '<label class="wo-seg"><input type="radio" name="wo-g' + i + '" value="' + value + '"'
+          + ' data-game="' + i + '"' + (state[i] === value ? ' checked' : '') + ' aria-label="' + escapeHtml(aria) + '">'
+          + '<span>' + escapeHtml(label) + '</span></label>';
+        html += '<fieldset class="wo-game"><legend class="sr-only">' + escapeHtml(away + ' at ' + home + ', day ' + day) + '</legend>'
+          + '<span class="wo-matchup">' + teamDot(g[2]) + escapeHtml(away)
+          + ' <span class="muted">@</span> ' + teamDot(g[1]) + escapeHtml(home) + '</span>'
+          + '<span class="wo-segs" role="radiogroup" aria-label="' + escapeHtml('Result of ' + away + ' at ' + home) + '">'
+          + seg('a', away, away + ' wins')
+          + seg('s', 'Sim', 'Simulate ' + away + ' at ' + home)
+          + seg('h', home, home + ' wins')
+          + '</span>'
+          + '<span class="wo-hint muted">' + escapeHtml(home) + ' ' + Math.round(pHome[i] * 100) + '%</span>'
+          + '</fieldset>';
+      });
+      html += '</div></details>';
+      first = false;
+    });
+    gamesEl.innerHTML = html;
+  }
+
+  function syncBoardChecks() {
+    gamesEl.querySelectorAll('input[data-game]').forEach((input) => {
+      input.checked = state[Number(input.dataset.game)] === input.value;
+    });
+  }
+
+  function renderOdds() {
+    const rows = runSims().sort((a, b) => b.expWins - a.expWins || b.playoff - a.playoff
+      || a.team.tid - b.team.tid);
+    const n = tidList.length;
+    let maxSeed = 0;
+    rows.forEach((r) => r.seeds.forEach((p) => { if (p > maxSeed) maxSeed = p; }));
+    let html = '<div class="table-wrap"><table class="wo-table">'
+      + '<caption class="sr-only">Re-simulated playoff odds and seed distribution per team</caption>'
+      + '<thead><tr><th scope="col">Team</th><th scope="col">Now</th><th scope="col">Proj W</th>'
+      + '<th scope="col">Playoff %</th>';
+    for (let s = 1; s <= n; s += 1) html += '<th scope="col" class="wo-seed-th">' + s + '</th>';
+    html += '</tr></thead><tbody>';
+    rows.forEach((r) => {
+      const t = r.team;
+      html += '<tr><th scope="row" class="wo-team-th">' + teamDot(t.tid) + escapeHtml(t.abbrev) + '</th>'
+        + '<td>' + t.record.w + '-' + t.record.l + '</td>'
+        + '<td>' + r.expWins.toFixed(1) + '</td>'
+        + '<td style="' + heatStyle(r.playoff, 0, 1, 1) + '">' + fmtPct(r.playoff) + '</td>';
+      r.seeds.forEach((p) => {
+        // Blank out sub-0.5% cells (matches the server's seed-table convention),
+        // scale the tint to the table's most likely seed so the mode pops green.
+        if (p < 0.005) {
+          html += '<td class="wo-seed-cell muted">·</td>';
+        } else {
+          html += '<td class="wo-seed-cell" style="' + heatStyle(p, 0, maxSeed, 1) + '">'
+            + Math.round(p * 100) + '</td>';
+        }
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>'
+      + '<p class="tool-note muted">Seed columns show the share of simulations ending at each seed, in percent. '
+      + 'Top four seeds make the playoffs.</p>';
+    oddsEl.innerHTML = html;
+    const locked = state.filter((s) => s !== 's').length;
+    if (countEl) countEl.textContent = locked ? locked + ' of ' + state.length + ' games locked' : '';
+  }
+
+  function scheduleUpdate() {
+    if (pending) return;
+    pending = true;
+    // Batch rapid pick changes into one 5,000-sim run per tick. setTimeout, not
+    // requestAnimationFrame: rAF stalls in hidden/background tabs and the odds
+    // would silently never refresh.
+    window.setTimeout(() => {
+      pending = false;
+      renderOdds();
+    }, 30);
+  }
+
+  gamesEl.addEventListener('change', (event) => {
+    const input = event.target.closest('input[data-game]');
+    if (!input) return;
+    state[Number(input.dataset.game)] = input.value;
+    syncHash();
+    scheduleUpdate();
+  });
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      state = state.map(() => 's');
+      syncHash();
+      syncBoardChecks();
+      scheduleUpdate();
+    });
+  }
+
+  fetch(root + 'assets/app-data.json')
+    .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then((data) => {
+      payload = data;
+      teams = data.teams;
+      tidList = teams.map((t) => t.tid);
+      tidList.forEach((tid, i) => { tidIndex[tid] = i; });
+      schedule = data.sim.schedule;
+      const k = data.sim.logistic_k;
+      const hca = data.sim.hca;
+      const strengths = data.sim.strengths;
+      pHome = schedule.map((g) => {
+        const diff = (strengths[String(g[1])] || 0) - (strengths[String(g[2])] || 0) + hca;
+        return 1 / (1 + Math.exp(-diff * k));
+      });
+      state = schedule.map(() => 's');
+      readHash();
+      renderBoard();
+      renderOdds();
+    })
+    .catch(() => {
+      gamesEl.innerHTML = '<p class="muted">Could not load the schedule (assets/app-data.json). Reload to try again.</p>';
+      oddsEl.innerHTML = '<p class="muted">—</p>';
+    });
+})();
+// ---------- SMP Wrapped deck (wrapped.html only) ----------
+// Progressive enhancement over a plain scrolling page: opts <html> into
+// scroll-snap, builds a dots rail, and adds keyboard slide navigation.
+// Honors prefers-reduced-motion (instant jumps instead of smooth scrolling).
+(function () {
+  const deck = document.querySelector('[data-wrapped-deck]');
+  if (!deck) return;
+  const slides = Array.from(deck.querySelectorAll('.wr-slide'));
+  if (!slides.length) return;
+
+  document.documentElement.classList.add('wr-snap');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const behavior = () => (reduceMotion.matches ? 'auto' : 'smooth');
+
+  // dots rail
+  const rail = document.createElement('nav');
+  rail.className = 'wr-dots';
+  rail.setAttribute('aria-label', 'Wrapped slides');
+  const dots = slides.map((slide, index) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'wr-dot';
+    const title = slide.dataset.wrTitle || `Slide ${index + 1}`;
+    dot.setAttribute('aria-label', title);
+    dot.title = title;
+    dot.addEventListener('click', () => goTo(index));
+    rail.appendChild(dot);
+    return dot;
+  });
+  document.body.appendChild(rail);
+
+  let current = 0;
+  function setActive(index) {
+    current = index;
+    dots.forEach((dot, i) => {
+      if (i === index) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
+    });
+  }
+  function goTo(index) {
+    const target = slides[Math.max(0, Math.min(slides.length - 1, index))];
+    if (target) target.scrollIntoView({ behavior: behavior(), block: 'start' });
+  }
+  setActive(0);
+
+  if ('IntersectionObserver' in window) {
+    const visible = new Map();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => visible.set(entry.target, entry.intersectionRatio));
+      let bestIndex = current;
+      let bestRatio = 0;
+      slides.forEach((slide, i) => {
+        const ratio = visible.get(slide) || 0;
+        if (ratio > bestRatio) { bestRatio = ratio; bestIndex = i; }
+      });
+      if (bestRatio > 0) setActive(bestIndex);
+    }, { threshold: [0.25, 0.5, 0.75] });
+    slides.forEach((slide) => observer.observe(slide));
+  }
+
+  // keyboard: arrows / PageUp / PageDown step one slide at a time
+  document.addEventListener('keydown', (event) => {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    const target = event.target;
+    if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' || target.isContentEditable)) return;
+    if (event.key === 'ArrowDown' || event.key === 'PageDown') {
+      event.preventDefault();
+      goTo(current + 1);
+    } else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+      event.preventDefault();
+      goTo(current - 1);
+    }
+  });
 })();

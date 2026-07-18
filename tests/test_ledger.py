@@ -76,12 +76,21 @@ class OddsLedgerTests(unittest.TestCase):
         update_odds_ledger(_export(2031, 1, 5), _odds(), path=self.path)
         with open(self.path, "rb") as handle:
             before = handle.read()
-        appended = update_odds_ledger(_export(2031, 1, 5), _odds(po=0.9), path=self.path)
+        appended = update_odds_ledger(_export(2031, 1, 5), _odds(), path=self.path)
         self.assertFalse(appended)
         with open(self.path, "rb") as handle:
             after = handle.read()
         self.assertEqual(before, after)  # byte-identical: idempotent rebuilds
         self.assertEqual(len(load_odds_history(self.path)), 1)
+
+    def test_duplicate_key_refreshes_changed_odds(self):
+        # Same (season, phase, games_played) but different odds — e.g. a
+        # re-export after a preseason roster move: refresh in place, no dupe.
+        update_odds_ledger(_export(2031, 1, 5), _odds(), path=self.path)
+        update_odds_ledger(_export(2031, 1, 5), _odds(po=0.9), path=self.path)
+        history = load_odds_history(self.path)
+        self.assertEqual(len(history), 1)
+        self.assertAlmostEqual(history[0]["teams"]["0"]["po"], 0.9)
 
     def test_older_key_noop(self):
         update_odds_ledger(_export(2031, 1, 12), _odds(), path=self.path)

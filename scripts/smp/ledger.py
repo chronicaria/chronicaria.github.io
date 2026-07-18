@@ -104,9 +104,23 @@ def update_odds_ledger(data: dict[str, Any], odds: dict[str, Any], path: str = D
     if not snapshot["teams"]:
         return False
     history = load_odds_history(path)
-    if history and _snapshot_key(snapshot) <= max(_snapshot_key(snap) for snap in history):
-        return False
-    history.append(snapshot)
+    if history:
+        latest_key = max(_snapshot_key(snap) for snap in history)
+        if _snapshot_key(snapshot) < latest_key:
+            return False
+        if _snapshot_key(snapshot) == latest_key:
+            # Same key: refresh the entry in place if the odds changed (e.g. a
+            # re-export at the same day after a roster move). Same export ->
+            # identical snapshot -> byte-identical no-op.
+            last = history[-1]
+            if _snapshot_key(last) == _snapshot_key(snapshot) and last != snapshot:
+                history[-1] = snapshot
+            else:
+                return False
+        else:
+            history.append(snapshot)
+    else:
+        history.append(snapshot)
     directory = os.path.dirname(path)
     if directory:
         os.makedirs(directory, exist_ok=True)

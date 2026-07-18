@@ -17,3 +17,17 @@
     });
   }
 
+  // ---------- nav dropdowns: one open at a time + Escape to close ----------
+  const navDropdowns = Array.from(document.querySelectorAll('.primary-nav details.nav-dropdown'));
+  navDropdowns.forEach((details) => {
+    details.addEventListener('toggle', () => {
+      if (details.open) {
+        navDropdowns.forEach((other) => { if (other !== details) other.removeAttribute('open'); });
+      }
+    });
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    navDropdowns.forEach((details) => details.removeAttribute('open'));
+  });
+

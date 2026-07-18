@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-import argparse
-import html
-import json
-import random
-import math
-import re
-import shutil
-import unicodedata
+"""Per-player pages.
+
+One unified page per player with a sticky section rail (Overview · Stats ·
+Game Log · Ratings · Contract & Injuries) and scroll-spy (static/js/player.js).
+The old ``-stats`` / ``-log`` / ``-ratings`` URLs are kept alive as tiny
+meta-refresh stubs that forward to the unified page's anchors.
+"""
+
 from collections import defaultdict
-from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from ..core import (
     ALL_PLAYERS_BY_PID,
@@ -54,7 +53,9 @@ from ..core import (
     table_html,
     td,
     team_abbrev_for_tid,
+    team_full_for_tid,
     team_label,
+    team_url,
     th,
     total_2p,
     total_2pa,
@@ -66,65 +67,222 @@ from ..simmodel import _player_projection
 
 from ..charts import development_chart_html, subrating_grid_html
 
+from ..identity import crest_svg, monogram_svg, team_css_vars, team_identity
+
+from ..portraits import portrait_html as _portraits_portrait_html
+
+from ..derived import fantasy_pts, led_league, player_shot_zones, SHOT_ZONES, ZONE_LABELS
+
+
+# Basketball GM skill codes -> plain-English labels (chip tooltips).
+SKILL_LABELS = {
+    "3": "Three-point shooter",
+    "A": "Athlete",
+    "B": "Ball handler",
+    "Di": "Interior defender",
+    "Dp": "Perimeter defender",
+    "Po": "Post scorer",
+    "Ps": "Passer",
+    "R": "Rebounder",
+    "V": "Volume scorer",
+}
+
+# Trophy case: award type string -> (crest kind, shelf, short label).
+# Shelf 0 = major hardware, shelf 1 = season honors; anything unmapped
+# (stat titles, Hall of Fame) lands on a third text-chip shelf.
+AWARD_CRESTS = {
+    "Won Championship": ("champion", 0, "Champion"),
+    "Most Valuable Player": ("mvp", 0, "MVP"),
+    "Finals MVP": ("finals_mvp", 0, "Finals MVP"),
+    "Semifinals MVP": ("sfmvp", 0, "Semis MVP"),
+    "Defensive Player of the Year": ("dpoy", 0, "DPOY"),
+    "Rookie of the Year": ("roy", 0, "ROY"),
+    "Sixth Man of the Year": ("smoy", 0, "6MOY"),
+    "Most Improved Player": ("mip", 0, "MIP"),
+    "First Team All-League": ("all_league_1", 1, "All-League 1st"),
+    "Second Team All-League": ("all_league_2", 1, "All-League 2nd"),
+    "Third Team All-League": ("all_league_3", 1, "All-League 3rd"),
+    "First Team All-Defensive": ("all_defensive", 1, "All-Defensive 1st"),
+    "Second Team All-Defensive": ("all_defensive", 1, "All-Defensive 2nd"),
+    "Third Team All-Defensive": ("all_defensive", 1, "All-Defensive 3rd"),
+    "All-Rookie Team": ("all_rookie", 1, "All-Rookie"),
+}
+
+# Display order within the crest shelves (dict order above is the source of truth).
+_AWARD_ORDER = {name: i for i, name in enumerate(AWARD_CRESTS)}
+
+# led_league(data) is tiny but called for every player page; memoize per export.
+# The cache pins the export dict itself so a recycled id() can never alias.
+_LED_CACHE: dict[int, tuple[dict[str, Any], dict[int, dict[str, float]]]] = {}
+
+
+def _led_index(data: dict[str, Any] | None) -> dict[int, dict[str, float]]:
+    if not data:
+        return {}
+    cached = _LED_CACHE.get(id(data))
+    if cached is None or cached[0] is not data:
+        _LED_CACHE.clear()  # one export per build; don't hoard stale ones
+        cached = (data, led_league(data))
+        _LED_CACHE[id(data)] = cached
+    return cached[1]
+
+
+def _led_hits(led: dict[int, dict[str, float]], season: Any, values: dict[str, float | None]) -> set[str]:
+    """Which seasonLeaders keys this row's values tie exactly (they led the league)."""
+    if not isinstance(season, int):
+        return set()
+    leaders = led.get(season) or {}
+    hits: set[str] = set()
+    for key, value in values.items():
+        lead = leaders.get(key)
+        if lead is None or value is None:
+            continue
+        if abs(float(value) - float(lead)) <= 1e-6:
+            hits.add(key)
+    return hits
+
+
+def _led_td(content: Any, sort: Any, hit: bool, label: str, cls: str = "") -> str:
+    """A td() that gets the gold led-league treatment when ``hit``."""
+    if not hit:
+        return td(content, sort=sort, cls=cls)
+    body = (
+        f'{content}<span class="led-star" title="Led the league in {esc(label)}" aria-hidden="true">★</span>'
+        f'<span class="sr-only">Led the league in {esc(label)}</span>'
+    )
+    classes = f"led-league {cls}".strip()
+    return td(body, sort=sort, cls=classes)
+
 
 def detail_item(label: str, value: str) -> str:
     return f'<div class="detail-item"><span>{esc(label)}</span><strong>{value}</strong></div>'
 
 
-def player_summary_rows(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], season: int, start_season: int) -> str:
-    regular = regular_stats_since(player, start_season)
-    current = [s for s in regular if s.get("season") == season]
-    current_stat = current[-1] if current else (regular[-1] if regular else {})
-    career = combine_stat_rows(regular) if regular else {}
+def _delta_titled(player: dict[str, Any], key: str, rating: dict[str, Any]) -> str:
+    """rating_delta_html with a 'vs last season' tooltip on the delta readout."""
+    return f'<span title="Change vs last season">{rating_delta_html(player, key, rating)}</span>'
 
-    def row(label: str, stat: dict[str, Any]) -> str:
-        if not stat:
-            values = [label] + ["—"] * 8
-            sorts = [label] + [None] * 8
+
+def player_portrait(player: dict[str, Any], cls: str = "portrait", root: str = "../", size: int = 120) -> str:
+    """portraits.portrait_html with a local guard: its monogram fallback currently
+    passes ``size=`` to identity.monogram_svg (which takes ``css_class``); until
+    that is fixed upstream, render the roundel directly rather than crash."""
+    try:
+        return _portraits_portrait_html(player, cls=cls, root=root, size=size)
+    except TypeError:
+        mono = monogram_svg(initials(player), player.get("tid"), jersey_number=player.get("jerseyNumber"))
+        return (
+            f'<span class="{esc(cls)} portrait-monogram" role="img" '
+            f'aria-label="{esc(player_name(player))}">{mono}</span>'
+        )
+
+
+# ---------------------------------------------------------------------------
+# Trading-card hero
+# ---------------------------------------------------------------------------
+
+
+def _career_team_dots(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], root: str) -> str:
+    """One color dot per franchise the player has suited up for (statsTids order)."""
+    seen: list[int] = []
+    for tid in player.get("statsTids") or []:
+        tid = safe_int(tid, -1)
+        if tid >= 0 and tid not in seen:
+            seen.append(tid)
+    if not seen:
+        return ""
+    cur_tid = safe_int(player.get("tid"), RETIRED_TID)
+    dots = []
+    for tid in seen:
+        ident = team_identity(tid)
+        name = team_full_for_tid(tid, teams_by_tid)
+        cur = " career-dot--now" if tid == cur_tid else ""
+        style = f"background:{ident['primary']};box-shadow:inset 0 0 0 2px {ident['secondary']}"
+        team = teams_by_tid.get(tid)
+        if team:
+            dots.append(
+                f'<a class="career-dot{cur}" href="{team_url(team, root)}" '
+                f'style="{style}" title="{esc(name)}"><span class="sr-only">{esc(name)}</span></a>'
+            )
         else:
-            gp = stat_gp(stat)
-            trb_pg = (float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0
-            values = [
-                label,
-                fmt_number(gp, 0),
-                fmt_number(per_game(stat, "min"), 1),
-                fmt_number(per_game(stat, "pts"), 1),
-                fmt_number(trb_pg, 1),
-                fmt_number(per_game(stat, "ast"), 1),
-                fmt_pct(made_pct(stat.get("fg"), stat.get("fga"))),
-                fmt_pct(made_pct(stat.get("tp"), stat.get("tpa"))),
-                fmt_pct(made_pct(stat.get("ft"), stat.get("fta"))),
-                fmt_pct(ts_pct(stat)),
-                fmt_number(stat.get("per"), 1),
-                fmt_number((float(stat.get("ows") or 0) + float(stat.get("dws") or 0)), 1),
-            ]
-            sorts = [label, gp, per_game(stat, "min"), per_game(stat, "pts"), trb_pg, per_game(stat, "ast"), made_pct(stat.get("fg"), stat.get("fga")), made_pct(stat.get("tp"), stat.get("tpa")), made_pct(stat.get("ft"), stat.get("fta")), ts_pct(stat), stat.get("per"), (float(stat.get("ows") or 0) + float(stat.get("dws") or 0))]
-        return "<tr>" + "".join(td(v, sort=s) for v, s in zip(values, sorts)) + "</tr>"
+            dots.append(
+                f'<span class="career-dot{cur}" style="{style}" title="{esc(name)}">'
+                f'<span class="sr-only">{esc(name)}</span></span>'
+            )
+    return (
+        '<div class="career-dots"><span class="career-dots-label">Career teams</span>'
+        + "".join(dots)
+        + "</div>"
+    )
 
-    headers = ["Summary", "G", "MP", "PTS", "TRB", "AST", "FG%", "3P%", "FT%", "TS%", "PER", "WS"]
+
+def trading_card_html(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], season: int, root: str = "../") -> str:
+    tid = safe_int(player.get("tid"), RETIRED_TID)
+    on_team = tid >= 0
+    rating = latest_rating(player, season)
+    name = player_name(player)
+
+    # Free agents / prospects get the neutral silver card (vars set in CSS).
+    card_cls = "player-card" if on_team else "player-card player-card--fa"
+    vars_attr = f' style="{team_css_vars(tid)}"' if on_team else ""
+
+    number = player.get("jerseyNumber")
+    number_txt = str(number).strip() if number not in (None, "") else ""
+    numeral = (
+        f'<span class="player-card-num" aria-hidden="true">{esc(number_txt)}</span>'
+        if number_txt
+        else ""
+    )
+
+    facts = []
+    if number_txt:
+        facts.append(f"#{esc(number_txt)}")
+    facts.append(esc(rating.get("pos", "—")))
+    if on_team:
+        team = teams_by_tid.get(tid)
+        facts.append(
+            f'<a class="player-card-team" href="{team_url(team, root)}">{esc(team_full_for_tid(tid, teams_by_tid))}</a>'
+            if team
+            else esc(team_full_for_tid(tid, teams_by_tid))
+        )
+    elif tid == FREE_AGENT_TID:
+        facts.append(f'<a class="player-card-team" href="{root}free-agency.html">Free Agent</a>')
+    else:
+        facts.append("Draft prospect")
+    facts.append(f"Age {age(player, season)}")
+    facts_html = ' <span class="player-card-sep">·</span> '.join(facts)
+
+    skills = rating.get("skills") or []
+    skills_html = ""
+    if skills:
+        chips = "".join(
+            f'<span class="player-card-skill" title="{esc(SKILL_LABELS.get(s, s))}">{esc(s)}</span>'
+            for s in skills
+        )
+        skills_html = f'<div class="player-card-skills">{chips}</div>'
+
+    dots_html = _career_team_dots(player, teams_by_tid, root)
+    foot = f'<div class="player-card-foot">{dots_html}</div>' if dots_html else ""
+
     return f"""
-    <section class="card compact-card">
-      <div class="table-wrap summary-wrap">
-        <table>
-          <thead><tr>{''.join(th(h) for h in headers)}</tr></thead>
-          <tbody>
-            {row(str(season), current_stat)}
-            {row('Career', career)}
-          </tbody>
-        </table>
+    <section class="{card_cls}"{vars_attr}>
+      <div class="player-card-face">
+        {numeral}
+        <div class="player-card-body">
+          <p class="eyebrow player-card-eyebrow">Player profile</p>
+          <h1>{esc(name)}</h1>
+          <p class="player-card-facts">{facts_html}</p>
+          {skills_html}
+        </div>
+        <div class="player-card-portrait">{player_portrait(player, cls="portrait card-portrait", root=root, size=132)}</div>
       </div>
+      {foot}
     </section>
     """
 
 
-def portrait_html(player: dict[str, Any]) -> str:
-    img = player.get("imgURL") or ""
-    if img:
-        return f'<img class="portrait" alt="{esc(player_name(player))}" src="{esc(img)}">'
-    return f'<div class="portrait placeholder" aria-hidden="true">{initials(player)}</div>'
-
-
-def render_player_hero(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], season: int, start_season: int, compact: bool = False) -> str:
+def player_bio_html(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], season: int) -> str:
+    """Bio facts + current ratings (the old hero's grids, on a normal card)."""
     rating = latest_rating(player, season)
     team_html = team_label(player.get("tid"), teams_by_tid, "../")
     born = player.get("born") or {}
@@ -142,8 +300,6 @@ def render_player_hero(player: dict[str, Any], teams_by_tid: dict[int, dict[str,
             draft_html = f"{draft.get('year')} · Undrafted"
     else:
         draft_html = "—"
-    awards = player.get("awards") or []
-    awards_html = "".join(f'<span class="award-chip">{esc(a.get("season", ""))} {esc(a.get("type", ""))}</span>' for a in awards[-8:]) or '<span class="muted">No awards listed</span>'
 
     relatives = player.get("relatives") or []
     family_bits = []
@@ -156,30 +312,21 @@ def render_player_hero(player: dict[str, Any], teams_by_tid: dict[int, dict[str,
         else:
             family_bits.append(f"{esc(rel_type)}: {esc(name)}")
     family_html = detail_item("Family", " · ".join(family_bits)) if family_bits else ""
-    if compact:
-        # Sub-page header: just the essentials, since the full bio lives on Overview.
-        details = "".join([
-            detail_item("Team", team_html),
-            detail_item("Position", esc(rating.get("pos", "—"))),
-            detail_item("Age", age(player, season)),
-            detail_item("Contract", fmt_contract(player)),
-            detail_item("Injury", injury_html(player)),
-        ])
-    else:
-        details = "".join([
-            detail_item("Team", team_html),
-            detail_item("Position", esc(rating.get("pos", "—"))),
-            detail_item("Age", age(player, season)),
-            detail_item("Height", fmt_height(player.get("hgt"))),
-            detail_item("Weight", f'{esc(player.get("weight", "—"))} lbs' if player.get("weight") else "—"),
-            detail_item("Born", born_html),
-            detail_item("College", esc(player.get("college") or "—")),
-            detail_item("Draft", esc(draft_html)),
-            detail_item("Contract", fmt_contract(player)),
-            detail_item("Injury", injury_html(player)),
-            detail_item("Mood", mood_html(player)),
-            family_html,
-        ])
+
+    details = "".join([
+        detail_item("Team", team_html),
+        detail_item("Position", esc(rating.get("pos", "—"))),
+        detail_item("Age", age(player, season)),
+        detail_item("Height", fmt_height(player.get("hgt"))),
+        detail_item("Weight", f'{esc(player.get("weight", "—"))} lbs' if player.get("weight") else "—"),
+        detail_item("Born", born_html),
+        detail_item("College", esc(player.get("college") or "—")),
+        detail_item("Draft", esc(draft_html)),
+        detail_item("Contract", fmt_contract(player)),
+        detail_item("Injury", injury_html(player)),
+        detail_item("Mood", mood_html(player)),
+        family_html,
+    ])
 
     rating_groups_html = []
     for title, keys in RATING_GROUPS:
@@ -198,34 +345,156 @@ def render_player_hero(player: dict[str, Any], teams_by_tid: dict[int, dict[str,
         </div>
         """)
 
-    body = f"""
-    <section class="player-hero card">
-      <div class="portrait-wrap">{portrait_html(player)}</div>
-      <div class="player-intro">
-        <p class="eyebrow">Player profile</p>
-        <h1>{esc(player_name(player))}</h1>
-        <p class="muted">#{esc(player.get('jerseyNumber', '—'))} · {team_html}</p>
-        <div class="details-grid">{details}</div>
-      </div>
-      <div class="rating-panel{'' if compact else ' full-rating-panel'}">
-        <div class="rating-topline">
-          <div class="big-rating"><span>Overall</span><strong>{rating_delta_html(player, 'ovr', rating)}</strong></div>
-          <div class="big-rating"><span>Potential</span><strong>{rating_delta_html(player, 'pot', rating)}</strong></div>
+    return f"""
+    <section class="card player-bio">
+      <div class="player-bio-cols">
+        <div>
+          <div class="section-title-row"><h2>Bio</h2></div>
+          <div class="details-grid">{details}</div>
         </div>
-        {'' if compact else f'<div class="rating-groups">{"".join(rating_groups_html)}</div><div class="awards-strip">{awards_html}</div>'}
+        <div class="rating-panel full-rating-panel">
+          <div class="rating-topline">
+            <div class="big-rating"><span>Overall</span><strong>{_delta_titled(player, 'ovr', rating)}</strong></div>
+            <div class="big-rating"><span>Potential</span><strong>{_delta_titled(player, 'pot', rating)}</strong></div>
+          </div>
+          <p class="rating-caption muted small-copy">Green/red deltas are the change vs last season's rating.</p>
+          <div class="rating-groups">{''.join(rating_groups_html)}</div>
+        </div>
       </div>
     </section>
     """
-    return body
 
 
-def per_game_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str, title: str, table_id: str) -> str:
+# ---------------------------------------------------------------------------
+# Trophy case
+# ---------------------------------------------------------------------------
+
+
+def trophy_case_html(player: dict[str, Any]) -> str:
+    awards = [a for a in player.get("awards") or [] if isinstance(a, dict) and a.get("type")]
+    if not awards:
+        return ""
+    grouped: dict[str, list[Any]] = defaultdict(list)
+    first_seen: dict[str, int] = {}
+    for i, award in enumerate(awards):
+        atype = str(award.get("type"))
+        grouped[atype].append(award.get("season"))
+        first_seen.setdefault(atype, i)
+
+    def seasons_text(seasons: list[Any]) -> str:
+        return ", ".join(str(s) for s in seasons if s is not None)
+
+    shelves: dict[int, list[str]] = {0: [], 1: [], 2: []}
+    crest_types = sorted(
+        (t for t in grouped if t in AWARD_CRESTS),
+        key=lambda t: _AWARD_ORDER[t],
+    )
+    for atype in crest_types:
+        kind, shelf, short = AWARD_CRESTS[atype]
+        seasons = grouped[atype]
+        count = f'<span class="trophy-count">×{len(seasons)}</span>' if len(seasons) > 1 else ""
+        gold = " trophy--gold" if shelf == 0 else ""
+        shelves[shelf].append(
+            f'<div class="trophy{gold}" title="{esc(atype)} — {esc(seasons_text(seasons))}">'
+            f'{crest_svg(kind, css_class="crest trophy-crest")}'
+            f'<span class="trophy-label">{esc(short)}</span>{count}</div>'
+        )
+    # Stat titles, Hall of Fame, anything future BBGM invents: compact text chips.
+    other_types = sorted((t for t in grouped if t not in AWARD_CRESTS), key=lambda t: first_seen[t])
+    for atype in other_types:
+        seasons = grouped[atype]
+        label = atype.replace("League ", "")
+        if atype == "Inducted into the Hall of Fame":
+            label = "Hall of Fame"
+        count = f" ×{len(seasons)}" if len(seasons) > 1 else ""
+        shelves[2].append(
+            f'<span class="trophy-chip" title="{esc(atype)} — {esc(seasons_text(seasons))}">'
+            f"{esc(label)}{esc(count)}</span>"
+        )
+
+    shelf_html = "".join(
+        f'<div class="trophy-shelf">{"".join(items)}</div>' for items in (shelves[0], shelves[1], shelves[2]) if items
+    )
+    return f"""
+    <section class="card trophy-case">
+      <div class="section-title-row"><h2>Trophy Case</h2><span class="count-pill">{len(awards)} awards</span></div>
+      {shelf_html}
+    </section>
+    """
+
+
+# ---------------------------------------------------------------------------
+# Season tables (summary, per-game, shot, advanced)
+# ---------------------------------------------------------------------------
+
+
+def _fpts_per_game(stat: dict[str, Any]) -> float | None:
+    gp = stat_gp(stat)
+    total = fantasy_pts(stat)
+    if total is None or gp <= 0:
+        return None
+    return total / gp
+
+
+def player_summary_rows(player: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]], season: int, start_season: int) -> str:
+    regular = regular_stats_since(player, start_season)
+    current = [s for s in regular if s.get("season") == season]
+    current_stat = current[-1] if current else (regular[-1] if regular else {})
+    career = combine_stat_rows(regular) if regular else {}
+    # Preseason exports have no current-season stats yet; label the row with the
+    # season the numbers actually come from instead of claiming the new one.
+    latest_label = str(current_stat.get("season", season)) if current_stat else str(season)
+
+    def row(label: str, stat: dict[str, Any]) -> str:
+        if not stat:
+            values = [label] + ["—"] * 8
+            sorts = [label] + [None] * 8
+        else:
+            gp = stat_gp(stat)
+            trb_pg = (float(stat.get("orb") or 0) + float(stat.get("drb") or 0)) / gp if gp else 0
+            fpts = _fpts_per_game(stat)
+            values = [
+                label,
+                fmt_number(gp, 0),
+                fmt_number(per_game(stat, "min"), 1),
+                fmt_number(per_game(stat, "pts"), 1),
+                fmt_number(trb_pg, 1),
+                fmt_number(per_game(stat, "ast"), 1),
+                fmt_pct(made_pct(stat.get("fg"), stat.get("fga"))),
+                fmt_pct(made_pct(stat.get("tp"), stat.get("tpa"))),
+                fmt_pct(made_pct(stat.get("ft"), stat.get("fta"))),
+                fmt_pct(ts_pct(stat)),
+                fmt_number(stat.get("per"), 1),
+                fmt_number((float(stat.get("ows") or 0) + float(stat.get("dws") or 0)), 1),
+                fmt_number(fpts, 1) if fpts is not None else "—",
+            ]
+            sorts = [label, gp, per_game(stat, "min"), per_game(stat, "pts"), trb_pg, per_game(stat, "ast"), made_pct(stat.get("fg"), stat.get("fga")), made_pct(stat.get("tp"), stat.get("tpa")), made_pct(stat.get("ft"), stat.get("fta")), ts_pct(stat), stat.get("per"), (float(stat.get("ows") or 0) + float(stat.get("dws") or 0)), fpts]
+        return "<tr>" + "".join(td(v, sort=s) for v, s in zip(values, sorts)) + "</tr>"
+
+    headers = ["Summary", "G", "MP", "PTS", "TRB", "AST", "FG%", "3P%", "FT%", "TS%", "PER", "WS", "FPTS"]
+    return f"""
+    <section class="card compact-card">
+      <div class="table-wrap summary-wrap">
+        <table>
+          <thead><tr>{''.join(th(h) for h in headers)}</tr></thead>
+          <tbody>
+            {row(latest_label, current_stat)}
+            {row('Career', career)}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    """
+
+
+def per_game_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str, title: str, table_id: str, led: dict[int, dict[str, float]] | None = None) -> str:
+    led = led or {}
     source_rows = rows[:]
     display_rows = rows[:]
     if len(rows) > 1:
         display_rows.append(combine_stat_rows(rows))
 
-    headers = ["Year", "Team", "Age", "G", "GS", "MP", "FG", "FGA", "FG%", "3P", "3PA", "3P%", "2P", "2PA", "2P%", "eFG%", "FT", "FTA", "FT%", "ORB", "DRB", "TRB", "AST", "TOV", "STL", "BLK", "BA", "PF", "PTS"]
+    headers = ["Year", "Team", "Age", "G", "GS", "MP", "FG", "FGA", "FG%", "3P", "3PA", "3P%", "2P", "2PA", "2P%", "eFG%", "FT", "FTA", "FT%", "ORB", "DRB", "TRB", "AST", "TOV", "STL", "BLK", "BA", "PF", "PTS", "FPTS"]
     html_rows = []
     for stat in display_rows:
         gp = stat_gp(stat)
@@ -241,36 +510,53 @@ def per_game_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_
         tp_pct = made_pct(stat.get("tp"), stat.get("tpa"))
         two_pct = made_pct(total_2p(stat), total_2pa(stat))
         ft_pct = made_pct(stat.get("ft"), stat.get("fta"))
+        fpts = _fpts_per_game(stat)
+        hits = _led_hits(led, season, {
+            "min": per_game(stat, "min"),
+            "fgp": fg_pct,
+            "tpp": tp_pct,
+            "2pp": two_pct,
+            "efg": efg_pct(stat),
+            "ftp": ft_pct,
+            "orb": per_game(stat, "orb"),
+            "drb": per_game(stat, "drb"),
+            "trb": trb_pg,
+            "ast": per_game(stat, "ast"),
+            "stl": per_game(stat, "stl"),
+            "blk": per_game(stat, "blk"),
+            "pts": per_game(stat, "pts"),
+        }) if not stat.get("playoffs") else set()
         html_rows.append("".join([
             td(year_cell, sort=season if isinstance(season, int) else 99999),
             td(team_label(stat.get("tid"), teams_by_tid, root), sort=team_label(stat.get("tid"), teams_by_tid, as_link=False)),
             td(age(player, season) if isinstance(season, int) else "—", sort=age_sort),
             td(fmt_number(gp, 0), sort=gp),
             td(fmt_number(stat.get("gs"), 0), sort=stat.get("gs")),
-            td(fmt_number(per_game(stat, "min"), 1), sort=per_game(stat, "min")),
+            _led_td(fmt_number(per_game(stat, "min"), 1), per_game(stat, "min"), "min" in hits, "minutes per game"),
             td(fmt_number(per_game(stat, "fg"), 1), sort=per_game(stat, "fg")),
             td(fmt_number(per_game(stat, "fga"), 1), sort=per_game(stat, "fga")),
-            td(fmt_pct(fg_pct), sort=fg_pct),
+            _led_td(fmt_pct(fg_pct), fg_pct, "fgp" in hits, "FG%"),
             td(fmt_number(per_game(stat, "tp"), 1), sort=per_game(stat, "tp")),
             td(fmt_number(per_game(stat, "tpa"), 1), sort=per_game(stat, "tpa")),
-            td(fmt_pct(tp_pct), sort=tp_pct),
+            _led_td(fmt_pct(tp_pct), tp_pct, "tpp" in hits, "3P%"),
             td(fmt_number(total_2p(stat) / gp if gp else 0, 1), sort=(total_2p(stat) / gp if gp else 0)),
             td(fmt_number(total_2pa(stat) / gp if gp else 0, 1), sort=(total_2pa(stat) / gp if gp else 0)),
-            td(fmt_pct(two_pct), sort=two_pct),
-            td(fmt_pct(efg_pct(stat)), sort=efg_pct(stat)),
+            _led_td(fmt_pct(two_pct), two_pct, "2pp" in hits, "2P%"),
+            _led_td(fmt_pct(efg_pct(stat)), efg_pct(stat), "efg" in hits, "eFG%"),
             td(fmt_number(per_game(stat, "ft"), 1), sort=per_game(stat, "ft")),
             td(fmt_number(per_game(stat, "fta"), 1), sort=per_game(stat, "fta")),
-            td(fmt_pct(ft_pct), sort=ft_pct),
-            td(fmt_number(per_game(stat, "orb"), 1), sort=per_game(stat, "orb")),
-            td(fmt_number(per_game(stat, "drb"), 1), sort=per_game(stat, "drb")),
-            td(fmt_number(trb_pg, 1), sort=trb_pg),
-            td(fmt_number(per_game(stat, "ast"), 1), sort=per_game(stat, "ast")),
+            _led_td(fmt_pct(ft_pct), ft_pct, "ftp" in hits, "FT%"),
+            _led_td(fmt_number(per_game(stat, "orb"), 1), per_game(stat, "orb"), "orb" in hits, "offensive rebounds"),
+            _led_td(fmt_number(per_game(stat, "drb"), 1), per_game(stat, "drb"), "drb" in hits, "defensive rebounds"),
+            _led_td(fmt_number(trb_pg, 1), trb_pg, "trb" in hits, "rebounds"),
+            _led_td(fmt_number(per_game(stat, "ast"), 1), per_game(stat, "ast"), "ast" in hits, "assists"),
             td(fmt_number(per_game(stat, "tov"), 1), sort=per_game(stat, "tov")),
-            td(fmt_number(per_game(stat, "stl"), 1), sort=per_game(stat, "stl")),
-            td(fmt_number(per_game(stat, "blk"), 1), sort=per_game(stat, "blk")),
+            _led_td(fmt_number(per_game(stat, "stl"), 1), per_game(stat, "stl"), "stl" in hits, "steals"),
+            _led_td(fmt_number(per_game(stat, "blk"), 1), per_game(stat, "blk"), "blk" in hits, "blocks"),
             td(fmt_number(per_game(stat, "ba"), 1), sort=per_game(stat, "ba")),
             td(fmt_number(per_game(stat, "pf"), 1), sort=per_game(stat, "pf")),
-            td(fmt_number(per_game(stat, "pts"), 1), sort=per_game(stat, "pts")),
+            _led_td(fmt_number(per_game(stat, "pts"), 1), per_game(stat, "pts"), "pts" in hits, "scoring"),
+            td(fmt_number(fpts, 1) if fpts is not None else "—", sort=fpts),
         ]))
 
     return f"""
@@ -281,7 +567,8 @@ def per_game_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_
     """
 
 
-def shot_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str, title: str, table_id: str) -> str:
+def shot_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str, title: str, table_id: str, led: dict[int, dict[str, float]] | None = None) -> str:
+    led = led or {}
     display_rows = rows[:]
     if len(rows) > 1:
         display_rows.append(combine_stat_rows(rows))
@@ -300,6 +587,14 @@ def shot_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid:
         post_pct = made_pct(stat.get("fgLowPost"), stat.get("fgaLowPost"))
         mid_pct = made_pct(stat.get("fgMidRange"), stat.get("fgaMidRange"))
         tp_pct = made_pct(stat.get("tp"), stat.get("tpa"))
+        hits = _led_hits(led, season, {
+            "fgpAtRim": rim_pct,
+            "fgpLowPost": post_pct,
+            "fgpMidRange": mid_pct,
+            "tpp": tp_pct,
+            "dd": safe_float(stat.get("dd")) if stat.get("dd") is not None else None,
+            "td": safe_float(stat.get("td")) if stat.get("td") is not None else None,
+        }) if not stat.get("playoffs") else set()
         html_rows.append("".join([
             td(esc(season), sort=season if isinstance(season, int) else 99999),
             td(team_label(stat.get("tid"), teams_by_tid, root), sort=team_label(stat.get("tid"), teams_by_tid, as_link=False)),
@@ -309,18 +604,18 @@ def shot_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid:
             td(fmt_number(per_game(stat, "min"), 1), sort=per_game(stat, "min")),
             td(fmt_number(per_game(stat, "fgAtRim"), 1), sort=per_game(stat, "fgAtRim")),
             td(fmt_number(per_game(stat, "fgaAtRim"), 1), sort=per_game(stat, "fgaAtRim")),
-            td(fmt_pct(rim_pct), sort=rim_pct),
+            _led_td(fmt_pct(rim_pct), rim_pct, "fgpAtRim" in hits, "at-rim FG%"),
             td(fmt_number(per_game(stat, "fgLowPost"), 1), sort=per_game(stat, "fgLowPost")),
             td(fmt_number(per_game(stat, "fgaLowPost"), 1), sort=per_game(stat, "fgaLowPost")),
-            td(fmt_pct(post_pct), sort=post_pct),
+            _led_td(fmt_pct(post_pct), post_pct, "fgpLowPost" in hits, "low-post FG%"),
             td(fmt_number(per_game(stat, "fgMidRange"), 1), sort=per_game(stat, "fgMidRange")),
             td(fmt_number(per_game(stat, "fgaMidRange"), 1), sort=per_game(stat, "fgaMidRange")),
-            td(fmt_pct(mid_pct), sort=mid_pct),
+            _led_td(fmt_pct(mid_pct), mid_pct, "fgpMidRange" in hits, "mid-range FG%"),
             td(fmt_number(per_game(stat, "tp"), 1), sort=per_game(stat, "tp")),
             td(fmt_number(per_game(stat, "tpa"), 1), sort=per_game(stat, "tpa")),
-            td(fmt_pct(tp_pct), sort=tp_pct),
-            td(fmt_number(stat.get("dd"), 0), sort=stat.get("dd")),
-            td(fmt_number(stat.get("td"), 0), sort=stat.get("td")),
+            _led_td(fmt_pct(tp_pct), tp_pct, "tpp" in hits, "3P%"),
+            _led_td(fmt_number(stat.get("dd"), 0), stat.get("dd"), "dd" in hits, "double-doubles"),
+            _led_td(fmt_number(stat.get("td"), 0), stat.get("td"), "td" in hits, "triple-doubles"),
             td(fmt_number(stat.get("qd"), 0), sort=stat.get("qd")),
             td(fmt_number(stat.get("fxf"), 0), sort=stat.get("fxf")),
         ]))
@@ -333,7 +628,8 @@ def shot_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid:
     """
 
 
-def advanced_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str, title: str, table_id: str) -> str:
+def advanced_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str, title: str, table_id: str, led: dict[int, dict[str, float]] | None = None) -> str:
+    led = led or {}
     display_rows = rows[:]
     if len(rows) > 1:
         display_rows.append(combine_stat_rows(rows))
@@ -358,6 +654,30 @@ def advanced_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_
         bpm = obpm + dbpm
         pmar = ratio(stat.get("tpa"), stat.get("fga"))
         ftr = ratio(stat.get("fta"), stat.get("fga"))
+        hits = _led_hits(led, season, {
+            "per": stat.get("per"),
+            "ewa": stat.get("ewa"),
+            "tsp": ts_pct(stat),
+            "orbp": stat.get("orbp"),
+            "drbp": stat.get("drbp"),
+            "trbp": stat.get("trbp"),
+            "astp": stat.get("astp"),
+            "stlp": stat.get("stlp"),
+            "blkp": stat.get("blkp"),
+            "usgp": stat.get("usgp"),
+            "pm100": stat.get("pm100"),
+            "onOff100": stat.get("onOff100"),
+            "ortg": stat.get("ortg"),
+            "drtg": stat.get("drtg"),
+            "ows": ows,
+            "dws": dws,
+            "ws": ws,
+            "ws48": ws48,
+            "obpm": obpm if stat.get("obpm") is not None else None,
+            "dbpm": dbpm if stat.get("dbpm") is not None else None,
+            "bpm": bpm if (stat.get("obpm") is not None or stat.get("dbpm") is not None) else None,
+            "vorp": stat.get("vorp"),
+        }) if not stat.get("playoffs") else set()
         html_rows.append("".join([
             td(esc(season), sort=season if isinstance(season, int) else 99999),
             td(team_label(stat.get("tid"), teams_by_tid, root), sort=team_label(stat.get("tid"), teams_by_tid, as_link=False)),
@@ -365,31 +685,31 @@ def advanced_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_
             td(fmt_number(gp, 0), sort=gp),
             td(fmt_number(stat.get("gs"), 0), sort=stat.get("gs")),
             td(fmt_number(per_game(stat, "min"), 1), sort=per_game(stat, "min")),
-            td(fmt_number(stat.get("per"), 1), sort=stat.get("per")),
-            td(fmt_number(stat.get("ewa"), 1), sort=stat.get("ewa")),
-            td(fmt_pct(ts_pct(stat)), sort=ts_pct(stat)),
+            _led_td(fmt_number(stat.get("per"), 1), stat.get("per"), "per" in hits, "PER"),
+            _led_td(fmt_number(stat.get("ewa"), 1), stat.get("ewa"), "ewa" in hits, "EWA"),
+            _led_td(fmt_pct(ts_pct(stat)), ts_pct(stat), "tsp" in hits, "TS%"),
             td(fmt_ratio(pmar), sort=pmar),
             td(fmt_ratio(ftr), sort=ftr),
-            td(fmt_number(stat.get("orbp"), 1), sort=stat.get("orbp")),
-            td(fmt_number(stat.get("drbp"), 1), sort=stat.get("drbp")),
-            td(fmt_number(stat.get("trbp"), 1), sort=stat.get("trbp")),
-            td(fmt_number(stat.get("astp"), 1), sort=stat.get("astp")),
-            td(fmt_number(stat.get("stlp"), 1), sort=stat.get("stlp")),
-            td(fmt_number(stat.get("blkp"), 1), sort=stat.get("blkp")),
+            _led_td(fmt_number(stat.get("orbp"), 1), stat.get("orbp"), "orbp" in hits, "ORB%"),
+            _led_td(fmt_number(stat.get("drbp"), 1), stat.get("drbp"), "drbp" in hits, "DRB%"),
+            _led_td(fmt_number(stat.get("trbp"), 1), stat.get("trbp"), "trbp" in hits, "TRB%"),
+            _led_td(fmt_number(stat.get("astp"), 1), stat.get("astp"), "astp" in hits, "AST%"),
+            _led_td(fmt_number(stat.get("stlp"), 1), stat.get("stlp"), "stlp" in hits, "STL%"),
+            _led_td(fmt_number(stat.get("blkp"), 1), stat.get("blkp"), "blkp" in hits, "BLK%"),
             td(fmt_number(turnover_pct(stat), 1), sort=turnover_pct(stat)),
-            td(fmt_number(stat.get("usgp"), 1), sort=stat.get("usgp")),
-            td(fmt_number(stat.get("pm100"), 1), sort=stat.get("pm100"), cls=("delta-up" if float(stat.get("pm100") or 0) > 0 else "delta-down" if float(stat.get("pm100") or 0) < 0 else "")),
-            td(fmt_number(stat.get("onOff100"), 1), sort=stat.get("onOff100"), cls=("delta-up" if float(stat.get("onOff100") or 0) > 0 else "delta-down" if float(stat.get("onOff100") or 0) < 0 else "")),
-            td(fmt_number(stat.get("ortg"), 1), sort=stat.get("ortg")),
-            td(fmt_number(stat.get("drtg"), 1), sort=stat.get("drtg")),
-            td(fmt_number(ows, 1), sort=ows),
-            td(fmt_number(dws, 1), sort=dws),
-            td(fmt_number(ws, 1), sort=ws),
-            td(fmt_ratio(ws48), sort=ws48),
-            td(fmt_number(obpm, 1), sort=obpm),
-            td(fmt_number(dbpm, 1), sort=dbpm),
-            td(fmt_number(bpm, 1), sort=bpm),
-            td(fmt_number(stat.get("vorp"), 1), sort=stat.get("vorp")),
+            _led_td(fmt_number(stat.get("usgp"), 1), stat.get("usgp"), "usgp" in hits, "usage"),
+            _led_td(fmt_number(stat.get("pm100"), 1), stat.get("pm100"), "pm100" in hits, "plus-minus", cls=("delta-up" if float(stat.get("pm100") or 0) > 0 else "delta-down" if float(stat.get("pm100") or 0) < 0 else "")),
+            _led_td(fmt_number(stat.get("onOff100"), 1), stat.get("onOff100"), "onOff100" in hits, "on-off", cls=("delta-up" if float(stat.get("onOff100") or 0) > 0 else "delta-down" if float(stat.get("onOff100") or 0) < 0 else "")),
+            _led_td(fmt_number(stat.get("ortg"), 1), stat.get("ortg"), "ortg" in hits, "offensive rating"),
+            _led_td(fmt_number(stat.get("drtg"), 1), stat.get("drtg"), "drtg" in hits, "defensive rating"),
+            _led_td(fmt_number(ows, 1), ows, "ows" in hits, "offensive win shares"),
+            _led_td(fmt_number(dws, 1), dws, "dws" in hits, "defensive win shares"),
+            _led_td(fmt_number(ws, 1), ws, "ws" in hits, "win shares"),
+            _led_td(fmt_ratio(ws48), ws48, "ws48" in hits, "WS/48"),
+            _led_td(fmt_number(obpm, 1), obpm, "obpm" in hits, "OBPM"),
+            _led_td(fmt_number(dbpm, 1), dbpm, "dbpm" in hits, "DBPM"),
+            _led_td(fmt_number(bpm, 1), bpm, "bpm" in hits, "BPM"),
+            _led_td(fmt_number(stat.get("vorp"), 1), stat.get("vorp"), "vorp" in hits, "VORP"),
         ]))
 
     return f"""
@@ -398,6 +718,94 @@ def advanced_table(player: dict[str, Any], rows: list[dict[str, Any]], teams_by_
       {table_html(headers, html_rows, table_id=table_id, empty_message="No advanced stats from the selected seasons.")}
     </section>
     """
+
+
+# ---------------------------------------------------------------------------
+# Shot diet (per-season 100%-stacked attempt-share bars)
+# ---------------------------------------------------------------------------
+
+
+def _zone_fill(pct: float | None, lg_pct: float | None) -> str:
+    """heat_style()'s red→green hue ramp, keyed to FG% vs the league average
+    in the same zone (±8 percentage points saturates)."""
+    if pct is None or lg_pct is None:
+        return "var(--panel-3)"
+    diff = max(-8.0, min(8.0, pct - lg_pct))
+    frac = (diff + 8.0) / 16.0
+    hue = 4 + frac * 126
+    return f"hsla({hue:.0f}, 55%, 41%, .45)"
+
+
+def shot_diet_html(player: dict[str, Any], data: dict[str, Any] | None, start_season: int) -> str:
+    """One 100%-stacked bar per retained season: segment width = share of FGA
+    by zone, tint = zone FG% vs league average, hover title = makes/attempts."""
+    if not data:
+        return ""
+    pid = safe_int(player.get("pid"), -1)
+    seasons = sorted({
+        s.get("season") for s in regular_stats_since(player, start_season)
+        if isinstance(s.get("season"), int)
+    })
+    rows = []
+    for s in seasons:
+        zones = player_shot_zones(data, pid, s)
+        if not zones:
+            continue
+        total_fga = sum(safe_float(z.get("fga")) for z in zones.values())
+        if total_fga <= 0:
+            continue
+        segments = []
+        aria_bits = []
+        x = 0.0
+        for zone, _, _ in SHOT_ZONES:
+            z = zones[zone]
+            fga = safe_float(z.get("fga"))
+            if fga <= 0:
+                continue
+            share = fga / total_fga
+            width = share * 100.0
+            pct = z.get("pct")
+            lg_pct = z.get("lg_pct")
+            label = ZONE_LABELS[zone]
+            pct_txt = fmt_pct(pct) if pct is not None else "—"
+            lg_txt = f" (lg {fmt_pct(lg_pct)})" if lg_pct is not None else ""
+            title = (
+                f"{label}: {fmt_number(z.get('fg'), 0)}/{fmt_number(fga, 0)} · "
+                f"{pct_txt}% FG{lg_txt} · {fmt_number(share * 100, 0)}% of attempts"
+            )
+            segments.append(
+                f'<rect x="{x:.2f}" y="0" width="{max(0.0, width - 0.4):.2f}" height="12" '
+                f'fill="{_zone_fill(pct, lg_pct)}"><title>{esc(title)}</title></rect>'
+            )
+            aria_bits.append(f"{label} {fmt_number(share * 100, 0)}% of attempts at {pct_txt}% FG")
+            x += width
+        if not segments:
+            continue
+        aria = f"Season {s} shot diet: " + "; ".join(aria_bits)
+        rows.append(
+            f'<div class="shotdiet-row">'
+            f'<span class="shotdiet-season">{esc(s)}</span>'
+            f'<svg class="shotdiet-bar" viewBox="0 0 100 12" preserveAspectRatio="none" '
+            f'role="img" aria-label="{esc(aria)}">{"".join(segments)}</svg>'
+            f'<span class="shotdiet-fga muted small-copy">{fmt_number(total_fga, 0)} FGA</span>'
+            f"</div>"
+        )
+    if not rows:
+        return ""
+    return f"""
+    <section class="card compact-card shotdiet-card">
+      <div class="section-title-row"><h2>Shot Diet</h2>
+        <span class="muted small-copy">At Rim · Low Post · Mid-Range · Three, left to right · width = attempt share · tint = FG% vs league</span>
+      </div>
+      {''.join(rows)}
+      <p class="muted small-copy">Aggregated from retained box scores; hover a segment for makes/attempts.</p>
+    </section>
+    """
+
+
+# ---------------------------------------------------------------------------
+# Ratings / game log / opponents / highs / form (existing sections)
+# ---------------------------------------------------------------------------
 
 
 def ratings_table(player: dict[str, Any], start_season: int) -> str:
@@ -417,7 +825,7 @@ def ratings_table(player: dict[str, Any], start_season: int) -> str:
         cells.append(td(skills, sort=" ".join(rating.get("skills") or [])))
         rows.append("".join(cells))
     return f"""
-    <section class="card stats-section" id="ratings">
+    <section class="card stats-section">
       <div class="section-title-row"><h2>Ratings</h2></div>
       {table_html(headers, rows, table_id=f"ratings-{player.get('pid')}", empty_message="No ratings from the selected seasons.")}
     </section>
@@ -428,7 +836,7 @@ def game_log_table(player: dict[str, Any], entries: list[dict[str, Any]], teams_
     played = [e for e in entries if safe_float((e.get("box") or {}).get("min")) > 0]
     if not played:
         return ""
-    headers = ["Day", "Opp", "Result", "MP", "FG", "3P", "FT", "ORB", "TRB", "AST", "TOV", "STL", "BLK", "PF", "PTS", "+/-", "GmSc"]
+    headers = ["Day", "Opp", "Result", "MP", "FG", "3P", "FT", "ORB", "TRB", "AST", "TOV", "STL", "BLK", "PF", "PTS", "+/-", "GmSc", "FPTS"]
     rows = []
     for entry in played:
         box = entry["box"]
@@ -450,6 +858,7 @@ def game_log_table(player: dict[str, Any], entries: list[dict[str, Any]], teams_
         )
         trb = safe_float(box.get("orb")) + safe_float(box.get("drb"))
         gmsc = game_score_value(box)
+        fpts = fantasy_pts(box)
         rows.append("".join([
             td(fmt_number(entry.get("day"), 0), sort=entry.get("day")),
             td(f'<span class="muted">{loc}</span> {opp}', sort=team_abbrev_for_tid(entry.get("opp_tid"), teams_by_tid)),
@@ -468,6 +877,7 @@ def game_log_table(player: dict[str, Any], entries: list[dict[str, Any]], teams_
             td(fmt_number(box.get("pts") or 0, 0), sort=box.get("pts")),
             td(fmt_signed(box.get("pm") or 0, 0), sort=box.get("pm"), cls=plus_minus_class(box.get("pm"))),
             td(fmt_number(gmsc, 1), sort=gmsc),
+            td(fmt_number(fpts, 1) if fpts is not None else "—", sort=fpts),
         ]))
     return f"""
     <section class="card stats-section">
@@ -597,21 +1007,86 @@ def season_highs_html(player: dict[str, Any], log_entries: list[dict[str, Any]],
     """
 
 
-def salary_history_html(player: dict[str, Any]) -> str:
+# ---------------------------------------------------------------------------
+# Contract & injuries
+# ---------------------------------------------------------------------------
+
+
+def salary_history_html(player: dict[str, Any], season: int | None = None) -> str:
+    """Contract card: season-by-season salary ledger (guaranteed years first,
+    then history), with the first post-contract season shown as a muted UFA row."""
+    cur_season = season if isinstance(season, int) else safe_int(season, 0) or None
     salaries = [s for s in player.get("salaries", []) if isinstance(s, dict) and isinstance(s.get("season"), int)]
-    if not salaries:
-        return ""
+    contract = player.get("contract") or {}
+    exp = contract.get("exp") if isinstance(contract.get("exp"), int) else None
+    amount = safe_float(contract.get("amount"))
+    tid = safe_int(player.get("tid"), RETIRED_TID)
+    rostered = tid >= 0
+
     by_season: dict[int, float] = {}
     for s in salaries:
         by_season[s["season"]] = safe_float(s.get("amount"))
-    seasons = sorted(by_season)
-    rows = ["".join([td(esc(s), sort=s), td(fmt_money(by_season[s]), sort=by_season[s])]) for s in seasons]
+    # Fill any guaranteed contract years the export didn't enumerate. Free
+    # agents are skipped: their "contract" is an asking price, not money owed.
+    if rostered and exp is not None and cur_season is not None and amount > 0:
+        for s in range(cur_season, exp + 1):
+            by_season.setdefault(s, amount)
+    if not by_season:
+        return ""
+
+    rows = []
+    # Guaranteed years first (newest at top), then the paid history. Notes only
+    # apply to rostered players: an FA's future "salary" is nothing but an ask.
+    for s in sorted(by_season, reverse=True):
+        note = ""
+        cls = ""
+        if rostered and cur_season is not None and s > cur_season:
+            note = '<span class="salary-note muted small-copy">guaranteed</span>'
+            cls = "salary-future"
+        elif rostered and cur_season is not None and s == cur_season:
+            note = '<span class="salary-note muted small-copy">current</span>'
+        rows.append(f'<tr class="{cls}">' + "".join([
+            td(esc(s), sort=s),
+            td(f"{fmt_money(by_season[s])} {note}", sort=by_season[s]),
+        ]) + "</tr>")
+    # The season after the last guaranteed year: no salary on the books -> UFA.
+    if rostered and exp is not None:
+        rows.insert(0, "<tr>" + "".join([
+            td(esc(exp + 1), sort=exp + 1),
+            td('<span class="muted salary-ufa">UFA</span>', sort=0),
+        ]) + "</tr>")
     total = sum(by_season.values())
     rows.append(f'<tr class="total-row">{td("Total", cls="total-label")}{td(fmt_money(total), sort=total)}</tr>')
+    subtitle = "incl. guaranteed years" if rostered else "career earnings"
     return f"""
     <section class="card compact-card">
-      <div class="section-title-row"><h2>Salary History</h2></div>
+      <div class="section-title-row"><h2>Salary</h2><span class="muted small-copy">{esc(subtitle)}</span></div>
       {table_html(["Season", "Salary"], rows, table_id=f"salary-{player.get('pid')}", empty_message="No salary data.", wrap_cls="fit-table")}
+    </section>
+    """
+
+
+def contract_summary_html(player: dict[str, Any], season: int) -> str:
+    contract = player.get("contract") or {}
+    exp = contract.get("exp") if isinstance(contract.get("exp"), int) else None
+    amount = safe_float(contract.get("amount"))
+    tid = safe_int(player.get("tid"), RETIRED_TID)
+    is_fa = tid == FREE_AGENT_TID
+    rostered = tid >= 0
+
+    tiles = []
+    deal_label = "Asking price" if is_fa else "Current deal"
+    tiles.append(f'<div class="vital-tile"><span>{esc(deal_label)}</span><strong>{fmt_contract(player)}</strong></div>')
+    if rostered and exp is not None and exp >= season and amount > 0:
+        years = exp - season + 1
+        tiles.append(f'<div class="vital-tile"><span>Guaranteed</span><strong>{years} yr · {fmt_money(amount * years)}</strong></div>')
+        tiles.append(f'<div class="vital-tile"><span>Free agent</span><strong>{esc(exp + 1)}</strong></div>')
+    elif is_fa:
+        tiles.append('<div class="vital-tile"><span>Status</span><strong>Free agent</strong></div>')
+    return f"""
+    <section class="card compact-card">
+      <div class="section-title-row"><h2>Contract</h2></div>
+      <div class="vitals-row">{''.join(tiles)}</div>
     </section>
     """
 
@@ -636,74 +1111,117 @@ def injury_history_html(player: dict[str, Any]) -> str:
     """
 
 
-def player_subnav(player: dict[str, Any], active_sub: str, available: set[str]) -> str:
-    slug = player_slug(player)
-    items = [("overview", "Overview", f"{slug}.html")]
-    if "stats" in available:
-        items.append(("stats", "Stats", f"{slug}-stats.html"))
-    if "log" in available:
-        items.append(("log", "Game Log", f"{slug}-log.html"))
-    items.append(("ratings", "Ratings", f"{slug}-ratings.html"))
+# ---------------------------------------------------------------------------
+# Rail + page assembly
+# ---------------------------------------------------------------------------
+
+RAIL_SECTIONS = [
+    ("overview", "Overview"),
+    ("stats", "Stats"),
+    ("log", "Game Log"),
+    ("ratings", "Ratings"),
+    ("contract", "Contract & Injuries"),
+]
+
+
+def player_rail_html(available: set[str]) -> str:
     links = []
-    for key, label, href in items:
-        active = " active" if key == active_sub else ""
-        cur = ' aria-current="page"' if key == active_sub else ""
-        links.append(f'<a class="subnav-link{active}" href="{href}"{cur}>{esc(label)}</a>')
-    return f'<nav class="team-subnav" aria-label="Player sections">{"".join(links)}</nav>'
+    for key, label in RAIL_SECTIONS:
+        if key not in available:
+            continue
+        links.append(f'<a class="rail-link" href="#{key}">{esc(label)}</a>')
+    return f'<nav class="player-rail" aria-label="Player sections" data-player-rail>{"".join(links)}</nav>'
 
 
-def render_player_pages(player: dict[str, Any], teams: list[dict[str, Any]], season: int, start_season: int, log_entries: list[dict[str, Any]] | None = None) -> dict[str, str]:
-    """Build the player's sub-pages. Returns ``{suffix: html}`` (suffix "" is the
-    Overview / canonical page). Only sub-pages that have data are generated.
+def redirect_stub_html(player: dict[str, Any], anchor: str, label: str) -> str:
+    """Tiny meta-refresh stub keeping an old sub-page URL alive."""
+    slug = player_slug(player)
+    target = f"{slug}.html#{anchor}"
+    name = player_name(player)
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="0; url={esc(target)}">
+  <link rel="canonical" href="{esc(slug)}.html">
+  <title>{esc(name)} — {esc(label)} — SMP Basketball League</title>
+</head>
+<body>
+  <p><a href="{esc(target)}">{esc(name)} — {esc(label)} has moved</a></p>
+</body>
+</html>
+"""
 
-    The Monte Carlo projection is computed once and shared across the projection-backed
-    sections (development chart, scouting tags, trajectory grid, projection table)."""
+
+def render_player_pages(player: dict[str, Any], teams: list[dict[str, Any]], season: int, start_season: int, log_entries: list[dict[str, Any]] | None = None, data: dict[str, Any] | None = None) -> dict[str, str]:
+    """Build the player's pages. Returns ``{suffix: html}``: suffix "" is the
+    unified page; "-stats"/"-log"/"-ratings" are redirect stubs to its anchors.
+
+    ``data`` (the full export) is optional: without it the shot-diet strip and
+    led-league gold styling are skipped, everything else renders as usual.
+    The Monte Carlo projection is computed once and shared across the
+    projection-backed sections (development chart, trajectory grid)."""
     teams_by_tid = {t["tid"]: t for t in teams}
     regular = regular_stats_since(player, start_season)
     playoffs = playoff_stats_since(player, start_season)
     logs = log_entries or []
     proj = _player_projection(player, season)
+    led = _led_index(data)
 
-    # Gate sub-pages on whether the sections would actually render content: the stat
-    # tables skip seasons with no games and the game log / vs-opponent tables skip
-    # 0-minute (DNP) appearances, so gating on the raw lists would leave dead tabs.
-    available: set[str] = set()
+    # Sections only appear when they would render content: the stat tables skip
+    # seasons with no games and the game log skips 0-minute (DNP) appearances.
+    available: set[str] = {"overview", "ratings", "contract"}
     if any(stat_gp(s) > 0 for s in regular):
         available.add("stats")
     if any(safe_float((e.get("box") or {}).get("min")) > 0 for e in logs):
         available.add("log")
-    full_hero = render_player_hero(player, teams_by_tid, season, start_season)
-    compact_hero = render_player_hero(player, teams_by_tid, season, start_season, compact=True)
 
-    def page(active: str, title_suffix: str, hero: str, sections: list[str]) -> str:
-        body = hero + player_subnav(player, active, available) + "".join(sections)
-        return page_html(player_name(player) + title_suffix, body, teams, root="../", active="players")
-
-    pages: dict[str, str] = {}
-    pages[""] = page("overview", "", full_hero, [
+    pid = player.get("pid")
+    overview_sections = [
+        player_bio_html(player, teams_by_tid, season),
         player_summary_rows(player, teams_by_tid, season, start_season),
+        trophy_case_html(player),
         season_highs_html(player, logs, teams_by_tid, season, "../"),
         form_card_html(player, logs),
         development_chart_html(player, season, proj),
-        subrating_grid_html(player, proj),
-    ])
+    ]
+    body_parts = [
+        trading_card_html(player, teams_by_tid, season, "../"),
+        player_rail_html(available),
+        f'<div class="player-section" id="overview">{"".join(overview_sections)}</div>',
+    ]
     if "stats" in available:
         stats_sections = [
-            per_game_table(player, regular, teams_by_tid, "../", "Per Game · Regular Season", f"regular-{player.get('pid')}"),
-            shot_table(player, regular, teams_by_tid, "../", "Shot Locations and Feats · Regular Season", f"shots-{player.get('pid')}"),
-            advanced_table(player, regular, teams_by_tid, "../", "Advanced · Regular Season", f"advanced-{player.get('pid')}"),
+            per_game_table(player, regular, teams_by_tid, "../", "Per Game · Regular Season", f"regular-{pid}", led=led),
+            shot_diet_html(player, data, start_season),
+            shot_table(player, regular, teams_by_tid, "../", "Shot Locations and Feats · Regular Season", f"shots-{pid}", led=led),
+            advanced_table(player, regular, teams_by_tid, "../", "Advanced · Regular Season", f"advanced-{pid}", led=led),
         ]
         if playoffs:
-            stats_sections.append(per_game_table(player, playoffs, teams_by_tid, "../", "Per Game · Playoffs", f"playoffs-{player.get('pid')}"))
-            stats_sections.append(advanced_table(player, playoffs, teams_by_tid, "../", "Advanced · Playoffs", f"playoff-advanced-{player.get('pid')}"))
-        pages["-stats"] = page("stats", " — Stats", compact_hero, stats_sections)
+            stats_sections.append(per_game_table(player, playoffs, teams_by_tid, "../", "Per Game · Playoffs", f"playoffs-{pid}"))
+            stats_sections.append(advanced_table(player, playoffs, teams_by_tid, "../", "Advanced · Playoffs", f"playoff-advanced-{pid}"))
+        body_parts.append(f'<div class="player-section" id="stats">{"".join(stats_sections)}</div>')
     if "log" in available:
-        pages["-log"] = page("log", " — Game Log", compact_hero, [
+        log_sections = [
             game_log_table(player, logs, teams_by_tid, season, "../"),
             vs_opponent_table(player, logs, teams_by_tid, "../"),
-        ])
-    pages["-ratings"] = page("ratings", " — Ratings", compact_hero, [
+        ]
+        body_parts.append(f'<div class="player-section" id="log">{"".join(log_sections)}</div>')
+    ratings_sections = [
         ratings_table(player, start_season),
-        '<div class="history-row">' + salary_history_html(player) + injury_history_html(player) + "</div>",
-    ])
+        subrating_grid_html(player, proj),
+    ]
+    body_parts.append(f'<div class="player-section" id="ratings">{"".join(ratings_sections)}</div>')
+    contract_sections = [
+        contract_summary_html(player, season),
+        '<div class="history-row">' + salary_history_html(player, season) + injury_history_html(player) + "</div>",
+    ]
+    body_parts.append(f'<div class="player-section" id="contract">{"".join(contract_sections)}</div>')
+
+    pages: dict[str, str] = {}
+    pages[""] = page_html(player_name(player), "".join(body_parts), teams, root="../", active="players")
+    pages["-stats"] = redirect_stub_html(player, "stats", "Stats")
+    pages["-log"] = redirect_stub_html(player, "log", "Game Log")
+    pages["-ratings"] = redirect_stub_html(player, "ratings", "Ratings")
     return pages

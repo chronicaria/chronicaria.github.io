@@ -76,3 +76,34 @@ a:hover { text-decoration: underline; }
   }
 }
 
+/* ---------- global footer + heading anchors (W10) ---------- */
+body { display: flex; flex-direction: column; min-height: 100vh; }
+main.page-shell { flex: 1 0 auto; }
+.site-footer {
+  margin-top: auto;
+  padding: .9rem clamp(.75rem, 2.5vw, 1.5rem) 1.3rem;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+}
+.footer-links { display: flex; flex-wrap: wrap; gap: .1rem .3rem; margin-bottom: .45rem; }
+.footer-links a {
+  padding: .2rem .45rem;
+  border-radius: .15rem;
+  color: var(--muted);
+  font-size: .78rem;
+  text-decoration: none;
+}
+.footer-links a:hover { color: var(--text); background: var(--panel-2); text-decoration: none; }
+.footer-meta { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; color: var(--muted); font-size: .75rem; }
+.footer-sep { opacity: .6; }
+.h-anchor {
+  margin-left: .4rem;
+  color: var(--muted);
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity .15s;
+}
+h2:hover .h-anchor, .h-anchor:focus-visible { opacity: 1; }
+.h-anchor:hover { color: var(--accent); text-decoration: none; }
+

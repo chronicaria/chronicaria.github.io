@@ -160,6 +160,5 @@ def portrait_html(
         initials(player),
         player.get("tid"),
         jersey_number=player.get("jerseyNumber"),
-        size=int(size),
     )
     return f'<span class="{esc(cls)} portrait-monogram" role="img" aria-label="{esc(name)}">{mono}</span>'

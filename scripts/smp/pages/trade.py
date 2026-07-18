@@ -1,16 +1,18 @@
 from __future__ import annotations
 
-import argparse
-import html
+"""Trade Center page.
+
+Like the Compare page, the Trade Machine is a server-rendered shell whose
+client (static/js/trade-extras.js) fetches assets/app-data.json for rosters,
+contracts, trade values, payrolls (incl. dead money) and the finance block's
+$300M luxury-tax line. The only page-embedded data is a tiny draft-pick
+supplement — app-data.json does not carry picks.
+
+The contract efficiency table stays fully server-rendered.
+"""
+
 import json
-import random
-import math
-import re
-import shutil
-import unicodedata
-from collections import defaultdict
-from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from ..core import (
     age,
@@ -22,7 +24,6 @@ from ..core import (
     page_html,
     player_link,
     player_name,
-    player_url,
     safe_float,
     safe_int,
     season_regular_stat,
@@ -30,10 +31,8 @@ from ..core import (
     td,
     team_abbrev,
     team_dot,
-    team_full_name,
     team_label,
     team_palette_by_tid,
-    team_payroll,
 )
 
 
@@ -84,180 +83,60 @@ def contract_efficiency_table(players: list[dict[str, Any]], teams: list[dict[st
     """
 
 
-def trade_machine_payload(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> str:
+def trade_extras_payload(data: dict[str, Any], teams: list[dict[str, Any]]) -> str:
+    """Compact JSON supplement: tradeable draft picks per team.
+
+    ``picks`` maps tid -> [{id, label}] (dpid + a human label like
+    "2032 2nd (via MAN)"). Everything else the Trade Machine needs comes from
+    assets/app-data.json.
+    """
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
-    out_teams = []
-    for team in sorted(teams, key=team_abbrev):
-        tid = safe_int(team.get("tid"))
-        roster = [p for p in players if safe_int(p.get("tid"), -9) == tid]
-        roster.sort(key=lambda p: -safe_float((p.get("contract") or {}).get("amount")))
-        payroll = team_payroll(roster, season)
-        picks = []
-        for dp in data.get("draftPicks", []):
-            if safe_int(dp.get("tid"), -10) != tid or not isinstance(dp.get("season"), int):
-                continue
-            via = ""
-            if safe_int(dp.get("originalTid"), -10) != tid:
-                via = team_abbrev(teams_by_tid.get(safe_int(dp.get("originalTid"), -10)))
-            picks.append({
-                "id": dp.get("dpid"),
-                "label": f"{dp.get('season')}{'' if safe_int(dp.get('round')) == 1 else ' 2nd'}" + (f" (via {via})" if via else ""),
-            })
-        out_teams.append({
-            "tid": tid,
-            "abbrev": team_abbrev(team),
-            "name": team_full_name(team),
-            "payroll": payroll,
-            "players": [
-                {
-                    "pid": p.get("pid"),
-                    "n": player_name(p),
-                    "pos": latest_rating(p, season).get("pos", ""),
-                    "age": age(p, season),
-                    "ovr": latest_rating(p, season).get("ovr"),
-                    "amt": safe_float((p.get("contract") or {}).get("amount")),
-                    "exp": (p.get("contract") or {}).get("exp"),
-                    "value": round(safe_float(p.get("value")), 1),
-                    "u": player_url(p),
-                }
-                for p in roster
-            ],
-            "picks": picks,
+    picks: dict[str, list[dict[str, Any]]] = {}
+    for dp in data.get("draftPicks", []):
+        tid = safe_int(dp.get("tid"), -10)
+        if tid < 0 or tid not in teams_by_tid or not isinstance(dp.get("season"), int):
+            continue
+        via = ""
+        if safe_int(dp.get("originalTid"), -10) != tid:
+            via = team_abbrev(teams_by_tid.get(safe_int(dp.get("originalTid"), -10)))
+        picks.setdefault(str(tid), []).append({
+            "id": dp.get("dpid"),
+            "label": f"{dp.get('season')}{'' if safe_int(dp.get('round')) == 1 else ' 2nd'}" + (f" (via {via})" if via else ""),
         })
-    payload = {"teams": out_teams}
-    return json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
+    payload = {"picks": picks}
+    return json.dumps(payload, separators=(",", ":"), sort_keys=True).replace("</", "<\\/")
 
 
-TRADE_MACHINE_JS = r"""
-(function () {
-  const dataEl = document.getElementById('trade-data');
-  if (!dataEl) return;
-  const data = JSON.parse(dataEl.textContent);
-  const fmtM = (k) => {
-    const sign = k < 0 ? '-' : '';
-    const m = Math.abs(k) / 1000;
-    return sign + '$' + (Math.round(m * 100) / 100) + 'M';
-  };
-  const sides = [
-    { sel: document.querySelector('[data-trade-team="0"]'), list: document.querySelector('[data-trade-list="0"]'), picked: new Set(), pickedPicks: new Set() },
-    { sel: document.querySelector('[data-trade-team="1"]'), list: document.querySelector('[data-trade-list="1"]'), picked: new Set(), pickedPicks: new Set() },
-  ];
-  const summary = document.querySelector('[data-trade-summary]');
-
-  sides.forEach((side, index) => {
-    data.teams.forEach((team) => {
-      const opt = document.createElement('option');
-      opt.value = team.tid;
-      opt.textContent = team.abbrev + ' — ' + team.name;
-      side.sel.appendChild(opt);
-    });
-    side.sel.selectedIndex = index === 0 ? 0 : 1;
-    side.sel.addEventListener('change', () => { side.picked.clear(); side.pickedPicks.clear(); renderSide(index); renderSummary(); });
-  });
-
-  function teamOf(side) {
-    return data.teams.find((t) => String(t.tid) === String(side.sel.value));
-  }
-
-  function renderSide(index) {
-    const side = sides[index];
-    const team = teamOf(side);
-    side.list.innerHTML = '';
-    team.players.forEach((p) => {
-      const row = document.createElement('label');
-      row.className = 'trade-row';
-      row.innerHTML = '<input type="checkbox"> <span class="trade-name">' + p.n + '</span>'
-        + '<span class="muted">' + p.pos + ' · ' + p.age + 'y · ' + p.ovr + ' ovr</span>'
-        + '<span class="trade-amt">' + fmtM(p.amt) + '/' + (p.exp || '—') + '</span>'
-        + '<span class="trade-val">' + p.value + '</span>';
-      const box = row.querySelector('input');
-      box.checked = side.picked.has(p.pid);
-      box.addEventListener('change', () => {
-        if (box.checked) side.picked.add(p.pid); else side.picked.delete(p.pid);
-        renderSummary();
-      });
-      side.list.appendChild(row);
-    });
-    if (team.picks.length) {
-      team.picks.forEach((pick) => {
-        const row = document.createElement('label');
-        row.className = 'trade-row trade-pick';
-        row.innerHTML = '<input type="checkbox"> <span class="trade-name">' + pick.label + '</span><span class="muted">draft pick</span><span class="trade-amt"></span><span class="trade-val">—</span>';
-        const box = row.querySelector('input');
-        box.checked = side.pickedPicks.has(pick.id);
-        box.addEventListener('change', () => {
-          if (box.checked) side.pickedPicks.add(pick.id); else side.pickedPicks.delete(pick.id);
-          renderSummary();
-        });
-        side.list.appendChild(row);
-      });
-    }
-  }
-
-  function sideAssets(side) {
-    const team = teamOf(side);
-    const players = team.players.filter((p) => side.picked.has(p.pid));
-    const picks = team.picks.filter((pick) => side.pickedPicks.has(pick.id));
-    const salary = players.reduce((s, p) => s + p.amt, 0);
-    const value = players.reduce((s, p) => s + p.value, 0);
-    return { team, players, picks, salary, value };
-  }
-
-  function renderSummary() {
-    const a = sideAssets(sides[0]);
-    const b = sideAssets(sides[1]);
-    if (String(a.team.tid) === String(b.team.tid)) {
-      summary.innerHTML = '<p class="muted">Pick two different teams.</p>';
-      return;
-    }
-    const newPayrollA = a.team.payroll - a.salary + b.salary;
-    const newPayrollB = b.team.payroll - b.salary + a.salary;
-    const diff = a.value - b.value;
-    let verdict = 'Even value trade.';
-    if (Math.abs(diff) > 1) {
-      const winner = diff > 0 ? b.team.abbrev : a.team.abbrev;
-      verdict = winner + ' wins this trade by ' + Math.abs(Math.round(diff * 10) / 10) + ' value' + (a.picks.length || b.picks.length ? ' (draft picks not valued)' : '');
-    }
-    const lines = [];
-    const describe = (from, to) => {
-      const bits = from.players.map((p) => p.n).concat(from.picks.map((pick) => pick.label));
-      return '<p><strong>' + from.team.abbrev + ' → ' + to.team.abbrev + ':</strong> ' + (bits.join(', ') || '<span class="muted">nothing</span>')
-        + ' <span class="muted">(salary ' + fmtM(from.salary) + ', value ' + (Math.round(from.value * 10) / 10) + ')</span></p>';
-    };
-    lines.push(describe(a, b));
-    lines.push(describe(b, a));
-    lines.push('<p><strong>' + a.team.abbrev + '</strong> payroll after: ' + fmtM(newPayrollA) + '</p>');
-    lines.push('<p><strong>' + b.team.abbrev + '</strong> payroll after: ' + fmtM(newPayrollB) + '</p>');
-    lines.push('<p class="trade-verdict">' + verdict + '</p>');
-    summary.innerHTML = lines.join('');
-  }
-
-  renderSide(0);
-  renderSide(1);
-  renderSummary();
-})();
-"""
+def _trade_side(index: int, label: str) -> str:
+    return f"""
+        <div class="trade-side">
+          <label class="select-label combo-label" for="trade-combo-{index}">{label}</label>
+          <div class="combo" data-trade-combo="{index}">
+            <input id="trade-combo-{index}" type="text" class="combo-input" role="combobox"
+              aria-autocomplete="list" aria-expanded="false" aria-controls="trade-combo-list-{index}"
+              aria-activedescendant="" autocomplete="off" autocapitalize="off" spellcheck="false"
+              placeholder="Type a team…" disabled>
+            <div class="combo-list" id="trade-combo-list-{index}" role="listbox" aria-label="{label} matches" hidden></div>
+          </div>
+          <input class="table-search combo-roster-filter" type="search" data-trade-filter="{index}"
+            placeholder="Filter roster…" aria-label="Filter {label} roster" disabled>
+          <div class="trade-list" data-trade-list="{index}">
+            <p class="app-loading">Loading rosters…</p>
+          </div>
+        </div>"""
 
 
 def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> str:
-    payload = trade_machine_payload(data, teams, players, season)
+    extras = trade_extras_payload(data, teams)
     machine = f"""
-    <section class="card home-section">
-      <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy">check assets on both sides · BBGM trade values</span></div>
-      <div class="trade-grid">
-        <div class="trade-side">
-          <label class="select-label">Team A <select data-trade-team="0"></select></label>
-          <div class="trade-list" data-trade-list="0"></div>
-        </div>
-        <div class="trade-side">
-          <label class="select-label">Team B <select data-trade-team="1"></select></label>
-          <div class="trade-list" data-trade-list="1"></div>
-        </div>
+    <section class="card home-section" data-app="trade">
+      <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy">check assets on both sides · BBGM trade values · payrolls incl. dead money</span></div>
+      <div class="trade-grid">{_trade_side(0, "Team A")}{_trade_side(1, "Team B")}
       </div>
-      <div class="trade-summary" data-trade-summary></div>
+      <div class="trade-summary" data-trade-summary aria-live="polite"></div>
+      <noscript><p class="empty-state">The trade machine needs JavaScript.</p></noscript>
     </section>
-    <script type="application/json" id="trade-data">{payload}</script>
-    <script>{TRADE_MACHINE_JS}</script>
+    <script type="application/json" id="trade-extra">{extras}</script>
     """
     body = f"""
     <section class="page-hero">

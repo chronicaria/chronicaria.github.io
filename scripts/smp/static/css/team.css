@@ -35,3 +35,238 @@
 #roster-stats tbody tr:nth-child(5) > *,
 #roster-stats tbody tr:nth-child(10) > * { border-bottom: 2px solid var(--line); }
 
+
+/* ---------- W2 team immersion: identity scope, stripe, watermark, rafters ---------- */
+/* Every color below is derived from the --team-* vars emitted by identity.team_css_vars()
+   mixed with theme tokens, so both themes stay legible. Plain fallbacks come first. */
+.team-scope { position: relative; }
+.tm-stripe {
+  height: 7px;
+  margin-bottom: .75rem;
+  border-radius: .15rem .15rem 0 0;
+  background: var(--team-primary, var(--accent));
+  background: linear-gradient(180deg, var(--team-primary, var(--accent)) 0 58%, var(--team-secondary, var(--accent)) 58% 100%);
+}
+.team-scope .team-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--panel);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--team-primary) 30%, var(--panel)) 0%, var(--panel) 62%);
+  border-top: 2px solid var(--line);
+  border-top-color: color-mix(in srgb, var(--team-secondary) 60%, var(--line));
+}
+.tm-hero-copy { position: relative; z-index: 1; }
+.team-scope .hero-finance { position: relative; z-index: 1; }
+.tm-watermark {
+  position: absolute;
+  right: -.05em;
+  bottom: -.42em;
+  z-index: 0;
+  font-size: clamp(5rem, 16vw, 9.5rem);
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: 1;
+  color: var(--team-secondary, var(--muted));
+  opacity: .09;
+  pointer-events: none;
+  user-select: none;
+}
+html[data-theme="light"] .tm-watermark { color: var(--team-primary, var(--muted)); opacity: .08; }
+
+/* accent-tinted subnav */
+.team-scope .subnav-link.active {
+  background: var(--panel-3);
+  background: color-mix(in srgb, var(--team-primary) 16%, var(--panel-3));
+  box-shadow: inset 0 -2px 0 var(--team-secondary, var(--accent));
+}
+.team-scope .subnav-link:hover {
+  background: var(--panel-2);
+  background: color-mix(in srgb, var(--team-primary) 8%, var(--panel-2));
+}
+
+/* card top borders + section-title markers + soft panel washes */
+.team-scope .card {
+  border-top: 2px solid var(--line);
+  border-top-color: color-mix(in srgb, var(--team-primary) 55%, var(--line));
+}
+.team-scope .section-title-row h2::before {
+  content: "";
+  display: inline-block;
+  width: .5rem;
+  height: .5rem;
+  margin-right: .4rem;
+  border-radius: .1rem;
+  vertical-align: 0;
+  background: var(--team-secondary, var(--accent));
+  background: linear-gradient(180deg, var(--team-primary, var(--accent)) 0 50%, var(--team-secondary, var(--accent)) 50% 100%);
+}
+.team-scope .vital-tile,
+.team-scope .game-chip,
+.team-scope .depth-col,
+.team-scope .pick-chip {
+  background: var(--panel-2);
+  background: color-mix(in srgb, var(--team-primary) 6%, var(--panel-2));
+}
+.team-scope .vital-tile.has-tip { cursor: help; }
+
+/* rafters: championship pennants hanging in the hero */
+.tm-rafters {
+  position: absolute;
+  top: 0;
+  right: .9rem;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: .45rem;
+  padding: 0 .55rem;
+  border-top: 3px solid var(--line);
+  border-top-color: color-mix(in srgb, var(--team-secondary) 45%, var(--line));
+}
+.banner { display: block; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .35)); }
+.banner--title { width: 2.5rem; height: auto; }
+.banner--finals { width: 1.65rem; height: auto; margin-top: .1rem; opacity: .82; }
+.banner-finals-body { fill: var(--panel-3); stroke: var(--line); }
+.banner-finals-year { fill: var(--text); }
+.banner-finals-cap { fill: var(--muted); }
+@media (max-width: 760px) {
+  .tm-rafters { position: static; order: -1; width: 100%; border-top-width: 2px; padding: 0 .3rem .1rem; }
+  .banner--title { width: 2rem; }
+  .banner--finals { width: 1.35rem; }
+  .tm-watermark { font-size: 5rem; }
+}
+
+/* ---------- W2 starting five half-court ---------- */
+.sfive-court { position: relative; max-width: 620px; margin: 0 auto; }
+.sfive-court-svg { display: block; width: 100%; height: auto; }
+.sfive-floor {
+  fill: var(--panel-2);
+  fill: color-mix(in srgb, var(--team-primary) 7%, var(--panel-2));
+  stroke: var(--line);
+  stroke-width: 2;
+  rx: 4;
+}
+.sfive-line, .sfive-arc {
+  fill: none;
+  stroke: var(--muted);
+  stroke: color-mix(in srgb, var(--team-primary) 45%, var(--muted));
+  stroke-width: 2.5;
+}
+.sfive-paint {
+  fill: var(--panel-3);
+  fill: color-mix(in srgb, var(--team-primary) 26%, var(--panel-2));
+  stroke: var(--team-secondary, var(--muted));
+  stroke-width: 2.5;
+}
+.sfive-paintline { fill: none; stroke: var(--team-secondary, var(--muted)); stroke-width: 2.5; }
+.sfive-rim { fill: none; stroke: var(--team-secondary, var(--muted)); stroke-width: 3; }
+.sfive-slot {
+  position: absolute;
+  transform: translate(-50%, -46%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+  text-align: center;
+  width: 8.4rem;
+}
+.sfive-roundel { display: block; width: 3.4rem; height: 3.4rem; }
+.sfive-portrait, .sfive-roundel .monogram {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--panel);
+  border: 2px solid var(--team-secondary, var(--line));
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+}
+.sfive-roundel .monogram { border: 0; }
+.sfive-vacant {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px dashed var(--muted);
+  color: var(--muted);
+  font-weight: 700;
+  font-size: .95rem;
+  background: var(--panel);
+  opacity: .8;
+}
+.sfive-tag {
+  display: grid;
+  gap: .05rem;
+  justify-items: center;
+  padding: .18rem .45rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel);
+  background: color-mix(in srgb, var(--panel) 88%, var(--team-primary));
+  font-size: .74rem;
+  line-height: 1.25;
+  max-width: 100%;
+}
+.sfive-pos {
+  color: var(--muted);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+.sfive-name { color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 7.6rem; }
+.sfive-meta { display: inline-flex; gap: .35rem; color: var(--muted); font-size: .66rem; font-variant-numeric: tabular-nums; }
+.sfive-ovr { font-weight: 700; color: var(--text); }
+.sfive-bench {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+  margin-top: .65rem;
+  padding-top: .55rem;
+  border-top: 1px solid var(--line);
+}
+.sfive-bench-label {
+  color: var(--muted);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-right: .2rem;
+}
+.sfive-bench-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .16rem .5rem .16rem .2rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  background: color-mix(in srgb, var(--team-primary) 6%, var(--panel-2));
+  color: var(--text);
+  font-size: .74rem;
+  text-decoration: none;
+}
+.sfive-bench-chip:hover { border-color: var(--team-secondary, var(--accent)); text-decoration: none; }
+.sfive-bench-portrait, .sfive-bench-chip .monogram { width: 1.5rem; height: 1.5rem; border-radius: 50%; object-fit: cover; display: block; }
+.sfive-bench-ovr { color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 700; }
+@media (max-width: 640px) {
+  .sfive-court-svg { display: none; }
+  .sfive-court { max-width: none; }
+  .sfive-slot { position: static; transform: none; width: auto; flex-direction: row; text-align: left; }
+  .sfive-court { display: grid; gap: .45rem; }
+  .sfive-tag { justify-items: start; }
+  .sfive-roundel { width: 2.6rem; height: 2.6rem; flex: 0 0 auto; }
+}
+
+/* show-inactive roster toggle */
+.inactive-toggle { display: inline-flex; align-items: center; gap: .35rem; color: var(--muted); margin: .2rem 0 .4rem; cursor: pointer; }
+.team-scope tr.inactive-row { display: none; }
+.team-scope .show-inactive tr.inactive-row { display: table-row; }
+.team-scope .show-inactive tr.inactive-row > td { opacity: .68; }
+
+/* layered roundels: monogram sits under the portrait so a dead photo never leaves a hole */
+.sfive-roundel { position: relative; }
+.sfive-roundel .tm-under { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sfive-roundel .sfive-portrait { position: relative; z-index: 1; }
+.sfive-bench-roundel { position: relative; width: 1.5rem; height: 1.5rem; flex: 0 0 auto; }
+.sfive-bench-roundel .tm-under { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sfive-bench-roundel .sfive-bench-portrait { position: relative; z-index: 1; }

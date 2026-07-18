@@ -1,0 +1,227 @@
+/* ---------- SMP Wrapped (wrapped.html) ----------
+   Full-bleed scroll-snap deck. All classes are wr- prefixed. Snap is applied
+   to <html> via the .wr-snap class wrapped.js adds only on this page, so the
+   rest of the site never inherits it; without JS the page is a plain scroll. */
+
+html.wr-snap { scroll-snap-type: y proximity; }
+
+.wr-deck {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-top: -1rem; /* cancel the page-shell top padding for true full-bleed */
+}
+
+.wr-slide {
+  min-height: calc(100vh - 3rem);
+  min-height: calc(100svh - 3rem);
+  scroll-snap-align: start;
+  scroll-margin-top: 2.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 3.5rem);
+  border-bottom: 1px solid var(--line);
+}
+.wr-slide:nth-child(even) { background: color-mix(in srgb, var(--panel) 65%, var(--bg)); }
+.wr-slide:last-child { border-bottom: 0; }
+
+.wr-inner { width: 100%; max-width: 64rem; }
+
+/* type scale */
+.wr-eyebrow {
+  margin: 0 0 .5rem;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.wr-huge {
+  margin: 0;
+  font-size: clamp(3rem, 11vw, 7.5rem);
+  font-weight: 800;
+  line-height: .95;
+  letter-spacing: -.02em;
+}
+.wr-accent { color: var(--accent); }
+.wr-h2 {
+  margin: 0 0 1.4rem;
+  font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+.wr-sub { margin: .8rem 0 0; font-size: clamp(1rem, 2.4vw, 1.3rem); color: var(--muted); }
+.wr-big {
+  display: block;
+  font-size: clamp(2.2rem, 6vw, 4.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.wr-tabular { font-variant-numeric: tabular-nums; }
+.wr-unit { font-size: .35em; font-weight: 700; letter-spacing: .08em; color: var(--muted); }
+.wr-label {
+  display: block;
+  margin-top: .35rem;
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.wr-sublabel { display: block; margin-top: .15rem; font-size: .78rem; color: var(--muted); }
+.wr-footnote { margin-top: 1.6rem; font-size: .78rem; color: var(--muted); }
+.wr-scroll-hint { margin-top: 2.2rem; font-size: 1.6rem; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) {
+  .wr-scroll-hint { animation: wr-nudge 2.4s ease-in-out infinite; }
+  @keyframes wr-nudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(.4rem); }
+  }
+}
+
+/* season-in-numbers tiles */
+.wr-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem;
+}
+.wr-stat {
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: .3rem;
+  background: var(--panel);
+}
+
+/* feature blocks (fantasy line, top riser) */
+.wr-feature { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2rem); flex-wrap: wrap; }
+.wr-feature-copy { min-width: 0; }
+.wr-feature-name { margin: .5rem 0 0; font-size: clamp(1.3rem, 3.2vw, 2rem); font-weight: 700; }
+.wr-portrait {
+  width: clamp(6rem, 14vw, 9rem);
+  height: clamp(6rem, 14vw, 9rem);
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--line);
+  background: var(--panel-2);
+  flex: 0 0 auto;
+}
+.wr-portrait-sm { width: 3.6rem; height: 3.6rem; border-width: 2px; }
+.wr-portrait.portrait-monogram { display: grid; place-items: center; border: 0; background: none; }
+.wr-portrait.portrait-monogram .monogram { width: 100%; height: 100%; }
+
+.wr-riser-list { margin: 1.6rem 0 0; padding: 0 0 0 1.2rem; }
+.wr-riser-list li { margin: .35rem 0; font-size: clamp(.95rem, 2vw, 1.15rem); }
+.wr-delta { font-weight: 800; color: var(--good); font-variant-numeric: tabular-nums; }
+
+/* leaders wall */
+.wr-leaders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.wr-leader {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: .3rem;
+  background: var(--panel);
+}
+.wr-leader-value { margin: 0; font-size: 1.6rem; font-weight: 800; line-height: 1.1; }
+.wr-leader-name { margin: .2rem 0 0; font-weight: 600; }
+
+/* playoff bracket recap */
+.wr-bracket { display: grid; gap: 1.4rem; }
+.wr-round h3 {
+  margin: 0 0 .5rem;
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.wr-series-list { margin: 0; padding: 0; list-style: none; }
+.wr-series-list li {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  padding: .55rem .2rem;
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(1.05rem, 2.6vw, 1.5rem);
+}
+.wr-series-list li:last-child { border-bottom: 0; }
+.wr-seed { font-size: .72em; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wr-series-score { font-weight: 800; }
+
+/* champion slide */
+.wr-slide-champion {
+  background:
+    radial-gradient(60% 55% at 50% 30%, color-mix(in srgb, var(--warn) 16%, transparent), transparent 70%);
+}
+.wr-champ { display: flex; align-items: center; gap: clamp(1.2rem, 4vw, 3rem); flex-wrap: wrap; }
+.wr-champ-copy { min-width: 0; }
+.wr-champ-name { font-size: clamp(2.4rem, 8vw, 5.5rem); }
+.wr-champ-name a { color: inherit; }
+.wr-pennant { width: clamp(6rem, 14vw, 9.5rem); height: auto; flex: 0 0 auto; font-family: inherit; }
+.wr-finals-mvp { display: flex; align-items: center; gap: .9rem; margin-top: 1.6rem; }
+
+/* team cards */
+.wr-team-card {
+  border-radius: .5rem;
+  padding: clamp(1.2rem, 4vw, 2.4rem);
+  background: linear-gradient(160deg,
+    var(--team-primary),
+    color-mix(in srgb, var(--team-primary) 78%, #000));
+  border: 1px solid color-mix(in srgb, var(--team-secondary) 55%, transparent);
+  color: var(--team-on-primary);
+}
+.wr-team-card a { color: var(--team-on-primary); }
+.wr-team-card .wr-eyebrow,
+.wr-team-card .wr-label,
+.wr-team-card .wr-sublabel,
+.wr-team-card .wr-unit { color: color-mix(in srgb, var(--team-on-primary) 72%, var(--team-primary)); }
+.wr-team-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.4rem; }
+.wr-team-mono { flex: 0 0 auto; }
+.wr-team-name { margin: 0; font-size: clamp(1.7rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.01em; }
+.wr-team-stats { display: flex; gap: clamp(1.4rem, 5vw, 3.5rem); flex-wrap: wrap; align-items: end; }
+.wr-team-result { display: block; font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 700; line-height: 1.15; }
+.wr-team-card .wr-performer { display: flex; align-items: center; gap: .9rem; margin-top: 1.5rem; }
+.wr-performer-name { margin: .15rem 0 0; font-size: 1.15rem; font-weight: 700; }
+.wr-team-card .wr-portrait { border-color: color-mix(in srgb, var(--team-secondary) 70%, transparent); }
+.wr-share { margin: 1.6rem 0 0; display: flex; gap: .6rem; flex-wrap: wrap; }
+.wr-team-card .wr-share-link {
+  /* relative to the card's own colors so it reads on both themes */
+  background: color-mix(in srgb, var(--team-on-primary) 14%, transparent);
+  border-color: color-mix(in srgb, var(--team-secondary) 70%, transparent);
+  color: var(--team-on-primary);
+}
+.wr-team-card .wr-share-link:hover { border-color: var(--team-secondary); }
+
+/* dots rail (built by wrapped.js) */
+.wr-dots {
+  position: fixed;
+  right: .6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  z-index: 15;
+}
+.wr-dot {
+  width: .65rem;
+  height: .65rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+.wr-dot[aria-current="true"] { background: var(--accent); border-color: var(--accent); }
+.wr-dot:hover { border-color: var(--accent); }
+@media (max-width: 700px) {
+  .wr-dots { display: none; }
+  .wr-slide { scroll-snap-align: none; } /* long slides on small screens scroll freely */
+}

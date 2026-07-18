@@ -101,3 +101,93 @@ tr.next-day > td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 .h2h-grid th:first-child, .h2h-grid td:first-child { text-align: left; }
 .h2h-self { background: rgba(255,255,255,.03); }
 
+/* ---------- phase-aware home (hm-) ---------- */
+.hm-banner-row { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.hm-banner-title { margin: 0; font-size: 1.05rem; }
+.hm-phase-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: .1rem .5rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  border-radius: .8rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.hm-banner-note { margin: .4rem 0 0; }
+.hm-stake-static { cursor: default; }
+.hm-stake-static:hover { border-color: var(--line); }
+.hm-stake-team { color: inherit; }
+.hm-stake-team:hover { color: var(--accent); text-decoration: none; }
+.hm-digest-summary { margin: 0 0 .3rem; }
+.hm-pick { font-size: .68rem; white-space: nowrap; }
+.hm-award-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .6rem; }
+.hm-award {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .5rem .6rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+}
+.hm-award-crest { display: inline-flex; flex: 0 0 auto; }
+.hm-award-crest .crest { width: 26px; height: 26px; }
+.hm-award-body { display: flex; flex-direction: column; gap: .05rem; min-width: 0; }
+.hm-award-body .player-link { overflow-wrap: anywhere; }
+.hm-award-label {
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- four-factors quadrant scatter (ff4-) ---------- */
+.ff4-wrap { max-width: 680px; }
+.ff4-chart { width: 100%; height: auto; display: block; }
+.ff4-avg { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; opacity: .6; }
+.ff4-quad { fill: var(--muted); font-size: 9.5px; letter-spacing: .05em; text-transform: uppercase; opacity: .75; }
+.ff4-axis { fill: var(--muted); font-size: 10.5px; }
+.ff4-dot { fill: var(--ff4-c, var(--accent)); stroke: var(--panel); stroke-width: 1.5; }
+.ff4-label { fill: var(--text); font-size: 11px; font-weight: 700; paint-order: stroke; stroke: var(--panel); stroke-width: 2.5px; }
+.ff4-link { text-decoration: none; }
+.ff4-link:hover .ff4-dot, .ff4-link:focus-visible .ff4-dot { stroke: var(--accent); stroke-width: 2.5; }
+.ff4-link:hover .ff4-label, .ff4-link:focus-visible .ff4-label { fill: var(--accent); }
+
+/* ---------- playoff-odds river (oddsr-) ---------- */
+.oddsr-wrap { max-width: 700px; }
+.oddsr-chart { width: 100%; height: auto; display: block; }
+[data-oddsr] .oddsr-chart { cursor: crosshair; }
+.oddsr-line {
+  fill: none;
+  stroke: var(--oddsr-c, var(--accent));
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.oddsr-dot { fill: var(--oddsr-c, var(--accent)); stroke: var(--panel); stroke-width: 1; }
+.oddsr-endlabel { fill: var(--oddsr-c, var(--text)); font-size: 10.5px; font-weight: 700; paint-order: stroke; stroke: var(--panel); stroke-width: 2px; }
+.oddsr-leader { stroke: var(--muted); stroke-width: .8; opacity: .55; }
+.oddsr-hline { stroke: var(--muted); stroke-width: 1; pointer-events: none; }
+.oddsr-tooltip { min-width: 10rem; max-width: 14rem; white-space: normal; }
+.oddsr-tip-row { display: flex; align-items: center; gap: .35rem; font-variant-numeric: tabular-nums; }
+.oddsr-tip-row .oddsr-tip-val { margin-left: auto; font-weight: 600; color: var(--text); }
+.oddsr-tip-dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 50%; flex: 0 0 auto; }
+
+/* ---------- fantasy leaders (fanl-) ---------- */
+.fanl-list li { gap: .35rem; }
+.fanl-track {
+  flex: 1 1 2.2rem;
+  min-width: 1.4rem;
+  height: .32rem;
+  border-radius: .16rem;
+  background: color-mix(in srgb, var(--muted) 18%, transparent);
+  overflow: hidden;
+}
+.fanl-bar { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
+.fanl-list .leader-value { flex: 0 0 auto; }
+

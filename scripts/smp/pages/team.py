@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import colorsys
 import html
 import json
 import random
@@ -18,25 +19,30 @@ from ..core import (
     TEAM_RATING_RANK_KEYS,
     active_teams_for_season,
     age,
+    build_game_logs,
     canonical_pos,
     completed_game_items,
+    current_season,
     esc,
     fmt_money,
     fmt_number,
     fmt_pct,
     fmt_record,
     fmt_signed,
+    fmt_win_pct,
     game_ot_label,
     game_recap_text,
     game_sort_key,
     game_url,
     game_winner_tid,
     heat_style,
+    initials,
     is_completed_game_item,
     item_team_points,
     latest_rating,
     latest_regular_stat,
     latest_team_season,
+    latest_team_stat,
     made_pct,
     page_html,
     per_game,
@@ -47,6 +53,7 @@ from ..core import (
     roster_row,
     safe_float,
     safe_int,
+    season_regular_stat,
     standings_order,
     stat_gp,
     streak_text,
@@ -56,10 +63,16 @@ from ..core import (
     team_abbrev_for_tid,
     team_full_name,
     team_label,
-    team_palette_by_tid,
     team_schedule_result,
     team_slug,
+    win_pct,
 )
+
+from ..derived import four_factors
+
+from ..identity import monogram_svg, team_css_vars, team_identity
+
+from ..portraits import portrait_html
 
 from ..finance import (
     FIN_BASE,
@@ -72,6 +85,126 @@ from ..finance import (
     fmt_money_pm,
     team_finances_table,
 )
+
+
+# ---------------------------------------------------------------------------
+# Team-immersion helpers: identity scope wrapper, color ramps, small tiles
+# ---------------------------------------------------------------------------
+
+
+def team_scope_html(team: dict[str, Any], body: str) -> str:
+    """Wrap a team page body in a div carrying the team's --team-* css vars,
+    with the two-color jersey stripe pinned along the top."""
+    tid = safe_int(team.get("tid"), -1)
+    return (
+        f'<div class="team-scope" style="{team_css_vars(tid)}">'
+        '<div class="tm-stripe" aria-hidden="true"></div>'
+        f"{body}</div>"
+    )
+
+
+def _hex_rgb(color: str) -> tuple:
+    c = str(color).lstrip("#")
+    if len(c) == 3:
+        c = "".join(ch * 2 for ch in c)
+    try:
+        return tuple(int(c[i:i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return (90, 100, 110)
+
+
+def _mix_hex(a: str, b: str, t: float) -> str:
+    """Linear RGB mix of two hex colors; t=0 -> a, t=1 -> b."""
+    t = max(0.0, min(1.0, t))
+    ra, rb = _hex_rgb(a), _hex_rgb(b)
+    return "#%02x%02x%02x" % tuple(int(round(ca + (cb - ca) * t)) for ca, cb in zip(ra, rb))
+
+
+def _lighten_hex(color: str, amount: float) -> str:
+    """Shift lightness in HLS space; positive lightens, negative darkens."""
+    r, g, b = (v / 255.0 for v in _hex_rgb(color))
+    h, l, s = colorsys.rgb_to_hls(r, g, b)
+    l = max(0.0, min(1.0, l + amount))
+    rr, gg, bb = colorsys.hls_to_rgb(h, l, s)
+    return "#%02x%02x%02x" % (int(round(rr * 255)), int(round(gg * 255)), int(round(bb * 255)))
+
+
+def team_color_ramp(tid: Any, n: int) -> list[str]:
+    """n distinct band colors derived from the team's identity (secondary -> primary),
+    with alternating lightness so adjacent streamgraph bands stay separable. Fixed
+    hexes on purpose: the fills sit on a neutral panel in both themes."""
+    ident = team_identity(tid)
+    a, b = ident["secondary"], ident["primary"]
+    out = []
+    for i in range(max(1, n)):
+        t = i / (n - 1) if n > 1 else 0.0
+        base = _mix_hex(a, b, t)
+        if i % 2 == 1:
+            base = _lighten_hex(base, 0.12)
+        out.append(base)
+    return out
+
+
+def _on_hex(color: str) -> str:
+    """Legible text color (white / near-black) for a fixed hex background."""
+    r, g, b = _hex_rgb(color)
+    luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255.0
+    return "#10131a" if luminance > 0.55 else "#ffffff"
+
+
+def _tile(label: str, value: str, cls: str = "", tip: str | None = None) -> str:
+    """One .vital-tile stat chip, optionally with an explainer tooltip."""
+    tip_attr = f' title="{esc(tip)}"' if tip else ""
+    tip_cls = " has-tip" if tip else ""
+    cls_attr = f' class="{esc(cls)}"' if cls else ""
+    return (
+        f'<div class="vital-tile{tip_cls}"{tip_attr}><span>{esc(label)}</span>'
+        f"<strong{cls_attr}>{value}</strong></div>"
+    )
+
+
+def _team_completed_window(team: dict[str, Any], game_items: list[dict[str, Any]], season: int) -> tuple[list[dict[str, Any]], int]:
+    """Completed regular-season games involving the team for ``season``; when that
+    season has none yet (preseason), fall back to the latest season present in
+    ``game_items`` so team pages stay honest instead of empty. Returns
+    (window, display_season)."""
+    tid = safe_int(team.get("tid"))
+    involved = [
+        item for item in game_items
+        if is_completed_game_item(item)
+        and not item.get("playoffs")
+        and tid in (safe_int(item.get("home_tid")), safe_int(item.get("away_tid")))
+    ]
+    involved.sort(key=game_sort_key)
+    window = [item for item in involved if safe_int(item.get("season")) == season]
+    if window:
+        return window, season
+    seasons = [safe_int(item.get("season")) for item in involved]
+    if not seasons:
+        return [], season
+    display = max(seasons)
+    return [item for item in involved if safe_int(item.get("season")) == display], display
+
+
+def _portrait(player: dict[str, Any], cls: str, root: str) -> str:
+    """portraits.portrait_html with a monogram guard: a player with neither photo
+    nor rendered face must never break the build (portrait_html's final fallback
+    currently passes an unsupported kwarg to monogram_svg)."""
+    try:
+        return portrait_html(player, cls, root)
+    except TypeError:
+        mono = monogram_svg(initials(player), player.get("tid"),
+                            jersey_number=player.get("jerseyNumber"))
+        return (f'<span class="{esc(cls)} portrait-monogram" role="img" '
+                f'aria-label="{esc(player_name(player))}">{mono}</span>')
+
+
+def _roundel(player: dict[str, Any], cls: str, root: str) -> str:
+    """Portrait with a monogram layered underneath: when a hotlinked photo 404s
+    for a player with no rendered face, the portrait chain hides the bitmap —
+    the monogram beneath keeps the roundel from ever rendering empty."""
+    mono = monogram_svg(initials(player), player.get("tid"), css_class="monogram tm-under")
+    return f"{mono}{_portrait(player, cls, root)}"
 
 
 def team_vitals_html(team: dict[str, Any], season: int) -> str:
@@ -100,7 +233,7 @@ def team_vitals_html(team: dict[str, Any], season: int) -> str:
     return f'<div class="vitals-row">{tile_html}</div>'
 
 
-def team_games_strip(team: dict[str, Any], game_items: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]]) -> str:
+def team_games_strip(team: dict[str, Any], game_items: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], season: int | None = None) -> str:
     tid = safe_int(team.get("tid"))
     involved = [
         item for item in game_items
@@ -133,9 +266,15 @@ def team_games_strip(team: dict[str, Any], game_items: list[dict[str, Any]], tea
         )
     if not chips:
         return ""
+    note = "last 5 · next 5"
+    if season is not None and played and not upcoming:
+        played_seasons = {safe_int(item.get("season")) for item in played}
+        if season not in played_seasons:
+            latest = max(played_seasons)
+            note = f"final 5 games of {latest} · no {season} games yet"
     return f"""
     <section class="card">
-      <div class="section-title-row"><h2>Form &amp; Upcoming</h2><span class="muted small-copy">last 5 · next 5</span></div>
+      <div class="section-title-row"><h2>Form &amp; Upcoming</h2><span class="muted small-copy">{esc(note)}</span></div>
       <div class="game-strip">{''.join(chips)}</div>
     </section>
     """
@@ -143,12 +282,18 @@ def team_games_strip(team: dict[str, Any], game_items: list[dict[str, Any]], tea
 
 def team_games_table(team: dict[str, Any], game_items: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], season: int) -> str:
     tid = safe_int(team.get("tid"))
-    involved = [
+    all_involved = [
         item for item in game_items
-        if safe_int(item.get("season")) == season
-        and not item.get("playoffs")
+        if not item.get("playoffs")
         and tid in (safe_int(item.get("home_tid")), safe_int(item.get("away_tid")))
     ]
+    involved = [item for item in all_involved if safe_int(item.get("season")) == season]
+    display_season = season
+    if not involved and all_involved:
+        # Honest preseason state: no current-season games exist yet, so show the
+        # last completed season's log with clear labeling instead of nothing.
+        display_season = max(safe_int(item.get("season")) for item in all_involved)
+        involved = [item for item in all_involved if safe_int(item.get("season")) == display_season]
     involved.sort(key=game_sort_key)
     if not involved:
         return ""
@@ -185,27 +330,187 @@ def team_games_table(team: dict[str, Any], game_items: list[dict[str, Any]], tea
         )
     completed_count = sum(1 for item in involved if is_completed_game_item(item))
     headers = ["Day", "Opponent", "Result", "Note", "Link"]
+    if display_season == season:
+        title = "All Games"
+        note = f"{completed_count} completed · {len(involved) - completed_count} upcoming"
+        caption = f"{team_full_name(team)} current-season game log"
+    else:
+        title = f"{display_season} Season Log"
+        note = f"the {season} season hasn't started · showing all {completed_count} completed {display_season} games"
+        caption = f"{team_full_name(team)} {display_season} season game log"
     return f"""
     <section class="card">
-      <div class="section-title-row"><h2>All Games</h2><span class="muted small-copy">{completed_count} completed · {len(involved) - completed_count} upcoming</span></div>
-      {table_html(headers, rows, table_id=f"team-{tid}-games", empty_message="No games found.", caption=f"{team_full_name(team)} current-season game log")}
+      <div class="section-title-row"><h2>{esc(title)}</h2><span class="muted small-copy">{esc(note)}</span></div>
+      {table_html(headers, rows, table_id=f"team-{tid}-games", empty_message="No games found.", caption=caption)}
     </section>
     """
 
 
-def depth_chart_card(roster: list[dict[str, Any]], season: int) -> str:
-    slots = ["PG", "SG", "SF", "PF", "C"]
+def team_playoffs_table(team: dict[str, Any], game_items: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], season: int) -> str:
+    """Playoff games for the season shown on the Games page (the regular-season
+    table deliberately excludes them, so surface the postseason run here)."""
+    tid = safe_int(team.get("tid"))
+    all_involved = [
+        item for item in game_items
+        if item.get("playoffs") and is_completed_game_item(item)
+        and tid in (safe_int(item.get("home_tid")), safe_int(item.get("away_tid")))
+    ]
+    involved = [item for item in all_involved if safe_int(item.get("season")) == season]
+    display_season = season
+    if not involved and all_involved:
+        display_season = max(safe_int(item.get("season")) for item in all_involved)
+        involved = [item for item in all_involved if safe_int(item.get("season")) == display_season]
+    if not involved:
+        return ""
+    involved.sort(key=game_sort_key)
+    rows = []
+    for item in involved:
+        home = safe_int(item.get("home_tid")) == tid
+        opp_tid = item.get("away_tid") if home else item.get("home_tid")
+        result = team_schedule_result(item, tid)
+        ot = game_ot_label(item)
+        if ot:
+            result += f" {ot}"
+        opp_prefix = "vs." if home else "@"
+        margin = safe_float(item_team_points(item, tid)) - safe_float(item_team_points(item, safe_int(opp_tid)))
+        cls = "game-log-win" if result.startswith("W") else "game-log-loss"
+        rows.append(
+            f'<tr class="click-row {cls}" data-href="{esc(game_url(item, "../"))}">'
+            + "".join([
+                td(fmt_number(item.get("day"), 0), sort=safe_int(item.get("day"))),
+                td(f'{opp_prefix} {team_label(opp_tid, teams_by_tid, "../")}', sort=team_abbrev_for_tid(opp_tid, teams_by_tid), cls="name-cell"),
+                td(esc(result), sort=margin),
+                td(esc(game_recap_text(item, teams_by_tid)), sort="", cls="game-note"),
+                td(f'<a class="button-link table-link" href="{esc(game_url(item, "../"))}">View</a>', sort=safe_int(item.get("day"))),
+            ])
+            + "</tr>"
+        )
+    return f"""
+    <section class="card">
+      <div class="section-title-row"><h2>{display_season} Playoffs</h2><span class="muted small-copy">{len(involved)} postseason games</span></div>
+      {table_html(["Day", "Opponent", "Result", "Note", "Link"], rows, table_id=f"team-{tid}-playoff-games", empty_message="No playoff games.", caption=f"{team_full_name(team)} {display_season} playoff game log")}
+    </section>
+    """
 
-    def preferred_slot(player: dict[str, Any]) -> str:
-        return canonical_pos(player, latest_rating(player, season))
 
-    buckets: dict[str, list[dict[str, Any]]] = {slot: [] for slot in slots}
+DEPTH_SLOTS = ["PG", "SG", "SF", "PF", "C"]
+
+
+def _position_buckets(roster: list[dict[str, Any]], season: int) -> dict[str, list[dict[str, Any]]]:
+    """Each player once, in his single best canonical slot, sorted by OVR desc.
+    Shared by the depth chart and the Starting Five court."""
+    buckets: dict[str, list[dict[str, Any]]] = {slot: [] for slot in DEPTH_SLOTS}
     for player in roster:
-        buckets[preferred_slot(player)].append(player)
+        buckets[canonical_pos(player, latest_rating(player, season))].append(player)
+    for slot in DEPTH_SLOTS:
+        buckets[slot].sort(key=lambda p: (-safe_int(latest_rating(p, season).get("ovr")), player_name(p)))
+    return buckets
+
+
+def _injury_cross(player: dict[str, Any]) -> str:
+    injury = player.get("injury") or {}
+    if injury.get("type") and injury.get("type") != "Healthy":
+        return ' <span class="injured" title="' + esc(injury.get("type", "")) + '">✚</span>'
+    return ""
+
+
+# Slot anchor points on the half court, in % of the court container (x, y).
+SFIVE_SLOTS = [
+    ("PG", 50.0, 14.0),
+    ("SG", 79.0, 32.0),
+    ("SF", 21.0, 32.0),
+    ("PF", 31.5, 64.0),
+    ("C", 66.5, 61.0),
+]
+
+
+def half_court_svg() -> str:
+    """Decorative half court painted with the scope's team colors: key and arcs
+    in the primary/secondary, lines mixed toward the page palette so both
+    themes keep contrast. Pure geometry — the player roundels are HTML overlaid
+    on top (portrait chain stays portraits.portrait_html)."""
+    # viewBox is 500x470 = 50ft x 47ft half court, baseline at the bottom.
+    hoop_x, hoop_y = 250.0, 417.5
+    r3 = 237.5
+    corner_dx = 220.0
+    dy = math.sqrt(r3 * r3 - corner_dx * corner_dx)
+    corner_y = hoop_y - dy
+    return f"""
+      <svg class="sfive-court-svg" viewBox="0 0 500 470" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid meet">
+        <rect x="1.5" y="1.5" width="497" height="467" class="sfive-floor"/>
+        <circle cx="250" cy="2" r="60" class="sfive-line"/>
+        <circle cx="250" cy="2" r="24" class="sfive-paintline"/>
+        <rect x="170" y="280" width="160" height="190" class="sfive-paint"/>
+        <circle cx="250" cy="280" r="60" class="sfive-line"/>
+        <path d="M{hoop_x - corner_dx:.0f},470 L{hoop_x - corner_dx:.0f},{corner_y:.1f} A{r3:.1f} {r3:.1f} 0 0 1 {hoop_x + corner_dx:.0f},{corner_y:.1f} L{hoop_x + corner_dx:.0f},470" class="sfive-arc"/>
+        <line x1="215" y1="437" x2="285" y2="437" class="sfive-paintline"/>
+        <circle cx="{hoop_x:.0f}" cy="{hoop_y:.1f}" r="9" class="sfive-rim"/>
+      </svg>"""
+
+
+def starting_five_card(team: dict[str, Any], roster: list[dict[str, Any]], season: int) -> str:
+    """Starting Five on a half-court: portrait roundels at PG-C from the depth
+    chart's single-best-fit computation, dashed vacancy roundels for empty
+    slots, and the bench rail underneath sorted by overall."""
+    if not roster:
+        return ""
+    buckets = _position_buckets(roster, season)
+    starters = {slot: (buckets[slot][0] if buckets[slot] else None) for slot in DEPTH_SLOTS}
+    starter_pids = {safe_int(p.get("pid"), -1) for p in starters.values() if p}
+    slots_html = []
+    for slot, x, y in SFIVE_SLOTS:
+        player = starters.get(slot)
+        if player is None:
+            slots_html.append(
+                f'<div class="sfive-slot sfive-slot--vacant" style="left:{x:.1f}%;top:{y:.1f}%">'
+                f'<span class="sfive-roundel sfive-vacant" role="img" aria-label="No natural {slot} on the roster">{slot}</span>'
+                f'<span class="sfive-tag"><span class="sfive-pos">{slot}</span><span class="muted">Vacant</span></span>'
+                "</div>"
+            )
+            continue
+        rating = latest_rating(player, season)
+        jersey = player.get("jerseyNumber")
+        jersey_bit = f'<span class="sfive-num">#{esc(jersey)}</span>' if jersey not in (None, "") else ""
+        slots_html.append(
+            f'<div class="sfive-slot" style="left:{x:.1f}%;top:{y:.1f}%">'
+            f'<span class="sfive-roundel">{_roundel(player, "sfive-portrait", "../")}</span>'
+            f'<span class="sfive-tag"><span class="sfive-pos">{slot}</span>'
+            f'<a class="sfive-name" href="{player_url(player, "../")}">{esc(player_name(player))}</a>{_injury_cross(player)}'
+            f'<span class="sfive-meta">{jersey_bit}<span class="sfive-ovr">{esc(rating.get("ovr", "—"))} OVR</span></span>'
+            "</span></div>"
+        )
+    bench = sorted(
+        (p for p in roster if safe_int(p.get("pid"), -1) not in starter_pids),
+        key=lambda p: (-safe_int(latest_rating(p, season).get("ovr")), player_name(p)),
+    )
+    bench_chips = "".join(
+        f'<a class="sfive-bench-chip" href="{player_url(p, "../")}">'
+        f'<span class="sfive-bench-roundel">{_roundel(p, "sfive-bench-portrait", "../")}</span>'
+        f'<span class="sfive-bench-name">{esc(player_name(p))}{_injury_cross(p)}</span>'
+        f'<span class="sfive-bench-ovr">{esc(latest_rating(p, season).get("ovr", "—"))}</span></a>'
+        for p in bench
+    )
+    bench_rail = (
+        f'<div class="sfive-bench" aria-label="Bench"><span class="sfive-bench-label">Bench</span>{bench_chips}</div>'
+        if bench_chips else ""
+    )
+    return f"""
+    <section class="card sfive-card">
+      <div class="section-title-row"><h2>Starting Five</h2><span class="muted small-copy">best fit at each position by overall · ✚ currently injured</span></div>
+      <div class="sfive-court">
+        {half_court_svg()}
+        {''.join(slots_html)}
+      </div>
+      {bench_rail}
+    </section>"""
+
+
+def depth_chart_card(roster: list[dict[str, Any]], season: int) -> str:
+    slots = DEPTH_SLOTS
+    buckets = _position_buckets(roster, season)
     columns = []
     for slot in slots:
         fits = buckets[slot]
-        fits.sort(key=lambda p: -safe_int(latest_rating(p, season).get("ovr")))
         rows = []
         for p in fits[:4]:
             rating = latest_rating(p, season)
@@ -225,32 +530,11 @@ def depth_chart_card(roster: list[dict[str, Any]], season: int) -> str:
     """
 
 
-def rotation_map_card(team: dict[str, Any], roster: list[dict[str, Any]], game_items: list[dict[str, Any]], game_logs: dict[int, list[dict[str, Any]]], season: int, teams_by_tid: dict[int, dict[str, Any]]) -> str:
-    tid = safe_int(team.get("tid"))
-    completed = [
-        item for item in game_items
-        if is_completed_game_item(item)
-        and safe_int(item.get("season")) == season
-        and not item.get("playoffs")
-        and tid in (safe_int(item.get("home_tid")), safe_int(item.get("away_tid")))
-    ]
-    completed.sort(key=game_sort_key)
-    window = completed
-    if not window:
-        return ""
-    gids = [str(item.get("gid")) for item in window]
+def _rotation_rows(tid: int, gids: list[str], game_logs: dict[int, list[dict[str, Any]]]) -> list[dict[str, Any]]:
+    """Per-player minutes across a window of games (by gid), attributed to the
+    team the player was logged with (mid-season trades stay honest). Sorted by
+    total minutes desc, then name; players with zero minutes are dropped."""
     gid_set = set(gids)
-    header_cells = ['<th class="name-cell">Player</th>']
-    for item in window:
-        won = game_winner_tid(item) == tid
-        opp_tid = item.get("away_tid") if safe_int(item.get("home_tid")) == tid else item.get("home_tid")
-        loc = "vs" if safe_int(item.get("home_tid")) == tid else "@"
-        cls = "rot-w" if won else "rot-l"
-        header_cells.append(
-            f'<th class="{cls}" title="Day {safe_int(item.get("day"))} {loc} {esc(team_abbrev_for_tid(opp_tid, teams_by_tid))}">'
-            f'{safe_int(item.get("day"))}</th>'
-        )
-
     rows_by_pid: dict[int, dict[str, Any]] = {}
     for pid, entries in game_logs.items():
         for entry in entries:
@@ -266,26 +550,51 @@ def rotation_map_card(team: dict[str, Any], roster: list[dict[str, Any]], game_i
             player = ALL_PLAYERS_BY_PID.get(pid)
             name = player_name(player) if player else str(box.get("name") or f"Player {pid}")
             label = player_link(player, "../", show_number=False) if player else f'<span class="player-link">{esc(name)}</span>'
-            row = rows_by_pid.setdefault(pid, {"name": name, "label": label, "minutes_by_gid": defaultdict(float)})
+            row = rows_by_pid.setdefault(pid, {"pid": pid, "name": name, "label": label, "minutes_by_gid": defaultdict(float)})
             row["minutes_by_gid"][gid] += minutes
-
     rows = []
-    max_minutes = max(
-        (
-            minutes
-            for row in rows_by_pid.values()
-            for minutes in row["minutes_by_gid"].values()
-        ),
-        default=0.0,
-    )
     for row in rows_by_pid.values():
-        minutes_by_gid = row["minutes_by_gid"]
-        window_minutes = [minutes_by_gid.get(gid, 0.0) for gid in gids]
+        window_minutes = [row["minutes_by_gid"].get(gid, 0.0) for gid in gids]
         total = sum(window_minutes)
         if total <= 0:
             continue
+        rows.append({**row, "minutes": window_minutes, "total": total})
+    rows.sort(key=lambda r: (-r["total"], r["name"]))
+    return rows
+
+
+def _window_header_bits(item: dict[str, Any], tid: int, teams_by_tid: dict[int, dict[str, Any]]) -> tuple[str, str, str]:
+    """(loc, opp_abbrev, result) chips for one completed game from the team's view."""
+    opp_tid = item.get("away_tid") if safe_int(item.get("home_tid")) == tid else item.get("home_tid")
+    loc = "vs" if safe_int(item.get("home_tid")) == tid else "@"
+    result = team_schedule_result(item, tid)
+    return loc, team_abbrev_for_tid(opp_tid, teams_by_tid), result
+
+
+def rotation_map_card(team: dict[str, Any], roster: list[dict[str, Any]], game_items: list[dict[str, Any]], game_logs: dict[int, list[dict[str, Any]]], season: int, teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    tid = safe_int(team.get("tid"))
+    window, display_season = _team_completed_window(team, game_items, season)
+    if not window:
+        return ""
+    gids = [str(item.get("gid")) for item in window]
+    header_cells = ['<th class="name-cell">Player</th>']
+    for item in window:
+        won = game_winner_tid(item) == tid
+        loc, opp, _result = _window_header_bits(item, tid, teams_by_tid)
+        cls = "rot-w" if won else "rot-l"
+        header_cells.append(
+            f'<th class="{cls}" data-gid="{esc(item.get("gid"))}" title="Day {safe_int(item.get("day"))} {loc} {esc(opp)}">'
+            f'{safe_int(item.get("day"))}</th>'
+        )
+
+    row_data = _rotation_rows(tid, gids, game_logs)
+    if not row_data:
+        return ""
+    max_minutes = max((m for row in row_data for m in row["minutes"]), default=0.0)
+    body_rows = []
+    for row in row_data:
         cells = [td(row["label"], sort=row["name"], cls="name-cell")]
-        for minutes in window_minutes:
+        for gid, minutes in zip(gids, row["minutes"]):
             if minutes <= 0:
                 cells.append(td('<span class="muted">·</span>', sort=0, cls="rot-cell"))
             else:
@@ -294,16 +603,14 @@ def rotation_map_card(team: dict[str, Any], roster: list[dict[str, Any]], game_i
                 alpha = 0.18 + 0.34 * frac
                 style = f"background-color: hsla({hue:.0f}, 58%, 42%, {alpha:.2f})"
                 cells.append(td(fmt_number(minutes, 0), sort=minutes, cls="rot-cell", style=style))
-        rows.append((total, row["name"], "".join(cells)))
-    if not rows:
-        return ""
-    rows.sort(key=lambda pair: (-pair[0], pair[1]))
-    body_html = "".join(f"<tr>{cells}</tr>" for _, _, cells in rows)
+        body_rows.append(f'<tr data-pid="{row["pid"]}">{"".join(cells)}</tr>')
+    body_html = "".join(body_rows)
+    season_note = "this season" if display_season == season else f"in {display_season} (no {season} games yet)"
     return f"""
     <section class="card">
-      <div class="section-title-row"><h2>Rotation Map</h2><span class="muted small-copy">{len(window)} completed games this season · red to green = minutes load · · = DNP</span></div>
+      <div class="section-title-row"><h2>Rotation Map</h2><span class="muted small-copy">{len(window)} completed games {esc(season_note)} · red to green = minutes load · · = DNP</span></div>
       <div class="table-wrap fit-table">
-        <table class="rotation-map">
+        <table class="rotation-map" data-rotation-table="{tid}">
           <thead><tr>{''.join(header_cells)}</tr></thead>
           <tbody>{body_html}</tbody>
         </table>
@@ -312,8 +619,318 @@ def rotation_map_card(team: dict[str, Any], roster: list[dict[str, Any]], game_i
     """
 
 
+def rotation_river_card(team: dict[str, Any], game_items: list[dict[str, Any]], game_logs: dict[int, list[dict[str, Any]]], season: int, teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    """B20 rotation river: a stacked-area streamgraph of minutes per game, one
+    band per player in an accent-derived ramp. Static SVG first; team.js layers
+    a hover readout synced with the rotation heat table below it."""
+    tid = safe_int(team.get("tid"))
+    window, display_season = _team_completed_window(team, game_items, season)
+    if len(window) < 2:
+        return ""  # a streamgraph needs at least two games of x-axis
+    gids = [str(item.get("gid")) for item in window]
+    rows = _rotation_rows(tid, gids, game_logs)
+    if not rows:
+        return ""
+    n_games = len(window)
+    colors = team_color_ramp(tid, len(rows))
+
+    # Stack: biggest total minutes at the bottom (rows already sorted desc).
+    totals_per_game = [sum(row["minutes"][i] for row in rows) for i in range(n_games)]
+    y_max = max(240.0, max(totals_per_game))
+
+    width, height = 720.0, 250.0
+    ml, mr, mt, mb = 40.0, 12.0, 10.0, 26.0
+    plot_w, plot_h = width - ml - mr, height - mt - mb
+
+    def xs(i: int) -> float:
+        return ml + (plot_w * i / (n_games - 1))
+
+    def yv(v: float) -> float:
+        return mt + plot_h - (v / y_max) * plot_h
+
+    base = [0.0] * n_games
+    bands = []
+    for bi, row in enumerate(rows):
+        lower = list(base)
+        upper = [lower[i] + row["minutes"][i] for i in range(n_games)]
+        fwd = " ".join(f"{xs(i):.1f},{yv(upper[i]):.1f}" for i in range(n_games))
+        back = " ".join(f"{xs(i):.1f},{yv(lower[i]):.1f}" for i in range(n_games - 1, -1, -1))
+        bands.append(
+            f'<polygon class="river-band" points="{fwd} {back}" fill="{colors[bi]}" data-pid="{row["pid"]}">'
+            f'<title>{esc(row["name"])} — {fmt_number(row["total"] / n_games, 1)} min/g</title></polygon>'
+        )
+        base = upper
+
+    grid = []
+    for tick in (0, 120, 240):
+        if tick > y_max:
+            continue
+        gy = yv(float(tick))
+        grid.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w}" y2="{gy:.1f}" class="chart-grid"/>')
+        grid.append(f'<text x="{ml - 6}" y="{gy + 3.5:.1f}" class="chart-tick" text-anchor="end">{tick}</text>')
+    step = max(1, n_games // 9)
+    for i in range(0, n_games, step):
+        grid.append(f'<text x="{xs(i):.1f}" y="{height - 8}" class="chart-tick" text-anchor="middle">{safe_int(window[i].get("day"))}</text>')
+
+    games_payload = []
+    for item in window:
+        loc, opp, result = _window_header_bits(item, tid, teams_by_tid)
+        games_payload.append({
+            "gid": str(item.get("gid")),
+            "day": safe_int(item.get("day")),
+            "opp": f"{loc} {opp}",
+            "res": result,
+        })
+    payload = {
+        "tid": tid,
+        "games": games_payload,
+        "players": [
+            {"pid": row["pid"], "name": row["name"], "color": colors[bi],
+             "mins": [round(m, 1) for m in row["minutes"]]}
+            for bi, row in enumerate(rows)
+        ],
+        "g": {"ml": ml, "mt": mt, "pw": plot_w, "ph": plot_h, "w": width, "h": height, "ymax": y_max},
+    }
+    payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
+
+    legend = "".join(
+        f'<a class="river-chip" href="{player_url(ALL_PLAYERS_BY_PID[row["pid"]], "../")}" data-pid="{row["pid"]}" style="--river-color:{colors[bi]}">'
+        f'<span class="river-chip-dot"></span>{esc(row["name"])}</a>'
+        if row["pid"] in ALL_PLAYERS_BY_PID else
+        f'<span class="river-chip" data-pid="{row["pid"]}" style="--river-color:{colors[bi]}">'
+        f'<span class="river-chip-dot"></span>{esc(row["name"])}</span>'
+        for bi, row in enumerate(rows)
+    )
+    season_note = f"season {display_season}" if display_season != season else "this season"
+    return f"""
+    <section class="card river-card">
+      <div class="section-title-row"><h2>Rotation River</h2><span class="muted small-copy">stacked minutes per game, {esc(season_note)} · hover for the game and rotation</span></div>
+      <div class="chart-wrap river-wrap" data-river="river-data-{tid}">
+        <svg viewBox="0 0 {width:.0f} {height:.0f}" class="river-chart" role="img" aria-label="Minutes distribution per game across {n_games} completed games">
+          {''.join(grid)}
+          {''.join(bands)}
+          <line class="river-guide" data-river-guide y1="{mt}" y2="{mt + plot_h}" style="display:none"/>
+        </svg>
+        <div class="chart-tooltip river-tooltip" data-river-tooltip hidden></div>
+      </div>
+      <div class="river-legend">{legend}</div>
+      <script type="application/json" id="river-data-{tid}">{payload_json}</script>
+    </section>"""
+
+
+# ---------------------------------------------------------------------------
+# Scoring share (100%-stacked bar with PTS / FGA / AST toggle)
+# ---------------------------------------------------------------------------
+
+SHARE_METRICS = [
+    ("pts", "PTS", "points"),
+    ("fga", "FGA", "field-goal attempts"),
+    ("ast", "AST", "assists"),
+]
+
+
+def _share_display_season(roster: list[dict[str, Any]], season: int) -> int | None:
+    """Latest season <= season in which anyone on the current roster logged
+    regular-season games."""
+    seasons = set()
+    for p in roster:
+        for s in p.get("stats") or []:
+            if (isinstance(s, dict) and not s.get("playoffs")
+                    and isinstance(s.get("season"), int) and s["season"] <= season
+                    and stat_gp(s) > 0):
+                seasons.add(s["season"])
+    return max(seasons) if seasons else None
+
+
+def scoring_share_card(team: dict[str, Any], roster: list[dict[str, Any]], season: int) -> str:
+    """B21: who the offense runs through — a sorted 100%-stacked horizontal bar
+    of each player's share of team PTS, toggleable to FGA and AST share."""
+    display = _share_display_season(roster, season)
+    if display is None:
+        return ""
+    per_player: list[dict[str, Any]] = []
+    for p in roster:
+        stat = season_regular_stat(p, display)
+        if not stat or stat_gp(stat) <= 0:
+            continue
+        per_player.append({
+            "pid": safe_int(p.get("pid"), -1),
+            "player": p,
+            "name": player_name(p),
+            "pts": safe_float(stat.get("pts")),
+            "fga": safe_float(stat.get("fga")),
+            "ast": safe_float(stat.get("ast")),
+        })
+    if not per_player:
+        return ""
+    # Stable color per player from the team ramp, keyed by PTS rank so colors
+    # do not reshuffle when toggling metrics.
+    per_player.sort(key=lambda r: (-r["pts"], r["name"]))
+    colors = team_color_ramp(safe_int(team.get("tid")), len(per_player))
+    for i, row in enumerate(per_player):
+        row["color"] = colors[i]
+
+    tid = safe_int(team.get("tid"))
+    buttons = []
+    panels = []
+    for mi, (key, label, noun) in enumerate(SHARE_METRICS):
+        total = sum(r[key] for r in per_player)
+        if total <= 0:
+            continue
+        ordered = sorted(per_player, key=lambda r: (-r[key], r["name"]))
+        segs = []
+        for row in ordered:
+            share = 100.0 * row[key] / total
+            if share <= 0:
+                continue
+            label_html = f"<span>{esc(row['name'].split(' ')[-1])}</span>" if share >= 8.0 else ""
+            segs.append(
+                f'<div class="share-seg" style="width:{share:.2f}%;background:{row["color"]};color:{_on_hex(row["color"])}" '
+                f'title="{esc(row["name"])} — {share:.1f}% of team {label} ({fmt_number(row[key], 0)})">{label_html}</div>'
+            )
+        top3 = " · ".join(f'{r["name"]} {100.0 * r[key] / total:.0f}%' for r in ordered[:3])
+        first = not buttons
+        buttons.append(
+            f'<button type="button" data-share-metric="{key}" class="{"active" if first else ""}" '
+            f'aria-pressed="{"true" if first else "false"}">{label}</button>'
+        )
+        panels.append(
+            f'<div class="share-bar" data-share-panel="{key}" role="img" '
+            f'aria-label="Share of team {noun}: {esc(top3)}"{"" if first else " hidden"}>{"".join(segs)}</div>'
+        )
+    if not panels:
+        return ""
+    legend = "".join(
+        f'<a class="river-chip" href="{player_url(row["player"], "../")}" style="--river-color:{row["color"]}">'
+        f'<span class="river-chip-dot"></span>{esc(row["name"])}</a>'
+        for row in per_player
+    )
+    note = f"{display} regular-season totals · current roster (any team)" if display != season else "this season · current roster"
+    return f"""
+    <section class="card share-card" data-share-card>
+      <div class="section-title-row"><h2>Scoring Share</h2>
+        <div class="share-toggle" role="group" aria-label="Share metric">{''.join(buttons)}</div>
+      </div>
+      {''.join(panels)}
+      <div class="river-legend share-legend">{legend}</div>
+      <p class="muted small-copy">{esc(note)}</p>
+    </section>"""
+
+
+# ---------------------------------------------------------------------------
+# Four factors vs league average (diverging strip)
+# ---------------------------------------------------------------------------
+
+# (key, label, higher_is_better, format digits, is_ratio)
+FF_ROWS = [
+    ("efg", "eFG%", True, 1, False),
+    ("tov_pct", "TOV%", False, 1, False),
+    ("orb_pct", "ORB%", True, 1, False),
+    ("ft_rate", "FT/FGA", True, 3, True),
+    ("opp_efg", "Opp eFG%", False, 1, False),
+    ("opp_tov_pct", "Opp TOV%", True, 1, False),
+    ("opp_orb_pct", "Opp ORB%", False, 1, False),
+    ("opp_ft_rate", "Opp FT/FGA", False, 3, True),
+]
+
+
+def four_factors_card(data: dict[str, Any], team: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
+    """B16(b): Dean Oliver four factors (offense + defense) as a diverging strip
+    against the league average for the same season."""
+    tid = safe_int(team.get("tid"))
+    # Latest season <= season with real team stats (preseason rows are all zero).
+    display = None
+    for cand in range(season, season - 8, -1):
+        row = latest_team_stat(team, cand)
+        if safe_int(row.get("season"), -1) == cand and safe_float(row.get("gp")) > 0:
+            display = cand
+            break
+    if display is None:
+        return ""
+    league_rows = []
+    own = None
+    for t in active_teams_for_season(teams, display):
+        stat = latest_team_stat(t, display)
+        if safe_int(stat.get("season"), -1) != display or safe_float(stat.get("gp")) <= 0:
+            continue
+        ff = four_factors(stat)
+        league_rows.append(ff)
+        if safe_int(t.get("tid"), -99) == tid:
+            own = ff
+    if own is None or len(league_rows) < 2:
+        return ""
+
+    width = 660.0
+    ml, mr = 92.0, 96.0
+    row_h, top = 27.0, 8.0
+    plot_w = width - ml - mr
+    half = plot_w / 2.0
+    center_x = ml + half
+    height = top + row_h * len(FF_ROWS) + 20.0
+
+    parts = [
+        f'<line x1="{center_x:.1f}" y1="{top:.1f}" x2="{center_x:.1f}" y2="{top + row_h * len(FF_ROWS):.1f}" class="ff-center"/>',
+        f'<text x="{center_x:.1f}" y="{height - 6:.1f}" class="chart-tick" text-anchor="middle">league average</text>',
+    ]
+    for ri, (key, label, higher_better, digits, is_ratio) in enumerate(FF_ROWS):
+        y = top + ri * row_h
+        bar_y = y + 6.0
+        bar_h = row_h - 12.0
+        values = [safe_float(r.get(key), float("nan")) for r in league_rows]
+        values = [v for v in values if math.isfinite(v)]
+        value = own.get(key)
+        if value is None or not values:
+            continue
+        value = safe_float(value)
+        avg = sum(values) / len(values)
+        max_dev = max((abs(v - avg) for v in values), default=0.0)
+        dev = value - avg
+        good = (dev > 0) == higher_better if abs(dev) > 1e-9 else None
+        frac = 0.0 if max_dev <= 1e-9 else max(-1.0, min(1.0, dev / max_dev))
+        # Bars diverge by GOODNESS, not raw sign: better than league always
+        # extends right (e.g. a low Opp eFG% is a right-side green bar).
+        plot_frac = frac if higher_better else -frac
+        bar_w = abs(plot_frac) * (half - 6.0)
+        bar_x = center_x if plot_frac >= 0 else center_x - bar_w
+        cls = "ff-bar-good" if good else ("ff-bar-bad" if good is not None else "ff-bar-flat")
+        fmt_v = fmt_number(value, digits)
+        fmt_avg = fmt_number(avg, digits)
+        delta_txt = f"{'+' if dev > 0 else ''}{fmt_number(dev, digits)}"
+        parts.append(f'<g class="ff-row"><title>{esc(label)}: {fmt_v} vs league {fmt_avg} ({delta_txt})</title>')
+        parts.append(f'<text x="{ml - 8:.1f}" y="{y + row_h / 2 + 3.5:.1f}" class="ff-label" text-anchor="end">{esc(label)}</text>')
+        parts.append(f'<rect x="{ml:.1f}" y="{bar_y:.1f}" width="{plot_w:.1f}" height="{bar_h:.1f}" class="ff-track"/>')
+        if bar_w > 0.5:
+            parts.append(f'<rect x="{bar_x:.1f}" y="{bar_y:.1f}" width="{bar_w:.1f}" height="{bar_h:.1f}" class="{cls}"/>')
+        val_cls = "ff-val-good" if good else ("ff-val-bad" if good is not None else "ff-val")
+        parts.append(
+            f'<text x="{ml + plot_w + 8:.1f}" y="{y + row_h / 2 + 3.5:.1f}" class="{val_cls}" text-anchor="start">'
+            f"{fmt_v} <tspan class=\"ff-delta\">({delta_txt})</tspan></text>"
+        )
+        parts.append("</g>")
+
+    season_note = f"{display} regular season" + ("" if display == season else f" · no {season} team stats yet")
+    return f"""
+    <section class="card ff-card">
+      <div class="section-title-row"><h2>Four Factors</h2><span class="muted small-copy">{esc(season_note)} · bars measure distance from the league average; right of center = better</span></div>
+      <div class="chart-wrap ff-wrap">
+        <svg viewBox="0 0 {width:.0f} {height:.0f}" class="ff-chart" role="img" aria-label="Four factors vs league average, {esc(display)} season">
+          {''.join(parts)}
+        </svg>
+      </div>
+    </section>"""
+
+
 def team_quarter_profile(team: dict[str, Any], data: dict[str, Any], season: int, teams_by_tid: dict[int, dict[str, Any]]) -> str:
     tid = safe_int(team.get("tid"))
+    # Honest preseason state: profile the latest season that actually has games.
+    if not completed_game_items(data, season, playoffs=False):
+        candidates = [
+            safe_int(g.get("season")) for g in data.get("games", [])
+            if isinstance(g.get("season"), int) and safe_int(g.get("season")) <= season
+        ]
+        if not candidates:
+            return ""
+        season = max(candidates)
     own_q = [0.0, 0.0, 0.0, 0.0]
     opp_q = [0.0, 0.0, 0.0, 0.0]
     games = 0
@@ -443,7 +1060,7 @@ def team_quarter_profile(team: dict[str, Any], data: dict[str, Any], season: int
     ])
     return f"""
     <section class="card">
-      <div class="section-title-row"><h2>Game Profile</h2><span class="muted small-copy">average points by quarter · green = outscoring opponents</span></div>
+      <div class="section-title-row"><h2>Game Profile</h2><span class="muted small-copy">{season} season · average points by quarter · green = outscoring opponents</span></div>
       <div class="profile-row">
         {table}
         <div class="vitals-row">{tiles}</div>
@@ -488,6 +1105,239 @@ def draft_picks_card(data: dict[str, Any], team: dict[str, Any], teams_by_tid: d
     """
 
 
+# ---------------------------------------------------------------------------
+# Franchise Arc (teams/{slug}-history.html)
+# ---------------------------------------------------------------------------
+
+
+def _round_name(round_index_1based: int, total_rounds: int) -> str:
+    from_end = total_rounds - round_index_1based
+    if from_end <= 0:
+        return "Finals"
+    if from_end == 1:
+        return "Semifinals"
+    if from_end == 2:
+        return "Quarterfinals"
+    return f"Round {round_index_1based}"
+
+
+def _final_team_tid(player: dict[str, Any]) -> int | None:
+    """The last team a player suited up for (his final regular-season stat row)."""
+    rows = [
+        s for s in player.get("stats") or []
+        if isinstance(s, dict) and not s.get("playoffs")
+        and isinstance(s.get("season"), int) and safe_int(s.get("tid"), -9) >= 0
+    ]
+    if not rows:
+        return None
+    rows.sort(key=lambda s: s["season"])  # stable: later team in a season stays last
+    return safe_int(rows[-1].get("tid"))
+
+
+def franchise_seasons(team: dict[str, Any], data: dict[str, Any], teams: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """One summary row per completed (or in-progress) season the franchise has
+    actually played: record, league finish, playoff result. Data-driven off the
+    team's seasons rows + playoffSeries; the empty preseason row is skipped."""
+    tid = safe_int(team.get("tid"))
+    cur = current_season(data)
+    champs = champions_by_season(data)
+    out = []
+    for srow in team.get("seasons") or []:
+        if not isinstance(srow, dict):
+            continue
+        s = srow.get("season")
+        won, lost = safe_int(srow.get("won")), safe_int(srow.get("lost"))
+        if not isinstance(s, int) or won + lost == 0:
+            continue
+        order = standings_order(active_teams_for_season(teams, s), s)
+        finish = (order.index(tid) + 1) if tid in order else None
+        prw = safe_int(srow.get("playoffRoundsWon"), -1)
+        info = champs.get(s)
+        rounds = info["rounds"] if info else 2
+        if info and info["champ"] == tid:
+            result, kind = "Champion", "champ"
+        elif info and info["runner_up"] == tid:
+            result, kind = "Lost Finals", "finals"
+        elif s == cur and s not in champs:
+            result, kind = "In progress", "live"
+        elif prw >= 0:
+            result, kind = f"Lost {_round_name(prw + 1, rounds)}", "out"
+        else:
+            result, kind = "Missed playoffs", "miss"
+        stat = latest_team_stat(team, s)
+        gp = safe_float(stat.get("gp")) if safe_int(stat.get("season"), -1) == s else 0.0
+        out.append({
+            "season": s, "won": won, "lost": lost,
+            "pct": win_pct(won, lost), "finish": finish,
+            "result": result, "kind": kind,
+            "ps": (safe_float(stat.get("pts")) / gp) if gp > 0 else None,
+            "pa": (safe_float(stat.get("oppPts")) / gp) if gp > 0 else None,
+        })
+    out.sort(key=lambda r: r["season"])
+    return out
+
+
+_PIN_KINDS = {
+    "trade": ("◆", "arc-pin-trade"),
+    "retire": ("●", "arc-pin-retire"),
+    "join": ("★", "arc-pin-join"),
+}
+
+
+def team_event_pins(team: dict[str, Any], data: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]]) -> dict[int, list[dict[str, str]]]:
+    """Season -> notable franchise events for the arc: trades the team made,
+    joining the league (expansion), and retirements of players who finished
+    their careers with the team. Labels are plain text for tooltips."""
+    tid = safe_int(team.get("tid"))
+    players_by_pid = {
+        safe_int(p.get("pid"), -1): p
+        for p in data.get("players") or [] if isinstance(p, dict) and p.get("pid") is not None
+    }
+    pins: dict[int, list[dict[str, str]]] = defaultdict(list)
+    for event in data.get("events") or []:
+        if not isinstance(event, dict):
+            continue
+        etype = event.get("type")
+        s = safe_int(event.get("season"), -1)
+        if s < 0:
+            continue
+        tids = [safe_int(t, -99) for t in (event.get("tids") or [])]
+        if etype == "trade" and tid in tids:
+            others = [t for t in tids if t != tid]
+            other = team_abbrev_for_tid(others[0], teams_by_tid) if others else "another team"
+            n = len(event.get("pids") or [])
+            suffix = f" · {n} player{'' if n == 1 else 's'} moved" if n else ""
+            pins[s].append({"kind": "trade", "label": f"Trade with {other}{suffix}"})
+        elif etype == "teamExpansion" and tid in tids:
+            pins[s].append({"kind": "join", "label": "Joined the league as an expansion team"})
+        elif etype == "retired":
+            for pid in event.get("pids") or []:
+                player = players_by_pid.get(safe_int(pid, -1))
+                if player is not None and _final_team_tid(player) == tid:
+                    pins[s].append({"kind": "retire", "label": f"{player_name(player)} retired"})
+    return dict(pins)
+
+
+def franchise_arc_card(team: dict[str, Any], data: dict[str, Any], teams: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]]) -> str:
+    """C26: the W/L ribbon — wins up, losses down, playoff exits and title flags
+    along the top, event pins along the bottom."""
+    rows = franchise_seasons(team, data, teams)
+    if not rows:
+        return f"""
+    <section class="card">
+      <div class="section-title-row"><h2>Franchise Arc</h2></div>
+      <p class="empty-state">No completed seasons yet — the arc starts once real games are played.</p>
+    </section>"""
+    pins_by_season_raw = team_event_pins(team, data, teams_by_tid)
+    # Snap pins from seasons outside the played range (e.g. an expansion-draft
+    # event the offseason before the first game) to the nearest shown column,
+    # keeping the true year in the tooltip.
+    seasons_shown = [r["season"] for r in rows]
+    pins_by_season: dict[int, list[dict[str, str]]] = defaultdict(list)
+    for s, plist in sorted(pins_by_season_raw.items()):
+        target = min(seasons_shown, key=lambda shown: (abs(shown - s), shown))
+        for pin in plist:
+            label = pin["label"] if target == s else f'{s}: {pin["label"]}'
+            pins_by_season[target].append({**pin, "label": label})
+    n = len(rows)
+    max_wl = max(max(r["won"], r["lost"]) for r in rows) or 1
+
+    ml, mr = 46.0, 16.0
+    col_w = max(64.0, min(96.0, 560.0 / n))
+    marker_y = 16.0
+    win_h_max, loss_h_max = 82.0, 58.0
+    axis_y = 34.0 + win_h_max
+    pin_y = axis_y + loss_h_max + 26.0
+    height = pin_y + 34.0
+    width = ml + col_w * n + mr
+    bar_w = min(36.0, col_w * 0.46)
+
+    parts = [
+        f'<line x1="{ml - 6:.1f}" y1="{axis_y:.1f}" x2="{width - mr + 4:.1f}" y2="{axis_y:.1f}" class="arc-axis"/>',
+        f'<text x="{ml - 10:.1f}" y="{axis_y - win_h_max / 2:.1f}" class="arc-side" text-anchor="middle" transform="rotate(-90 {ml - 10:.1f} {axis_y - win_h_max / 2:.1f})">W</text>',
+        f'<text x="{ml - 10:.1f}" y="{axis_y + loss_h_max / 2 + 4:.1f}" class="arc-side" text-anchor="middle" transform="rotate(-90 {ml - 10:.1f} {axis_y + loss_h_max / 2 + 4:.1f})">L</text>',
+    ]
+    for i, r in enumerate(rows):
+        cx = ml + col_w * i + col_w / 2
+        win_h = win_h_max * r["won"] / max_wl
+        loss_h = loss_h_max * r["lost"] / max_wl
+        title = f'{r["season"]}: {r["won"]}-{r["lost"]} · {r["result"]}'
+        parts.append(f'<g class="arc-col"><title>{esc(title)}</title>')
+        parts.append(f'<rect x="{cx - bar_w / 2:.1f}" y="{axis_y - win_h:.1f}" width="{bar_w:.1f}" height="{max(1.0, win_h):.1f}" class="arc-win"/>')
+        parts.append(f'<rect x="{cx - bar_w / 2:.1f}" y="{axis_y + 1:.1f}" width="{bar_w:.1f}" height="{max(1.0, loss_h):.1f}" class="arc-loss"/>')
+        parts.append(f'<text x="{cx:.1f}" y="{axis_y - win_h - 5:.1f}" class="arc-num" text-anchor="middle">{r["won"]}</text>')
+        parts.append(f'<text x="{cx:.1f}" y="{axis_y + loss_h + 13:.1f}" class="arc-num arc-num-loss" text-anchor="middle">{r["lost"]}</text>')
+        # Playoff exit marker / title flag along the top rail.
+        if r["kind"] == "champ":
+            parts.append(f'<polygon points="{_star_points(cx - 26, marker_y - 3.4, 5.0, 2.0)}" class="arc-flag"/>')
+            parts.append(f'<text x="{cx + 4:.1f}" y="{marker_y:.1f}" class="arc-marker arc-marker-champ" text-anchor="middle">TITLE</text>')
+        elif r["kind"] == "finals":
+            parts.append(f'<text x="{cx:.1f}" y="{marker_y:.1f}" class="arc-marker arc-marker-finals" text-anchor="middle">Finals</text>')
+        elif r["kind"] == "out":
+            short = r["result"].replace("Lost ", "")
+            parts.append(f'<text x="{cx:.1f}" y="{marker_y:.1f}" class="arc-marker" text-anchor="middle">{esc(short)}</text>')
+        elif r["kind"] == "live":
+            parts.append(f'<text x="{cx:.1f}" y="{marker_y:.1f}" class="arc-marker" text-anchor="middle">Live</text>')
+        parts.append(f'<text x="{cx:.1f}" y="{height - 6:.1f}" class="chart-tick" text-anchor="middle">{r["season"]}</text>')
+        # Event pins.
+        pins = pins_by_season.get(r["season"]) or []
+        shown = pins[:3]
+        extra = pins[3:]
+        px = cx - (len(shown) - 1) * 7.0 + (0 if not extra else -4.0)
+        for pi, pin in enumerate(shown):
+            glyph, cls = _PIN_KINDS.get(pin["kind"], ("●", "arc-pin-retire"))
+            parts.append(
+                f'<text x="{px + pi * 14.0:.1f}" y="{pin_y:.1f}" class="arc-pin {cls}" text-anchor="middle">{glyph}'
+                f"<title>{esc(pin['label'])}</title></text>"
+            )
+        if extra:
+            combined = " · ".join(p["label"] for p in extra)
+            parts.append(
+                f'<text x="{px + len(shown) * 14.0:.1f}" y="{pin_y:.1f}" class="arc-pin arc-pin-more" text-anchor="middle">+{len(extra)}'
+                f"<title>{esc(combined)}</title></text>"
+            )
+        parts.append("</g>")
+
+    titles = sum(1 for r in rows if r["kind"] == "champ")
+    sub = f"{rows[0]['season']}–{rows[-1]['season']} · {titles} championship{'' if titles == 1 else 's'}"
+    return f"""
+    <section class="card arc-card">
+      <div class="section-title-row"><h2>Franchise Arc</h2><span class="muted small-copy">{esc(sub)} · hover a column or pin for detail</span></div>
+      <div class="chart-wrap arc-wrap">
+        <svg viewBox="0 0 {width:.0f} {height:.0f}" class="arc-chart" role="img" aria-label="Season-by-season wins and losses for {esc(team_full_name(team))}">
+          {''.join(parts)}
+        </svg>
+      </div>
+      <p class="muted small-copy arc-legend"><span class="arc-pin-trade">◆</span> trade · <span class="arc-pin-retire">●</span> retirement · <span class="arc-pin-join">★</span> expansion · markers above the bars show each season's playoff exit</p>
+    </section>"""
+
+
+def season_results_card(team: dict[str, Any], data: dict[str, Any], teams: list[dict[str, Any]]) -> str:
+    rows_data = franchise_seasons(team, data, teams)
+    if not rows_data:
+        return ""
+    body_rows = []
+    for r in sorted(rows_data, key=lambda r: -r["season"]):
+        result_cls = {"champ": "delta-up", "finals": "", "live": "muted", "miss": "muted"}.get(r["kind"], "")
+        result_html = f'<span class="{result_cls}">{esc(r["result"])}</span>' if result_cls else esc(r["result"])
+        if r["kind"] == "champ":
+            result_html = f'<span class="arc-flag-inline" aria-hidden="true">★</span> {result_html}'
+        body_rows.append("".join([
+            td(esc(r["season"]), sort=r["season"]),
+            td(fmt_record(r["won"], r["lost"]), sort=r["won"]),
+            td(fmt_win_pct(r["pct"]), sort=r["pct"]),
+            td(fmt_number(r["ps"], 1) if r["ps"] is not None else "—", sort=r["ps"]),
+            td(fmt_number(r["pa"], 1) if r["pa"] is not None else "—", sort=r["pa"]),
+            td(f'#{r["finish"]}' if r["finish"] else "—", sort=r["finish"]),
+            td(result_html, sort=r["result"]),
+        ]))
+    return f"""
+    <section class="card">
+      <div class="section-title-row"><h2>Season Results</h2><span class="count-pill">{len(rows_data)} seasons</span></div>
+      {table_html(["Season", "Record", "Pct", "PS", "PA", "Finish", "Playoffs"], body_rows, table_id=f"team-{safe_int(team.get('tid'))}-seasons", empty_message="No seasons yet.", caption=f"{team_full_name(team)} season-by-season results")}
+    </section>"""
+
+
 def hero_finance_chip(tfin: dict[str, Any] | None) -> str:
     if not tfin:
         return ""
@@ -498,20 +1348,159 @@ def hero_finance_chip(tfin: dict[str, Any] | None) -> str:
         ac = "delta-up" if avail >= 0 else "delta-down"
         return f"""
     <div class="hero-finance">
-      <div class="hero-fin-row"><span>Cash on hand</span><strong class="{nc}">{fmt_money(now)}</strong></div>
-      <div class="hero-fin-row"><span>Available to spend</span><strong class="{ac}">{fmt_money(avail)}</strong></div>
+      <div class="hero-fin-row" title="Bankroll carried between seasons: accumulated revenues minus payroll and tax."><span>Cash on hand</span><strong class="{nc}">{fmt_money(now)}</strong></div>
+      <div class="hero-fin-row" title="Cash on hand minus next season's committed payroll (roster, dead money, retained salary)."><span>Available to spend</span><strong class="{ac}">{fmt_money(avail)}</strong></div>
     </div>"""
     pc = "delta-up" if proj >= 0 else "delta-down"
     return f"""
     <div class="hero-finance">
-      <div class="hero-fin-row"><span>Cash on hand</span><strong class="{nc}">{fmt_money(now)}</strong></div>
-      <div class="hero-fin-row"><span>Projected EOS</span><strong class="{pc}">{fmt_money(proj)}</strong></div>
+      <div class="hero-fin-row" title="This season's ledger so far: starting balance plus revenues earned to date, minus payroll and luxury tax."><span>Cash on hand</span><strong class="{nc}">{fmt_money(now)}</strong></div>
+      <div class="hero-fin-row" title="Projected end-of-season balance using 10k-sim projected wins and playoff-bonus expected value."><span>Projected EOS</span><strong class="{pc}">{fmt_money(proj)}</strong></div>
     </div>"""
+
+
+# ---------------------------------------------------------------------------
+# Championship banners (pennants in the hero rafters)
+# ---------------------------------------------------------------------------
+
+
+def _star_points(cx: float, cy: float, r_outer: float, r_inner: float) -> str:
+    """Points attribute for a small upright 5-point star (banner decoration)."""
+    coords = []
+    for i in range(10):
+        r = r_outer if i % 2 == 0 else r_inner
+        ang = math.pi / 5.0 * i - math.pi / 2.0
+        coords.append("%.2f,%.2f" % (cx + r * math.cos(ang), cy + r * math.sin(ang)))
+    return " ".join(coords)
+
+
+def _playoff_games_to_win(data: dict[str, Any], season: int) -> int:
+    """Series length (games to win) for a season's playoffs, from the retained
+    playoff game rows; defaults to 4 when that season's games are gone."""
+    for game in data.get("games") or []:
+        if (safe_int(game.get("season"), -1) == season and game.get("playoffs")
+                and game.get("numGamesToWinSeries") is not None):
+            return max(1, safe_int(game.get("numGamesToWinSeries"), 4))
+    return 4
+
+
+def champions_by_season(data: dict[str, Any]) -> dict[int, dict[str, Any]]:
+    """{season: {"champ": tid, "runner_up": tid, "rounds": n}} from playoffSeries.
+
+    Past seasons read straight off the decided final; the current season only
+    counts once the Finals series is actually clinched (playoffSeries grows one
+    round at a time, so a mid-playoff export must not mint a champion early).
+    """
+    cur = current_season(data)
+    out: dict[int, dict[str, Any]] = {}
+    for ps in data.get("playoffSeries") or []:
+        if not isinstance(ps, dict):
+            continue
+        season = safe_int(ps.get("season"), -1)
+        rounds = [rnd for rnd in (ps.get("series") or []) if rnd]
+        if season < 0 or not rounds:
+            continue
+        first = [m for m in rounds[0] if isinstance(m, dict)]
+        expected = (int(round(math.log2(len(first)))) + 1) if first else len(rounds)
+        if len(rounds) < expected:
+            continue
+        finals = [m for m in rounds[expected - 1] if isinstance(m, dict)]
+        if len(finals) != 1:
+            continue
+        home = finals[0].get("home") or {}
+        away = finals[0].get("away") or {}
+        hw, aw = safe_int(home.get("won")), safe_int(away.get("won"))
+        if hw == aw:
+            continue
+        if season >= cur and max(hw, aw) < _playoff_games_to_win(data, season):
+            continue  # Finals in progress: no champion yet
+        champ, runner = (home, away) if hw > aw else (away, home)
+        out[season] = {
+            "champ": safe_int(champ.get("tid"), -1),
+            "runner_up": safe_int(runner.get("tid"), -1),
+            "rounds": expected,
+        }
+    return out
+
+
+def team_banner_history(data: dict[str, Any], tid: int) -> list[dict[str, Any]]:
+    """Chronological banner entries for a team: {"season", "kind"} with kind
+    "title" (championship) or "finals" (Finals appearance, lost)."""
+    out = []
+    for season, info in sorted(champions_by_season(data).items()):
+        if info["champ"] == tid:
+            out.append({"season": season, "kind": "title"})
+        elif info["runner_up"] == tid:
+            out.append({"season": season, "kind": "finals"})
+    return out
+
+
+def banner_svg(season: Any, kind: str = "title", tid: Any = None) -> str:
+    """One rafter pennant. kind="title" is the full championship banner (team
+    primary fill, secondary trim, star); kind="finals" is slimmer and muted for
+    a Finals appearance. Colors resolve from the --team-* css vars — pass
+    ``tid`` to bake them onto the svg so it renders standalone (reusable: the
+    history-page "Rafters" strip can call this directly with a tid).
+    """
+    year = esc(season)
+    vars_attr = f' style="{team_css_vars(tid)}"' if tid is not None else ""
+    if kind == "title":
+        return (
+            f'<svg class="banner banner--title" viewBox="0 0 36 48" role="img" '
+            f'aria-label="{year} League Champions"{vars_attr} '
+            'xmlns="http://www.w3.org/2000/svg">'
+            '<title>' + year + ' League Champions</title>'
+            '<polygon points="1,1 35,1 35,31 18,46 1,31" fill="var(--team-primary)" '
+            'stroke="var(--team-secondary)" stroke-width="1.6" stroke-linejoin="round"/>'
+            '<line x1="4.5" y1="5" x2="31.5" y2="5" stroke="var(--team-secondary)" '
+            'stroke-width="1.4" opacity=".85"/>'
+            '<text x="18" y="17.5" text-anchor="middle" '
+            "font-family=\"'Helvetica Neue',Helvetica,Arial,sans-serif\" "
+            'font-weight="700" font-size="9.5" fill="var(--team-on-primary)">' + year + "</text>"
+            f'<polygon points="{_star_points(18, 29, 5.4, 2.15)}" fill="var(--team-secondary)"/>'
+            "</svg>"
+        )
+    return (
+        f'<svg class="banner banner--finals" viewBox="0 0 26 42" role="img" '
+        f'aria-label="{year} Finals appearance"{vars_attr} '
+        'xmlns="http://www.w3.org/2000/svg">'
+        '<title>' + year + " Finals</title>"
+        '<polygon points="1,1 25,1 25,27 13,41 1,27" class="banner-finals-body" '
+        'stroke-width="1.2" stroke-linejoin="round"/>'
+        '<rect x="1" y="1" width="24" height="3.4" fill="var(--team-secondary)" opacity=".55"/>'
+        '<text x="13" y="15.5" text-anchor="middle" '
+        "font-family=\"'Helvetica Neue',Helvetica,Arial,sans-serif\" "
+        'font-weight="700" font-size="7.6" class="banner-finals-year">' + year + "</text>"
+        '<text x="13" y="24.5" text-anchor="middle" '
+        "font-family=\"'Helvetica Neue',Helvetica,Arial,sans-serif\" "
+        'font-weight="600" font-size="5" letter-spacing=".4" class="banner-finals-cap">FINALS</text>'
+        "</svg>"
+    )
+
+
+def team_rafters_html(data: dict[str, Any] | None, team: dict[str, Any]) -> str:
+    """The hero rafters strip: one pennant per championship / Finals run.
+    Teams with no banners get nothing at all."""
+    if not data:
+        return ""
+    tid = safe_int(team.get("tid"), -1)
+    entries = team_banner_history(data, tid)
+    if not entries:
+        return ""
+    pennants = "".join(banner_svg(e["season"], e["kind"]) for e in entries)
+    n_titles = sum(1 for e in entries if e["kind"] == "title")
+    label = f'{n_titles} championship{"" if n_titles == 1 else "s"}' if n_titles else "Finals appearances"
+    return f'<div class="tm-rafters" role="group" aria-label="{esc(label)}">{pennants}</div>'
 
 
 def team_subnav(team: dict[str, Any], active_sub: str) -> str:
     slug = team_slug(team)
-    items = [("roster", "Roster", f"{slug}.html"), ("games", "Games", f"{slug}-games.html"), ("finances", "Finances", f"{slug}-finances.html")]
+    items = [
+        ("roster", "Roster", f"{slug}.html"),
+        ("games", "Games", f"{slug}-games.html"),
+        ("finances", "Finances", f"{slug}-finances.html"),
+        ("history", "History", f"{slug}-history.html"),
+    ]
     links = []
     for key, label, href in items:
         active = " active" if key == active_sub else ""
@@ -520,20 +1509,22 @@ def team_subnav(team: dict[str, Any], active_sub: str) -> str:
     return f'<nav class="team-subnav" aria-label="Team sections">{"".join(links)}</nav>'
 
 
-def team_hero_html(team: dict[str, Any], season: int, sorted_roster: list[dict[str, Any]], teams: list[dict[str, Any]], tfin: dict[str, Any] | None) -> str:
-    primary = team_palette_by_tid(teams).get(safe_int(team.get("tid"), -1), "#5b9dff")
+def team_hero_html(team: dict[str, Any], season: int, sorted_roster: list[dict[str, Any]], teams: list[dict[str, Any]], tfin: dict[str, Any] | None, data: dict[str, Any] | None = None) -> str:
     ts = latest_team_season(team, season)
     record = fmt_record(ts.get("won"), ts.get("lost"))
     streak = streak_text(ts.get("streak"))
-    bits = [esc(team.get("abbrev", ""))]
+    abbrev = str(team.get("abbrev") or team_identity(safe_int(team.get("tid"), -1))["abbrev"])
+    bits = [esc(abbrev)]
     if record != "—":
         bits.append(record)
     if streak != "—":
         bits.append(streak)
     bits.append(f"{len(sorted_roster)} players")
     return f"""
-    <section class="page-hero team-hero" style="--team-primary:{esc(primary)};--team-secondary:{esc(primary)}">
-      <div>
+    <section class="page-hero team-hero">
+      <span class="tm-watermark" aria-hidden="true">{esc(abbrev)}</span>
+      {team_rafters_html(data, team)}
+      <div class="tm-hero-copy">
         <p class="eyebrow">Team</p>
         <h1>{esc(team_full_name(team))}</h1>
         <p class="muted">{' · '.join(bits)}</p>
@@ -569,14 +1560,18 @@ def finance_ledger_card(tfin: dict[str, Any] | None) -> str:
         year = f.get("bankroll_year", "")
         nc = "delta-up" if bal >= 0 else "delta-down"
         ac = "delta-up" if avail >= 0 else "delta-down"
+        tiles = "".join([
+            _tile(f"Balance entering {year}", fmt_money(bal), cls=nc,
+                  tip="Cumulative bankroll carried between seasons: all past revenues minus payroll and tax."),
+            _tile(f"{year} payroll", fmt_money(committed),
+                  tip=f"Committed {year} salaries for the current roster, plus dead money and retained salary."),
+            _tile("Available to spend", fmt_money(avail), cls=ac,
+                  tip="Balance minus committed payroll — what's actually free for signings."),
+        ])
         return f"""
     <section class="card">
-      <div class="section-title-row"><h2>Cash on Hand</h2><span class="muted small-copy">available to spend in free agency</span></div>
-      <div class="vitals-row">
-        <div class="vital-tile"><span>Balance entering {year}</span><strong class="{nc}">{fmt_money(bal)}</strong></div>
-        <div class="vital-tile"><span>{year} payroll</span><strong>{fmt_money(committed)}</strong></div>
-        <div class="vital-tile"><span>Available to spend</span><strong class="{ac}">{fmt_money(avail)}</strong></div>
-      </div>
+      <div class="section-title-row"><h2>Cash on Hand</h2><span class="muted small-copy">available to spend in free agency · hover a tile for what it counts</span></div>
+      <div class="vitals-row">{tiles}</div>
     </section>"""
 
     def row(label: str, now: str, proj: str, cls: str = "") -> str:
@@ -625,16 +1620,21 @@ def luxury_tax_card(tfin: dict[str, Any] | None, league_fin: dict[str, Any]) -> 
         return ""
     f = tfin
     cap = league_fin.get("soft_cap", FIN_SOFT_CAP)
-    tiles = [("Payroll", fmt_money(f["payroll"]), "")]
+    tiles = [_tile("Payroll", fmt_money(f["payroll"]),
+                   tip="Full-season player salaries plus dead money and retained salary.")]
     if f["over_cap"]:
-        tiles.append(("Over cap by", fmt_money(f["payroll"] - cap), "delta-down"))
-        tiles.append(("Luxury tax paid", fmt_money(-f["luxtax"]), "delta-down"))
+        tiles.append(_tile("Over cap by", fmt_money(f["payroll"] - cap), cls="delta-down",
+                           tip=f"Payroll above the {fmt_money(cap)} soft cap."))
+        tiles.append(_tile("Luxury tax paid", fmt_money(-f["luxtax"]), cls="delta-down",
+                           tip="$1 of tax for every $1 of payroll over the soft cap."))
     elif f["under_cap"]:
-        tiles.append(("Under cap by", fmt_money(cap - f["payroll"]), "delta-up"))
-        tiles.append(("Tax distribution", fmt_money_pm(f["tax_share"]), "delta-up"))
+        tiles.append(_tile("Under cap by", fmt_money(cap - f["payroll"]), cls="delta-up",
+                           tip=f"Room below the {fmt_money(cap)} soft cap."))
+        tiles.append(_tile("Tax distribution", fmt_money_pm(f["tax_share"]), cls="delta-up",
+                           tip="Equal share of the league's collected luxury tax, paid to every under-cap team."))
     else:
-        tiles.append(("At the cap", "$0", ""))
-    tile_html = "".join(f'<div class="vital-tile"><span>{esc(l)}</span><strong class="{c}">{v}</strong></div>' for l, v, c in tiles)
+        tiles.append(_tile("At the cap", "$0"))
+    tile_html = "".join(tiles)
     n_under = safe_int(league_fin.get("n_under"), 0)
     note = f'League luxury-tax pool {fmt_money(league_fin.get("pool", 0))} split equally among {n_under} under-cap team{"" if n_under == 1 else "s"} ({fmt_money(league_fin.get("share", 0))} each).'
     return f"""
@@ -732,9 +1732,22 @@ def roster_tabs(sorted_roster: list[dict[str, Any]], season: int, start_season: 
         ranges[key] = (min(vals), max(vals)) if vals else (0.0, 0.0)
 
     stats_headers = ["Name", "Pos", "Age", "Ovr", "Pot", "Contract", "Health", "G", "MP", "PTS", "TRB", "AST", "STL", "BLK", "BPM", "Acquired"]
-    stats_rows = [roster_row(p, season, start_season, root, teams_by_tid) for p in sorted_roster]
     adv_headers = ["Name", "Pos", "Age", "G", "MP", "TS%", "eFG%", "ORtg", "DRtg", "OBPM", "DBPM", "BPM", "VORP", "+/-"]
-    adv_rows = [roster_advanced_row(p, season, start_season, root) for p in sorted_roster]
+
+    # 0-GP players have no real stat line — their all-zero rows read as fabricated,
+    # so the Stats/Advanced views hide them behind a "show inactive" toggle. The
+    # Ratings view always shows the full roster (ratings are real for everyone).
+    zero_gp = {safe_int(p.get("pid"), -1) for p in sorted_roster
+               if stat_gp(latest_regular_stat(p, start_season, season)) <= 0}
+    if len(zero_gp) == len(sorted_roster):
+        zero_gp = set()  # everyone is 0 GP (expansion roster): hiding all would lie harder
+
+    def stat_tr(p: dict[str, Any], cells: str) -> str:
+        cls = ' class="inactive-row"' if safe_int(p.get("pid"), -1) in zero_gp else ""
+        return f"<tr{cls}>{cells}</tr>"
+
+    stats_rows = [stat_tr(p, roster_row(p, season, start_season, root, teams_by_tid)) for p in sorted_roster]
+    adv_rows = [stat_tr(p, roster_advanced_row(p, season, start_season, root)) for p in sorted_roster]
     rat_headers: list = ["Name", "Pos", "Age", "Ovr", "Pot"]
     for key, label in TEAM_RATING_RANK_KEYS:
         rat_headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
@@ -745,12 +1758,21 @@ def roster_tabs(sorted_roster: list[dict[str, Any]], season: int, start_season: 
                 f'aria-controls="panel-{tid}" aria-selected="{"true" if first else "false"}" '
                 f'tabindex="{"0" if first else "-1"}" data-tab-target="panel-{tid}">{esc(label)}</button>')
 
+    inactive_toggle = ""
+    if zero_gp:
+        n = len(zero_gp)
+        inactive_toggle = (
+            '<label class="inactive-toggle small-copy">'
+            '<input type="checkbox" data-toggle-inactive> '
+            f'Show inactive — {n} player{"" if n == 1 else "s"} with 0 GP hidden</label>'
+        )
     return f"""
-    <section class="card">
+    <section class="card" data-roster-card>
       <div class="section-title-row"><h2>Players</h2><span class="muted small-copy">click a column header to sort · {len(sorted_roster)} players</span></div>
       <div class="tabs" role="tablist" aria-label="Roster stat views" data-tabs>
         {tab("rstats", "Stats", True)}{tab("radv", "Advanced", False)}{tab("rrat", "Ratings", False)}
       </div>
+      {inactive_toggle}
       <div id="panel-rstats" role="tabpanel" aria-labelledby="tab-rstats" data-tab-panel>
         {table_html(stats_headers, stats_rows, table_id="roster-stats", empty_message="No players found.", wrap_cls="fit-table", pos_filter=True)}
       </div>
@@ -770,44 +1792,76 @@ def _sorted_team_roster(roster: list[dict[str, Any]], season: int) -> list[dict[
 def render_team_roster_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, tfin: dict[str, Any] | None = None) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     sorted_roster = _sorted_team_roster(roster, season)
-    rotation = rotation_map_card(team, sorted_roster, game_items or [], game_logs or {}, season, teams_by_tid) if game_items and game_logs else ""
+    rotation = river = ""
+    if game_items and game_logs is not None:
+        # In the preseason the display window falls back to the last completed
+        # season, whose logs are not the current-season ones — rebuild to match.
+        _window, display_season = _team_completed_window(team, game_items, season)
+        logs = game_logs
+        if display_season != season and data is not None:
+            logs = build_game_logs(data, display_season)
+        river = rotation_river_card(team, game_items, logs, season, teams_by_tid)
+        rotation = rotation_map_card(team, sorted_roster, game_items, logs, season, teams_by_tid)
     picks = draft_picks_card(data, team, teams_by_tid) if data else ""
     body = f"""
-    {team_hero_html(team, season, sorted_roster, teams, tfin)}
+    {team_hero_html(team, season, sorted_roster, teams, tfin, data=data)}
     {team_subnav(team, "roster")}
+    {starting_five_card(team, sorted_roster, season)}
     {roster_tabs(sorted_roster, season, start_season, "../", teams_by_tid, game_logs)}
     {depth_chart_card(sorted_roster, season)}
+    {river}
     {rotation}
+    {scoring_share_card(team, sorted_roster, season)}
     {picks}
     """
-    return page_html(team_full_name(team), body, teams, root="../", active=f"team-{team.get('tid')}")
+    return page_html(team_full_name(team), team_scope_html(team, body), teams, root="../", active=f"team-{team.get('tid')}")
 
 
 def render_team_games_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, tfin: dict[str, Any] | None = None) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     sorted_roster = _sorted_team_roster(roster, season)
-    strip = team_games_strip(team, game_items or [], teams_by_tid) if game_items else ""
+    strip = team_games_strip(team, game_items or [], teams_by_tid, season=season) if game_items else ""
     games_table = team_games_table(team, game_items or [], teams_by_tid, season) if game_items else ""
+    playoff_items = completed_game_items(data, None, playoffs=True) if data else []
+    playoffs_table = team_playoffs_table(team, playoff_items, teams_by_tid, season) if playoff_items else ""
     profile = team_quarter_profile(team, data, season, teams_by_tid) if data else ""
+    factors = four_factors_card(data, team, teams, season) if data else ""
     body = f"""
-    {team_hero_html(team, season, sorted_roster, teams, tfin)}
+    {team_hero_html(team, season, sorted_roster, teams, tfin, data=data)}
     {team_subnav(team, "games")}
     {strip}
     {games_table}
+    {playoffs_table}
+    {factors}
     {profile}
     """
-    return page_html(f"{team_full_name(team)} — Games", body, teams, root="../", active=f"team-{team.get('tid')}")
+    return page_html(f"{team_full_name(team)} — Games", team_scope_html(team, body), teams, root="../", active=f"team-{team.get('tid')}")
 
 
 def render_team_finances_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, tfin: dict[str, Any] | None = None, league_fin: dict[str, Any] | None = None) -> str:
     sorted_roster = _sorted_team_roster(roster, season)
     body = f"""
-    {team_hero_html(team, season, sorted_roster, teams, tfin)}
+    {team_hero_html(team, season, sorted_roster, teams, tfin, data=data)}
     {team_subnav(team, "finances")}
     {finance_ledger_card(tfin)}
     {luxury_tax_card(tfin, league_fin or {})}
-    <h2 class="block-title">Owed Payroll</h2>
     {team_finances_table(sorted_roster, season, data=data, tid=safe_int(team.get("tid")))}
     {finance_rules_card()}
     """
-    return page_html(f"{team_full_name(team)} — Finances", body, teams, root="../", active=f"team-{team.get('tid')}")
+    return page_html(f"{team_full_name(team)} — Finances", team_scope_html(team, body), teams, root="../", active=f"team-{team.get('tid')}")
+
+
+def render_team_history_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, tfin: dict[str, Any] | None = None) -> str:
+    """The 4th team subpage: the Franchise Arc — W/L ribbon, playoff exits,
+    title flags, event pins, and the season-by-season results table."""
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    sorted_roster = _sorted_team_roster(roster, season)
+    arc = franchise_arc_card(team, data, teams, teams_by_tid) if data else ""
+    results = season_results_card(team, data, teams) if data else ""
+    body = f"""
+    {team_hero_html(team, season, sorted_roster, teams, tfin, data=data)}
+    {team_subnav(team, "history")}
+    {arc}
+    {results}
+    """
+    return page_html(f"{team_full_name(team)} — Franchise Arc", team_scope_html(team, body), teams, root="../", active=f"team-{team.get('tid')}")

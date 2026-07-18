@@ -16,6 +16,8 @@ from .core import (
     ALL_PLAYERS_BY_PID,
     SITE_META,
     active_players,
+    latest_game_season,
+    register_site_meta,
     active_teams_for_season,
     build_game_logs,
     completed_game_items,
@@ -47,7 +49,12 @@ from .simmodel import league_sim
 
 from .pages.home import render_home_page
 
-from .pages.team import render_team_finances_page, render_team_games_page, render_team_roster_page
+from .pages.team import (
+    render_team_finances_page,
+    render_team_games_page,
+    render_team_history_page,
+    render_team_roster_page,
+)
 
 from .pages.player import render_player_pages
 
@@ -66,9 +73,19 @@ from .pages.compare import render_compare_page
 
 from .pages.trade import render_trade_page
 
+from .pages.extras import render_extras_pages
+
+from .pages.wrapped import emit_wrapped_cards, render_wrapped
+
+from .pages.lineup import render_lineup_pages
+
+from .pages.simulator import render_simulator_pages
+
 from .appdata import write_app_data
 
-from .ledger import update_odds_ledger
+from .derived import feats_index
+
+from .ledger import load_odds_history, update_odds_ledger
 
 from .portraits import emit_faces
 
@@ -91,19 +108,39 @@ CSS_FILES = [
     "team-extras.css",
     "charts.css",
     "history.css",
+    "league.css",
+    "extras.css",
+    "wrapped.css",
     "search.css",
     "misc.css",
+    "apps.css",
+    "tools.css",
+    "mobile.css",
+    "print.css",
 ]
 
+# core.js opens a shared IIFE that charts.js closes; fragments in between run
+# inside it (theme.js must immediately follow core.js — later fragments read its
+# consts). Files after charts.js are standalone self-contained IIFEs.
 JS_FILES = [
     "core.js",
+    "theme.js",
     "scatter.js",
     "hover.js",
+    "home.js",
     "search.js",
     "tables.js",
     "nav.js",
     "tabs.js",
+    "player.js",
     "charts.js",
+    "team.js",
+    "league.js",
+    "compare.js",
+    "trade-extras.js",
+    "lineup.js",
+    "simulator.js",
+    "wrapped.js",
 ]
 
 
@@ -145,6 +182,7 @@ def generate_site(
 ) -> dict[str, int | str]:
     data = json.loads(json_path.read_text(encoding="utf-8"))
     normalize_positions(data)
+    register_site_meta(data, json_path.name)
     season = current_season(data)
     teams = sorted(data.get("teams", []), key=team_sort_key)
     players = active_players(data)
@@ -201,7 +239,10 @@ def generate_site(
     emit_faces(out_dir, data.get("players", []))
     write_app_data(out_dir, data, teams=teams, players=players, season=season, start_season=start_season)
 
-    write_text(out_dir / "index.html", render_home_page(data, teams, players, season, start_season))
+    ledger_path = json_path.parent / "odds_history.json"
+    sim_result = league_sim(data, teams, season) or {}
+    update_odds_ledger(data, sim_result, path=ledger_path)
+    write_text(out_dir / "index.html", render_home_page(data, teams, players, season, start_season, odds_history=load_odds_history(str(ledger_path))))
     write_text(out_dir / "schedule.html", render_schedule_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days))
     fa_market_year = season + 1 if phase_value(data) >= 8 else season
     write_text(out_dir / "free-agency.html", render_free_agency_page(fa_players, teams, season, start_season, all_players=players, market_year=fa_market_year))
@@ -213,8 +254,6 @@ def generate_site(
     write_text(out_dir / "compare.html", render_compare_page(data, teams, players, season, start_season))
 
     game_logs = build_game_logs(data, season)
-    sim_result = league_sim(data, teams, season) or {}
-    update_odds_ledger(data, sim_result, path=json_path.parent / "odds_history.json")
     league_fin = compute_league_finances(data, teams, players, season, sim_result.get("teams"))
     for team in teams:
         roster = [player for player in players if player.get("tid") == team.get("tid")]
@@ -223,10 +262,11 @@ def generate_site(
         write_text(out_dir / "teams" / f"{slug}.html", render_team_roster_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
         write_text(out_dir / "teams" / f"{slug}-games.html", render_team_games_page(team, roster, teams, season, start_season, data=data, game_items=game_items, game_logs=game_logs, tfin=tfin))
         write_text(out_dir / "teams" / f"{slug}-finances.html", render_team_finances_page(team, roster, teams, season, start_season, data=data, tfin=tfin, league_fin=league_fin))
+        write_text(out_dir / "teams" / f"{slug}-history.html", render_team_history_page(team, roster, teams, season, start_season, data=data, tfin=tfin))
 
     def write_player_pages(p: dict[str, Any], log_entries: list[dict[str, Any]] | None) -> None:
         slug = player_slug(p)
-        for suffix, html in render_player_pages(p, teams, season, start_season, log_entries=log_entries).items():
+        for suffix, html in render_player_pages(p, teams, season, start_season, log_entries=log_entries, data=data).items():
             write_text(out_dir / "players" / f"{slug}{suffix}.html", html)
 
     prospects = draft_prospects(data)
@@ -238,13 +278,29 @@ def generate_site(
 
     # Write a page for every game linked from the site: the schedule/team slate (game_items)
     # plus the current season's completed games incl. playoffs (home "Latest Results", the
-    # playoff bracket, and records feats all link to these gids).
+    # playoff bracket, and records feats all link to these gids), plus the latest completed
+    # game season incl. its playoffs (bracket/records/classics links in offseason exports).
     page_items = {str(item.get("gid")): item for item in game_items if item.get("gid") is not None}
     for item in completed_game_items(data, season, playoffs=None):
         page_items.setdefault(str(item.get("gid")), item)
+    last_game_season = latest_game_season(data)
+    if last_game_season is not None and last_game_season != season:
+        for item in completed_game_items(data, last_game_season, playoffs=None):
+            page_items.setdefault(str(item.get("gid")), item)
     all_game_pages = list(page_items.values())
+    feats = feats_index(data)
     for item in all_game_pages:
-        write_text(out_dir / "games" / f"{game_slug_from_gid(item.get('gid'))}.html", render_game_page(item, all_game_pages, teams, players, safe_int(item.get("season"), season)))
+        write_text(out_dir / "games" / f"{game_slug_from_gid(item.get('gid'))}.html", render_game_page(item, all_game_pages, teams, players, safe_int(item.get("season"), season), feats_by_gid=feats))
+
+    for name, page in render_extras_pages(data, teams).items():
+        write_text(out_dir / name, page)
+    for name, page in render_wrapped(data, teams, linkable_gids=set(page_items.keys())).items():
+        write_text(out_dir / name, page)
+    emit_wrapped_cards(out_dir, data, teams)
+    for name, page in render_lineup_pages(data, teams, players, season, start_season).items():
+        write_text(out_dir / name, page)
+    for name, page in render_simulator_pages(data, teams, players, season, start_season).items():
+        write_text(out_dir / name, page)
 
     completed_scores = [item for item in game_items if is_completed_game_item(item)]
     return {

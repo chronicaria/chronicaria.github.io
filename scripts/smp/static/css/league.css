@@ -1,0 +1,84 @@
+/* ---------- league pages: draft re-grades, rafters, records/history polish ---------- */
+
+/* Gold led-the-league treatment (classname shared with player-page season tables). */
+.led-league { color: var(--warn); font-weight: 600; white-space: nowrap; }
+.led-league .led-star { margin-left: .12rem; font-size: .82em; }
+
+/* ---------- draft re-grades ---------- */
+.regrade-card .tabs { margin-bottom: .55rem; }
+.regrade-class-title { margin: 0; font-size: .8rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.regrade-crests { display: inline-flex; align-items: center; gap: .3rem; flex-wrap: wrap; }
+.regrade-crest { display: inline-flex; align-items: center; gap: .1rem; color: var(--warn); }
+.regrade-crest .crest { width: 1.15rem; height: 1.15rem; vertical-align: middle; }
+.regrade-crest-count { font-size: .68rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.regrade-still { text-transform: uppercase; letter-spacing: .05em; }
+
+/* ---------- rafters (championship pennants) ---------- */
+.rafters { display: flex; align-items: flex-start; gap: .35rem; overflow-x: auto; padding: .35rem .1rem .5rem; }
+.rafters-slot { flex: 1 0 auto; min-width: 4.2rem; display: flex; flex-direction: column; align-items: center; gap: .3rem; text-align: center; }
+.rafters-flags { display: flex; gap: .2rem; align-items: flex-start; min-height: 4.6rem; }
+.rafters-flag { display: block; line-height: 0; }
+a.rafters-flag:hover .rafters-pennant, a.rafters-flag:focus-visible .rafters-pennant { transform: translateY(2px); }
+.rafters-pennant { width: 3.3rem; height: auto; transition: transform .15s ease; }
+.rafters-pennant-empty { opacity: .6; }
+.rafters-abbrev { font-size: .72rem; font-weight: 700; letter-spacing: .05em; color: var(--text); display: flex; flex-direction: column; gap: .05rem; }
+.rafters-abbrev .muted { font-weight: 500; letter-spacing: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .rafters-pennant { transition: none; }
+}
+
+/* ---------- all-time leaders totals/per-game toggle ---------- */
+[data-leaders-panel][hidden] { display: none; }
+
+/* ---------- transaction log filters ---------- */
+.txlog-toolbar { justify-content: flex-start; flex-wrap: wrap; gap: .6rem 1rem; }
+[data-txlog] li.tx-hidden { display: none; }
+[data-txlog] details.tx-season.tx-season-empty { display: none; }
+
+/* ---------- schedule honest empty state ---------- */
+.sched-empty { margin: .4rem 0; padding: 1rem 1.1rem; border: 1px dashed var(--line); border-radius: .15rem; background: var(--panel-2); max-width: 42rem; }
+.sched-empty-title { margin: 0 0 .3rem; font-weight: 700; }
+.sched-empty p { margin: 0; }
+.sched-empty p + p { margin-top: .3rem; }
+
+/* ---------- free-agency top-10 card strip ---------- */
+.fa-card-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; }
+.fa-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  padding: .7rem .55rem .6rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  color: var(--text);
+  text-decoration: none;
+  text-align: center;
+}
+.fa-card:hover, .fa-card:focus-visible { border-color: var(--accent); text-decoration: none; }
+.fa-card-rank {
+  position: absolute;
+  top: .35rem;
+  left: .45rem;
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.fa-card-portrait { width: 3.4rem; height: 3.4rem; border-radius: 50%; object-fit: cover; background: var(--panel-3); }
+.fa-card-portrait .monogram { width: 3.4rem; height: 3.4rem; }
+.fa-card-name { font-weight: 700; font-size: .84rem; line-height: 1.25; }
+.fa-card:hover .fa-card-name { text-decoration: underline; }
+.fa-card-meta { color: var(--muted); font-size: .72rem; }
+.fa-card-ask {
+  margin-top: .1rem;
+  padding: .1rem .55rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: .76rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

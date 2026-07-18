@@ -114,3 +114,17 @@ tr.group-hidden { display: none; }
 tr.pos-hidden { display: none; }
 .pos-filter-bar { margin-bottom: .4rem; }
 
+/* ---------- column groups + sticky year + My Team rows (W10) ---------- */
+.colgroup-toggle { margin-bottom: .4rem; }
+.cg-hidden { display: none; }
+table.sticky-col2 th:nth-child(2), table.sticky-col2 td:nth-child(2) {
+  position: sticky;
+  left: var(--c1w, 0px);
+  z-index: 2;
+}
+table.sticky-col2 td:nth-child(2) { background: inherit; }
+table.sticky-col2 thead th:nth-child(2) { z-index: 4; background: var(--panel-2); }
+tbody tr.my-team-row > td { background: color-mix(in srgb, var(--accent) 14%, var(--panel)); }
+tbody tr.my-team-row > td:first-child { box-shadow: inset 2px 0 0 var(--accent); }
+tbody tr.my-team-row:hover > td { background: color-mix(in srgb, var(--accent) 24%, var(--panel)); }
+

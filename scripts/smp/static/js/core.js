@@ -115,19 +115,26 @@
   document.querySelectorAll('[data-view-toggle]').forEach((wrap) => {
     const table = document.getElementById(wrap.dataset.viewToggle);
     if (!table) return;
+    const viewStoreKey = 'viewtoggle:' + wrap.dataset.viewToggle;
+    function activateView(button, persist) {
+      wrap.querySelectorAll('button').forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      button.classList.add('active');
+      button.setAttribute('aria-pressed', 'true');
+      table.classList.remove('show-adv', 'show-p36', 'show-rate');
+      if (button.dataset.view !== 'basic') table.classList.add('show-' + button.dataset.view);
+      if (persist) { try { localStorage.setItem(viewStoreKey, button.dataset.view); } catch (e) {} }
+    }
     wrap.querySelectorAll('button').forEach((button) => {
       button.setAttribute('aria-pressed', button.classList.contains('active') ? 'true' : 'false');
-      button.addEventListener('click', () => {
-        wrap.querySelectorAll('button').forEach((b) => {
-          b.classList.remove('active');
-          b.setAttribute('aria-pressed', 'false');
-        });
-        button.classList.add('active');
-        button.setAttribute('aria-pressed', 'true');
-        table.classList.remove('show-adv', 'show-p36', 'show-rate');
-        if (button.dataset.view !== 'basic') table.classList.add('show-' + button.dataset.view);
-      });
+      button.addEventListener('click', () => activateView(button, true));
     });
+    let storedView = null;
+    try { storedView = localStorage.getItem(viewStoreKey); } catch (e) {}
+    const savedButton = storedView && wrap.querySelector('button[data-view="' + storedView + '"]');
+    if (savedButton && !savedButton.classList.contains('active')) activateView(savedButton, false);
   });
 
   document.querySelectorAll('[data-group-toggle]').forEach((wrap) => {
@@ -154,7 +161,7 @@
   });
 
   document.addEventListener('click', (event) => {
-    document.querySelectorAll('details.team-dropdown[open]').forEach((details) => {
+    document.querySelectorAll('details.team-dropdown[open], details.nav-dropdown[open]').forEach((details) => {
       if (!details.contains(event.target)) details.removeAttribute('open');
     });
   });

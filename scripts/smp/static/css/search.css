@@ -38,4 +38,85 @@
 .search-results a:hover, .search-results a.selected { background: var(--panel-2); text-decoration: none; }
 .search-empty { padding: .45rem .6rem; color: var(--muted); font-size: .78rem; }
 
+/* ---------- command palette (W10) ---------- */
+.palette-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10vh 1rem 1rem;
+  background: rgba(0, 0, 0, .55);
+}
+.palette-overlay[hidden] { display: none; }
+.palette {
+  width: min(100%, 34rem);
+  border: 1px solid var(--line);
+  border-radius: .25rem;
+  background: var(--panel);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .5);
+}
+.palette-input {
+  width: 100%;
+  padding: .7rem .85rem;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: .25rem .25rem 0 0;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-size: .95rem;
+  outline: none;
+}
+.palette-results { max-height: min(50vh, 22rem); overflow-y: auto; }
+.palette-group {
+  padding: .45rem .85rem .2rem;
+  color: var(--muted);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.pal-opt {
+  display: flex;
+  justify-content: space-between;
+  gap: .6rem;
+  padding: .42rem .85rem;
+  color: var(--text);
+  font-size: .85rem;
+  text-decoration: none;
+}
+.pal-opt .muted { font-size: .72rem; }
+.pal-opt:hover, .pal-opt.selected { background: var(--accent-soft); text-decoration: none; }
+.palette-empty { padding: .6rem .85rem; color: var(--muted); font-size: .8rem; }
+.palette-hint { margin: 0; padding: .4rem .85rem .5rem; border-top: 1px solid var(--line); font-size: .7rem; }
+
+/* ---------- filterable combobox factory (SMP.combobox, W10) ---------- */
+.smp-combobox { position: relative; display: inline-block; max-width: 100%; }
+.smp-combobox-list {
+  position: absolute;
+  top: calc(100% + .25rem);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  max-height: 16rem;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+}
+.smp-combobox-list[hidden] { display: none; }
+.smp-cbx-opt {
+  display: flex;
+  justify-content: space-between;
+  gap: .6rem;
+  padding: .38rem .6rem;
+  font-size: .82rem;
+  cursor: pointer;
+}
+.smp-cbx-opt:hover, .smp-cbx-opt.selected { background: var(--panel-2); }
+.smp-cbx-opt .muted { font-size: .72rem; }
+
 

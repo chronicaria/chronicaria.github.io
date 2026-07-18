@@ -1,0 +1,110 @@
+/* ---------- client apps: comboboxes, radar overlay, trade finance readout ---------- */
+.app-loading, .app-error { margin: .6rem 0 0; font-size: .85rem; }
+.app-loading { color: var(--muted); }
+.app-error { color: var(--bad); }
+
+/* filterable combobox (Compare player pickers, Trade Machine team pickers) */
+.combo-slot { display: flex; align-items: center; gap: .5rem; }
+.combo { position: relative; flex: 0 1 15rem; min-width: 11rem; }
+.combo-input {
+  width: 100%;
+  padding: .4rem .55rem;
+  border-radius: .15rem;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: .85rem;
+  outline: none;
+}
+.combo-input:focus { border-color: var(--accent); }
+.combo-input:disabled { opacity: .55; cursor: wait; }
+.combo-list {
+  position: absolute;
+  top: calc(100% + .3rem);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  max-height: 18rem;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel);
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+}
+.combo-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .6rem;
+  padding: .42rem .6rem;
+  font-size: .82rem;
+  cursor: pointer;
+}
+.combo-option .muted { font-size: .72rem; white-space: nowrap; }
+.combo-option:hover, .combo-option.selected { background: var(--panel-2); }
+.combo-empty { padding: .45rem .6rem; color: var(--muted); font-size: .78rem; }
+.combo-label { flex: none; }
+.trade-side .combo { margin-bottom: .45rem; }
+.trade-side .combo-label { margin-bottom: .3rem; }
+.combo-roster-filter { width: 100%; margin-bottom: .45rem; }
+
+/* portrait chips (compare table header, radar legend) */
+.app-face {
+  display: inline-flex;
+  width: 1.65rem;
+  height: 1.65rem;
+  margin-right: .4rem;
+  vertical-align: middle;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--panel-3);
+  flex: none;
+}
+.app-face img, .app-face svg { width: 100%; height: 100%; display: block; }
+.cmp-players th .app-face { width: 1.5rem; height: 1.5rem; }
+
+/* radar overlay */
+.radar-block { margin: .35rem 0 .5rem; }
+.radar-svg { display: block; width: 100%; max-width: 30rem; margin: 0 auto; height: auto; }
+.radar-grid { fill: none; stroke: var(--line); stroke-width: 1; }
+.radar-axis { stroke: var(--line); stroke-width: 1; }
+.radar-label { fill: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.radar-poly { fill-opacity: .16; stroke-width: 2; stroke-linejoin: round; }
+.radar-dot { stroke: var(--panel); stroke-width: 1; }
+.radar-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.2rem; margin-top: .35rem; }
+.radar-chip { display: inline-flex; align-items: center; gap: .35rem; font-size: .82rem; }
+.radar-chip .app-face { margin-right: 0; }
+.radar-chip .muted { font-size: .72rem; }
+.radar-swatch { display: inline-block; width: .85rem; height: .3rem; border-radius: .15rem; }
+.radar-swatch--dashed {
+  background-image: repeating-linear-gradient(90deg, transparent 0 .18rem, var(--panel) .18rem .3rem);
+}
+.radar-note { margin: .5rem 0 0; text-align: center; }
+
+/* trade finance readout: payroll before/after vs the $300M tax line */
+.tfin { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .55rem 0; }
+@media (max-width: 900px) { .tfin { grid-template-columns: 1fr; } }
+.tfin-team {
+  padding: .5rem .6rem;
+  border: 1px solid var(--line);
+  border-radius: .2rem;
+  background: var(--panel-2);
+}
+.tfin-team--over { border-color: var(--warn); background: var(--warn-soft); }
+.tfin-head { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; }
+.tfin-nums { font-variant-numeric: tabular-nums; font-size: .82rem; color: var(--muted); }
+.tfin-nums strong { color: var(--text); }
+.tfin-bar {
+  position: relative;
+  height: .45rem;
+  margin: .4rem 0 .3rem;
+  border-radius: .15rem;
+  background: var(--panel-3);
+  overflow: hidden;
+}
+.tfin-fill { position: absolute; inset: 0 auto 0 0; display: block; background: var(--accent); border-radius: .15rem; }
+.tfin-team--over .tfin-fill { background: var(--warn); }
+.tfin-tick { position: absolute; top: -0.1rem; bottom: -0.1rem; width: 2px; background: var(--bad); }
+.tfin-note { font-size: .74rem; color: var(--muted); }
+.tfin-note--over { color: var(--warn); font-weight: 700; }

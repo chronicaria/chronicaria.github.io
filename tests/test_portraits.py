@@ -202,7 +202,6 @@ class TestPortraitHtml(PortraitsFixtureCase):
         self.assertIn('data-monogram="CD"', html)
         self.assertIn('data-tid="2"', html)
         self.assertIn('data-jersey="11"', html)
-        self.assertIn('data-size="40"', html)
         self.assertIn('aria-label="Cy Dunn"', html)
         self.assertIn('role="img"', html)
         self.assertNotIn("<img", html)

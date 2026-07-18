@@ -28,6 +28,7 @@ from ..core import (
     fmt_record,
     fmt_signed,
     fmt_win_pct,
+    free_agents,
     game_ot_label,
     game_recap_text,
     game_url,
@@ -44,6 +45,7 @@ from ..core import (
     latest_team_stat,
     made_pct,
     page_html,
+    phase_value,
     per_game,
     player_link,
     player_name,
@@ -70,14 +72,24 @@ from ..core import (
     team_mov,
     team_palette_by_tid,
     team_slug,
+    team_sort_key,
     team_stat_per_game,
+    team_url,
     total_rebounds,
     win_pct,
 )
 
+from ..derived import fantasy_pts, four_factors
+
 from ..finance import compute_league_finances
 
+from ..identity import team_chart_color
+
+from ..ledger import load_odds_history
+
 from ..simmodel import league_sim, playoff_clinch_marks
+
+from .league import playoff_bracket_html
 
 
 def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
@@ -142,8 +154,9 @@ def stakes_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) 
     items_by_gid = {str(item.get("gid")): item for item in items}
     cards = []
     for stake in sorted(stakes, key=lambda s: -max(abs(s.get("home_swing") or 0), abs(s.get("away_swing") or 0))):
+        # Projected (simulated) games have no game page — link each team to its
+        # team page instead of emitting a dead "#" link.
         item = items_by_gid.get(str(stake["gid"]))
-        link = esc(game_url(item)) if item else "#"
         rows = []
         for side, tid_key, swing_key in (("away", "away_tid", "away_swing"), ("home", "home_tid", "home_swing")):
             tid = stake[tid_key]
@@ -154,14 +167,27 @@ def stakes_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) 
                 pts = 100 * swing
                 cls = "delta-up" if pts >= 10 else ""
                 swing_html = f'<span class="{cls}">±{fmt_number(pts, 0)}%</span>'
+            team = teams_by_tid.get(safe_int(tid))
+            label = f'{team_dot(tid, palette)}{esc(team_abbrev_for_tid(tid, teams_by_tid))}'
+            if item is None and team:
+                label = f'<a class="hm-stake-team" href="{esc(team_url(team))}">{label}</a>'
             rows.append(
-                f'<span class="score-row"><span>{team_dot(tid, palette)}{esc(team_abbrev_for_tid(tid, teams_by_tid))}</span>'
+                f'<span class="score-row"><span>{label}</span>'
                 f'<strong>{swing_html}</strong></span>'
             )
-        cards.append(f'<a class="score-line score-stack" href="{link}">{"".join(rows)}</a>')
+        if item is not None:
+            cards.append(f'<a class="score-line score-stack" href="{esc(game_url(item))}">{"".join(rows)}</a>')
+        else:
+            cards.append(f'<div class="score-line score-stack hm-stake-static">{"".join(rows)}</div>')
+    if sim.get("fresh"):
+        title = "What's at Stake · Opening Day"
+        note = "playoff-odds swing between winning and losing the projected opening matchup"
+    else:
+        title = f'What\'s at Stake · Day {sim.get("day")}'
+        note = "playoff-odds swing between winning and losing today's game"
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>What's at Stake · Day {sim.get("day")}</h2><span class="muted small-copy">playoff-odds swing between winning and losing today's game</span></div>
+      <div class="section-title-row"><h2>{title}</h2><span class="muted small-copy">{note}</span></div>
       <div class="score-list">{''.join(cards)}</div>
     </section>
     """
@@ -821,29 +847,733 @@ def home_finances_table(data: dict[str, Any], teams: list[dict[str, Any]], playe
     """
 
 
-def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int, start_season: int) -> str:
+# ---------------------------------------------------------------------------
+# Phase-aware composition (PLAN D32) + new home cards (B11/B14/B16a)
+# ---------------------------------------------------------------------------
+
+def home_phase_kind(data: dict[str, Any], season: int) -> str:
+    """Which home-page composition to show: preseason/regular/playoffs/offseason.
+
+    Basketball GM phases: 0 preseason, 1 regular season, 2 after trade deadline,
+    3 playoffs, >=4 offseason (draft lottery through free agency). A "regular
+    season" export with zero completed games is still preseason in spirit —
+    every standings/stat card would be a wall of dashes — so it composes as
+    preseason until real games land.
+    """
+    phase = phase_value(data)
+    if phase >= 4:
+        return "offseason"
+    if phase == 3:
+        return "playoffs"
+    if phase <= 0 or not completed_game_items(data, season, playoffs=False):
+        return "preseason"
+    return "regular"
+
+
+def last_completed_season(data: dict[str, Any], season: int) -> int:
+    """Newest season with completed regular-season games in the export."""
+    for candidate in range(season, season - 4, -1):
+        if completed_game_items(data, candidate, playoffs=False):
+            return candidate
+    return season - 1
+
+
+def _season_label(chart_season: int, page_season: int) -> str:
+    """Card sub-label when a chart falls back to the last completed season."""
+    if chart_season == page_season:
+        return ""
+    return f"{chart_season} · last completed season"
+
+
+def preseason_banner(data: dict[str, Any], season: int) -> str:
+    """One-card preseason lead-in. Its single explanation line replaces the
+    zero-data standings / team-stats / award-sentiment cards (no dash walls)."""
+    season_len = regular_season_length(data, season) or 45
+    return f"""
+    <section class="card home-section hm-banner">
+      <div class="hm-banner-row">
+        <span class="hm-phase-pill">Preseason</span>
+        <h2 class="hm-banner-title">The {esc(season)} season hasn't tipped off yet</h2>
+        <span class="muted small-copy">{esc(season_len)} games ahead</span>
+      </div>
+      <p class="hm-banner-note muted small-copy">Standings, team stats, and award voting go live with the first real games — until then, everything below is projected from current rosters.</p>
+    </section>
+    """
+
+
+def playoff_bracket_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
+    """Current playoff bracket as the playoffs-phase lead card."""
+    ps = next((p for p in data.get("playoffSeries", []) or [] if isinstance(p, dict) and safe_int(p.get("season")) == season), None)
+    if not ps:
+        return ""
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    inner = playoff_bracket_html(ps, teams_by_tid, "")
+    if not inner:
+        return ""
+    return f"""
+    <section class="card home-section">
+      <div class="section-title-row"><h2>{esc(season)} Playoffs</h2><a class="muted small-copy" href="schedule.html">Full schedule →</a></div>
+      {inner}
+    </section>
+    """
+
+
+# Offseason-transaction event types, in digest display order. "draft" has no
+# entry in EVENT_BADGES (the in-season feed never sees one), so it is added here.
+_DIGEST_BADGES = dict(EVENT_BADGES)
+_DIGEST_BADGES["draft"] = ("DRAFT", "badge-accent")
+
+_DIGEST_COUNT_LABELS = [
+    ("trade", "trade", "trades"),
+    ("sign", "signing", "signings"),
+    ("draft", "draft pick", "draft picks"),
+    ("release", "player waived", "players waived"),
+    ("retired", "retirement", "retirements"),
+    ("hallOfFame", "Hall of Fame induction", "Hall of Fame inductions"),
+]
+
+
+def offseason_events(data: dict[str, Any], completed_season: int) -> list[dict[str, Any]]:
+    """Transaction events from the offseason after ``completed_season``.
+
+    BBGM logs offseason moves (retirements, draft, signings) under the season
+    that just ended, after its playoff events. The boundary is the last
+    playoffs-type eid of that season; draft/retired/hallOfFame events only ever
+    happen in the offseason, and events carrying an explicit phase >= 4 count
+    regardless of eid. In-season trades and signings stay out of the digest.
+    """
+    wanted = {"trade", "freeAgent", "reSigned", "release", "draft", "retired", "hallOfFame"}
+    events = [e for e in data.get("events", []) or []
+              if isinstance(e, dict) and safe_int(e.get("season"), -1) == completed_season and e.get("type") in wanted]
+    po_eids = [safe_int(e.get("eid")) for e in data.get("events", []) or []
+               if isinstance(e, dict) and safe_int(e.get("season"), -1) == completed_season
+               and e.get("type") in ("playoffs", "award")]
+    boundary = max(po_eids) if po_eids else -1
+    out = []
+    for event in events:
+        etype = event.get("type")
+        if etype in ("draft", "retired", "hallOfFame"):
+            out.append(event)
+        elif safe_int(event.get("eid"), -1) > boundary or safe_int(event.get("phase"), -1) >= 4:
+            out.append(event)
+    out.sort(key=lambda e: safe_int(e.get("eid")))
+    return out
+
+
+def offseason_digest_card(data: dict[str, Any], teams: list[dict[str, Any]], completed_season: int, root: str = "") -> str:
+    """Digest of the offseason's moves: count summary + the notable transactions."""
+    events = offseason_events(data, completed_season)
+    if not events:
+        return ""
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
+    by_type: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for event in events:
+        key = "sign" if event.get("type") in ("freeAgent", "reSigned") else event.get("type")
+        by_type[key].append(event)
+
+    counts = []
+    for key, singular, plural in _DIGEST_COUNT_LABELS:
+        n = len(by_type.get(key, []))
+        if n:
+            counts.append(f"{n} {singular if n == 1 else plural}")
+    summary = " · ".join(counts)
+
+    def event_sort_amount(event: dict[str, Any]) -> float:
+        return safe_float((event.get("contract") or {}).get("amount"))
+
+    # Notable slice, chronological by story arc: retirements -> draft -> signings/trades.
+    notable: list[dict[str, Any]] = []
+    notable += sorted(by_type.get("retired", []), key=lambda e: -safe_float(e.get("score")))[:2]
+    notable += sorted(by_type.get("hallOfFame", []), key=lambda e: safe_int(e.get("eid")))[:2]
+    notable += sorted(by_type.get("draft", []), key=lambda e: safe_int(e.get("eid")))[:3]
+    notable += sorted(by_type.get("trade", []), key=lambda e: safe_int(e.get("eid")))[:3]
+    notable += sorted(by_type.get("sign", []), key=event_sort_amount, reverse=True)[:4]
+
+    items = []
+    for event in notable:
+        html_text = compose_event_html(event, all_players_by_pid, teams_by_tid, completed_season, set(), root)
+        if not html_text:
+            continue
+        label, badge_cls = _DIGEST_BADGES.get(event.get("type"), ("NEWS", "badge-muted"))
+        items.append(f'<li><span class="badge {badge_cls}">{esc(label)}</span><span>{html_text}</span></li>')
+    if not items:
+        return ""
+    return f"""
+    <section class="card home-section news-card hm-digest">
+      <div class="section-title-row"><h2>Offseason Digest</h2><span class="count-pill">{len(events)} {'move' if len(events) == 1 else 'moves'}</span></div>
+      <p class="muted small-copy hm-digest-summary">{esc(summary)}</p>
+      <ul class="news-list">{''.join(items)}</ul>
+    </section>
+    """
+
+
+def preseason_rookie_watch_card(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, root: str = "") -> str:
+    """Rookie watch before any games exist: the incoming class by current rating."""
+    teams_by_tid = {t["tid"]: t for t in teams}
+    palette = team_palette_by_tid(teams)
+    rookies = []
+    for player in players:
+        if safe_int(player.get("tid"), -9) < 0:
+            continue
+        draft = player.get("draft") or {}
+        if draft.get("year") != season - 1:
+            continue
+        rating = latest_rating(player, season)
+        rookies.append((safe_int(rating.get("ovr")), safe_int(rating.get("pot")), player, rating, draft))
+    if not rookies:
+        return ""
+    rookies.sort(key=lambda x: (-x[0], -x[1], player_name(x[2])))
+    rows = []
+    for rank, (ovr, pot, player, rating, draft) in enumerate(rookies[:6], 1):
+        pick = safe_int(draft.get("pick"))
+        pick_html = f'<span class="hm-pick muted">#{pick} pick</span>' if pick > 0 else ""
+        rows.append(
+            f'<li><span class="leader-rank">{rank}</span>'
+            f'{team_dot(player.get("tid"), palette)}'
+            f'<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
+            f'<span class="leader-team">{esc(team_abbrev_for_tid(player.get("tid"), teams_by_tid))}</span>'
+            f'{pick_html}'
+            f'<span class="leader-value">{esc(rating.get("pos", ""))} · {ovr} <span class="muted">/ {pot}</span></span></li>'
+        )
+    return f"""
+    <section class="card home-section">
+      <div class="section-title-row"><h2>Rookie Watch</h2><span class="muted small-copy">the incoming class · Ovr / Pot</span></div>
+      <ol class="leader-list rookie-list">{''.join(rows)}</ol>
+    </section>
+    """
+
+
+def season_awards_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int, root: str = "") -> str:
+    """The completed season's award winners (offseason lead card)."""
+    from ..identity import crest_svg
+
+    row = next((a for a in data.get("awards", []) or [] if isinstance(a, dict) and safe_int(a.get("season")) == season), None)
+    if not row:
+        return ""
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
+    entries = [
+        ("finalsMvp", "finals_mvp", "Finals MVP"),
+        ("mvp", "mvp", "MVP"),
+        ("dpoy", "dpoy", "DPOY"),
+        ("smoy", "smoy", "Sixth Man"),
+        ("roy", "roy", "Rookie of the Year"),
+        ("mip", "mip", "Most Improved"),
+    ]
+    cells = []
+    for key, crest_kind, label in entries:
+        winner = row.get(key) or {}
+        if not isinstance(winner, dict) or winner.get("pid") is None:
+            continue
+        player = all_players_by_pid.get(safe_int(winner.get("pid")))
+        if player is not None and player.get("retiredYear") is None and safe_int(player.get("tid"), -9) >= FREE_AGENT_TID:
+            name_html = f'<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
+        else:
+            name_html = esc(winner.get("name") or player_name(player or {}) or "—")
+        team_ab = team_abbrev_for_tid(winner.get("tid"), teams_by_tid)
+        cells.append(
+            f'<div class="hm-award"><span class="hm-award-crest crest--gold">{crest_svg(crest_kind)}</span>'
+            f'<div class="hm-award-body"><span class="hm-award-label">{esc(label)}</span>'
+            f'{name_html}<span class="leader-team">{esc(team_ab)}</span></div></div>'
+        )
+    if not cells:
+        return ""
+    return f"""
+    <section class="card home-section">
+      <div class="section-title-row"><h2>{esc(season)} Awards</h2><a class="muted small-copy" href="history.html">Full history →</a></div>
+      <div class="hm-award-grid">{''.join(cells)}</div>
+    </section>
+    """
+
+
+def fa_watch_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int, root: str = "") -> str:
+    """Top available free agents (offseason lead card)."""
+    fas = free_agents(data)
+    if not fas:
+        return ""
+    scored = []
+    for player in fas:
+        rating = latest_rating(player, season)
+        scored.append((safe_int(rating.get("ovr")), safe_int(rating.get("pot")), player, rating))
+    scored.sort(key=lambda x: (-x[0], -x[1], player_name(x[2])))
+    rows = []
+    for rank, (ovr, pot, player, rating) in enumerate(scored[:8], 1):
+        rows.append(
+            f'<li><span class="leader-rank">{rank}</span>'
+            f'<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
+            f'<span class="leader-team">{esc(rating.get("pos", ""))}</span>'
+            f'<span class="leader-value">{ovr} <span class="muted">/ {pot}</span></span></li>'
+        )
+    return f"""
+    <section class="card home-section">
+      <div class="section-title-row"><h2>Free Agent Market</h2><a class="muted small-copy" href="{root}free-agency.html">Full market →</a></div>
+      <ol class="leader-list">{''.join(rows)}</ol>
+    </section>
+    """
+
+
+def _exact_team_stat(team: dict[str, Any], season: int) -> dict[str, Any]:
+    """Regular-season team stat row for exactly ``season`` (no fallback)."""
+    for row in team.get("stats", []) or []:
+        if isinstance(row, dict) and not row.get("playoffs") and safe_int(row.get("season")) == season:
+            return row
+    return {}
+
+
+def _team_rating_proxies(stat: dict[str, Any]) -> tuple[float, float] | None:
+    """(offensive, defensive) points per 100 possessions, Dean Oliver possessions."""
+    if safe_float(stat.get("gp")) <= 0:
+        return None
+    poss = safe_float(stat.get("fga")) - safe_float(stat.get("orb")) + safe_float(stat.get("tov")) + 0.44 * safe_float(stat.get("fta"))
+    opp_poss = safe_float(stat.get("oppFga")) - safe_float(stat.get("oppOrb")) + safe_float(stat.get("oppTov")) + 0.44 * safe_float(stat.get("oppFta"))
+    if poss <= 0 or opp_poss <= 0:
+        return None
+    return (100.0 * safe_float(stat.get("pts")) / poss, 100.0 * safe_float(stat.get("oppPts")) / opp_poss)
+
+
+def four_factors_scatter_card(data: dict[str, Any], teams: list[dict[str, Any]], chart_season: int, page_season: int) -> str:
+    """Quadrant scatter of team offense vs defense (B16a).
+
+    x = offensive rating proxy (points per 100 possessions), y = defensive
+    rating proxy with better defense UP. Dots are --team-chart colored with
+    abbrev labels; dashed league-average crosshair splits the four quadrants.
+    Tooltips carry the Dean Oliver four factors from smp.derived.
+    """
+    points = []
+    for team in active_teams_for_season(teams, chart_season):
+        stat = _exact_team_stat(team, chart_season)
+        proxies = _team_rating_proxies(stat)
+        if proxies is None:
+            continue
+        points.append((team, stat, proxies[0], proxies[1]))
+    if len(points) < 2:
+        return ""
+
+    xs_vals = [p[2] for p in points]
+    ys_vals = [p[3] for p in points]
+    avg_x = sum(xs_vals) / len(xs_vals)
+    avg_y = sum(ys_vals) / len(ys_vals)
+    pad = 1.2
+    lo_x, hi_x = min(xs_vals) - pad, max(xs_vals) + pad
+    lo_y, hi_y = min(ys_vals) - pad, max(ys_vals) + pad
+
+    width, height = 640.0, 420.0
+    ml, mr, mt, mb = 46.0, 18.0, 26.0, 44.0
+    plot_w, plot_h = width - ml - mr, height - mt - mb
+
+    def sx(v: float) -> float:
+        return ml + (v - lo_x) / max(1e-9, hi_x - lo_x) * plot_w
+
+    def sy(v: float) -> float:
+        # Lower defensive rating (fewer points allowed) is better -> up.
+        return mt + (v - lo_y) / max(1e-9, hi_y - lo_y) * plot_h
+
+    parts: list[str] = []
+    step = 2 if (hi_x - lo_x) <= 14 else 4
+    tick = math.ceil(lo_x / step) * step
+    while tick <= hi_x:
+        gx = sx(tick)
+        parts.append(f'<line x1="{gx:.1f}" y1="{mt}" x2="{gx:.1f}" y2="{mt + plot_h:.1f}" class="chart-grid"/>')
+        parts.append(f'<text x="{gx:.1f}" y="{mt + plot_h + 14:.1f}" class="chart-tick" text-anchor="middle">{int(tick)}</text>')
+        tick += step
+    step_y = 2 if (hi_y - lo_y) <= 14 else 4
+    tick = math.ceil(lo_y / step_y) * step_y
+    while tick <= hi_y:
+        gy = sy(tick)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w:.1f}" y2="{gy:.1f}" class="chart-grid"/>')
+        parts.append(f'<text x="{ml - 6}" y="{gy + 3.5:.1f}" class="chart-tick" text-anchor="end">{int(tick)}</text>')
+        tick += step_y
+
+    # League-average crosshair + quadrant captions.
+    parts.append(f'<line x1="{sx(avg_x):.1f}" y1="{mt}" x2="{sx(avg_x):.1f}" y2="{mt + plot_h:.1f}" class="ff4-avg"/>')
+    parts.append(f'<line x1="{ml}" y1="{sy(avg_y):.1f}" x2="{ml + plot_w:.1f}" y2="{sy(avg_y):.1f}" class="ff4-avg"/>')
+    captions = [
+        (ml + 8, mt + 12, "start", "− offense · + defense"),
+        (ml + plot_w - 8, mt + 12, "end", "+ offense · + defense"),
+        (ml + 8, mt + plot_h - 6, "start", "− offense · − defense"),
+        (ml + plot_w - 8, mt + plot_h - 6, "end", "+ offense · − defense"),
+    ]
+    for cx, cy, anchor, text in captions:
+        parts.append(f'<text x="{cx:.1f}" y="{cy:.1f}" class="ff4-quad" text-anchor="{anchor}">{esc(text)}</text>')
+
+    # Label placement with a light de-overlap pass: labels keep their dot's x
+    # side but get nudged vertically when two nearby teams would collide.
+    placed: list[tuple[float, float]] = []  # (label x, label y) already used
+
+    def _label_y(px: float, py: float) -> float:
+        ly = py + 3.5
+        for ox_, oy_ in sorted(placed, key=lambda q: q[1]):
+            if abs(px - ox_) < 52 and abs(ly - oy_) < 11:
+                ly = oy_ + 11.0
+        placed.append((px, ly))
+        return ly
+
+    for team, stat, ox, dy in sorted(points, key=lambda p: (sy(p[3]), safe_int(p[0].get("tid")))):
+        tid = safe_int(team.get("tid"))
+        color = team_chart_color(tid)
+        ff = four_factors(stat)
+        px, py = sx(ox), sy(dy)
+        anchor = "end" if px > ml + plot_w - 42 else "start"
+        lx = px - 9 if anchor == "end" else px + 9
+        ly = _label_y(lx, py)
+        title = (
+            f"{team_full_name(team)} — Off {fmt_number(ox, 1)} / Def {fmt_number(dy, 1)} pts per 100 poss. "
+            f"eFG% {fmt_number(ff.get('efg'), 1)} · TOV% {fmt_number(ff.get('tov_pct'), 1)} · "
+            f"ORB% {fmt_number(ff.get('orb_pct'), 1)} · FT/FGA {fmt_number(ff.get('ft_rate'), 2)}"
+        )
+        parts.append(
+            f'<a href="teams/{team_slug(team)}.html" class="ff4-link" aria-label="{esc(team_full_name(team))}">'
+            f'<g class="ff4-pt" style="--ff4-c:{esc(color)}">'
+            f'<title>{esc(title)}</title>'
+            f'<circle cx="{px:.1f}" cy="{py:.1f}" r="5.5" class="ff4-dot"/>'
+            f'<text x="{lx:.1f}" y="{ly:.1f}" class="ff4-label" text-anchor="{anchor}">{esc(team_abbrev(team))}</text>'
+            f"</g></a>"
+        )
+
+    parts.append(f'<text x="{ml + plot_w / 2:.1f}" y="{height - 6:.1f}" class="ff4-axis" text-anchor="middle">offense — points scored per 100 possessions →</text>')
+    parts.append(f'<text x="12" y="{mt + plot_h / 2:.1f}" class="ff4-axis" text-anchor="middle" transform="rotate(-90 12 {mt + plot_h / 2:.1f})">defense — fewer points allowed ↑</text>')
+
+    sub = _season_label(chart_season, page_season)
+    sub_html = f'<span class="count-pill">{esc(sub)}</span>' if sub else '<span class="muted small-copy">points per 100 possessions · dashed lines = league average</span>'
+    caption = "Top-right is the winning quadrant: scoring efficiently while allowing little. Hover a dot for that team's four factors."
+    if sub:
+        caption = f"Final {chart_season} numbers — the freshest read on every roster until {page_season} games arrive. " + caption
+    return f"""
+    <section class="card home-section">
+      <div class="section-title-row"><h2>Offense vs Defense</h2>{sub_html}</div>
+      <div class="chart-wrap ff4-wrap">
+        <svg viewBox="0 0 {width:.0f} {height:.0f}" class="ff4-chart" role="img" aria-label="Team offensive vs defensive rating scatter, {esc(chart_season)} season">
+          {''.join(parts)}
+        </svg>
+      </div>
+      <p class="muted small-copy">{esc(caption)}</p>
+    </section>
+    """
+
+
+# Short x-tick names per BBGM phase for odds-river snapshots.
+_RIVER_PHASE_TICKS = {0: "Pre", 1: "RS", 2: "RS", 3: "PO", 4: "Off", 5: "Draft", 6: "Off", 7: "Re-sign", 8: "FA"}
+_RIVER_PHASE_NAMES = {0: "Preseason", 1: "Regular season", 2: "Regular season", 3: "Playoffs", 4: "Offseason",
+                      5: "Draft", 6: "Offseason", 7: "Re-signing", 8: "Free agency"}
+
+
+def _river_snapshot_labels(snaps: list[dict[str, Any]]) -> tuple[list[str], list[str]]:
+    """(short tick labels, long tooltip labels) for the ledger snapshots.
+
+    Repeated phases get a running number ("RS 1", "RS 2", …) so every snapshot
+    has a distinct, honest label even though the ledger doesn't store days.
+    """
+    shorts = [_RIVER_PHASE_TICKS.get(safe_int(s.get("phase"), -1), "?") for s in snaps]
+    longs = [_RIVER_PHASE_NAMES.get(safe_int(s.get("phase"), -1), "Snapshot") for s in snaps]
+    counts: dict[str, int] = defaultdict(int)
+    for short in shorts:
+        counts[short] += 1
+    seen: dict[str, int] = defaultdict(int)
+    out_short, out_long = [], []
+    for short, long_label in zip(shorts, longs):
+        seen[short] += 1
+        if counts[short] > 1:
+            out_short.append(f"{short} {seen[short]}")
+            out_long.append(f"{long_label} · update {seen[short]}")
+        else:
+            out_short.append(short)
+            out_long.append(long_label)
+    return out_short, out_long
+
+
+def odds_river_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int,
+                    history: list[dict[str, Any]] | None = None) -> str:
+    """Playoff-odds river (B14): every team's PO% across the ledger snapshots.
+
+    Reads league-data/odds_history.json (one snapshot per CI build). With a
+    single snapshot it renders a graceful dot-only state; from two snapshots on
+    it draws the ten team-colored lines with a JS hover crosshair.
+    """
+    if history is None:
+        history = load_odds_history()
+    snaps = [s for s in history if safe_int(s.get("season"), -1) == season]
+    if not snaps:
+        return ""
+    n = len(snaps)
+    teams_sorted = sorted(active_teams_for_season(teams, season), key=team_sort_key)
+    ticks, tick_names = _river_snapshot_labels(snaps)
+
+    width, height = 680.0, 260.0
+    ml, mr, mt, mb = 40.0, 64.0, 12.0, 30.0
+    plot_w, plot_h = width - ml - mr, height - mt - mb
+
+    def sx(i: int) -> float:
+        return ml + (plot_w * i / (n - 1) if n > 1 else 0.0)
+
+    def sy(pct: float) -> float:
+        return mt + plot_h - max(0.0, min(100.0, pct)) / 100.0 * plot_h
+
+    parts: list[str] = []
+    for pct in (0, 25, 50, 75, 100):
+        gy = sy(pct)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w:.1f}" y2="{gy:.1f}" class="chart-grid"/>')
+        parts.append(f'<text x="{ml - 6}" y="{gy + 3.5:.1f}" class="chart-tick" text-anchor="end">{pct}</text>')
+    for i, tick in enumerate(ticks):
+        parts.append(f'<text x="{sx(i):.1f}" y="{height - 8:.1f}" class="chart-tick" text-anchor="middle">{esc(tick)}</text>')
+
+    payload_teams = []
+    end_labels = []
+    for team in teams_sorted:
+        tid = safe_int(team.get("tid"))
+        color = team_chart_color(tid)
+        series: list[float | None] = []
+        for snap in snaps:
+            entry = (snap.get("teams") or {}).get(str(tid))
+            series.append(round(100.0 * safe_float(entry.get("po")), 1) if isinstance(entry, dict) else None)
+        if all(v is None for v in series):
+            continue
+        # Split at missing snapshots so gaps are never drawn as data.
+        segments: list[list[int]] = []
+        run: list[int] = []
+        for i, value in enumerate(series):
+            if value is None:
+                if run:
+                    segments.append(run)
+                run = []
+            else:
+                run.append(i)
+        if run:
+            segments.append(run)
+        team_parts = [f'<g class="oddsr-team" data-tid="{tid}" style="--oddsr-c:{esc(color)}">']
+        for seg in segments:
+            if len(seg) > 1:
+                pts = " ".join(f"{sx(i):.1f},{sy(series[i]):.1f}" for i in seg)
+                team_parts.append(f'<polyline points="{pts}" class="oddsr-line"/>')
+        for i in ([seg[0] for seg in segments if len(seg) == 1] if n > 1 else [i for i, v in enumerate(series) if v is not None]):
+            team_parts.append(f'<circle cx="{sx(i):.1f}" cy="{sy(series[i]):.1f}" r="3.4" class="oddsr-dot"/>')
+        team_parts.append("</g>")
+        parts.append("".join(team_parts))
+        last_i = max(i for i, v in enumerate(series) if v is not None)
+        end_labels.append((sy(series[last_i]), tid, color, team_abbrev(team)))
+        payload_teams.append({"tid": tid, "ab": team_abbrev(team), "name": team_full_name(team),
+                              "color": color, "po": series})
+    if not payload_teams:
+        return ""
+
+    # De-overlap the team labels (same clamp as the bump chart). With a single
+    # snapshot the dots sit at the left edge, so the labels follow them there.
+    gap = 12.0
+    prev_y = -1e9
+    label_x = ml + plot_w + 8 if n > 1 else ml + 12
+    for anchor_y, tid, color, abbrev in sorted(end_labels):
+        ny = max(anchor_y, prev_y + gap)
+        prev_y = ny
+        parts.append(
+            f'<text x="{label_x:.1f}" y="{ny + 3.5:.1f}" class="oddsr-endlabel" '
+            f'data-tid="{tid}" style="--oddsr-c:{esc(color)}">{esc(abbrev)}</text>'
+        )
+        if abs(ny - anchor_y) > 1.0:
+            parts.append(f'<line x1="{label_x - 6:.1f}" y1="{anchor_y:.1f}" x2="{label_x - 2:.1f}" y2="{ny:.1f}" class="oddsr-leader"/>')
+
+    if n > 1:
+        hover = (f'<line class="oddsr-hline" data-oddsr-hline y1="{mt}" y2="{mt + plot_h:.1f}" style="display:none"/>')
+        note = f"one line per team · {n} snapshots so far · hover for the full league at any point"
+        payload = {
+            "labels": ticks, "names": tick_names,
+            "teams": payload_teams,
+            "g": {"ml": ml, "mt": mt, "pw": plot_w, "ph": plot_h, "w": width, "h": height, "n": n},
+        }
+        payload_json = json.dumps(payload, separators=(",", ":")).replace("</", "<\\/")
+        payload_html = f'<script type="application/json" id="oddsr-data">{payload_json}</script>'
+        tooltip_html = '<div class="chart-tooltip oddsr-tooltip" data-oddsr-tooltip hidden></div>'
+        wrap_attr = " data-oddsr"
+    else:
+        hover = ""
+        note = "odds history accumulates as the season progresses — one snapshot so far"
+        payload_html = ""
+        tooltip_html = ""
+        wrap_attr = ""
+    return f"""
+    <section class="card home-section">
+      <div class="section-title-row"><h2>Playoff Odds Over Time</h2><span class="muted small-copy">{esc(note)}</span></div>
+      <div class="chart-wrap oddsr-wrap"{wrap_attr}>
+        <svg viewBox="0 0 {width:.0f} {height:.0f}" class="oddsr-chart" role="img" aria-label="Playoff odds by team across {n} season {'snapshot' if n == 1 else 'snapshots'}">
+          {''.join(parts)}
+          {hover}
+        </svg>
+        {tooltip_html}
+      </div>
+      {payload_html}
+    </section>
+    """
+
+
+def fantasy_leaders_card(data: dict[str, Any], players: list[dict[str, Any]], teams: list[dict[str, Any]],
+                         fantasy_season: int, page_season: int, root: str = "") -> str:
+    """Top 8 by fantasy points per game (B11), ESPN points scoring via smp.derived."""
+    teams_by_tid = {t["tid"]: t for t in teams}
+    palette = team_palette_by_tid(teams)
+    max_team_gp = max((safe_float(_exact_team_stat(t, fantasy_season).get("gp")) for t in teams), default=0.0)
+    if max_team_gp <= 0:
+        return ""
+    min_gp = max(1.0, 0.7 * max_team_gp)
+    scored = []
+    for player in players:
+        if safe_int(player.get("tid"), -9) < FREE_AGENT_TID:
+            continue
+        stat = season_regular_stat(player, fantasy_season)
+        gp = stat_gp(stat)
+        if gp < min_gp:
+            continue
+        fpts = fantasy_pts(stat)
+        if fpts is None:
+            continue
+        scored.append((fpts / gp, gp, player, stat))
+    if not scored:
+        return ""
+    scored.sort(key=lambda x: (-x[0], player_name(x[2])))
+    top = scored[:8]
+    best = top[0][0] or 1.0
+    rows = []
+    for rank, (fppg, gp, player, stat) in enumerate(top, 1):
+        # Attribute production to the team the player actually played for that
+        # season (the stat row), not wherever they signed since.
+        disp_tid = safe_int(stat.get("tid"), -1)
+        if disp_tid < 0:
+            disp_tid = safe_int(player.get("tid"), -1)
+        bar_w = max(4.0, 100.0 * fppg / best)
+        rows.append(
+            f'<li title="{esc(player_name(player))}: {fmt_number(fppg, 1)} fantasy points per game over {fmt_number(gp, 0)} games">'
+            f'<span class="leader-rank">{rank}</span>'
+            f'{team_dot(disp_tid, palette)}'
+            f'<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
+            f'<span class="leader-team">{esc(team_abbrev_for_tid(disp_tid, teams_by_tid))}</span>'
+            f'<span class="fanl-track"><span class="fanl-bar" style="width:{bar_w:.0f}%"></span></span>'
+            f'<span class="leader-value">{fmt_number(fppg, 1)}</span></li>'
+        )
+    sub = _season_label(fantasy_season, page_season)
+    note = f"{sub} · " if sub else ""
+    note += f"ESPN points scoring · FPTS/G · min {fmt_number(min_gp, 0)} GP"
+    return f"""
+    <section class="card home-section">
+      <div class="section-title-row"><h2>Fantasy Leaders</h2><span class="muted small-copy">{esc(note)}</span></div>
+      <ol class="leader-list fanl-list">{''.join(rows)}</ol>
+    </section>
+    """
+
+
+def _home_columns(main_cards: list[str], side_cards: list[str]) -> str:
+    """Two-column layout that never emits empty wrappers (no hollow home-side)."""
+    main_html = "".join(card for card in main_cards if card)
+    side_html = "".join(card for card in side_cards if card)
+    if main_html and side_html:
+        return (f'<div class="home-columns"><div class="home-main">{main_html}</div>'
+                f'<div class="home-side">{side_html}</div></div>')
+    return main_html + side_html
+
+
+def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]],
+                     season: int, start_season: int, odds_history: list[dict[str, Any]] | None = None) -> str:
     chart_teams = active_teams_for_season(teams, season)
     # Once a season is over, the projection worth showing is the upcoming one (simulated from
     # current rosters); mid-season this is just the current season, so the card is unchanged.
     proj_season = inferred_upcoming_schedule_season(data)
-    body = f"""
-    <h1 class="sr-only">SMP Basketball League</h1>
-    {latest_results_strip(data, chart_teams, season)}
-    <div class="home-columns">
-      <div class="home-main">
-        {standings_table(data, chart_teams, season)}
-        {playoff_odds_card(data, chart_teams, proj_season)}
-        {stakes_card(data, chart_teams, season)}
-        {league_leaders_card(data, players, teams, season)}
-      </div>
-      <div class="home-side">
-        {news_feed_card(data, teams, season)}
-        {injury_report_card(players, teams, season)}
-        {rookie_watch_card(data, players, teams, season)}
-      </div>
-    </div>
-    {team_stats_table(chart_teams, season)}
-    {awards_voting_table(data, players, teams, season)}
-    {home_finances_table(data, teams, players, season)}
-    """
+    kind = home_phase_kind(data, season)
+    completed = last_completed_season(data, season)
+    if odds_history is None:
+        odds_history = load_odds_history()
+    river = odds_river_card(data, chart_teams, season, history=odds_history)
+    if not river and proj_season != season:
+        river = odds_river_card(data, active_teams_for_season(teams, proj_season), proj_season, history=odds_history)
+
+    if kind == "preseason":
+        # No real games yet: lead with the year-ahead projections and the offseason
+        # story; zero-data standings/team-stats/award cards are replaced by the
+        # banner's one-line explanation instead of rendering as dash walls.
+        ff_season = completed
+        fantasy_season = completed
+        body = f"""
+        <h1 class="sr-only">SMP Basketball League</h1>
+        {preseason_banner(data, season)}
+        {_home_columns(
+            [
+                playoff_odds_card(data, chart_teams, proj_season),
+                stakes_card(data, chart_teams, season),
+                four_factors_scatter_card(data, teams, ff_season, season),
+                river,
+            ],
+            [
+                offseason_digest_card(data, teams, completed),
+                preseason_rookie_watch_card(players, teams, season),
+                fantasy_leaders_card(data, players, teams, fantasy_season, season),
+                injury_report_card(players, teams, season),
+                news_feed_card(data, teams, season),
+            ],
+        )}
+        {home_finances_table(data, teams, players, season)}
+        """
+    elif kind == "playoffs":
+        body = f"""
+        <h1 class="sr-only">SMP Basketball League</h1>
+        {playoff_bracket_card(data, chart_teams, season)}
+        {latest_results_strip(data, chart_teams, season)}
+        {_home_columns(
+            [
+                standings_table(data, chart_teams, season),
+                league_leaders_card(data, players, teams, season),
+                four_factors_scatter_card(data, teams, season, season),
+                river,
+            ],
+            [
+                news_feed_card(data, teams, season),
+                injury_report_card(players, teams, season),
+                fantasy_leaders_card(data, players, teams, season, season),
+                rookie_watch_card(data, players, teams, season),
+            ],
+        )}
+        {team_stats_table(chart_teams, season)}
+        {awards_voting_table(data, players, teams, season)}
+        {home_finances_table(data, teams, players, season)}
+        """
+    elif kind == "offseason":
+        body = f"""
+        <h1 class="sr-only">SMP Basketball League</h1>
+        {season_awards_card(data, teams, completed)}
+        {_home_columns(
+            [
+                fa_watch_card(data, teams, season),
+                standings_table(data, chart_teams, season),
+                four_factors_scatter_card(data, teams, completed, season),
+                river,
+            ],
+            [
+                offseason_digest_card(data, teams, completed),
+                fantasy_leaders_card(data, players, teams, completed, season),
+                news_feed_card(data, teams, season),
+            ],
+        )}
+        {team_stats_table(chart_teams, season)}
+        {awards_voting_table(data, players, teams, season)}
+        {home_finances_table(data, teams, players, season)}
+        """
+    else:
+        body = f"""
+        <h1 class="sr-only">SMP Basketball League</h1>
+        {latest_results_strip(data, chart_teams, season)}
+        {_home_columns(
+            [
+                standings_table(data, chart_teams, season),
+                playoff_odds_card(data, chart_teams, proj_season),
+                stakes_card(data, chart_teams, season),
+                league_leaders_card(data, players, teams, season),
+                four_factors_scatter_card(data, teams, season, season),
+                river,
+            ],
+            [
+                news_feed_card(data, teams, season),
+                injury_report_card(players, teams, season),
+                fantasy_leaders_card(data, players, teams, season, season),
+                rookie_watch_card(data, players, teams, season),
+            ],
+        )}
+        {team_stats_table(chart_teams, season)}
+        {awards_voting_table(data, players, teams, season)}
+        {home_finances_table(data, teams, players, season)}
+        """
     return page_html("Home", body, teams, root="", active="home")

@@ -16,6 +16,7 @@ from ..core import (
     ALL_PLAYERS_BY_PID,
     EVENT_BADGES,
     FREE_AGENT_TID,
+    RETIRED_TID,
     RATING_GROUP_STARTS,
     SCATTER_METRICS,
     TEAM_PALETTE,
@@ -43,6 +44,7 @@ from ..core import (
     game_winner_tid,
     heat_style,
     inferred_upcoming_schedule_season,
+    initials,
     is_completed_game_item,
     latest_rating,
     latest_regular_stat,
@@ -82,11 +84,259 @@ from ..core import (
 
 from ..simmodel import fa_salary_by_length, league_sim
 
+from ..derived import led_league
+
+from ..identity import crest_svg, monogram_svg, team_css_vars
+
+from ..portraits import portrait_html
+
+
+# ---------------------------------------------------------------------------
+# Shared league-page helpers: ordinals, led-league gold, honors, pennants
+# ---------------------------------------------------------------------------
+
+_ORDINAL_SUFFIX = {1: "st", 2: "nd", 3: "rd"}
+
+
+def ordinal(n: Any) -> str:
+    n = safe_int(n)
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = _ORDINAL_SUFFIX.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+
+def led_league_mark(value_html: str, note: str) -> str:
+    """Wrap already-rendered stat HTML in the shared gold led-the-league treatment."""
+    return (
+        f'<span class="led-league" title="{esc(note)}">{value_html}'
+        f'<span class="led-star" aria-hidden="true">★</span>'
+        f'<span class="sr-only"> (led the league)</span></span>'
+    )
+
+
+def _portrait_safe(player: dict[str, Any], cls: str, root: str = "", size: int = 56) -> str:
+    """portraits.portrait_html with a monogram fallback.
+
+    portrait_html's final monogram branch currently passes a ``size`` kwarg that
+    identity.monogram_svg does not accept; until that lands upstream, catch the
+    TypeError and inline the roundel ourselves so no player renders broken.
+    """
+    try:
+        return portrait_html(player, cls=cls, root=root, size=size)
+    except TypeError:
+        mono = monogram_svg(initials(player), player.get("tid"), jersey_number=player.get("jerseyNumber"))
+        return (
+            f'<span class="{esc(cls)} portrait-monogram" role="img" '
+            f'aria-label="{esc(player_name(player))}">{mono}</span>'
+        )
+
+
+def champions_by_season(data: dict[str, Any]) -> dict[int, int]:
+    """season -> championship-winning tid, from the exported playoff brackets."""
+    out: dict[int, int] = {}
+    for ps in data.get("playoffSeries", []):
+        if not isinstance(ps, dict):
+            continue
+        season = ps.get("season")
+        rounds = ps.get("series") or []
+        if not isinstance(season, int) or not rounds or not rounds[-1]:
+            continue
+        final = rounds[-1][0]
+        home, away = final.get("home") or {}, final.get("away") or {}
+        if not home or not away:
+            continue
+        champ = home if safe_int(home.get("won")) > safe_int(away.get("won")) else away
+        out[season] = safe_int(champ.get("tid"), -1)
+    return out
+
+
+# Crest kinds in trophy-case display order, with tooltip labels.
+_HONOR_KINDS = [
+    ("champion", "Champion"),
+    ("mvp", "MVP"),
+    ("finals_mvp", "Finals MVP"),
+    ("sfmvp", "Semifinals MVP"),
+    ("dpoy", "Defensive POY"),
+    ("smoy", "Sixth Man"),
+    ("mip", "Most Improved"),
+    ("roy", "Rookie of the Year"),
+    ("all_league_1", "All-League 1st Team"),
+    ("all_league_2", "All-League 2nd Team"),
+    ("all_league_3", "All-League 3rd Team"),
+    ("all_defensive", "All-Defensive"),
+    ("all_rookie", "All-Rookie"),
+]
+
+_ALL_LEAGUE_TEAM_KINDS = {"First Team": "all_league_1", "Second Team": "all_league_2", "Third Team": "all_league_3"}
+
+
+def player_honors_index(data: dict[str, Any]) -> dict[int, list[tuple[str, int]]]:
+    """pid -> [(crest kind, season), ...] from the awards log plus playoff titles."""
+    out: dict[int, list[tuple[str, int]]] = defaultdict(list)
+
+    def add(winner: Any, kind: str, season: int) -> None:
+        if isinstance(winner, dict) and winner.get("pid") is not None:
+            out[safe_int(winner.get("pid"))].append((kind, season))
+
+    for award in data.get("awards", []):
+        if not isinstance(award, dict):
+            continue
+        season = safe_int(award.get("season"), -1)
+        if season < 0:
+            continue
+        for key, kind in (("mvp", "mvp"), ("dpoy", "dpoy"), ("smoy", "smoy"), ("mip", "mip"),
+                          ("roy", "roy"), ("finalsMvp", "finals_mvp")):
+            add(award.get(key), kind, season)
+        sfmvp = award.get("sfmvp")
+        for winner in (sfmvp if isinstance(sfmvp, list) else [sfmvp]):
+            add(winner, "sfmvp", season)
+        for group in award.get("allLeague") or []:
+            if not isinstance(group, dict):
+                continue
+            kind = _ALL_LEAGUE_TEAM_KINDS.get(group.get("title") or "First Team", "all_league_1")
+            for member in group.get("players") or []:
+                add(member, kind, season)
+        def_groups = award.get("allDefensive") or []
+        if def_groups and isinstance(def_groups[0], dict) and "players" not in def_groups[0]:
+            def_groups = [{"players": def_groups}]
+        for group in def_groups[:1]:  # 1st team only, matching honors_html
+            if isinstance(group, dict):
+                for member in group.get("players") or []:
+                    add(member, "all_defensive", season)
+        for member in award.get("allRookie") or []:
+            add(member, "all_rookie", season)
+
+    champs = champions_by_season(data)
+    for player in data.get("players", []):
+        pid = player.get("pid")
+        if pid is None:
+            continue
+        for row in player.get("stats", []):
+            if not (isinstance(row, dict) and row.get("playoffs")):
+                continue
+            season = safe_int(row.get("season"), -1)
+            if champs.get(season) == safe_int(row.get("tid"), -9) and stat_gp(row) > 0:
+                add({"pid": pid}, "champion", season)
+    return dict(out)
+
+
+def honor_chips_html(honors: list[tuple[str, int]]) -> str:
+    """Compact crest-chip strip for a player's honors, grouped by kind with ×N counts."""
+    if not honors:
+        return '<span class="muted">—</span>'
+    grouped: dict[str, list[int]] = defaultdict(list)
+    for kind, season in honors:
+        grouped[kind].append(season)
+    chips = []
+    for kind, label in _HONOR_KINDS:
+        seasons = sorted(grouped.get(kind, []))
+        if not seasons:
+            continue
+        count = f'<span class="regrade-crest-count">×{len(seasons)}</span>' if len(seasons) > 1 else ""
+        title = f"{label} " + ", ".join(str(s) for s in seasons)
+        chips.append(
+            f'<span class="regrade-crest" title="{esc(title)}">'
+            f'{crest_svg(kind, css_class="crest")}{count}'
+            f'<span class="sr-only">{esc(title)}</span></span>'
+        )
+    return f'<span class="regrade-crests">{"".join(chips)}</span>'
+
+
+def career_regular_totals(player: dict[str, Any]) -> dict[str, Any]:
+    """Raw career regular-season totals for the re-grade value columns."""
+    rows = [s for s in player.get("stats", []) if isinstance(s, dict) and not s.get("playoffs")]
+    gp = sum(stat_gp(s) for s in rows)
+    pts = sum(safe_float(s.get("pts")) for s in rows)
+    ws = sum(safe_float(s.get("ows")) + safe_float(s.get("dws")) for s in rows)
+    ewa = sum(safe_float(s.get("ewa")) for s in rows)
+    return {"gp": gp, "pts": pts, "ws": ws, "ewa": ewa, "ppg": (pts / gp) if gp else None}
+
+
+def pennant_svg(team: dict[str, Any], year: int | None = None) -> str:
+    """Championship banner SVG in team colors; ``year=None`` renders the empty
+    dashed placeholder slot for a franchise with no titles yet."""
+    tid = safe_int(team.get("tid"), -1)
+    abbrev = team_abbrev(team)
+    if year is None:
+        return (
+            '<svg class="rafters-pennant rafters-pennant-empty" viewBox="0 0 64 88" '
+            'aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">'
+            '<path d="M6 8h52v52L32 84 6 60z" fill="none" stroke="var(--line)" '
+            'stroke-width="2" stroke-dasharray="4 4"/></svg>'
+        )
+    label = f"{team_full_name(team)} — {year} champions"
+    return (
+        f'<svg class="rafters-pennant" viewBox="0 0 64 88" style="{team_css_vars(tid)}" '
+        f'role="img" aria-label="{esc(label)}" xmlns="http://www.w3.org/2000/svg">'
+        f'<title>{esc(label)}</title>'
+        '<rect x="3" y="2" width="58" height="4" rx="1.5" fill="var(--team-secondary)"/>'
+        '<path d="M6 8h52v52L32 84 6 60z" fill="var(--team-primary)" '
+        'stroke="var(--team-secondary)" stroke-width="2"/>'
+        '<text x="32" y="24" text-anchor="middle" font-family="\'Helvetica Neue\',Helvetica,Arial,sans-serif" '
+        f'font-weight="600" font-size="9.5" letter-spacing="1" fill="var(--team-on-primary)" opacity=".8">{esc(abbrev)}</text>'
+        '<text x="32" y="45" text-anchor="middle" font-family="\'Helvetica Neue\',Helvetica,Arial,sans-serif" '
+        f'font-weight="700" font-size="15" fill="var(--team-on-primary)">{esc(year)}</text>'
+        '<text x="32" y="58" text-anchor="middle" font-family="\'Helvetica Neue\',Helvetica,Arial,sans-serif" '
+        'font-weight="600" font-size="6.4" letter-spacing="1.6" fill="var(--team-on-primary)" '
+        'opacity=".75">CHAMPS</text></svg>'
+    )
+
+
+def rafters_strip_html(data: dict[str, Any], teams: list[dict[str, Any]]) -> str:
+    """All ten franchises' championship pennants side by side (empty slots stay honest)."""
+    champs = champions_by_season(data)
+    by_tid: dict[int, list[int]] = defaultdict(list)
+    for season, tid in sorted(champs.items()):
+        by_tid[tid].append(season)
+    strip_teams = sorted(
+        (t for t in teams if t.get("tid") is not None and not t.get("disabled")),
+        key=lambda t: team_abbrev(t),
+    )
+    if not strip_teams or not champs:
+        return ""
+    slots = []
+    for team in strip_teams:
+        tid = safe_int(team.get("tid"), -1)
+        years = by_tid.get(tid, [])
+        if years:
+            flags = "".join(
+                f'<a class="rafters-flag" href="#season-{y}">{pennant_svg(team, y)}</a>'
+                for y in years
+            )
+        else:
+            flags = f'<span class="rafters-flag" title="No championships yet">{pennant_svg(team)}</span>'
+        title_count = f'{len(years)} title{"s" if len(years) != 1 else ""}' if years else "no titles yet"
+        slots.append(
+            f'<div class="rafters-slot" role="listitem">'
+            f'<div class="rafters-flags">{flags}</div>'
+            f'<span class="rafters-abbrev">{esc(team_abbrev(team))} '
+            f'<span class="muted small-copy">{esc(title_count)}</span></span></div>'
+        )
+    return f"""
+    <section class="card rafters-card">
+      <div class="section-title-row"><h2>The Rafters</h2><span class="muted small-copy">every championship banner in league history · click a pennant for that season</span></div>
+      <div class="rafters" role="list">{''.join(slots)}</div>
+    </section>
+    """
+
+
+def fa_asking_price(player: dict[str, Any], season: int) -> float:
+    """Starting bid in BBGM thousands: a released player (Gooners waive) asks their
+    current contract price; everyone else asks the model's 1-year annual value."""
+    override = player.get("_fa_bid")
+    if override is not None:
+        return safe_float(override)
+    rating = latest_rating(player, season)
+    born = (player.get("born") or {}).get("year")
+    age_val = (season - born) if isinstance(born, int) else 25
+    return fa_salary_by_length(safe_int(rating.get("ovr")), safe_int(rating.get("pot")), age_val)[0] * 1000
+
 
 def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges: dict[str, tuple[float, float]]) -> str:
     rating = latest_rating(player, season)
     born = (player.get("born") or {}).get("year")
-    age_val = (season - born) if isinstance(born, int) else 25
     cells = [
         td(player_link(player, root, show_number=False), sort=player_name(player), cls="name-cell"),
         td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
@@ -94,13 +344,7 @@ def free_agent_row(player: dict[str, Any], season: int, root: str, rating_ranges
         td(esc(rating.get("ovr") if rating.get("ovr") is not None else "—"), sort=rating.get("ovr")),
         td(esc(rating.get("pot") if rating.get("pot") is not None else "—"), sort=rating.get("pot")),
     ]
-    # Starting bid: a released player (Gooners waive) asks their current contract price; everyone
-    # else asks the model's 1-year annual value. Both in BBGM thousands.
-    override = player.get("_fa_bid")
-    if override is not None:
-        bid_k = safe_float(override)
-    else:
-        bid_k = fa_salary_by_length(safe_int(rating.get("ovr")), safe_int(rating.get("pot")), age_val)[0] * 1000
+    bid_k = fa_asking_price(player, season)
     cells.append(td(fmt_money(bid_k), sort=bid_k, cls="group-start"))
     for key, _ in TEAM_RATING_RANK_KEYS:
         value = rating.get(key)
@@ -133,6 +377,30 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
         headers.append((label, "group-start" if key in RATING_GROUP_STARTS else ""))
     rows = [free_agent_row(p, season, "", rating_ranges) for p in sorted_players]
 
+    fa_cards = []
+    for rank, p in enumerate(sorted_players[:10], 1):
+        rating = latest_rating(p, season)
+        bid_k = fa_asking_price(p, season)
+        meta_bits = [rating.get("pos") or "—", f"{age(p, season)} yr",
+                     f"{rating.get('ovr', '—')} ovr / {rating.get('pot', '—')} pot"]
+        fa_cards.append(
+            f'<a class="fa-card" href="{player_url(p)}">'
+            f'<span class="fa-card-rank" aria-hidden="true">{rank}</span>'
+            f'{_portrait_safe(p, "fa-card-portrait", root="", size=56)}'
+            f'<span class="fa-card-name">{esc(player_name(p))}</span>'
+            f'<span class="fa-card-meta">{esc(" · ".join(str(b) for b in meta_bits))}</span>'
+            f'<span class="fa-card-ask" title="Starting bid: annual value of a one-year deal">{fmt_money(bid_k)}</span>'
+            f'</a>'
+        )
+    fa_card_strip = ""
+    if fa_cards:
+        fa_card_strip = f"""
+    <section class="card">
+      <div class="section-title-row"><h2>Top of the Market</h2><span class="muted small-copy">best available by overall · chip shows the asking price</span></div>
+      <div class="fa-card-strip">{''.join(fa_cards)}</div>
+    </section>
+    """
+
     body = f"""
     <section class="page-hero">
       <div>
@@ -141,6 +409,7 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
         <p class="muted">Every unsigned player available this offseason. Starting bid is the annual value of a one-year deal, derived from the player's overall, potential, and age.</p>
       </div>
     </section>
+    {fa_card_strip}
     <section class="card">
       <div class="section-title-row"><h2>Available Players</h2><span class="count-pill">{len(sorted_players)}</span></div>
       <div class="toolbar">
@@ -526,7 +795,13 @@ def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], sche
         </div>
         """
     else:
-        table = f'<p class="empty-state">The {upcoming} schedule hasn\'t been released yet.</p>'
+        table = f"""
+        <div class="sched-empty">
+          <p class="sched-empty-title">The {upcoming} schedule hasn't been released yet.</p>
+          <p class="muted">Game days will appear here as soon as the league office publishes the slate.
+          Until then, the <a href="index.html">home page</a> carries the projected {upcoming} standings and title odds.</p>
+        </div>
+        """
 
     season_for_h2h = max((safe_int(item.get("season")) for item in items), default=upcoming)
     hero_copy = (f"{esc(label)} · <strong>vs.</strong> home · <strong>@</strong> road · the highlighted row is the next game day"
@@ -556,16 +831,23 @@ AWARD_DISPLAY = [
 ]
 
 
-def award_winner_html(winner: dict[str, Any] | None, all_players_by_pid: dict[int, dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str) -> str:
+def award_winner_html(winner: dict[str, Any] | None, all_players_by_pid: dict[int, dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str, led: dict[int, dict[str, float]] | None = None, season: int | None = None) -> str:
     if not isinstance(winner, dict) or winner.get("pid") is None:
         return '<span class="muted">—</span>'
     name = event_player_link(winner.get("pid"), all_players_by_pid, root, label=winner.get("name"))
     team = team_abbrev(teams_by_tid.get(safe_int(winner.get("tid"), -10)))
+    leaders = (led or {}).get(season) or {} if season is not None else {}
     stats_bits = []
     for key, label in (("pts", "PTS"), ("trb", "TRB"), ("ast", "AST")):
-        if winner.get(key) is not None:
-            stats_bits.append(f"{fmt_number(winner.get(key), 1)} {label}")
-    stat_text = f' <span class="muted small-copy">{esc(team)} · {esc(", ".join(stats_bits))}</span>' if stats_bits else f' <span class="muted small-copy">{esc(team)}</span>'
+        value = winner.get(key)
+        if value is None:
+            continue
+        bit = esc(f"{fmt_number(value, 1)} {label}")
+        lead = leaders.get(key)
+        if lead is not None and abs(safe_float(value) - lead) <= 1e-6:
+            bit = led_league_mark(bit, f"Led the league in {label} in {season}")
+        stats_bits.append(bit)
+    stat_text = f' <span class="muted small-copy">{esc(team)} · {" · ".join(stats_bits)}</span>' if stats_bits else f' <span class="muted small-copy">{esc(team)}</span>'
     return f"{name}{stat_text}"
 
 
@@ -640,7 +922,7 @@ def playoff_bracket_html(ps: dict[str, Any], teams_by_tid: dict[int, dict[str, A
     return f'<div class="bracket">{"".join(cols)}</div>'
 
 
-def past_season_leaders_html(data: dict[str, Any], season: int, all_players_by_pid: dict[int, dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str) -> str:
+def past_season_leaders_html(data: dict[str, Any], season: int, all_players_by_pid: dict[int, dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]], root: str, led: dict[int, dict[str, float]] | None = None) -> str:
     rows = []
     for player in data.get("players", []):
         stat = season_regular_stat(player, season)
@@ -649,13 +931,14 @@ def past_season_leaders_html(data: dict[str, Any], season: int, all_players_by_p
     if not rows:
         return ""
     categories = [
-        ("PTS", lambda s: per_game(s, "pts")),
-        ("TRB", lambda s: total_rebounds(s) / stat_gp(s) if stat_gp(s) else None),
-        ("AST", lambda s: per_game(s, "ast")),
-        ("PER", lambda s: s.get("per")),
+        ("PTS", "pts", lambda s: per_game(s, "pts")),
+        ("TRB", "trb", lambda s: total_rebounds(s) / stat_gp(s) if stat_gp(s) else None),
+        ("AST", "ast", lambda s: per_game(s, "ast")),
+        ("PER", "per", lambda s: s.get("per")),
     ]
+    leaders = (led or {}).get(season) or {}
     bits = []
-    for label, fn in categories:
+    for label, led_key, fn in categories:
         scored = sorted(
             ((float(fn(s)), p) for p, s in rows if fn(s) is not None),
             key=lambda x: -x[0],
@@ -663,9 +946,13 @@ def past_season_leaders_html(data: dict[str, Any], season: int, all_players_by_p
         if not scored:
             continue
         value, player = scored[0]
+        value_html = fmt_number(value, 1)
+        lead = leaders.get(led_key)
+        if lead is not None and abs(value - lead) <= 1e-6:
+            value_html = led_league_mark(value_html, f"Led the league in {label} in {season}")
         bits.append(
             f'<span class="leader-inline"><strong>{esc(label)}</strong> '
-            f'{event_player_link(player.get("pid"), all_players_by_pid, root)} {fmt_number(value, 1)}</span>'
+            f'{event_player_link(player.get("pid"), all_players_by_pid, root)} {value_html}</span>'
         )
     return f'<div class="leaders-inline">{"".join(bits)}</div>'
 
@@ -825,6 +1112,123 @@ def mock_draft_card(data: dict[str, Any], teams: list[dict[str, Any]], season: i
     """
 
 
+def _regrade_note(pick: int, rank: int | None, tot: dict[str, Any], class_matured: bool) -> tuple[str, str] | None:
+    """Factual steal/bust callout from pick number vs career-WS rank, or None.
+
+    Steals need real production (30+ games, top-3 class value); busts need a
+    high pick and a class that has had at least two seasons to prove out.
+    """
+    if rank is not None:
+        if pick - rank >= 4 and rank <= 3 and tot["gp"] >= 30:
+            return ("badge-good", f"{ordinal(rank)} in class by career WS, picked {ordinal(pick)}")
+        if class_matured and rank - pick >= 4 and pick <= 5:
+            return ("badge-bad", f"Picked {ordinal(pick)}, {ordinal(rank)} in class by career WS")
+    elif class_matured and pick <= 5 and tot["gp"] <= 0:
+        return ("badge-bad", f"Picked {ordinal(pick)}, yet to play a league game")
+    return None
+
+
+def draft_regrades_section(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
+    """Per-class draft recaps: what every past pick became, re-graded by career WS."""
+    teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
+    palette = team_palette_by_tid(teams)
+    all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
+    honors = player_honors_index(data)
+    latest_completed = max(champions_by_season(data), default=season - 1)
+
+    classes: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for p in data.get("players", []):
+        d = p.get("draft") or {}
+        year = d.get("year")
+        if (isinstance(year, int) and year <= latest_completed
+                and safe_int(d.get("round")) >= 1 and safe_int(d.get("tid"), -1) >= 0):
+            classes[year].append(p)
+    class_years = sorted(classes, reverse=True)
+    if not class_years:
+        return ""
+
+    panels = []
+    tabs = []
+    for i, year in enumerate(class_years):
+        picks = sorted(classes[year], key=lambda p: (safe_int((p.get("draft") or {}).get("round")),
+                                                     safe_int((p.get("draft") or {}).get("pick")),
+                                                     player_name(p)))
+        totals = {safe_int(p.get("pid")): career_regular_totals(p) for p in picks}
+        ranked = sorted((p for p in picks if totals[safe_int(p.get("pid"))]["gp"] > 0),
+                        key=lambda p: (-totals[safe_int(p.get("pid"))]["ws"], player_name(p)))
+        ws_rank = {safe_int(p.get("pid")): r for r, p in enumerate(ranked, 1)}
+        class_matured = year + 2 <= latest_completed
+        class_played = bool(ranked)
+
+        rows = []
+        for overall, p in enumerate(picks, 1):
+            pid = safe_int(p.get("pid"))
+            d = p.get("draft") or {}
+            tot = totals[pid]
+            rank = ws_rank.get(pid)
+            draft_tid = safe_int(d.get("tid"), -1)
+            orig_tid = safe_int(d.get("originalTid"), draft_tid)
+            drafted_by = f'{team_dot(draft_tid, palette)}{team_anchor(teams_by_tid.get(draft_tid, {}))}'
+            if orig_tid != draft_tid:
+                drafted_by += f' <span class="muted small-copy">via {esc(team_abbrev_for_tid(orig_tid, teams_by_tid))}</span>'
+            cur_tid = safe_int(p.get("tid"), RETIRED_TID if p.get("retiredYear") is not None else -9)
+            if p.get("retiredYear") is not None:
+                now_html, now_sort = '<span class="muted">Retired</span>', "zz-retired"
+            elif cur_tid == FREE_AGENT_TID:
+                now_html, now_sort = '<a href="free-agency.html">FA</a>', "z-fa"
+            elif cur_tid >= 0:
+                now_html = team_label(cur_tid, teams_by_tid)
+                now_sort = team_abbrev_for_tid(cur_tid, teams_by_tid)
+                if cur_tid == draft_tid:
+                    now_html += ' <span class="badge badge-good regrade-still" title="Still with the team that drafted him">still</span>'
+            else:
+                now_html, now_sort = '<span class="muted">—</span>', "zz"
+            note = _regrade_note(overall, rank, tot, class_matured)
+            note_html = f'<span class="badge {note[0]}">{esc(note[1])}</span>' if note else ""
+            rating = latest_rating(p)
+            rows.append("".join([
+                td(f'{overall} <span class="muted small-copy">R{safe_int(d.get("round"))}</span>', sort=overall),
+                td(event_player_link(pid, all_players_by_pid, "", label=player_name(p)), sort=player_name(p), cls="name-cell"),
+                td(esc(rating.get("pos", "—")), sort=rating.get("pos", "")),
+                td(drafted_by, sort=team_abbrev_for_tid(draft_tid, teams_by_tid), cls="name-cell"),
+                td(now_html, sort=now_sort),
+                td(fmt_number(tot["gp"], 0), sort=tot["gp"], cls="group-start"),
+                td(fmt_number(tot["ppg"], 1) if tot["ppg"] is not None else "—", sort=tot["ppg"]),
+                td(fmt_number(tot["ws"], 1), sort=tot["ws"]),
+                td(fmt_number(tot["ewa"], 1), sort=tot["ewa"]),
+                td(honor_chips_html(honors.get(pid, [])), sort=len(honors.get(pid, [])), cls="group-start"),
+                td(note_html, sort=(overall - rank) if rank is not None else None),
+            ]))
+
+        if class_played:
+            note_copy = f"re-graded by career regular-season Win Shares · through {latest_completed}"
+        else:
+            note_copy = f"drafted after the {year} season · the class debuts in {year + 1}, so there is nothing to re-grade yet"
+        headers = ["Pick", "Player", "Pos", "Drafted by", "Now", ("GP", "group-start"), "PPG", "WS", "EWA",
+                   ("Honors", "group-start"), "Note"]
+        table_id = f"regrade-{year}"
+        panels.append(f"""
+      <div id="panel-regrade-{year}" role="tabpanel" aria-labelledby="tab-regrade-{year}" data-tab-panel{"" if i == 0 else " hidden"}>
+        <div class="section-title-row"><h3 class="regrade-class-title">Class of {year}</h3><span class="muted small-copy">{esc(note_copy)}</span></div>
+        {table_html(headers, rows, table_id=table_id, empty_message="No picks recorded.", caption=f"{year} draft class re-grade")}
+      </div>""")
+        tabs.append(
+            f'<button type="button" class="{"active" if i == 0 else ""}" role="tab" id="tab-regrade-{year}" '
+            f'aria-controls="panel-regrade-{year}" aria-selected="{"true" if i == 0 else "false"}" '
+            f'tabindex="{"0" if i == 0 else "-1"}" data-tab-target="panel-regrade-{year}">{year}</button>'
+        )
+
+    return f"""
+    <section class="card regrade-card">
+      <div class="section-title-row"><h2>Draft Re-Grades</h2><span class="muted small-copy">how every past pick panned out · steal and bust calls compare draft slot with career Win Shares</span></div>
+      <div class="tabs" role="tablist" aria-label="Past draft classes" data-tabs>
+        {''.join(tabs)}
+      </div>
+      {''.join(panels)}
+    </section>
+    """
+
+
 def render_draft_page(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
     prospects = draft_prospects(data)
     by_year: dict[int, list[dict[str, Any]]] = defaultdict(list)
@@ -852,18 +1256,41 @@ def render_draft_page(data: dict[str, Any], teams: list[dict[str, Any]], season:
       <div class="view-toggle draft-tabs" role="tablist" aria-label="Draft classes" data-draft-tabs>{tabs}</div>
     </section>
     {panels}
+    {draft_regrades_section(data, teams, season)}
     """
     return page_html("Draft", body, teams, root="", active="draft")
+
+
+# event type -> (filter key, badge label, badge class). Draft events get their own
+# badge locally (core's EVENT_BADGES predates the draft filter).
+_TX_TYPES = {
+    "freeAgent": "sign",
+    "reSigned": "sign",
+    "release": "waive",
+    "trade": "trade",
+    "draft": "draft",
+}
+
+_TX_FILTER_BUTTONS = [
+    ("all", "All"),
+    ("sign", "Signings"),
+    ("trade", "Trades"),
+    ("waive", "Waivers"),
+    ("draft", "Draft"),
+]
 
 
 def transactions_archive_html(data: dict[str, Any], teams: list[dict[str, Any]]) -> str:
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
-    wanted = {"freeAgent", "reSigned", "release", "trade"}
     by_season: dict[int, list[dict[str, Any]]] = defaultdict(list)
     for event in data.get("events", []):
-        if event.get("type") in wanted and isinstance(event.get("season"), int):
-            by_season[event["season"]].append(event)
+        if event.get("type") not in _TX_TYPES or not isinstance(event.get("season"), int):
+            continue
+        # The 2026 inaugural fantasy draft only seeded rosters (1,500+ events) — skip it.
+        if event.get("type") == "draft" and event.get("season") == 2026:
+            continue
+        by_season[event["season"]].append(event)
     if not by_season:
         return ""
     season_blocks = []
@@ -874,18 +1301,40 @@ def transactions_archive_html(data: dict[str, Any], teams: list[dict[str, Any]])
             html_text = compose_event_html(event, all_players_by_pid, teams_by_tid, season, set(), "")
             if not html_text:
                 continue
-            label, badge_cls = EVENT_BADGES.get(event.get("type"), ("NEWS", "badge-muted"))
-            items.append(f'<li><span class="badge {badge_cls}">{esc(label)}</span><span>{html_text}</span></li>')
+            etype = event.get("type")
+            label, badge_cls = EVENT_BADGES.get(etype, ("DRAFT", "badge-accent") if etype == "draft" else ("NEWS", "badge-muted"))
+            tids = ",".join(str(safe_int(t)) for t in (event.get("tids") or []) if t is not None)
+            items.append(
+                f'<li data-tx-type="{esc(_TX_TYPES.get(etype, "other"))}" data-tx-tids=",{esc(tids)},">'
+                f'<span class="badge {badge_cls}">{esc(label)}</span><span>{html_text}</span></li>'
+            )
         if not items:
             continue
         open_attr = " open" if season == max(by_season) else ""
         season_blocks.append(
-            f'<details class="tx-season"{open_attr}><summary>Season {season} <span class="count-pill">{len(items)} moves</span></summary>'
+            f'<details class="tx-season"{open_attr}><summary>Season {season} '
+            f'<span class="count-pill" data-tx-count="{len(items)}">{len(items)} moves</span></summary>'
             f'<ul class="news-list">{"".join(items)}</ul></details>'
         )
+    type_buttons = "".join(
+        f'<button type="button" class="{"active" if value == "all" else ""}" '
+        f'data-tx-type="{value}" aria-pressed="{"true" if value == "all" else "false"}">{esc(label)}</button>'
+        for value, label in _TX_FILTER_BUTTONS
+    )
+    team_options = ['<option value="all">All teams</option>'] + [
+        f'<option value="{safe_int(t.get("tid"))}">{esc(team_abbrev(t))}</option>'
+        for t in sorted(teams, key=team_abbrev)
+        if t.get("tid") is not None and not t.get("disabled")
+    ]
     return f"""
-    <section class="card home-section">
-      <div class="section-title-row"><h2>Transaction Log</h2><span class="muted small-copy">every signing, trade, and waiver on record</span></div>
+    <section class="card home-section" data-txlog>
+      <div class="section-title-row"><h2>Transaction Log</h2><span class="muted small-copy">every signing, trade, waiver, and draft pick on record</span></div>
+      <div class="toolbar txlog-toolbar">
+        <div class="view-toggle" data-tx-type-filter role="group" aria-label="Filter transactions by type">{type_buttons}</div>
+        <label class="select-label">Team
+          <select data-tx-team-filter aria-label="Filter transactions by team">{''.join(team_options)}</select>
+        </label>
+      </div>
       {''.join(season_blocks)}
     </section>
     """
@@ -897,6 +1346,7 @@ def render_history_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> st
     awards_by_season = {a.get("season"): a for a in data.get("awards", []) if isinstance(a, dict)}
     playoffs_by_season = {ps.get("season"): ps for ps in data.get("playoffSeries", []) if isinstance(ps, dict)}
     seasons = sorted(set(awards_by_season) | set(playoffs_by_season), reverse=True)
+    led = led_league(data)
 
     # summary table
     summary_rows = []
@@ -917,11 +1367,11 @@ def render_history_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> st
             team = teams_by_tid.get(safe_int(side.get("tid"), -10))
             return f'{team_anchor(team)}' if team else "—"
         summary_rows.append("".join([
-            td(esc(season), sort=season),
+            td(f'<a href="#season-{esc(season)}">{esc(season)}</a>', sort=season),
             td(team_cell(champion), cls="name-cell"),
             td(team_cell(runner_up)),
             td(award_winner_html(award.get("finalsMvp"), all_players_by_pid, teams_by_tid, ""), cls="name-cell"),
-            td(award_winner_html(award.get("mvp"), all_players_by_pid, teams_by_tid, ""), cls="name-cell"),
+            td(award_winner_html(award.get("mvp"), all_players_by_pid, teams_by_tid, "", led=led, season=season), cls="name-cell"),
         ]))
 
     season_cards = []
@@ -929,14 +1379,14 @@ def render_history_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> st
         award = awards_by_season.get(season) or {}
         ps = playoffs_by_season.get(season)
         award_rows = "".join(
-            f'<div class="detail-item"><span>{esc(label)}</span><strong>{award_winner_html(award.get(key), all_players_by_pid, teams_by_tid, "")}</strong></div>'
+            f'<div class="detail-item"><span>{esc(label)}</span><strong>{award_winner_html(award.get(key), all_players_by_pid, teams_by_tid, "", led=led, season=season)}</strong></div>'
             for key, label in AWARD_DISPLAY if award.get(key)
         )
         bracket = playoff_bracket_html(ps, teams_by_tid, "") if ps else ""
-        leaders = past_season_leaders_html(data, season, all_players_by_pid, teams_by_tid, "")
+        leaders = past_season_leaders_html(data, season, all_players_by_pid, teams_by_tid, "", led=led)
         honors = honors_html(award, all_players_by_pid, teams_by_tid, "")
         season_cards.append(f"""
-        <section class="card home-section">
+        <section class="card home-section" id="season-{season}">
           <div class="section-title-row"><h2>Season {season}</h2></div>
           {bracket}
           {leaders}
@@ -949,9 +1399,10 @@ def render_history_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> st
     <section class="page-hero">
       <div>
         <h1>League History</h1>
-        <p class="muted">Champions, awards, and playoff brackets from past seasons</p>
+        <p class="muted">Champions, awards, and playoff brackets from past seasons · <span class="led-league" title="Gold marks a stat that led the league that season">gold ★</span> = led the league</p>
       </div>
     </section>
+    {rafters_strip_html(data, teams)}
     <section class="card home-section">
       <div class="section-title-row"><h2>Champions</h2></div>
       {table_html(["Season", "Champion", "Runner-up", "Finals MVP", "MVP"], summary_rows, table_id="champions", empty_message="No completed seasons yet.")}
@@ -979,13 +1430,21 @@ def all_time_leaders_html(data: dict[str, Any], teams: list[dict[str, Any]], roo
     if not totals:
         return ""
 
-    def box(title, value_fn, digits=0):
+    def box(title, value_fn, digits=0, per_game=False, min_gp=0):
         scored = []
         for player, stat in totals:
+            gp = stat_gp(stat)
+            if gp < min_gp:
+                continue
             value = value_fn(stat)
             if value is None:
                 continue
-            scored.append((float(value), player))
+            value = float(value)
+            if per_game:
+                if gp <= 0:
+                    continue
+                value = value / gp
+            scored.append((value, player))
         scored.sort(key=lambda x: (-x[0], player_name(x[1])))
         rows = []
         for rank, (value, player) in enumerate(scored[:10], 1):
@@ -998,17 +1457,29 @@ def all_time_leaders_html(data: dict[str, Any], teams: list[dict[str, Any]], roo
             )
         return f'<div class="leader-box"><h3>{esc(title)}</h3><ol class="leader-list">{"".join(rows)}</ol></div>'
 
-    boxes = [
-        box("Career Points", lambda s: s.get("pts")),
-        box("Career Rebounds", lambda s: total_rebounds(s)),
-        box("Career Assists", lambda s: s.get("ast")),
-        box("Career Steals", lambda s: s.get("stl")),
-        box("Career Blocks", lambda s: s.get("blk")),
+    categories = [
+        ("Points", lambda s: s.get("pts")),
+        ("Rebounds", lambda s: total_rebounds(s)),
+        ("Assists", lambda s: s.get("ast")),
+        ("Steals", lambda s: s.get("stl")),
+        ("Blocks", lambda s: s.get("blk")),
     ]
+    # Per-game boards re-rank with a modest floor so 5-game cameos don't lead.
+    pg_min_gp = 40
+    totals_boxes = "".join(box(f"Career {label}", fn) for label, fn in categories)
+    pg_boxes = "".join(box(f"{label} Per Game", fn, digits=1, per_game=True, min_gp=pg_min_gp) for label, fn in categories)
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>All-Time Leaders</h2><span class="muted small-copy">regular season since {start_season}, including retired players</span></div>
-      <div class="leader-grid">{''.join(boxes)}</div>
+      <div class="toolbar">
+        <div class="section-title-row"><h2>All-Time Leaders</h2><span class="muted small-copy">regular season since {start_season}, including retired players</span></div>
+        <div class="view-toggle" data-leaders-toggle role="group" aria-label="Leader boards as totals or per game">
+          <button type="button" class="active" data-leaders-view="totals" aria-pressed="true">Totals</button>
+          <button type="button" data-leaders-view="pg" aria-pressed="false">Per Game</button>
+        </div>
+      </div>
+      <div class="leader-grid" data-leaders-panel="totals">{totals_boxes}</div>
+      <div class="leader-grid" data-leaders-panel="pg" hidden>{pg_boxes}</div>
+      <p class="muted small-copy" data-leaders-panel="pg" hidden>Per-game boards require at least {pg_min_gp} career games.</p>
     </section>
     """
 
@@ -1061,28 +1532,36 @@ def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], seaso
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
     all_players_by_pid = {safe_int(p.get("pid")): p for p in data.get("players", []) if p.get("pid") is not None}
     current_gids = {str(g.get("gid")) for g in data.get("games", []) if g.get("season") == season}
+    led = led_league(data)
     feats = [f for f in data.get("playerFeats", []) if isinstance(f, dict)]
     feats.sort(key=lambda f: (feat_rank(f.get("stats") or {}), -safe_int((f.get("stats") or {}).get("pts")), -safe_int(f.get("season"))))
-    headers = ["Season", "Player", "Team", "Opp", "Result", "Line", "Feat"]
+    # No Season column: the feats tables live inside per-season tabs already.
+    headers = ["Player", "Team", "Opp", "Result", "Line", "Feat"]
 
     def feat_row(feat: dict[str, Any]) -> str:
         stats = feat.get("stats") or {}
+        feat_season = safe_int(feat.get("season"))
+        leaders = led.get(feat_season) or {}
         trb = safe_int(stats.get("orb")) + safe_int(stats.get("drb"))
         badges = " ".join(f'<span class="badge badge-accent">{esc(b)}</span>' for b in feat_badges(stats))
         result_text = f"{esc(feat.get('result', ''))} {esc(feat.get('score', ''))}"
-        if str(feat.get("gid")) in current_gids and safe_int(feat.get("season")) == season:
+        if str(feat.get("gid")) in current_gids and feat_season == season:
             result_text = f'<a href="games/{esc(game_slug_from_gid(feat.get("gid")))}.html">{result_text}</a>'
-        line = (
-            f"{safe_int(stats.get('pts'))} PTS · {trb} TRB · {safe_int(stats.get('ast'))} AST · "
-            f"{safe_int(stats.get('stl'))} STL · {safe_int(stats.get('blk'))} BLK"
-        )
+        line_bits = []
+        for value, max_key, label in ((safe_int(stats.get("pts")), "ptsMax", "PTS"), (trb, "trbMax", "TRB"),
+                                      (safe_int(stats.get("ast")), "astMax", "AST"), (safe_int(stats.get("stl")), "stlMax", "STL"),
+                                      (safe_int(stats.get("blk")), "blkMax", "BLK")):
+            bit = f"{value} {label}"
+            lead = leaders.get(max_key)
+            if lead is not None and abs(value - lead) <= 1e-6:
+                bit = led_league_mark(bit, f"Best single-game {label} total of {feat_season}")
+            line_bits.append(bit)
         return "".join([
-            td(esc(feat.get("season")), sort=feat.get("season")),
             td(event_player_link(feat.get("pid"), all_players_by_pid, "", label=feat.get("name")), sort=feat.get("name"), cls="name-cell"),
             td(team_label(feat.get("tid"), teams_by_tid), sort=team_abbrev_for_tid(feat.get("tid"), teams_by_tid)),
             td(team_label(feat.get("oppTid"), teams_by_tid), sort=team_abbrev_for_tid(feat.get("oppTid"), teams_by_tid)),
             td(result_text, sort=feat.get("score")),
-            td(line, sort=safe_int(stats.get("pts"))),
+            td(" · ".join(line_bits), sort=safe_int(stats.get("pts"))),
             td(badges, sort=feat_rank(stats)),
         ])
 
@@ -1120,7 +1599,7 @@ def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], seaso
     {best_performances_card(data, teams, season)}
     {all_time_leaders_html(data, teams, start_season=start_season)}
     <section class="card">
-      <div class="section-title-row"><h2>Single-Game Feats</h2></div>
+      <div class="section-title-row"><h2>Single-Game Feats</h2><span class="muted small-copy"><span class="led-league" title="Gold marks the best single-game total of that season">gold ★</span> = season's best single-game total</span></div>
       <div class="tabs" role="tablist" aria-label="Feats by season" data-tabs>
         {feat_tabs}
       </div>

@@ -40,8 +40,8 @@
   background: var(--panel-2);
   border-color: var(--line);
 }
-.team-dropdown { position: relative; flex: 0 0 auto; }
-.team-dropdown summary {
+.team-dropdown, .nav-dropdown { position: relative; flex: 0 0 auto; }
+.team-dropdown summary, .nav-dropdown summary {
   list-style: none;
   cursor: pointer;
   white-space: nowrap;
@@ -52,14 +52,15 @@
   font-size: .85rem;
   font-weight: 500;
 }
-.team-dropdown summary::-webkit-details-marker { display: none; }
-.team-dropdown summary::after { content: " ▾"; color: var(--muted); font-size: .75rem; }
-.team-dropdown[open] summary, .team-dropdown.active summary, .team-dropdown summary:hover {
+.team-dropdown summary::-webkit-details-marker, .nav-dropdown summary::-webkit-details-marker { display: none; }
+.team-dropdown summary::after, .nav-dropdown summary::after { content: " ▾"; color: var(--muted); font-size: .75rem; }
+.team-dropdown[open] summary, .team-dropdown.active summary, .team-dropdown summary:hover,
+.nav-dropdown[open] summary, .nav-dropdown.active summary, .nav-dropdown summary:hover {
   color: var(--text);
   background: var(--panel-2);
   border-color: var(--line);
 }
-.team-menu {
+.team-menu, .nav-menu {
   position: absolute;
   top: calc(100% + .35rem);
   right: 0;
@@ -76,7 +77,7 @@
   background: var(--panel);
   box-shadow: 0 10px 30px rgba(0,0,0,.45);
 }
-.team-menu a {
+.team-menu a, .nav-menu a {
   display: block;
   white-space: nowrap;
   padding: .35rem .55rem;
@@ -86,5 +87,39 @@
   font-weight: 500;
   text-decoration: none;
 }
-.team-menu a:hover, .team-menu a.active { color: var(--text); background: var(--panel-2); }
+.team-menu a:hover, .team-menu a.active, .nav-menu a:hover, .nav-menu a.active { color: var(--text); background: var(--panel-2); }
 
+/* ---------- header controls: theme toggle + My Team picker (W10) ---------- */
+.header-controls { display: flex; flex: 0 0 auto; align-items: center; gap: .4rem; }
+.my-team-picker {
+  max-width: 8.5rem;
+  padding: .3rem .4rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--bg);
+  color: var(--muted);
+  font: inherit;
+  font-size: .78rem;
+}
+.my-team-picker:focus { border-color: var(--accent); }
+body[data-my-team] .my-team-picker { border-color: var(--accent); color: var(--text); }
+.team-menu a.my-team-link { color: var(--accent); font-weight: 700; }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--bg);
+  color: var(--muted);
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--accent); }
+.theme-toggle .tt-icon { display: none; width: 1rem; height: 1rem; }
+html[data-theme-pref="dark"] .theme-toggle .tt-dark,
+html[data-theme-pref="light"] .theme-toggle .tt-light,
+html[data-theme-pref="auto"] .theme-toggle .tt-auto,
+html:not([data-theme-pref]) .theme-toggle .tt-auto { display: block; }

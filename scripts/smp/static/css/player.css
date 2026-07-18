@@ -1,11 +1,4 @@
 /* ---------- player page ---------- */
-.player-hero {
-  display: grid;
-  grid-template-columns: 120px minmax(260px, 1fr) minmax(360px, 600px);
-  gap: 1rem;
-  align-items: start;
-}
-.portrait-wrap { display: flex; justify-content: center; align-items: flex-start; }
 .portrait {
   width: 120px;
   height: 120px;
@@ -64,7 +57,6 @@
 .rating-row { display: flex; justify-content: space-between; gap: .6rem; padding: .12rem 0; font-size: .8rem; }
 .rating-row span { color: var(--muted); }
 .rating-row strong { text-align: right; font-weight: 600; white-space: nowrap; }
-.awards-strip { display: flex; flex-wrap: wrap; }
 .summary-wrap table { min-width: 700px; }
 .home-hero { margin-bottom: .75rem; }
 .home-section { margin-bottom: .75rem; }
@@ -85,3 +77,230 @@
 }
 .candidate-img.placeholder { display: grid; place-items: center; color: var(--muted); font-weight: 700; font-size: .68rem; }
 
+/* ---------- trading-card hero ---------- */
+.player-card {
+  --team-primary: #3a4150;
+  --team-secondary: #8a93a5;
+  --team-on-primary: #ffffff;
+  position: relative;
+  margin-bottom: .75rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  overflow: hidden;
+  background: var(--panel);
+}
+/* Free agents / prospects: neutral silver card. */
+.player-card--fa {
+  --team-primary: #5c636e;
+  --team-secondary: #c3cad4;
+  --team-on-primary: #ffffff;
+}
+.player-card-face {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1rem 0;
+  min-height: 150px;
+  overflow: hidden;
+  color: var(--team-on-primary);
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--team-primary) 82%, #000) 0%,
+    var(--team-primary) 55%,
+    color-mix(in srgb, var(--team-primary) 70%, var(--team-secondary)) 100%
+  );
+}
+.player-card-num {
+  position: absolute;
+  right: 158px;
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: 7.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: var(--team-on-primary);
+  opacity: .16;
+  pointer-events: none;
+  user-select: none;
+}
+.player-card-body { position: relative; padding-bottom: 1rem; }
+.player-card-eyebrow { color: color-mix(in srgb, var(--team-on-primary) 70%, transparent); }
+.player-card h1 { font-size: 1.65rem; color: var(--team-on-primary); }
+.player-card-facts {
+  margin: .3rem 0 0;
+  font-size: .85rem;
+  color: color-mix(in srgb, var(--team-on-primary) 88%, transparent);
+}
+.player-card-facts a.player-card-team {
+  color: var(--team-on-primary);
+  font-weight: 700;
+  text-decoration-color: var(--team-secondary);
+}
+.player-card-sep { opacity: .55; }
+.player-card-skills { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .55rem; }
+.player-card-skill {
+  display: inline-flex;
+  align-items: center;
+  padding: .1rem .5rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: var(--team-on-primary);
+  background: color-mix(in srgb, var(--team-secondary) 28%, transparent);
+  border: 1px solid color-mix(in srgb, var(--team-secondary) 55%, transparent);
+}
+/* Portrait anchored flush to the card's bottom edge. */
+.player-card-portrait { flex: 0 0 auto; align-self: flex-end; display: flex; }
+.player-card-portrait .card-portrait {
+  display: block;
+  width: 132px;
+  height: 132px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  object-fit: cover;
+  object-position: top;
+}
+.player-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .45rem 1rem;
+  background: var(--panel-2);
+  border-top: 1px solid var(--line);
+}
+.career-dots { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.career-dots-label {
+  color: var(--muted);
+  font-size: .68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-right: .2rem;
+}
+.career-dot {
+  width: .95rem;
+  height: .95rem;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+.career-dot--now { outline: 2px solid var(--accent); outline-offset: 1px; }
+a.career-dot:hover { transform: scale(1.18); }
+@media (max-width: 700px) {
+  .player-card-face { flex-direction: column; align-items: flex-start; min-height: 0; }
+  .player-card-portrait { align-self: flex-end; margin-top: -1.25rem; }
+  .player-card-portrait .card-portrait { width: 104px; height: 104px; }
+  .player-card-num { right: .5rem; font-size: 5rem; }
+}
+
+/* ---------- sticky section rail ---------- */
+.player-rail {
+  position: sticky;
+  top: var(--rail-offset, 3.25rem);
+  z-index: 15;
+  display: flex;
+  gap: .15rem;
+  overflow-x: auto;
+  margin: 0 0 .75rem;
+  padding: .3rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: .2rem;
+}
+.rail-link {
+  flex: 0 0 auto;
+  padding: .35rem .8rem;
+  border-radius: .15rem;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.rail-link:hover { color: var(--text); background: var(--panel-2); text-decoration: none; }
+.rail-link.active { color: var(--text); background: var(--panel-3); box-shadow: inset 0 -2px 0 var(--accent); }
+.player-section { scroll-margin-top: var(--anchor-offset, 7.5rem); }
+
+/* ---------- bio card ---------- */
+.player-bio-cols {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(340px, 620px);
+  gap: 1rem;
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .player-bio-cols { grid-template-columns: 1fr; }
+}
+.rating-caption { margin: .1rem 0 .2rem; }
+
+/* ---------- trophy case ---------- */
+.trophy-case .trophy-shelf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .6rem;
+  align-items: stretch;
+  padding: .45rem 0 .55rem;
+  border-bottom: 2px solid var(--line);
+}
+.trophy-case .trophy-shelf:last-child { border-bottom: 0; padding-bottom: .1rem; }
+.trophy {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .4rem .6rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  color: var(--text);
+}
+.trophy .trophy-crest { width: 1.7em; height: 1.7em; vertical-align: middle; }
+.trophy--gold {
+  color: var(--warn);
+  border-color: color-mix(in srgb, var(--warn) 45%, var(--line));
+  background: var(--warn-soft);
+}
+.trophy-label { font-size: .78rem; font-weight: 700; color: var(--text); }
+.trophy-count { font-size: .78rem; font-weight: 800; color: var(--warn); }
+.trophy-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: .12rem .5rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-3);
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+/* ---------- shot diet ---------- */
+.shotdiet-row {
+  display: grid;
+  grid-template-columns: 3rem 1fr 4.5rem;
+  gap: .6rem;
+  align-items: center;
+  margin: .3rem 0;
+}
+.shotdiet-season { font-weight: 700; font-size: .82rem; color: var(--muted); }
+.shotdiet-bar {
+  width: 100%;
+  height: 1.15rem;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+}
+.shotdiet-fga { text-align: right; }
+
+/* ---------- led-league gold ---------- */
+td.led-league { font-weight: 700; color: var(--warn); }
+.led-star { margin-left: .18rem; font-size: .72em; color: var(--warn); }
+
+/* ---------- contract & salary ---------- */
+.salary-note { margin-left: .25rem; }
+.salary-ufa { font-weight: 600; letter-spacing: .04em; }

@@ -77,3 +77,119 @@
 .preview-injuries h3 { margin: 0 0 .25rem; letter-spacing: .07em; }
 .preview-injuries p { margin: .15rem 0; }
 
+
+/* ---------- W2 rotation river (stacked minutes streamgraph) ---------- */
+.river-wrap { max-width: 760px; }
+.river-chart { width: 100%; height: auto; display: block; cursor: crosshair; }
+.river-band { stroke: var(--bg); stroke-width: .8; }
+.river-band.river-dim { opacity: .25; }
+.river-guide { stroke: var(--text); stroke-width: 1; opacity: .6; pointer-events: none; }
+.river-legend { display: flex; flex-wrap: wrap; gap: .3rem .45rem; margin-top: .5rem; }
+.river-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .1rem .45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: .7rem;
+  text-decoration: none;
+}
+.river-chip:hover { border-color: var(--river-color, var(--accent)); text-decoration: none; }
+.river-chip-dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--river-color, var(--muted)); flex: 0 0 auto; }
+.river-tooltip { min-width: 9rem; max-width: 14rem; white-space: normal; }
+.river-tooltip span { display: block; }
+.rotation-map .col-hl { background: rgba(255, 255, 255, .07); }
+.rotation-map tr.row-hl > td { box-shadow: inset 0 0 0 999px rgba(255, 255, 255, .05); }
+
+/* ---------- W2 scoring share (100%-stacked bar + metric toggle) ---------- */
+.share-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: .2rem; overflow: hidden; }
+.share-toggle button {
+  padding: .28rem .7rem;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--muted);
+  font: inherit;
+  font-size: .74rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.share-toggle button:first-child { border-left: 0; }
+.share-toggle button.active {
+  background: var(--panel-3);
+  background: color-mix(in srgb, var(--team-primary) 16%, var(--panel-3));
+  color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--team-secondary, var(--accent));
+}
+.share-bar {
+  display: flex;
+  height: 2.1rem;
+  border: 1px solid var(--line);
+  border-radius: .2rem;
+  overflow: hidden;
+  background: var(--panel-2);
+}
+.share-bar[hidden] { display: none; }
+.share-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+  border-right: 1px solid var(--bg);
+  cursor: help;
+}
+.share-seg:last-child { border-right: 0; }
+.share-seg span {
+  color: inherit;
+  font-size: .68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 .3rem;
+}
+.share-legend { margin-top: .45rem; }
+
+/* ---------- W2 four factors diverging strip ---------- */
+.ff-wrap { max-width: 720px; }
+.ff-chart { width: 100%; height: auto; display: block; }
+.ff-center { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 3 3; opacity: .8; }
+.ff-label { fill: var(--text); font-size: 11px; font-weight: 600; }
+.ff-track { fill: var(--panel-2); }
+.ff-bar-good { fill: var(--good); opacity: .85; }
+.ff-bar-bad { fill: var(--bad); opacity: .8; }
+.ff-bar-flat { fill: var(--muted); opacity: .5; }
+.ff-val, .ff-val-good, .ff-val-bad { font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; fill: var(--text); }
+.ff-val-good { fill: var(--good); }
+.ff-val-bad { fill: var(--bad); }
+.ff-delta { fill: var(--muted); font-weight: 500; font-size: 10px; }
+.ff-row { cursor: help; }
+
+/* ---------- W2 franchise arc ---------- */
+.arc-wrap { overflow-x: auto; }
+.arc-chart { width: 100%; max-width: 860px; height: auto; display: block; min-width: 480px; }
+.arc-axis { stroke: var(--text); stroke-width: 1.2; opacity: .55; }
+.arc-side { fill: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .1em; }
+.arc-win { fill: var(--team-chart, var(--accent)); rx: 2; }
+.arc-loss { fill: var(--muted); opacity: .42; rx: 2; }
+.arc-num { fill: var(--text); font-size: 10.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.arc-num-loss { fill: var(--muted); font-weight: 600; }
+.arc-marker { fill: var(--muted); font-size: 9.5px; font-weight: 600; letter-spacing: .03em; }
+.arc-marker-finals { fill: var(--team-secondary, var(--text)); font-weight: 700; }
+.arc-marker-champ { fill: var(--warn); font-weight: 800; letter-spacing: .08em; }
+.arc-flag { fill: var(--warn); }
+.arc-flag-inline { color: var(--warn); }
+.arc-pin { font-size: 11px; cursor: help; }
+.arc-pin-trade { fill: var(--accent); color: var(--accent); }
+.arc-pin-retire { fill: var(--muted); color: var(--muted); }
+.arc-pin-join { fill: var(--team-secondary, var(--warn)); color: var(--warn); }
+.arc-pin-more { fill: var(--muted); font-size: 9.5px; font-weight: 700; }
+.arc-legend { margin-top: .35rem; }
+.arc-col:hover .arc-win { opacity: .85; }
+.river-chip.active { border-color: var(--river-color, var(--accent)); box-shadow: inset 0 0 0 1px var(--river-color, var(--accent)); }
+html[data-theme="light"] .rotation-map .col-hl { background: rgba(0, 0, 0, .07); }
+html[data-theme="light"] .rotation-map tr.row-hl > td { box-shadow: inset 0 0 0 999px rgba(0, 0, 0, .05); }

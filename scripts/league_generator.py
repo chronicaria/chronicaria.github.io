@@ -460,6 +460,62 @@ def free_agents(data: dict[str, Any]) -> list[dict[str, Any]]:
     return out
 
 
+CANONICAL_POS = ("PG", "SG", "SF", "PF", "C")
+
+
+def canonical_pos(player: dict[str, Any], rating: dict[str, Any]) -> str:
+    """Round BBGM's 9 position labels down to one of the 5 canonical slots.
+    The middle labels (G/GF/F/FC) sit at *.5 on the PG=0..C=4 axis; break the
+    tie with the player's build (playmaking for guards, height elsewhere) — the
+    same rule the depth chart has always used for its single-slot fit."""
+    pos = (rating or {}).get("pos") or ""
+    if pos in CANONICAL_POS:
+        return pos
+    height = safe_int(player.get("hgt"), 0)  # inches
+    if pos == "G":
+        playmaking = safe_int(rating.get("pss")) + safe_int(rating.get("drb"))
+        scoring = safe_int(rating.get("tp")) + safe_int(rating.get("fg"))
+        return "PG" if playmaking >= scoring else "SG"
+    if pos == "GF":
+        return "SG" if height and height < 79 else "SF"
+    if pos == "F":
+        return "SF" if height and height < 81 else "PF"
+    if pos == "FC":
+        return "PF" if height and height < 83 else "C"
+    # ponytail: unlabeled fallback — pure height buckets; never fires on real BBGM data.
+    if height:
+        if height < 76:
+            return "PG"
+        if height < 79:
+            return "SG"
+        if height < 81:
+            return "SF"
+        if height < 83:
+            return "PF"
+    return "C"
+
+
+def normalize_positions(data: dict[str, Any]) -> None:
+    """VISUAL-only: collapse the 9 BBGM position labels to the 5 canonical slots
+    in-memory, so every rendered surface shows a single position per player. The
+    source JSON on disk is never modified."""
+    canon_by_pid: dict[int, str] = {}
+    for p in data.get("players", []):
+        latest = None
+        for r in p.get("ratings") or []:
+            r["pos"] = canonical_pos(p, r)
+            latest = r["pos"]
+        if latest and p.get("pid") is not None:
+            canon_by_pid[safe_int(p.get("pid"))] = latest
+    # Box scores carry their own denormalized pos snapshot — map by pid to match.
+    for g in data.get("games", []):
+        for t in g.get("teams", []):
+            for pb in t.get("players", []):
+                c = canon_by_pid.get(safe_int(pb.get("pid")))
+                if c:
+                    pb["pos"] = c
+
+
 def contract_expiring_players(players: list[dict[str, Any]], exp_year: int, rostered_only: bool = True) -> list[dict[str, Any]]:
     rows = []
     for player in players:
@@ -1078,70 +1134,8 @@ FIN_NEXT_BALANCE: dict[int, int] = {
     5: 98000,   # Gooning Gooners    (78 + 20 received from Waltham in that trade)
 }
 
-# 2031 offseason roster move: the Gooners (tid 5) waive everyone but these keepers. Each waived
-# player enters free agency asking their current contract price. ponytail: hand-maintained.
-GOONERS_TID = 5
-# Cason Wallace (1304) is kept at his existing $16M-thru-2031 deal.
-GOONERS_KEEP_PIDS = {113, 1284, 1293, 1304, 1663, 1729}  # Ruutli, Tyson, Smith Jr., Wallace, Edgecombe, Avdalas
-
-# 2031 offseason trades (hand-maintained). Applied AFTER the Gooners waive pass so incoming
-# players aren't swept back out by it. Contracts already match the agreed terms, so only the
-# roster team changes; salary that stays with the old team is handled by FIN_RETENTION above.
-TRADE_MOVES: dict[int, int] = {   # pid -> destination tid
-    118: 5,   # Espoir Ndinga: Toronto -> Gooners ($1M thru 2031)
-    1765: 5,  # Ajay Mitchell: Waltham -> Gooners ($21M thru 2033, paid by Waltham)
-    1325: 5,  # Trae Young:    Waltham -> Gooners ($18M thru 2032, paid by Waltham)
-}
-TRADE_PICKS: dict[tuple[int, int], int] = {   # (draft season, originalTid) -> new owning tid
-    (2032, 5): 6,  # Gooners' 2032 pick -> Waltham
-}
-
-
-def apply_roster_moves(data: dict[str, Any]) -> None:
-    """Mutate the loaded export to reflect hand-entered offseason roster moves.
-
-    - Send the non-keeper Gooners to free agency (tid -1) and tag each with the contract price
-      it should ask for (`_fa_bid`, thousands) so the FA page shows that instead of the formula.
-    - Reprice this year's drafted rookies onto the salary formula (BBGM rookie-scale contracts
-      don't match our economy).
-    - Apply hand-entered trades (TRADE_MOVES / TRADE_PICKS), last so incoming players stick.
-
-    Runs before active_players/free_agents are computed.
-    """
-    season = current_season(data)
-    for p in data.get("players", []):
-        if safe_int(p.get("tid"), -99) == GOONERS_TID and safe_int(p.get("pid"), -1) not in GOONERS_KEEP_PIDS:
-            p["_fa_bid"] = safe_float((p.get("contract") or {}).get("amount"), 0.0)
-            p["tid"] = FREE_AGENT_TID
-
-        # Rookies drafted this year, now on a roster: price their contract off the formula.
-        draft = p.get("draft") or {}
-        if safe_int(draft.get("year"), -1) == season and safe_int(p.get("tid"), -99) >= 0:
-            rating = latest_rating(p, season)
-            born = (p.get("born") or {}).get("year")
-            age_val = (season - born) if isinstance(born, int) else 22
-            priced = fa_salary_by_length(safe_int(rating.get("ovr")), safe_int(rating.get("pot")), age_val)[0] * 1000
-            contract = p.setdefault("contract", {})
-            contract["amount"] = priced
-            # Keep the per-season salaries[] array in sync (the Owed Payroll table reads it first).
-            for salary in p.get("salaries", []):
-                if isinstance(salary, dict):
-                    salary["amount"] = priced
-
-    by_pid = {safe_int(p.get("pid"), -1): p for p in data.get("players", [])}
-    for pid, new_tid in TRADE_MOVES.items():
-        traded = by_pid.get(pid)
-        if traded is not None:
-            from_tid = safe_int(traded.get("tid"), -1)
-            traded["tid"] = new_tid
-            # Log the move so the roster's "Acquired" column reads as a trade, not a signing.
-            traded.setdefault("transactions", []).append(
-                {"season": season, "phase": phase_value(data), "tid": new_tid, "type": "trade", "fromTid": from_tid}
-            )
-    for dp in data.get("draftPicks", []):
-        new_tid = TRADE_PICKS.get((safe_int(dp.get("season"), -1), safe_int(dp.get("originalTid"), -1)))
-        if new_tid is not None:
-            dp["tid"] = new_tid
+# The 2031 waivers, rookie repricing, and trades are now materialized in the
+# canonical export. Site generation treats that file as authoritative.
 
 
 def team_retention_delta(tid: int, season: int) -> float:
@@ -1420,31 +1414,7 @@ def depth_chart_card(roster: list[dict[str, Any]], season: int) -> str:
     slots = ["PG", "SG", "SF", "PF", "C"]
 
     def preferred_slot(player: dict[str, Any]) -> str:
-        rating = latest_rating(player, season)
-        pos = rating.get("pos") or ""
-        if pos in slots:
-            return pos
-        height = safe_int(player.get("hgt"), 0)
-        if pos == "G":
-            playmaking = safe_int(rating.get("pss")) + safe_int(rating.get("drb"))
-            scoring = safe_int(rating.get("tp")) + safe_int(rating.get("fg"))
-            return "PG" if playmaking >= scoring else "SG"
-        if pos == "GF":
-            return "SG" if height and height < 79 else "SF"
-        if pos == "F":
-            return "SF" if height and height < 81 else "PF"
-        if pos == "FC":
-            return "PF" if height and height < 83 else "C"
-        if height:
-            if height < 76:
-                return "PG"
-            if height < 79:
-                return "SG"
-            if height < 81:
-                return "SF"
-            if height < 83:
-                return "PF"
-        return "C"
+        return canonical_pos(player, latest_rating(player, season))
 
     buckets: dict[str, list[dict[str, Any]]] = {slot: [] for slot in slots}
     for player in roster:
@@ -2045,7 +2015,7 @@ def roster_tabs(sorted_roster: list[dict[str, Any]], season: int, start_season: 
 
 
 def _sorted_team_roster(roster: list[dict[str, Any]], season: int) -> list[dict[str, Any]]:
-    return sorted(roster, key=lambda p: (p.get("rosterOrder", 10**9), -latest_rating(p, season).get("ovr", 0), player_name(p)))
+    return sorted(roster, key=lambda p: (-latest_rating(p, season).get("ovr", 0), player_name(p)))
 
 
 def render_team_roster_page(team: dict[str, Any], roster: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None, game_items: list[dict[str, Any]] | None = None, game_logs: dict[int, list[dict[str, Any]]] | None = None, tfin: dict[str, Any] | None = None) -> str:
@@ -2230,7 +2200,7 @@ def render_free_agency_page(players: list[dict[str, Any]], teams: list[dict[str,
 def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, Any]], season: int, start_season: int, data: dict[str, Any] | None = None) -> str:
     teams_by_tid = {t["tid"]: t for t in teams}
     rostered = [p for p in players if isinstance(p.get("tid"), int) and p.get("tid") >= 0]
-    sorted_players = sorted(rostered, key=lambda p: (p.get("tid", 999), p.get("rosterOrder", 9999), player_name(p)))
+    sorted_players = sorted(rostered, key=lambda p: (p.get("tid", 999), -safe_int(latest_rating(p, season).get("ovr")), player_name(p)))
     fa_players = sorted(
         # Match the free-agency page: hide scrub FAs below 50 ovr or 50 pot.
         [p for p in players if p.get("tid") == FREE_AGENT_TID
@@ -5971,7 +5941,7 @@ def box_team_percentages_row(team_box: dict[str, Any]) -> str:
 def projected_team_box(tid: Any, players: list[dict[str, Any]], season: int) -> dict[str, Any]:
     tid_int = safe_int(tid)
     roster = [p for p in players if p.get("tid") == tid_int and p.get("retiredYear") is None]
-    roster.sort(key=lambda p: (p.get("rosterOrder", 10**9), -safe_int(latest_rating(p, season).get("ovr")), player_name(p)))
+    roster.sort(key=lambda p: (-safe_int(latest_rating(p, season).get("ovr")), player_name(p)))
     selected = roster[:10]
     projected_players: list[dict[str, Any]] = []
     for i, player in enumerate(selected):
@@ -10301,7 +10271,7 @@ def generate_site(
     prev_json_path: Path | None = None,
 ) -> dict[str, int | str]:
     data = json.loads(json_path.read_text(encoding="utf-8"))
-    apply_roster_moves(data)
+    normalize_positions(data)
     season = current_season(data)
     teams = sorted(data.get("teams", []), key=team_sort_key)
     players = active_players(data)

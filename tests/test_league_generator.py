@@ -321,5 +321,50 @@ class TestTeamFinances(unittest.TestCase):
         self.assertEqual(lg.playoff_status(data, 1, 2030), (True, True, False))
 
 
+class TestCanonicalPositions(unittest.TestCase):
+    def _rating(self, pos, **kw):
+        return {"season": 2031, "pos": pos, "pss": 40, "drb": 40, "tp": 40, "fg": 40, **kw}
+
+    def test_canonical_labels_pass_through(self):
+        for pos in ("PG", "SG", "SF", "PF", "C"):
+            self.assertEqual(lg.canonical_pos({"hgt": 78}, self._rating(pos)), pos)
+
+    def test_guard_splits_on_playmaking_vs_scoring(self):
+        pg = self._rating("G", pss=60, drb=60, tp=30, fg=30)
+        sg = self._rating("G", pss=30, drb=30, tp=60, fg=60)
+        self.assertEqual(lg.canonical_pos({"hgt": 74}, pg), "PG")
+        self.assertEqual(lg.canonical_pos({"hgt": 74}, sg), "SG")
+
+    def test_frontcourt_middles_round_by_height(self):
+        self.assertEqual(lg.canonical_pos({"hgt": 78}, self._rating("GF")), "SG")
+        self.assertEqual(lg.canonical_pos({"hgt": 80}, self._rating("GF")), "SF")
+        self.assertEqual(lg.canonical_pos({"hgt": 80}, self._rating("F")), "SF")
+        self.assertEqual(lg.canonical_pos({"hgt": 82}, self._rating("F")), "PF")
+        self.assertEqual(lg.canonical_pos({"hgt": 82}, self._rating("FC")), "PF")
+        self.assertEqual(lg.canonical_pos({"hgt": 84}, self._rating("FC")), "C")
+
+    def test_normalize_rewrites_ratings_and_box_scores_in_place(self):
+        data = {
+            "players": [{"pid": 7, "hgt": 84, "ratings": [self._rating("FC"), self._rating("F", tp=30, fg=30)]}],
+            "games": [{"teams": [{"players": [{"pid": 7, "pos": "GF"}, {"pid": 99, "pos": "SF"}]}]}],
+        }
+        lg.normalize_positions(data)
+        self.assertEqual([r["pos"] for r in data["players"][0]["ratings"]], ["C", "PF"])
+        # box score maps by pid to the player's latest canonical pos; unknown pid untouched
+        box = data["games"][0]["teams"][0]["players"]
+        self.assertEqual(box[0]["pos"], "PF")
+        self.assertEqual(box[1]["pos"], "SF")
+
+    def test_no_middle_labels_survive_on_the_real_export(self):
+        import glob, json
+        matches = glob.glob(os.path.join(_REPO, "league-data", "2031_preseason.json"))
+        if not matches:
+            self.skipTest("2031 preseason export not present")
+        data = json.load(open(matches[0]))
+        lg.normalize_positions(data)
+        seen = {r.get("pos") for p in data["players"] for r in (p.get("ratings") or [])}
+        self.assertTrue(seen.issubset(set(lg.CANONICAL_POS)), seen)
+
+
 if __name__ == "__main__":
     unittest.main()

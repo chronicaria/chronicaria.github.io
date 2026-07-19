@@ -301,6 +301,20 @@
     let xKey = data.defaultX;
     let yKey = data.defaultY;
     let drawn = [];
+    let hoverPt = null;
+
+    // Theme-aware palette, resolved at draw time so light/dark both render true.
+    function chartTheme() {
+      const rootStyle = getComputedStyle(document.documentElement);
+      const cssVar = (name, fallback) => (rootStyle.getPropertyValue(name) || '').trim() || fallback;
+      return {
+        line: cssVar('--line', '#2b313a'),
+        muted: cssVar('--muted', '#939ca7'),
+        text: cssVar('--text', '#e8ecf1'),
+        accent: cssVar('--accent', '#5b9dff'),
+        bg: getComputedStyle(chartCanvas).backgroundColor || '#171b21',
+      };
+    }
 
     // restore state from URL hash: #x=usg&y=ts&pos=G&min=20&labels=1
     const hashParams = new URLSearchParams((location.hash || '').replace(/^#/, ''));
@@ -357,8 +371,14 @@
       return value.toFixed(digits);
     }
 
+    // Dot radius scales gently with minutes: rotation players read larger.
+    function dotRadius(p) {
+      const min = Number.isFinite(p.v.min) ? p.v.min : 24;
+      return 2.8 + 2.1 * Math.min(1, Math.max(0, min / 38));
+    }
+
     function draw() {
-      if (tooltip) tooltip.hidden = true;
+      const theme = chartTheme();
       const dpr = window.devicePixelRatio || 1;
       const cw = chartCanvas.clientWidth;
       const ch = chartCanvas.clientHeight;
@@ -380,10 +400,13 @@
         && (!minGp || (Number.isFinite(p.v.gp) && p.v.gp >= minGp)));
       drawn = [];
       if (!pts.length) {
-        ctx.fillStyle = '#939ca7';
+        if (tooltip) tooltip.hidden = true;
+        hoverPt = null;
+        ctx.fillStyle = theme.muted;
         ctx.fillText('No data for this combination.', 16, 24);
         return;
       }
+      if (hoverPt && pts.indexOf(hoverPt.p) === -1) hoverPt = null;
       let xLo = Math.min(...pts.map((p) => p.v[xKey]));
       let xHi = Math.max(...pts.map((p) => p.v[xKey]));
       let yLo = Math.min(...pts.map((p) => p.v[yKey]));
@@ -392,66 +415,106 @@
       const yPad = (yHi - yLo || 1) * 0.08;
       xLo -= xPad; xHi += xPad; yLo -= yPad; yHi += yPad;
 
-      const m = { left: 48, right: 14, top: 12, bottom: 34 };
+      const m = { left: 52, right: 16, top: 14, bottom: 40 };
       const plotW = cw - m.left - m.right;
       const plotH = ch - m.top - m.bottom;
       const px = (v) => m.left + ((v - xLo) / (xHi - xLo)) * plotW;
       const py = (v) => m.top + plotH - ((v - yLo) / (yHi - yLo)) * plotH;
 
+      // Horizontal gridlines only; the x-axis gets small tick marks instead.
       const xt = niceTicks(xLo, xHi, 8);
       const yt = niceTicks(yLo, yHi, 6);
-      ctx.strokeStyle = 'rgba(255,255,255,.06)';
-      ctx.fillStyle = '#939ca7';
       ctx.lineWidth = 1;
-      xt.ticks.forEach((v) => {
-        const x = px(v);
-        ctx.beginPath(); ctx.moveTo(x, m.top); ctx.lineTo(x, m.top + plotH); ctx.stroke();
-        ctx.textAlign = 'center';
-        ctx.fillText(fmtTick(v, xt.step), x, m.top + plotH + 16);
-      });
+      ctx.strokeStyle = theme.line;
+      ctx.fillStyle = theme.muted;
       yt.ticks.forEach((v) => {
         const y = py(v);
+        ctx.globalAlpha = 0.5;
         ctx.beginPath(); ctx.moveTo(m.left, y); ctx.lineTo(m.left + plotW, y); ctx.stroke();
+        ctx.globalAlpha = 1;
         ctx.textAlign = 'right';
-        ctx.fillText(fmtTick(v, yt.step), m.left - 7, y + 3.5);
+        ctx.fillText(fmtTick(v, yt.step), m.left - 8, y + 3.5);
       });
-      // zero lines
-      ctx.strokeStyle = 'rgba(255,255,255,.22)';
+      xt.ticks.forEach((v) => {
+        const x = px(v);
+        ctx.beginPath(); ctx.moveTo(x, m.top + plotH); ctx.lineTo(x, m.top + plotH + 5); ctx.stroke();
+        ctx.textAlign = 'center';
+        ctx.fillText(fmtTick(v, xt.step), x, m.top + plotH + 17);
+      });
+      // axis baselines
+      ctx.strokeStyle = theme.line;
+      ctx.beginPath();
+      ctx.moveTo(m.left, m.top);
+      ctx.lineTo(m.left, m.top + plotH);
+      ctx.lineTo(m.left + plotW, m.top + plotH);
+      ctx.stroke();
+      // dashed zero lines when the range crosses zero
+      ctx.strokeStyle = theme.muted;
+      ctx.globalAlpha = 0.55;
+      ctx.setLineDash([4, 4]);
       if (xLo < 0 && xHi > 0) { const x = px(0); ctx.beginPath(); ctx.moveTo(x, m.top); ctx.lineTo(x, m.top + plotH); ctx.stroke(); }
       if (yLo < 0 && yHi > 0) { const y = py(0); ctx.beginPath(); ctx.moveTo(m.left, y); ctx.lineTo(m.left + plotW, y); ctx.stroke(); }
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
       // axis labels
-      ctx.fillStyle = '#c6cdd5';
+      ctx.fillStyle = theme.text;
       ctx.textAlign = 'center';
-      ctx.fillText(labels[xKey] || xKey, m.left + plotW / 2, ch - 6);
+      ctx.font = '600 11px \"Helvetica Neue\", Helvetica, Arial, sans-serif';
+      ctx.fillText(labels[xKey] || xKey, m.left + plotW / 2, ch - 8);
       ctx.save();
-      ctx.translate(12, m.top + plotH / 2);
+      ctx.translate(13, m.top + plotH / 2);
       ctx.rotate(-Math.PI / 2);
       ctx.fillText(labels[yKey] || yKey, 0, 0);
       ctx.restore();
+      ctx.font = '11px \"Helvetica Neue\", Helvetica, Arial, sans-serif';
 
       pts.forEach((p) => {
         const x = px(p.v[xKey]);
         const y = py(p.v[yKey]);
+        const r = dotRadius(p);
         ctx.beginPath();
-        ctx.arc(x, y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = colors[p.team] || '#939ca7';
-        ctx.globalAlpha = 0.9;
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = colors[p.team] || theme.muted;
+        ctx.globalAlpha = hoverPt && hoverPt.p !== p ? 0.55 : 0.95;
         ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = 'rgba(0,0,0,.5)';
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = theme.bg;
         ctx.stroke();
         drawn.push({ x, y, p });
       });
 
       // label every visible point (overlap allowed)
-      if (labelsInput && labelsInput.checked && pts.length) {
-        ctx.fillStyle = '#c6cdd5';
+      if (labelsInput && labelsInput.checked) {
+        ctx.fillStyle = theme.muted;
         ctx.textAlign = 'left';
+        ctx.font = '10px \"Helvetica Neue\", Helvetica, Arial, sans-serif';
         pts.forEach((p) => {
-          const lx = px(p.v[xKey]) + 7;
-          const ly = py(p.v[yKey]) + 3;
-          ctx.fillText(p.name.split(' ').slice(-1)[0], lx, ly);
+          if (hoverPt && hoverPt.p === p) return;
+          ctx.fillText(p.name.split(' ').slice(-1)[0], px(p.v[xKey]) + dotRadius(p) + 3.5, py(p.v[yKey]) + 3);
         });
+        ctx.font = '11px \"Helvetica Neue\", Helvetica, Arial, sans-serif';
+      }
+
+      // hovered point: full-strength dot with a halo ring and its name
+      if (hoverPt) {
+        const x = px(hoverPt.p.v[xKey]);
+        const y = py(hoverPt.p.v[yKey]);
+        const r = dotRadius(hoverPt.p);
+        ctx.beginPath();
+        ctx.arc(x, y, r + 1, 0, Math.PI * 2);
+        ctx.fillStyle = colors[hoverPt.p.team] || theme.muted;
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = theme.bg;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(x, y, r + 4.5, 0, Math.PI * 2);
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = theme.text;
+        ctx.globalAlpha = 0.7;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
       }
     }
 
@@ -470,21 +533,30 @@
 
     chartCanvas.addEventListener('mousemove', (event) => {
       const hit = nearest(event);
+      if ((hit && hit.p) !== (hoverPt && hoverPt.p)) {
+        hoverPt = hit;
+        draw();
+      }
       if (!hit) { tooltip.hidden = true; chartCanvas.style.cursor = 'crosshair'; return; }
       chartCanvas.style.cursor = 'pointer';
-      tooltip.innerHTML = '<strong>' + hit.p.name + ' · ' + hit.p.team + '</strong>'
-        + '<span>' + (labels[xKey] || xKey) + ': ' + hit.p.v[xKey] + ' · '
-        + (labels[yKey] || yKey) + ': ' + hit.p.v[yKey] + '</span>';
+      const dotColor = colors[hit.p.team] || '';
+      tooltip.innerHTML = '<strong><span class=\"tip-dot\" style=\"--dot:' + dotColor + '\"></span>'
+        + hit.p.name + ' <span class=\"tip-team\">' + hit.p.team + (hit.p.pos ? ' · ' + hit.p.pos : '') + '</span></strong>'
+        + '<span>' + (labels[xKey] || xKey) + ' <b>' + hit.p.v[xKey] + '</b> · '
+        + (labels[yKey] || yKey) + ' <b>' + hit.p.v[yKey] + '</b></span>';
       tooltip.hidden = false;
       const wrapRect = chartCanvas.parentElement.getBoundingClientRect();
       const rect = chartCanvas.getBoundingClientRect();
-      let left = hit.x + (rect.left - wrapRect.left) + 12;
-      let top = hit.y + (rect.top - wrapRect.top) - 12;
-      if (left + tooltip.offsetWidth > wrapRect.width - 4) left = left - tooltip.offsetWidth - 24;
+      let left = hit.x + (rect.left - wrapRect.left) + 14;
+      let top = hit.y + (rect.top - wrapRect.top) - 14;
+      if (left + tooltip.offsetWidth > wrapRect.width - 4) left = left - tooltip.offsetWidth - 28;
       tooltip.style.left = left + 'px';
       tooltip.style.top = top + 'px';
     });
-    chartCanvas.addEventListener('mouseleave', () => { tooltip.hidden = true; });
+    chartCanvas.addEventListener('mouseleave', () => {
+      tooltip.hidden = true;
+      if (hoverPt) { hoverPt = null; draw(); }
+    });
     chartCanvas.addEventListener('click', (event) => {
       const hit = nearest(event);
       if (hit && hit.p.url) window.location.href = hit.p.url;
@@ -496,9 +568,10 @@
     if (minGpInput) minGpInput.addEventListener('input', () => { syncHash(); draw(); });
     if (labelsInput) labelsInput.addEventListener('change', () => { syncHash(); draw(); });
     window.addEventListener('resize', draw);
+    // repaint when the theme toggle stamps html[data-theme]
+    new MutationObserver(() => draw()).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     draw();
   }
-
 
   // ---------- schedule/h2h column hover ----------
   document.querySelectorAll('.schedule-grid, .h2h-grid').forEach((table) => {
@@ -562,7 +635,7 @@
         html += '<span class="oddsr-tip-row">' +
           '<span class="oddsr-tip-dot" style="background:' + escapeHtml(t.color) + '"></span>' +
           escapeHtml(t.ab) +
-          '<span class="oddsr-tip-val">' + Math.round(t.po) + '%</span></span>';
+          '<span class="oddsr-tip-val">' + t.po.toFixed(1) + '%</span></span>';
       });
       const cx = xs(i);
       hLine.setAttribute('x1', cx);
@@ -1630,11 +1703,11 @@
 (function () {
   // ---------- team pages (W2): standalone module, appended after the core bundle ----------
 
-  // show/hide 0-GP roster rows behind the "show inactive" toggle
+  // 0-GP roster rows show (dimmed) by default; unchecking "show inactive" hides them
   document.querySelectorAll('[data-toggle-inactive]').forEach((input) => {
     const card = input.closest('[data-roster-card]');
     if (!card) return;
-    const apply = () => card.classList.toggle('show-inactive', input.checked);
+    const apply = () => card.classList.toggle('hide-inactive', !input.checked);
     input.addEventListener('change', apply);
     apply();
   });
@@ -2194,6 +2267,35 @@
 (function () {
   'use strict';
 
+  // ---- shared engine team-OVR helper: window.SMPOvr -------------------------
+  // Published before the page guard so BOTH client tools use one port:
+  // trade-extras.js precedes lineup.js in the bundle concat order (build.py).
+  // Faithful JS port of scripts/projections.py team_ovr (regular-season
+  // branch), itself a port of zengm team/ovr.basketball.ts with
+  // numPlayersOnCourt == 5: sort OVRs descending, take the top 10, pad to 10
+  // with 0.0, then
+  //   predictedMOV = -OVR_K + sum_i OVR_A * exp(OVR_B * i) * ovr[i]
+  //   raw = predictedMOV * 50 / 15 + 50, displayed rounded half-up.
+  // team_ovr anchors its scale to scoring margin (raw = MOV * 50/15 + 50), so
+  // ovrToMov is the exact inverse: (raw - 50) * 15 / 50 maps a rating back to
+  // predicted margin, which feeds app-data.sim's logistic win-probability
+  // model — the same curve simulate_league uses (simmodel.sim_client_inputs).
+  // tests/test_tools_pages.py regenerates these constants from projections.py
+  // and asserts this formula matches projections.team_ovr on known groups.
+  const OVR_A = 0.3334;
+  const OVR_B = -0.1609;
+  const OVR_K = 102.98;
+  function teamOvrRaw(ovrs) {
+    const top = ovrs.map(Number).sort((a, b) => b - a).slice(0, 10);
+    while (top.length < 10) top.push(0);
+    let mov = -OVR_K;
+    for (let i = 0; i < 10; i += 1) mov += OVR_A * Math.exp(OVR_B * i) * top[i];
+    return mov * 50 / 15 + 50;
+  }
+  const roundOvr = (raw) => Math.floor(raw + 0.5); // Math.round, like Python's floor(x+.5)
+  const ovrToMov = (raw) => (raw - 50) * 15 / 50;
+  window.SMPOvr = { teamOvrRaw, roundOvr, ovrToMov };
+
   let bootTries = 0;
   function boot() {
     const machine = document.querySelector('[data-app="trade"]');
@@ -2239,6 +2341,12 @@
         rostersByTid[tid].sort((a, b) => (b.salary - a.salary) || a.name.localeCompare(b.name) || (a.pid - b.pid));
       });
       const tax = data.finance.tax_line;
+      // Projection model constants, all read from the payload so client math
+      // agrees with the server sim (simmodel.SIM_HCA / SIM_LOGISTIC_K).
+      const K = data.sim.logistic_k;
+      const HCA = data.sim.hca;
+      const seasonGames = (data.sim && data.sim.season_games) || 45;
+      const wsSeason = data.ws_season || null;
       const fullName = (t) => (t.region ? t.region + ' ' : '') + t.name;
 
       const comboOptions = teamsSorted.map((t) => ({
@@ -2317,9 +2425,9 @@
           const row = document.createElement('label');
           row.className = 'trade-row';
           row.innerHTML = '<input type="checkbox"> <span class="trade-name">' + esc(p.name) + '</span>'
-            + '<span class="muted">' + esc(p.pos) + ' · ' + (p.age === null ? '—' : p.age + 'y') + ' · ' + p.ovr + ' ovr</span>'
-            + '<span class="trade-amt">' + fmtM(p.salary) + '/' + (p.exp === null ? '—' : p.exp) + '</span>'
-            + '<span class="trade-val">' + (p.value === null ? '—' : p.value) + '</span>';
+            + '<span class="muted">' + esc(p.pos) + ' · ' + (p.age === null ? '—' : p.age + 'y') + ' · ' + p.ovr + ' ovr'
+            + (p.ws === null ? '' : ' · ' + p.ws.toFixed(1) + ' WS') + '</span>'
+            + '<span class="trade-amt">' + fmtM(p.salary) + '/' + (p.exp === null ? '—' : p.exp) + '</span>';
           const box = row.querySelector('input');
           box.checked = side.picked.has(p.pid);
           box.setAttribute('aria-label', 'Trade ' + p.name);
@@ -2335,7 +2443,7 @@
           shown += 1;
           const row = document.createElement('label');
           row.className = 'trade-row trade-pick';
-          row.innerHTML = '<input type="checkbox"> <span class="trade-name">' + esc(pick.label) + '</span><span class="muted">draft pick</span><span class="trade-amt"></span><span class="trade-val">—</span>';
+          row.innerHTML = '<input type="checkbox"> <span class="trade-name">' + esc(pick.label) + '</span><span class="muted">draft pick</span><span class="trade-amt"></span>';
           const box = row.querySelector('input');
           box.checked = side.pickedPicks.has(pick.id);
           box.setAttribute('aria-label', 'Trade ' + pick.label + ' draft pick');
@@ -2356,8 +2464,92 @@
         const players = (rostersByTid[side.tid] || []).filter((p) => side.picked.has(p.pid));
         const picks = (picksByTid[String(side.tid)] || []).filter((pick) => side.pickedPicks.has(pick.id));
         const salary = players.reduce((s, p) => s + p.salary, 0);
-        const value = players.reduce((s, p) => s + (p.value || 0), 0);
-        return { team, players, picks, salary, value };
+        const ws = players.reduce((s, p) => s + (p.ws || 0), 0);
+        return { team, players, picks, salary, ws };
+      }
+
+      // ---- post-trade roster projection ------------------------------------
+      // Each roster is graded by the engine team-OVR formula (SMPOvr, shared
+      // with the Lineup Lab); its MOV inverse feeds the sim's logistic model
+      // against the other nine rosters, home/road averaged, over the full
+      // regular season. Draft picks carry no OVR/WS, so they don't move the
+      // numbers — the deal note says so whenever picks are in the package.
+      function rosterRawOvr(roster) {
+        return teamOvrRaw(roster.map((p) => p.ovr));
+      }
+
+      function projectedWins(myMov, oppMovs) {
+        if (!oppMovs.length) return null;
+        let sum = 0;
+        oppMovs.forEach((theirs) => {
+          const diff = myMov - theirs;
+          const home = 1 / (1 + Math.exp(-(diff + HCA) * K));
+          const away = 1 / (1 + Math.exp(-(diff - HCA) * K));
+          sum += (home + away) / 2;
+        });
+        return seasonGames * (sum / oppMovs.length);
+      }
+
+      function leagueProjection(overrides) {
+        // {tid: {raw, mov, wins}} for every team; `overrides` swaps in
+        // post-trade rosters for the two teams in the deal.
+        const raws = {};
+        data.teams.forEach((t) => {
+          const roster = overrides && overrides[t.tid] ? overrides[t.tid] : (rostersByTid[t.tid] || []);
+          raws[t.tid] = rosterRawOvr(roster);
+        });
+        const out = {};
+        data.teams.forEach((t) => {
+          const mine = ovrToMov(raws[t.tid]);
+          const opp = data.teams.filter((o) => o.tid !== t.tid).map((o) => ovrToMov(raws[o.tid]));
+          out[t.tid] = { raw: raws[t.tid], wins: projectedWins(mine, opp) };
+        });
+        return out;
+      }
+
+      const fmtDelta = (n, dp) => {
+        const v = Number(n.toFixed(dp));
+        if (v === 0) return '±' + (0).toFixed(dp);
+        return (v > 0 ? '+' : '−') + Math.abs(v).toFixed(dp);
+      };
+      const deltaCls = (n, dp) => {
+        const v = Number(n.toFixed(dp));
+        return v > 0 ? ' tproj-delta--up' : (v < 0 ? ' tproj-delta--down' : '');
+      };
+      const record = (wins) => Math.round(wins) + '–' + (seasonGames - Math.round(wins));
+
+      function projCard(mine, other, before, after) {
+        const tid = mine.team.tid;
+        const ovr0 = roundOvr(before[tid].raw);
+        const ovr1 = roundOvr(after[tid].raw);
+        const w0 = before[tid].wins;
+        const w1 = after[tid].wins;
+        const wsIn = other.ws;   // players arriving came from the other side
+        const wsOut = mine.ws;
+        const wsNet = wsIn - wsOut;
+        const rowHtml = (label, value, delta, title) =>
+          '<div class="tproj-row"' + (title ? ' title="' + esc(title) + '"' : '') + '>'
+          + '<span class="tproj-label">' + label + '</span>'
+          + '<span class="tproj-vals">' + value + '</span>'
+          + delta + '</div>';
+        const chip = (n, dp, suffix) =>
+          '<span class="tproj-delta' + deltaCls(n, dp) + '">' + fmtDelta(n, dp) + (suffix || '') + '</span>';
+        let html = '<div class="tproj-side">'
+          + '<div class="tproj-head"><strong>' + esc(mine.team.abbrev) + '</strong>'
+          + '<span class="muted">' + esc(fullName(mine.team)) + '</span></div>';
+        html += rowHtml('Team OVR', ovr0 + ' <span class="tproj-arrow">→</span> ' + ovr1,
+          chip(ovr1 - ovr0, 0), 'Engine team overall for the top ten of the roster, before → after the trade');
+        html += rowHtml('Proj. record', record(w0) + ' <span class="tproj-arrow">→</span> ' + record(w1),
+          chip(w1 - w0, 1, ' w'),
+          'Projected ' + seasonGames + '-game record vs the other nine rosters, home/road averaged, before → after');
+        html += rowHtml('Win shares', 'in ' + wsIn.toFixed(1) + ' · out ' + wsOut.toFixed(1),
+          chip(wsNet, 1),
+          (wsSeason ? wsSeason + ' regular-season' : 'Last completed season’s') + ' Win Shares arriving vs leaving');
+        html += '<p class="tproj-verdict">OVR ' + fmtDelta(ovr1 - ovr0, 0)
+          + ' · projected wins ' + fmtDelta(w1 - w0, 1)
+          + ' · net WS ' + fmtDelta(wsNet, 1) + '</p>';
+        html += '</div>';
+        return html;
       }
 
       function taxReadout(team, salaryOut, salaryIn) {
@@ -2386,22 +2578,27 @@
           summary.innerHTML = '<p class="muted">Pick two different teams.</p>';
           return;
         }
-        const diff = a.value - b.value;
-        let verdict = 'Even value trade.';
-        if (Math.abs(diff) > 1) {
-          const winner = diff > 0 ? b.team.abbrev : a.team.abbrev;
-          verdict = winner + ' wins this trade by ' + Math.abs(Math.round(diff * 10) / 10) + ' value' + (a.picks.length || b.picks.length ? ' (draft picks not valued)' : '');
-        }
+        const outA = new Set(a.players.map((p) => p.pid));
+        const outB = new Set(b.players.map((p) => p.pid));
+        const overrides = {};
+        overrides[a.team.tid] = (rostersByTid[a.team.tid] || []).filter((p) => !outA.has(p.pid)).concat(b.players);
+        overrides[b.team.tid] = (rostersByTid[b.team.tid] || []).filter((p) => !outB.has(p.pid)).concat(a.players);
+        const before = leagueProjection(null);
+        const after = leagueProjection(overrides);
+
         const lines = [];
         const describe = (from, to) => {
           const bits = from.players.map((p) => esc(p.name)).concat(from.picks.map((pick) => esc(pick.label)));
           return '<p><strong>' + esc(from.team.abbrev) + ' → ' + esc(to.team.abbrev) + ':</strong> ' + (bits.join(', ') || '<span class="muted">nothing</span>')
-            + ' <span class="muted">(salary ' + fmtM(from.salary) + ', value ' + (Math.round(from.value * 10) / 10) + ')</span></p>';
+            + ' <span class="muted">(salary ' + fmtM(from.salary) + ')</span></p>';
         };
         lines.push(describe(a, b));
         lines.push(describe(b, a));
+        lines.push('<div class="tproj">' + projCard(a, b, before, after) + projCard(b, a, before, after) + '</div>');
         lines.push('<div class="tfin">' + taxReadout(a.team, a.salary, b.salary) + taxReadout(b.team, b.salary, a.salary) + '</div>');
-        lines.push('<p class="trade-verdict">' + verdict + '</p>');
+        if (a.picks.length || b.picks.length) {
+          lines.push('<p class="muted tproj-note">Draft picks change hands but carry no OVR or Win Shares, so they don’t move the projections.</p>');
+        }
         summary.innerHTML = lines.join('');
       }
 
@@ -2419,56 +2616,33 @@
 (function () {
   const app = document.querySelector('[data-lineup-app]');
   if (!app) return;
-  const root = document.body.dataset.root || '';
+  // Shared engine team-OVR port (constants + formula + MOV inverse): published
+  // by trade-extras.js, which precedes this file in the bundle concat order.
+  const O = window.SMPOvr;
+  if (!O) return;
 
   const escapeHtml = (value) => String(value).replace(/[&<>"]/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-  // Faithful JS port of scripts/projections.py team_ovr (regular-season branch),
-  // itself a port of zengm team/ovr.basketball.ts with numPlayersOnCourt == 5:
-  // sort OVRs descending, take the top 10, pad to 10 with 0.0, then
-  //   predictedMOV = -OVR_K + sum_i OVR_A * exp(OVR_B * i) * ovr[i]
-  //   raw = predictedMOV * 50 / 15 + 50, displayed rounded half-up.
-  // tests/test_tools_pages.py regenerates these constants from projections.py
-  // and asserts this formula matches projections.team_ovr on known groups.
-  const OVR_A = 0.3334;
-  const OVR_B = -0.1609;
-  const OVR_K = 102.98;
-  function teamOvrRaw(ovrs) {
-    const top = ovrs.map(Number).sort((a, b) => b - a).slice(0, 10);
-    while (top.length < 10) top.push(0);
-    let mov = -OVR_K;
-    for (let i = 0; i < 10; i += 1) mov += OVR_A * Math.exp(OVR_B * i) * top[i];
-    return mov * 50 / 15 + 50;
-  }
-  const roundOvr = (raw) => Math.floor(raw + 0.5); // Math.round, like Python's floor(x+.5)
   // ADAPTATION for a hand-picked group: team_ovr rates a full roster, so a bare
   // five would drag five literal 0.0 bench slots into the weighting and every
-  // lineup would grade absurdly negative. Instead the missing roster spots are
-  // filled with app-data.sim.bench_ovrs — the league-average 6th..10th-best OVR
-  // across the ten current rosters (5 floats, sorted desc) — i.e. your five
-  // plus a league-average bench. The weighting itself is untouched:
-  // lineupOvrRaw(five) is exactly projections.team_ovr(five + bench_ovrs).
-  // Safety net for a stale app-data.json without bench_ovrs: pad with
-  // simmodel.REPLACEMENT_OVR (40.0), the repo's "freely-available filler"
-  // constant, which tests assert against projections.team_ovr.
+  // lineup would grade absurdly negative. The missing roster spots are filled
+  // with app-data.sim.bench_ovrs — the league-average 6th..10th-best OVR
+  // across the ten current rosters (5 floats, sorted desc):
+  //   5-man mode:  your five + the whole league-average bench;
+  //   10-man mode: your bench picks fill slots 6-10, and each EMPTY bench slot
+  //                falls back to that slot's league-average value.
+  // The weighting itself is untouched — the effective ten feed
+  // projections.team_ovr exactly (via SMPOvr.teamOvrRaw). Safety net for a
+  // stale app-data.json without bench_ovrs: pad with simmodel.REPLACEMENT_OVR
+  // (40.0), the repo's "freely-available filler" constant, which tests assert
+  // against projections.team_ovr.
   const REPLACEMENT_OVR = 40.0;
   let benchOvrs = null; // payload.sim.bench_ovrs when present, else null
   function benchAt(i) {
     return benchOvrs && Number.isFinite(benchOvrs[i]) ? benchOvrs[i] : REPLACEMENT_OVR;
   }
-  function lineupOvrRaw(ovrs) {
-    const padded = ovrs.slice(0, 10);
-    for (let i = 0; padded.length < 10; i += 1) padded.push(benchAt(i));
-    return teamOvrRaw(padded);
-  }
-  // team_ovr anchors its scale to scoring margin (raw = MOV * 50/15 + 50), so the
-  // inverse maps a rating back to predicted margin. A custom five has no MOV
-  // history, so BOTH matchup sides are rated this same way (five vs top-ten
-  // roster) and the margin gap feeds the payload's logistic model — the exact
-  // win-probability curve simulate_league uses (see simmodel.sim_client_inputs).
-  const ovrToMov = (raw) => (raw - 50) * 15 / 50;
 
   // YIQ text-on-color pick (presentational only; server pages get the audited
   // on_primary from identity.py — app-data carries primary/secondary only).
@@ -2482,12 +2656,17 @@
   }
 
   const fmtMoney = (thousands) => '$' + (thousands / 1000).toFixed(1) + 'M';
-  const fmtPct = (p) => (p * 100).toFixed(1) + '%';
+  const fmtPct = (p) => (p * 100).toFixed(1) + '%'; // one decimal, everywhere
 
-  const slots = [null, null, null, null, null]; // pid or null per slot
+  let mode = 5; // 5 = your five + league-average bench; 10 = you build the bench
+  const slots = [null, null, null, null, null, null, null, null, null, null];
   const inputs = Array.from(app.querySelectorAll('[data-ll-input]'));
   const summaryEl = app.querySelector('[data-ll-summary]');
   const matchupsEl = app.querySelector('[data-ll-matchups]');
+  const benchWrap = app.querySelector('[data-ll-bench]');
+  const headingEl = app.querySelector('[data-ll-heading]');
+  const benchNoteEl = document.querySelector('[data-ll-benchnote]');
+  const modeInputs = Array.from(app.querySelectorAll('[data-ll-mode]'));
 
   let payload = null;
   let byPid = {};
@@ -2511,6 +2690,56 @@
     const team = byTid[p.tid];
     const t = team ? team.abbrev : (p.tid === -2 ? 'Draft' : 'FA');
     return t + ' · ' + p.pos + ' · ' + p.ovr + ' ovr';
+  }
+
+  // --- lineup size mode ------------------------------------------------------
+  function setMode(next, silent) {
+    mode = next === 10 ? 10 : 5;
+    if (mode === 5) {
+      // 5-man mode has no personal bench: drop bench picks so the formula,
+      // the salary bill and the shareable URL all describe what's visible.
+      for (let i = 5; i < 10; i += 1) {
+        slots[i] = null;
+        if (inputs[i]) inputs[i].value = '';
+      }
+    }
+    if (benchWrap) benchWrap.hidden = mode !== 10;
+    modeInputs.forEach((r) => { r.checked = Number(r.value) === mode; });
+    if (headingEl) headingEl.textContent = mode === 10 ? 'Your ten' : 'Your five';
+    if (benchNoteEl) {
+      benchNoteEl.textContent = mode === 10
+        ? 'Your ten (league-average fill for empty bench slots) vs each full roster, scored by the home page’s win-probability model.'
+        : 'Your five + a league-average bench vs each full roster, scored by the home page’s win-probability model.';
+    }
+    if (!silent) {
+      syncHash();
+      render();
+    }
+  }
+  modeInputs.forEach((r) => {
+    r.addEventListener('change', () => { if (r.checked) setMode(Number(r.value)); });
+  });
+
+  // The ten OVRs the engine formula weighs, honouring the mode: picked players
+  // first, then league-average bench values for whatever is missing (per-slot
+  // in 10-man mode, the whole bench in 5-man mode).
+  function effectiveOvrs() {
+    const ovrs = [];
+    for (let i = 0; i < 5; i += 1) {
+      if (slots[i] !== null && byPid[slots[i]]) ovrs.push(byPid[slots[i]].ovr);
+    }
+    if (mode === 10) {
+      for (let j = 0; j < 5; j += 1) {
+        const pid = slots[5 + j];
+        ovrs.push(pid !== null && byPid[pid] ? byPid[pid].ovr : benchAt(j));
+      }
+    } else {
+      for (let j = 0; j < 5; j += 1) ovrs.push(benchAt(j));
+    }
+    // empty starter slots: league-average filler so a partial lineup still grades
+    let j = 0;
+    while (ovrs.length < 10) ovrs.push(benchAt(j++));
+    return ovrs;
   }
 
   // --- filterable combobox per slot (ARIA pattern modeled on search.js) ------
@@ -2616,16 +2845,33 @@
     }
   }
 
-  // --- shareable state: pids comma-joined in the hash (slot order kept) ------
+  // --- shareable state: mode + pids in the hash ------------------------------
+  // 5-man mode keeps the legacy "#pid,pid,…" format (old links stay valid);
+  // 10-man mode is "#10:" + the ten slots positionally, empty slots as empty
+  // strings ("#10:12,,34" = starters 1+3 picked), trailing blanks trimmed.
   function syncHash() {
-    const pids = slots.filter((pid) => pid !== null);
+    if (mode === 10) {
+      const parts = slots.map((pid) => (pid === null ? '' : String(pid)));
+      while (parts.length && parts[parts.length - 1] === '') parts.pop();
+      history.replaceState(null, '', '#10:' + parts.join(','));
+      return;
+    }
+    const pids = slots.slice(0, 5).filter((pid) => pid !== null);
     history.replaceState(null, '', pids.length ? '#' + pids.join(',') : location.pathname + location.search);
   }
 
   function readHash() {
-    const parts = (location.hash || '').replace(/^#/, '').split(',').filter(Boolean);
-    parts.slice(0, 5).forEach((raw, i) => {
-      const pid = Number(raw);
+    const raw = (location.hash || '').replace(/^#/, '');
+    if (raw.slice(0, 3) === '10:') {
+      setMode(10, true);
+      raw.slice(3).split(',').slice(0, 10).forEach((part, i) => {
+        const pid = Number(part);
+        if (part !== '' && byPid[pid]) slots[i] = pid;
+      });
+      return;
+    }
+    raw.split(',').filter(Boolean).slice(0, 5).forEach((part, i) => {
+      const pid = Number(part);
       if (byPid[pid]) slots[i] = pid;
     });
   }
@@ -2637,7 +2883,9 @@
       const clearBtn = app.querySelector('[data-ll-clear][data-slot="' + i + '"]');
       const p = pid !== null ? byPid[pid] : null;
       if (!p) {
-        pickEl.innerHTML = '<span class="muted">Empty slot</span>';
+        pickEl.innerHTML = i >= 5
+          ? '<span class="muted">League-average fill</span>'
+          : '<span class="muted">Empty slot</span>';
         if (clearBtn) clearBtn.hidden = true;
         return;
       }
@@ -2650,9 +2898,10 @@
   }
 
   function renderSummary(picked, matchupRows) {
+    const starters = slots.slice(0, 5).filter((pid) => pid !== null).length;
+    const benchPicked = mode === 10 ? slots.slice(5).filter((pid) => pid !== null).length : 0;
     const count = picked.length;
-    const ovrs = picked.map((p) => p.ovr);
-    const ovr = count ? roundOvr(lineupOvrRaw(ovrs)) : null;
+    const ovr = count ? O.roundOvr(O.teamOvrRaw(effectiveOvrs())) : null;
     const salary = picked.reduce((sum, p) => sum + (p.salary || 0), 0);
     const taxLine = payload.finance.tax_line;
     const overTax = salary > taxLine;
@@ -2665,9 +2914,16 @@
       '<div class="ll-tile' + (cls ? ' ' + cls : '') + '"><span class="ll-tile-label">' + label + '</span>'
       + '<strong>' + value + '</strong><span class="muted">' + sub + '</span></div>';
     const benchLabel = benchOvrs ? 'a league-average bench' : 'a replacement-level bench';
+    let ovrSub;
+    if (mode === 10) {
+      ovrSub = (starters === 5 && benchPicked === 5)
+        ? 'your ten'
+        : (starters + benchPicked) + ' picked · league-average fill for the rest';
+    } else {
+      ovrSub = (starters === 5 ? 'your five' : starters + ' of 5 picked') + ' + ' + benchLabel;
+    }
     summaryEl.innerHTML = '<div class="ll-tiles">'
-      + tile('Lineup OVR', ovr === null ? '—' : String(ovr),
-             (count === 5 ? 'your five' : count + ' of 5 picked') + ' + ' + benchLabel, '')
+      + tile('Lineup OVR', ovr === null ? '—' : String(ovr), ovrSub, '')
       + tile('Total salary', fmtMoney(salary),
              fmtMoney(gap) + (overTax ? ' over' : ' under') + ' the ' + fmtMoney(taxLine) + ' tax line',
              overTax ? 'll-over-tax' : '')
@@ -2676,18 +2932,20 @@
       + '</div>';
   }
 
-  function matchupData(picked) {
-    if (picked.length < 5 || !payload) return [];
+  function matchupData() {
+    // matchups need the full first five; the bench may stay league-average
+    const startersFull = slots.slice(0, 5).every((pid) => pid !== null);
+    if (!startersFull || !payload) return [];
     const k = payload.sim.logistic_k;
     const hca = payload.sim.hca;
-    const mine = ovrToMov(lineupOvrRaw(picked.map((p) => p.ovr)));
+    const mine = O.ovrToMov(O.teamOvrRaw(effectiveOvrs()));
     return payload.teams.map((team) => {
       const roster = payload.players.filter((p) => p.tid === team.tid);
-      const raw = teamOvrRaw(roster.map((p) => p.ovr));
-      const diff = mine - ovrToMov(raw);
+      const raw = O.teamOvrRaw(roster.map((p) => p.ovr));
+      const diff = mine - O.ovrToMov(raw);
       return {
         team: team,
-        ovr: roundOvr(raw),
+        ovr: O.roundOvr(raw),
         home: 1 / (1 + Math.exp(-(diff + hca) * k)),
         away: 1 / (1 + Math.exp(-(diff - hca) * k)),
       };
@@ -2720,12 +2978,12 @@
     if (!payload) return;
     renderPicks();
     const picked = slots.filter((pid) => pid !== null).map((pid) => byPid[pid]);
-    const rows = matchupData(picked);
+    const rows = matchupData();
     renderSummary(picked, rows);
     renderMatchups(rows);
   }
 
-  fetch(root + 'assets/app-data.json')
+  fetch((document.body.dataset.root || '') + 'assets/app-data.json')
     .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then((data) => {
       payload = data;

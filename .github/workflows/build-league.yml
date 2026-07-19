@@ -42,6 +42,8 @@ jobs:
                   data = json.load(open(p))
               except Exception:
                   continue
+              if not isinstance(data, dict):
+                  continue  # e.g. odds_history.json is a JSON list, not an export
               ga = data.get("gameAttributes", {})
               if isinstance(ga, list):
                   ga = {x["key"]: x["value"] for x in ga if isinstance(x, dict) and "key" in x}

@@ -78,11 +78,16 @@ from ..finance import (
     FIN_FINALS,
     FIN_PER_WIN,
     FIN_PLAYOFF,
-    FIN_SHARE,
     FIN_SOFT_CAP,
     fmt_money_pm,
     team_finances_table,
 )
+
+
+def _fin_mil(amount: float) -> str:
+    """Exact short money label for a FIN_* constant ($12.8M, $15M) — fmt_money
+    renders 12800 as "$12.80M", which reads wrong in rules copy."""
+    return f"${amount / 1000:g}M"
 
 
 # ---------------------------------------------------------------------------
@@ -216,7 +221,7 @@ def team_vitals_html(team: dict[str, Any], season: int) -> str:
     owner_total = sum(safe_float(owner.get(k)) for k in ("wins", "playoffs", "money"))
     tiles = []
     if math.isfinite(hype):
-        tiles.append(("Hype", f"{hype * 100:.0f}%"))
+        tiles.append(("Hype", f"{hype * 100:.1f}%"))
     if att and gp_home:
         tiles.append(("Avg attendance", f"{att / gp_home:,.0f}"))
     if math.isfinite(cash):
@@ -445,7 +450,9 @@ def _depth_stat_line(player: dict[str, Any], season: int, start_season: int) -> 
 
 def depth_chart_card(roster: list[dict[str, Any]], season: int, start_season: int = 0) -> str:
     """Depth chart as card rows: Starters / 2nd String / 3rd String (deeper rows
-    only when a position runs that deep), five cards per row (PG–C)."""
+    only when a position runs that deep), five cards per row (PG–C). Each card
+    is horizontal: portrait on the left, name/jersey/OVR and the per-game
+    stat line stacked on the right."""
     buckets = _position_buckets(roster, season)
     n_rows = max(3, max((len(buckets[slot]) for slot in DEPTH_SLOTS), default=0))
     rows_html = []
@@ -455,8 +462,10 @@ def depth_chart_card(roster: list[dict[str, Any]], season: int, start_season: in
             fits = buckets[slot]
             if i >= len(fits):
                 cards.append(
-                    f'<div class="depth-card depth-card--vacant"><span class="depth-pos">{slot}</span>'
-                    '<span class="depth-vacant-label">Vacant</span></div>'
+                    f'<div class="depth-card depth-card--vacant">'
+                    '<span class="depth-portrait-wrap depth-portrait--vacant" aria-hidden="true"></span>'
+                    f'<span class="depth-main"><span class="depth-card-top"><span class="depth-pos">{slot}</span></span>'
+                    '<span class="depth-vacant-label">Vacant</span></span></div>'
                 )
                 continue
             p = fits[i]
@@ -465,12 +474,13 @@ def depth_chart_card(roster: list[dict[str, Any]], season: int, start_season: in
             jersey_bit = f'<span class="depth-num">#{esc(jersey)}</span>' if jersey not in (None, "") else ""
             cards.append(
                 f'<a class="depth-card" href="{player_url(p, "../")}">'
+                f'<span class="depth-portrait-wrap">{_roundel(p, "depth-portrait", "../")}</span>'
+                '<span class="depth-main">'
                 f'<span class="depth-card-top"><span class="depth-pos">{slot}</span>'
                 f'<span class="depth-ovr" title="Overall rating">{esc(rating.get("ovr", "—"))}</span></span>'
-                f'<span class="depth-portrait-wrap">{_roundel(p, "depth-portrait", "../")}</span>'
                 f'<span class="depth-id"><span class="depth-name">{esc(player_name(p))}</span>{_injury_cross(p)}{jersey_bit}</span>'
                 f"{_depth_stat_line(p, season, start_season)}"
-                "</a>"
+                "</span></a>"
             )
         rows_html.append(
             f'<div class="depth-row"><h3 class="depth-row-label">{_depth_row_label(i)}</h3>'
@@ -643,7 +653,7 @@ def scoring_share_card(team: dict[str, Any], roster: list[dict[str, Any]], seaso
                 f'<div class="share-seg" style="width:{share:.2f}%;background:{row["color"]};color:{_on_hex(row["color"])}" '
                 f'title="{esc(row["name"])} — {share:.1f}% of team {label} ({fmt_number(row[key], 0)})">{label_html}</div>'
             )
-        top3 = " · ".join(f'{r["name"]} {100.0 * r[key] / total:.0f}%' for r in ordered[:3])
+        top3 = " · ".join(f'{r["name"]} {100.0 * r[key] / total:.1f}%' for r in ordered[:3])
         first = not buttons
         buttons.append(
             f'<button type="button" data-share-metric="{key}" class="{"active" if first else ""}" '
@@ -861,7 +871,7 @@ def team_quarter_profile(team: dict[str, Any], data: dict[str, Any], season: int
             att = zone_totals[att_key]
             mix = 100 * att / total_fga
             pct = made_pct(zone_totals[made_key], att)
-            mix_cells.append(td(fmt_number(mix, 0) + "%", sort=mix))
+            mix_cells.append(td(fmt_number(mix, 1) + "%", sort=mix))
             pct_cells.append(td(fmt_pct(pct, 1), sort=pct))
         shot_rows = (
             '<tr>' + td("Shot mix", cls="name-cell") + "".join(mix_cells) + '</tr>'
@@ -976,19 +986,6 @@ def _round_name(round_index_1based: int, total_rounds: int) -> str:
     return f"Round {round_index_1based}"
 
 
-def _final_team_tid(player: dict[str, Any]) -> int | None:
-    """The last team a player suited up for (his final regular-season stat row)."""
-    rows = [
-        s for s in player.get("stats") or []
-        if isinstance(s, dict) and not s.get("playoffs")
-        and isinstance(s.get("season"), int) and safe_int(s.get("tid"), -9) >= 0
-    ]
-    if not rows:
-        return None
-    rows.sort(key=lambda s: s["season"])  # stable: later team in a season stays last
-    return safe_int(rows[-1].get("tid"))
-
-
 def franchise_seasons(team: dict[str, Any], data: dict[str, Any], teams: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """One summary row per completed (or in-progress) season the franchise has
     actually played: record, league finish, playoff result. Data-driven off the
@@ -1032,50 +1029,9 @@ def franchise_seasons(team: dict[str, Any], data: dict[str, Any], teams: list[di
     return out
 
 
-_PIN_KINDS = {
-    "trade": ("◆", "arc-pin-trade"),
-    "retire": ("●", "arc-pin-retire"),
-    "join": ("★", "arc-pin-join"),
-}
-
-
-def team_event_pins(team: dict[str, Any], data: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]]) -> dict[int, list[dict[str, str]]]:
-    """Season -> notable franchise events for the arc: trades the team made,
-    joining the league (expansion), and retirements of players who finished
-    their careers with the team. Labels are plain text for tooltips."""
-    tid = safe_int(team.get("tid"))
-    players_by_pid = {
-        safe_int(p.get("pid"), -1): p
-        for p in data.get("players") or [] if isinstance(p, dict) and p.get("pid") is not None
-    }
-    pins: dict[int, list[dict[str, str]]] = defaultdict(list)
-    for event in data.get("events") or []:
-        if not isinstance(event, dict):
-            continue
-        etype = event.get("type")
-        s = safe_int(event.get("season"), -1)
-        if s < 0:
-            continue
-        tids = [safe_int(t, -99) for t in (event.get("tids") or [])]
-        if etype == "trade" and tid in tids:
-            others = [t for t in tids if t != tid]
-            other = team_abbrev_for_tid(others[0], teams_by_tid) if others else "another team"
-            n = len(event.get("pids") or [])
-            suffix = f" · {n} player{'' if n == 1 else 's'} moved" if n else ""
-            pins[s].append({"kind": "trade", "label": f"Trade with {other}{suffix}"})
-        elif etype == "teamExpansion" and tid in tids:
-            pins[s].append({"kind": "join", "label": "Joined the league as an expansion team"})
-        elif etype == "retired":
-            for pid in event.get("pids") or []:
-                player = players_by_pid.get(safe_int(pid, -1))
-                if player is not None and _final_team_tid(player) == tid:
-                    pins[s].append({"kind": "retire", "label": f"{player_name(player)} retired"})
-    return dict(pins)
-
-
 def franchise_arc_card(team: dict[str, Any], data: dict[str, Any], teams: list[dict[str, Any]], teams_by_tid: dict[int, dict[str, Any]]) -> str:
     """C26: the W/L ribbon — wins up, losses down, playoff exits and title flags
-    along the top, event pins along the bottom."""
+    along the top."""
     rows = franchise_seasons(team, data, teams)
     if not rows:
         return f"""
@@ -1083,17 +1039,6 @@ def franchise_arc_card(team: dict[str, Any], data: dict[str, Any], teams: list[d
       <div class="section-title-row"><h2>Franchise Arc</h2></div>
       <p class="empty-state">No completed seasons yet — the arc starts once real games are played.</p>
     </section>"""
-    pins_by_season_raw = team_event_pins(team, data, teams_by_tid)
-    # Snap pins from seasons outside the played range (e.g. an expansion-draft
-    # event the offseason before the first game) to the nearest shown column,
-    # keeping the true year in the tooltip.
-    seasons_shown = [r["season"] for r in rows]
-    pins_by_season: dict[int, list[dict[str, str]]] = defaultdict(list)
-    for s, plist in sorted(pins_by_season_raw.items()):
-        target = min(seasons_shown, key=lambda shown: (abs(shown - s), shown))
-        for pin in plist:
-            label = pin["label"] if target == s else f'{s}: {pin["label"]}'
-            pins_by_season[target].append({**pin, "label": label})
     n = len(rows)
     max_wl = max(max(r["won"], r["lost"]) for r in rows) or 1
 
@@ -1102,8 +1047,7 @@ def franchise_arc_card(team: dict[str, Any], data: dict[str, Any], teams: list[d
     marker_y = 16.0
     win_h_max, loss_h_max = 82.0, 58.0
     axis_y = 34.0 + win_h_max
-    pin_y = axis_y + loss_h_max + 26.0
-    height = pin_y + 34.0
+    height = axis_y + loss_h_max + 44.0
     width = ml + col_w * n + mr
     bar_w = min(36.0, col_w * 0.46)
 
@@ -1134,36 +1078,18 @@ def franchise_arc_card(team: dict[str, Any], data: dict[str, Any], teams: list[d
         elif r["kind"] == "live":
             parts.append(f'<text x="{cx:.1f}" y="{marker_y:.1f}" class="arc-marker" text-anchor="middle">Live</text>')
         parts.append(f'<text x="{cx:.1f}" y="{height - 6:.1f}" class="chart-tick" text-anchor="middle">{r["season"]}</text>')
-        # Event pins.
-        pins = pins_by_season.get(r["season"]) or []
-        shown = pins[:3]
-        extra = pins[3:]
-        px = cx - (len(shown) - 1) * 7.0 + (0 if not extra else -4.0)
-        for pi, pin in enumerate(shown):
-            glyph, cls = _PIN_KINDS.get(pin["kind"], ("●", "arc-pin-retire"))
-            parts.append(
-                f'<text x="{px + pi * 14.0:.1f}" y="{pin_y:.1f}" class="arc-pin {cls}" text-anchor="middle">{glyph}'
-                f"<title>{esc(pin['label'])}</title></text>"
-            )
-        if extra:
-            combined = " · ".join(p["label"] for p in extra)
-            parts.append(
-                f'<text x="{px + len(shown) * 14.0:.1f}" y="{pin_y:.1f}" class="arc-pin arc-pin-more" text-anchor="middle">+{len(extra)}'
-                f"<title>{esc(combined)}</title></text>"
-            )
         parts.append("</g>")
 
     titles = sum(1 for r in rows if r["kind"] == "champ")
     sub = f"{rows[0]['season']}–{rows[-1]['season']} · {titles} championship{'' if titles == 1 else 's'}"
     return f"""
     <section class="card arc-card">
-      <div class="section-title-row"><h2>Franchise Arc</h2><span class="muted small-copy">{esc(sub)} · hover a column or pin for detail</span></div>
+      <div class="section-title-row"><h2>Franchise Arc</h2><span class="muted small-copy">{esc(sub)} · hover a column for detail</span></div>
       <div class="chart-wrap arc-wrap">
         <svg viewBox="0 0 {width:.0f} {height:.0f}" class="arc-chart" role="img" aria-label="Season-by-season wins and losses for {esc(team_full_name(team))}">
           {''.join(parts)}
         </svg>
       </div>
-      <p class="muted small-copy arc-legend"><span class="arc-pin-trade">◆</span> trade · <span class="arc-pin-retire">●</span> retirement · <span class="arc-pin-join">★</span> expansion</p>
     </section>"""
 
 
@@ -1203,7 +1129,7 @@ def hero_finance_chip(tfin: dict[str, Any] | None, year: int) -> str:
     sc = "delta-up" if surplus >= 0 else "delta-down"
     return f"""
     <div class="hero-finance">
-      <div class="hero-fin-row" title="Projected net revenue (league share + win payouts + playoff-bonus EV + adjustments − tax + tax share) — the whole {year} budget."><span>{year} budget</span><strong>{fmt_money(budget)}</strong></div>
+      <div class="hero-fin-row" title="Projected net revenue (win payouts + playoff-bonus EV + adjustments − tax + tax share) — the whole {year} budget."><span>{year} budget</span><strong>{fmt_money(budget)}</strong></div>
       <div class="hero-fin-row" title="Budget minus committed {year} payroll (roster, dead money, retained salary). Negative = must shed salary."><span>Surplus vs committed</span><strong class="{sc}">{fmt_money_pm(surplus)}</strong></div>
     </div>"""
 
@@ -1284,45 +1210,50 @@ def team_banner_history(data: dict[str, Any], tid: int) -> list[dict[str, Any]]:
     return out
 
 
+_BANNER_FONT = "font-family=\"'Helvetica Neue',Helvetica,Arial,sans-serif\""
+
+
 def banner_svg(season: Any, kind: str = "title", tid: Any = None) -> str:
-    """One rafter pennant. kind="title" is the full championship banner (team
-    primary fill, secondary trim, star); kind="finals" is slimmer and muted for
-    a Finals appearance. Colors resolve from the --team-* css vars — pass
-    ``tid`` to bake them onto the svg so it renders standalone (reusable: the
+    """One rafter pennant, sized to hang in the hero like a real arena banner.
+    kind="title" is the full championship banner (team primary fill, secondary
+    trim, star, CHAMPS caption); kind="finals" is slimmer and muted for a
+    Finals appearance. Colors resolve from the --team-* css vars — pass ``tid``
+    to bake them onto the svg so it renders standalone (reusable: the
     history-page "Rafters" strip can call this directly with a tid).
     """
     year = esc(season)
     vars_attr = f' style="{team_css_vars(tid)}"' if tid is not None else ""
     if kind == "title":
         return (
-            f'<svg class="banner banner--title" viewBox="0 0 36 48" role="img" '
+            f'<svg class="banner banner--title" viewBox="0 0 60 84" role="img" '
             f'aria-label="{year} League Champions"{vars_attr} '
             'xmlns="http://www.w3.org/2000/svg">'
             '<title>' + year + ' League Champions</title>'
-            '<polygon points="1,1 35,1 35,31 18,46 1,31" fill="var(--team-primary)" '
-            'stroke="var(--team-secondary)" stroke-width="1.6" stroke-linejoin="round"/>'
-            '<line x1="4.5" y1="5" x2="31.5" y2="5" stroke="var(--team-secondary)" '
-            'stroke-width="1.4" opacity=".85"/>'
-            '<text x="18" y="17.5" text-anchor="middle" '
-            "font-family=\"'Helvetica Neue',Helvetica,Arial,sans-serif\" "
-            'font-weight="700" font-size="9.5" fill="var(--team-on-primary)">' + year + "</text>"
-            f'<polygon points="{_star_points(18, 29, 5.4, 2.15)}" fill="var(--team-secondary)"/>'
+            '<polygon points="2,2 58,2 58,62 30,82 2,62" fill="var(--team-primary)" '
+            'stroke="var(--team-secondary)" stroke-width="2.4" stroke-linejoin="round"/>'
+            '<line x1="7" y1="8.5" x2="53" y2="8.5" stroke="var(--team-secondary)" '
+            'stroke-width="2" opacity=".85"/>'
+            f'<text x="30" y="27.5" text-anchor="middle" {_BANNER_FONT} '
+            'font-weight="700" font-size="15" letter-spacing=".5" '
+            'fill="var(--team-on-primary)">' + year + "</text>"
+            f'<polygon points="{_star_points(30, 41.5, 7.6, 3.0)}" fill="var(--team-secondary)"/>'
+            f'<text x="30" y="60" text-anchor="middle" {_BANNER_FONT} '
+            'font-weight="700" font-size="7.2" letter-spacing="1.6" '
+            'fill="var(--team-on-primary)" opacity=".85">CHAMPS</text>'
             "</svg>"
         )
     return (
-        f'<svg class="banner banner--finals" viewBox="0 0 26 42" role="img" '
+        f'<svg class="banner banner--finals" viewBox="0 0 46 68" role="img" '
         f'aria-label="{year} Finals appearance"{vars_attr} '
         'xmlns="http://www.w3.org/2000/svg">'
         '<title>' + year + " Finals</title>"
-        '<polygon points="1,1 25,1 25,27 13,41 1,27" class="banner-finals-body" '
-        'stroke-width="1.2" stroke-linejoin="round"/>'
-        '<rect x="1" y="1" width="24" height="3.4" fill="var(--team-secondary)" opacity=".55"/>'
-        '<text x="13" y="15.5" text-anchor="middle" '
-        "font-family=\"'Helvetica Neue',Helvetica,Arial,sans-serif\" "
-        'font-weight="700" font-size="7.6" class="banner-finals-year">' + year + "</text>"
-        '<text x="13" y="24.5" text-anchor="middle" '
-        "font-family=\"'Helvetica Neue',Helvetica,Arial,sans-serif\" "
-        'font-weight="600" font-size="5" letter-spacing=".4" class="banner-finals-cap">FINALS</text>'
+        '<polygon points="2,2 44,2 44,48 23,66 2,48" class="banner-finals-body" '
+        'stroke-width="1.8" stroke-linejoin="round"/>'
+        '<rect x="2" y="2" width="42" height="5" fill="var(--team-secondary)" opacity=".55"/>'
+        f'<text x="23" y="24.5" text-anchor="middle" {_BANNER_FONT} '
+        'font-weight="700" font-size="12" class="banner-finals-year">' + year + "</text>"
+        f'<text x="23" y="38.5" text-anchor="middle" {_BANNER_FONT} '
+        'font-weight="700" font-size="6.6" letter-spacing="1.3" class="banner-finals-cap">FINALS</text>'
         "</svg>"
     )
 
@@ -1383,10 +1314,10 @@ def team_hero_html(team: dict[str, Any], season: int, sorted_roster: list[dict[s
 
 
 def finance_ledger_card(tfin: dict[str, Any] | None, year: int) -> str:
-    """Revenue ledger: league share + win payouts + bonuses + adjustments, minus
-    tax plus tax share = net revenue, the team's whole budget for ``year``. Then
-    tiles: season balance vs this season's payroll, and committed-``year``
-    payroll vs the budget (surplus)."""
+    """Revenue ledger: win payouts + bonuses + adjustments, minus tax plus tax
+    share = net revenue, the team's whole budget for ``year``. Then tiles:
+    season balance vs this season's payroll, and committed-``year`` payroll vs
+    the budget (surplus)."""
     if not tfin:
         return ""
     f = tfin
@@ -1400,8 +1331,7 @@ def finance_ledger_card(tfin: dict[str, Any] | None, year: int) -> str:
     budget_now = f'<strong>{fmt_money(f["net_revenue_now"])}</strong>'
     budget_proj = f'<strong>{fmt_money(f["net_revenue_proj"])}</strong>'
     rows = [
-        row("League share", fmt_money_pm(f["share_rev"]), fmt_money_pm(f["share_rev"])),
-        row(f'Win payouts <span class="muted small-copy">({fmt_money(FIN_PER_WIN)} × W)</span>',
+        row(f'Win payouts <span class="muted small-copy">({_fin_mil(FIN_PER_WIN)} × W)</span>',
             f'{fmt_money_pm(f["win_rev_now"])} <span class="muted small-copy">({f["won"]} W)</span>',
             f'{fmt_money_pm(f["win_rev_proj"])} <span class="muted small-copy">(proj {fmt_number(f["proj_w"], 1)} W)</span>'),
         row('Playoff bonuses <span class="muted small-copy">(earned · projected = EV)</span>', fmt_money_pm(f["earned_playoff"]), fmt_money_pm(f["proj_playoff"])),
@@ -1479,6 +1409,9 @@ def luxury_tax_card(tfin: dict[str, Any] | None, league_fin: dict[str, Any]) -> 
 
 def finance_rules_card() -> str:
     stacked = FIN_PLAYOFF + FIN_FINALS + FIN_CHAMP
+    # 225 league wins/season (45 games x 10 teams / 2); 4 playoff berths,
+    # 2 finalists, 1 champion -> league-average net revenue.
+    avg_budget = (225 * FIN_PER_WIN + 4 * FIN_PLAYOFF + 2 * FIN_FINALS + FIN_CHAMP) / 10
     return f"""
     <section class="card">
       <div class="section-title-row"><h2>How Finances Work</h2></div>
@@ -1486,11 +1419,10 @@ def finance_rules_card() -> str:
         <div>
           <h3>Revenue</h3>
           <ul class="fin-list">
-            <li>League share <strong>{fmt_money(FIN_SHARE)}</strong></li>
-            <li>Per win <strong>+{fmt_money(FIN_PER_WIN)}</strong></li>
-            <li>Playoff berth <strong>+{fmt_money(FIN_PLAYOFF)}</strong> · Finals <strong>+{fmt_money(FIN_FINALS)}</strong> · Title <strong>+{fmt_money(FIN_CHAMP)}</strong></li>
+            <li>Per win <strong>+{_fin_mil(FIN_PER_WIN)}</strong> — every dollar is earned on the court</li>
+            <li>Playoff berth <strong>+{_fin_mil(FIN_PLAYOFF)}</strong> · Finals <strong>+{_fin_mil(FIN_FINALS)}</strong> · Title <strong>+{_fin_mil(FIN_CHAMP)}</strong></li>
           </ul>
-          <p class="muted small-copy">Bonuses stack once clinched — the champion banks +{fmt_money(stacked)}.</p>
+          <p class="muted small-copy">Bonuses stack once clinched — the champion banks +{_fin_mil(stacked)}.</p>
         </div>
         <div>
           <h3>Tax &amp; Budget</h3>
@@ -1499,7 +1431,7 @@ def finance_rules_card() -> str:
             <li>Collected tax is split equally among under-cap teams</li>
             <li>Net revenue <span class="muted small-copy">(revenue − tax + tax share)</span> is the whole next-season budget — no carried cash</li>
           </ul>
-          <p class="muted small-copy">League-average budget is exactly {fmt_money(FIN_SOFT_CAP)}.</p>
+          <p class="muted small-copy">League-average budget is {_fin_mil(avg_budget)}, just under the cap.</p>
         </div>
       </div>
     </section>"""
@@ -1566,9 +1498,10 @@ def roster_tabs(sorted_roster: list[dict[str, Any]], season: int, start_season: 
     stats_headers = ["Name", "Pos", "Age", "Ovr", "Pot", "Contract", "Health", "G", "MP", "PTS", "TRB", "AST", "STL", "BLK", "BPM", "Acquired"]
     adv_headers = ["Name", "Pos", "Age", "G", "MP", "TS%", "eFG%", "ORtg", "DRtg", "OBPM", "DBPM", "BPM", "VORP", "+/-"]
 
-    # 0-GP players have no real stat line — their all-zero rows read as fabricated,
-    # so the Stats/Advanced views hide them behind a "show inactive" toggle. The
-    # Ratings view always shows the full roster (ratings are real for everyone).
+    # 0-GP players have no real stat line — their all-zero rows are dimmed and
+    # can be hidden by unchecking the "show inactive" toggle (shown by default:
+    # the full roster is the honest view). The Ratings view always shows the
+    # full roster (ratings are real for everyone).
     zero_gp = {safe_int(p.get("pid"), -1) for p in sorted_roster
                if stat_gp(latest_regular_stat(p, start_season, season)) <= 0}
     if len(zero_gp) == len(sorted_roster):
@@ -1595,8 +1528,8 @@ def roster_tabs(sorted_roster: list[dict[str, Any]], season: int, start_season: 
         n = len(zero_gp)
         inactive_toggle = (
             '<label class="inactive-toggle small-copy">'
-            '<input type="checkbox" data-toggle-inactive> '
-            f'Show inactive — {n} player{"" if n == 1 else "s"} with 0 GP hidden</label>'
+            '<input type="checkbox" data-toggle-inactive checked> '
+            f'Show inactive — {n} player{"" if n == 1 else "s"} with 0 GP</label>'
         )
     return f"""
     <section class="card" data-roster-card>

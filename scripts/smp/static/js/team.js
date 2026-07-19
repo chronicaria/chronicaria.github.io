@@ -1,11 +1,11 @@
 (function () {
   // ---------- team pages (W2): standalone module, appended after the core bundle ----------
 
-  // show/hide 0-GP roster rows behind the "show inactive" toggle
+  // 0-GP roster rows show (dimmed) by default; unchecking "show inactive" hides them
   document.querySelectorAll('[data-toggle-inactive]').forEach((input) => {
     const card = input.closest('[data-roster-card]');
     if (!card) return;
-    const apply = () => card.classList.toggle('show-inactive', input.checked);
+    const apply = () => card.classList.toggle('hide-inactive', !input.checked);
     input.addEventListener('change', apply);
     apply();
   });

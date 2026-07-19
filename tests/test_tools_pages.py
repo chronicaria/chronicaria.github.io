@@ -1,7 +1,9 @@
 """Tests for the client-side tools pages (W9): Lineup Lab + Win-Out Machine.
 
 Covers the static shells (scripts/smp/pages/lineup.py / simulator.py) and the
-JS-side math: the team_ovr constants embedded in lineup.js are regenerated from
+JS-side math: the team_ovr constants live in the shared window.SMPOvr helper in
+trade-extras.js (which precedes lineup.js in the bundle and is consumed by both
+the Trade Machine and the Lineup Lab); they are regenerated from
 scripts/projections.py and the JS formula is mirrored in Python to assert OVR
 parity on known groups; simulator.js is asserted to carry the heat_style hsla
 convention and to read the logistic model from app-data rather than hardcoding.
@@ -30,6 +32,8 @@ from smp.pages.simulator import render_simulator_pages  # noqa: E402
 _JS_DIR = os.path.join(_SCRIPTS, "smp", "static", "js")
 with open(os.path.join(_JS_DIR, "lineup.js"), encoding="utf-8") as fh:
     LINEUP_JS = fh.read()
+with open(os.path.join(_JS_DIR, "trade-extras.js"), encoding="utf-8") as fh:
+    TRADE_JS = fh.read()
 with open(os.path.join(_JS_DIR, "simulator.js"), encoding="utf-8") as fh:
     SIMULATOR_JS = fh.read()
 
@@ -72,10 +76,15 @@ class TestLineupShell(unittest.TestCase):
         self.assertIn("data-lineup-app", html)
         self.assertIn("<noscript>", html)
         self.assertIn("Lineup Lab", html)
-        # five ARIA combobox slots, each with its own listbox
-        self.assertEqual(html.count("data-ll-input"), 5)
-        self.assertEqual(html.count('role="combobox"'), 5 + 1)  # 5 slots + global nav search
-        self.assertEqual(html.count('class="search-results ll-results"'), 5)
+        # ten ARIA combobox slots (5 starters + 5 bench), each with its own listbox
+        self.assertEqual(html.count("data-ll-input"), 10)
+        self.assertEqual(html.count('role="combobox"'), 10 + 1)  # 10 slots + global nav search
+        self.assertEqual(html.count('class="search-results ll-results"'), 10)
+        # 5-man / 10-man mode toggle; the bench group ships hidden (5-man default)
+        self.assertEqual(html.count("data-ll-mode"), 2)
+        self.assertIn('role="radiogroup"', html)
+        self.assertIn("data-ll-bench hidden", html)
+        self.assertIn("Bench 10", html)
         # tax line comes from finance.FIN_SOFT_CAP, not a hand-keyed figure
         self.assertIn("$300M tax line", html)
 
@@ -108,11 +117,12 @@ class TestSimulatorShell(unittest.TestCase):
 
 
 def _js_team_ovr_constants():
-    """The OVR_A/OVR_B/OVR_K literals shipped in lineup.js."""
+    """The OVR_A/OVR_B/OVR_K literals shipped in the shared SMPOvr helper
+    (trade-extras.js — the single client-side copy; lineup.js consumes it)."""
     out = {}
     for name in ("OVR_A", "OVR_B", "OVR_K"):
-        match = re.search(r"const %s = (-?[0-9.]+);" % name, LINEUP_JS)
-        assert match, f"{name} literal missing from lineup.js"
+        match = re.search(r"const %s = (-?[0-9.]+);" % name, TRADE_JS)
+        assert match, f"{name} literal missing from trade-extras.js"
         out[name] = float(match.group(1))
     return out
 
@@ -177,11 +187,28 @@ class TestLineupJsMath(unittest.TestCase):
         self.assertEqual(projections.team_ovr([50] * 5 + [REPLACEMENT_OVR] * 5), -13)
 
     def test_mov_inverse_documented_in_js(self):
-        # lineup.js maps raw OVR back to predicted margin with (raw - 50) * 15/50 —
+        # SMPOvr maps raw OVR back to predicted margin with (raw - 50) * 15/50 —
         # the exact inverse of team_ovr's raw = mov * 50/15 + 50 anchoring.
-        self.assertIn("(raw - 50) * 15 / 50", LINEUP_JS)
+        self.assertIn("(raw - 50) * 15 / 50", TRADE_JS)
         raw = 62.0
         self.assertAlmostEqual((raw - 50) * 15 / 50, (raw - 50) * 0.3)
+
+    def test_shared_helper_published_and_consumed(self):
+        # trade-extras.js precedes lineup.js in build.py's concat order and
+        # publishes the one client-side team_ovr port; lineup.js must consume
+        # it rather than carrying its own constants.
+        self.assertIn("window.SMPOvr = { teamOvrRaw, roundOvr, ovrToMov }", TRADE_JS)
+        self.assertIn("window.SMPOvr", LINEUP_JS)
+        for name in ("OVR_A", "OVR_B", "OVR_K"):
+            self.assertNotIn("const %s =" % name, LINEUP_JS)
+
+    def test_trade_projection_reads_payload_model(self):
+        # Post-trade record projections must use app-data.sim's logistic model
+        # and season length — parity with the server sim, nothing hardcoded.
+        self.assertIn("data.sim.logistic_k", TRADE_JS)
+        self.assertIn("data.sim.hca", TRADE_JS)
+        self.assertIn("season_games", TRADE_JS)
+        self.assertIn("ws_season", TRADE_JS)
 
 
 class TestSimulatorJsModel(unittest.TestCase):

@@ -19,6 +19,20 @@
     let xKey = data.defaultX;
     let yKey = data.defaultY;
     let drawn = [];
+    let hoverPt = null;
+
+    // Theme-aware palette, resolved at draw time so light/dark both render true.
+    function chartTheme() {
+      const rootStyle = getComputedStyle(document.documentElement);
+      const cssVar = (name, fallback) => (rootStyle.getPropertyValue(name) || '').trim() || fallback;
+      return {
+        line: cssVar('--line', '#2b313a'),
+        muted: cssVar('--muted', '#939ca7'),
+        text: cssVar('--text', '#e8ecf1'),
+        accent: cssVar('--accent', '#5b9dff'),
+        bg: getComputedStyle(chartCanvas).backgroundColor || '#171b21',
+      };
+    }
 
     // restore state from URL hash: #x=usg&y=ts&pos=G&min=20&labels=1
     const hashParams = new URLSearchParams((location.hash || '').replace(/^#/, ''));
@@ -75,8 +89,14 @@
       return value.toFixed(digits);
     }
 
+    // Dot radius scales gently with minutes: rotation players read larger.
+    function dotRadius(p) {
+      const min = Number.isFinite(p.v.min) ? p.v.min : 24;
+      return 2.8 + 2.1 * Math.min(1, Math.max(0, min / 38));
+    }
+
     function draw() {
-      if (tooltip) tooltip.hidden = true;
+      const theme = chartTheme();
       const dpr = window.devicePixelRatio || 1;
       const cw = chartCanvas.clientWidth;
       const ch = chartCanvas.clientHeight;
@@ -98,10 +118,13 @@
         && (!minGp || (Number.isFinite(p.v.gp) && p.v.gp >= minGp)));
       drawn = [];
       if (!pts.length) {
-        ctx.fillStyle = '#939ca7';
+        if (tooltip) tooltip.hidden = true;
+        hoverPt = null;
+        ctx.fillStyle = theme.muted;
         ctx.fillText('No data for this combination.', 16, 24);
         return;
       }
+      if (hoverPt && pts.indexOf(hoverPt.p) === -1) hoverPt = null;
       let xLo = Math.min(...pts.map((p) => p.v[xKey]));
       let xHi = Math.max(...pts.map((p) => p.v[xKey]));
       let yLo = Math.min(...pts.map((p) => p.v[yKey]));
@@ -110,66 +133,106 @@
       const yPad = (yHi - yLo || 1) * 0.08;
       xLo -= xPad; xHi += xPad; yLo -= yPad; yHi += yPad;
 
-      const m = { left: 48, right: 14, top: 12, bottom: 34 };
+      const m = { left: 52, right: 16, top: 14, bottom: 40 };
       const plotW = cw - m.left - m.right;
       const plotH = ch - m.top - m.bottom;
       const px = (v) => m.left + ((v - xLo) / (xHi - xLo)) * plotW;
       const py = (v) => m.top + plotH - ((v - yLo) / (yHi - yLo)) * plotH;
 
+      // Horizontal gridlines only; the x-axis gets small tick marks instead.
       const xt = niceTicks(xLo, xHi, 8);
       const yt = niceTicks(yLo, yHi, 6);
-      ctx.strokeStyle = 'rgba(255,255,255,.06)';
-      ctx.fillStyle = '#939ca7';
       ctx.lineWidth = 1;
-      xt.ticks.forEach((v) => {
-        const x = px(v);
-        ctx.beginPath(); ctx.moveTo(x, m.top); ctx.lineTo(x, m.top + plotH); ctx.stroke();
-        ctx.textAlign = 'center';
-        ctx.fillText(fmtTick(v, xt.step), x, m.top + plotH + 16);
-      });
+      ctx.strokeStyle = theme.line;
+      ctx.fillStyle = theme.muted;
       yt.ticks.forEach((v) => {
         const y = py(v);
+        ctx.globalAlpha = 0.5;
         ctx.beginPath(); ctx.moveTo(m.left, y); ctx.lineTo(m.left + plotW, y); ctx.stroke();
+        ctx.globalAlpha = 1;
         ctx.textAlign = 'right';
-        ctx.fillText(fmtTick(v, yt.step), m.left - 7, y + 3.5);
+        ctx.fillText(fmtTick(v, yt.step), m.left - 8, y + 3.5);
       });
-      // zero lines
-      ctx.strokeStyle = 'rgba(255,255,255,.22)';
+      xt.ticks.forEach((v) => {
+        const x = px(v);
+        ctx.beginPath(); ctx.moveTo(x, m.top + plotH); ctx.lineTo(x, m.top + plotH + 5); ctx.stroke();
+        ctx.textAlign = 'center';
+        ctx.fillText(fmtTick(v, xt.step), x, m.top + plotH + 17);
+      });
+      // axis baselines
+      ctx.strokeStyle = theme.line;
+      ctx.beginPath();
+      ctx.moveTo(m.left, m.top);
+      ctx.lineTo(m.left, m.top + plotH);
+      ctx.lineTo(m.left + plotW, m.top + plotH);
+      ctx.stroke();
+      // dashed zero lines when the range crosses zero
+      ctx.strokeStyle = theme.muted;
+      ctx.globalAlpha = 0.55;
+      ctx.setLineDash([4, 4]);
       if (xLo < 0 && xHi > 0) { const x = px(0); ctx.beginPath(); ctx.moveTo(x, m.top); ctx.lineTo(x, m.top + plotH); ctx.stroke(); }
       if (yLo < 0 && yHi > 0) { const y = py(0); ctx.beginPath(); ctx.moveTo(m.left, y); ctx.lineTo(m.left + plotW, y); ctx.stroke(); }
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
       // axis labels
-      ctx.fillStyle = '#c6cdd5';
+      ctx.fillStyle = theme.text;
       ctx.textAlign = 'center';
-      ctx.fillText(labels[xKey] || xKey, m.left + plotW / 2, ch - 6);
+      ctx.font = '600 11px \"Helvetica Neue\", Helvetica, Arial, sans-serif';
+      ctx.fillText(labels[xKey] || xKey, m.left + plotW / 2, ch - 8);
       ctx.save();
-      ctx.translate(12, m.top + plotH / 2);
+      ctx.translate(13, m.top + plotH / 2);
       ctx.rotate(-Math.PI / 2);
       ctx.fillText(labels[yKey] || yKey, 0, 0);
       ctx.restore();
+      ctx.font = '11px \"Helvetica Neue\", Helvetica, Arial, sans-serif';
 
       pts.forEach((p) => {
         const x = px(p.v[xKey]);
         const y = py(p.v[yKey]);
+        const r = dotRadius(p);
         ctx.beginPath();
-        ctx.arc(x, y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = colors[p.team] || '#939ca7';
-        ctx.globalAlpha = 0.9;
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = colors[p.team] || theme.muted;
+        ctx.globalAlpha = hoverPt && hoverPt.p !== p ? 0.55 : 0.95;
         ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = 'rgba(0,0,0,.5)';
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = theme.bg;
         ctx.stroke();
         drawn.push({ x, y, p });
       });
 
       // label every visible point (overlap allowed)
-      if (labelsInput && labelsInput.checked && pts.length) {
-        ctx.fillStyle = '#c6cdd5';
+      if (labelsInput && labelsInput.checked) {
+        ctx.fillStyle = theme.muted;
         ctx.textAlign = 'left';
+        ctx.font = '10px \"Helvetica Neue\", Helvetica, Arial, sans-serif';
         pts.forEach((p) => {
-          const lx = px(p.v[xKey]) + 7;
-          const ly = py(p.v[yKey]) + 3;
-          ctx.fillText(p.name.split(' ').slice(-1)[0], lx, ly);
+          if (hoverPt && hoverPt.p === p) return;
+          ctx.fillText(p.name.split(' ').slice(-1)[0], px(p.v[xKey]) + dotRadius(p) + 3.5, py(p.v[yKey]) + 3);
         });
+        ctx.font = '11px \"Helvetica Neue\", Helvetica, Arial, sans-serif';
+      }
+
+      // hovered point: full-strength dot with a halo ring and its name
+      if (hoverPt) {
+        const x = px(hoverPt.p.v[xKey]);
+        const y = py(hoverPt.p.v[yKey]);
+        const r = dotRadius(hoverPt.p);
+        ctx.beginPath();
+        ctx.arc(x, y, r + 1, 0, Math.PI * 2);
+        ctx.fillStyle = colors[hoverPt.p.team] || theme.muted;
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = theme.bg;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(x, y, r + 4.5, 0, Math.PI * 2);
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = theme.text;
+        ctx.globalAlpha = 0.7;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
       }
     }
 
@@ -188,21 +251,30 @@
 
     chartCanvas.addEventListener('mousemove', (event) => {
       const hit = nearest(event);
+      if ((hit && hit.p) !== (hoverPt && hoverPt.p)) {
+        hoverPt = hit;
+        draw();
+      }
       if (!hit) { tooltip.hidden = true; chartCanvas.style.cursor = 'crosshair'; return; }
       chartCanvas.style.cursor = 'pointer';
-      tooltip.innerHTML = '<strong>' + hit.p.name + ' · ' + hit.p.team + '</strong>'
-        + '<span>' + (labels[xKey] || xKey) + ': ' + hit.p.v[xKey] + ' · '
-        + (labels[yKey] || yKey) + ': ' + hit.p.v[yKey] + '</span>';
+      const dotColor = colors[hit.p.team] || '';
+      tooltip.innerHTML = '<strong><span class=\"tip-dot\" style=\"--dot:' + dotColor + '\"></span>'
+        + hit.p.name + ' <span class=\"tip-team\">' + hit.p.team + (hit.p.pos ? ' · ' + hit.p.pos : '') + '</span></strong>'
+        + '<span>' + (labels[xKey] || xKey) + ' <b>' + hit.p.v[xKey] + '</b> · '
+        + (labels[yKey] || yKey) + ' <b>' + hit.p.v[yKey] + '</b></span>';
       tooltip.hidden = false;
       const wrapRect = chartCanvas.parentElement.getBoundingClientRect();
       const rect = chartCanvas.getBoundingClientRect();
-      let left = hit.x + (rect.left - wrapRect.left) + 12;
-      let top = hit.y + (rect.top - wrapRect.top) - 12;
-      if (left + tooltip.offsetWidth > wrapRect.width - 4) left = left - tooltip.offsetWidth - 24;
+      let left = hit.x + (rect.left - wrapRect.left) + 14;
+      let top = hit.y + (rect.top - wrapRect.top) - 14;
+      if (left + tooltip.offsetWidth > wrapRect.width - 4) left = left - tooltip.offsetWidth - 28;
       tooltip.style.left = left + 'px';
       tooltip.style.top = top + 'px';
     });
-    chartCanvas.addEventListener('mouseleave', () => { tooltip.hidden = true; });
+    chartCanvas.addEventListener('mouseleave', () => {
+      tooltip.hidden = true;
+      if (hoverPt) { hoverPt = null; draw(); }
+    });
     chartCanvas.addEventListener('click', (event) => {
       const hit = nearest(event);
       if (hit && hit.p.url) window.location.href = hit.p.url;
@@ -214,7 +286,8 @@
     if (minGpInput) minGpInput.addEventListener('input', () => { syncHash(); draw(); });
     if (labelsInput) labelsInput.addEventListener('change', () => { syncHash(); draw(); });
     window.addEventListener('resize', draw);
+    // repaint when the theme toggle stamps html[data-theme]
+    new MutationObserver(() => draw()).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     draw();
   }
-
 

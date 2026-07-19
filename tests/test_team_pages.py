@@ -93,6 +93,7 @@ class TestChampionsAndBanners(unittest.TestCase):
         self.assertIn("banner--title", title)
         self.assertIn("--team-primary", title)  # standalone: vars baked on
         self.assertIn("2030 League Champions", title)
+        self.assertIn("CHAMPS", title)          # legible caption on the big banner
         self.assertIn("banner--finals", finals)
         self.assertIn("FINALS", finals)
 
@@ -262,16 +263,6 @@ class TestFranchiseArc(unittest.TestCase):
         self.assertEqual(by_season[2030]["result"], "Champion")
         self.assertEqual(by_season[2030]["finish"], 1)
 
-    def test_event_pins_cover_trades_retirements_expansion(self):
-        data, teams, me = self._data_and_teams()
-        pins = team_page.team_event_pins(me, data, {t["tid"]: t for t in teams})
-        kinds = {s: sorted(p["kind"] for p in v) for s, v in pins.items()}
-        self.assertEqual(kinds[2029], ["trade"])
-        self.assertEqual(kinds[2030], ["retire"])
-        self.assertEqual(kinds[2028], ["join"])
-        self.assertIn("Trade with TOR", pins[2029][0]["label"])
-        self.assertIn("Old Legend retired", pins[2030][0]["label"])
-
     def test_history_page_renders_arc_table_and_scope(self):
         data, teams, me = self._data_and_teams()
         html = team_page.render_team_history_page(me, [], teams, 2031, 2026, data=data)
@@ -279,7 +270,10 @@ class TestFranchiseArc(unittest.TestCase):
         self.assertIn("Franchise Arc", html)
         self.assertIn("Season Results", html)
         self.assertIn("TITLE", html)          # champion marker on the ribbon
-        self.assertIn("2028: Joined the league", html)  # snapped pin keeps true year
+        # P8: trade/retirement/expansion event pins are gone from the arc
+        self.assertNotIn("arc-pin", html)
+        self.assertNotIn("Joined the league", html)
+        self.assertNotIn("retired", html)
         self.assertIn('href="test-cam-2-history.html"', html)  # subnav self-link
 
     def test_empty_franchise_shows_honest_empty_state(self):
@@ -307,14 +301,16 @@ class TestImmersionAndPolish(unittest.TestCase):
             self.assertIn("tm-watermark", html)
             self.assertIn(">History</a>", html)  # 4th subnav entry
 
-    def test_zero_gp_rows_hidden_behind_toggle(self):
+    def test_zero_gp_rows_shown_by_default_with_hide_toggle(self):
         roster = [
             _player(1, "Played", "Games", stats=[_stat_row()]),
             _player(2, "Never", "Played", stats=[]),
         ]
         html = team_page.roster_tabs(roster, 2031, 2026, "../", {}, None)
-        self.assertIn("data-toggle-inactive", html)
-        self.assertIn("1 player with 0 GP hidden", html)
+        # P8: inactive players are visible by default — the checkbox starts checked
+        self.assertIn("data-toggle-inactive checked", html)
+        self.assertIn("1 player with 0 GP", html)
+        self.assertNotIn("hidden</label>", html)
         self.assertEqual(html.count('<tr class="inactive-row">'), 2)  # stats + advanced
 
     def test_all_zero_gp_roster_shows_everyone(self):
@@ -365,7 +361,7 @@ class TestFinanceDisplay(unittest.TestCase):
             {"pid": 1, "firstName": "P", "lastName": "0", "tid": 0,
              "contract": {"amount": 320000, "exp": 2032}, "ratings": [{"season": 2031, "ovr": 60}]},
             {"pid": 2, "firstName": "P", "lastName": "1", "tid": 1,
-             "contract": {"amount": 200000, "exp": 2032}, "ratings": [{"season": 2031, "ovr": 60}]},
+             "contract": {"amount": 40000, "exp": 2032}, "ratings": [{"season": 2031, "ovr": 60}]},
         ]
         data = {"teams": teams, "players": players, "playoffSeries": [], "releasedPlayers": []}
         return lg.compute_league_finances(data, teams, players, 2031, odds={})
@@ -373,8 +369,9 @@ class TestFinanceDisplay(unittest.TestCase):
     def test_ledger_presents_budget_not_cash(self):
         lf = self._league()
         html = team_page.finance_ledger_card(lf["teams"][0], 2032)
-        self.assertIn("League share", html)
+        self.assertNotIn("League share", html)  # P8: no flat share row
         self.assertIn("Win payouts", html)
+        self.assertIn("$12.8M", html)           # per-win rate, exact label
         self.assertIn("Playoff bonuses", html)
         self.assertIn("2032 budget", html)
         self.assertIn("Season balance", html)
@@ -390,23 +387,26 @@ class TestFinanceDisplay(unittest.TestCase):
         self.assertIn("2032 budget", html)
         self.assertIn("Surplus vs committed", html)
         self.assertNotIn("Cash on hand", html)
-        # over-cap team: budget 180+50-20+0=210 < committed 320 -> red surplus
-        self.assertAlmostEqual(over["net_revenue_proj"], 210000)
-        self.assertAlmostEqual(over["surplus_next"], 210000 - 320000)
+        # over-cap team: budget = 10 W × 12.8 − 20 tax = 108 < committed 320 -> red surplus
+        self.assertAlmostEqual(over["net_revenue_proj"], 108000)
+        self.assertAlmostEqual(over["surplus_next"], 108000 - 320000)
         self.assertIn("delta-down", html)
-        # under-cap team collects the pool and has a positive surplus
-        self.assertAlmostEqual(under["net_revenue_proj"], 180000 + 10000 + 20000)
+        # under-cap team collects the pool: 2 W × 12.8 + 20 tax share,
+        # against a $40M committed payroll -> positive surplus
+        self.assertAlmostEqual(under["net_revenue_proj"], 25600 + 20000)
+        self.assertAlmostEqual(under["surplus_next"], 45600 - 40000)
         self.assertIn("delta-up", team_page.hero_finance_chip(under, 2032))
 
     def test_rules_card_states_the_new_numbers(self):
         html = team_page.finance_rules_card()
-        self.assertIn("$180M", html)   # league share
-        self.assertIn("+$5M", html)    # per win
-        self.assertIn("+$10M", html)   # berth / finals
-        self.assertIn("+$15M", html)   # title
-        self.assertIn("+$35M", html)   # champion's stacked bonus
-        self.assertIn("$300M", html)   # soft cap / average budget
-        self.assertNotIn("$75", html)  # no starting cash
+        self.assertNotIn("League share", html)  # P8: no flat share
+        self.assertIn("+$12.8M", html)  # per win
+        self.assertIn("+$15M", html)    # berth / finals
+        self.assertIn("+$20M", html)    # title
+        self.assertIn("+$50M", html)    # champion's stacked bonus
+        self.assertIn("$300M", html)    # soft cap
+        self.assertIn("$299M", html)    # league-average budget
+        self.assertNotIn("$75", html)   # no starting cash
         self.assertNotIn("carried cash", html.replace("no carried cash", ""))
 
 

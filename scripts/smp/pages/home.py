@@ -74,12 +74,11 @@ from ..core import (
     team_slug,
     team_sort_key,
     team_stat_per_game,
-    team_url,
     total_rebounds,
     win_pct,
 )
 
-from ..derived import fantasy_pts, four_factors
+from ..derived import fantasy_pts
 
 from ..finance import compute_league_finances, fmt_money_pm
 
@@ -92,13 +91,23 @@ from ..simmodel import league_sim, playoff_clinch_marks
 from .league import playoff_bracket_html
 
 
-def _odds_pct(pct: float) -> str:
-    """Odds percentage at one-decimal precision; dash for zero, floor for traces."""
+def _pct1(pct: float) -> str:
+    """Compact one-decimal percentage, no % sign: dash for zero, floor for traces.
+
+    The bare "31.4" convention used where space is tight (seed-distribution
+    heat cells, the W/L sides of a playoff-odds swing).
+    """
     if pct == 0:
         return "—"
     if pct < 0.05:
-        return "&lt;0.1%"
-    return fmt_number(pct, 1) + "%"
+        return "&lt;0.1"
+    return fmt_number(pct, 1)
+
+
+def _odds_pct(pct: float) -> str:
+    """Odds percentage at one-decimal precision; dash for zero, floor for traces."""
+    out = _pct1(pct)
+    return out if out == "—" else out + "%"
 
 
 def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
@@ -128,12 +137,10 @@ def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season:
         ]
         for seed_index in range(n_seeds):
             pct = 100 * o["seeds"][seed_index]
-            if pct < 0.5:
-                text = "—" if pct == 0 else "<1"
-            else:
-                text = fmt_number(pct, 0)
-            cls = "seed-cut" if seed_index == 4 else ""
-            cells.append(td(text, sort=pct, style=seed_cell_style(pct), cls=cls))
+            # One-decimal like every other percentage; the compact "31.4"
+            # form (no % sign) keeps the ten heat cells tight.
+            cls = "seed-cell seed-cut" if seed_index == 4 else "seed-cell"
+            cells.append(td(_pct1(pct), sort=pct, style=seed_cell_style(pct), cls=cls))
         rows.append(f'<tr data-tid="{tid}">{"".join(cells)}</tr>')
     headers = ["Team", "Proj W-L", "PO%", "Finals%", "Title%"] + [str(i) for i in range(1, n_seeds + 1)]
     detail = ("Team strength is rated from each current roster (injury-aware), "
@@ -153,52 +160,91 @@ def playoff_odds_card(data: dict[str, Any], teams: list[dict[str, Any]], season:
     """
 
 
-def stakes_card(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
+def game_projection_cards(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -> str:
+    """One projection card per game on the next slate (replaces "What's at Stake").
+
+    Every number is read straight off simulate_league's Monte Carlo so the
+    display always agrees with the sim:
+
+    * win probability (one decimal, both teams) — the sim's own logistic over
+      the injury-adjusted strength gap plus its +1.5-point home edge
+      (simmodel.game_win_prob); the away figure is the exact one-decimal
+      complement of the home figure;
+    * projected spread — the same projected home margin (strength gap + home
+      edge, simmodel.projected_margin) quoted sportsbook-style in half-point
+      steps for the favorite (simmodel.projected_spread): "CAM -4.5" means
+      Cambridge is favored by 4.5; a dead-even line renders "Pick";
+    * playoff-odds swing — each team's current PO% next to its PO% conditioned
+      on winning / losing this game, tallied inside the same 10,000 sims.
+
+    Cards link to the game's preview page when the export schedules the game
+    (real gid); a projected round-robin filler renders as a plain card.
+    """
     sim = league_sim(data, teams, season)
     stakes = sim.get("stakes") or []
     if not stakes:
         return ""
+    odds = sim.get("teams") or {}
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
-    palette = team_palette_by_tid(teams)
     items, _ = score_items_for_page(data, teams)
     items_by_gid = {str(item.get("gid")): item for item in items}
+
+    def po_txt(value: float | None) -> str:
+        return "—" if value is None else _pct1(100.0 * value)
+
     cards = []
-    for stake in sorted(stakes, key=lambda s: -max(abs(s.get("home_swing") or 0), abs(s.get("away_swing") or 0))):
-        # Projected (simulated) games have no game page — link each team to its
-        # team page instead of emitting a dead "#" link.
-        item = items_by_gid.get(str(stake["gid"]))
-        rows = []
-        for side, tid_key, swing_key in (("away", "away_tid", "away_swing"), ("home", "home_tid", "home_swing")):
-            tid = stake[tid_key]
-            swing = stake.get(swing_key)
-            if swing is None:
-                swing_html = '<span class="muted">—</span>'
-            else:
-                pts = 100 * swing
-                cls = "delta-up" if pts >= 10 else ""
-                swing_html = f'<span class="{cls}">±{fmt_number(pts, 0)}%</span>'
-            team = teams_by_tid.get(safe_int(tid))
-            label = f'{team_dot(tid, palette)}{esc(team_abbrev_for_tid(tid, teams_by_tid))}'
-            if item is None and team:
-                label = f'<a class="hm-stake-team" href="{esc(team_url(team))}">{label}</a>'
-            rows.append(
-                f'<span class="score-row"><span>{label}</span>'
-                f'<strong>{swing_html}</strong></span>'
-            )
-        if item is not None:
-            cards.append(f'<a class="score-line score-stack" href="{esc(game_url(item))}">{"".join(rows)}</a>')
+    for stake in stakes:
+        home_tid, away_tid = safe_int(stake["home_tid"]), safe_int(stake["away_tid"])
+        home_ab = team_abbrev_for_tid(home_tid, teams_by_tid)
+        away_ab = team_abbrev_for_tid(away_tid, teams_by_tid)
+        home_wp = round(100.0 * safe_float(stake.get("home_wp"), 0.5), 1)
+        away_wp = round(100.0 - home_wp, 1)
+        spread = safe_float(stake.get("spread"), 0.0)
+        if spread < 0:
+            spread_text = f"{home_ab} {spread:.1f}"
+        elif spread > 0:
+            spread_text = f"{away_ab} -{spread:.1f}"
         else:
-            cards.append(f'<div class="score-line score-stack hm-stake-static">{"".join(rows)}</div>')
+            spread_text = "Pick"
+        rows = []
+        for tid, ab, wp, po_win, po_loss, marker in (
+            (away_tid, away_ab, away_wp, stake.get("away_po_win"), stake.get("away_po_loss"), ""),
+            (home_tid, home_ab, home_wp, stake.get("home_po_win"), stake.get("home_po_loss"), "@"),
+        ):
+            po_now = 100.0 * safe_float((odds.get(tid) or {}).get("po"), 0.0)
+            rows.append(
+                '<div class="gp-row">'
+                f'<span class="gp-side muted" aria-hidden="true">{esc(marker)}</span>'
+                f'<span class="gp-chip" style="--gp-c:{esc(team_chart_color(tid))}">{esc(ab)}</span>'
+                f'<strong class="gp-wp" title="Win probability">{fmt_number(wp, 1)}%</strong>'
+                f'<span class="gp-po" title="Playoff odds: now → if win / if lose">{_odds_pct(po_now)}'
+                f'<span class="gp-arrow" aria-hidden="true">→</span>'
+                f'<span class="gp-po-w">{po_txt(po_win)}</span><span class="gp-po-sep">/</span>'
+                f'<span class="gp-po-l">{po_txt(po_loss)}</span></span>'
+                "</div>"
+            )
+        item = items_by_gid.get(str(stake["gid"]))
+        foot = (f'<div class="gp-foot"><span class="gp-spread">{esc(spread_text)}</span>'
+                + ('<span class="gp-more muted">Preview →</span>' if item is not None else "")
+                + "</div>")
+        label = (f"{away_ab} at {home_ab}: {spread_text}, "
+                 f"home win probability {fmt_number(home_wp, 1)}%")
+        inner = f'{"".join(rows)}{foot}'
+        if item is not None:
+            cards.append(f'<a class="gp-card" href="{esc(game_url(item))}" aria-label="{esc(label)}">{inner}</a>')
+        else:
+            cards.append(f'<div class="gp-card gp-static" role="group" aria-label="{esc(label)}">{inner}</div>')
     if sim.get("fresh"):
-        title = "What's at Stake · Opening Day"
-        note = "playoff-odds swing on the projected opener"
+        title = "Game Projections · Opening Day"
     else:
-        title = f'What\'s at Stake · Day {sim.get("day")}'
-        note = "playoff-odds swing on today's game"
+        title = f'Game Projections · Day {sim.get("day")}'
+    detail = ("Per team: win probability, then playoff odds now → if they win / if they lose. "
+              "Spread and probabilities come from the same simulation as the odds table "
+              "(team strength + 1.5-point home edge).")
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>{title}</h2><span class="muted small-copy">{note}</span></div>
-      <div class="score-list">{''.join(cards)}</div>
+      <div class="section-title-row"><h2>{title}</h2><span class="muted small-copy" title="{esc(detail)}">win% · spread · playoff-odds swing</span></div>
+      <div class="gp-grid">{''.join(cards)}</div>
     </section>
     """
 
@@ -1155,135 +1201,6 @@ def _exact_team_stat(team: dict[str, Any], season: int) -> dict[str, Any]:
     return {}
 
 
-def _team_rating_proxies(stat: dict[str, Any]) -> tuple[float, float] | None:
-    """(offensive, defensive) points per 100 possessions, Dean Oliver possessions."""
-    if safe_float(stat.get("gp")) <= 0:
-        return None
-    poss = safe_float(stat.get("fga")) - safe_float(stat.get("orb")) + safe_float(stat.get("tov")) + 0.44 * safe_float(stat.get("fta"))
-    opp_poss = safe_float(stat.get("oppFga")) - safe_float(stat.get("oppOrb")) + safe_float(stat.get("oppTov")) + 0.44 * safe_float(stat.get("oppFta"))
-    if poss <= 0 or opp_poss <= 0:
-        return None
-    return (100.0 * safe_float(stat.get("pts")) / poss, 100.0 * safe_float(stat.get("oppPts")) / opp_poss)
-
-
-def four_factors_scatter_card(data: dict[str, Any], teams: list[dict[str, Any]], chart_season: int, page_season: int) -> str:
-    """Quadrant scatter of team offense vs defense (B16a).
-
-    x = offensive rating proxy (points per 100 possessions), y = defensive
-    rating proxy with better defense UP. Dots are --team-chart colored with
-    abbrev labels; dashed league-average crosshair splits the four quadrants.
-    Tooltips carry the Dean Oliver four factors from smp.derived.
-    """
-    points = []
-    for team in active_teams_for_season(teams, chart_season):
-        stat = _exact_team_stat(team, chart_season)
-        proxies = _team_rating_proxies(stat)
-        if proxies is None:
-            continue
-        points.append((team, stat, proxies[0], proxies[1]))
-    if len(points) < 2:
-        return ""
-
-    xs_vals = [p[2] for p in points]
-    ys_vals = [p[3] for p in points]
-    avg_x = sum(xs_vals) / len(xs_vals)
-    avg_y = sum(ys_vals) / len(ys_vals)
-    pad = 1.2
-    lo_x, hi_x = min(xs_vals) - pad, max(xs_vals) + pad
-    lo_y, hi_y = min(ys_vals) - pad, max(ys_vals) + pad
-
-    width, height = 640.0, 420.0
-    ml, mr, mt, mb = 46.0, 18.0, 26.0, 44.0
-    plot_w, plot_h = width - ml - mr, height - mt - mb
-
-    def sx(v: float) -> float:
-        return ml + (v - lo_x) / max(1e-9, hi_x - lo_x) * plot_w
-
-    def sy(v: float) -> float:
-        # Lower defensive rating (fewer points allowed) is better -> up.
-        return mt + (v - lo_y) / max(1e-9, hi_y - lo_y) * plot_h
-
-    parts: list[str] = []
-    step = 2 if (hi_x - lo_x) <= 14 else 4
-    tick = math.ceil(lo_x / step) * step
-    while tick <= hi_x:
-        gx = sx(tick)
-        parts.append(f'<line x1="{gx:.1f}" y1="{mt}" x2="{gx:.1f}" y2="{mt + plot_h:.1f}" class="chart-grid"/>')
-        parts.append(f'<text x="{gx:.1f}" y="{mt + plot_h + 14:.1f}" class="chart-tick" text-anchor="middle">{int(tick)}</text>')
-        tick += step
-    step_y = 2 if (hi_y - lo_y) <= 14 else 4
-    tick = math.ceil(lo_y / step_y) * step_y
-    while tick <= hi_y:
-        gy = sy(tick)
-        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{ml + plot_w:.1f}" y2="{gy:.1f}" class="chart-grid"/>')
-        parts.append(f'<text x="{ml - 6}" y="{gy + 3.5:.1f}" class="chart-tick" text-anchor="end">{int(tick)}</text>')
-        tick += step_y
-
-    # League-average crosshair + quadrant captions.
-    parts.append(f'<line x1="{sx(avg_x):.1f}" y1="{mt}" x2="{sx(avg_x):.1f}" y2="{mt + plot_h:.1f}" class="ff4-avg"/>')
-    parts.append(f'<line x1="{ml}" y1="{sy(avg_y):.1f}" x2="{ml + plot_w:.1f}" y2="{sy(avg_y):.1f}" class="ff4-avg"/>')
-    captions = [
-        (ml + 8, mt + 12, "start", "− offense · + defense"),
-        (ml + plot_w - 8, mt + 12, "end", "+ offense · + defense"),
-        (ml + 8, mt + plot_h - 6, "start", "− offense · − defense"),
-        (ml + plot_w - 8, mt + plot_h - 6, "end", "+ offense · − defense"),
-    ]
-    for cx, cy, anchor, text in captions:
-        parts.append(f'<text x="{cx:.1f}" y="{cy:.1f}" class="ff4-quad" text-anchor="{anchor}">{esc(text)}</text>')
-
-    # Label placement with a light de-overlap pass: labels keep their dot's x
-    # side but get nudged vertically when two nearby teams would collide.
-    placed: list[tuple[float, float]] = []  # (label x, label y) already used
-
-    def _label_y(px: float, py: float) -> float:
-        ly = py + 3.5
-        for ox_, oy_ in sorted(placed, key=lambda q: q[1]):
-            if abs(px - ox_) < 52 and abs(ly - oy_) < 11:
-                ly = oy_ + 11.0
-        placed.append((px, ly))
-        return ly
-
-    for team, stat, ox, dy in sorted(points, key=lambda p: (sy(p[3]), safe_int(p[0].get("tid")))):
-        tid = safe_int(team.get("tid"))
-        color = team_chart_color(tid)
-        ff = four_factors(stat)
-        px, py = sx(ox), sy(dy)
-        anchor = "end" if px > ml + plot_w - 42 else "start"
-        lx = px - 9 if anchor == "end" else px + 9
-        ly = _label_y(lx, py)
-        title = (
-            f"{team_full_name(team)} — Off {fmt_number(ox, 1)} / Def {fmt_number(dy, 1)} pts per 100 poss. "
-            f"eFG% {fmt_number(ff.get('efg'), 1)} · TOV% {fmt_number(ff.get('tov_pct'), 1)} · "
-            f"ORB% {fmt_number(ff.get('orb_pct'), 1)} · FT/FGA {fmt_number(ff.get('ft_rate'), 2)}"
-        )
-        parts.append(
-            f'<a href="teams/{team_slug(team)}.html" class="ff4-link" aria-label="{esc(team_full_name(team))}">'
-            f'<g class="ff4-pt" style="--ff4-c:{esc(color)}">'
-            f'<title>{esc(title)}</title>'
-            f'<circle cx="{px:.1f}" cy="{py:.1f}" r="5.5" class="ff4-dot"/>'
-            f'<text x="{lx:.1f}" y="{ly:.1f}" class="ff4-label" text-anchor="{anchor}">{esc(team_abbrev(team))}</text>'
-            f"</g></a>"
-        )
-
-    parts.append(f'<text x="{ml + plot_w / 2:.1f}" y="{height - 6:.1f}" class="ff4-axis" text-anchor="middle">offense — points scored per 100 possessions →</text>')
-    parts.append(f'<text x="12" y="{mt + plot_h / 2:.1f}" class="ff4-axis" text-anchor="middle" transform="rotate(-90 12 {mt + plot_h / 2:.1f})">defense — fewer points allowed ↑</text>')
-
-    sub = _season_label(chart_season, page_season)
-    sub_html = f'<span class="count-pill">{esc(sub)}</span>' if sub else '<span class="muted small-copy" title="Dashed lines mark the league average; top-right is the winning quadrant">points per 100 possessions</span>'
-    caption = f"{chart_season} four factors · hover a dot for detail"
-    return f"""
-    <section class="card home-section">
-      <div class="section-title-row"><h2>Offense vs Defense</h2>{sub_html}</div>
-      <div class="chart-wrap ff4-wrap">
-        <svg viewBox="0 0 {width:.0f} {height:.0f}" class="ff4-chart" role="img" aria-label="Team offensive vs defensive rating scatter, {esc(chart_season)} season">
-          {''.join(parts)}
-        </svg>
-      </div>
-      <p class="muted small-copy">{esc(caption)}</p>
-    </section>
-    """
-
-
 # Short x-tick names per BBGM phase for odds-river snapshots.
 _RIVER_PHASE_TICKS = {0: "Pre", 1: "RS", 2: "RS", 3: "PO", 4: "Off", 5: "Draft", 6: "Off", 7: "Re-sign", 8: "FA"}
 _RIVER_PHASE_NAMES = {0: "Preseason", 1: "Regular season", 2: "Regular season", 3: "Playoffs", 4: "Offseason",
@@ -1470,15 +1387,15 @@ def fantasy_leaders_card(data: dict[str, Any], players: list[dict[str, Any]], te
         if disp_tid < 0:
             disp_tid = safe_int(player.get("tid"), -1)
         bar_w = max(4.0, 100.0 * fppg / best)
-        fppg_int = int(round(fppg))
+        fppg_txt = fmt_number(fppg, 1)
         rows.append(
-            f'<li title="{esc(player_name(player))}: {fppg_int} fantasy points per game over {fmt_number(gp, 0)} games">'
+            f'<li title="{esc(player_name(player))}: {fppg_txt} fantasy points per game over {fmt_number(gp, 0)} games">'
             f'<span class="leader-rank">{rank}</span>'
             f'{team_dot(disp_tid, palette)}'
             f'<a class="player-link" href="{player_url(player, root)}">{esc(player_name(player))}</a>'
             f'<span class="leader-team">{esc(team_abbrev_for_tid(disp_tid, teams_by_tid))}</span>'
-            f'<span class="fanl-track"><span class="fanl-bar" style="width:{bar_w:.0f}%"></span></span>'
-            f'<span class="leader-value">{fppg_int}</span></li>'
+            f'<span class="fanl-track"><span class="fanl-bar" style="width:{bar_w:.0f}%;--fanl-c:{esc(team_chart_color(disp_tid))}"></span></span>'
+            f'<span class="leader-value">{fppg_txt}</span></li>'
         )
     sub = _season_label(fantasy_season, page_season)
     note = f"{sub} · " if sub else ""
@@ -1519,7 +1436,6 @@ def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players:
         # No real games yet: lead with the year-ahead projections and the offseason
         # story; zero-data standings/team-stats/award cards are replaced by the
         # banner's one-line explanation instead of rendering as dash walls.
-        ff_season = completed
         fantasy_season = completed
         body = f"""
         <h1 class="sr-only">SMP Basketball League</h1>
@@ -1527,8 +1443,7 @@ def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players:
         {_home_columns(
             [
                 playoff_odds_card(data, chart_teams, proj_season),
-                stakes_card(data, chart_teams, season),
-                four_factors_scatter_card(data, teams, ff_season, season),
+                game_projection_cards(data, chart_teams, season),
                 river,
             ],
             [
@@ -1550,7 +1465,6 @@ def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players:
             [
                 standings_table(data, chart_teams, season),
                 league_leaders_card(data, players, teams, season),
-                four_factors_scatter_card(data, teams, season, season),
                 river,
             ],
             [
@@ -1572,7 +1486,6 @@ def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players:
             [
                 fa_watch_card(data, teams, season),
                 standings_table(data, chart_teams, season),
-                four_factors_scatter_card(data, teams, completed, season),
                 river,
             ],
             [
@@ -1593,9 +1506,8 @@ def render_home_page(data: dict[str, Any], teams: list[dict[str, Any]], players:
             [
                 standings_table(data, chart_teams, season),
                 playoff_odds_card(data, chart_teams, proj_season),
-                stakes_card(data, chart_teams, season),
+                game_projection_cards(data, chart_teams, season),
                 league_leaders_card(data, players, teams, season),
-                four_factors_scatter_card(data, teams, season, season),
                 river,
             ],
             [

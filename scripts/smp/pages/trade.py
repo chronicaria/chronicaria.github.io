@@ -4,9 +4,12 @@ from __future__ import annotations
 
 Like the Compare page, the Trade Machine is a server-rendered shell whose
 client (static/js/trade-extras.js) fetches assets/app-data.json for rosters,
-contracts, trade values, payrolls (incl. dead money) and the finance block's
-$300M luxury-tax line. The only page-embedded data is a tiny draft-pick
-supplement — app-data.json does not carry picks.
+contracts, Win Shares, payrolls (incl. dead money) and the finance block's
+$300M luxury-tax line. The client grades each build with a post-trade roster
+projection — team OVR, projected record, and a win-shares ledger — instead of
+the engine's abstract "value" number, which the page no longer surfaces
+anywhere. The only page-embedded data is a tiny draft-pick supplement —
+app-data.json does not carry picks.
 
 The contract efficiency table stays fully server-rendered.
 """
@@ -68,13 +71,12 @@ def contract_efficiency_table(players: list[dict[str, Any]], teams: list[dict[st
             td(esc(exp or "—"), sort=exp),
             td(fmt_number(ws, 1), sort=ws),
             td(fmt_number(vorp, 1), sort=vorp),
-            td(fmt_number(player.get("value"), 1), sort=player.get("value")),
             td(fmt_number(ws_per_m * 10, 2), sort=ws_per_m, style=heat_style(ws_per_m, lo, hi, 1)),
         ]))
-    headers = ["Player", "Team", "Age", "Ovr", "Salary", "Thru", "WS", "VORP", "Value", "WS per $10M"]
+    headers = ["Player", "Team", "Age", "Ovr", "Salary", "Thru", "WS", "VORP", "WS per $10M"]
     return f"""
     <section class="card home-section">
-      <div class="section-title-row"><h2>Contract Efficiency</h2><span class="muted small-copy">production per salary dollar, non-minimum contracts · this season</span></div>
+      <div class="section-title-row"><h2>Contract Efficiency</h2><span class="muted small-copy">non-minimum contracts · this season</span></div>
       <div class="toolbar">
         <input class="table-search" data-table-filter="contracts" placeholder="Filter contracts…" aria-label="Filter contracts">
       </div>
@@ -130,7 +132,9 @@ def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players
     extras = trade_extras_payload(data, teams)
     machine = f"""
     <section class="card home-section" data-app="trade">
-      <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy">engine trade values · payrolls incl. dead money</span></div>
+      <div class="section-title-row"><h2>Trade Machine</h2><span class="muted small-copy"
+        title="Each side is re-projected after the swap: engine team OVR, a record from the sim's win-probability model, last season's Win Shares in vs out, and payroll against the luxury-tax line.">post-trade
+        OVR, record &amp; win-share projections · payrolls incl. dead money</span></div>
       <div class="trade-grid">{_trade_side(0, "Team A")}{_trade_side(1, "Team B")}
       </div>
       <div class="trade-summary" data-trade-summary aria-live="polite"></div>
@@ -142,7 +146,7 @@ def render_trade_page(data: dict[str, Any], teams: list[dict[str, Any]], players
     <section class="page-hero">
       <div>
         <h1>Trade Center</h1>
-        <p class="muted">Build trades and find contract bargains</p>
+        <p class="muted">Build a trade, see what each roster becomes</p>
       </div>
     </section>
     {machine}

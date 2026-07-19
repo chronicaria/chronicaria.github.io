@@ -41,7 +41,7 @@
         html += '<span class="oddsr-tip-row">' +
           '<span class="oddsr-tip-dot" style="background:' + escapeHtml(t.color) + '"></span>' +
           escapeHtml(t.ab) +
-          '<span class="oddsr-tip-val">' + Math.round(t.po) + '%</span></span>';
+          '<span class="oddsr-tip-val">' + t.po.toFixed(1) + '%</span></span>';
       });
       const cx = xs(i);
       hLine.setAttribute('x1', cx);

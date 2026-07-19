@@ -2,7 +2,9 @@
 momentum bars, DNP footer, FPTS column, Fantasy MVP, Instant Classic chip)."""
 
 import json
+import math
 import os
+import re
 import sys
 import unittest
 
@@ -178,6 +180,13 @@ class TestBoxScoreTables(unittest.TestCase):
         self.assertNotIn(">GmSc<", self.html)
         self.assertNotIn("ESPN", self.html)
 
+    def test_shot_zone_percentages_have_one_decimal(self):
+        zones = self.html.index("Shot Zones")
+        pcts = re.findall(r"\((\d+(?:\.\d+)?)%\)", self.html[zones:])
+        self.assertTrue(pcts)
+        for pct in pcts:
+            self.assertRegex(pct, r"^\d+\.\d$")
+
 
 class TestGameStars(unittest.TestCase):
     def _best(self, item, key_fn):
@@ -273,6 +282,57 @@ class TestPreviewPages(unittest.TestCase):
 
     def test_preview_center_is_at_sign(self):
         self.assertIn('<span class="gx-at">@</span>', self.html)
+
+
+class TestPreviewProjection(unittest.TestCase):
+    """The preview hero's projection block: win probabilities + spread, one
+    decimal, numerically identical to the Monte Carlo's win_prob model."""
+
+    def setUp(self):
+        self.item = _scheduled_item()  # home_tid=1, away_tid=2, season 2031
+        self.html = render(self.item, [self.item], 2031)
+
+    def _sim_probability(self):
+        from smp.simmodel import SIM_HCA, SIM_LOGISTIC_K, sim_client_inputs
+        strengths = sim_client_inputs(DATA, TEAMS, PLAYERS, 2031)["strengths"]
+        diff = strengths[1] - strengths[2] + SIM_HCA
+        return diff, 1.0 / (1.0 + math.exp(-diff * SIM_LOGISTIC_K))
+
+    def test_projection_block_present_in_hero(self):
+        hero_end = self.html.index("box-team-section")
+        self.assertIn('class="gx-proj"', self.html[:hero_end])
+        self.assertIn("gx-proj-bar", self.html)
+        self.assertIn("gx-proj-spread", self.html)
+
+    def test_strengths_match_sim_client_inputs(self):
+        from smp.simmodel import sim_client_inputs
+        expected = sim_client_inputs(DATA, TEAMS, PLAYERS, 2031)["strengths"]
+        computed = game_page.preview_strengths(TEAMS, PLAYERS, 2031)
+        self.assertEqual(computed, expected)
+
+    def test_probabilities_one_decimal_and_sum_to_100(self):
+        _, p_home = self._sim_probability()
+        home_pct = round(p_home * 100, 1)
+        away_pct = round(100.0 - home_pct, 1)
+        self.assertIn(">%.1f%%<" % home_pct, self.html)
+        self.assertIn(">%.1f%%<" % away_pct, self.html)
+        self.assertAlmostEqual(home_pct + away_pct, 100.0, places=6)
+
+    def test_spread_shows_favorite_laying_points(self):
+        diff, _ = self._sim_probability()
+        fav = TEAMS_BY_TID[1 if diff > 0 else 2]["abbrev"]
+        self.assertIn("%s %.1f" % (fav, -abs(diff)), self.html)
+
+    def test_completed_game_has_no_projection(self):
+        item = item_by_gid(ITEMS_2030, 518)
+        html = render(item, ITEMS_2030, 2030)
+        self.assertNotIn("gx-proj", html)
+
+    def test_win_prob_formula_matches_simulate_league(self):
+        # p = 1/(1+exp(-(sH-sA+1.5)*0.16)) — the exact win_prob inside the sim.
+        strengths = {1: 2.0, 2: -1.0}
+        p = game_page.preview_home_win_prob(strengths, 1, 2)
+        self.assertAlmostEqual(p, 1.0 / (1.0 + math.exp(-(2.0 - (-1.0) + 1.5) * 0.16)), places=12)
 
 
 class TestDramaThreshold(unittest.TestCase):

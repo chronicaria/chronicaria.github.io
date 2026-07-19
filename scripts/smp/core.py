@@ -289,7 +289,8 @@ def fmt_money(amount: Any) -> str:
         millions = magnitude / 1000
         if abs(millions - round(millions)) < 1e-9:
             return f"{sign}${int(round(millions))}M"
-        return sign + f"${millions:.2f}M".rstrip("0").rstrip(".")
+        num = f"{millions:.2f}".rstrip("0").rstrip(".")
+        return f"{sign}${num}M"
     return f"{sign}${int(round(magnitude))}K"
 
 

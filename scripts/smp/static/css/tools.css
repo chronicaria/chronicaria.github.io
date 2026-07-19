@@ -2,6 +2,45 @@
 .tool-note { font-size: .78rem; margin: .2rem 0 .6rem; }
 
 /* Lineup Lab */
+.ll-head { align-items: center; }
+
+/* 5-man / 10-man segmented radio control (same pattern as the Win-Out locks) */
+.ll-segs { display: inline-flex; border: 1px solid var(--line); border-radius: .15rem; overflow: hidden; }
+.ll-seg { position: relative; } /* keep the visually-hidden radio over its own segment */
+.ll-seg input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+.ll-seg span {
+  display: inline-block;
+  padding: .24rem .65rem;
+  font-size: .74rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-left: 1px solid var(--line);
+}
+.ll-seg:first-child span { border-left: 0; }
+.ll-seg input:checked + span { background: var(--accent-soft); color: var(--text); }
+.ll-seg input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: -2px; }
+.ll-seg span:hover { color: var(--text); }
+
+.ll-bench { margin: .1rem 0 .8rem; padding-top: .55rem; border-top: 1px dashed var(--line); }
+.ll-bench-title {
+  margin: 0 0 .5rem;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.ll-bench-title .small-copy { text-transform: none; letter-spacing: 0; font-weight: 400; }
+
 .ll-slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: .75rem; margin-bottom: .8rem; }
 @media (max-width: 1050px) { .ll-slots { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 640px) { .ll-slots { grid-template-columns: 1fr; } }

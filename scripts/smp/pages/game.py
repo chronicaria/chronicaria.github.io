@@ -57,6 +57,11 @@ from ..derived import drama_index, fantasy_pts
 
 from ..identity import team_identity
 
+# Read-only consumption of the sim model: the exact constants and player-impact
+# function behind simulate_league / sim_client_inputs, so the preview projection
+# below shows the same numbers the Monte Carlo uses (parity is tested).
+from ..simmodel import SIM_HCA, SIM_LOGISTIC_K, SIM_MOV_BLEND_K, player_game_impact
+
 
 SHOT_ZONES = [("AtRim", "Rim"), ("LowPost", "Post"), ("MidRange", "Mid"), ("", "3P")]
 
@@ -87,7 +92,7 @@ def shot_zone_cells(box: dict[str, Any]) -> list[str]:
         else:
             made, att = safe_float(box.get("fg" + suffix)), safe_float(box.get("fga" + suffix))
         pct = made_pct(made, att)
-        cells.append(td(f"{fmt_number(made, 0)}-{fmt_number(att, 0)} <span class=\"muted\">({fmt_pct(pct, 0)}%)</span>" if att else "—", sort=pct))
+        cells.append(td(f"{fmt_number(made, 0)}-{fmt_number(att, 0)} <span class=\"muted\">({fmt_pct(pct, 1)}%)</span>" if att else "—", sort=pct))
     return cells
 
 
@@ -582,7 +587,8 @@ def line_score_html(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]
 
 def box_score_header(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any]],
                      prev_item: dict[str, Any] | None, next_item: dict[str, Any] | None,
-                     feats_by_gid: dict[str, list[dict[str, Any]]] | None = None) -> str:
+                     feats_by_gid: dict[str, list[dict[str, Any]]] | None = None,
+                     projection_html: str = "") -> str:
     season = safe_int(item.get("season"))
     home_tid = item.get("home_tid")
     away_tid = item.get("away_tid")
@@ -615,7 +621,10 @@ def box_score_header(item: dict[str, Any], teams_by_tid: dict[int, dict[str, Any
         {game_series_note(item, teams_by_tid)}
         """
     else:
-        extras = '<p class="scheduled-note">Scheduled game · box score to come.</p>'
+        extras = f"""
+        {projection_html}
+        <p class="scheduled-note">Scheduled game · box score to come.</p>
+        """
 
     return f"""
     <section class="box-score-hero card gx-hero" style="{hero_style_vars(home_tid, away_tid)}">
@@ -681,6 +690,107 @@ def season_series_html(item: dict[str, Any], all_items: list[dict[str, Any]], te
       <div class="section-title-row"><h2>Season Series</h2><span class="muted small-copy">{esc(series_text)}</span></div>
       <div class="series-row">{''.join(chips)}</div>
     </section>
+    """
+
+
+# ---------------------------------------------------------------------------
+# Preview projection (win probability + spread, sim-consistent)
+# ---------------------------------------------------------------------------
+
+# Strengths are identical for every preview page in a build; memoize on the
+# exact list objects build.py passes to every render_game_page call.
+_STRENGTH_CACHE: dict[tuple[int, int, int, int, int], dict[int, float]] = {}
+
+
+def preview_strengths(teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> dict[int, float]:
+    """Healthy-baseline sim strengths per tid, mirroring simmodel.sim_client_inputs.
+
+    Same math as the Monte Carlo's base strength: current-roster top-10
+    per-game impact centered on the league mean, blended with CURRENT-season
+    scoring margin at weight gp/(gp+SIM_MOV_BLEND_K). Tests assert parity with
+    sim_client_inputs so displayed odds always agree with the sim.
+    """
+    key = (id(teams), len(teams), id(players), len(players), season)
+    cached = _STRENGTH_CACHE.get(key)
+    if cached is not None:
+        return cached
+    tids = [safe_int(t.get("tid")) for t in teams if t.get("tid") is not None]
+    roster_by_tid: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for player in players:
+        tid = safe_int(player.get("tid"), -9)
+        if tid >= 0:
+            roster_by_tid[tid].append(player)
+    roster_strength: dict[int, float] = {}
+    for tid in tids:
+        rotation = sorted(roster_by_tid.get(tid, []), key=lambda p: -player_game_impact(p, season))[:10]
+        roster_strength[tid] = sum(player_game_impact(p, season) for p in rotation)
+    mean_roster = sum(roster_strength.values()) / len(roster_strength) if roster_strength else 0.0
+    strengths: dict[int, float] = {}
+    for team in teams:
+        tid = safe_int(team.get("tid"))
+        stat = latest_team_stat(team, season)
+        # latest_team_stat falls back to an earlier season's row when this
+        # season has no stats yet — never blend last season's margin.
+        if safe_int(stat.get("season")) == season:
+            gp = safe_float(stat.get("gp"))
+            mov = team_mov(stat) or 0.0
+        else:
+            gp, mov = 0.0, 0.0
+        mov_weight = gp / (gp + SIM_MOV_BLEND_K)
+        strengths[tid] = (1.0 - mov_weight) * (roster_strength.get(tid, 0.0) - mean_roster) + mov_weight * mov
+    _STRENGTH_CACHE[key] = strengths
+    return strengths
+
+
+def preview_home_win_prob(strengths: dict[int, float], home_tid: int, away_tid: int) -> float:
+    """p(home) = 1 / (1 + exp(-(sH - sA + SIM_HCA) * SIM_LOGISTIC_K)) — the sim's win_prob."""
+    diff = strengths.get(home_tid, 0.0) - strengths.get(away_tid, 0.0) + SIM_HCA
+    return 1.0 / (1.0 + math.exp(-diff * SIM_LOGISTIC_K))
+
+
+def preview_projection_html(item: dict[str, Any], teams: list[dict[str, Any]],
+                            teams_by_tid: dict[int, dict[str, Any]],
+                            players: list[dict[str, Any]], season: int) -> str:
+    """Hero centerpiece for unplayed games: both win probabilities + the spread."""
+    home_tid = safe_int(item.get("home_tid"))
+    away_tid = safe_int(item.get("away_tid"))
+    if home_tid not in teams_by_tid or away_tid not in teams_by_tid:
+        return ""
+    strengths = preview_strengths(teams, players, season)
+    p_home = preview_home_win_prob(strengths, home_tid, away_tid)
+    diff = strengths.get(home_tid, 0.0) - strengths.get(away_tid, 0.0) + SIM_HCA
+    # One-decimal percentages that always sum to 100.0.
+    home_pct = round(p_home * 100, 1)
+    away_pct = round(100.0 - home_pct, 1)
+    home_ab = team_abbrev_for_tid(home_tid, teams_by_tid)
+    away_ab = team_abbrev_for_tid(away_tid, teams_by_tid)
+    # Spread from the favorite's side: home lays -(sH-sA+HCA) points.
+    if abs(round(diff, 1)) < 0.05:
+        spread_text = "Pick 'em"
+    else:
+        fav_ab = home_ab if diff > 0 else away_ab
+        spread_text = f"{fav_ab} {fmt_number(-abs(diff), 1)}"
+    fav_side = "home" if diff > 0 else ("away" if diff < 0 else "even")
+    aria = (
+        f"Projection: {away_ab} {fmt_pct(away_pct, 1)} percent, "
+        f"{home_ab} {fmt_pct(home_pct, 1)} percent, spread {spread_text}"
+    )
+    return f"""
+      <div class="gx-proj" role="group" aria-label="{esc(aria)}">
+        <div class="gx-proj-nums">
+          <span class="gx-proj-side gx-proj-away{' gx-proj-fav' if fav_side == 'away' else ''}">
+            <span class="gx-proj-pct">{fmt_pct(away_pct, 1)}%</span>
+            <span class="gx-proj-team">{esc(away_ab)}</span>
+          </span>
+          <span class="gx-proj-spread" title="Projected spread — sim strengths plus a {fmt_number(SIM_HCA, 1)}-point home edge">{esc(spread_text)}</span>
+          <span class="gx-proj-side gx-proj-home{' gx-proj-fav' if fav_side == 'home' else ''}">
+            <span class="gx-proj-pct">{fmt_pct(home_pct, 1)}%</span>
+            <span class="gx-proj-team">{esc(home_ab)}</span>
+          </span>
+        </div>
+        <div class="gx-proj-bar" aria-hidden="true"><span class="gx-proj-fill gx-proj-fill-away" style="width:{away_pct}%"></span><span class="gx-proj-fill gx-proj-fill-home" style="width:{home_pct}%"></span></div>
+        <p class="gx-proj-caption muted small-copy">Win probability · same model as the season sim</p>
+      </div>
     """
 
 
@@ -805,12 +915,14 @@ def render_game_page(item: dict[str, Any], all_items: list[dict[str, Any]], team
     next_item = ordered_items[index + 1] if 0 <= index < len(ordered_items) - 1 else None
     home_box = item.get("home_box") or projected_team_box(item.get("home_tid"), players, season)
     away_box = item.get("away_box") or projected_team_box(item.get("away_tid"), players, season)
-    preview = "" if is_completed_game_item(item) else game_preview_html(item, teams_by_tid, players, season, "../")
+    completed = is_completed_game_item(item)
+    preview = "" if completed else game_preview_html(item, teams_by_tid, players, season, "../")
+    projection = "" if completed else preview_projection_html(item, teams, teams_by_tid, players, season)
     series = season_series_html(item, all_items, teams_by_tid, "../")
     clutch = clutch_plays_html(item, "../")
     shots = game_shot_profile(item, teams_by_tid, "../")
     body = f"""
-    {box_score_header(item, teams_by_tid, prev_item, next_item, feats_by_gid=feats_by_gid)}
+    {box_score_header(item, teams_by_tid, prev_item, next_item, feats_by_gid=feats_by_gid, projection_html=projection)}
     {clutch}
     {preview}
     {box_score_team_table(away_box, teams_by_tid, players_by_pid, root='../')}

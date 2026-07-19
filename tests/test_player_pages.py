@@ -168,6 +168,31 @@ class TestTradingCard(unittest.TestCase):
         self.assertNotIn("Asking price", html)
 
 
+class TestHeroHonors(unittest.TestCase):
+    AWARDS = [
+        {"season": 2027, "type": "Most Valuable Player"},
+        {"season": 2028, "type": "Most Valuable Player"},
+        {"season": 2028, "type": "Won Championship"},
+        {"season": 2028, "type": "First Team All-League"},
+        {"season": 2028, "type": "League Scoring Leader"},
+    ]
+
+    def test_hero_card_carries_compact_crest_strip_with_counts(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        html = pp.trading_card_html(_player(40, awards=self.AWARDS), teams_by_tid, 2031)
+        self.assertIn("player-card-honors", html)
+        self.assertIn("card-honor--gold", html)  # champion/MVP tier
+        self.assertIn("×2", html)  # MVP twice
+        self.assertIn("All-League 1st", html)
+        # Champion (award order) leads the strip; stat titles stay off the hero.
+        self.assertLess(html.index("Champion"), html.index("MVP"))
+        self.assertNotIn("Scoring Leader", html)
+
+    def test_no_awards_means_no_strip(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        self.assertNotIn("player-card-honors", pp.trading_card_html(_player(41), teams_by_tid, 2031))
+
+
 class TestTrophyCase(unittest.TestCase):
     def test_groups_repeat_awards_with_counts(self):
         player = _player(5, awards=[
@@ -199,6 +224,12 @@ class TestFantasyPoints(unittest.TestCase):
         expected = lg.fantasy_pts(player["stats"][0]) / 10.0
         self.assertIn(f">{expected:.0f}<", table)
         self.assertNotIn(f">{expected:.1f}<", table)
+
+    def test_integer_fpts_never_renders_minus_zero(self):
+        self.assertEqual(pp._fmt_int(-0.4), "0")
+        self.assertEqual(pp._fmt_int(-0.5), "0")
+        self.assertEqual(pp._fmt_int(-1.6), "-2")
+        self.assertEqual(pp._fmt_int(50.2), "50")
 
     def test_game_log_has_integer_fpts_and_no_gmsc(self):
         teams_by_tid = {t["tid"]: t for t in TEAMS}
@@ -259,18 +290,33 @@ class TestShotDiet(unittest.TestCase):
 
 
 class TestContractSection(unittest.TestCase):
-    def test_salary_table_guaranteed_first_with_ufa_row(self):
+    def test_salary_table_current_first_then_guaranteed_then_history(self):
         html = pp.salary_history_html(_player(14), 2031)
-        # UFA row (exp 2032 -> 2033) leads, then guaranteed/current/history desc.
-        ufa_pos = html.index("UFA")
-        pos_2032 = html.index(">2032<")
+        # Current season leads (highlighted), guaranteed years ascend, the
+        # UFA row (exp 2032 -> 2033) follows, then history newest-first.
         pos_2031 = html.index(">2031<")
+        pos_2032 = html.index(">2032<")
+        ufa_pos = html.index("UFA")
         pos_2030 = html.index(">2030<")
-        self.assertLess(ufa_pos, pos_2032)
-        self.assertLess(pos_2032, pos_2031)
-        self.assertLess(pos_2031, pos_2030)
+        self.assertLess(pos_2031, pos_2032)
+        self.assertLess(pos_2032, ufa_pos)
+        self.assertLess(ufa_pos, pos_2030)
+        self.assertIn("salary-current", html)
         self.assertIn("guaranteed", html)
         self.assertIn("total-row", html)
+
+    def test_salary_table_spans_through_season_plus_four(self):
+        # Contract through 2038: rows stop at 2035, no UFA row (2039 > 2035).
+        player = _player(19, contract={"amount": 20000, "exp": 2038})
+        html = pp.salary_history_html(player, 2031)
+        self.assertIn(">2035<", html)
+        self.assertNotIn(">2036<", html)
+        self.assertNotIn(">2037<", html)
+        self.assertNotIn(">2038<", html)
+        self.assertNotIn("UFA", html)
+        # Total covers only the seasons shown: 2030 + 2031 + 2032..2035 filled.
+        shown_total = 15000 + 20000 + 20000 + 20000 * 3
+        self.assertIn(lg.fmt_money(shown_total), html)
 
     def test_free_agent_has_no_ufa_row_and_no_future_fill(self):
         html = pp.salary_history_html(_player(15, tid=-1), 2031)
@@ -282,28 +328,25 @@ class TestContractSection(unittest.TestCase):
         self.assertIn("Current deal", pp.contract_summary_html(_player(17), 2031))
 
     def test_ovr_delta_carries_vs_last_season_tooltip(self):
-        teams_by_tid = {t["tid"]: t for t in TEAMS}
-        html = pp.player_bio_html(_player(18), teams_by_tid, 2031)
+        html = pp.player_ratings_html(_player(18), 2031)
         self.assertIn("Change vs last season", html)
         self.assertIn("vs last season", html)
 
 
 class TestRatingDeltas(unittest.TestCase):
-    def test_bio_panel_shows_green_deltas_for_all_rated_keys(self):
-        teams_by_tid = {t["tid"]: t for t in TEAMS}
+    def test_ratings_card_shows_green_deltas_for_all_rated_keys(self):
         ratings = [
             {"season": 2030, "pos": "SG", "ovr": 60, "pot": 66, "hgt": 50, "stre": 40, "tp": 70},
             {"season": 2031, "pos": "SG", "ovr": 63, "pot": 66, "hgt": 50, "stre": 44, "tp": 68},
         ]
-        html = pp.player_bio_html(_player(20, ratings=ratings), teams_by_tid, 2031)
+        html = pp.player_ratings_html(_player(20, ratings=ratings), 2031)
         self.assertIn('delta-up">(+3)', html)   # ovr 60 -> 63
         self.assertIn('delta-up">(+4)', html)   # stre 40 -> 44
         self.assertIn('delta-down">(-2)', html)  # tp 70 -> 68
 
     def test_rookie_single_season_shows_no_delta(self):
-        teams_by_tid = {t["tid"]: t for t in TEAMS}
         ratings = [{"season": 2031, "pos": "SG", "ovr": 55, "pot": 70, "stre": 40}]
-        html = pp.player_bio_html(_player(21, ratings=ratings), teams_by_tid, 2031)
+        html = pp.player_ratings_html(_player(21, ratings=ratings), 2031)
         self.assertNotIn("delta-up", html)
         self.assertNotIn("delta-down", html)
 
@@ -313,6 +356,57 @@ class TestNoRatingTrajectories(unittest.TestCase):
         pages = pp.render_player_pages(_player(22), TEAMS, 2031, 2026, log_entries=[_log_entry()])
         self.assertNotIn("Rating Trajectories", pages[""])
         self.assertNotIn("data-subrating-grid", pages[""])
+
+
+class TestPageComposition(unittest.TestCase):
+    def test_overview_splits_into_main_and_sidebar_with_section_heads(self):
+        pages = pp.render_player_pages(_player(23), TEAMS, 2031, 2026, log_entries=[_log_entry()])
+        unified = pages[""]
+        self.assertIn("overview-grid", unified)
+        self.assertIn('class="ov-main"', unified)
+        self.assertIn('class="ov-side"', unified)
+        # Identity vars scope the whole page, not just the hero card.
+        self.assertIn('class="player-scope"', unified)
+        # Landmark heads for the anchored sections.
+        for head in ("Stats", "Game Log", "Ratings", "Contract &amp; Injuries"):
+            self.assertIn(f"<h2>{head}</h2>", unified)
+
+    def test_free_agent_page_uses_neutral_scope(self):
+        pages = pp.render_player_pages(_player(24, tid=-1), TEAMS, 2031, 2026)
+        self.assertIn("player-scope player-scope--fa", pages[""])
+
+    def test_summary_is_a_tile_strip_with_career_line(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        html = pp.player_summary_rows(_player(25), teams_by_tid, 2030, 2026)
+        self.assertIn("sumtile-grid", html)
+        self.assertIn("sumtile-career", html)
+        self.assertIn(">PTS<", html)
+        self.assertIn(">30.0<", html)  # 300 pts / 10 gp
+        # No stats at all -> no card.
+        self.assertEqual(pp.player_summary_rows(_player(26, with_stats=False), teams_by_tid, 2030, 2026), "")
+
+    def test_per_game_table_defaults_to_key_columns(self):
+        teams_by_tid = {t["tid"]: t for t in TEAMS}
+        player = _player(27)
+        html = pp.per_game_table(player, player["stats"], teams_by_tid, "../", "Per Game", "t27")
+        self.assertIn('data-colgroup-toggle="t27"', html)
+        self.assertIn('data-colgroup-default="key"', html)
+        self.assertIn('data-colgroup="shooting"', html)
+
+    def test_shot_diet_share_has_one_decimal(self):
+        player = _player(28)
+        data = {
+            "games": [{
+                "season": 2030,
+                "teams": [{"players": [{
+                    "pid": 28, "fgAtRim": 4, "fgaAtRim": 6, "fgLowPost": 1,
+                    "fgaLowPost": 2, "fgMidRange": 2, "fgaMidRange": 5,
+                    "tp": 1, "tpa": 4,
+                }]}],
+            }],
+        }
+        html = pp.shot_diet_html(player, data, 2026)
+        self.assertIn("35.3% of attempts", html)  # 6/17 at the rim, one decimal
 
 
 if __name__ == "__main__":

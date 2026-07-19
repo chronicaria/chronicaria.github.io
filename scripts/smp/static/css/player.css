@@ -57,7 +57,6 @@
 .rating-row { display: flex; justify-content: space-between; gap: .6rem; padding: .12rem 0; font-size: .8rem; }
 .rating-row span { color: var(--muted); }
 .rating-row strong { text-align: right; font-weight: 600; white-space: nowrap; }
-.summary-wrap table { min-width: 700px; }
 .home-hero { margin-bottom: .75rem; }
 .home-section { margin-bottom: .75rem; }
 .award-name strong { display: block; font-size: .9rem; color: var(--text); }
@@ -76,6 +75,20 @@
   border: 1px solid var(--line);
 }
 .candidate-img.placeholder { display: grid; place-items: center; color: var(--muted); font-weight: 700; font-size: .68rem; }
+
+/* ---------- player scope (team identity vars for everything on the page) ---------- */
+.player-scope {
+  --team-primary: #3a4150;
+  --team-secondary: #8a93a5;
+  --team-on-primary: #ffffff;
+  /* A secondary that always reads against the page background, both themes. */
+  --team-ink: color-mix(in srgb, var(--team-secondary) 62%, var(--text));
+}
+.player-scope--fa {
+  --team-primary: #5c636e;
+  --team-secondary: #c3cad4;
+  --team-on-primary: #ffffff;
+}
 
 /* ---------- trading-card hero ---------- */
 .player-card {
@@ -218,6 +231,37 @@
   letter-spacing: .07em;
 }
 .plate-ask strong { font-size: .95rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+/* Honors strip: mini award crests with counts, the card's banner rail. */
+.player-card-honors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem .35rem;
+  padding: .45rem 1.1rem .4rem;
+  background: color-mix(in srgb, var(--team-primary) 7%, var(--panel));
+  border-bottom: 1px solid var(--line);
+}
+.card-honor {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .16rem .55rem .16rem .42rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+.card-honor .card-honor-crest { width: 1.1em; height: 1.1em; flex: 0 0 auto; color: var(--team-ink); }
+.honor-count { font-weight: 800; font-size: .7rem; color: var(--muted); }
+.card-honor--gold {
+  border-color: color-mix(in srgb, var(--warn) 45%, var(--line));
+  background: var(--warn-soft);
+}
+.card-honor--gold .card-honor-crest,
+.card-honor--gold .honor-count { color: var(--warn); }
 /* Headline per-game stat tiles: counting row over shooting-splits row. */
 .player-card-tiles {
   display: grid;
@@ -324,56 +368,115 @@ a.career-dot:hover { transform: scale(1.18); }
 .rail-link.active { color: var(--text); background: var(--panel-3); box-shadow: inset 0 -2px 0 var(--accent); }
 .player-section { scroll-margin-top: var(--anchor-offset, 7.5rem); }
 
-/* ---------- bio card ---------- */
-.player-bio-cols {
+/* ---------- section landmark heads ---------- */
+.psec-head {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin: 1.5rem 0 .6rem;
+}
+.psec-head::before {
+  content: "";
+  flex: 0 0 auto;
+  width: .32rem;
+  height: 1.05rem;
+  border-radius: .12rem;
+  background: var(--team-ink, var(--accent));
+}
+.psec-head h2 {
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: .01em;
+  text-transform: none;
+  color: var(--text);
+}
+.psec-head::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ---------- overview: main column + sidebar ---------- */
+.overview-grid {
   display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(340px, 620px);
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 336px);
+  gap: .75rem;
   align-items: start;
 }
-@media (max-width: 980px) {
-  .player-bio-cols { grid-template-columns: 1fr; }
+.ov-main, .ov-side { min-width: 0; }
+.ov-side .details-grid { grid-template-columns: 1fr; }
+@media (max-width: 1024px) {
+  .overview-grid { grid-template-columns: 1fr; }
 }
-.rating-caption { margin: .1rem 0 .2rem; }
 
-/* ---------- trophy case ---------- */
-.trophy-case .trophy-shelf {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .5rem .6rem;
-  align-items: stretch;
-  padding: .45rem 0 .55rem;
-  border-bottom: 2px solid var(--line);
+/* ---------- season vs career tiles ---------- */
+.sumtile-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: .4rem;
 }
-.trophy-case .trophy-shelf:last-child { border-bottom: 0; padding-bottom: .1rem; }
-.trophy {
-  display: inline-flex;
-  align-items: center;
-  gap: .45rem;
-  padding: .4rem .6rem;
+.sumtile {
+  display: grid;
+  gap: .08rem;
+  justify-items: center;
+  padding: .45rem .3rem .4rem;
   border: 1px solid var(--line);
   border-radius: .15rem;
   background: var(--panel-2);
-  color: var(--text);
+  text-align: center;
 }
-.trophy .trophy-crest { width: 1.7em; height: 1.7em; vertical-align: middle; }
-.trophy--gold {
-  color: var(--warn);
-  border-color: color-mix(in srgb, var(--warn) 45%, var(--line));
+.sumtile-label {
+  color: var(--muted);
+  font-size: .62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.sumtile > strong { font-size: 1.06rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.sumtile-career { font-size: .68rem; font-variant-numeric: tabular-nums; }
+.sumtile-cap { text-transform: uppercase; letter-spacing: .05em; font-size: .58rem; }
+@media (max-width: 700px) {
+  .sumtile-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ---------- trophy case (slim ledger) ---------- */
+.trophy-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: .3rem;
+}
+.trophy-line {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .34rem .55rem;
+  border: 1px solid var(--line);
+  border-radius: .15rem;
+  background: var(--panel-2);
+  font-size: .78rem;
+}
+.trophy-line .trophy-crest { width: 1.35em; height: 1.35em; flex: 0 0 auto; color: var(--team-ink, var(--muted)); }
+.trophy-line--gold {
+  border-color: color-mix(in srgb, var(--warn) 40%, var(--line));
   background: var(--warn-soft);
 }
-.trophy-label { font-size: .78rem; font-weight: 700; color: var(--text); }
-.trophy-count { font-size: .78rem; font-weight: 800; color: var(--warn); }
-.trophy-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: .12rem .5rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
+.trophy-line--gold .trophy-crest { color: var(--warn); }
+.trophy-line-main { font-weight: 700; color: var(--text); }
+.trophy-count { font-size: .75rem; font-weight: 800; color: var(--warn); margin-left: .28rem; }
+.trophy-line-seasons { margin-left: auto; text-align: right; font-size: .7rem; }
+.trophy-dot {
+  flex: 0 0 auto;
+  width: .5rem;
+  height: .5rem;
+  border-radius: 50%;
   background: var(--panel-3);
-  color: var(--muted);
-  font-size: .75rem;
+  border: 1px solid var(--line);
+  margin: 0 .28rem;
 }
+.trophy-line--minor .trophy-line-main { font-weight: 600; color: var(--muted); }
 
 /* ---------- shot diet ---------- */
 .shotdiet-row {
@@ -401,3 +504,18 @@ td.led-league { font-weight: 700; color: var(--warn); }
 /* ---------- contract & salary ---------- */
 .salary-note { margin-left: .25rem; }
 .salary-ufa { font-weight: 600; letter-spacing: .04em; }
+tr.salary-current td { background: color-mix(in srgb, var(--team-ink, var(--accent)) 14%, transparent); }
+tr.salary-current td:first-child { font-weight: 700; }
+tr.salary-future td { color: var(--muted); }
+tr.salary-future td .salary-note { color: var(--muted); }
+
+/* ---------- card-title rhythm below the hero ---------- */
+.player-section .stats-section .section-title-row,
+.player-section .sum-card .section-title-row,
+.player-section .ratings-current .section-title-row {
+  padding-bottom: .45rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: .6rem;
+}
+.player-section .card { margin-bottom: .75rem; }
+.ov-side .card { background: color-mix(in srgb, var(--panel) 96%, var(--team-primary)); }

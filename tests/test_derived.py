@@ -19,9 +19,13 @@ from smp.simmodel import (  # noqa: E402
     REPLACEMENT_OVR,
     SIM_HCA,
     SIM_LOGISTIC_K,
+    game_win_prob,
     league_bench_ovrs,
     player_game_impact,
+    projected_margin,
+    projected_spread,
     sim_client_inputs,
+    sim_strengths,
     simulate_league,
 )
 
@@ -204,7 +208,7 @@ def _league_player(pid, tid, ovr, season=2030):
             "season": season - 1, "playoffs": False, "tid": tid, "gp": 10,
             "min": 300, "pts": 150, "fg": 60, "fga": 120, "tp": 10, "tpa": 30,
             "ft": 20, "fta": 25, "orb": 10, "drb": 40, "ast": 30, "stl": 8,
-            "blk": 5, "tov": 12, "obpm": 1.0, "dbpm": 0.5,
+            "blk": 5, "tov": 12, "obpm": 1.0, "dbpm": 0.5, "ows": 1.5, "dws": 0.5,
         }],
     }
 
@@ -291,14 +295,18 @@ class TestAppData(unittest.TestCase):
     def test_schema_keys_present(self):
         data = _league_export()
         app = appdata.build_app_data(data)
-        self.assertEqual(sorted(app.keys()), ["finance", "players", "season", "sim", "teams"])
+        self.assertEqual(sorted(app.keys()), ["finance", "players", "season", "sim", "teams", "ws_season"])
         self.assertEqual(app["season"], 2030)
+        # phase 0 (preseason): the newest COMPLETED season is the previous one
+        self.assertEqual(app["ws_season"], 2029)
         self.assertEqual(app["finance"], {"tax_line": 300000, "notes": "thousands"})
 
         player = app["players"][0]
         for key in ["pid", "name", "pos", "age", "tid", "jersey", "ovr", "pot",
-                    "salary", "exp", "value", "pg", "ratings", "skills"]:
+                    "salary", "exp", "value", "ws", "pg", "ratings", "skills"]:
             self.assertIn(key, player)
+        # "ws" = ows + dws from the ws_season stat row (1.5 + 0.5 in the fixture)
+        self.assertEqual(player["ws"], 2.0)
         self.assertEqual(
             sorted(player["pg"].keys()),
             sorted(["pts", "trb", "ast", "stl", "blk", "tov", "min",
@@ -323,9 +331,10 @@ class TestAppData(unittest.TestCase):
         self.assertEqual(team["payroll"], sum(10000 + 100 * p for p in range(6)))
 
         sim = app["sim"]
-        self.assertEqual(sorted(sim.keys()), ["bench_ovrs", "hca", "logistic_k", "schedule", "strengths"])
+        self.assertEqual(sorted(sim.keys()), ["bench_ovrs", "hca", "logistic_k", "schedule", "season_games", "strengths"])
         self.assertEqual(sim["hca"], SIM_HCA)
         self.assertEqual(sim["logistic_k"], SIM_LOGISTIC_K)
+        self.assertEqual(sim["season_games"], 6)  # the fixture's numGames
         self.assertEqual(sorted(sim["strengths"].keys()), ["0", "1", "2", "3"])
         self.assertTrue(sim["schedule"])
         for entry in sim["schedule"]:
@@ -471,6 +480,67 @@ class TestSimParity(unittest.TestCase):
 
     def test_expected_wins_match_server_sim_in_season(self):
         self._assert_parity(_league_export_in_season())
+
+
+class TestGameModelHelpers(unittest.TestCase):
+    """Read-only helpers (game_win_prob / projected_margin / projected_spread /
+    sim_strengths) expose the sim's exact numbers to other pages."""
+
+    def setUp(self):
+        ALL_PLAYERS_BY_PID.clear()
+
+    def tearDown(self):
+        ALL_PLAYERS_BY_PID.clear()
+
+    def test_game_win_prob_is_the_sims_logistic(self):
+        # Even strengths: home edge only.
+        expected = 1.0 / (1.0 + math.exp(-SIM_HCA * SIM_LOGISTIC_K))
+        self.assertAlmostEqual(game_win_prob(0.0, 0.0), expected, places=12)
+        self.assertGreater(game_win_prob(0.0, 0.0), 0.5)  # HCA favors the host
+        # Arbitrary strengths follow the documented formula exactly.
+        self.assertAlmostEqual(
+            game_win_prob(3.2, -1.1),
+            1.0 / (1.0 + math.exp(-(3.2 - (-1.1) + SIM_HCA) * SIM_LOGISTIC_K)),
+            places=12,
+        )
+
+    def test_projected_margin_is_strength_gap_plus_hca(self):
+        self.assertAlmostEqual(projected_margin(2.0, -1.0), 3.0 + SIM_HCA)
+        self.assertAlmostEqual(projected_margin(0.0, 0.0), SIM_HCA)
+
+    def test_projected_spread_quotes_half_points_for_the_favorite(self):
+        self.assertEqual(projected_spread(2.9, 0.0), -4.5)   # margin +4.4 -> HOME -4.5
+        self.assertEqual(projected_spread(0.0, 3.6), 2.0)    # margin -2.1 -> AWAY -2.0
+        self.assertEqual(projected_spread(-SIM_HCA, 0.0), 0.0)  # dead even -> pick'em
+
+    def test_sim_strengths_matches_client_inputs(self):
+        data = _league_export_in_season()
+        self.assertEqual(
+            sim_strengths(data, data["teams"], data["players"], 2030),
+            sim_client_inputs(data, data["teams"], data["players"], 2030)["strengths"],
+        )
+
+    def test_stakes_payload_reuses_the_same_strengths(self):
+        # The next-slate projection payload must agree with the helpers when fed
+        # sim_client_inputs strengths (no injuries in this fixture).
+        data = _league_export_in_season()
+        teams, players = data["teams"], data["players"]
+        strengths = sim_strengths(data, teams, players, 2030)
+        result = simulate_league(data, teams, players, 2030, sims=200)
+        stakes = result["stakes"]
+        self.assertEqual(result["day"], 3)
+        self.assertEqual([s["gid"] for s in stakes], ["5", "6"])  # both day-3 games
+        for stake in stakes:
+            home, away = stake["home_tid"], stake["away_tid"]
+            self.assertAlmostEqual(
+                stake["home_wp"], game_win_prob(strengths[home], strengths[away]), places=12)
+            self.assertEqual(
+                stake["spread"], projected_spread(strengths[home], strengths[away]))
+            for key in ("home_po_win", "home_po_loss", "away_po_win", "away_po_loss"):
+                value = stake[key]
+                if value is not None:
+                    self.assertGreaterEqual(value, 0.0)
+                    self.assertLessEqual(value, 1.0)
 
 
 if __name__ == "__main__":

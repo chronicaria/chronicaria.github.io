@@ -14,15 +14,43 @@
 .regrade-still { text-transform: uppercase; letter-spacing: .05em; }
 
 /* ---------- rafters (championship pennants) ---------- */
-.rafters { display: flex; align-items: flex-start; gap: .35rem; overflow-x: auto; padding: .35rem .1rem .5rem; }
-.rafters-slot { flex: 1 0 auto; min-width: 4.2rem; display: flex; flex-direction: column; align-items: center; gap: .3rem; text-align: center; }
-.rafters-flags { display: flex; gap: .2rem; align-items: flex-start; min-height: 4.6rem; }
+.rafters-card {
+  background:
+    linear-gradient(color-mix(in srgb, var(--panel-3) 55%, transparent), transparent 46%),
+    var(--panel);
+}
+.rafters-card .section-title-row { border-bottom: 1px solid var(--line); padding-bottom: .45rem; margin-bottom: .2rem; }
+.rafters { display: flex; align-items: flex-start; gap: .55rem; overflow-x: auto; padding: .55rem .15rem .65rem; }
+.rafters-slot {
+  flex: 1 0 auto;
+  min-width: 6.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .45rem;
+  text-align: center;
+}
+.rafters-flags { display: flex; gap: .3rem; align-items: flex-start; min-height: 8rem; }
 .rafters-flag { display: block; line-height: 0; }
-a.rafters-flag:hover .rafters-pennant, a.rafters-flag:focus-visible .rafters-pennant { transform: translateY(2px); }
-.rafters-pennant { width: 3.3rem; height: auto; transition: transform .15s ease; }
-.rafters-pennant-empty { opacity: .6; }
-.rafters-abbrev { font-size: .72rem; font-weight: 700; letter-spacing: .05em; color: var(--text); display: flex; flex-direction: column; gap: .05rem; }
-.rafters-abbrev .muted { font-weight: 500; letter-spacing: 0; }
+a.rafters-flag:hover .rafters-pennant, a.rafters-flag:focus-visible .rafters-pennant { transform: translateY(3px); }
+.rafters-pennant {
+  width: 5.6rem;
+  height: auto;
+  transition: transform .18s ease;
+  filter: drop-shadow(0 5px 9px color-mix(in srgb, var(--text) 16%, transparent));
+}
+.rafters-pennant-empty { opacity: .5; filter: none; }
+.rafters-abbrev { font-size: .8rem; font-weight: 700; letter-spacing: .06em; color: var(--text); display: flex; flex-direction: column; align-items: center; gap: .22rem; }
+.rafters-count {
+  padding: .06rem .5rem;
+  border-radius: 999px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.rafters-count-none { background: transparent; border: 1px dashed var(--line); color: var(--muted); font-weight: 500; }
 @media (prefers-reduced-motion: reduce) {
   .rafters-pennant { transition: none; }
 }
@@ -37,6 +65,18 @@ a.rafters-flag:hover .rafters-pennant, a.rafters-flag:focus-visible .rafters-pen
 .txlog-toolbar { justify-content: flex-start; flex-wrap: wrap; gap: .6rem 1rem; }
 [data-txlog] li.tx-hidden { display: none; }
 [data-txlog] details.tx-season.tx-season-empty { display: none; }
+
+/* ---------- schedule game projections (win% + spread on unplayed games) ---------- */
+.sched-proj {
+  display: block;
+  font-size: .66rem;
+  line-height: 1.3;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sched-proj.sched-fav { color: var(--text); font-weight: 600; }
+.sched-spread { margin-left: .3rem; color: var(--muted); font-weight: 500; }
 
 /* ---------- schedule honest empty state ---------- */
 .sched-empty { margin: .4rem 0; padding: 1rem 1.1rem; border: 1px dashed var(--line); border-radius: .15rem; background: var(--panel-2); max-width: 42rem; }

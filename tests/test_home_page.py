@@ -1,8 +1,8 @@
-"""Tests for scripts/smp/pages/home.py (phase-aware home page, W4).
+"""Tests for scripts/smp/pages/home.py (phase-aware home page, W4/P8).
 
 Covers the phase composition switch, the odds-river chart (including a
 synthetic multi-point ledger and the graceful single-point state), the
-fantasy-leaders card, the four-factors quadrant scatter, and the
+fantasy-leaders card, the per-game projection cards, and the
 offseason-digest event selection.
 """
 
@@ -181,13 +181,13 @@ class TestFantasyLeadersCard(unittest.TestCase):
         self.assertIn("FPTS/G", html)
         self.assertNotIn("ESPN", html)
 
-    def test_fantasy_scoring_value_is_integer(self):
+    def test_fantasy_scoring_value_has_one_decimal(self):
         # Per game: pts20 fg8 fga16 tp2 ft2 fta3 trb8 ast5 stl1 blk1 tov2
-        # = 20 + 2 + 16 - 16 + 2 - 3 + 8 + 10 + 4 + 4 - 4 = 43 FPTS/G, shown as an int
+        # = 20 + 2 + 16 - 16 + 2 - 3 + 8 + 10 + 4 + 4 - 4 = 43 FPTS/G, shown as 43.0
         player = self._player(1, "Known Line", 0, 2030, 40)
         html = home.fantasy_leaders_card(self.data, [player], self.teams, 2030, 2031)
-        self.assertIn(">43</span>", html)
-        self.assertNotIn(">43.0</span>", html)
+        self.assertIn(">43.0</span>", html)
+        self.assertNotIn(">43</span>", html)
 
     def test_no_team_games_renders_nothing(self):
         teams = [_team(0, "AAA"), _team(1, "BBB")]  # no 2030 stat rows
@@ -195,28 +195,76 @@ class TestFantasyLeadersCard(unittest.TestCase):
         self.assertEqual(home.fantasy_leaders_card(self.data, [player], teams, 2030, 2031), "")
 
 
-class TestFourFactorsScatter(unittest.TestCase):
-    def test_renders_dots_labels_and_quadrants(self):
-        teams = [
-            _team(0, "AAA", stats=[_team_stat_row(2030, pts=5100, opp_pts=4800)]),
-            _team(1, "BBB", stats=[_team_stat_row(2030, pts=4800, opp_pts=5100)]),
-        ]
-        data = {"gameAttributes": {"season": 2031, "phase": 0}, "games": []}
-        html = home.four_factors_scatter_card(data, teams, 2030, 2031)
-        self.assertIn('class="ff4-chart"', html)
-        self.assertEqual(html.count('class="ff4-dot"'), 2)
-        self.assertIn(">AAA</text>", html)
-        self.assertIn(">BBB</text>", html)
-        self.assertIn(team_chart_color(0), html)
-        self.assertIn("+ offense · + defense", html)
-        self.assertIn("2030 · last completed season", html)  # honest fallback label
-        self.assertIn('href="teams/region0-name0-0.html"', html)
+class TestGameProjectionCards(unittest.TestCase):
+    """One card per next-slate game: color chips, one-decimal win probability
+    for both sides, a spread quoted for the favorite, and each team's
+    conditional playoff-odds swing — all straight from the sim payload."""
 
-    def test_no_played_games_renders_nothing(self):
-        teams = [_team(0, "AAA", stats=[_team_stat_row(2031, gp=0)]),
-                 _team(1, "BBB", stats=[_team_stat_row(2031, gp=0)])]
-        data = {"gameAttributes": {"season": 2031, "phase": 0}, "games": []}
-        self.assertEqual(home.four_factors_scatter_card(data, teams, 2031, 2031), "")
+    def setUp(self):
+        self._real_league_sim = home.league_sim
+        home.league_sim = lambda data, teams, season: {
+            "teams": {0: {"po": 0.489}, 1: {"po": 0.623}},
+            "stakes": [{
+                "gid": "704", "day": 1, "home_tid": 0, "away_tid": 1,
+                "home_wp": 0.553, "spread": -1.5,
+                "home_po_win": 0.552, "home_po_loss": 0.417,
+                "away_po_win": 0.66, "away_po_loss": 0.581,
+            }],
+            "day": 1,
+            "fresh": True,
+        }
+
+    def tearDown(self):
+        home.league_sim = self._real_league_sim
+
+    def _teams(self):
+        return [_team(0, "AAA"), _team(1, "BBB")]
+
+    def test_card_links_to_preview_and_shows_all_projection_numbers(self):
+        data = {
+            "gameAttributes": {"season": 2031, "phase": 1, "numGames": 45},
+            "games": [],
+            "schedule": [{"gid": 704, "season": 2031, "day": 1, "homeTid": 0, "awayTid": 1}],
+        }
+        html = home.game_projection_cards(data, self._teams(), 2031)
+        self.assertIn("Game Projections · Opening Day", html)
+        # The scheduled game has a real gid: the card links to its preview page.
+        self.assertIn('href="games/704.html"', html)
+        # One-decimal win probability for BOTH teams; away is the exact complement.
+        self.assertIn(">55.3%</strong>", html)
+        self.assertIn(">44.7%</strong>", html)
+        # Spread is quoted for the favorite (home, tid 0 -> AAA) in half points.
+        self.assertIn("AAA -1.5", html)
+        # Playoff-odds swing: current PO% -> if-win / if-lose, all one decimal.
+        self.assertIn("62.3%", html)   # away current PO
+        self.assertIn(">66.0</span>", html)
+        self.assertIn(">58.1</span>", html)
+        self.assertIn("48.9%", html)   # home current PO
+        self.assertIn(">55.2</span>", html)
+        self.assertIn(">41.7</span>", html)
+        # Team color chips carry each side's chart color.
+        self.assertIn(team_chart_color(0), html)
+        self.assertIn(team_chart_color(1), html)
+
+    def test_projected_filler_game_renders_static_card_and_pick_line(self):
+        # A generated round-robin gid has no game page; the card must not link.
+        stub = home.league_sim(None, None, None)
+        stub["stakes"][0].update({"gid": "proj-1", "spread": 0.0, "home_wp": 0.5,
+                                  "home_po_win": None, "home_po_loss": None})
+        home.league_sim = lambda data, teams, season: stub
+        data = {"gameAttributes": {"season": 2031, "phase": 1, "numGames": 45}, "games": []}
+        html = home.game_projection_cards(data, self._teams(), 2031)
+        self.assertIn("gp-static", html)
+        self.assertNotIn("<a class=\"gp-card\"", html)
+        self.assertNotIn('href="#"', html)
+        self.assertIn(">Pick</span>", html)          # dead-even line
+        self.assertIn(">50.0%</strong>", html)
+        self.assertIn(">—</span>", html)             # missing conditional odds stay honest
+
+    def test_no_stakes_renders_nothing(self):
+        home.league_sim = lambda data, teams, season: {"teams": {}, "stakes": [], "day": None, "fresh": False}
+        data = {"gameAttributes": {"season": 2031, "phase": 1}, "games": []}
+        self.assertEqual(home.game_projection_cards(data, self._teams(), 2031), "")
 
 
 class TestOffseasonEvents(unittest.TestCase):
@@ -241,8 +289,8 @@ class TestOffseasonEvents(unittest.TestCase):
 
 class TestPreseasonComposition(unittest.TestCase):
     """The dash-wall acceptance test: a preseason render must not emit the
-    zero-data standings/team-stats/award-sentiment tables, and the stake chips
-    must link to team pages instead of '#'."""
+    zero-data standings/team-stats/award-sentiment tables, and no card may
+    emit a dead '#' link."""
 
     def setUp(self):
         SITE_META.pop("sim", None)
@@ -256,7 +304,9 @@ class TestPreseasonComposition(unittest.TestCase):
                 1: {"po": 0.4, "finals": 0.2, "champ": 0.1, "seeds": [0.5, 0.5], "proj_w": 21.0, "games_left": 45},
             },
             "stakes": [{"gid": "proj-1", "day": 1, "home_tid": 0, "away_tid": 1,
-                        "home_swing": 0.12, "away_swing": 0.10}],
+                        "home_wp": 0.58, "spread": -2.0,
+                        "home_po_win": 0.66, "home_po_loss": 0.52,
+                        "away_po_win": 0.49, "away_po_loss": 0.33}],
             "day": 1,
             "fresh": True,
         }
@@ -303,9 +353,11 @@ class TestPreseasonComposition(unittest.TestCase):
         self.assertNotIn('id="standings-', html)
         self.assertNotIn('id="team-stats"', html)
         self.assertNotIn('id="award-sentiment"', html)
-        # Stake chips link to team pages, never '#'.
+        # Projection cards for a filler game stay unlinked — never '#'.
         self.assertNotIn('href="#"', html)
-        self.assertIn("hm-stake-team", html)
+        self.assertIn("gp-card", html)
+        self.assertIn("Game Projections", html)
+        # Team links elsewhere (odds table) still point at real team pages.
         self.assertIn('href="teams/region0-name0-0.html"', html)
         # The offseason digest replaces the empty in-season news feed.
         self.assertIn("Offseason Digest", html)
@@ -314,7 +366,7 @@ class TestPreseasonComposition(unittest.TestCase):
 
 
 class TestPlayoffOddsPrecision(unittest.TestCase):
-    """PO% / Finals% / Title% show one decimal; per-seed cells stay integers."""
+    """PO% / Finals% / Title% AND the seed-distribution cells all show one decimal."""
 
     def setUp(self):
         self._real_league_sim = home.league_sim
@@ -339,10 +391,11 @@ class TestPlayoffOddsPrecision(unittest.TestCase):
         self.assertIn("25.5%", html)     # rounds to one decimal, not an int
         self.assertIn("&lt;0.1%", html)  # trace odds floor, not "0.0%"
         self.assertIn(">—<", html)       # exactly zero stays a dash
-        # Seed-distribution cells stay integers.
-        self.assertIn(">62<", html)
-        self.assertIn(">38<", html)
-        self.assertNotIn(">62.0<", html)
+        # Seed-distribution cells: compact one-decimal, in tight seed cells.
+        self.assertIn(">62.0<", html)
+        self.assertIn(">38.0<", html)
+        self.assertNotIn(">62<", html)
+        self.assertIn('class="seed-cell', html)
 
     def test_odds_pct_formatter(self):
         self.assertEqual(home._odds_pct(0.0), "—")
@@ -350,6 +403,12 @@ class TestPlayoffOddsPrecision(unittest.TestCase):
         self.assertEqual(home._odds_pct(0.05), "0.1%")
         self.assertEqual(home._odds_pct(74.5), "74.5%")
         self.assertEqual(home._odds_pct(100.0), "100.0%")
+
+    def test_compact_pct_formatter(self):
+        self.assertEqual(home._pct1(0.0), "—")
+        self.assertEqual(home._pct1(0.04), "&lt;0.1")
+        self.assertEqual(home._pct1(31.44), "31.4")
+        self.assertEqual(home._pct1(100.0), "100.0")
 
 
 class TestHomeFinancesTable(unittest.TestCase):

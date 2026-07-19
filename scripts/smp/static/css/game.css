@@ -136,6 +136,61 @@ a.gx-team-name:hover { text-decoration: underline; }
 .gx-dnp a { color: var(--muted); }
 .gx-dnp a:hover { color: var(--text); }
 
+/* ---------- gx-proj: preview projection (win probability + spread) ---------- */
+.gx-proj {
+  max-width: 26rem;
+  margin: .8rem auto .1rem;
+  padding: .6rem .85rem .5rem;
+  border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+  border-radius: .25rem;
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
+  backdrop-filter: blur(2px);
+}
+.gx-proj-nums {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+}
+.gx-proj-side { display: flex; flex-direction: column; line-height: 1.15; min-width: 4.2rem; }
+.gx-proj-away { align-items: flex-start; text-align: left; }
+.gx-proj-home { align-items: flex-end; text-align: right; }
+.gx-proj-pct {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+}
+.gx-proj-fav .gx-proj-pct { color: var(--text); }
+.gx-proj-team { font-size: .68rem; font-weight: 700; letter-spacing: .09em; color: var(--muted); }
+.gx-proj-spread {
+  flex: 0 0 auto;
+  padding: .22rem .65rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: help;
+}
+.gx-proj-bar {
+  display: flex;
+  height: .45rem;
+  margin-top: .5rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--panel-2);
+}
+.gx-proj-fill { display: block; height: 100%; }
+.gx-proj-fill-away { background: color-mix(in srgb, var(--gx-away-chart) 85%, var(--text) 0%); }
+.gx-proj-fill-home { background: color-mix(in srgb, var(--gx-home-chart) 85%, var(--text) 0%); }
+.gx-proj-fill-away + .gx-proj-fill-home { border-left: 2px solid var(--panel); }
+.gx-proj-caption { margin: .45rem 0 0; text-align: center; }
+
 @media (max-width: 900px) {
   .site-header { flex-direction: column; align-items: flex-start; }
   .nav-search { flex: none; width: 100%; }

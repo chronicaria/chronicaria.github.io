@@ -289,10 +289,12 @@ def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: 
     }
 
     def win_prob(home: int, away: int, k_home: int, k_away: int) -> float:
-        diff = (base_strength[home] - penalty_at[home][min(k_home, max_left)]) - (
-            base_strength[away] - penalty_at[away][min(k_away, max_left)]
-        ) + 1.5
-        return 1.0 / (1.0 + math.exp(-diff * 0.16))
+        # The module-level logistic (strength gap + SIM_HCA home edge) over the
+        # injury-adjusted strengths k games into the rest of the season.
+        return game_win_prob(
+            base_strength[home] - penalty_at[home][min(k_home, max_left)],
+            base_strength[away] - penalty_at[away][min(k_away, max_left)],
+        )
 
     rng = random.Random(20290101)
     playoff_count = defaultdict(int)
@@ -372,6 +374,11 @@ def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: 
             "games_left": games_left[tid],
         }
 
+    # Per-game projection payload for the next slate. Win probability and
+    # spread reuse the exact strengths the Monte Carlo fed win_prob for these
+    # games (injury-adjusted at k=0), so any display built on this payload
+    # agrees with the sim; the conditional playoff odds are tallied inside
+    # the same sims.
     stakes = []
     for day, home, away, gid in stakes_games:
         counts = stake_counts[gid]
@@ -380,12 +387,15 @@ def simulate_league(data: dict[str, Any], teams: list[dict[str, Any]], players: 
             total, made = counts[key][0], counts[key][1]
             return made / total if total else None
 
-        home_swing = away_swing = None
-        if rate("home_win") is not None and rate("home_loss") is not None:
-            home_swing = rate("home_win") - rate("home_loss")
-        if rate("away_win") is not None and rate("away_loss") is not None:
-            away_swing = rate("away_win") - rate("away_loss")
-        stakes.append({"gid": gid, "day": day, "home_tid": home, "away_tid": away, "home_swing": home_swing, "away_swing": away_swing})
+        eff_home = base_strength[home] - penalty_at[home][0]
+        eff_away = base_strength[away] - penalty_at[away][0]
+        stakes.append({
+            "gid": gid, "day": day, "home_tid": home, "away_tid": away,
+            "home_wp": game_win_prob(eff_home, eff_away),
+            "spread": projected_spread(eff_home, eff_away),
+            "home_po_win": rate("home_win"), "home_po_loss": rate("home_loss"),
+            "away_po_win": rate("away_win"), "away_po_loss": rate("away_loss"),
+        })
     return {"teams": results, "stakes": stakes, "day": first_day, "fresh": fresh}
 
 
@@ -397,14 +407,66 @@ def league_sim(data: dict[str, Any], teams: list[dict[str, Any]], season: int) -
     return cache[season]
 
 
-# --- client-sim parity (consumed by appdata.py) ------------------------------
-# simulate_league's per-game win probability is
+# --- shared game model (consumed by simulate_league, appdata.py, pages) ------
+# simulate_league decides every game with
 #     p(home) = 1 / (1 + exp(-(strength_diff + SIM_HCA) * SIM_LOGISTIC_K))
-# These constants mirror the literals inside win_prob above (1.5 and 0.16) so the
-# client-side simulator (Win-Out Machine / Lineup Lab) reproduces the exact same
-# model. Keep them in sync with win_prob; tests assert projected-win parity.
+# The constants and the helpers below ARE that model: simulate_league's inner
+# win_prob calls game_win_prob, and the client-side simulator (Win-Out Machine /
+# Lineup Lab) mirrors the same constants. Tests assert projected-win parity.
 SIM_HCA = 1.5
 SIM_LOGISTIC_K = 0.16
+
+
+def game_win_prob(home_strength: float, away_strength: float) -> float:
+    """Home team's single-game win probability from two team strengths.
+
+    This is THE formula the Monte Carlo (simulate_league) decides games with:
+    a logistic over the projected home scoring margin — the strength gap plus
+    the +1.5-point home-court edge (SIM_HCA), scaled by SIM_LOGISTIC_K::
+
+        p(home) = 1 / (1 + exp(-((home - away) + SIM_HCA) * SIM_LOGISTIC_K))
+
+    Read-only consumers (home-page game cards, game previews) call this so
+    their displayed probabilities agree with the sim exactly. Strengths are
+    per-game scoring-margin signals from sim_client_inputs / simulate_league.
+    """
+    return 1.0 / (1.0 + math.exp(-(home_strength - away_strength + SIM_HCA) * SIM_LOGISTIC_K))
+
+
+def projected_margin(home_strength: float, away_strength: float) -> float:
+    """Projected home scoring margin, in points, for a single game.
+
+    Team strengths are per-game scoring-margin signals, so the expected margin
+    is simply ``(home_strength - away_strength) + SIM_HCA`` — the same quantity
+    the win-probability logistic is applied to. Positive means the home team is
+    projected to win by that many points.
+    """
+    return (home_strength - away_strength) + SIM_HCA
+
+
+def projected_spread(home_strength: float, away_strength: float) -> float:
+    """Sportsbook-style point spread for the HOME team, in half-point steps.
+
+    The projected home margin (projected_margin) is quoted the way a book
+    lists a line: negated (the favorite "lays" points) and rounded half-up to
+    the nearest 0.5. A +4.4-point home margin returns -4.5 ("HOME -4.5"); a
+    2.1-point away edge returns +2.0 ("AWAY -2.0"); a dead-even matchup
+    returns 0.0 (a pick'em). Sign only says which side is favored — negative
+    is the home team.
+    """
+    margin = projected_margin(home_strength, away_strength)
+    return -math.floor(margin * 2.0 + 0.5) / 2.0
+
+
+def sim_strengths(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> dict[int, float]:
+    """Read-only team strengths, exactly as the sim computes them.
+
+    Convenience view over sim_client_inputs (which documents the model:
+    current-roster impact blended with current-season MOV, never last
+    season's margin). Feed pairs of these to game_win_prob / projected_spread
+    for displays that must agree with simulate_league's Monte Carlo.
+    """
+    return sim_client_inputs(data, teams, players, season)["strengths"]
 
 
 def sim_client_inputs(data: dict[str, Any], teams: list[dict[str, Any]], players: list[dict[str, Any]], season: int) -> dict[str, Any]:

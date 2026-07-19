@@ -4,56 +4,33 @@
 (function () {
   const app = document.querySelector('[data-lineup-app]');
   if (!app) return;
-  const root = document.body.dataset.root || '';
+  // Shared engine team-OVR port (constants + formula + MOV inverse): published
+  // by trade-extras.js, which precedes this file in the bundle concat order.
+  const O = window.SMPOvr;
+  if (!O) return;
 
   const escapeHtml = (value) => String(value).replace(/[&<>"]/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-  // Faithful JS port of scripts/projections.py team_ovr (regular-season branch),
-  // itself a port of zengm team/ovr.basketball.ts with numPlayersOnCourt == 5:
-  // sort OVRs descending, take the top 10, pad to 10 with 0.0, then
-  //   predictedMOV = -OVR_K + sum_i OVR_A * exp(OVR_B * i) * ovr[i]
-  //   raw = predictedMOV * 50 / 15 + 50, displayed rounded half-up.
-  // tests/test_tools_pages.py regenerates these constants from projections.py
-  // and asserts this formula matches projections.team_ovr on known groups.
-  const OVR_A = 0.3334;
-  const OVR_B = -0.1609;
-  const OVR_K = 102.98;
-  function teamOvrRaw(ovrs) {
-    const top = ovrs.map(Number).sort((a, b) => b - a).slice(0, 10);
-    while (top.length < 10) top.push(0);
-    let mov = -OVR_K;
-    for (let i = 0; i < 10; i += 1) mov += OVR_A * Math.exp(OVR_B * i) * top[i];
-    return mov * 50 / 15 + 50;
-  }
-  const roundOvr = (raw) => Math.floor(raw + 0.5); // Math.round, like Python's floor(x+.5)
   // ADAPTATION for a hand-picked group: team_ovr rates a full roster, so a bare
   // five would drag five literal 0.0 bench slots into the weighting and every
-  // lineup would grade absurdly negative. Instead the missing roster spots are
-  // filled with app-data.sim.bench_ovrs — the league-average 6th..10th-best OVR
-  // across the ten current rosters (5 floats, sorted desc) — i.e. your five
-  // plus a league-average bench. The weighting itself is untouched:
-  // lineupOvrRaw(five) is exactly projections.team_ovr(five + bench_ovrs).
-  // Safety net for a stale app-data.json without bench_ovrs: pad with
-  // simmodel.REPLACEMENT_OVR (40.0), the repo's "freely-available filler"
-  // constant, which tests assert against projections.team_ovr.
+  // lineup would grade absurdly negative. The missing roster spots are filled
+  // with app-data.sim.bench_ovrs — the league-average 6th..10th-best OVR
+  // across the ten current rosters (5 floats, sorted desc):
+  //   5-man mode:  your five + the whole league-average bench;
+  //   10-man mode: your bench picks fill slots 6-10, and each EMPTY bench slot
+  //                falls back to that slot's league-average value.
+  // The weighting itself is untouched — the effective ten feed
+  // projections.team_ovr exactly (via SMPOvr.teamOvrRaw). Safety net for a
+  // stale app-data.json without bench_ovrs: pad with simmodel.REPLACEMENT_OVR
+  // (40.0), the repo's "freely-available filler" constant, which tests assert
+  // against projections.team_ovr.
   const REPLACEMENT_OVR = 40.0;
   let benchOvrs = null; // payload.sim.bench_ovrs when present, else null
   function benchAt(i) {
     return benchOvrs && Number.isFinite(benchOvrs[i]) ? benchOvrs[i] : REPLACEMENT_OVR;
   }
-  function lineupOvrRaw(ovrs) {
-    const padded = ovrs.slice(0, 10);
-    for (let i = 0; padded.length < 10; i += 1) padded.push(benchAt(i));
-    return teamOvrRaw(padded);
-  }
-  // team_ovr anchors its scale to scoring margin (raw = MOV * 50/15 + 50), so the
-  // inverse maps a rating back to predicted margin. A custom five has no MOV
-  // history, so BOTH matchup sides are rated this same way (five vs top-ten
-  // roster) and the margin gap feeds the payload's logistic model — the exact
-  // win-probability curve simulate_league uses (see simmodel.sim_client_inputs).
-  const ovrToMov = (raw) => (raw - 50) * 15 / 50;
 
   // YIQ text-on-color pick (presentational only; server pages get the audited
   // on_primary from identity.py — app-data carries primary/secondary only).
@@ -67,12 +44,17 @@
   }
 
   const fmtMoney = (thousands) => '$' + (thousands / 1000).toFixed(1) + 'M';
-  const fmtPct = (p) => (p * 100).toFixed(1) + '%';
+  const fmtPct = (p) => (p * 100).toFixed(1) + '%'; // one decimal, everywhere
 
-  const slots = [null, null, null, null, null]; // pid or null per slot
+  let mode = 5; // 5 = your five + league-average bench; 10 = you build the bench
+  const slots = [null, null, null, null, null, null, null, null, null, null];
   const inputs = Array.from(app.querySelectorAll('[data-ll-input]'));
   const summaryEl = app.querySelector('[data-ll-summary]');
   const matchupsEl = app.querySelector('[data-ll-matchups]');
+  const benchWrap = app.querySelector('[data-ll-bench]');
+  const headingEl = app.querySelector('[data-ll-heading]');
+  const benchNoteEl = document.querySelector('[data-ll-benchnote]');
+  const modeInputs = Array.from(app.querySelectorAll('[data-ll-mode]'));
 
   let payload = null;
   let byPid = {};
@@ -96,6 +78,56 @@
     const team = byTid[p.tid];
     const t = team ? team.abbrev : (p.tid === -2 ? 'Draft' : 'FA');
     return t + ' · ' + p.pos + ' · ' + p.ovr + ' ovr';
+  }
+
+  // --- lineup size mode ------------------------------------------------------
+  function setMode(next, silent) {
+    mode = next === 10 ? 10 : 5;
+    if (mode === 5) {
+      // 5-man mode has no personal bench: drop bench picks so the formula,
+      // the salary bill and the shareable URL all describe what's visible.
+      for (let i = 5; i < 10; i += 1) {
+        slots[i] = null;
+        if (inputs[i]) inputs[i].value = '';
+      }
+    }
+    if (benchWrap) benchWrap.hidden = mode !== 10;
+    modeInputs.forEach((r) => { r.checked = Number(r.value) === mode; });
+    if (headingEl) headingEl.textContent = mode === 10 ? 'Your ten' : 'Your five';
+    if (benchNoteEl) {
+      benchNoteEl.textContent = mode === 10
+        ? 'Your ten (league-average fill for empty bench slots) vs each full roster, scored by the home page’s win-probability model.'
+        : 'Your five + a league-average bench vs each full roster, scored by the home page’s win-probability model.';
+    }
+    if (!silent) {
+      syncHash();
+      render();
+    }
+  }
+  modeInputs.forEach((r) => {
+    r.addEventListener('change', () => { if (r.checked) setMode(Number(r.value)); });
+  });
+
+  // The ten OVRs the engine formula weighs, honouring the mode: picked players
+  // first, then league-average bench values for whatever is missing (per-slot
+  // in 10-man mode, the whole bench in 5-man mode).
+  function effectiveOvrs() {
+    const ovrs = [];
+    for (let i = 0; i < 5; i += 1) {
+      if (slots[i] !== null && byPid[slots[i]]) ovrs.push(byPid[slots[i]].ovr);
+    }
+    if (mode === 10) {
+      for (let j = 0; j < 5; j += 1) {
+        const pid = slots[5 + j];
+        ovrs.push(pid !== null && byPid[pid] ? byPid[pid].ovr : benchAt(j));
+      }
+    } else {
+      for (let j = 0; j < 5; j += 1) ovrs.push(benchAt(j));
+    }
+    // empty starter slots: league-average filler so a partial lineup still grades
+    let j = 0;
+    while (ovrs.length < 10) ovrs.push(benchAt(j++));
+    return ovrs;
   }
 
   // --- filterable combobox per slot (ARIA pattern modeled on search.js) ------
@@ -201,16 +233,33 @@
     }
   }
 
-  // --- shareable state: pids comma-joined in the hash (slot order kept) ------
+  // --- shareable state: mode + pids in the hash ------------------------------
+  // 5-man mode keeps the legacy "#pid,pid,…" format (old links stay valid);
+  // 10-man mode is "#10:" + the ten slots positionally, empty slots as empty
+  // strings ("#10:12,,34" = starters 1+3 picked), trailing blanks trimmed.
   function syncHash() {
-    const pids = slots.filter((pid) => pid !== null);
+    if (mode === 10) {
+      const parts = slots.map((pid) => (pid === null ? '' : String(pid)));
+      while (parts.length && parts[parts.length - 1] === '') parts.pop();
+      history.replaceState(null, '', '#10:' + parts.join(','));
+      return;
+    }
+    const pids = slots.slice(0, 5).filter((pid) => pid !== null);
     history.replaceState(null, '', pids.length ? '#' + pids.join(',') : location.pathname + location.search);
   }
 
   function readHash() {
-    const parts = (location.hash || '').replace(/^#/, '').split(',').filter(Boolean);
-    parts.slice(0, 5).forEach((raw, i) => {
-      const pid = Number(raw);
+    const raw = (location.hash || '').replace(/^#/, '');
+    if (raw.slice(0, 3) === '10:') {
+      setMode(10, true);
+      raw.slice(3).split(',').slice(0, 10).forEach((part, i) => {
+        const pid = Number(part);
+        if (part !== '' && byPid[pid]) slots[i] = pid;
+      });
+      return;
+    }
+    raw.split(',').filter(Boolean).slice(0, 5).forEach((part, i) => {
+      const pid = Number(part);
       if (byPid[pid]) slots[i] = pid;
     });
   }
@@ -222,7 +271,9 @@
       const clearBtn = app.querySelector('[data-ll-clear][data-slot="' + i + '"]');
       const p = pid !== null ? byPid[pid] : null;
       if (!p) {
-        pickEl.innerHTML = '<span class="muted">Empty slot</span>';
+        pickEl.innerHTML = i >= 5
+          ? '<span class="muted">League-average fill</span>'
+          : '<span class="muted">Empty slot</span>';
         if (clearBtn) clearBtn.hidden = true;
         return;
       }
@@ -235,9 +286,10 @@
   }
 
   function renderSummary(picked, matchupRows) {
+    const starters = slots.slice(0, 5).filter((pid) => pid !== null).length;
+    const benchPicked = mode === 10 ? slots.slice(5).filter((pid) => pid !== null).length : 0;
     const count = picked.length;
-    const ovrs = picked.map((p) => p.ovr);
-    const ovr = count ? roundOvr(lineupOvrRaw(ovrs)) : null;
+    const ovr = count ? O.roundOvr(O.teamOvrRaw(effectiveOvrs())) : null;
     const salary = picked.reduce((sum, p) => sum + (p.salary || 0), 0);
     const taxLine = payload.finance.tax_line;
     const overTax = salary > taxLine;
@@ -250,9 +302,16 @@
       '<div class="ll-tile' + (cls ? ' ' + cls : '') + '"><span class="ll-tile-label">' + label + '</span>'
       + '<strong>' + value + '</strong><span class="muted">' + sub + '</span></div>';
     const benchLabel = benchOvrs ? 'a league-average bench' : 'a replacement-level bench';
+    let ovrSub;
+    if (mode === 10) {
+      ovrSub = (starters === 5 && benchPicked === 5)
+        ? 'your ten'
+        : (starters + benchPicked) + ' picked · league-average fill for the rest';
+    } else {
+      ovrSub = (starters === 5 ? 'your five' : starters + ' of 5 picked') + ' + ' + benchLabel;
+    }
     summaryEl.innerHTML = '<div class="ll-tiles">'
-      + tile('Lineup OVR', ovr === null ? '—' : String(ovr),
-             (count === 5 ? 'your five' : count + ' of 5 picked') + ' + ' + benchLabel, '')
+      + tile('Lineup OVR', ovr === null ? '—' : String(ovr), ovrSub, '')
       + tile('Total salary', fmtMoney(salary),
              fmtMoney(gap) + (overTax ? ' over' : ' under') + ' the ' + fmtMoney(taxLine) + ' tax line',
              overTax ? 'll-over-tax' : '')
@@ -261,18 +320,20 @@
       + '</div>';
   }
 
-  function matchupData(picked) {
-    if (picked.length < 5 || !payload) return [];
+  function matchupData() {
+    // matchups need the full first five; the bench may stay league-average
+    const startersFull = slots.slice(0, 5).every((pid) => pid !== null);
+    if (!startersFull || !payload) return [];
     const k = payload.sim.logistic_k;
     const hca = payload.sim.hca;
-    const mine = ovrToMov(lineupOvrRaw(picked.map((p) => p.ovr)));
+    const mine = O.ovrToMov(O.teamOvrRaw(effectiveOvrs()));
     return payload.teams.map((team) => {
       const roster = payload.players.filter((p) => p.tid === team.tid);
-      const raw = teamOvrRaw(roster.map((p) => p.ovr));
-      const diff = mine - ovrToMov(raw);
+      const raw = O.teamOvrRaw(roster.map((p) => p.ovr));
+      const diff = mine - O.ovrToMov(raw);
       return {
         team: team,
-        ovr: roundOvr(raw),
+        ovr: O.roundOvr(raw),
         home: 1 / (1 + Math.exp(-(diff + hca) * k)),
         away: 1 / (1 + Math.exp(-(diff - hca) * k)),
       };
@@ -305,12 +366,12 @@
     if (!payload) return;
     renderPicks();
     const picked = slots.filter((pid) => pid !== null).map((pid) => byPid[pid]);
-    const rows = matchupData(picked);
+    const rows = matchupData();
     renderSummary(picked, rows);
     renderMatchups(rows);
   }
 
-  fetch(root + 'assets/app-data.json')
+  fetch((document.body.dataset.root || '') + 'assets/app-data.json')
     .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then((data) => {
       payload = data;

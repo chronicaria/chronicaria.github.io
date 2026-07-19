@@ -670,22 +670,25 @@ def render_classics_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> s
     for rank, (score, game) in enumerate(featured, 1):
         gid = game.get("gid")
         anchor = f"g{esc(gid)}"
+        medal_cls = f"cl-medal-{rank}" if rank <= 3 else "cl-medal-std"
         box_link = (
             f'<a class="button-link cl-box-link" href="games/{esc(gid)}.html">Box score</a>'
             if str(gid) in linked_gids else ""
         )
+        meter_pct = max(0.0, min(100.0, score))
         articles.append(f"""
-        <article class="cl-game" id="{anchor}">
-          <div class="cl-rank" aria-hidden="true">{rank}</div>
+        <article class="cl-game{' cl-top3' if rank <= 3 else ''}" id="{anchor}">
+          <div class="cl-medal {medal_cls}" aria-hidden="true"><span class="cl-medal-num">{rank}</span></div>
           <div class="cl-body">
-            <div class="cl-top-row">
-              <span class="cl-badge" title="Drama index 0–100: closeness, overtimes, comeback size, clutch plays, statistical feats">Drama {fmt_number(score, 1)}</span>
-              <span class="cl-score">{_matchup_score_html(game, teams_by_tid, linked_gids, "")}</span>
-              <a class="cl-permalink" href="#{anchor}" aria-label="Permalink to game {esc(gid)}">#</a>
-            </div>
-            <p class="muted small-copy">{esc(_classic_meta(game))}</p>
+            <div class="cl-scoreline">{_matchup_score_html(game, teams_by_tid, linked_gids, "")}</div>
+            <p class="cl-meta muted small-copy">{esc(_classic_meta(game))}</p>
             <p class="cl-blurb">{esc(classic_blurb(game, teams_by_tid, feats_by_gid))}</p>
-            {box_link}
+            <div class="cl-foot">{box_link}<a class="cl-permalink" href="#{anchor}" aria-label="Permalink to game {esc(gid)}">#</a></div>
+          </div>
+          <div class="cl-drama">
+            <span class="cl-badge" title="Drama index 0–100: closeness, overtimes, comeback size, clutch plays, statistical feats">Drama</span>
+            <span class="cl-drama-num">{fmt_number(score, 1)}</span>
+            <span class="cl-drama-meter" aria-hidden="true"><span class="cl-drama-fill" style="width:{meter_pct:.1f}%"></span></span>
           </div>
         </article>
         """)
@@ -695,8 +698,9 @@ def render_classics_page(data: dict[str, Any], teams: list[dict[str, Any]]) -> s
         if retained_span else "No completed games retained in this export"
     )
     body = f"""
-    <section class="page-hero">
+    <section class="page-hero cl-hero">
       <div>
+        <p class="eyebrow">Hall of Fame</p>
         <h1>Greatest Games</h1>
         <p class="muted">{esc(span_note)}</p>
       </div>

@@ -108,34 +108,38 @@ html[data-theme="light"] .tm-watermark { color: var(--team-primary, var(--muted)
 }
 .team-scope .vital-tile.has-tip { cursor: help; }
 
-/* rafters: championship pennants hanging in the hero */
+/* rafters: full-width rail across the top of the hero, championship pennants
+   hanging from it at real arena-banner scale (zero-banner-safe: the strip is
+   only emitted when a team has banners) */
 .tm-rafters {
-  position: absolute;
-  top: 0;
-  right: .9rem;
+  order: -1;
+  position: relative;
   z-index: 1;
+  width: calc(100% + 2rem);
+  margin: -.8rem -1rem .5rem;
+  padding: 0 1.4rem;
   display: flex;
+  justify-content: flex-end;
   align-items: flex-start;
-  gap: .45rem;
-  padding: 0 .55rem;
-  border-top: 3px solid var(--line);
+  gap: .9rem;
+  border-top: 5px solid var(--line);
   border-top-color: color-mix(in srgb, var(--team-secondary) 45%, var(--line));
 }
-.banner { display: block; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .35)); }
-.banner--title { width: 2.5rem; height: auto; }
-.banner--finals { width: 1.65rem; height: auto; margin-top: .1rem; opacity: .82; }
+.banner { display: block; flex: 0 0 auto; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
+.banner--title { width: 5rem; height: auto; }
+.banner--finals { width: 3.3rem; height: auto; opacity: .88; }
 .banner-finals-body { fill: var(--panel-3); stroke: var(--line); }
 .banner-finals-year { fill: var(--text); }
 .banner-finals-cap { fill: var(--muted); }
 @media (max-width: 760px) {
-  .tm-rafters { position: static; order: -1; width: 100%; border-top-width: 2px; padding: 0 .3rem .1rem; }
-  .banner--title { width: 2rem; }
-  .banner--finals { width: 1.35rem; }
+  .tm-rafters { flex-wrap: wrap; justify-content: flex-start; gap: .7rem; padding: 0 1rem; border-top-width: 4px; }
+  .banner--title { width: 3.8rem; }
+  .banner--finals { width: 2.6rem; }
   .tm-watermark { font-size: 5rem; }
 }
 
-/* show-inactive roster toggle */
+/* show-inactive roster toggle: 0-GP rows are VISIBLE (dimmed) by default;
+   unchecking the box hides them */
 .inactive-toggle { display: inline-flex; align-items: center; gap: .35rem; color: var(--muted); margin: .2rem 0 .4rem; cursor: pointer; }
-.team-scope tr.inactive-row { display: none; }
-.team-scope .show-inactive tr.inactive-row { display: table-row; }
-.team-scope .show-inactive tr.inactive-row > td { opacity: .68; }
+.team-scope tr.inactive-row > td { opacity: .68; }
+.team-scope .hide-inactive tr.inactive-row { display: none; }

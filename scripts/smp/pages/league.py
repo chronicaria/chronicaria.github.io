@@ -21,6 +21,7 @@ from ..core import (
     SCATTER_METRICS,
     TEAM_PALETTE,
     TEAM_RATING_RANK_KEYS,
+    active_players,
     active_teams_for_season,
     age,
     build_game_logs,
@@ -81,7 +82,7 @@ from ..core import (
     ts_pct,
 )
 
-from ..simmodel import fa_salary_by_length, league_sim
+from ..simmodel import fa_salary_by_length, league_sim, sim_client_inputs
 
 from ..derived import fantasy_pts, led_league
 
@@ -253,6 +254,13 @@ def career_regular_totals(player: dict[str, Any]) -> dict[str, Any]:
     return {"gp": gp, "pts": pts, "ws": ws, "ewa": ewa, "ppg": (pts / gp) if gp else None}
 
 
+_PENNANT_FONT = "'Helvetica Neue',Helvetica,Arial,sans-serif"
+
+# 5-point star centered on (48, 47), outer radius 6.5, inner radius 2.7.
+_PENNANT_STAR = ("48,40.5 49.9,45.1 54.9,45.5 51.1,48.7 52.3,53.6 "
+                 "48,51 43.7,53.6 44.9,48.7 41.1,45.5 46.1,45.1")
+
+
 def pennant_svg(team: dict[str, Any], year: int | None = None) -> str:
     """Championship banner SVG in team colors; ``year=None`` renders the empty
     dashed placeholder slot for a franchise with no titles yet."""
@@ -260,26 +268,32 @@ def pennant_svg(team: dict[str, Any], year: int | None = None) -> str:
     abbrev = team_abbrev(team)
     if year is None:
         return (
-            '<svg class="rafters-pennant rafters-pennant-empty" viewBox="0 0 64 88" '
+            '<svg class="rafters-pennant rafters-pennant-empty" viewBox="0 0 96 132" '
             'aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">'
-            '<path d="M6 8h52v52L32 84 6 60z" fill="none" stroke="var(--line)" '
-            'stroke-width="2" stroke-dasharray="4 4"/></svg>'
+            '<rect x="4" y="3" width="88" height="5" rx="2" fill="none" stroke="var(--line)" stroke-width="1.5"/>'
+            '<path d="M10 12h76v72L48 126 10 84z" fill="none" stroke="var(--line)" '
+            'stroke-width="2" stroke-dasharray="5 5"/></svg>'
         )
     label = f"{team_full_name(team)} — {year} champions"
     return (
-        f'<svg class="rafters-pennant" viewBox="0 0 64 88" style="{team_css_vars(tid)}" '
+        f'<svg class="rafters-pennant" viewBox="0 0 96 132" style="{team_css_vars(tid)}" '
         f'role="img" aria-label="{esc(label)}" xmlns="http://www.w3.org/2000/svg">'
         f'<title>{esc(label)}</title>'
-        '<rect x="3" y="2" width="58" height="4" rx="1.5" fill="var(--team-secondary)"/>'
-        '<path d="M6 8h52v52L32 84 6 60z" fill="var(--team-primary)" '
-        'stroke="var(--team-secondary)" stroke-width="2"/>'
-        '<text x="32" y="24" text-anchor="middle" font-family="\'Helvetica Neue\',Helvetica,Arial,sans-serif" '
-        f'font-weight="600" font-size="9.5" letter-spacing="1" fill="var(--team-on-primary)" opacity=".8">{esc(abbrev)}</text>'
-        '<text x="32" y="45" text-anchor="middle" font-family="\'Helvetica Neue\',Helvetica,Arial,sans-serif" '
-        f'font-weight="700" font-size="15" fill="var(--team-on-primary)">{esc(year)}</text>'
-        '<text x="32" y="58" text-anchor="middle" font-family="\'Helvetica Neue\',Helvetica,Arial,sans-serif" '
-        'font-weight="600" font-size="6.4" letter-spacing="1.6" fill="var(--team-on-primary)" '
-        'opacity=".75">CHAMPS</text></svg>'
+        '<rect x="4" y="3" width="88" height="5" rx="2" fill="var(--team-secondary)"/>'
+        '<rect x="20" y="6" width="4" height="9" fill="var(--team-secondary)" opacity=".85"/>'
+        '<rect x="72" y="6" width="4" height="9" fill="var(--team-secondary)" opacity=".85"/>'
+        '<path d="M10 12h76v72L48 126 10 84z" fill="var(--team-primary)" '
+        'stroke="var(--team-secondary)" stroke-width="2.5"/>'
+        '<path d="M16.5 18.5h63v62.5L48 117.5 16.5 81z" fill="none" '
+        'stroke="var(--team-on-primary)" stroke-width="1" opacity=".25"/>'
+        f'<text x="48" y="33" text-anchor="middle" font-family="{_PENNANT_FONT}" '
+        f'font-weight="700" font-size="11" letter-spacing="2.4" fill="var(--team-on-primary)" opacity=".85">{esc(abbrev)}</text>'
+        f'<polygon points="{_PENNANT_STAR}" fill="var(--team-secondary)"/>'
+        f'<text x="48" y="80" text-anchor="middle" font-family="{_PENNANT_FONT}" '
+        f'font-weight="800" font-size="23" letter-spacing=".5" fill="var(--team-on-primary)">{esc(year)}</text>'
+        f'<text x="48" y="94" text-anchor="middle" font-family="{_PENNANT_FONT}" '
+        'font-weight="600" font-size="6.6" letter-spacing="1.9" fill="var(--team-on-primary)" '
+        'opacity=".8">CHAMPIONS</text></svg>'
     )
 
 
@@ -307,11 +321,12 @@ def rafters_strip_html(data: dict[str, Any], teams: list[dict[str, Any]]) -> str
         else:
             flags = f'<span class="rafters-flag" title="No championships yet">{pennant_svg(team)}</span>'
         title_count = f'{len(years)} title{"s" if len(years) != 1 else ""}' if years else "no titles yet"
+        slot_cls = "rafters-slot rafters-champ" if years else "rafters-slot"
         slots.append(
-            f'<div class="rafters-slot" role="listitem">'
+            f'<div class="{slot_cls}" role="listitem">'
             f'<div class="rafters-flags">{flags}</div>'
             f'<span class="rafters-abbrev">{esc(team_abbrev(team))} '
-            f'<span class="muted small-copy">{esc(title_count)}</span></span></div>'
+            f'<span class="rafters-count{"" if years else " rafters-count-none"}">{esc(title_count)}</span></span></div>'
         )
     return f"""
     <section class="card rafters-card">
@@ -606,7 +621,7 @@ def render_players_index(players: list[dict[str, Any]], teams: list[dict[str, An
         <canvas id="player-chart" data-player-chart height="460"></canvas>
         <div class="chart-tooltip" data-chart-tooltip hidden></div>
       </div>
-      <p class="muted small-copy">Min 1 GP · click a legend team to toggle it · click a dot to open the player</p>
+      <p class="muted small-copy">Dot size tracks minutes · legend chips toggle teams · click a dot to open the player</p>
     </section>
     <script type="application/json" id="player-chart-data">{payload_json}</script>
     """
@@ -733,6 +748,46 @@ def head_to_head_matrix(data: dict[str, Any], teams: list[dict[str, Any]], seaso
     """
 
 
+def _game_projections(data: dict[str, Any], teams: list[dict[str, Any]], season: int, items: list[dict[str, Any]]) -> dict[str, tuple[float, float]]:
+    """gid -> (p_home, projected home margin) for every unplayed scheduled game.
+
+    Consumes simmodel.sim_client_inputs read-only, so the displayed numbers use
+    the exact strengths/HCA/k the Monte Carlo sim applies inside win_prob
+    (p_home = 1/(1+exp(-(sH-sA+HCA)*k)), HCA=+1.5 pts, k=0.16 — the P8 spec
+    formula doubles as the fallback if the payload ever omits the constants).
+    """
+    if not any(not is_completed_game_item(item) for item in items):
+        return {}
+    try:
+        sim = sim_client_inputs(data, teams, active_players(data), season)
+        strengths = {safe_int(tid): safe_float(value) for tid, value in (sim.get("strengths") or {}).items()}
+        hca = safe_float(sim.get("hca"), 1.5)
+        k = safe_float(sim.get("logistic_k"), 0.16)
+    except Exception:
+        return {}
+    if not strengths or k <= 0:
+        return {}
+    out: dict[str, tuple[float, float]] = {}
+    for item in items:
+        if is_completed_game_item(item):
+            continue
+        home, away = safe_int(item.get("home_tid"), -1), safe_int(item.get("away_tid"), -1)
+        if home not in strengths or away not in strengths:
+            continue
+        margin = strengths[home] - strengths[away] + hca
+        p_home = 1.0 / (1.0 + math.exp(-margin * k))
+        out[str(item.get("gid"))] = (p_home, margin)
+    return out
+
+
+def _spread_label(team_margin: float) -> str:
+    """Betting-style line from the team's own projected margin (favorite < 0)."""
+    line = -team_margin
+    if abs(line) < 0.05:
+        line = 0.0
+    return f"{line:+.1f}"
+
+
 def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], schedule_season: int | None = None, schedule_days: int | None = None) -> str:
     teams_by_tid = {int(team.get("tid")): team for team in teams if team.get("tid") is not None}
     # Show only the upcoming season's schedule. In the offseason it has no games yet (we don't
@@ -741,6 +796,7 @@ def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], sche
     items, _ = score_items_for_page(data, teams, schedule_season=schedule_season, schedule_days=schedule_days)
     items = [item for item in items if safe_int(item.get("season")) == upcoming]
     label = f"Season {upcoming} schedule"
+    projections = _game_projections(data, teams, upcoming, items)
     grid_teams = sorted(
         [team for team in teams if team.get("tid") is not None and not team.get("disabled")],
         key=lambda team: team_abbrev(team),
@@ -775,6 +831,7 @@ def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], sche
                 matchup = schedule_matchup_label(item, tid, teams_by_tid)
                 cls = "sched-cell"
                 result_html = ""
+                title_attr = ""
                 if is_completed_game_item(item):
                     result = team_schedule_result(item, tid)
                     cls += " sched-win" if result.startswith("W") else " sched-loss"
@@ -782,7 +839,26 @@ def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], sche
                     if ot:
                         result = f"{result} {ot}"
                     result_html = f'<span class="sched-result">{esc(result)}</span>'
-                parts.append(f'<a class="{cls}" href="{esc(game_url(item))}">{matchup}{result_html}</a>')
+                else:
+                    proj = projections.get(str(item.get("gid")))
+                    if proj is not None:
+                        p_home, home_margin = proj
+                        is_home = safe_int(item.get("home_tid"), -1) == tid
+                        p_team = p_home if is_home else 1.0 - p_home
+                        team_margin = home_margin if is_home else -home_margin
+                        spread = _spread_label(team_margin)
+                        home_ab = team_abbrev_for_tid(item.get("home_tid"), teams_by_tid)
+                        away_ab = team_abbrev_for_tid(item.get("away_tid"), teams_by_tid)
+                        detail = (f"Projected: {home_ab} {fmt_number(100 * p_home, 1)}% · "
+                                  f"{away_ab} {fmt_number(100 * (1.0 - p_home), 1)}% · "
+                                  f"{home_ab if p_home >= 0.5 else away_ab} "
+                                  f"{_spread_label(home_margin if p_home >= 0.5 else -home_margin)}")
+                        title_attr = f' title="{esc(detail)}"'
+                        cls += " sched-proj-cell"
+                        fav_cls = " sched-fav" if p_team >= 0.5 else ""
+                        result_html = (f'<span class="sched-proj{fav_cls}">{fmt_number(100 * p_team, 1)}%'
+                                       f'<span class="sched-spread">{esc(spread)}</span></span>')
+                parts.append(f'<a class="{cls}" href="{esc(game_url(item))}"{title_attr}>{matchup}{result_html}</a>')
             cells.append(td("".join(parts)))
         row_cls = ' class="next-day"' if next_day is not None and day == next_day else ""
         rows.append(f"<tr{row_cls}>" + "".join(cells) + "</tr>")
@@ -805,8 +881,10 @@ def render_schedule_page(data: dict[str, Any], teams: list[dict[str, Any]], sche
         """
 
     season_for_h2h = max((safe_int(item.get("season")) for item in items), default=upcoming)
+    proj_bit = (' · <span title="Sim-model win probability and point spread for each team, '
+                'including +1.5 home-court advantage">proj. win% &amp; spread</span>') if projections else ""
     hero_copy = (f'{esc(label)} · <strong>vs.</strong> home · <strong>@</strong> road · '
-                 f'<span title="The highlighted row is the next game day">highlight = next day</span>'
+                 f'<span title="The highlighted row is the next game day">highlight = next day</span>{proj_bit}'
                  if rows else esc(label))
     body = f"""
     <section class="page-hero">
@@ -977,6 +1055,15 @@ def prospect_row(player: dict[str, Any], season: int, rating_ranges: dict[str, t
     return "".join(cells)
 
 
+def _odds_pct(pct: float) -> str:
+    """One-decimal percentage with the site's <0.1% / — conventions (input 0-100)."""
+    if pct >= 0.05:
+        return fmt_number(pct, 1) + "%"
+    if pct > 0:
+        return "&lt;0.1%"
+    return "—"
+
+
 def projected_lottery_html(data: dict[str, Any], teams: list[dict[str, Any]], season: int, draft_year: int) -> str:
     palette = team_palette_by_tid(teams)
     teams_by_tid = {int(t.get("tid")): t for t in teams if t.get("tid") is not None}
@@ -1022,8 +1109,8 @@ def projected_lottery_html(data: dict[str, Any], teams: list[dict[str, Any]], se
             ]
             if slot_odds:
                 p1, top3 = slot_odds.get(slot_tid, (0.0, 0.0))
-                cells.append(td(fmt_number(p1, 0) + "%" if p1 >= 0.5 else "—", sort=p1, style=seed_cell_style(p1)))
-                cells.append(td(fmt_number(top3, 0) + "%" if top3 >= 0.5 else "—", sort=top3, style=seed_cell_style(top3)))
+                cells.append(td(_odds_pct(p1), sort=p1, style=seed_cell_style(p1)))
+                cells.append(td(_odds_pct(top3), sort=top3, style=seed_cell_style(top3)))
             rows.append(f'<tr data-tid="{owner_tid}">{"".join(cells)}</tr>')
     if not rows:
         return ""
@@ -1569,7 +1656,9 @@ def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], seaso
             td(badges, sort=feat_rank(stats)),
         ])
 
-    feat_seasons = list(range(start_season, season + 1))
+    # Newest season first, and the CURRENT season is the default tab — honest
+    # empty state early in the year, filling in automatically as games play.
+    feat_seasons = list(range(season, start_season - 1, -1))
     rows_by_season: dict[int, list[str]] = {yr: [] for yr in feat_seasons}
     for feat in feats:
         yr = safe_int(feat.get("season"))
@@ -1583,13 +1672,19 @@ def render_records_page(data: dict[str, Any], teams: list[dict[str, Any]], seaso
                 f'tabindex="{"0" if first else "-1"}" data-tab-target="panel-feats-{yr}">{yr}</button>')
 
     feat_tabs = "".join(feat_tab(yr, i == 0) for i, yr in enumerate(feat_seasons))
+
+    def feat_empty_message(yr: int) -> str:
+        if yr == season:
+            return f"No feats in {yr} yet — big nights land here as games are played."
+        return f"No feats recorded in {yr}."
+
     feat_panels = "".join(
         f"""
       <div id="panel-feats-{yr}" role="tabpanel" aria-labelledby="tab-feats-{yr}" data-tab-panel{"" if i == 0 else " hidden"}>
         <div class="toolbar">
           <input class="table-search" data-table-filter="feats-{yr}" placeholder="Filter feats…" aria-label="Filter {yr} feats">
         </div>
-        {table_html(headers, rows_by_season[yr], table_id=f"feats-{yr}", empty_message=f"No feats recorded in {yr}.")}
+        {table_html(headers, rows_by_season[yr], table_id=f"feats-{yr}", empty_message=feat_empty_message(yr))}
       </div>"""
         for i, yr in enumerate(feat_seasons)
     )

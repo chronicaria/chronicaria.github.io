@@ -82,6 +82,62 @@
 }
 .radar-note { margin: .5rem 0 0; text-align: center; }
 
+/* trade machine rows: value column removed — override misc.css's 5-track grid */
+.trade-row { grid-template-columns: auto minmax(0, 1.3fr) minmax(0, 1fr) auto; }
+
+/* post-trade roster projection cards (one per side) */
+.tproj { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .55rem 0; }
+@media (max-width: 900px) { .tproj { grid-template-columns: 1fr; } }
+.tproj-side {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  padding: .55rem .65rem .5rem;
+  border: 1px solid var(--line);
+  border-radius: .2rem;
+  background: var(--panel-2);
+}
+.tproj-head {
+  display: flex;
+  align-items: baseline;
+  gap: .45rem;
+  padding-bottom: .35rem;
+  border-bottom: 1px solid var(--line);
+}
+.tproj-head strong { font-size: .95rem; letter-spacing: .02em; }
+.tproj-head .muted { font-size: .74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tproj-row {
+  display: grid;
+  grid-template-columns: minmax(6rem, auto) 1fr auto;
+  align-items: baseline;
+  gap: .6rem;
+  font-size: .82rem;
+}
+.tproj-label { color: var(--muted); font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.tproj-vals { font-variant-numeric: tabular-nums; }
+.tproj-arrow { color: var(--muted); font-style: normal; }
+.tproj-delta {
+  justify-self: end;
+  padding: .04rem .4rem;
+  border-radius: .6rem;
+  background: var(--panel-3);
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.tproj-delta--up { background: var(--good-soft); color: var(--good); }
+.tproj-delta--down { background: var(--bad-soft); color: var(--bad); }
+.tproj-verdict {
+  margin: .25rem 0 0;
+  padding-top: .35rem;
+  border-top: 1px solid var(--line);
+  font-size: .78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.tproj-note { font-size: .74rem; }
+
 /* trade finance readout: payroll before/after vs the $300M tax line */
 .tfin { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin: .55rem 0; }
 @media (max-width: 900px) { .tfin { grid-template-columns: 1fr; } }

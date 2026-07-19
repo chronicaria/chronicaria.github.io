@@ -137,6 +137,12 @@ class TestTradePage(unittest.TestCase):
         self.assertIn("Contract Efficiency", html)
         self.assertIn("Big Contract", html)
 
+    def test_value_metric_removed(self):
+        html = lg.render_trade_page(self.data, self.teams, self.players, 2030)
+
+        self.assertNotIn(">Value<", html)     # contract-efficiency Value column is gone
+        self.assertIn(">WS per $10M<", html)  # efficiency stays WS-per-dollar-based
+
     def test_picks_supplement_labels_and_filtering(self):
         html = lg.render_trade_page(self.data, self.teams, self.players, 2030)
 
@@ -169,9 +175,21 @@ class TestStaticAppAssets(unittest.TestCase):
         self.assertIn("finance.tax_line", js)
         self.assertIn("tfin-team--over", js)  # over-tax warning styling hook
 
+    def test_trade_extras_js_projection_replaces_value(self):
+        js = self._read("js", "trade-extras.js")
+        # the engine "value" metric is gone: no per-player value column, no
+        # value-based verdicts — replaced by the post-trade roster projection
+        self.assertNotIn("trade-val", js)
+        self.assertNotIn("wins this trade", js)
+        for hook in ("window.SMPOvr", "tproj-side", "tproj-verdict", "projectedWins"):
+            self.assertIn(hook, js)
+        # win-shares ledger sums the app-data "ws" field per side
+        self.assertIn("p.ws", js)
+
     def test_apps_css_covers_both_themes_hooks(self):
         css = self._read("css", "apps.css")
-        for cls in (".combo-list", ".radar-poly", ".tfin-tick", ".app-loading", ".app-error"):
+        for cls in (".combo-list", ".radar-poly", ".tfin-tick", ".app-loading", ".app-error",
+                    ".tproj-side", ".tproj-delta--down", ".tproj-verdict"):
             self.assertIn(cls, css)
         # theme tokens only — no hardcoded page-background colors
         self.assertIn("var(--", css)

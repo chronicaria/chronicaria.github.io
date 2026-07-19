@@ -1,5 +1,7 @@
-"""Tests for the league pages (W5): draft re-grades, led-league gold styling,
-the Rafters pennant strip, records/history polish, FA cards, schedule empty state."""
+"""Tests for the league pages (W5/P8): draft re-grades, led-league gold styling,
+the Rafters pennant strip, records/history polish, FA cards, schedule empty state,
+schedule game projections (win% + spread), current-season feats default tab, and
+one-decimal draft odds."""
 
 import glob
 import json
@@ -17,10 +19,10 @@ from smp.pages import league as lp  # noqa: E402
 from smp.core import normalize_positions, current_season, team_sort_key  # noqa: E402
 
 
-def _load_export():
-    matches = glob.glob(os.path.join(_REPO, "league-data", "2031_preseason.json"))
+def _load_export(name="2031_preseason.json"):
+    matches = glob.glob(os.path.join(_REPO, "league-data", name))
     if not matches:
-        raise unittest.SkipTest("no 2031_preseason.json export available")
+        raise unittest.SkipTest("no %s export available" % name)
     with open(matches[0], "r", encoding="utf-8") as fh:
         data = json.load(fh)
     normalize_positions(data)
@@ -235,6 +237,93 @@ class TestSchedulePage(_ExportCase):
         self.assertIn("hasn't been released yet", html)
         self.assertIn('href="index.html"', html)
         self.assertIn("title odds", html)
+
+
+class TestFeatsDefaultTab(_ExportCase):
+    """records.html Single-Game Feats: the CURRENT season tab is the visible
+    default (honest empty state until games play), newest seasons first."""
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestFeatsDefaultTab, cls).setUpClass()
+        cls.html = lp.render_records_page(cls.data, cls.teams, cls.season)
+
+    def test_current_season_tab_is_default_and_first(self):
+        self.assertEqual(self.season, 2031)
+        self.assertIn('id="tab-feats-2031" aria-controls="panel-feats-2031" '
+                      'aria-selected="true"', self.html)
+        self.assertLess(self.html.index('data-tab-target="panel-feats-2031"'),
+                        self.html.index('data-tab-target="panel-feats-2030"'))
+
+    def test_current_season_panel_visible_others_hidden(self):
+        self.assertIn('id="panel-feats-2031" role="tabpanel" aria-labelledby="tab-feats-2031" data-tab-panel>', self.html)
+        self.assertIn('id="panel-feats-2030" role="tabpanel" aria-labelledby="tab-feats-2030" data-tab-panel hidden>', self.html)
+
+    def test_current_season_empty_state_is_honest(self):
+        # no 2031 feats in this export yet -> the default tab explains itself
+        self.assertIn("No feats in 2031 yet", self.html)
+
+
+class TestScheduleProjections(unittest.TestCase):
+    """Unplayed scheduled games carry sim-model win% (one decimal, both teams
+    via the two team columns + the title tooltip) and a spread."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = _load_export("2031_regularseason.json")
+        cls.season = current_season(cls.data)
+        cls.teams = sorted(cls.data.get("teams", []), key=team_sort_key)
+        cls.html = lp.render_schedule_page(cls.data, cls.teams)
+
+    def test_projections_render_for_unplayed_games(self):
+        self.assertIn("sched-proj", self.html)
+        self.assertIn("sched-spread", self.html)
+        self.assertIn("proj. win% &amp; spread", self.html)
+
+    def test_win_probabilities_are_one_decimal(self):
+        import re
+        pcts = re.findall(r'class="sched-proj[^"]*">(\d+\.\d)%', self.html)
+        self.assertTrue(pcts, "expected win-probability chips on unplayed games")
+        # spreads are signed one-decimal numbers
+        spreads = re.findall(r'class="sched-spread">([+-]\d+\.\d)<', self.html)
+        self.assertTrue(spreads)
+
+    def test_tooltip_names_both_teams(self):
+        import re
+        details = re.findall(r'title="Projected: (\w+) (\d+\.\d)% · (\w+) (\d+\.\d)%', self.html)
+        self.assertTrue(details)
+        for home, p_home, away, p_away in details[:20]:
+            self.assertNotEqual(home, away)
+            self.assertAlmostEqual(float(p_home) + float(p_away), 100.0, delta=0.11)
+
+    def test_projection_numbers_match_sim_client_inputs(self):
+        import math
+        from smp.simmodel import sim_client_inputs
+        from smp.core import active_players
+        sim = sim_client_inputs(self.data, self.teams, active_players(self.data), self.season)
+        strengths = sim["strengths"]
+        items = [
+            {"gid": 1, "season": self.season, "home_tid": 0, "away_tid": 1},
+        ]
+        proj = lp._game_projections(self.data, self.teams, self.season, items)
+        p_home, margin = proj["1"]
+        expected_margin = strengths[0] - strengths[1] + sim["hca"]
+        self.assertAlmostEqual(margin, expected_margin, places=9)
+        self.assertAlmostEqual(p_home, 1.0 / (1.0 + math.exp(-expected_margin * sim["logistic_k"])), places=9)
+
+
+class TestSpreadAndOddsFormatting(unittest.TestCase):
+    def test_spread_label_is_betting_style(self):
+        # a team projected to win by 3.24 is a -3.2 favorite
+        self.assertEqual(lp._spread_label(3.24), "-3.2")
+        self.assertEqual(lp._spread_label(-3.24), "+3.2")
+        self.assertEqual(lp._spread_label(0.01), "+0.0")
+
+    def test_odds_pct_one_decimal_with_conventions(self):
+        self.assertEqual(lp._odds_pct(42.0), "42.0%")
+        self.assertEqual(lp._odds_pct(0.26), "0.3%")
+        self.assertEqual(lp._odds_pct(0.04), "&lt;0.1%")
+        self.assertEqual(lp._odds_pct(0.0), "—")
 
 
 if __name__ == "__main__":

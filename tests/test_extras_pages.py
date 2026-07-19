@@ -170,7 +170,7 @@ class TestRenderExtrasPages(unittest.TestCase):
     def test_classics_ranking_and_blurbs(self):
         classics = self.pages["classics.html"]
         # game 3 (2-point comeback win with a feat) is the most dramatic
-        first_anchor = classics.index('<article class="cl-game"')
+        first_anchor = classics.index('<article class="cl-game')
         self.assertIn('id="g3"', classics[first_anchor:first_anchor + 200])
         # factual blurb: comeback size + boundary + score + feat
         self.assertIn("Down 12 entering the 3rd, BBB stormed back to win 99-97", classics)
@@ -179,12 +179,25 @@ class TestRenderExtrasPages(unittest.TestCase):
         self.assertIn('class="cl-badge"', classics)
         self.assertIn('href="#g3"', classics)
         # 4 completed games -> all featured; no honorable-mentions section
-        self.assertEqual(classics.count('<article class="cl-game"'), 4)
+        self.assertEqual(classics.count('<article class="cl-game'), 4)
         self.assertNotIn("Honorable Mentions", classics)
         self.assertIn("Top 4 of 4 retained games (2027) by drama index", classics)
         # box-score links for every game that gets a page (incl. last season's playoffs)
         self.assertIn('href="games/3.html"', classics)
         self.assertIn('href="games/4.html"', classics)
+
+    def test_classics_gallery_treatment(self):
+        classics = self.pages["classics.html"]
+        # top-3 medallions are distinct; the rest share the standard medal
+        for cls in ("cl-medal-1", "cl-medal-2", "cl-medal-3"):
+            self.assertEqual(classics.count(f'cl-medal {cls}'), 1)
+        self.assertEqual(classics.count("cl-medal cl-medal-std"), 1)
+        self.assertEqual(classics.count("cl-top3"), 3)
+        # drama-score column with a 0-100 meter per game
+        self.assertEqual(classics.count('class="cl-drama-num"'), 4)
+        self.assertEqual(classics.count("cl-drama-fill"), 4)
+        # scoreline typography wraps the matchup score
+        self.assertEqual(classics.count('class="cl-scoreline"'), 4)
 
     def test_deterministic_output(self):
         again = extras.render_extras_pages(_mini_data(), _mini_data()["teams"])

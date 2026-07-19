@@ -7,20 +7,26 @@ apps (Compare, Trade Machine, Lineup Lab, Win-Out Machine) instead of each page
 embedding its own player JSON. Schema (see PLAN.md):
 
     { "season": int,
-      "players": [{pid,name,pos,age,tid,jersey,ovr,pot,salary,exp,value,
+      "ws_season": int,   # the season the players' "ws" field is drawn from
+      "players": [{pid,name,pos,age,tid,jersey,ovr,pot,salary,exp,value,ws,
                    pg:{pts,trb,ast,stl,blk,tov,min,fg_pct,tp_pct,ft_pct,fpts},
                    ratings:{15 subratings}, skills:[...]}],
       "teams": [{tid,abbrev,region,name,colors:{primary,secondary,chart},
                  strength,payroll,record:{w,l}}],
       "sim": {"strengths":{tid:num}, "hca":num, "logistic_k":num,
               "schedule":[[day,home_tid,away_tid],...],
-              "bench_ovrs":[5 floats desc]},
+              "bench_ovrs":[5 floats desc], "season_games":int},
       "finance": {"tax_line":300000, "notes":"thousands"} }
 
 All money is in Basketball GM "thousands" units. The sim block mirrors
 simulate_league's win-probability model (see simmodel.sim_client_inputs) so
 client sims agree with the server-side Monte Carlo; bench_ovrs is the
-league-average 6th..10th-best current-roster OVR (Lineup Lab's bench).
+league-average 6th..10th-best current-roster OVR (Lineup Lab's bench);
+season_games is the regular-season length (the Trade Machine's projected
+records span it). "ws" is the player's regular-season Win Shares (ows+dws)
+from ws_season — the newest COMPLETED season — and is null for players
+without a stat row that year (rookies, prospects); the Trade Machine's
+win-shares ledger sums it per side.
 """
 
 import json
@@ -37,9 +43,12 @@ from .core import (
     latest_regular_stat,
     made_pct,
     per_game,
+    phase_value,
     player_name,
+    regular_season_length,
     safe_float,
     safe_int,
+    season_regular_stat,
     stat_gp,
     team_payroll,
     team_sort_key,
@@ -96,7 +105,27 @@ def _round(value: float | None, digits: int = 1) -> float | None:
     return round(float(value), digits) + 0.0
 
 
-def _player_entry(player: dict[str, Any], season: int, start_season: int) -> dict[str, Any]:
+# Basketball GM phase 4 (draft lottery) is the first phase at which the current
+# season's playoffs are decided, so its Win Shares are final. Mirrors the cap
+# in pages/wrapped.newest_completed_season.
+_PHASE_SEASON_COMPLETE = 4
+
+
+def ws_reference_season(data: dict[str, Any], season: int) -> int:
+    """The newest season with FINAL Win Shares: the current season once its
+    playoffs have finished (phase >= draft lottery), else the previous one."""
+    return season if phase_value(data) >= _PHASE_SEASON_COMPLETE else season - 1
+
+
+def _player_ws(player: dict[str, Any], ws_season: int) -> float | None:
+    """Regular-season Win Shares (ows+dws) from ``ws_season``; None without a row."""
+    stat = season_regular_stat(player, ws_season)
+    if not stat:
+        return None
+    return _round(safe_float(stat.get("ows")) + safe_float(stat.get("dws")), 1)
+
+
+def _player_entry(player: dict[str, Any], season: int, start_season: int, ws_season: int) -> dict[str, Any]:
     rating = latest_rating(player, season)
     stat = latest_regular_stat(player, start_season, season)
     gp = stat_gp(stat)
@@ -116,6 +145,7 @@ def _player_entry(player: dict[str, Any], season: int, start_season: int) -> dic
         "salary": int(round(safe_float(contract.get("amount")))),
         "exp": safe_int(contract.get("exp")) if contract.get("exp") is not None else None,
         "value": _round(safe_float(player.get("value")), 1),
+        "ws": _player_ws(player, ws_season),
         "pg": {
             "pts": _round(per_game(stat, "pts")),
             "trb": _round(total_rebounds(stat) / gp if gp else 0.0),
@@ -163,12 +193,13 @@ def build_app_data(
 
     sim = sim_client_inputs(data, teams, players, season)
     fresh = bool(sim.get("fresh"))
+    ws_season = ws_reference_season(data, season)
 
     pool = sorted(
         players + draft_prospects(data),
         key=lambda p: (-safe_int(latest_rating(p, season).get("ovr")), player_name(p), safe_int(p.get("pid"))),
     )
-    player_entries = [_player_entry(p, season, start_season) for p in pool]
+    player_entries = [_player_entry(p, season, start_season, ws_season) for p in pool]
 
     team_entries: list[dict[str, Any]] = []
     for team in sorted(teams, key=lambda t: safe_int(t.get("tid"), 10**9)):
@@ -197,6 +228,7 @@ def build_app_data(
 
     return {
         "season": season,
+        "ws_season": ws_season,
         "players": player_entries,
         "teams": team_entries,
         "sim": {
@@ -205,6 +237,7 @@ def build_app_data(
             "logistic_k": sim["logistic_k"],
             "schedule": [[safe_int(day), safe_int(home), safe_int(away)] for day, home, away in sim["schedule"]],
             "bench_ovrs": league_bench_ovrs(players, season),
+            "season_games": regular_season_length(data, season),
         },
         "finance": {"tax_line": FIN_SOFT_CAP, "notes": "thousands"},
     }

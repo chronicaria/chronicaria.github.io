@@ -163,8 +163,9 @@ FIN_ADJUSTMENTS: dict[int, dict[int, dict[str, Any]]] = {
         6: {"amount":  1000, "note": "Cash from Cambridge (trade)"},  # Waltham Bears
     },
     2031: {
-        5: {"amount": -30000, "note": "Darryn Peterson trade"},  # Gooning Gooners
-        6: {"amount":  30000, "note": "Darryn Peterson trade"},  # Waltham Bears
+        3: {"amount": -25000, "note": "Trae Young trade"},                        # Queens Pigeons
+        5: {"amount":  -5000, "note": "Darryn Peterson trade / Trae Young trade"},  # Gooning Gooners (-30M +25M)
+        6: {"amount":  30000, "note": "Darryn Peterson trade"},                   # Waltham Bears
     },
 }
 
@@ -178,8 +179,9 @@ FIN_RETENTION: dict[int, dict[str, Any]] = {
     # old $17M retention no longer applies — that entry was removed.)
     # 2031 trade: Ajay Mitchell + Trae Young to the Gooners with Waltham paying them in FULL,
     # so the retained share equals each contract and the Gooners carry $0 for both.
+    # (Trae Young pid 1325 was flipped to Queens on day 3; the retention did NOT follow him,
+    # so Queens carries his full $18M and Waltham's entry was removed.)
     1765: {"held_by": 6, "amount": 21000, "note": "Waltham (trade)"},  # Ajay Mitchell (roster tid 5)
-    1325: {"held_by": 6, "amount": 18000, "note": "Waltham (trade)"},  # Trae Young (roster tid 5)
 }
 
 # The 2031 waivers, rookie repricing, and trades are now materialized in the

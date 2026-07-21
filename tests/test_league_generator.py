@@ -268,14 +268,17 @@ class TestTeamFinances(unittest.TestCase):
         self.assertAlmostEqual(cam["adj"] + wal["adj"], 0)
 
     def test_2031_peterson_trade_cash(self):
-        # 2031: Gooners (tid 5) send $30M to Waltham (tid 6) in the Darryn Peterson trade.
-        teams = [self._team_s(5, "GOO", 5, 5), self._team_s(6, "WAL", 5, 5)]
-        players = [self._pl(5, 100000), self._pl(6, 100000)]
+        # 2031: Gooners (tid 5) send $30M to Waltham (tid 6) in the Darryn Peterson trade,
+        # and receive $25M from Queens (tid 3) in the Trae Young trade -> net -$5M.
+        teams = [self._team_s(3, "QUE", 5, 5), self._team_s(5, "GOO", 5, 5), self._team_s(6, "WAL", 5, 5)]
+        players = [self._pl(3, 100000), self._pl(5, 100000), self._pl(6, 100000)]
         data = {"teams": teams, "players": players, "playoffSeries": [], "releasedPlayers": []}
         lf = lg.compute_league_finances(data, teams, players, 2031, odds={})
-        goo, wal = lf["teams"][5], lf["teams"][6]
-        self.assertEqual(goo["adj"], -30000)
+        que, goo, wal = lf["teams"][3], lf["teams"][5], lf["teams"][6]
+        self.assertEqual(que["adj"], -25000)
+        self.assertEqual(goo["adj"], -5000)
         self.assertEqual(wal["adj"], 30000)
+        self.assertIn("Trae Young", que["adj_note"])
         self.assertIn("Darryn Peterson", goo["adj_note"])
         self.assertIn("Darryn Peterson", wal["adj_note"])
         # a 2031 adjustment must not leak into another season's ledger

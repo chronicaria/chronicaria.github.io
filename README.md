@@ -22,7 +22,7 @@ valorant/             RWPA dashboard — 19 matches, 410 rounds
 concerto/             Piano concerto pairwise ranker
 nyc-weather/          Hourly forecasts with ensemble uncertainty bands
 winter-trip/          Italy, winter 2026-27 — itinerary and logistics
-paper/                The Gothic Times v2 — nine desks, ~120 feeds
+quant-internships/    Summer 2027 quant internship board — 59 roles, 38 firms
 
 assets/home.css       Landing page — the broadsheet design system
 assets/styles.css     Every other top-level page
@@ -74,19 +74,37 @@ under `~/Desktop/Code/` and copy the result back:
 Re-run the hub injection after any rebuild — it adds the `hub.js` tag to pages that lack
 it and skips the rest.
 
-## Two newspapers
+## The newspaper
 
-`daily/` is the live paper, printed by `scripts/update_daily.py` and current through
-July 2026. `paper/` is a fuller rewrite — nine desks instead of five, ~120 feeds, its own
-`build.py` in `PersonalNewspaper/` — but its last edition is from June. Pick one before
-either goes stale; they are both called The Gothic Times.
+`daily/` is the paper, printed by `scripts/update_daily.py` on a schedule. A second,
+fuller rewrite once lived at `/paper/` (nine desks, ~120 feeds, built by a separate
+`PersonalNewspaper` project); it was retired in favour of this one, which is the version
+that actually stays current.
 
 ## Automation
 
-`scripts/` still holds the updaters for the daily paper, sports, and weather, but the
-GitHub Actions workflows that ran them stayed behind on the old `andrewjparkus.github.io`
-repository (now the RAPM dashboard). Nothing here is on a schedule yet — the updaters run
-by hand until workflows are added back.
+Three scheduled workflows in `.github/workflows/`:
+
+| Workflow | Cadence | Runs | Writes |
+|---|---|---|---|
+| `print-daily.yml` | 10:10 UTC daily | `update_daily.py` | `data/daily/`, `daily.xml` |
+| `update-sports.yml` | every 6h | `update_sports.py` | `data/sports.json`, `data/history/` |
+| `update-weather.yml` | every 3h | `update_weather.py` | `assets/weather/county-temp.svg`, `data/weather.json` |
+
+The first two are stdlib-only. The weather one installs `tools/county-temp-map` (geopandas,
+rasterio, exactextract, cairosvg + libcairo from apt) and caches the ~80 MB Census shapefile
+between runs.
+
+All three commit through `scripts/publish.sh`, which rebases and retries on a rejected push
+— the schedules can drift into each other, and without that the second one to finish just
+fails. They commit with `[skip ci]` and no-op when nothing changed.
+
+A workflow succeeding does not mean every source was healthy: a dead feed or a failed team
+fetch is swallowed so one bad source can't kill the run. Check the `errors` key in
+`data/daily/latest.json` or `data/sports.json` if a section looks thin.
+
+**GitHub disables scheduled workflows after ~60 days without repo activity.** The updaters'
+own commits normally keep them alive; re-enable from the Actions tab if they ever pause.
 
 ## Deploying
 

@@ -47,14 +47,8 @@ jobs:
       - name: Repaint the map
         run: python3 scripts/update_weather.py
 
-      - name: Commit
+      - name: Publish
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/weather/county-temp.svg data/weather.json
-          if git diff --cached --quiet; then
-            echo "No change — same RTMA hour as the last run."
-            exit 0
-          fi
-          git commit -m "Repaint the county temperature map [skip ci]"
-          git push
+          scripts/publish.sh \
+            "Repaint the county temperature map [skip ci]" \
+            assets/weather/county-temp.svg data/weather.json

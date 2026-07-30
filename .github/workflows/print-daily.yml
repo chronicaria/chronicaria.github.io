@@ -37,14 +37,8 @@ jobs:
       - name: Print the edition
         run: python3 scripts/update_daily.py
 
-      - name: Commit the edition
+      - name: Publish the edition
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/daily daily.xml
-          if git diff --cached --quiet; then
-            echo "No change — the edition already matched what is committed."
-            exit 0
-          fi
-          git commit -m "Print the edition for $(date -u +%Y-%m-%d) [skip ci]"
-          git push
+          scripts/publish.sh \
+            "Print the edition for $(date -u +%Y-%m-%d) [skip ci]" \
+            data/daily daily.xml

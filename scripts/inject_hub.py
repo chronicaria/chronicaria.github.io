@@ -11,16 +11,12 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DIRS = [
-    "concerto",
-    "fantasy-basketball",
-    "fantasy-football",
-    "winter-trip",
-    "nyc-weather",
-    "valorant",
-    "paper",
-    "rome-wiki",
-]
+
+# Same list site_nav.py uses, so adding a project in one place is enough.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from site_nav import PROJECTS  # noqa: E402
+
+DIRS = [href.strip("/") for href, _ in PROJECTS]
 
 TAG = '<script defer src="/assets/hub.js"></script>'
 

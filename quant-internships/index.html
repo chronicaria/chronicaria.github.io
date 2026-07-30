@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Summer 2027 quant internships · open now</title>
+<meta name="description" content="Every Summer 2027 quantitative trading, research and developer internship open to an undergraduate graduating May 2028, with direct application links, compensation and one-application-only policies.">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("quant-internships-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script defer src="/assets/hub.js"></script></head>
+<body>
+<a class="skip-link" href="#main">Skip to the table</a>
+
+<header class="site-header">
+  <div class="masthead">
+    <h1>Summer 2027 <em>quant internships</em></h1>
+    <p class="standfirst">
+      Quantitative trading, research and developer roles open to an undergraduate graduating
+      <strong>May 2028</strong>. PhD- and Master's-only postings are excluded. Sorted QT before QR before QD,
+      then by tier, then New York first.
+    </p>
+  </div>
+  <div class="header-side">
+    <p class="tally">
+      <span class="n" id="tally-n">0</span>
+      <span class="label" id="tally-label">roles shown</span>
+    </p>
+    <button class="theme-toggle" type="button">◐ dark</button>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="filter-group">
+    <span class="label">Role</span>
+    <button class="chip" type="button" data-type="QT" aria-pressed="false">QT</button>
+    <button class="chip" type="button" data-type="QR" aria-pressed="false">QR</button>
+    <button class="chip" type="button" data-type="QD" aria-pressed="false">QD</button>
+  </div>
+  <div class="filter-group">
+    <span class="label">Where</span>
+    <button class="chip" type="button" data-loc="NYC" aria-pressed="false">NYC</button>
+    <button class="chip" type="button" data-loc="Chicago" aria-pressed="false">Chicago</button>
+    <button class="chip" type="button" data-loc="Other" aria-pressed="false">Other</button>
+  </div>
+  <div class="filter-group">
+    <span class="label">Status</span>
+    <button class="chip" type="button" data-status="open" aria-pressed="false">Open now</button>
+    <button class="chip" type="button" data-status="soon" aria-pressed="false">Opening soon</button>
+  </div>
+  <div class="filter-group">
+    <button class="chip" type="button" id="hide-applied" aria-pressed="false">Hide applied</button>
+  </div>
+  <input class="search" id="search" type="search" placeholder="Search firm, role, note…" aria-label="Search roles">
+  <span class="spacer"></span>
+  <button class="reset" type="button" id="reset">Reset</button>
+</div>
+
+<main id="main">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="sortable" data-sort="firm" scope="col">Firm <span class="arrow">▾</span></th>
+          <th scope="col">Role</th>
+          <th class="sortable" data-sort="type" scope="col">Type <span class="arrow">▾</span></th>
+          <th class="sortable" data-sort="tier" scope="col">Tier <span class="arrow">▾</span></th>
+          <th scope="col">Location</th>
+          <th class="sortable" data-sort="comp" scope="col">Intern pay <span class="arrow">▾</span></th>
+          <th scope="col">Multi-apply</th>
+          <th scope="col">Link</th>
+          <th scope="col">Track</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="empty" id="empty" hidden>Nothing matches those filters.</p>
+  </div>
+
+  <section class="notes">
+    <h2>How to read this</h2>
+    <ul>
+      <li><strong>Type.</strong> <span class="rt" data-t="QT">QT</span> quantitative trader,
+        <span class="rt" data-t="QR">QR</span> quantitative researcher,
+        <span class="rt" data-t="QD">QD</span> quantitative developer or analyst. Pure software, FPGA and
+        hardware roles are left out even at quant firms.</li>
+      <li><strong>Tier</strong> is a rough read on selectivity and exit value, not a ranking of the firms as
+        businesses. T1 is the group that clears the highest bar and pays the most; T3 is still a real quant
+        seat.</li>
+      <li><strong>Multi-apply.</strong> Several firms want exactly one application per cycle. Where that
+        column is red, choose your role before you submit, because the choice is usually irreversible for
+        the season.</li>
+      <li><strong>Intern pay</strong> is what the firm posts where pay-transparency law forces it, and what
+        candidates report otherwise. Treat reported figures as approximate.</li>
+      <li><strong>Track</strong> stores a local "applied" flag in this browser only. Nothing leaves the page.</li>
+    </ul>
+
+    <h2>The one-application traps</h2>
+    <p>Twelve rows on this page restrict you, and the restriction is usually irreversible for the season.
+      Decide before you submit:</p>
+    <ul>
+      <li><strong>Hudson River Trading.</strong> The posting says it outright: <em>"We do not allow multiple
+        applications. Please apply to the ONE role you are most interested in."</em></li>
+      <li><strong>Virtu.</strong> <em>"Please only apply to one internship position."</em> Their QT and QR
+        seats compete with each other.</li>
+      <li><strong>IMC.</strong> One application per role per year, and they strongly urge a single best fit.
+        QT and QR are separate reqs, so this is a real choice.</li>
+      <li><strong>Akuna.</strong> Applying signals the role is your top Akuna preference and you will not be
+        considered for the others.</li>
+      <li><strong>Squarepoint.</strong> The req opens in bold with a one-application instruction.</li>
+      <li><strong>Radix.</strong> Apply to only one Radix posting.</li>
+      <li><strong>Quantic.</strong> Exactly one of the three Quantic roles. QR outranks QD for you.</li>
+      <li><strong>Millennium.</strong> Two applications maximum, counted across every location.</li>
+    </ul>
+    <p>By contrast, <strong>Jane Street</strong> takes multiple applications, <strong>D. E. Shaw</strong>
+      lets you bundle several roles into one submission, and <strong>Citadel</strong> and
+      <strong>Citadel Securities</strong> are separate firms that recruit independently, so both are fair
+      game. <strong>Optiver</strong> has no per-role limit but does impose a global cooldown after a failed
+      assessment, so do not burn it cold.</p>
+
+    <h2>Applying</h2>
+    <ul>
+      <li>Almost every firm here reviews on a <strong>rolling basis</strong>. Applying in early August is
+        materially better than applying in late September with the same résumé.</li>
+      <li>The online assessments are the real filter, not the résumé. Most are timed mental arithmetic and
+        probability. Practise before you spend an application on a firm you care about.</li>
+      <li>Watch the graduation windows. Several postings name a range rather than a class year:
+        DRW wants December 2027 to June 2028, IMC September 2027 to July 2028, Optiver December 2027 to
+        June 2029, and Flow Traders says <em>"Class of 2028 preferred"</em>.</li>
+    </ul>
+
+    <h2>Keyboard</h2>
+    <ul>
+      <li><code>/</code> focus search · <code>Esc</code> clear it</li>
+      <li><code>1</code> <code>2</code> <code>3</code> toggle QT / QR / QD · <code>0</code> reset everything</li>
+      <li>Click any underlined column header to sort; click again to reverse.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span id="stamp">Checked 30 July 2026</span>
+  <span>Postings close without notice. Verify on the firm's own page before relying on a row.</span>
+</footer>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

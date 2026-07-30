@@ -16,10 +16,10 @@
     { href: "/fantasy-basketball/", label: "Fantasy Basketball" },
     { href: "/fantasy-football/", label: "Fantasy Football" },
     { href: "/valorant/", label: "Valorant RWPA" },
+    { href: "/quant-internships/", label: "Quant Internships" },
     { href: "/concerto/", label: "Concerto Ranker" },
     { href: "/nyc-weather/", label: "Weather Dashboard" },
     { href: "/winter-trip/", label: "Italy, winter 2026–27" },
-    { href: "/paper/", label: "Gothic Times v2" },
   ];
 
   var ELSEWHERE = [

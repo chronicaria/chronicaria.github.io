@@ -1,0 +1,45 @@
+name: Update sports
+
+# Records, standings, recent results and upcoming games for the eight tracked
+# teams, from ESPN's public site API. Stdlib only. One team failing never
+# breaks the others — that team keeps its previous data for the cycle, and the
+# run still succeeds, so check data/sports.json's "errors" if a team looks stale.
+
+on:
+  schedule:
+    - cron: "20 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-sports
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch team data
+        run: python3 scripts/update_sports.py
+
+      - name: Commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # update_sports.py also appends finished games to data/history/.
+          git add data/sports.json data/history
+          if git diff --cached --quiet; then
+            echo "No change."
+            exit 0
+          fi
+          git commit -m "Refresh sports data [skip ci]"
+          git push

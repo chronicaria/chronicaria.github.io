@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-18T00:47:07Z",
+ "updated": "2026-07-30T23:43:28Z",
  "errors": [],
  "teams": [
   {
@@ -11,7 +11,7 @@
    "id": "150",
    "name": "Duke Blue Devils",
    "abbr": "DUKE",
-   "record": "35-3",
+   "record": "",
    "standing": "1st in ACC",
    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
    "color": "00539b",
@@ -221,7 +221,7 @@
      "oppAbbr": "TULN",
      "home": true,
      "url": "https://www.espn.com/college-football/game/_/gameId/401858209",
-     "odds": "DUKE -9.5 \u00b7 O/U 53.5"
+     "odds": "DUKE -10 \u00b7 O/U 52.5"
     },
     {
      "date": "2026-09-12T19:30Z",
@@ -302,100 +302,100 @@
    "id": "6",
    "name": "Dallas Mavericks",
    "abbr": "DAL",
-   "record": "26-56",
+   "record": "",
    "standing": "3rd in Southwest Division",
    "logo": "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
    "color": "0064b1",
    "form": [
     {
-     "date": "2026-03-26T02:00Z",
-     "opp": "Nuggets",
-     "oppAbbr": "DEN",
+     "date": "2025-03-25T23:30Z",
+     "opp": "Knicks",
+     "oppAbbr": "NY",
      "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401810914",
+     "url": "https://www.espn.com/nba/game/_/gameId/401705614",
      "res": "L",
-     "score": "135-142"
+     "score": "113-128"
     },
     {
-     "date": "2026-03-28T02:00Z",
-     "opp": "Trail Blazers",
-     "oppAbbr": "POR",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401810929",
-     "res": "W",
-     "score": "100-93"
-    },
-    {
-     "date": "2026-03-31T00:30Z",
-     "opp": "Timberwolves",
-     "oppAbbr": "MIN",
-     "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401810950",
-     "res": "L",
-     "score": "94-124"
-    },
-    {
-     "date": "2026-04-01T00:00Z",
-     "opp": "Bucks",
-     "oppAbbr": "MIL",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401858694",
-     "res": "L",
-     "score": "99-123"
-    },
-    {
-     "date": "2026-04-04T00:30Z",
+     "date": "2025-03-27T23:00Z",
      "opp": "Magic",
      "oppAbbr": "ORL",
-     "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401810982",
-     "res": "L",
-     "score": "127-138"
-    },
-    {
-     "date": "2026-04-05T23:30Z",
-     "opp": "Lakers",
-     "oppAbbr": "LAL",
-     "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401810995",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401705626",
      "res": "W",
-     "score": "134-128"
+     "score": "101-92"
     },
     {
-     "date": "2026-04-08T02:30Z",
+     "date": "2025-03-30T00:00Z",
+     "opp": "Bulls",
+     "oppAbbr": "CHI",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401705643",
+     "res": "W",
+     "score": "120-119"
+    },
+    {
+     "date": "2025-04-01T00:30Z",
+     "opp": "Nets",
+     "oppAbbr": "BKN",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401705661",
+     "res": "L",
+     "score": "109-113"
+    },
+    {
+     "date": "2025-04-03T00:30Z",
+     "opp": "Hawks",
+     "oppAbbr": "ATL",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401705675",
+     "res": "W",
+     "score": "120-118"
+    },
+    {
+     "date": "2025-04-05T02:30Z",
      "opp": "Clippers",
      "oppAbbr": "LAC",
      "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401811011",
+     "url": "https://www.espn.com/nba/game/_/gameId/401705693",
      "res": "L",
-     "score": "103-116"
+     "score": "91-114"
     },
     {
-     "date": "2026-04-09T02:00Z",
-     "opp": "Suns",
-     "oppAbbr": "PHX",
+     "date": "2025-04-06T02:30Z",
+     "opp": "Clippers",
+     "oppAbbr": "LAC",
      "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401811019",
+     "url": "https://www.espn.com/nba/game/_/gameId/401705698",
      "res": "L",
-     "score": "107-112"
+     "score": "104-135"
     },
     {
-     "date": "2026-04-11T00:00Z",
-     "opp": "Spurs",
-     "oppAbbr": "SA",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401811035",
-     "res": "L",
-     "score": "120-139"
-    },
-    {
-     "date": "2026-04-13T00:30Z",
-     "opp": "Bulls",
-     "oppAbbr": "CHI",
+     "date": "2025-04-09T23:30Z",
+     "opp": "Lakers",
+     "oppAbbr": "LAL",
      "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401811048",
+     "url": "https://www.espn.com/nba/game/_/gameId/401705725",
+     "res": "L",
+     "score": "97-112"
+    },
+    {
+     "date": "2025-04-12T00:30Z",
+     "opp": "Raptors",
+     "oppAbbr": "TOR",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401705744",
      "res": "W",
-     "score": "149-128"
+     "score": "124-102"
+    },
+    {
+     "date": "2025-04-13T19:30Z",
+     "opp": "Grizzlies",
+     "oppAbbr": "MEM",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401705760",
+     "res": "L",
+     "score": "97-132"
     }
    ],
    "next": []
@@ -409,172 +409,172 @@
    "id": "21",
    "name": "New York Mets",
    "abbr": "NYM",
-   "record": "41-57",
+   "record": "46-63",
    "standing": "5th in NL East",
    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/nym.png",
    "color": "002d72",
    "form": [
     {
-     "date": "2026-07-05T00:08Z",
-     "opp": "Braves",
-     "oppAbbr": "ATL",
-     "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816018",
-     "res": "L",
-     "score": "3-14"
-    },
-    {
-     "date": "2026-07-05T16:30Z",
-     "opp": "Braves",
-     "oppAbbr": "ATL",
-     "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816033",
-     "res": "W",
-     "score": "10-9"
-    },
-    {
-     "date": "2026-07-06T23:15Z",
-     "opp": "Braves",
-     "oppAbbr": "ATL",
-     "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816047",
-     "res": "W",
-     "score": "7-6"
-    },
-    {
-     "date": "2026-07-07T23:10Z",
-     "opp": "Royals",
-     "oppAbbr": "KC",
-     "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816057",
-     "res": "L",
-     "score": "12-16"
-    },
-    {
-     "date": "2026-07-08T23:10Z",
-     "opp": "Royals",
-     "oppAbbr": "KC",
-     "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816072",
-     "res": "W",
-     "score": "6-2"
-    },
-    {
-     "date": "2026-07-09T17:10Z",
-     "opp": "Royals",
-     "oppAbbr": "KC",
-     "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816086",
-     "res": "W",
-     "score": "7-3"
-    },
-    {
-     "date": "2026-07-10T23:50Z",
-     "opp": "Red Sox",
-     "oppAbbr": "BOS",
-     "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816096",
-     "res": "L",
-     "score": "2-6"
-    },
-    {
-     "date": "2026-07-11T20:10Z",
-     "opp": "Red Sox",
-     "oppAbbr": "BOS",
-     "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816111",
-     "res": "L",
-     "score": "0-4"
-    },
-    {
-     "date": "2026-07-12T17:40Z",
-     "opp": "Red Sox",
-     "oppAbbr": "BOS",
-     "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816126",
-     "res": "L",
-     "score": "2-3"
-    },
-    {
-     "date": "2026-07-16T22:00Z",
-     "opp": "Phillies",
-     "oppAbbr": "PHI",
-     "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816143",
-     "res": "W",
-     "score": "4-1"
-    }
-   ],
-   "next": [
-    {
-     "date": "2026-07-18T20:05Z",
-     "opp": "Phillies",
-     "oppAbbr": "PHI",
-     "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816158"
-    },
-    {
      "date": "2026-07-19T17:35Z",
      "opp": "Phillies",
      "oppAbbr": "PHI",
      "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816173"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816173",
+     "res": "W",
+     "score": "6-1"
     },
     {
      "date": "2026-07-20T23:40Z",
      "opp": "Brewers",
      "oppAbbr": "MIL",
      "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816195"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816195",
+     "res": "L",
+     "score": "3-8"
     },
     {
      "date": "2026-07-21T23:40Z",
      "opp": "Brewers",
      "oppAbbr": "MIL",
      "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816210"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816210",
+     "res": "W",
+     "score": "4-0"
     },
     {
      "date": "2026-07-22T18:10Z",
      "opp": "Brewers",
      "oppAbbr": "MIL",
      "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816225"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816225",
+     "res": "L",
+     "score": "3-4"
     },
     {
      "date": "2026-07-24T23:10Z",
      "opp": "Dodgers",
      "oppAbbr": "LAD",
      "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816240"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816240",
+     "res": "L",
+     "score": "2-4"
     },
     {
      "date": "2026-07-25T23:15Z",
      "opp": "Dodgers",
      "oppAbbr": "LAD",
      "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816255"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816255",
+     "res": "L",
+     "score": "3-4"
     },
     {
      "date": "2026-07-26T17:40Z",
      "opp": "Dodgers",
      "oppAbbr": "LAD",
      "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816270"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816270",
+     "res": "W",
+     "score": "8-3"
     },
     {
      "date": "2026-07-27T23:10Z",
      "opp": "Braves",
      "oppAbbr": "ATL",
      "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816281"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816281",
+     "res": "W",
+     "score": "14-3"
     },
     {
-     "date": "2026-07-28T23:10Z",
+     "date": "2026-07-29T17:10Z",
      "opp": "Braves",
      "oppAbbr": "ATL",
      "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816293"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816308",
+     "res": "W",
+     "score": "3-2"
+    },
+    {
+     "date": "2026-07-29T23:10Z",
+     "opp": "Braves",
+     "oppAbbr": "ATL",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401902545",
+     "res": "L",
+     "score": "0-1"
+    }
+   ],
+   "next": [
+    {
+     "date": "2026-07-31T23:10Z",
+     "opp": "Marlins",
+     "oppAbbr": "MIA",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816334"
+    },
+    {
+     "date": "2026-08-01T20:10Z",
+     "opp": "Marlins",
+     "oppAbbr": "MIA",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816349"
+    },
+    {
+     "date": "2026-08-02T17:40Z",
+     "opp": "Marlins",
+     "oppAbbr": "MIA",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816364"
+    },
+    {
+     "date": "2026-08-04T22:40Z",
+     "opp": "Guardians",
+     "oppAbbr": "CLE",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816388"
+    },
+    {
+     "date": "2026-08-05T22:40Z",
+     "opp": "Guardians",
+     "oppAbbr": "CLE",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816403"
+    },
+    {
+     "date": "2026-08-06T17:10Z",
+     "opp": "Guardians",
+     "oppAbbr": "CLE",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816418"
+    },
+    {
+     "date": "2026-08-07T22:40Z",
+     "opp": "Pirates",
+     "oppAbbr": "PIT",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816428"
+    },
+    {
+     "date": "2026-08-08T22:40Z",
+     "opp": "Pirates",
+     "oppAbbr": "PIT",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816443"
+    },
+    {
+     "date": "2026-08-09T17:35Z",
+     "opp": "Pirates",
+     "oppAbbr": "PIT",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816458"
+    },
+    {
+     "date": "2026-08-10T23:15Z",
+     "opp": "Braves",
+     "oppAbbr": "ATL",
+     "home": false,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816470"
     }
    ]
   },
@@ -603,8 +603,8 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "",
-   "standing": "3rd in AFC South",
+   "record": "0-0",
+   "standing": "1st in AFC South",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",
    "form": [
@@ -705,8 +705,7 @@
      "opp": "Ravens",
      "oppAbbr": "BAL",
      "home": true,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401872659",
-     "odds": "BAL -3.5 \u00b7 O/U 49.5"
+     "url": "https://www.espn.com/nfl/game/_/gameId/401872659"
     },
     {
      "date": "2026-09-21T00:20Z",
@@ -960,38 +959,11 @@
    "id": "18966",
    "name": "LAFC",
    "abbr": "LAFC",
-   "record": "7-3-5",
-   "standing": "5th in MLS",
+   "record": "10-3-5",
+   "standing": "2nd in MLS",
    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/18966.png",
    "color": "000000",
    "form": [
-    {
-     "date": "2026-04-05T01:30Z",
-     "opp": "Orlando",
-     "oppAbbr": "ORL",
-     "home": true,
-     "url": "https://www.espn.com/soccer/match/_/gameId/761525",
-     "res": "W",
-     "score": "6-0"
-    },
-    {
-     "date": "2026-04-11T20:45Z",
-     "opp": "Portland",
-     "oppAbbr": "POR",
-     "home": false,
-     "url": "https://www.espn.com/soccer/match/_/gameId/761531",
-     "res": "L",
-     "score": "1-2"
-    },
-    {
-     "date": "2026-04-19T23:00Z",
-     "opp": "San Jose",
-     "oppAbbr": "SJ",
-     "home": true,
-     "url": "https://www.espn.com/soccer/match/_/gameId/761558",
-     "res": "L",
-     "score": "1-4"
-    },
     {
      "date": "2026-04-23T02:30Z",
      "opp": "Colorado",
@@ -1054,6 +1026,33 @@
      "url": "https://www.espn.com/soccer/match/_/gameId/761658",
      "res": "W",
      "score": "1-0"
+    },
+    {
+     "date": "2026-07-18T02:25Z",
+     "opp": "LA Galaxy",
+     "oppAbbr": "LA",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761664",
+     "res": "W",
+     "score": "3-0"
+    },
+    {
+     "date": "2026-07-23T02:30Z",
+     "opp": "Salt Lake",
+     "oppAbbr": "RSL",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761679",
+     "res": "W",
+     "score": "3-1"
+    },
+    {
+     "date": "2026-07-26T02:30Z",
+     "opp": "Kansas City",
+     "oppAbbr": "SKC",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/761694",
+     "res": "W",
+     "score": "4-0"
     }
    ],
    "next": []

@@ -71,6 +71,26 @@
    "score": "89-66"
   },
   {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-03-25T23:30Z",
+   "opp": "Knicks",
+   "home": false,
+   "res": "L",
+   "score": "113-128"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-03-27T23:00Z",
+   "opp": "Magic",
+   "home": false,
+   "res": "W",
+   "score": "101-92"
+  },
+  {
    "team": "duke-mbb",
    "label": "Duke MBB",
    "league": "NCAA MBB",
@@ -79,6 +99,16 @@
    "home": true,
    "res": "W",
    "score": "100-93"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-03-30T00:00Z",
+   "opp": "Bulls",
+   "home": false,
+   "res": "W",
+   "score": "120-119"
   },
   {
    "team": "duke-mbb",
@@ -91,6 +121,36 @@
    "score": "85-65"
   },
   {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-04-01T00:30Z",
+   "opp": "Nets",
+   "home": true,
+   "res": "L",
+   "score": "109-113"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-04-03T00:30Z",
+   "opp": "Hawks",
+   "home": true,
+   "res": "W",
+   "score": "120-118"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-04-05T02:30Z",
+   "opp": "Clippers",
+   "home": false,
+   "res": "L",
+   "score": "91-114"
+  },
+  {
    "team": "duke-mbb",
    "label": "Duke MBB",
    "league": "NCAA MBB",
@@ -99,6 +159,46 @@
    "home": true,
    "res": "L",
    "score": "67-70"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-04-06T02:30Z",
+   "opp": "Clippers",
+   "home": false,
+   "res": "L",
+   "score": "104-135"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-04-09T23:30Z",
+   "opp": "Lakers",
+   "home": true,
+   "res": "L",
+   "score": "97-112"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-04-12T00:30Z",
+   "opp": "Raptors",
+   "home": true,
+   "res": "W",
+   "score": "124-102"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2025-04-13T19:30Z",
+   "opp": "Grizzlies",
+   "home": false,
+   "res": "L",
+   "score": "97-132"
   },
   {
    "team": "canes",

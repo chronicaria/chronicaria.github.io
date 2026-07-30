@@ -60,19 +60,27 @@ python3 -m http.server 8845 --directory .
 
 ## Regenerating a sub-project
 
-The projects were copied in as built output. To update one, rebuild it in its own folder
-under `~/Desktop/Code/` and copy the result back:
+The projects were copied in as built output and their standalone folders under
+`~/Desktop/Code/` were deleted on 2026-07-30, so **this repository is now the source**
+for most of them.
 
-| Path | Source folder | Build |
-|---|---|---|
-| `fantasy-basketball/` | `fantasy-encyclopedia/` | `python3 build.py` |
-| `fantasy-football/` | `fantasy-football-encyclopedia/` | `python3 build.py` |
-| `paper/` | `PersonalNewspaper/` | `python3 build.py` → `public/` |
-| `rome-wiki/` | `rome-wiki/` | `PAGES_BASE_PATH=/rome-wiki npm run build:pages` → `out/` |
-| `winter-trip/`, `valorant/`, `concerto/`, `nyc-weather/` | same-named folders | static, copy as-is |
+| Path | How to rebuild |
+|---|---|
+| `concerto/`, `valorant/`, `nyc-weather/`, `winter-trip/`, `quant-internships/` | Nothing to build — edit the files in place. |
+| `fantasy-basketball/` | `cd fantasy-basketball && python3 build.py` — reads the vault at `~/Desktop/Rome/Basketball/Fantasy Basketball/2026-27 Fantasy Basketball Encyclopedia`. |
+| `fantasy-football/` | `cd fantasy-football && python3 build.py` — reads `~/Desktop/Rome/Sports/NFL/Fantasy Football`. |
+| `rome-wiki/` | **The exception.** Only the export lives here; the Next.js source is at [chronicaria/rome-wiki](https://github.com/chronicaria/rome-wiki). Clone it, `PAGES_BASE_PATH=/rome-wiki npm run build:pages`, and copy `out/` over `rome-wiki/`. That repo is kept for exactly this reason — do not delete it. |
 
-Re-run the hub injection after any rebuild — it adds the `hub.js` tag to pages that lack
-it and skips the rest.
+After any rebuild:
+
+```sh
+python3 scripts/inject_hub.py    # re-adds the hub tag to new pages, skips the rest
+```
+
+To add or remove a project, edit `PROJECTS` in `scripts/site_nav.py` and run it — it
+regenerates the nav, the `SECTIONS` array in `hub.js`, and the sitemap from that one list.
+`inject_hub.py` reads the same list. The home page's Published work shelf is deliberately
+hand-written and needs its card added by hand.
 
 ## The newspaper
 

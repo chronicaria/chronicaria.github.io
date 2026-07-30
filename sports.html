@@ -4,12 +4,75 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sports — Andrew Park</title>
-  <meta name="description" content="Live trackers for Andrew Park's eight teams across six leagues — records, form, and upcoming schedules.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23171b21'/%3E%3Ctext x='50' y='68' font-family='Helvetica,Arial,sans-serif' font-size='46' font-weight='700' fill='%235b9dff' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
+  <meta name="description" content="Live trackers for Duke basketball, Duke football, and the Dallas Mavericks — records, form, and upcoming schedules.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23faf9f4'/%3E%3Crect x='5' y='5' width='90' height='90' fill='none' stroke='%23003153' stroke-width='4'/%3E%3Ctext x='50' y='68' font-family='Didot,Georgia,serif' font-size='48' font-weight='700' fill='%23003153' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
   <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
   <link rel="apple-touch-icon" href="assets/icon-180.png">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    /* page-local: three-column upcoming schedules */
+    .sched-cols {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.4rem 1.8rem;
+    }
+    .sched-col h3 {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: .6rem;
+      margin: 0 0 .3rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--rule-strong);
+      font-family: "Newsreader", Georgia, serif;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .sched-col .sched-league {
+      font-family: var(--mono);
+      font-size: .62rem;
+      font-weight: 400;
+      letter-spacing: .08em;
+      color: var(--gray);
+      white-space: nowrap;
+    }
+    .sched-col ul { margin: 0; padding: 0; list-style: none; }
+    .sched-col li {
+      display: flex;
+      align-items: baseline;
+      gap: .55rem;
+      padding: .38rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: .85rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .sched-col li:last-child { border-bottom: 0; }
+    .sched-date {
+      flex: 0 0 5rem;
+      font-family: var(--mono);
+      font-size: .66rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .sched-opp { flex: 1 1 auto; min-width: 0; }
+    .sched-time {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: .66rem;
+      letter-spacing: .08em;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .sched-empty { padding: .5rem 0; font-size: .82rem; }
+    @media (max-width: 700px) {
+      .sched-cols { grid-template-columns: 1fr; gap: 1.3rem; }
+    }
+  </style>
   <script defer src="assets/site.js"></script>
   <script defer src="assets/ui.js"></script>
   <script defer src="assets/sports.js"></script>
@@ -28,12 +91,6 @@
           <a class="active" href="sports.html">Sports</a>
           <a href="music.html">Music</a>
           <a href="literature.html">Literature</a>
-        </div>
-      </div>
-      <div class="nav-drop">
-        <button type="button" class="nav-drop-btn">Other</button>
-        <div class="nav-drop-menu">
-          <a href="league/index.html">SMP Basketball League</a>
           <a href="weather.html">Temperature</a>
         </div>
       </div>
@@ -44,10 +101,11 @@
 
     <section class="page-hero">
       <div>
-        <p class="eyebrow">Eight teams · six leagues · one fan</p>
+        <p class="eyebrow">Three teams · three leagues · one fan</p>
         <h1>Sports</h1>
-        <p class="tagline">Records, standings, recent form, and what's next for every team I follow —
-          refreshed every six hours by a GitHub Actions pipeline pulling ESPN data.</p>
+        <p class="tagline">Records, standings, recent form, and what's next for Duke basketball, Duke
+          football, and the Mavericks — NCAA hoops, NCAA football, and the NBA — refreshed every six
+          hours by a GitHub Actions pipeline pulling ESPN data.</p>
       </div>
       <span class="tag neutral" data-updated>updated —</span>
     </section>
@@ -67,36 +125,15 @@
     </section>
 
     <div class="tier-head">
-      <h2>Tier 1 — ride or die</h2>
+      <h2>The teams</h2>
     </div>
     <div class="tier-grid" data-tier="1"></div>
 
-    <div class="tier-head">
-      <h2>Tier 2 — deeply invested</h2>
-    </div>
-    <div class="tier-grid" data-tier="2"></div>
-
-    <div class="tier-head">
-      <h2>Tier 3 — committed</h2>
-    </div>
-    <div class="tier-grid" data-tier="3"></div>
-
     <section class="card">
-      <div class="section-title-row">
-        <h2>Upcoming games</h2>
-        <label class="select-label">Team
-          <select data-upcoming-filter></select>
-        </label>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Date</th><th style="text-align:left;">Matchup</th><th>League</th><th>Time</th></tr>
-          </thead>
-          <tbody data-upcoming-rows></tbody>
-        </table>
-      </div>
-      <p class="small-copy muted" style="margin:.5rem 0 0;" data-upcoming-note></p>
+      <h2>Upcoming games</h2>
+      <div class="sched-cols" data-upcoming-cols></div>
+      <p class="small-copy muted" style="margin:.7rem 0 0;">Off-season schedules appear as leagues
+        publish them.</p>
     </section>
 
     <p class="small-copy muted">Data via ESPN's public API, refreshed every six hours. Form strips show

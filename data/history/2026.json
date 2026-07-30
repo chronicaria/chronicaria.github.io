@@ -609,6 +609,106 @@
    "home": true,
    "res": "W",
    "score": "4-2"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-05T00:08Z",
+   "opp": "Braves",
+   "home": false,
+   "res": "L",
+   "score": "3-14"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-05T16:30Z",
+   "opp": "Braves",
+   "home": false,
+   "res": "W",
+   "score": "10-9"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-06T23:15Z",
+   "opp": "Braves",
+   "home": false,
+   "res": "W",
+   "score": "7-6"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-07T23:10Z",
+   "opp": "Royals",
+   "home": true,
+   "res": "L",
+   "score": "12-16"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-08T23:10Z",
+   "opp": "Royals",
+   "home": true,
+   "res": "W",
+   "score": "6-2"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-09T17:10Z",
+   "opp": "Royals",
+   "home": true,
+   "res": "W",
+   "score": "7-3"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-10T23:50Z",
+   "opp": "Red Sox",
+   "home": true,
+   "res": "L",
+   "score": "2-6"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-11T20:10Z",
+   "opp": "Red Sox",
+   "home": true,
+   "res": "L",
+   "score": "0-4"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-12T17:40Z",
+   "opp": "Red Sox",
+   "home": true,
+   "res": "L",
+   "score": "2-3"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-16T22:00Z",
+   "opp": "Phillies",
+   "home": false,
+   "res": "W",
+   "score": "4-1"
   }
  ]
 }

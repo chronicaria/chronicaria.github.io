@@ -472,14 +472,6 @@
       det.appendChild(el("p", "blurb", data.puzzle.a));
       puzzleBox.appendChild(det);
     }
-    const leagueBox = $("[data-gt-league]");
-    if (leagueBox && data.league) {
-      const p = el("p", "blurb");
-      p.append(`The SMP season sits at day ${data.league.day}. `,
-        link("../league/index.html", "Standings, box scores & the playoff race →"));
-      leagueBox.appendChild(p);
-    }
-
     /* back page: poem, reading room, archive */
     if (poems && poems.length) {
       const p = poems[(data.edition - 1 + poems.length * 100) % poems.length];
@@ -570,12 +562,12 @@
   }
 
   const LAB_META = {
-    "Anthropic":       { hue: "#d97757" },
-    "OpenAI":          { hue: "#9fb7c9" },
-    "Google DeepMind": { hue: "#4285f4" },
-    "DeepSeek":        { hue: "#4d6bfe" },
-    "xAI":             { hue: "#cbd2dc" },
-    "Mistral":         { hue: "#fa520f" },
+    "Anthropic":       { hue: "var(--prussian)" },
+    "OpenAI":          { hue: "var(--gray)" },
+    "Google DeepMind": { hue: "var(--navy)" },
+    "DeepSeek":        { hue: "var(--ink)" },
+    "xAI":             { hue: "var(--gray)" },
+    "Mistral":         { hue: "var(--prussian)" },
   };
 
   function renderAITimeline() {
@@ -981,7 +973,8 @@
           poly.addEventListener("click", () => openDrill(st));
         } else poly.setAttribute("class", "norace");
         svg.appendChild(poly);
-        const t = svgEl("text", { x: cx, y: cy + 4, class: "hexlbl on-dark" });
+        const light = entry ? lightFill(entry.fav.party, entry.fav.price) : true;
+        const t = svgEl("text", { x: cx, y: cy + 4, class: `hexlbl ${light ? "on-light" : "on-dark"}` });
         t.textContent = st;
         svg.appendChild(t);
       }

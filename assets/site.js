@@ -2,20 +2,28 @@
   const burger = document.querySelector("[data-nav-burger]");
   const nav = document.querySelector(".primary-nav");
   if (burger && nav) {
-    burger.addEventListener("click", () => nav.classList.toggle("open"));
+    burger.addEventListener("click", () => {
+      burger.setAttribute("aria-expanded", nav.classList.toggle("open"));
+    });
   }
 
   /* dropdown menus: click-to-toggle (touch), hover handled in CSS */
+  const closeDrop = (d) => {
+    d.classList.remove("open");
+    d.querySelector(".nav-drop-btn").setAttribute("aria-expanded", "false");
+  };
   document.querySelectorAll(".nav-drop > .nav-drop-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const drop = btn.parentElement;
-      document.querySelectorAll(".nav-drop.open").forEach((d) => d !== drop && d.classList.remove("open"));
-      drop.classList.toggle("open");
+      document.querySelectorAll(".nav-drop.open").forEach((d) => d !== drop && closeDrop(d));
+      const open = drop.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open);
+      if (!open) btn.blur(); /* else :focus-within keeps the closed menu visible */
     });
   });
   document.addEventListener("click", () => {
-    document.querySelectorAll(".nav-drop.open").forEach((d) => d.classList.remove("open"));
+    document.querySelectorAll(".nav-drop.open").forEach(closeDrop);
   });
 
   const year = document.querySelector("[data-year]");

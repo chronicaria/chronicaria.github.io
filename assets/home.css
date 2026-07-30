@@ -1,0 +1,469 @@
+/* ─────────────────────────────────────────────────────────────
+   home.css — landing page only. Other pages keep styles.css.
+   A broadsheet: Bodoni Moda masthead, Newsreader text,
+   Prussian ink on paper. Dark theme = the evening edition.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --paper: #faf9f4;
+  --ink: #10171e;
+  --prussian: #003153;
+  --royal: #00539b;
+  --navy: #012169;
+  --gray: #5b6672;
+  --rule: rgba(16, 23, 30, 0.16);
+  --rule-strong: rgba(16, 23, 30, 0.55);
+  --band: rgba(1, 33, 105, 0.15);
+  --accent: var(--prussian);
+  --mono: "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  /* tokens consumed by ui.js's injected overlays (Cmd+K palette, shelf, help) */
+  --panel: #ffffff;
+  --panel-2: #f1efe8;
+  --line: rgba(16, 23, 30, 0.16);
+  --text: #10171e;
+  --muted: #5b6672;
+}
+
+html[data-theme="dark"] {
+  --paper: #0d141d;
+  --ink: #e7e4da;
+  --prussian: #8db6dd;
+  --royal: #a8c8e8;
+  --navy: #6ea6de;
+  --gray: #939eab;
+  --rule: rgba(231, 228, 218, 0.16);
+  --rule-strong: rgba(231, 228, 218, 0.55);
+  --band: rgba(110, 166, 222, 0.2);
+  --panel: #101a26;
+  --panel-2: #0d141d;
+  --line: rgba(231, 228, 218, 0.16);
+  --text: #e7e4da;
+  --muted: #939eab;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+::selection { background: var(--prussian); color: var(--paper); }
+
+a { color: inherit; }
+
+:focus-visible { outline: 2px solid var(--royal); outline-offset: 3px; }
+
+.skip {
+  position: absolute; left: -999px; top: 0;
+  background: var(--ink); color: var(--paper);
+  padding: 0.5rem 1rem; z-index: 10;
+}
+.skip:focus { left: 0; }
+
+/* ── shared text idioms ─────────────────────────────────────── */
+
+.smallcaps {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.deck a, .org a, .entry p a, .entry li a, .semester li a, .site-footer a {
+  color: inherit;
+  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 3px;
+  transition: color 0.25s ease;
+}
+.deck a:hover, .org a:hover, .entry p a:hover, .entry li a:hover, .semester li a:hover, .site-footer a:hover { color: var(--royal); }
+
+/* ── masthead ───────────────────────────────────────────────── */
+
+/* z-index: the hero's filling animations create later stacking contexts
+   that would otherwise paint over the nav dropdowns */
+.mast { position: relative; z-index: 10; max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+.topstrip {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--gray);
+  animation: fadeIn 0.6s ease both;
+}
+.topstrip-right { display: flex; align-items: baseline; gap: 1.1rem; }
+
+.theme-toggle {
+  font: inherit;
+  color: var(--gray);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  padding: 0.25rem 0 1px;
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.theme-toggle:hover { color: var(--royal); border-color: var(--royal); }
+
+.masthead {
+  text-align: center;
+  padding: 2.4rem 0 1.6rem;
+}
+.masthead h1 {
+  margin: 0;
+  font-family: "Bodoni Moda", "Bodoni 72", Didot, serif;
+  font-optical-sizing: auto;
+  font-size: clamp(3rem, 9vw, 5.6rem);
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  line-height: 1;
+  animation: riseIn 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.05s both;
+}
+.masthead h1 a { text-decoration: none; }
+
+.dateline {
+  margin: 1.4rem 0 0;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  text-align: center;
+  color: var(--gray);
+  font-weight: 500;
+  animation: fadeIn 0.7s ease 0.3s both;
+}
+
+/* ── nav ────────────────────────────────────────────────────── */
+
+.primary-nav {
+  display: flex;
+  justify-content: center;
+  align-items: baseline; /* <a> and .nav-drop buttons share one text baseline */
+  gap: 2.4rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--rule-strong);
+  animation: fadeIn 0.7s ease 0.45s both;
+}
+.primary-nav a,
+.nav-drop-btn {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+.primary-nav a:hover,
+.nav-drop-btn:hover { color: var(--royal); }
+.primary-nav a.active { color: var(--prussian); }
+.primary-nav a.active::after { content: " ●"; font-size: 0.5em; vertical-align: 0.25em; }
+
+.nav-drop { position: relative; }
+.nav-drop-btn::after { content: " ▾"; font-size: 0.85em; color: var(--gray); }
+.nav-drop-menu {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 50%;
+  transform: translate(-50%, -4px);
+  min-width: 13rem;
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  box-shadow: 0 0 0 4px var(--paper);
+  padding: 0.35rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 5;
+}
+.nav-drop:hover .nav-drop-menu,
+.nav-drop:focus-within .nav-drop-menu,
+.nav-drop.open .nav-drop-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.nav-drop-menu a {
+  display: block;
+  padding: 0.5rem 1.1rem;
+  text-align: center;
+  letter-spacing: 0.14em;
+}
+.nav-drop-menu a:hover { background: var(--band); color: var(--royal); }
+
+.nav-burger { display: none; }
+a.game-day::before { content: "● "; color: var(--royal); font-size: 0.6em; vertical-align: 0.2em; }
+
+/* ── page shell ─────────────────────────────────────────────── */
+
+.sheet { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+/* ── standfirst ─────────────────────────────────────────────── */
+
+.standfirst {
+  text-align: center;
+  padding: 2.4rem 0;
+  animation: fadeIn 0.7s ease 0.55s both;
+}
+.standfirst .deck { margin: 0; font-size: 1.06rem; color: var(--gray); }
+
+.btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; margin-top: 1.4rem; }
+.btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  padding: 0.65em 1.4em;
+  border: 1px solid var(--rule-strong);
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.btn:hover { border-color: var(--prussian); color: var(--prussian); }
+.btn.primary { background: var(--prussian); border-color: var(--prussian); color: var(--paper); }
+.btn.primary:hover { background: var(--navy); border-color: var(--navy); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── section slugs ──────────────────────────────────────────── */
+
+.oxford { height: 6px; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); }
+
+.columns h2,
+.listings h2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.6rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+.columns h2::after,
+.listings h2::after { content: ""; flex: 1; border-top: 1px solid var(--rule); }
+.hash-link { text-decoration: none; color: var(--gray); opacity: 0; transition: opacity 0.2s ease; font-weight: 400; }
+h2:hover .hash-link,
+.hash-link:focus-visible { opacity: 1; }
+
+.section-title-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 1rem; }
+.section-title-row h2 { flex: 1; }
+.section-title-row .note { font-style: italic; font-size: 0.82rem; color: var(--gray); }
+
+/* ── columns ────────────────────────────────────────────────── */
+
+.columns { display: grid; grid-template-columns: 1.55fr 1fr; padding-top: 2.4rem; }
+.main-col { padding-right: 2.6rem; }
+.side-col { border-left: 1px solid var(--rule); padding-left: 2.6rem; }
+
+.main-col > section + section,
+.side-col > section + section { margin-top: 2.4rem; padding-top: 2.4rem; border-top: 1px solid var(--rule); }
+
+/* ── entries ────────────────────────────────────────────────── */
+
+.entry + .entry { margin-top: 2rem; padding-top: 1.8rem; border-top: 1px solid var(--rule); }
+
+.entry-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.entry-head h3 {
+  margin: 0;
+  font-family: "Bodoni Moda", "Bodoni 72", Didot, serif;
+  font-optical-sizing: auto;
+  font-size: 1.32rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.entry-head h3 a { text-decoration: none; transition: color 0.25s ease; }
+.entry-head h3 a:hover { color: var(--royal); }
+.when {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray);
+  white-space: nowrap;
+  padding-top: 0.35rem;
+}
+
+.entry .org { margin: 0.25rem 0 0; font-style: italic; color: var(--gray); }
+
+.entry p { margin: 0.55rem 0 0; }
+.entry ul { margin: 0.7rem 0 0; padding: 0; list-style: none; }
+.entry ul li { padding-left: 1.15rem; position: relative; margin-top: 0.45rem; font-size: 0.97rem; }
+.entry ul li::before { content: "–"; position: absolute; left: 0; color: var(--prussian); }
+.entry ul li strong { font-weight: 600; }
+.entry em { color: var(--gray); }
+
+/* ── chips ──────────────────────────────────────────────────── */
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.9rem; }
+.chip {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: var(--gray);
+  border: 1px solid var(--rule);
+  padding: 0.22em 0.65em;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.chip:hover { border-color: var(--rule-strong); color: var(--ink); }
+
+.side-col .eyebrow {
+  margin: 1.2rem 0 0.5rem;
+  color: var(--prussian);
+  font-weight: 600;
+}
+.side-col .eyebrow:first-of-type { margin-top: 0; }
+
+/* ── coursework listings ────────────────────────────────────── */
+
+.listings { margin-top: 3.2rem; padding-top: 2.4rem; }
+.listings-rule { margin-top: 3.2rem; }
+
+.semester-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+  gap: 1.8rem;
+}
+.semester h3 {
+  margin: 0 0 0.7rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule-strong);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+.semester h3 .tag { font-family: var(--mono); font-weight: 400; letter-spacing: 0.08em; color: var(--gray); text-transform: lowercase; }
+.semester ul { margin: 0; padding: 0; list-style: none; }
+.semester li { margin-top: 0.55rem; font-size: 0.88rem; line-height: 1.35; }
+.semester li .code {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: var(--gray);
+  margin-top: 0.1rem;
+}
+.tag.grad {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--prussian);
+  border: 1px solid currentColor;
+  padding: 0.05em 0.35em;
+  margin-left: 0.4rem;
+  vertical-align: 2px;
+}
+
+/* department inks on course codes; grad courses print a shade lighter */
+.semester .code.dept-math { color: #003153; }
+.semester .code.dept-math.grad { color: #35638d; }
+.semester .code.dept-cs { color: #8c2f39; }
+.semester .code.dept-cs.grad { color: #a34a54; }
+.semester .code.dept-hum { color: #2f6b4f; }
+.semester .code.dept-hum.grad { color: #47795f; }
+html[data-theme="dark"] .semester .code.dept-math { color: #8db6dd; }
+html[data-theme="dark"] .semester .code.dept-math.grad { color: #b6d3ec; }
+html[data-theme="dark"] .semester .code.dept-cs { color: #d99098; }
+html[data-theme="dark"] .semester .code.dept-cs.grad { color: #e7bcc1; }
+html[data-theme="dark"] .semester .code.dept-hum { color: #86c0a5; }
+html[data-theme="dark"] .semester .code.dept-hum.grad { color: #aed5c2; }
+
+/* ── colophon ───────────────────────────────────────────────── */
+
+.site-footer {
+  margin-top: 3.2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule-strong);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+.site-footer .links { margin-top: 0.4rem; }
+.site-footer .colophon { font-style: italic; margin-top: 0.5rem; }
+.monogram { font-family: "Bodoni Moda", "Bodoni 72", Didot, serif; color: var(--prussian); }
+
+/* ── scroll reveal ──────────────────────────────────────────── */
+
+html.js .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+html.js .reveal.in { opacity: 1; transform: none; }
+
+/* ── responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 920px) {
+  .columns { grid-template-columns: 1fr; }
+  .main-col { padding-right: 0; }
+  .side-col { border-left: none; padding-left: 0; margin-top: 2.4rem; padding-top: 2.4rem; border-top: 1px solid var(--rule); }
+}
+
+@media (max-width: 700px) {
+  .topstrip .place { display: none; }
+  .masthead { padding: 1.8rem 0 1.2rem; }
+  .dateline { font-size: 0.62rem; letter-spacing: 0.14em; }
+
+  .nav-burger {
+    display: block;
+    font: inherit;
+    background: none;
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 0.6rem;
+    margin: -0.5rem -0.6rem;
+  }
+  .primary-nav {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    text-align: center;
+    animation: none; /* the load fade would replay on every burger open */
+  }
+  .primary-nav.open { display: flex; }
+  .primary-nav > a, .nav-drop { padding: 0.8rem 0; border-top: 1px solid var(--rule); }
+  .primary-nav > a:first-child { border-top: none; }
+  .nav-drop-btn { padding: 0.2rem 0.6rem; }
+  .nav-drop-menu {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    display: none;
+    border: none;
+    box-shadow: none;
+    padding-top: 0.3rem;
+  }
+  .nav-drop.open .nav-drop-menu { display: block; transform: none; }
+  .nav-drop-menu a { padding: 0.55rem 0; color: var(--gray); }
+
+  .entry-head { flex-direction: column; gap: 0.1rem; }
+  .when { padding-top: 0.15rem; }
+}
+
+/* ── reduced motion ─────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .chart .mean { stroke-dasharray: none; stroke-dashoffset: 0; }
+  .chart .future { clip-path: none; }
+  html.js .reveal { opacity: 1; transform: none; }
+}

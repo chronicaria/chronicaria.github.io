@@ -1,6 +1,206 @@
 {
  "games": [
   {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-04T00:00Z",
+   "opp": "Wake Forest",
+   "home": true,
+   "res": "W",
+   "score": "93-60"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-08T23:45Z",
+   "opp": "North Carolina",
+   "home": false,
+   "res": "W",
+   "score": "82-69"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-13T16:00Z",
+   "opp": "Georgia Tech",
+   "home": true,
+   "res": "W",
+   "score": "78-70"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-14T23:00Z",
+   "opp": "North Carolina",
+   "home": true,
+   "res": "W",
+   "score": "74-71"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-16T00:30Z",
+   "opp": "Louisville",
+   "home": true,
+   "res": "W",
+   "score": "73-62"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-21T19:09Z",
+   "opp": "Mount St Marys",
+   "home": true,
+   "res": "W",
+   "score": "93-49"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-23T19:04Z",
+   "opp": "Baylor",
+   "home": true,
+   "res": "W",
+   "score": "89-66"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-28T02:03Z",
+   "opp": "Arizona",
+   "home": true,
+   "res": "W",
+   "score": "100-93"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-03-30T00:59Z",
+   "opp": "Alabama",
+   "home": true,
+   "res": "W",
+   "score": "85-65"
+  },
+  {
+   "team": "duke-mbb",
+   "label": "Duke MBB",
+   "league": "NCAA MBB",
+   "date": "2025-04-06T01:28Z",
+   "opp": "Houston",
+   "home": true,
+   "res": "L",
+   "score": "67-70"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-06T23:00Z",
+   "opp": "Capitals",
+   "home": false,
+   "res": "W",
+   "score": "2-1"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-08T23:00Z",
+   "opp": "Capitals",
+   "home": false,
+   "res": "L",
+   "score": "1-3"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-10T22:00Z",
+   "opp": "Capitals",
+   "home": true,
+   "res": "W",
+   "score": "4-0"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-12T23:00Z",
+   "opp": "Capitals",
+   "home": true,
+   "res": "W",
+   "score": "5-2"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-15T23:00Z",
+   "opp": "Capitals",
+   "home": false,
+   "res": "W",
+   "score": "3-1"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-21T00:00Z",
+   "opp": "Panthers",
+   "home": true,
+   "res": "L",
+   "score": "2-5"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-23T00:00Z",
+   "opp": "Panthers",
+   "home": true,
+   "res": "L",
+   "score": "0-5"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-25T00:00Z",
+   "opp": "Panthers",
+   "home": false,
+   "res": "L",
+   "score": "2-6"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-27T00:00Z",
+   "opp": "Panthers",
+   "home": false,
+   "res": "W",
+   "score": "3-0"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2025-05-29T00:00Z",
+   "opp": "Panthers",
+   "home": true,
+   "res": "L",
+   "score": "3-5"
+  },
+  {
    "team": "duke-fb",
    "label": "Duke FB",
    "league": "NCAA FB",

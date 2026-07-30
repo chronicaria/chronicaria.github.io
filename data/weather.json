@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-07-17T23:00:00Z",
-  "updated": "2026-07-18T00:54:09Z",
+  "valid_time_utc": "2026-07-30T23:00:00Z",
+  "updated": "2026-07-30T23:49:58Z",
   "hottest": [
-    {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 100.7
-    },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 100.6
+      "temp_f": 110.1
     },
     {
-      "name": "Boyd",
-      "state": "NE",
-      "temp_f": 99.3
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 109.8
+    },
+    {
+      "name": "Maricopa",
+      "state": "AZ",
+      "temp_f": 109.4
     }
   ],
   "coldest": [
     {
-      "name": "Yakutat",
-      "state": "AK",
-      "temp_f": 44.7
-    },
-    {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 45.5
+      "temp_f": 48.9
     },
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 46.0
+      "temp_f": 49.0
+    },
+    {
+      "name": "Nome",
+      "state": "AK",
+      "temp_f": 52.1
     }
   ],
   "national": {
-    "min_f": 44.7,
-    "max_f": 100.7,
-    "mean_f": 84.6
+    "min_f": 48.9,
+    "max_f": 110.1,
+    "mean_f": 84.1
   }
 }

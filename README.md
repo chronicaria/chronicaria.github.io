@@ -93,5 +93,7 @@ by hand until workflows are added back.
 Push to `main`. GitHub Pages serves the root. No build step.
 
 Project repositories that used to publish `chronicaria.github.io/<name>/` — `valorant`,
-`winter-trip`, `rome-wiki` — will shadow the folders here if their Pages deployments are
-still enabled. Turn those off so these copies are what gets served.
+`winter-trip`, `rome-wiki` — would shadow the folders here, because a project site wins
+over the org site at the same path. Their Pages deployments were disabled on 2026-07-30;
+the repositories themselves are untouched. If you ever re-enable Pages on one of them, it
+will silently take that path back.

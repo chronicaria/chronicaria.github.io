@@ -1,0 +1,204 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+e:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+f:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/weather/","children":"Weather"}],[]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Weather"]}],["$","h1",null,{"children":"Open-Meteo Previous Runs API"}],["$","p",null,{"className":"article-deck","children":"The free, no-key, CORS-enabled endpoint that hands you past forecasts at a fixed lead time — the linchpin of NYC weather dashboard Phase 4 (\"how good were recent forecasts?\"), with no backend and no snapshotting of your own."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 6, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[5," min · ","981"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","the-endpoint-not-the-plain-forecast-api",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-endpoint-not-the-plain-forecast-api","children":"The endpoint (NOT the plain Forecast API)"}]}],["$","li","what-means-the-exact-semantics",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-means-the-exact-semantics","children":"What means (the exact semantics)"}]}],["$","li","range-and-coverage-live-verified",{"className":"toc-depth-2","children":["$","a",null,{"href":"#range-and-coverage-live-verified","children":"Range and coverage (live-verified)"}]}],["$","li","the-phase-4-pattern-no-backend-no-snapshots",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-phase-4-pattern-no-backend-no-snapshots","children":"The Phase-4 pattern (no backend, no snapshots)"}]}],["$","li","is-a-good-truth-for-past-hours",{"className":"toc-depth-2","children":["$","a",null,{"href":"#is-a-good-truth-for-past-hours","children":"Is a good \"truth\" for past hours?"}]}],["$","li","concrete-nyc-example-returns-current--previous_day13-with-past_days-live-tested",{"className":"toc-depth-2","children":["$","a",null,{"href":"#concrete-nyc-example-returns-current--previous_day13-with-past_days-live-tested","children":"Concrete NYC example (returns current + previous_day1..3 with past_days, live-tested)"}]}],["$","li","aggregated-mae-by-lead-the-panels-actual-output-live-verified",{"className":"toc-depth-2","children":["$","a",null,{"href":"#aggregated-mae-by-lead-the-panels-actual-output-live-verified","children":"Aggregated MAE-by-lead (the panel's actual output, live-verified)"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","the-endpoint-not-the-plain-forecast-api",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-endpoint-not-the-plain-forecast-api","children":"The endpoint (NOT the plain Forecast API)"}]}],["$","li","what-means-the-exact-semantics",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-means-the-exact-semantics","children":"What means (the exact semantics)"}]}],["$","li","range-and-coverage-live-verified",{"className":"toc-depth-2","children":["$","a",null,{"href":"#range-and-coverage-live-verified","children":"Range and coverage (live-verified)"}]}],["$","li","the-phase-4-pattern-no-backend-no-snapshots",{"className":"toc-depth-2","children":"$L3"}],"$L4","$L5","$L6","$L7","$L8"]}]]}],"$L9","$La"]}]]}],null,"$Lb"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","a",null,{"href":"#the-phase-4-pattern-no-backend-no-snapshots","children":"The Phase-4 pattern (no backend, no snapshots)"}]
+4:["$","li","is-a-good-truth-for-past-hours",{"className":"toc-depth-2","children":["$","a",null,{"href":"#is-a-good-truth-for-past-hours","children":"Is a good \"truth\" for past hours?"}]}]
+5:["$","li","concrete-nyc-example-returns-current--previous_day13-with-past_days-live-tested",{"className":"toc-depth-2","children":["$","a",null,{"href":"#concrete-nyc-example-returns-current--previous_day13-with-past_days-live-tested","children":"Concrete NYC example (returns current + previous_day1..3 with past_days, live-tested)"}]}]
+6:["$","li","aggregated-mae-by-lead-the-panels-actual-output-live-verified",{"className":"toc-depth-2","children":["$","a",null,{"href":"#aggregated-mae-by-lead-the-panels-actual-output-live-verified","children":"Aggregated MAE-by-lead (the panel's actual output, live-verified)"}]}]
+7:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+8:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+c:T2a49,<h2 id="the-endpoint-not-the-plain-forecast-api">The endpoint (NOT the plain Forecast API)</h2>
+<p><code>https://previous-runs-api.open-meteo.com/v1/forecast</code> — a <strong>separate host</strong> from <code>api.open-meteo.com</code>. Same query grammar as the Forecast API, but this is the one that actually <em>serves</em> the <code>_previous_dayK</code> data.</p>
+<aside class="callout callout-warning">
+<p class="callout-title">Warning</p>
+<p>The main Forecast API silently returns nulls
+<code>api.open-meteo.com/v1/forecast</code> <strong>accepts</strong> <code>temperature_2m_previous_day1</code> (HTTP 200, no error) but returns an all-<code>null</code> column. You must use the <code>previous-runs-api</code> host to get real values. Live-verified 2026-07-06 — same request, main host = all null, previous-runs host = real numbers.</p>
+</aside>
+<p>Free, no API key, <strong>CORS <code>access-control-allow-origin: *</code></strong> (verified via live headers + OPTIONS preflight → <code>GET, POST, OPTIONS</code>). Callable straight from a browser.</p>
+<h2 id="what-means-the-exact-semantics">What <code>_previous_dayK</code> means (the exact semantics)</h2>
+<p>For a given valid hour <code>h</code>, <code>temperature_2m_previous_dayK</code> is <strong>the value that was forecast K days (24·K hours) before <code>h</code></strong> — i.e. a <strong>K-day-lead forecast</strong> for that hour. <code>day1</code> = predicted 24 h ahead, <code>day2</code> = 48 h ahead, … up to <code>day7</code> = 168 h ahead.</p>
+<p>Subtlety (from Open-Meteo's own writeup): <code>previous_day1</code> is <em>not</em> a single model run from 24 h ago. It's a <strong>stitched series</strong> — for each hour, take the value from whichever run was initialised ~24 h earlier (they discard the first 24 h of each run, then the next 24 h, etc.). So each <code>_previous_dayK</code> column is a continuous time series where lead time is held constant. That's exactly what you want for skill-vs-lead analysis.</p>
+<h2 id="range-and-coverage-live-verified">Range and coverage (live-verified)</h2>
+<ul>
+<li><strong>K = 1 … 7.</strong> <code>previous_day7</code> returns real data; <code>previous_day8</code>/<code>day9</code> are accepted syntactically (HTTP 200) but return <strong>all nulls</strong> — so <strong>7 is the true max lead</strong>.</li>
+<li><strong>Base variables confirmed to support <code>_previous_dayK</code></strong>: <code>temperature_2m</code>, <code>precipitation</code>, <code>wind_speed_10m</code>, <code>relative_humidity_2m</code>, <code>apparent_temperature</code> — all returned real non-null data. (Docs also list dewpoint, pressure, cloud cover, wind direction, etc.; the suffix is general across the model's surface variables.)</li>
+<li><strong><code>past_days</code> max = 93</strong> (server error: <em>"Allowed range 0 to 93"</em> — note it's <strong>93, not 92</strong>). Combine <code>&#x26;past_days=N</code> with the <code>_previous_dayK</code> columns to pull up to ~3 months of already-verifiable past hours in one call.</li>
+<li>Archive depth: most models from ~Jan 2024; GFS 2 m temp back to Mar 2021.</li>
+</ul>
+<h2 id="the-phase-4-pattern-no-backend-no-snapshots">The Phase-4 pattern (no backend, no snapshots)</h2>
+<p>For each past hour <code>h</code> in the response:</p>
+<ul>
+<li><strong>actual / truth proxy</strong> = <code>temperature_2m[h]</code> (the current best estimate — see truth note below)</li>
+<li><strong>K-day-lead forecast</strong> = <code>temperature_2m_previous_dayK[h]</code></li>
+<li><strong>error</strong> = <code>temperature_2m[h] − temperature_2m_previous_dayK[h]</code></li>
+</ul>
+<p>Aggregate over the last N days (up to 93) → MAE / bias per lead time K. This is the whole "how accurate were recent forecasts?" panel, computed client-side. You do <strong>not</strong> need to snapshot your own forecasts (the concern flagged in <a href="/rome-wiki/articles/weather/nyc-weather-dashboard/" class="wiki-link">NYC weather dashboard</a>'s "when you'd need a backend") — Open-Meteo already archived them.</p>
+<h2 id="is-a-good-truth-for-past-hours">Is <code>temperature_2m</code> a good "truth" for past hours?</h2>
+<p>For a past hour, the plain <code>temperature_2m</code> on both the Forecast API and this endpoint is a <strong>best-estimate analysis blend</strong> (the most-recent/best run's assimilated state), <strong>not</strong> raw observations. Live NYC check for 2026-07-01:</p>
+<table>
+<thead>
+<tr>
+<th>hour (UTC)</th>
+<th><code>temperature_2m</code> (best est.)</th>
+<th>ERA5 archive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12:00</td>
+<td>25.7 °C</td>
+<td>25.3 °C</td>
+</tr>
+<tr>
+<td>18:00</td>
+<td>34.6 °C</td>
+<td>35.8 °C</td>
+</tr>
+</tbody>
+</table>
+<p>The Forecast API and Historical Forecast API agreed exactly (both 25.7 / 34.6); <strong>ERA5 differed by 0.4–1.2 °C</strong>. So:</p>
+<ul>
+<li><code>temperature_2m</code> for past hours is a <strong>fine, zero-extra-call truth proxy</strong> — good enough for a "recent forecasts" panel.</li>
+<li>For a <em>rigorous</em> scorecard, prefer <strong>ERA5</strong> (<code>archive-api.open-meteo.com/v1/archive</code>, ~5-day latency, reanalysis) or <strong>NWS station obs</strong> (KNYC/KLGA/KJFK/KEWR METARs) as the actual. The existing <a href="/rome-wiki/articles/weather/weather-forecast-apis/" class="wiki-link">Weather forecast APIs</a> note lists these.</li>
+</ul>
+<h2 id="concrete-nyc-example-returns-current--previous_day13-with-past_days-live-tested">Concrete NYC example (returns current + previous_day1..3 with past_days, live-tested)</h2>
+<pre><code>https://previous-runs-api.open-meteo.com/v1/forecast
+  ?latitude=40.71&#x26;longitude=-74.01
+  &#x26;hourly=temperature_2m,temperature_2m_previous_day1,temperature_2m_previous_day2,temperature_2m_previous_day3
+  &#x26;past_days=3&#x26;forecast_days=1
+  &#x26;timezone=America%2FNew_York&#x26;temperature_unit=fahrenheit
+</code></pre>
+<p>Aligned values it returned (°F) — <code>err = current − prevK</code> is the K-day-lead error:</p>
+<table>
+<thead>
+<tr>
+<th>time</th>
+<th>current</th>
+<th>prev_day1</th>
+<th>prev_day2</th>
+<th>prev_day3</th>
+<th>err1</th>
+<th>err2</th>
+<th>err3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>07-03 18:00</td>
+<td>94.4</td>
+<td>103.6</td>
+<td>79.6</td>
+<td>99.5</td>
+<td>−9.2</td>
+<td>+14.8</td>
+<td>−5.1</td>
+</tr>
+<tr>
+<td>07-04 00:00</td>
+<td>75.8</td>
+<td>84.7</td>
+<td>79.9</td>
+<td>83.3</td>
+<td>−8.9</td>
+<td>−4.1</td>
+<td>−7.5</td>
+</tr>
+<tr>
+<td>07-04 18:00</td>
+<td>94.9</td>
+<td>85.9</td>
+<td>90.4</td>
+<td>87.7</td>
+<td>+9.0</td>
+<td>+4.5</td>
+<td>+7.2</td>
+</tr>
+<tr>
+<td>07-05 06:00</td>
+<td>73.3</td>
+<td>73.1</td>
+<td>75.2</td>
+<td>74.7</td>
+<td>+0.2</td>
+<td>−1.9</td>
+<td>−1.4</td>
+</tr>
+<tr>
+<td>07-06 06:00</td>
+<td>69.2</td>
+<td>69.9</td>
+<td>72.2</td>
+<td>71.1</td>
+<td>−0.7</td>
+<td>−3.0</td>
+<td>−1.9</td>
+</tr>
+</tbody>
+</table>
+<p>Note how errors are small near "now" (the run barely changed) and swing to ±5–15 °F for hours that were 1–3 days out — exactly the lead-time skill decay you want to visualize. This ties directly to <a href="/rome-wiki/articles/weather/forecast-skill/" class="wiki-link">Forecast skill</a> and <a href="/rome-wiki/articles/weather/temperature-forecast-confidence-intervals/" class="wiki-link">Temperature forecast confidence intervals</a>.</p>
+<h2 id="aggregated-mae-by-lead-the-panels-actual-output-live-verified">Aggregated MAE-by-lead (the panel's actual output, live-verified)</h2>
+<p>Averaging <code>|error|</code> over the whole window is the number the Phase-4 panel prints. One call, <code>past_days=14&#x26;forecast_days=0</code>, NYC, 336 hourly samples per column (2026-07-06):</p>
+<table>
+<thead>
+<tr>
+<th>Lead</th>
+<th>MAE (°F)</th>
+<th>bias (truth−fc)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Day 1</td>
+<td><strong>2.75</strong></td>
+<td>−0.2</td>
+</tr>
+<tr>
+<td>Day 2</td>
+<td>3.21</td>
+<td>+1.1</td>
+</tr>
+<tr>
+<td>Day 3</td>
+<td><strong>3.58</strong></td>
+<td>+1.0</td>
+</tr>
+<tr>
+<td>Day 4</td>
+<td>4.22</td>
+<td>+1.4</td>
+</tr>
+<tr>
+<td>Day 5</td>
+<td><strong>4.37</strong></td>
+<td>+0.6</td>
+</tr>
+</tbody>
+</table>
+<p>Monotonic and lands squarely on the <a href="/rome-wiki/articles/weather/temperature-forecast-confidence-intervals/" class="wiki-link">Temperature forecast confidence intervals</a> table (day1 ~3.0, day3 ~3.5, day5 ~4.5) and the task's sanity band (day1 2–3, day3 3–4, day5 4–5 °F). <strong>Use this as a built-in bug check</strong>: if your computed curve is flat, non-monotonic, or off by 10×, it's a wiring bug — almost always the wrong host (all-null columns), a column-misalignment, or a °C/°F mixup. Minimal client compute:</p>
+<pre><code class="language-js">const KS=[1,2,3,4,5];
+const url=`https://previous-runs-api.open-meteo.com/v1/forecast?latitude=40.71&#x26;longitude=-74.01`
+ +`&#x26;hourly=temperature_2m,${KS.map(k=>`temperature_2m_previous_day${k}`).join(',')}`
+ +`&#x26;past_days=14&#x26;forecast_days=0&#x26;temperature_unit=fahrenheit&#x26;timezone=America%2FNew_York`;
+const {hourly:h}=await(await fetch(url)).json(), truth=h.temperature_2m;
+const mae=KS.map(k=>{const f=h[`temperature_2m_previous_day${k}`];
+  const e=truth.map((t,i)=>t!=null&#x26;&#x26;f[i]!=null?Math.abs(t-f[i]):null).filter(x=>x!=null);
+  return {lead:k, mae:e.reduce((a,b)=>a+b,0)/e.length};});
+</code></pre>
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Previous Runs API docs — <a href="https://open-meteo.com/en/docs/previous-runs-api" target="_blank" rel="noopener noreferrer">https://open-meteo.com/en/docs/previous-runs-api</a></li>
+<li>"Weather Forecasts From Previous Model Runs" — <a href="https://openmeteo.substack.com/p/weather-forecasts-from-previous-model-runs" target="_blank" rel="noopener noreferrer">https://openmeteo.substack.com/p/weather-forecasts-from-previous-model-runs</a> (the stitched-series semantics)</li>
+<li><em>(Endpoint, host split, K=1..7 max, past_days=93, per-variable support, CORS headers, and all NYC values above live-verified against 40.71,−74.01 on 2026-07-06.)</em></li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Does <code>past_days=93</code> reach back far enough that <code>_previous_day7</code> has full coverage across the whole window, or do the oldest hours lose their day-7 column (archive depth vs window edge)?</li>
+<li>Should the panel score against <code>temperature_2m</code> (zero extra calls, but analysis-blend) or make a second ERA5/METAR call for a defensible "actual"? Trade one API call for rigor.</li>
+<li>Is the stitched <code>_previous_dayK</code> series drawn from the same model mix as the dashboard's ensemble (<code>gfs</code>/<code>ecmwf</code>/<code>icon</code>), or a single best-match model — i.e. am I scoring <em>the forecast I showed</em>?</li>
+</ul>9:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$c"}}],"$Ld"]}]
+a:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","weather/nyc-weather-dashboard",{"children":["$","$L2",null,{"href":"/articles/weather/nyc-weather-dashboard/","children":"NYC weather dashboard"}]}],["$","li","weather/weather-forecast-apis",{"children":["$","$L2",null,{"href":"/articles/weather/weather-forecast-apis/","children":"Weather forecast APIs"}]}],["$","li","weather/weather-prediction-moc",{"children":["$","$L2",null,{"href":"/articles/weather/weather-prediction-moc/","children":"Weather prediction (MOC)"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","weather/weather-forecast-apis",{"children":["$","$L2",null,{"href":"/articles/weather/weather-forecast-apis/","children":"Weather forecast APIs"}]}],["$","li","weather/nyc-weather-dashboard",{"children":["$","$L2",null,{"href":"/articles/weather/nyc-weather-dashboard/","children":"NYC weather dashboard"}]}],["$","li","weather/forecast-skill",{"children":["$","$L2",null,{"href":"/articles/weather/forecast-skill/","children":"Forecast skill"}]}],["$","li","weather/temperature-forecast-confidence-intervals",{"children":["$","$L2",null,{"href":"/articles/weather/temperature-forecast-confidence-intervals/","children":"Temperature forecast confidence intervals"}]}],["$","li","weather/weather-prediction-moc",{"children":["$","$L2",null,{"href":"/articles/weather/weather-prediction-moc/","children":"Weather prediction (MOC)"}]}],["$","li","weather/feels-like-temperature",{"children":["$","$L2",null,{"href":"/articles/weather/feels-like-temperature/","children":"Feels-like temperature"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","weather",{"children":"weather"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","api",{"children":"api"}],["$","li","reference",{"children":"reference"}],["$","li","backtesting",{"children":"backtesting"}]]}]]}]]}]
+b:["$","$Le",null,{"children":["$","$f",null,{"name":"Next.MetadataOutlet","children":"$@10"}]}]
+d:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/weather/nyc-weather-dashboard/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"NYC weather dashboard"}]]}],["$","$L2",null,{"href":"/articles/weather/temperature-forecast-confidence-intervals/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Temperature forecast confidence intervals"}]]}]]}]
+10:null

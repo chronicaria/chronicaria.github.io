@@ -1,0 +1,228 @@
+1:"$Sreact.fragment"
+2:I[70359,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ReadingProgress"]
+3:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+4:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchTrigger"]
+5:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchExperience"]
+6:I[39756,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+7:I[37457,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+d:I[68027,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default",1]
+:HL["/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","style"]
+:HL["/rome-wiki/_next/static/media/5f402bd2d8eef81a-s.p.16whm0euli40m.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/9433d1a810498265-s.p.0h26ys03~gfbk.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"P":null,"c":["","articles","sports","college-football","duke","dukes-path-through-the-acc-and-college-football-playoff",""],"q":"","i":false,"f":[[["",{"children":["articles",{"children":[["slug","sports/college-football/duke/dukes-path-through-the-acc-and-college-football-playoff","c",null],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",16],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/rome-wiki/_next/static/chunks/14kbu79734gwo.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable newsreader_dccbc19-module__XM85IG__variable","children":[["$","a",null,{"href":"#main-content","className":"skip-link","children":"Skip to the article"}],["$","$L2",null,{}],["$","header",null,{"className":"site-header","children":[["$","div",null,{"className":"utility-strip","children":[["$","span",null,{"children":"Established 2026"}],["$","span",null,{"className":"utility-center","children":"A living external brain"}],["$","span",null,{"children":[980," articles · ","Jul 10, 2026"]}]]}],["$","div",null,{"className":"navigation-row","children":[["$","$L3",null,{"href":"/","className":"small-wordmark","aria-label":"Rome front page","children":"Rome"}],["$","nav",null,{"className":"primary-nav","aria-label":"Primary navigation","children":[["$","$L3",null,{"href":"/#reading-rooms","children":"Reading rooms"}],["$","$L3",null,{"href":"/#universe-map","children":"Map"}],["$","$L3",null,{"href":"/#updates","children":"Updates"}],["$","$L3",null,{"href":"/about/","children":"About"}]]}],["$","$L4",null,{}]]}],["$","nav",null,{"className":"topic-rail","aria-label":"Reading rooms","children":[["$","$L3","AI",{"href":"/topics/ai/","children":"AI"}],["$","$L3","Basketball",{"href":"/topics/basketball/","children":"Basketball"}],["$","$L3","Classical Music",{"href":"/topics/classical-music/","children":"Classical Music"}],["$","$L3","Crypto",{"href":"/topics/crypto/","children":"Crypto"}],["$","$L3","History",{"href":"/topics/history/","children":"History"}],["$","$L3","Investing",{"href":"/topics/investing/","children":"Investing"}],["$","$L3","Markets",{"href":"/topics/markets/","children":"Markets"}],["$","$L3","Mathematics",{"href":"/topics/mathematics/","children":"Mathematics"}],["$","$L3","Piano",{"href":"/topics/piano/","children":"Piano"}],["$","$L3","Politics",{"href":"/topics/politics/","children":"Politics"}],["$","$L3","Sports",{"href":"/topics/sports/","children":"Sports"}],["$","$L3","String Theory",{"href":"/topics/string-theory/","children":"String Theory"}],["$","$L3","Weather",{"href":"/topics/weather/","children":"Weather"}]]}]]}],["$","$L5",null,{}],["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main-content","className":"not-found-page page-shell narrow-page","children":[["$","p",null,{"className":"eyebrow","children":"404 · End of the footpath"}],["$","h1",null,{"children":"This page has not entered Rome yet."}],["$","p",null,{"children":["Open search with ",["$","kbd",null,{"children":"⌘ K"}],", explore the universe map, or return to the front page and follow another link."]}],["$","$L3",null,{"href":"/","className":"button-link","children":"Return to Rome"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","footer",null,{"className":"site-footer","children":[["$","div",null,{"children":[["$","$L3",null,{"href":"/","className":"footer-wordmark","children":"Rome"}],["$","p",null,{"children":"Andrew Park's second brain, set in type."}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"This edition"}],["$","p",null,{"children":[980," articles across ",16," reading rooms, with"," ",431," open research threads."]}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Ownership & provenance"}],["$","p",null,{"children":"Rome belongs to Andrew Park. Every article also carries its authoring source."}]]}],["$","div",null,{"className":"footer-links","children":[["$","$L3",null,{"href":"/about/","children":"About Rome"}],["$","$L3",null,{"href":"/#universe-map","children":"Explore the map"}]]}]]}]]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":"$L8","templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["$L9",{"children":["$La",{},null,false,null]},null,false,"$@b"]},null,false,"$@b"]},null,false,null],"$Lc",false]],"m":"$undefined","G":["$d",["$Le"]],"S":true,"h":null,"s":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"X6ZOd3MQP6S0cUC6FLNdS"}
+10:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+11:"$Sreact.suspense"
+14:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ViewportBoundary"]
+16:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"MetadataBoundary"]
+8:["$","$L7",null,{}]
+9:["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}]
+a:["$","$1","c",{"children":["$Lf",null,["$","$L10",null,{"children":["$","$11",null,{"name":"Next.MetadataOutlet","children":"$@12"}]}]]}]
+13:[]
+b:"$W13"
+c:["$","$1","h",{"children":[null,["$","$L14",null,{"children":"$L15"}],["$","div",null,{"hidden":true,"children":["$","$L16",null,{"children":["$","$11",null,{"name":"Next.Metadata","children":"$L17"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+e:["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+f:["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L3",null,{"href":"/","children":"Front page"}],["$","$L3",null,{"href":"/topics/sports/","children":"Sports"}],[["$","span","College Football",{"children":"College Football"}],["$","span","Duke",{"children":"Duke"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Sports"]}],["$","h1",null,{"children":"Duke's path through the ACC and College Football Playoff"}],["$","p",null,{"className":"article-deck","children":"Duke's cleanest 2026 playoff route is to finish among the ACC's top two by conference winning percentage, win the ACC Championship Game, and claim the league champion's automatic place in the 12-team field; an at-large route exists, but it demands a much stronger national résumé than merely remaining in the ACC race."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 10, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[12," min · ","2,491"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","the-route-in-one-sentence",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-route-in-one-sentence","children":"The route in one sentence"}]}],["$","li","dukes-2026-schedule-funnel",{"className":"toc-depth-2","children":["$","a",null,{"href":"#dukes-2026-schedule-funnel","children":"Duke's 2026 schedule funnel"}]}],["$","li","the-leverage-points",{"className":"toc-depth-3","children":["$","a",null,{"href":"#the-leverage-points","children":"The leverage points"}]}],["$","li","how-duke-qualifies-for-charlotte",{"className":"toc-depth-2","children":["$","a",null,{"href":"#how-duke-qualifies-for-charlotte","children":"How Duke qualifies for Charlotte"}]}],["$","li","what-record-is-probably-enough",{"className":"toc-depth-3","children":["$","a",null,{"href":"#what-record-is-probably-enough","children":"What record is probably enough?"}]}],["$","li","what-winning-the-acc-now-buys",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-winning-the-acc-now-buys","children":"What winning the ACC now buys"}]}],["$","li","the-at-large-route",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-at-large-route","children":"The at-large route"}]}],["$","li","facts-versus-inference",{"className":"toc-depth-2","children":["$","a",null,{"href":"#facts-versus-inference","children":"Facts versus inference"}]}],["$","li","established-facts-as-of-july-10-2026",{"className":"toc-depth-3","children":["$","a",null,{"href":"#established-facts-as-of-july-10-2026","children":"Established facts as of July 10, 2026"}]}],["$","li","inferences-and-planning-judgments",{"className":"toc-depth-3","children":["$","a",null,{"href":"#inferences-and-planning-judgments","children":"Inferences and planning judgments"}]}],["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","the-route-in-one-sentence",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-route-in-one-sentence","children":"The route in one sentence"}]}],["$","li","dukes-2026-schedule-funnel",{"className":"toc-depth-2","children":["$","a",null,{"href":"#dukes-2026-schedule-funnel","children":"Duke's 2026 schedule funnel"}]}],"$L18","$L19","$L1a","$L1b","$L1c","$L1d","$L1e","$L1f","$L20","$L21","$L22"]}]]}],"$L23","$L24"]}]]}]
+18:["$","li","the-leverage-points",{"className":"toc-depth-3","children":["$","a",null,{"href":"#the-leverage-points","children":"The leverage points"}]}]
+19:["$","li","how-duke-qualifies-for-charlotte",{"className":"toc-depth-2","children":["$","a",null,{"href":"#how-duke-qualifies-for-charlotte","children":"How Duke qualifies for Charlotte"}]}]
+1a:["$","li","what-record-is-probably-enough",{"className":"toc-depth-3","children":["$","a",null,{"href":"#what-record-is-probably-enough","children":"What record is probably enough?"}]}]
+1b:["$","li","what-winning-the-acc-now-buys",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-winning-the-acc-now-buys","children":"What winning the ACC now buys"}]}]
+1c:["$","li","the-at-large-route",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-at-large-route","children":"The at-large route"}]}]
+1d:["$","li","facts-versus-inference",{"className":"toc-depth-2","children":["$","a",null,{"href":"#facts-versus-inference","children":"Facts versus inference"}]}]
+1e:["$","li","established-facts-as-of-july-10-2026",{"className":"toc-depth-3","children":["$","a",null,{"href":"#established-facts-as-of-july-10-2026","children":"Established facts as of July 10, 2026"}]}]
+1f:["$","li","inferences-and-planning-judgments",{"className":"toc-depth-3","children":["$","a",null,{"href":"#inferences-and-planning-judgments","children":"Inferences and planning judgments"}]}]
+20:["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}]
+21:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+22:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+25:T4d84,<p>Up: <a href="/rome-wiki/articles/sports/college-football/duke/duke-football/" class="wiki-link">Duke football</a></p>
+<p>Related: <a href="/rome-wiki/articles/sports/college-football/duke/duke-football-2026/" class="wiki-link">Duke football 2026</a> · <a href="/rome-wiki/articles/sports/college-football/duke/manny-diazs-duke-program/" class="wiki-link">Manny Diaz's Duke program</a> · <a href="/rome-wiki/wanted/dukes-2025-acc-championship/" class="wiki-link wiki-link-missing" title="Unwritten article — a research thread waiting to be followed">Duke's 2025 ACC championship +</a> · <a href="/rome-wiki/wanted/college-football-playoff/" class="wiki-link wiki-link-missing" title="Unwritten article — a research thread waiting to be followed">College Football Playoff +</a></p>
+<h2 id="the-route-in-one-sentence">The route in one sentence</h2>
+<p>The 2026 postseason problem has three gates: survive Duke's nine-game ACC schedule with one of the league's two best conference winning percentages, win the December 5 ACC Championship Game in Charlotte, and then enter a 12-team College Football Playoff bracket whose seed is determined by the selection committee's final ranking.</p>
+<p>That sounds linear, but the details matter. The ACC is not using divisions. Its championship participants are the top two postseason-eligible teams by <strong>winning percentage in all regular-season conference games</strong>, not necessarily the two teams with the greatest raw number of ACC wins. The 2026 transition to a nine-game conference schedule is also uneven: the ACC says 12 programs will play nine league games, while five will play eight. Duke is in the nine-game group. A 7–2 Duke team would post a .778 conference percentage; a 6–2 team elsewhere would post .750. A 6–3 Duke team would be .667, equal to a 6–3 peer but behind a 6–2 one.</p>
+<p>As of July 10, no 2026 games have been played, so there are no meaningful current standings. Any claim that Duke “needs” a particular record is therefore a planning threshold, not an official qualification rule. The ACC has also said it will publish an updated tiebreaker policy ahead of the season. Until that update appears, the prior policy is only a provisional guide, not a binding 2026 procedure.</p>
+<h2 id="dukes-2026-schedule-funnel">Duke's 2026 schedule funnel</h2>
+<p>Duke opens with four September games:</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Opponent</th>
+<th>Site</th>
+<th>ACC game?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>September 5</td>
+<td>Tulane</td>
+<td>Durham</td>
+<td>No</td>
+</tr>
+<tr>
+<td>September 12</td>
+<td>Illinois</td>
+<td>Champaign</td>
+<td>No</td>
+</tr>
+<tr>
+<td>September 19</td>
+<td>Stanford</td>
+<td>Durham</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>September 26</td>
+<td>William &#x26; Mary</td>
+<td>Durham</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>After an October 3 open date, every remaining game is in the conference:</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Opponent</th>
+<th>Site</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>October 10</td>
+<td>Georgia Tech</td>
+<td>Atlanta</td>
+</tr>
+<tr>
+<td>October 17</td>
+<td>North Carolina</td>
+<td>Durham</td>
+</tr>
+<tr>
+<td>October 23</td>
+<td>Virginia</td>
+<td>Charlottesville</td>
+</tr>
+<tr>
+<td>October 31</td>
+<td>Boston College</td>
+<td>Durham</td>
+</tr>
+<tr>
+<td>November 7</td>
+<td>NC State</td>
+<td>Raleigh</td>
+</tr>
+<tr>
+<td>November 14</td>
+<td>Miami</td>
+<td>Coral Gables</td>
+</tr>
+<tr>
+<td>November 20</td>
+<td>Clemson</td>
+<td>Durham</td>
+</tr>
+<tr>
+<td>November 28</td>
+<td>Wake Forest</td>
+<td>Winston-Salem</td>
+</tr>
+</tbody>
+</table>
+<p>The structure creates an unusually clear split. Duke gets one early conference data point against Stanford, then an open week, then plays eight ACC games in eight weeks. Seven of its nine league opponents are east of the Mississippi, and five are traditional regional opponents in the Carolinas or Virginia. But geographic familiarity should not be confused with ease. The official Duke schedule identifies Georgia Tech, Virginia, NC State, Miami and Wake Forest as teams that won at least eight games in 2025; Miami reached the national championship game, and Duke hosts Clemson in a Friday-night game six days after playing at Miami.</p>
+<p>The nonconference games matter differently. Tulane and Illinois cannot improve Duke's ACC winning percentage, but they can strengthen or weaken an at-large CFP résumé. They also shape the committee's interpretation of Duke's team quality before the compressed league run. William &#x26; Mary is an FCS opponent; beating it is necessary for record maintenance but, as an inference, is unlikely to carry the comparative value of beating Illinois or Tulane.</p>
+<h3 id="the-leverage-points">The leverage points</h3>
+<p>Not all nine ACC games have equal strategic value even though each win counts equally in the standings.</p>
+<p>First, head-to-head results were the first test in the prior two-team policy. A win over another contender is therefore both one Duke win and a likely tiebreak asset, subject to the 2026 update. Second, Duke plays all nine of its league opponents only once, so there is no return game to repair head-to-head damage. Third, schedule strength entered late under the prior policy through combined conference winning percentage of opponents and SportSource Analytics' Team Rating Score. Whether the updated 2026 policy retains that sequence was not yet public on July 10.</p>
+<p>The November sequence is the sharpest part of the funnel. Duke plays at NC State, at Miami, Clemson at home on a short week, and at Wake Forest. Even if preseason expectations prove wrong, that four-game run supplies 44 percent of Duke's conference schedule after November begins. A team that reaches November at 4–1 in ACC play could still fall out of Charlotte; a team at 3–2 could still recover, but it would have little tiebreak margin.</p>
+<h2 id="how-duke-qualifies-for-charlotte">How Duke qualifies for Charlotte</h2>
+<p>The ACC title game matches the top two postseason-eligible teams. The 2026 game is scheduled for noon ET on Saturday, December 5, at Bank of America Stadium in Charlotte and will air on ABC. Duke does not have to finish first to enter it. Finishing second by conference winning percentage is enough; the highest-percentage team, outright or after tiebreakers, is designated the home team.</p>
+<p>The following was the published <strong>prior-policy</strong> order for a two-team tie. It is useful for identifying evidence to track, but the ACC's December 2025 scheduling announcement said an updated policy would be announced ahead of 2026:</p>
+<ol>
+<li>Head-to-head competition.</li>
+<li>Winning percentage against all common opponents.</li>
+<li>Winning percentage against common opponents in the order of those opponents' conference finish, with ties in that order broken.</li>
+<li>Combined conference winning percentage of the tied teams' conference opponents.</li>
+<li>The higher SportSource Analytics Team Rating Score after the regular season.</li>
+<li>A draw administered by the commissioner or the commissioner's designee.</li>
+</ol>
+<p>Under that prior policy, a tie of three or more teams first asked whether every tied team played the others. If so, it used combined head-to-head winning percentage among them. If they did not all play, a team that defeated every other tied team advanced under the next test; a team that lost to every other tied team could be eliminated. The procedure then moved through common-opponent percentage, performance against common opponents in order of finish, combined opponent conference percentage, SportSource Analytics and finally a draw. When a team or teams were removed but the championship places remained unresolved, the procedure restarted with the remaining tied teams. This paragraph must be checked against the promised 2026 update before any live scenario is treated as authoritative.</p>
+<p>Two subtleties from the prior policy are worth monitoring: conference games against postseason-ineligible teams counted in the standings and tiebreakers, and an unbalanced schedule could leave a small common-opponent subset. The updated policy will determine whether those details still control in 2026.</p>
+<h3 id="what-record-is-probably-enough">What record is probably enough?</h3>
+<p>No fixed record clinches a berth before the rest of the standings are known. The following are analytical guideposts, not ACC rules:</p>
+<ul>
+<li><strong>9–0</strong> wins the regular-season race outright.</li>
+<li><strong>8–1</strong> would ordinarily put Duke in extremely strong position, though a tie and the identity of the loss could still determine home-team designation or, in an exceptional three-team 8–1 pileup, qualification.</li>
+<li><strong>7–2</strong> is a strong championship-game profile but not a guarantee. The 2025 race demonstrated how many contenders can remain alive late under an eight-game schedule.</li>
+<li><strong>6–3</strong> requires help in most plausible strong-league distributions and exposes Duke to multi-team tiebreaks.</li>
+<li><strong>5–4 or worse</strong> would require an unusually compressed top of the conference and should not be treated as a practical planning target.</li>
+</ul>
+<p>The best operational target is therefore seven ACC wins as the floor for serious Charlotte positioning and eight as the cleaner target. That is inference from the mathematics of a 17-team standings table and recent conference congestion, not a promise.</p>
+<h2 id="what-winning-the-acc-now-buys">What winning the ACC now buys</h2>
+<p>The CFP Management Committee announced in January 2026 that the 12-team format will continue for the 2026–27 season. The current CFP protocol gives automatic places to the champions of the ACC, Big Ten, Big 12 and SEC, plus the highest-ranked champion from the American, Conference USA, Mid-American, Mountain West, Pac-12 and Sun Belt. Seven additional teams enter through the ranking process.</p>
+<p>For Duke, that makes an ACC Championship the route that removes almost all ambiguity about <strong>selection</strong>. An ACC champion is in the playoff even if it is outside the committee's top 12; the committee would evaluate and place an unranked automatic qualifier at the bottom of the field. Winning the ACC does not, however, guarantee a bye. The four highest-ranked teams receive seeds 1–4 and first-round byes. Seeds 5–8 host first-round games against 12–9, respectively, and seeds 9–12 travel.</p>
+<p>That distinction is a major change from the inaugural 12-team design, under which highly ranked conference champions received privileged seeds. Under the current direct-seeding system, an ACC champion ranked ninth is seeded ninth and travels in round one. An ACC champion ranked third gets the No. 3 seed and a bye. Conference status supplies access; committee rank supplies position.</p>
+<p>The CFP bracket is fixed after selection. There is no adjustment to avoid a regular-season rematch or a same-conference game, and there is no reseeding after a round. Quarterfinals and semifinals are played in the CFP bowl rotation. The 2026–27 national championship is scheduled for January 25, 2027, at Allegiant Stadium in Las Vegas.</p>
+<h2 id="the-at-large-route">The at-large route</h2>
+<p>Duke can reach the CFP without winning the ACC, but the phrase “at large” hides several possible seasons:</p>
+<ol>
+<li><strong>Lose the ACC title game after an elite regular season.</strong> A Duke team that reaches Charlotte with 10 or 11 regular-season wins and owns strong victories could remain among the seven highest-ranked non-automatic qualifiers.</li>
+<li><strong>Miss Charlotte through a crowded tiebreak while carrying a strong overall résumé.</strong> This is mathematically possible, especially because Duke plays nine ACC games while some teams play eight. It would leave the committee to decide whether Duke is among the best remaining teams.</li>
+<li><strong>Finish behind two ACC teams but rank nationally.</strong> There is no conference cap; the CFP protocol expressly says no limit exists on participants from one conference.</li>
+</ol>
+<p>None is automatic. The selection committee ranks 25 teams through repeated comparison and voting. Its protocol says there is no single controlling metric. It considers a wide range of information, including strength of schedule, head-to-head competition, comparative outcomes against common opponents and other relevant factors when teams are comparable. The practical implication is that “11 wins” or “top three in the ACC” is not an eligibility clause.</p>
+<p>Duke's nonconference slate is crucial here. An unbeaten or one-loss nonconference record that includes Tulane and a road win at Illinois would provide evidence beyond the ACC standings. A loss to William &#x26; Mary would be severe negative evidence. The exact value of every result will depend on opponent quality as it develops; preseason reputations are not final résumé values.</p>
+<p>The committee's first 2026 rankings meetings are scheduled for November 2–3, after Duke's Boston College game. Subsequent meetings occur weekly, with final deliberations December 4–6. Those interim rankings are snapshots, not protected positions. Duke's decisive NC State–Miami–Clemson sequence occurs after the first ranking and therefore gives the committee late, direct evidence.</p>
+<h2 id="facts-versus-inference">Facts versus inference</h2>
+<h3 id="established-facts-as-of-july-10-2026">Established facts as of July 10, 2026</h3>
+<ul>
+<li>Duke has nine scheduled ACC games and three nonconference games in 2026.</li>
+<li>The ACC is transitioning to nine conference games, but only 12 programs play nine in 2026; five play eight.</li>
+<li>Conference winning percentage, not raw conference wins, selects the top two championship-game participants.</li>
+<li>The ACC said an updated tiebreaker policy would be announced ahead of 2026; the older published procedure is provisional context, not yet a verified 2026 rule.</li>
+<li>The ACC Championship Game is December 5 in Charlotte.</li>
+<li>The 2026–27 CFP remains a 12-team tournament.</li>
+<li>The ACC champion receives an automatic berth under the current CFP protocol.</li>
+<li>The four highest-ranked teams receive byes; conference champions are seeded according to committee rank rather than automatically moved into the top four.</li>
+<li>There is no limit on the number of teams from one conference.</li>
+<li>Duke is 0–0 because the season has not begun.</li>
+</ul>
+<h3 id="inferences-and-planning-judgments">Inferences and planning judgments</h3>
+<ul>
+<li>Seven ACC wins should keep Duke in serious Charlotte contention; eight is the safer working target.</li>
+<li>The closing four-game stretch is the schedule's highest-leverage segment.</li>
+<li>Tulane and Illinois matter disproportionately to an at-large case because they are Duke's strongest scheduled nonconference comparison opportunities.</li>
+<li>An ACC title is much more reliable than an at-large argument, while a highly ranked ACC title is necessary to turn automatic access into a bye.</li>
+</ul>
+<p>These inferences should be revised as opponent records, injuries, roster roles, and committee rankings become observable.</p>
+<h2 id="why-it-matters">Why it matters</h2>
+<p>Duke's 2025 ACC championship proved that the program can navigate a congested race and win in Charlotte. The 2026 structure asks a harder follow-up question: can Duke sustain title-level performance across nine conference games, then translate a league championship into national position rather than merely national access?</p>
+<p>The answer affects how every result should be read. Stanford is not “just” the September conference opener; it may become a head-to-head or common-opponent tiebreak input. Tulane and Illinois do not count in the ACC table, but they may determine whether a championship-game loss ends Duke's playoff case. Miami and Clemson are not automatically elimination games, yet victories there could improve both conference position and committee evaluation. The postseason path is not one race but two overlapping ones: an exact standings race governed by ACC rules and a comparative résumé race governed by committee judgment.</p>
+<h2 id="sources">Sources</h2>
+<p>Accessed 2026-07-10.</p>
+<ul>
+<li>Duke Athletics, “2026 Football Schedule”: <a href="https://goduke.com/sports/football/schedule/2026" target="_blank" rel="noopener noreferrer">https://goduke.com/sports/football/schedule/2026</a></li>
+<li>Duke Athletics, “Six Kick Times Scheduled for 2026 Slate” (May 27, 2026): <a href="https://goduke.com/news/2026/5/27/football-six-kick-times-scheduled-for-2026-slate" target="_blank" rel="noopener noreferrer">https://goduke.com/news/2026/5/27/football-six-kick-times-scheduled-for-2026-slate</a></li>
+<li>Atlantic Coast Conference, “ACC Unveils 2026 Football Schedule” (January 26, 2026): <a href="https://theacc.com/news/2026/1/26/acc-unveils-2026-football-schedule.aspx" target="_blank" rel="noopener noreferrer">https://theacc.com/news/2026/1/26/acc-unveils-2026-football-schedule.aspx</a></li>
+<li>Atlantic Coast Conference, “ACC Announces 2026 Football Schedule Model” (December 16, 2025): <a href="https://theacc.com/news/2025/12/16/acc-announces-2026-football-schedule-model.aspx" target="_blank" rel="noopener noreferrer">https://theacc.com/news/2025/12/16/acc-announces-2026-football-schedule-model.aspx</a></li>
+<li>Atlantic Coast Conference, “ACC Football Tiebreaker Policy”: <a href="https://s3.amazonaws.com/sidearm.sites/acc.sidearmsports.com/documents/2023/5/17/ACC_FOOTBALL_TIEBREAKER_POLICY.pdf" target="_blank" rel="noopener noreferrer">https://s3.amazonaws.com/sidearm.sites/acc.sidearmsports.com/documents/2023/5/17/ACC_FOOTBALL_TIEBREAKER_POLICY.pdf</a></li>
+<li>Atlantic Coast Conference, “2025 ACC Football Championship Game Tiebreakers” (November 24, 2025): <a href="https://theacc.com/news/2025/11/24/2025-acc-football-championship-game-tiebreakers.aspx" target="_blank" rel="noopener noreferrer">https://theacc.com/news/2025/11/24/2025-acc-football-championship-game-tiebreakers.aspx</a></li>
+<li>College Football Playoff, “College Football Playoff Management Committee Extends Current Format Through 2026-27 Season” (January 23, 2026): <a href="https://collegefootballplayoff.com/news/2026/1/23/2627-format.aspx" target="_blank" rel="noopener noreferrer">https://collegefootballplayoff.com/news/2026/1/23/2627-format.aspx</a></li>
+<li>College Football Playoff, “CFP Selection Committee Protocol”: <a href="https://collegefootballplayoff.com/sports/2016/10/24/selection-committee-protocol" target="_blank" rel="noopener noreferrer">https://collegefootballplayoff.com/sports/2016/10/24/selection-committee-protocol</a></li>
+<li>College Football Playoff, “About the 12-Team College Football Playoff Format”: <a href="https://collegefootballplayoff.com/sports/2024/5/29/12-team-format.aspx" target="_blank" rel="noopener noreferrer">https://collegefootballplayoff.com/sports/2024/5/29/12-team-format.aspx</a></li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Will the ACC amend or republish its tiebreaker policy specifically for the uneven eight- and nine-game 2026 transition?</li>
+<li>Which five ACC teams are officially in the eight-game group, and how often could unequal denominators alter the top-two race?</li>
+<li>What are the exact first-round and bowl dates for the 2026–27 CFP beyond the announced January 25 championship?</li>
+<li>How will Duke's opponents perform, and which common-opponent clusters will become relevant by November?</li>
+<li>Will late schedule selections move any currently Saturday-listed Duke game to Friday, changing recovery time in the closing run?</li>
+</ul>23:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$25"}}],"$L26"]}]
+24:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","sports/college-football/duke/duke-football",{"children":["$","$L3",null,{"href":"/articles/sports/college-football/duke/duke-football/","children":"Duke football"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","sports/college-football/duke/duke-football",{"children":["$","$L3",null,{"href":"/articles/sports/college-football/duke/duke-football/","children":"Duke football"}]}],["$","li","sports/college-football/duke/duke-football-2026",{"children":["$","$L3",null,{"href":"/articles/sports/college-football/duke/duke-football-2026/","children":"Duke football 2026"}]}],["$","li","sports/college-football/duke/manny-diazs-duke-program",{"children":["$","$L3",null,{"href":"/articles/sports/college-football/duke/manny-diazs-duke-program/","children":"Manny Diaz's Duke program"}]}],["$","li","sports/college-football/duke/duke-defense-under-manny-diaz",{"children":["$","$L3",null,{"href":"/articles/sports/college-football/duke/duke-defense-under-manny-diaz/","children":"Duke defense under Manny Diaz"}]}],["$","li","sports/college-football/duke/duke-defensive-front-development-2026",{"children":["$","$L3",null,{"href":"/articles/sports/college-football/duke/duke-defensive-front-development-2026/","children":"Duke defensive front development 2026"}]}],["$","li","sports/college-football/duke/duke-football-2026-opponent-map",{"children":["$","$L3",null,{"href":"/articles/sports/college-football/duke/duke-football-2026-opponent-map/","children":"Duke football 2026 opponent map"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","sports",{"children":"sports"}],["$","li","college-football",{"children":"college-football"}],["$","li","duke",{"children":"duke"}],["$","li","acc",{"children":"acc"}],["$","li","college-football-playoff",{"children":"college-football-playoff"}]]}]]}]]}]
+26:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L3",null,{"href":"/articles/sports/college-football/duke/duke-tight-end-development-2026/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Duke tight end development 2026"}]]}],["$","$L3",null,{"href":"/articles/sports/college-football/duke/manny-diazs-duke-program/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Manny Diaz's Duke program"}]]}]]}]
+15:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+12:null
+17:[["$","title","0",{"children":"Duke's path through the ACC and College Football Playoff · Rome"}],["$","meta","1",{"name":"description","content":"Duke's cleanest 2026 playoff route is to finish among the ACC's top two by conference winning percentage, win the ACC Championship Game, and claim the league champion's automatic place in the 12-team field; an at-large route exists, but it demands a much stronger national résumé than merely remaining in the ACC race."}],["$","meta","2",{"name":"application-name","content":"Rome"}],["$","meta","3",{"name":"author","content":"Andrew Park"}],["$","meta","4",{"name":"keywords","content":"Rome,wiki,second brain,knowledge garden,research"}],["$","meta","5",{"name":"creator","content":"Andrew Park"}],["$","meta","6",{"name":"publisher","content":"Andrew Park"}],["$","meta","7",{"property":"og:title","content":"Duke's path through the ACC and College Football Playoff"}],["$","meta","8",{"property":"og:description","content":"Duke's cleanest 2026 playoff route is to finish among the ACC's top two by conference winning percentage, win the ACC Championship Game, and claim the league champion's automatic place in the 12-team field; an at-large route exists, but it demands a much stronger national résumé than merely remaining in the ACC race."}],["$","meta","9",{"property":"og:type","content":"article"}],["$","meta","10",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","11",{"name":"twitter:title","content":"Rome — A Living Encyclopedia"}],["$","meta","12",{"name":"twitter:description","content":"Andrew Park's second brain, set in type."}],["$","meta","13",{"name":"twitter:image","content":"http://localhost:3000/og.png"}]]

@@ -1,0 +1,80 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+7:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+8:"$Sreact.suspense"
+3:Ta76,<h2 id="098-aero-briefing">098 AERO briefing</h2>
+<p>Up: <a href="/rome-wiki/articles/crypto/crypto-top-200-interview-database/" class="wiki-link">Crypto top 200 interview database</a></p>
+<h2 id="verdict">Verdict</h2>
+<p>Aerodrome Finance (AERO) current call: <code>ACTIVE_LOCKER_ONLY__NO_LIQUID_SPOT_BUY</code>; blocker: Liquid AERO economics remain inferior to active locked or managed exposure.</p>
+<ul>
+<li>Token: AERO</li>
+<li>Research lane: Base DEX / ve locker</li>
+<li>Current call: <code>ACTIVE_LOCKER_ONLY__NO_LIQUID_SPOT_BUY</code></li>
+<li>Bull case: Business activity and liquidity are real.</li>
+<li>Main blocker: Liquid AERO economics remain inferior to active locked or managed exposure.</li>
+<li>Evidence gate: Reopen liquid token only if passive spot capture beats emissions without needing ve exposure.</li>
+</ul>
+<h2 id="snapshot">Snapshot</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ticker</td>
+<td>AERO</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>Aerodrome Finance</td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td>Top-200 snapshot token</td>
+</tr>
+<tr>
+<td>Rank</td>
+<td>98</td>
+</tr>
+<tr>
+<td>Price</td>
+<td>$0.587</td>
+</tr>
+<tr>
+<td>Market cap</td>
+<td>$565.82M</td>
+</tr>
+<tr>
+<td>FDV</td>
+<td>$1.13B</td>
+</tr>
+<tr>
+<td>24h volume</td>
+<td>$29.85M</td>
+</tr>
+</tbody>
+</table>
+<h2 id="thesis">Thesis</h2>
+<p>Aerodrome Finance (AERO) is a top-200 snapshot asset at rank 98. Current call: <code>ACTIVE_LOCKER_ONLY__NO_LIQUID_SPOT_BUY</code>. Main blocker: Liquid AERO economics remain inferior to active locked or managed exposure.</p>
+<h2 id="token-specific-evidence">Token-Specific Evidence</h2>
+<ul>
+<li>Aerodrome has real Base DEX activity and strong venue liquidity.</li>
+<li>The live check put Aerodrome around a majority share of Base DEX volume across short windows.</li>
+<li>The core problem is beneficiary identity: reported holder revenue belongs to veAERO voters, while liquid AERO absorbs heavy emissions.</li>
+<li>Liquid exposure reopens only if passive spot capture beats emissions without requiring ve exposure.</li>
+</ul>
+<h2 id="what-would-change-the-verdict">What Would Change The Verdict</h2>
+<p>Reopen liquid token only if passive spot capture beats emissions without needing ve exposure.</p>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>What wallet-visible evidence would prove that AERO captures value for passive holders?</li>
+<li>What fact would falsify the current blocker: Liquid AERO economics remain inferior to active locked or managed exposure?</li>
+<li>Has the evidence gate been met: Reopen liquid token only if passive spot capture beats emissions without needing ve exposure?</li>
+</ul>0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/crypto/","children":"Crypto"}],[["$","span","Briefings",{"children":"Briefings"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Crypto"]}],["$","h1",null,{"children":"098 AERO briefing"}],["$","p",null,{"className":"article-deck","children":"Aerodrome Finance (AERO) current call: ; blocker: Liquid AERO economics remain inferior to active locked or managed exposure."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Mixed provenance"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 7, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[2," min · ","278"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","098-aero-briefing",{"className":"toc-depth-2","children":["$","a",null,{"href":"#098-aero-briefing","children":"098 AERO briefing"}]}],["$","li","verdict",{"className":"toc-depth-2","children":["$","a",null,{"href":"#verdict","children":"Verdict"}]}],["$","li","snapshot",{"className":"toc-depth-2","children":["$","a",null,{"href":"#snapshot","children":"Snapshot"}]}],["$","li","thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis","children":"Thesis"}]}],["$","li","token-specific-evidence",{"className":"toc-depth-2","children":["$","a",null,{"href":"#token-specific-evidence","children":"Token-Specific Evidence"}]}],["$","li","what-would-change-the-verdict",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-the-verdict","children":"What Would Change The Verdict"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","098-aero-briefing",{"className":"toc-depth-2","children":["$","a",null,{"href":"#098-aero-briefing","children":"098 AERO briefing"}]}],["$","li","verdict",{"className":"toc-depth-2","children":["$","a",null,{"href":"#verdict","children":"Verdict"}]}],["$","li","snapshot",{"className":"toc-depth-2","children":["$","a",null,{"href":"#snapshot","children":"Snapshot"}]}],["$","li","thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis","children":"Thesis"}]}],["$","li","token-specific-evidence",{"className":"toc-depth-2","children":["$","a",null,{"href":"#token-specific-evidence","children":"Token-Specific Evidence"}]}],["$","li","what-would-change-the-verdict",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-the-verdict","children":"What Would Change The Verdict"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$3"}}],"$L4"]}],"$L5"]}]]}],null,"$L6"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+4:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/crypto/briefings/092-pump-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"092 PUMP briefing"}]]}],["$","$L2",null,{"href":"/articles/crypto/briefings/148-pendle-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"148 PENDLE briefing"}]]}]]}]
+5:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","crypto/crypto",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto/","children":"Crypto"}]}],["$","li","crypto/crypto-non-major-bull-market-research",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-non-major-bull-market-research/","children":"Crypto non-major bull market research"}]}],["$","li","crypto/crypto-top-200-interview-database",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-top-200-interview-database/","children":"Crypto top 200 interview database"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","crypto/crypto-top-200-interview-database",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-top-200-interview-database/","children":"Crypto top 200 interview database"}]}],["$","li","crypto/crypto-non-major-bull-market-research",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-non-major-bull-market-research/","children":"Crypto non-major bull market research"}]}],["$","li","crypto/crypto",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto/","children":"Crypto"}]}],["$","li","crypto/briefings/081-jup-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/081-jup-briefing/","children":"081 JUP briefing"}]}],["$","li","crypto/briefings/092-pump-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/092-pump-briefing/","children":"092 PUMP briefing"}]}],["$","li","crypto/briefings/148-pendle-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/148-pendle-briefing/","children":"148 PENDLE briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","project",{"children":"project"}],["$","li","investing",{"children":"investing"}],["$","li","crypto",{"children":"crypto"}],["$","li","briefing",{"children":"briefing"}],["$","li","aero",{"children":"aero"}]]}]]}]]}]
+6:["$","$L7",null,{"children":["$","$8",null,{"name":"Next.MetadataOutlet","children":"$@9"}]}]
+9:null

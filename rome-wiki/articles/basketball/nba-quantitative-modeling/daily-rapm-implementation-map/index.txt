@@ -1,0 +1,159 @@
+1:"$Sreact.fragment"
+2:I[70359,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ReadingProgress"]
+3:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+4:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchTrigger"]
+5:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchExperience"]
+6:I[39756,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+7:I[37457,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+c:I[68027,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default",1]
+:HL["/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","style"]
+:HL["/rome-wiki/_next/static/media/5f402bd2d8eef81a-s.p.16whm0euli40m.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/9433d1a810498265-s.p.0h26ys03~gfbk.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"P":null,"c":["","articles","basketball","nba-quantitative-modeling","daily-rapm-implementation-map",""],"q":"","i":false,"f":[[["",{"children":["articles",{"children":[["slug","basketball/nba-quantitative-modeling/daily-rapm-implementation-map","c",null],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",16],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/rome-wiki/_next/static/chunks/14kbu79734gwo.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable newsreader_dccbc19-module__XM85IG__variable","children":[["$","a",null,{"href":"#main-content","className":"skip-link","children":"Skip to the article"}],["$","$L2",null,{}],["$","header",null,{"className":"site-header","children":[["$","div",null,{"className":"utility-strip","children":[["$","span",null,{"children":"Established 2026"}],["$","span",null,{"className":"utility-center","children":"A living external brain"}],["$","span",null,{"children":[980," articles · ","Jul 10, 2026"]}]]}],["$","div",null,{"className":"navigation-row","children":[["$","$L3",null,{"href":"/","className":"small-wordmark","aria-label":"Rome front page","children":"Rome"}],["$","nav",null,{"className":"primary-nav","aria-label":"Primary navigation","children":[["$","$L3",null,{"href":"/#reading-rooms","children":"Reading rooms"}],["$","$L3",null,{"href":"/#universe-map","children":"Map"}],["$","$L3",null,{"href":"/#updates","children":"Updates"}],["$","$L3",null,{"href":"/about/","children":"About"}]]}],["$","$L4",null,{}]]}],["$","nav",null,{"className":"topic-rail","aria-label":"Reading rooms","children":[["$","$L3","AI",{"href":"/topics/ai/","children":"AI"}],["$","$L3","Basketball",{"href":"/topics/basketball/","children":"Basketball"}],["$","$L3","Classical Music",{"href":"/topics/classical-music/","children":"Classical Music"}],["$","$L3","Crypto",{"href":"/topics/crypto/","children":"Crypto"}],["$","$L3","History",{"href":"/topics/history/","children":"History"}],["$","$L3","Investing",{"href":"/topics/investing/","children":"Investing"}],["$","$L3","Markets",{"href":"/topics/markets/","children":"Markets"}],["$","$L3","Mathematics",{"href":"/topics/mathematics/","children":"Mathematics"}],["$","$L3","Piano",{"href":"/topics/piano/","children":"Piano"}],["$","$L3","Politics",{"href":"/topics/politics/","children":"Politics"}],["$","$L3","Sports",{"href":"/topics/sports/","children":"Sports"}],["$","$L3","String Theory",{"href":"/topics/string-theory/","children":"String Theory"}],["$","$L3","Weather",{"href":"/topics/weather/","children":"Weather"}]]}]]}],["$","$L5",null,{}],["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main-content","className":"not-found-page page-shell narrow-page","children":[["$","p",null,{"className":"eyebrow","children":"404 · End of the footpath"}],["$","h1",null,{"children":"This page has not entered Rome yet."}],["$","p",null,{"children":["Open search with ",["$","kbd",null,{"children":"⌘ K"}],", explore the universe map, or return to the front page and follow another link."]}],["$","$L3",null,{"href":"/","className":"button-link","children":"Return to Rome"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","footer",null,{"className":"site-footer","children":[["$","div",null,{"children":[["$","$L3",null,{"href":"/","className":"footer-wordmark","children":"Rome"}],["$","p",null,{"children":"Andrew Park's second brain, set in type."}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"This edition"}],["$","p",null,{"children":[980," articles across ",16," reading rooms, with"," ",431," open research threads."]}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Ownership & provenance"}],["$","p",null,{"children":"Rome belongs to Andrew Park. Every article also carries its authoring source."}]]}],["$","div",null,{"className":"footer-links","children":[["$","$L3",null,{"href":"/about/","children":"About Rome"}],["$","$L3",null,{"href":"/#universe-map","children":"Explore the map"}]]}]]}]]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["$L8",{"children":["$L9",{},null,false,null]},null,false,"$@a"]},null,false,"$@a"]},null,false,null],"$Lb",false]],"m":"$undefined","G":["$c",["$Ld"]],"S":true,"h":null,"s":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"X6ZOd3MQP6S0cUC6FLNdS"}
+f:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+10:"$Sreact.suspense"
+13:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ViewportBoundary"]
+15:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"MetadataBoundary"]
+8:["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}]
+9:["$","$1","c",{"children":["$Le",null,["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]]}]
+12:[]
+a:"$W12"
+b:["$","$1","h",{"children":[null,["$","$L13",null,{"children":"$L14"}],["$","div",null,{"hidden":true,"children":["$","$L15",null,{"children":["$","$10",null,{"name":"Next.Metadata","children":"$L16"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+d:["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+17:T2455,<h2 id="repository-boundary">Repository boundary</h2>
+<p>Two repositories play different roles:</p>
+<ul>
+<li><strong><code>unified-rapm</code></strong> is the research and build source of truth. It contains the solver drivers, priors, translation, forward models, validation harnesses, exporters, and private/generated artifacts.</li>
+<li><strong><code>andrewjparkus.github.io</code></strong> is the generated public product. Its HTML, JavaScript, CSS, player data, projections, and API files are staged by the source build and then manually reviewed and published by Andrew.</li>
+</ul>
+<p>The public checkout should not be edited by hand: <code>build_pages.py</code> clears everything except its <code>.git</code> directory before restaging the site. Manual changes there are disposable by design. <a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/daily-rapm-public-site/" class="wiki-link">Daily RAPM public site</a> describes the user-facing surfaces.</p>
+<h2 id="end-to-end-flow">End-to-end flow</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Main source code</th>
+<th>Principal artifact or effect</th>
+<th>Concept note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Possession inputs</td>
+<td>sibling NBA, NCAA, and G League play-by-play/design caches</td>
+<td>sparse lineup matrices and component targets</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm-lineup-model/" class="wiki-link">RAPM lineup model</a></td>
+</tr>
+<tr>
+<td>Daily league solves</td>
+<td><code>daily_v5/msolve.py</code>, <code>backfill.py</code>, <code>xleague.py</code></td>
+<td>per-game-day pure and prior-informed boards</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm-lineup-model/" class="wiki-link">RAPM lineup model</a></td>
+</tr>
+<tr>
+<td>Component scale</td>
+<td><code>joint_alpha.py</code>, <code>calibrate_factors.py</code></td>
+<td>component penalties, half-lives, offsets, reference-scale gates</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm-regularization-and-identification/" class="wiki-link">RAPM regularization and identification</a></td>
+</tr>
+<tr>
+<td>Box/prior layer</td>
+<td><code>daily_v5/daily_prior/</code></td>
+<td>causal player-day prior means and box-mode curves</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm/" class="wiki-link">RAPM</a></td>
+</tr>
+<tr>
+<td>Cross-league translation</td>
+<td><code>anchors.py</code>, <code>fit_translation_v5.py</code></td>
+<td>mover mappings and <code>Var_translate</code> floors</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/cross-league-rapm-translation/" class="wiki-link">Cross-league RAPM translation</a></td>
+</tr>
+<tr>
+<td>Unified history</td>
+<td><code>aggregate.py</code></td>
+<td>NBA-equivalent daily series across three leagues</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/six-factor-rapm-decomposition/" class="wiki-link">Six-factor RAPM decomposition</a></td>
+</tr>
+<tr>
+<td>Season-end snapshots</td>
+<td><code>oos_harness.py</code></td>
+<td>causal player-season training and evaluation panel</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm-evaluation-and-uncertainty/" class="wiki-link">RAPM evaluation and uncertainty</a></td>
+</tr>
+<tr>
+<td>Player forward model</td>
+<td><code>build_forward_xgb.py</code>, <code>build_projection.py</code>, <code>build_forward_calibration.py</code></td>
+<td>one-to-five-year factor/net paths and intervals</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/nba-player-forward-projection-model/" class="wiki-link">NBA player forward projection model</a></td>
+</tr>
+<tr>
+<td>Minutes and availability</td>
+<td><code>build_minutes_model.py</code>, <code>build_gp_model.py</code>, rotation distribution builders</td>
+<td>roster demand, expected GP, role uncertainty</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/nba-team-season-projection-model/" class="wiki-link">NBA team season projection model</a></td>
+</tr>
+<tr>
+<td>Season simulation</td>
+<td><code>project_2027.py</code>, <code>build_projection_teams.py</code></td>
+<td>wins, percentiles, play-in/playoff/title odds</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/nba-team-season-projection-model/" class="wiki-link">NBA team season projection model</a></td>
+</tr>
+<tr>
+<td>Public exporters</td>
+<td><code>export_api.py</code>, table/team/draft/trajectory builders</td>
+<td>static JSON and API payloads</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/daily-rapm-public-site/" class="wiki-link">Daily RAPM public site</a></td>
+</tr>
+<tr>
+<td>Site assembly</td>
+<td><code>build_pages.py</code>, <code>deploy_site.sh</code></td>
+<td>regenerated <code>andrewjparkus.github.io</code> checkout</td>
+<td><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/daily-rapm-public-site/" class="wiki-link">Daily RAPM public site</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="measurement-path">Measurement path</h2>
+<p>The expensive substrate is the possession solve. The NBA driver builds or loads a large sparse matrix for each underlying component, slices it to a game-day's trailing five-year window, applies the 550-day decay, and solves the weighted ridge. NCAA and G League are solved on their native scales in separate processes.</p>
+<p>The daily boards remain modular:</p>
+<ul>
+<li><code>out/nba</code> holds the pure NBA path;</li>
+<li><code>out/nba_hybrid</code> holds whichever promoted prior-informed build produced it;</li>
+<li><code>out/college</code> and <code>out/gleague</code> hold native feeder-league paths;</li>
+<li>the aggregation stage applies canonical translation and writes the unified series.</li>
+</ul>
+<p>The unified parquet is several gigabytes and tens of millions of rows. Consumers should project columns and stream row groups rather than load it wholesale. This operational fact shapes the exporters and is part of why the public site contains compact downsampled JSON rather than the research corpus itself.</p>
+<h2 id="projection-path">Projection path</h2>
+<p>The forward stack deliberately starts after the descriptive measurement stack:</p>
+<ol>
+<li><code>oos_harness.py</code> extracts season-end causal snapshots.</li>
+<li><code>build_forward_xgb.py</code> constructs temporal panels and trains factor/horizon plus aggregate-net models.</li>
+<li><code>build_projection.py</code> applies gate decisions, fallbacks, exact re-decomposition, and calibrated intervals.</li>
+<li>minutes, expected games, and roster inputs are built independently.</li>
+<li><code>project_2027.py</code> combines the pieces into team strength and Monte Carlo outcomes.</li>
+</ol>
+<p>This separation makes “measured” and “projected” inspectable. A forecast model can be replaced without rewriting the historical RAPM curve, and a minutes-model experiment need not alter a player's per-100 rating.</p>
+<h2 id="product-build-and-publication">Product build and publication</h2>
+<p><code>deploy_site.sh</code> is the executable product definition. It rebuilds forward artifacts, runs exporters, invokes the site assembly clear step, reruns exporters that write directly into the fresh public checkout, and verifies required files exist. It stages but does not authorize publication. Andrew's review, commit, and push of the GitHub Pages repository are the final gate.</p>
+<p>The source repository itself is local-only in the inspected configuration. Its ignored multi-gigabyte data is not protected by the public site's Git history. Source code, generated data, and published product therefore have different recovery and provenance contracts.</p>
+<h2 id="which-files-answer-which-question">Which files answer which question</h2>
+<ul>
+<li>“What is the current mathematical model?” — <code>msolve.py</code>, <code>joint_alpha.py</code>, and the active calibration JSON.</li>
+<li>“What actually ships?” — <code>deploy_site.sh</code> and the public artifact metadata.</li>
+<li>“How was a model cell promoted?” — <code>forward_model_gate.json</code>, ablation artifacts, and <a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm-evaluation-and-uncertainty/" class="wiki-link">RAPM evaluation and uncertainty</a>.</li>
+<li>“Why does a feeder-league rating look compressed?” — <code>var_translate_v5.json</code> and <a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/cross-league-rapm-translation/" class="wiki-link">Cross-league RAPM translation</a>.</li>
+<li>“Why does the prose disagree with an artifact?” — inspect file dates and treat live code plus generated metadata as current until the documentation is refreshed.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Should a machine-readable model manifest version every solve regime, translation map, forward gate, minutes contract, and public build together?</li>
+<li>Which large artifacts are irreplaceable and need an explicit backup plan outside Git?</li>
+<li>Can the daily build become incremental without weakening causal and reproducibility gates?</li>
+<li>How should generated public prose be tested against executable invariants such as the current net projection path?</li>
+</ul>e:["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L3",null,{"href":"/","children":"Front page"}],["$","$L3",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA quantitative modeling",{"children":"NBA quantitative modeling"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Daily RAPM implementation map"}],["$","p",null,{"className":"article-deck","children":"The Daily RAPM system is a staged research pipeline: possession designs become daily league boards, translated player histories, forward ratings, team simulations, static exports, and finally a generated GitHub Pages checkout."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[4," min · ","739"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","repository-boundary",{"className":"toc-depth-2","children":["$","a",null,{"href":"#repository-boundary","children":"Repository boundary"}]}],["$","li","end-to-end-flow",{"className":"toc-depth-2","children":["$","a",null,{"href":"#end-to-end-flow","children":"End-to-end flow"}]}],["$","li","measurement-path",{"className":"toc-depth-2","children":["$","a",null,{"href":"#measurement-path","children":"Measurement path"}]}],["$","li","projection-path",{"className":"toc-depth-2","children":["$","a",null,{"href":"#projection-path","children":"Projection path"}]}],["$","li","product-build-and-publication",{"className":"toc-depth-2","children":["$","a",null,{"href":"#product-build-and-publication","children":"Product build and publication"}]}],["$","li","which-files-answer-which-question",{"className":"toc-depth-2","children":["$","a",null,{"href":"#which-files-answer-which-question","children":"Which files answer which question"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","repository-boundary",{"className":"toc-depth-2","children":["$","a",null,{"href":"#repository-boundary","children":"Repository boundary"}]}],["$","li","end-to-end-flow",{"className":"toc-depth-2","children":["$","a",null,{"href":"#end-to-end-flow","children":"End-to-end flow"}]}],["$","li","measurement-path",{"className":"toc-depth-2","children":["$","a",null,{"href":"#measurement-path","children":"Measurement path"}]}],["$","li","projection-path",{"className":"toc-depth-2","children":["$","a",null,{"href":"#projection-path","children":"Projection path"}]}],["$","li","product-build-and-publication",{"className":"toc-depth-2","children":["$","a",null,{"href":"#product-build-and-publication","children":"Product build and publication"}]}],["$","li","which-files-answer-which-question",{"className":"toc-depth-2","children":["$","a",null,{"href":"#which-files-answer-which-question","children":"Which files answer which question"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$17"}}],"$L18"]}],"$L19"]}]]}]
+18:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/cross-league-rapm-translation/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Cross-league RAPM translation"}]]}],["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/daily-rapm-public-site/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Daily RAPM public site"}]]}]]}]
+19:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-quantitative-modeling/daily-rapm-public-site",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/daily-rapm-public-site/","children":"Daily RAPM public site"}]}],["$","li","basketball/nba-quantitative-modeling/rapm",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm/","children":"RAPM"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-quantitative-modeling/daily-rapm-public-site",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/daily-rapm-public-site/","children":"Daily RAPM public site"}]}],["$","li","basketball/nba-quantitative-modeling/rapm",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm/","children":"RAPM"}]}],["$","li","basketball/nba-quantitative-modeling/nba-player-forward-projection-model",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/nba-player-forward-projection-model/","children":"NBA player forward projection model"}]}],["$","li","basketball/nba-quantitative-modeling/rapm-evaluation-and-uncertainty",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm-evaluation-and-uncertainty/","children":"RAPM evaluation and uncertainty"}]}],["$","li","basketball/nba-quantitative-modeling/rapm-lineup-model",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm-lineup-model/","children":"RAPM lineup model"}]}],["$","li","basketball/nba-quantitative-modeling/rapm-regularization-and-identification",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm-regularization-and-identification/","children":"RAPM regularization and identification"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","analytics",{"children":"analytics"}],["$","li","rapm",{"children":"rapm"}],["$","li","software-architecture",{"children":"software-architecture"}]]}]]}]]}]
+14:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+11:null
+16:[["$","title","0",{"children":"Daily RAPM implementation map · Rome"}],["$","meta","1",{"name":"description","content":"The Daily RAPM system is a staged research pipeline: possession designs become daily league boards, translated player histories, forward ratings, team simulations, static exports, and finally a generated GitHub Pages checkout."}],["$","meta","2",{"name":"application-name","content":"Rome"}],["$","meta","3",{"name":"author","content":"Andrew Park"}],["$","meta","4",{"name":"keywords","content":"Rome,wiki,second brain,knowledge garden,research"}],["$","meta","5",{"name":"creator","content":"Andrew Park"}],["$","meta","6",{"name":"publisher","content":"Andrew Park"}],["$","meta","7",{"property":"og:title","content":"Daily RAPM implementation map"}],["$","meta","8",{"property":"og:description","content":"The Daily RAPM system is a staged research pipeline: possession designs become daily league boards, translated player histories, forward ratings, team simulations, static exports, and finally a generated GitHub Pages checkout."}],["$","meta","9",{"property":"og:type","content":"article"}],["$","meta","10",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","11",{"name":"twitter:title","content":"Rome — A Living Encyclopedia"}],["$","meta","12",{"name":"twitter:description","content":"Andrew Park's second brain, set in type."}],["$","meta","13",{"name":"twitter:image","content":"http://localhost:3000/og.png"}]]

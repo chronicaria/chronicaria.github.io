@@ -1,0 +1,416 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+d:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+e:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Houston Rockets 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"Authoritative prior source: , row , accessed July 9, 2026."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[12," min · ","2,563"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],"$L3","$L4","$L5","$L6","$L7"]}]]}],"$L8","$L9"]}]]}],null,"$La"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}]
+4:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+5:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+6:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+7:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+b:T5fbd,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>54.8</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>47.0-63.0, with p50 55.0</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>+2.552 pts/100, se_strength 2.371</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>98.7%</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_TOO_HIGH</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>-0.9 pts/100, judgmental</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>-2.6 wins, judgmental</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>52.2</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>58/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>Houston is a real West contender, but the 54.8-win prior is a little too optimistic because it stacks Kevin Durant age/availability, Fred VanVleet ACL return, half-court spacing, and crowded defense-first rotation assumptions with limited room for slippage.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<p>Required quoted prior fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mc_mean_wins</code></td>
+<td align="right">54.8</td>
+</tr>
+<tr>
+<td><code>p10_wins</code></td>
+<td align="right">47.0</td>
+</tr>
+<tr>
+<td><code>p50_wins</code></td>
+<td align="right">55.0</td>
+</tr>
+<tr>
+<td><code>p90_wins</code></td>
+<td align="right">63.0</td>
+</tr>
+<tr>
+<td><code>make_playoffs_prob</code></td>
+<td align="right">0.987</td>
+</tr>
+<tr>
+<td><code>strength</code></td>
+<td align="right">2.552</td>
+</tr>
+<tr>
+<td><code>se_strength</code></td>
+<td align="right">2.371</td>
+</tr>
+<tr>
+<td><code>n_cold_start</code></td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>The public JSON prior says Houston is a high-end Western playoff team: 54.8 mean wins, a 47.0-to-63.0 central band, +2.552 strength, and 98.7% playoff probability. This briefing treats those numbers as the only authoritative team-level prior.</p>
+<p>I did not use <code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code> for Houston's team-level wins, strength, playoff odds, or win band. I also avoid relying on it for player values here because this rerun is specifically correcting prior-source confusion. Rotation discussion below is based on the public/team roster context, the local depth chart CSV as non-authoritative role context, and public reporting.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>The local depth chart CSV, used only as non-authoritative role context, frames Houston's roster this way:</p>
+<table>
+<thead>
+<tr>
+<th>Starters</th>
+<th>Rotation</th>
+<th>Deep / fringe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fred VanVleet, Amen Thompson, Kevin Durant, Jabari Smith Jr., Alperen Sengun</td>
+<td>Clint Capela, Tari Eason, Bogdan Bogdanovic, Marcus Smart, Reed Sheppard</td>
+<td>Steven Adams, Jeff Green, Jae'Sean Tate, Isaiah Crawford, Tristen Newton, Aaron Holiday, Quadir Copeland, Bruce Thornton, JD Davison</td>
+</tr>
+</tbody>
+</table>
+<p>Source: <code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code>, HOU rows, accessed July 9, 2026. This is roster/depth context only, not a team prior.</p>
+<p>The most likely regular-season starting framework from public reporting is VanVleet, Amen Thompson, Jabari Smith Jr., Durant, and Sengun. The first bench layer is more matchup-dependent: Smart for defense and ball pressure, Bogdanovic for shooting, Eason for wing havoc/rebounding, Capela or Adams for size, and Sheppard for shooting/secondary handling.</p>
+<p>The minutes challenge is that Houston has many useful players but not all combinations solve the same problem. Smart, Amen, Eason, Capela, Adams, and Sengun can overwhelm teams physically, but several of those groupings squeeze spacing. Bogdanovic, VanVleet, Reed, Durant, and Jabari improve spacing, but those lineups can ask older or smaller guards to cover more ground. A 55-win mean assumes Udoka finds the right mix quickly and that the veteran health ledger cooperates.</p>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>The authoritative public JSON row does not expose team six-factor detail, so this section is a basketball style read rather than a model factor claim.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Read</th>
+<th>Model challenge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shot quality / spacing</td>
+<td>Durant, VanVleet, Bogdanovic, Jabari, and Reed give Houston enough shooting paths. Amen, Sengun, Smart, Capela, and Adams create real spacing tradeoffs.</td>
+<td>The offense may be less stable than a 54.8-win prior if VanVleet is not fully back or Bogdanovic is not healthy enough to close.</td>
+</tr>
+<tr>
+<td>Turnovers / organization</td>
+<td>VanVleet's return should stabilize late-clock possessions and lower turnover risk. Sengun also helps as a hub.</td>
+<td>ACL recovery could make VanVleet less able to bend defenses, leaving Sengun/Durant to create under pressure.</td>
+</tr>
+<tr>
+<td>Second chances</td>
+<td>Houston's size and Eason/Amen activity make offensive rebounding a real weapon.</td>
+<td>Rebounding-heavy looks can cost shooting, especially if two centers or multiple non-shooters share the floor.</td>
+</tr>
+<tr>
+<td>Defensive shot quality</td>
+<td>Udoka has multiple big, physical defenders and switchable pressure options.</td>
+<td>Smart/Amen/Eason lineups can be elite defensively, but closing units still need enough offense.</td>
+</tr>
+<tr>
+<td>Defensive turnovers</td>
+<td>Smart, Amen, Eason, and VanVleet can pressure the ball and passing lanes.</td>
+<td>Those same players may compress half-court spacing unless paired with enough shooting.</td>
+</tr>
+<tr>
+<td>Defensive rebounding</td>
+<td>Capela, Adams, Sengun, Jabari, Eason, and Amen create a strong glass profile.</td>
+<td>If Houston leans into smaller shooting groups, this edge can shrink.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>My stance is <code>MODEL_TOO_HIGH</code>, but only modestly. Houston should be forecast as a playoff team and plausible top-four West seed. The question is whether the mean should be 54.8 wins rather than closer to 52.</p>
+<p>The first mechanism is availability. Durant is still a premier shot-maker, but NBA.com lists him as a 37-year-old, 19-year veteran on the Rockets roster. The model can price age curves, but a 55-win team led by a late-career superstar has little margin if he misses time or slips defensively. VanVleet is the second hinge: NBA.com reported a torn right ACL in September 2025, and the Rockets' offensive structure asks him to return as both a spacer and organizer.</p>
+<p>The second mechanism is spacing. Houston's best defensive and rebounding combinations can include multiple non-elite shooters. Amen Thompson, Sengun, Smart, Capela, and Adams all bring real value, but if too many share the floor, opponents can shrink the court and force Durant into difficult isolations. Bogdanovic helps this directly, but NBA's roundup also described his previous season with the Clippers as injury-interrupted.</p>
+<p>The third mechanism is rotation compression. Marcus Smart, Bogdanovic, Tari Eason, Reed Sheppard, Clint Capela, Steven Adams, and Aaron Holiday cannot all be optimized at once behind the likely starters. That is good depth, but a 98.7% playoff probability and 54.8 wins assume the overlap produces optionality more than role friction.</p>
+<p>The fourth mechanism is playoff-style evidence. Houston was strong in 2025-26, but public records show a 52-30 team that lost a first-round series to the Lakers 4-2. Adding or returning useful players can improve the team, but the prior already asks Houston to exceed that 52-win baseline despite age/health and fit questions.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th align="right">Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The authoritative prior is very strong, not merely playoff-safe.</td>
+<td>Public JSON row: HOU 54.8 wins, 47.0/55.0/63.0 p10/p50/p90, 98.7% playoff probability, +2.552 strength, 2.371 se_strength, 3 cold-start players. Source: <code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>, accessed July 9, 2026.</td>
+<td>neutral</td>
+<td align="right">0.0 wins</td>
+<td align="right">100</td>
+</tr>
+<tr>
+<td>Houston's recent baseline supports contender status but not automatic 55-win certainty.</td>
+<td>Basketball-Reference lists the 2025-26 Rockets at 52-30, 5th in the West, 115.2 PPG, and 110.0 opponent PPG. Accessed July 9, 2026: <a href="https://www.basketball-reference.com/teams/HOU/2026.html" target="_blank" rel="noopener noreferrer">https://www.basketball-reference.com/teams/HOU/2026.html</a></td>
+<td>mixed</td>
+<td align="right">-0.4 wins</td>
+<td align="right">78</td>
+</tr>
+<tr>
+<td>The 2026 postseason ended in the first round, which keeps the ceiling case honest.</td>
+<td>NBA game notes say Houston lost the First Round series vs. the Lakers 4-2. Accessed July 9, 2026: <a href="https://www.nba.com/gamenotes/rockets.pdf" target="_blank" rel="noopener noreferrer">https://www.nba.com/gamenotes/rockets.pdf</a></td>
+<td>hurts</td>
+<td align="right">-0.4 wins</td>
+<td align="right">75</td>
+</tr>
+<tr>
+<td>Durant is a huge fit win but also an age/availability concentration point.</td>
+<td>NBA.com reported Durant and Capela to Houston in the July 2025 seven-team trade; NBA.com roster lists Durant as 37 with 19 years experience. Accessed July 9, 2026: <a href="https://www.nba.com/news/kevin-durant-joins-rockets-7-team-trade" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/kevin-durant-joins-rockets-7-team-trade</a> and <a href="https://www.nba.com/team/1610612745/rockets" target="_blank" rel="noopener noreferrer">https://www.nba.com/team/1610612745/rockets</a></td>
+<td>mixed</td>
+<td align="right">-0.6 wins</td>
+<td align="right">74</td>
+</tr>
+<tr>
+<td>VanVleet's return can lift the offense, but ACL recovery is a central uncertainty.</td>
+<td>NBA.com reported VanVleet tore his right ACL in September 2025 and could miss the 2025-26 season. Accessed July 9, 2026: <a href="https://www.nba.com/news/rockets-fred-vanvleet-tears-acl" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/rockets-fred-vanvleet-tears-acl</a></td>
+<td>hurts</td>
+<td align="right">-0.7 wins</td>
+<td align="right">82</td>
+</tr>
+<tr>
+<td>Smart adds defensive optionality, but not a clean spacing fix.</td>
+<td>NBA.com reported Smart agreed to a Rockets deal; NBA's offseason roundup listed 9.3 PPG, 3.0 APG, 2.8 RPG, and 1.4 SPG in 62 games. Accessed July 9, 2026: <a href="https://www.nba.com/news/marcus-smart-free-agency-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/marcus-smart-free-agency-2026</a> and <a href="https://www.nba.com/news/2026-nba-offseason-roundup" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-nba-offseason-roundup</a></td>
+<td>mixed</td>
+<td align="right">-0.2 wins</td>
+<td align="right">65</td>
+</tr>
+<tr>
+<td>Bogdanovic directly addresses shooting but carries health/role uncertainty.</td>
+<td>NBA.com reported Bogdanovic's one-year Rockets deal and noted his career 38.1% three-point shooting; the roundup says he battled injuries with the Clippers. Accessed July 9, 2026: <a href="https://www.nba.com/news/bogdan-bogdanovic-rockets-free-agency" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/bogdan-bogdanovic-rockets-free-agency</a> and <a href="https://www.nba.com/news/2026-nba-offseason-roundup" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-nba-offseason-roundup</a></td>
+<td>mixed</td>
+<td align="right">+0.3 wins</td>
+<td align="right">66</td>
+</tr>
+<tr>
+<td>Houston's current offseason context includes both additions and departures.</td>
+<td>NBA offseason tracker lists Bogdanovic and Smart additions, Tari Eason re-signing, Dorian Finney-Smith departure by trade, and Josh Okogie departure reported by ESPN. Accessed July 9, 2026: <a href="https://www.nba.com/news/nba-offseason-deals-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nba-offseason-deals-2026</a></td>
+<td>mixed</td>
+<td align="right">-0.1 wins</td>
+<td align="right">68</td>
+</tr>
+<tr>
+<td>Public beat reporting sees many lineup options but also confirms the likely starting five and the central spacing/role questions.</td>
+<td>Houston Chronicle projects VanVleet, Amen, Jabari, Durant, Sengun and discusses double-big, Smart/Thompson/Eason, and Sengun/Bogdanovic lineup ideas. Accessed July 9, 2026: <a href="https://www.houstonchronicle.com/sports/rockets/article/houston-new-lineups-marcus-smart-fred-vanvleet-22334534.php" target="_blank" rel="noopener noreferrer">https://www.houstonchronicle.com/sports/rockets/article/houston-new-lineups-marcus-smart-fred-vanvleet-22334534.php</a></td>
+<td>mixed</td>
+<td align="right">-0.5 wins</td>
+<td align="right">70</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Role/value question</th>
+<th>Concern or upside</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kevin Durant</td>
+<td>Offensive ceiling raiser and likely late-game hub.</td>
+<td>Still elite, but age-37/38 season increases availability and defensive-mobility downside.</td>
+<td>If Durant misses time or slips from superstar efficiency, Houston's half-court offense loses its cleanest separator.</td>
+</tr>
+<tr>
+<td>Fred VanVleet</td>
+<td>Likely starting point guard and spacing/turnover stabilizer.</td>
+<td>Returning from a torn right ACL; burst and lateral defense may lag even if cleared.</td>
+<td>Houston's 55-win case depends on VanVleet restoring organization without needing a long ramp-up.</td>
+</tr>
+<tr>
+<td>Amen Thompson</td>
+<td>Starter-level defensive engine and transition/rim-pressure weapon.</td>
+<td>Development upside is real; half-court spacing remains the swing skill.</td>
+<td>If Amen becomes easier to fit late in games, model may be right; if defenses ignore him, the offense tightens.</td>
+</tr>
+<tr>
+<td>Alperen Sengun</td>
+<td>Starting center / offensive hub.</td>
+<td>Passing and interior scoring help; playoff-style spacing and rim-protection matchups remain questions.</td>
+<td>Houston needs Sengun to anchor offense without forcing too many non-shooter lineups.</td>
+</tr>
+<tr>
+<td>Jabari Smith Jr.</td>
+<td>Starting forward and connective spacer/defender.</td>
+<td>Cleanest fit among young forwards, but needs high-level shooting/defense to hold lineups together.</td>
+<td>Jabari is the pressure valve when Amen/Sengun/Smart lineups need space.</td>
+</tr>
+<tr>
+<td>Marcus Smart</td>
+<td>Defensive guard/wing option and Udoka familiarity piece.</td>
+<td>Strong defender, but not a high-gravity shooter; role may be more matchup-specific than starter-level.</td>
+<td>If Smart plays heavy minutes with Amen/Sengun, spacing can become a tax.</td>
+</tr>
+<tr>
+<td>Bogdan Bogdanovic</td>
+<td>Bench shooter and movement spacer.</td>
+<td>Career shooting helps a lot; recent injury-interrupted season makes minutes uncertain.</td>
+<td>He is one of the few players who directly fixes Houston's shooting geometry.</td>
+</tr>
+<tr>
+<td>Tari Eason</td>
+<td>Defensive/rebounding wing, likely important bench closer.</td>
+<td>High-energy value is clear; shooting consistency decides closing viability.</td>
+<td>Eason can swing lineups from good to suffocating if opponents still guard him.</td>
+</tr>
+<tr>
+<td>Clint Capela</td>
+<td>Rotation center and rim/rebound specialist.</td>
+<td>Useful regular-season depth, but overlaps with Sengun/Adams and adds no spacing.</td>
+<td>Center depth raises the floor but can clutter optimal playoff-style units.</td>
+</tr>
+<tr>
+<td>Steven Adams</td>
+<td>Deep/rotation matchup big.</td>
+<td>Physical screening and rebounding are useful; age/availability and spacing make him situational.</td>
+<td>If Adams is needed nightly, Houston's offense may lose flexibility.</td>
+</tr>
+<tr>
+<td>Reed Sheppard</td>
+<td>Young guard/shooter development swing.</td>
+<td>If he earns trust, he solves spacing and backup creation; if not, guard depth relies on older/defense-first options.</td>
+<td>Reed's development is a clean path to proving my downgrade too pessimistic.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>I am applying a judgmental adjustment of -0.9 points per 100 and -2.6 wins, moving Houston from 54.8 to 52.2 wins. This is not a new model output; it is a research-layer challenge to the public prior.</p>
+<p>The rough accounting:</p>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th align="right">Win effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Durant age/availability concentration</td>
+<td align="right">-0.7</td>
+</tr>
+<tr>
+<td>VanVleet ACL return and early-season ramp risk</td>
+<td align="right">-0.8</td>
+</tr>
+<tr>
+<td>Spacing friction in best defensive/rebounding lineups</td>
+<td align="right">-0.6</td>
+</tr>
+<tr>
+<td>Rotation compression among Smart/Bogdanovic/Eason/Reed/Capela/Adams</td>
+<td align="right">-0.4</td>
+</tr>
+<tr>
+<td>Strong team baseline, Udoka defense, and added shooting/optionality</td>
+<td align="right">+0.7</td>
+</tr>
+<tr>
+<td>Net judgmental delta</td>
+<td align="right">-2.6</td>
+</tr>
+</tbody>
+</table>
+<p>The downgrade is deliberately modest. A 52.2-win adjusted view still has Houston as a strong playoff team. The argument is that the 54.8-win mean gives too much benefit of the doubt to health, age, and fit all at once.</p>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest argument against <code>MODEL_TOO_HIGH</code> is that the Rockets may simply be deeper and cleaner than my risk framing admits. Houston won 52 games in 2025-26, has Durant as an elite shot-maker, gets VanVleet back to organize the offense, and adds Bogdanovic's shooting plus Smart's defensive pressure. Udoka has already built a physical, high-floor identity, and the West behind Oklahoma City may leave room for Houston to pile up regular-season wins even if the playoff fit is imperfect.</p>
+<p>Amen Thompson could also make this whole downgrade too cautious. If his shooting, passing, or off-ball cutting improves enough that defenses cannot shrink the floor, Houston's best defensive groups become much easier to close with. Sengun could benefit from VanVleet and Bogdanovic spacing, Jabari could settle into an ideal low-maintenance role, and Eason could give them another closing-caliber wing. In that world, 54.8 wins and a top-two West projection are fully defensible.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>A clean training-camp report that VanVleet is fully cleared without workload limits would reduce the downgrade.</li>
+<li>Evidence that Bogdanovic is healthy enough for 20-plus reliable minutes would improve the spacing case.</li>
+<li>Amen Thompson showing credible catch-and-shoot or short-roll growth would move the stance toward <code>MODEL_ABOUT_RIGHT</code>.</li>
+<li>A preseason rotation that staggers Smart, Amen, Sengun, Capela, and Adams cleanly would lower the spacing concern.</li>
+<li>Durant being managed conservatively in preseason but moving well would increase confidence in the 55-win prior.</li>
+<li>Reed Sheppard earning a stable rotation role would make Houston's guard/spacing depth look much more robust.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<ul>
+<li>The only authoritative team-level prior used here is <code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>, row <code>franchise == "HOU"</code>, with <code>mc_mean_wins = 54.8</code>, <code>p10_wins = 47.0</code>, <code>p50_wins = 55.0</code>, <code>p90_wins = 63.0</code>, <code>make_playoffs_prob = 0.987</code>, <code>strength = 2.552</code>, <code>se_strength = 2.371</code>, and <code>n_cold_start = 3</code>.</li>
+<li>I did not use <code>projection_2026_27_teams.json</code> for Houston team-level prior fields. To avoid the prior-source confusion that caused the failed verification, I also do not rely on its player-win table in this revision.</li>
+<li>The local depth chart CSV is used only as non-authoritative roster/role context and may lag final camp roles.</li>
+<li>Public roster pages and offseason trackers are July 2026 artifacts and can lag official transaction processing.</li>
+<li>Several core claims are inherently uncertain until camp: VanVleet's post-ACL movement, Durant's workload plan, Bogdanovic's availability, and whether Udoka closes with shooting or defense.</li>
+<li>This is a mechanism-based research memo, not a replacement projection.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<p>Local/model sources:</p>
+<ul>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>, row <code>franchise == "HOU"</code>; accessed July 9, 2026. Authoritative prior for <code>mc_mean_wins</code>, <code>p10_wins</code>, <code>p50_wins</code>, <code>p90_wins</code>, <code>make_playoffs_prob</code>, <code>strength</code>, <code>se_strength</code>, and <code>n_cold_start</code>.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code>, HOU rows; accessed July 9, 2026. Non-authoritative roster/depth context only.</li>
+<li><code>Rome/Basketball/NBA multi-agent forecasting company/Boss prompt for 30 NBA team research agents.md</code>; accessed July 9, 2026. Briefing template and challenge rules.</li>
+</ul>
+<p>External public/free sources:</p>
+<ul>
+<li>Basketball-Reference 2025-26 Houston Rockets page, accessed July 9, 2026: <a href="https://www.basketball-reference.com/teams/HOU/2026.html" target="_blank" rel="noopener noreferrer">https://www.basketball-reference.com/teams/HOU/2026.html</a></li>
+<li>NBA.com Rockets game notes PDF, accessed July 9, 2026: <a href="https://www.nba.com/gamenotes/rockets.pdf" target="_blank" rel="noopener noreferrer">https://www.nba.com/gamenotes/rockets.pdf</a></li>
+<li>NBA.com, "Kevin Durant traded to Rockets as part of historic 7-team deal", accessed July 9, 2026: <a href="https://www.nba.com/news/kevin-durant-joins-rockets-7-team-trade" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/kevin-durant-joins-rockets-7-team-trade</a></li>
+<li>NBA.com Houston Rockets team page/current roster, accessed July 9, 2026: <a href="https://www.nba.com/team/1610612745/rockets" target="_blank" rel="noopener noreferrer">https://www.nba.com/team/1610612745/rockets</a></li>
+<li>NBA.com, "Rockets' Fred VanVleet reportedly tears ACL, could miss entire season", accessed July 9, 2026: <a href="https://www.nba.com/news/rockets-fred-vanvleet-tears-acl" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/rockets-fred-vanvleet-tears-acl</a></li>
+<li>NBA.com, "Rockets, Marcus Smart reportedly agree to 2-year deal", accessed July 9, 2026: <a href="https://www.nba.com/news/marcus-smart-free-agency-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/marcus-smart-free-agency-2026</a></li>
+<li>NBA.com, "Bogdan Bogdanovic signs with Rockets on 1-year deal", accessed July 9, 2026: <a href="https://www.nba.com/news/bogdan-bogdanovic-rockets-free-agency" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/bogdan-bogdanovic-rockets-free-agency</a></li>
+<li>NBA.com, "NBA Free Agency Roundup: Recap all the moves from the first week", accessed July 9, 2026: <a href="https://www.nba.com/news/2026-nba-offseason-roundup" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-nba-offseason-roundup</a></li>
+<li>NBA.com, "NBA Offseason: Every free agency deal, extension &#x26; trade for all 30 teams", accessed July 9, 2026: <a href="https://www.nba.com/news/nba-offseason-deals-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nba-offseason-deals-2026</a></li>
+<li>Houston Chronicle, "Houston Rockets: Interesting lineup combinations for next season", accessed July 9, 2026: <a href="https://www.houstonchronicle.com/sports/rockets/article/houston-new-lineups-marcus-smart-fred-vanvleet-22334534.php" target="_blank" rel="noopener noreferrer">https://www.houstonchronicle.com/sports/rockets/article/houston-new-lineups-marcus-smart-fred-vanvleet-22334534.php</a></li>
+</ul>8:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$b"}}],"$Lc"]}]
+9:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","p",null,{"className":"rail-empty","children":"Nothing points here yet."}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-team-briefings-2026-27/00-cross-team-findings",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-cross-team-findings/","children":"2026-27 NBA cross-team findings"}]}],["$","li","basketball/nba-team-briefings-2026-27/00-index",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-index/","children":"2026-27 NBA team briefing index"}]}],["$","li","basketball/nba-team-briefings-2026-27/atl-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/atl-2026-27-briefing/","children":"Atlanta Hawks 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bos-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","children":"BOS 2026-27 research briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing/","children":"Brooklyn Nets 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/cha-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","children":"Charlotte Hornets 2026-27 Research Briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+a:["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]
+c:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/gsw-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Golden State Warriors 2026-27 Research Briefing"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/ind-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Indiana Pacers 2026-27 Research Briefing"}]]}]]}]
+f:null

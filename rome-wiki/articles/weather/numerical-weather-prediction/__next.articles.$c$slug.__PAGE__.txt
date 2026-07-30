@@ -1,0 +1,81 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+7:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+8:"$Sreact.suspense"
+3:T18e8,<h2 id="what-the-model-actually-solves">What the model actually solves</h2>
+<p>A general-circulation forecast model steps forward a coupled set of PDEs derived from conservation laws:</p>
+<ul>
+<li><strong>Momentum</strong> — Navier–Stokes for a compressible fluid on a rotating sphere (gives winds).</li>
+<li><strong>Mass</strong> — continuity, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>d</mi><mi>ρ</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>+</mo><mi>ρ</mi><mtext> </mtext><mi mathvariant="normal">∇</mi><mo>⋅</mo><mi mathvariant="bold">V</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\frac{d\rho}{dt} + \rho\,\nabla\cdot\mathbf{V} = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2772em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">ρ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ρ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">∇</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf" style="margin-right:0.016em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>.</li>
+<li><strong>Energy</strong> — first law of thermodynamics (gives temperature).</li>
+<li><strong>Moisture</strong> — a water-vapour continuity equation (gives clouds, precip).</li>
+</ul>
+<p>Classically this set is called the <strong>primitive equations</strong>, which assume hydrostatic balance in the vertical. That label is now slightly dated: the leading operational cores (ECMWF IFS, ICON, GFS-FV3, Met Office UM) are <strong>non-hydrostatic</strong>, so they go beyond the classical primitive set. The continuous equations are discretized onto a grid (or spectral basis) and marched forward in timesteps.</p>
+<h2 id="where-the-initial-state-comes-from-data-assimilation">Where the initial state comes from: data assimilation</h2>
+<p>A forecast is only as good as its starting point. <strong>Data assimilation</strong> blends a short model forecast (the "background") with fresh observations to produce the best estimate of the current atmosphere. ECMWF uses <strong>4D-Var</strong>: it receives ~800 million observations/day and assimilates ~60 million quality-controlled ones, the vast majority from <strong>satellites</strong> (~90 instruments). This is the step whose residual error seeds all later <a href="/rome-wiki/articles/weather/atmospheric-predictability-limit/" class="wiki-link">chaotic error growth</a>.</p>
+<h2 id="major-global-models-20242026">Major global models (2024–2026)</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Centre</th>
+<th>Grid spacing</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IFS / HRES</strong></td>
+<td>ECMWF (Europe)</td>
+<td>~9 km</td>
+<td>Generally the most accurate global model</td>
+</tr>
+<tr>
+<td><strong>GFS</strong></td>
+<td>NOAA/NCEP (US)</td>
+<td>~13 km</td>
+<td>FV3 finite-volume cubed-sphere core</td>
+</tr>
+<tr>
+<td><strong>ICON</strong></td>
+<td>DWD (Germany)</td>
+<td>~13 km</td>
+<td>Icosahedral non-hydrostatic</td>
+</tr>
+<tr>
+<td><strong>UM</strong></td>
+<td>Met Office (UK)</td>
+<td>~10 km</td>
+<td>Unified Model</td>
+</tr>
+<tr>
+<td><strong>GEM/GDPS</strong></td>
+<td>ECCC (Canada)</td>
+<td>~15 km</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>ARPEGE</strong></td>
+<td>Météo-France</td>
+<td>~5 km → 24 km</td>
+<td>Stretched grid, finest over France</td>
+</tr>
+</tbody>
+</table>
+<p>ECMWF's IFS also drives the <a href="/rome-wiki/articles/weather/ensemble-forecasting/" class="wiki-link">ensemble (ENS)</a>, now at the same ~9 km resolution. Machine-learning emulators (GraphCast, Pangu-Weather, ECMWF's AIFS) now match or beat these physics models on some <a href="/rome-wiki/articles/weather/forecast-skill/" class="wiki-link">skill scores</a> at a fraction of the compute — an active shift as of 2026.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li>P. Bauer, A. Thorpe, G. Brunet (2015), "The quiet revolution of numerical weather prediction," <em>Nature</em> 525:47–55.</li>
+<li>ECMWF, "Key facts and figures" and IFS documentation (resolutions, 4D-Var obs counts).</li>
+<li>NOAA/GFDL, FV3 dynamical core; DWD ICON; Met Office UM; ECCC GDPS; Météo-France ARPEGE model docs.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>How exactly does 4D-Var propagate observation information backward in the assimilation window?</li>
+<li>Do the ML emulators (GraphCast/AIFS) learn the same dynamics, or shortcuts that break in novel regimes?</li>
+<li>Where does the hydrostatic approximation actually fail enough to matter at ~10 km?</li>
+</ul>0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/weather/","children":"Weather"}],[]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Weather"]}],["$","h1",null,{"children":"Numerical weather prediction"}],["$","p",null,{"className":"article-deck","children":"Weather forecasts are produced by integrating the governing fluid equations of the atmosphere forward in time on a 3D grid, starting from an observed initial state."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 6, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[2," min · ","423"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","what-the-model-actually-solves",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-the-model-actually-solves","children":"What the model actually solves"}]}],["$","li","where-the-initial-state-comes-from-data-assimilation",{"className":"toc-depth-2","children":["$","a",null,{"href":"#where-the-initial-state-comes-from-data-assimilation","children":"Where the initial state comes from: data assimilation"}]}],["$","li","major-global-models-20242026",{"className":"toc-depth-2","children":["$","a",null,{"href":"#major-global-models-20242026","children":"Major global models (2024–2026)"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","what-the-model-actually-solves",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-the-model-actually-solves","children":"What the model actually solves"}]}],["$","li","where-the-initial-state-comes-from-data-assimilation",{"className":"toc-depth-2","children":["$","a",null,{"href":"#where-the-initial-state-comes-from-data-assimilation","children":"Where the initial state comes from: data assimilation"}]}],["$","li","major-global-models-20242026",{"className":"toc-depth-2","children":["$","a",null,{"href":"#major-global-models-20242026","children":"Major global models (2024–2026)"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$3"}}],"$L4"]}],"$L5"]}]]}],null,"$L6"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+4:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/weather/forecast-skill/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Forecast skill"}]]}],["$","$L2",null,{"href":"/articles/weather/nyc-weather-dashboard/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"NYC weather dashboard"}]]}]]}]
+5:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","mathematics/applied-pdes/data-assimilation-as-an-inverse-problem",{"children":["$","$L2",null,{"href":"/articles/mathematics/applied-pdes/data-assimilation-as-an-inverse-problem/","children":"Data assimilation as an inverse problem"}]}],["$","li","mathematics/mathematics",{"children":["$","$L2",null,{"href":"/articles/mathematics/mathematics/","children":"Mathematics"}]}],["$","li","mathematics/applied-pdes/primitive-equations-of-the-atmosphere",{"children":["$","$L2",null,{"href":"/articles/mathematics/applied-pdes/primitive-equations-of-the-atmosphere/","children":"Primitive equations of the atmosphere"}]}],["$","li","weather/weather-prediction-moc",{"children":["$","$L2",null,{"href":"/articles/weather/weather-prediction-moc/","children":"Weather prediction (MOC)"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","weather/atmospheric-predictability-limit",{"children":["$","$L2",null,{"href":"/articles/weather/atmospheric-predictability-limit/","children":"Atmospheric predictability limit"}]}],["$","li","weather/ensemble-forecasting",{"children":["$","$L2",null,{"href":"/articles/weather/ensemble-forecasting/","children":"Ensemble forecasting"}]}],["$","li","weather/forecast-skill",{"children":["$","$L2",null,{"href":"/articles/weather/forecast-skill/","children":"Forecast skill"}]}],["$","li","weather/weather-prediction-moc",{"children":["$","$L2",null,{"href":"/articles/weather/weather-prediction-moc/","children":"Weather prediction (MOC)"}]}],["$","li","mathematics/applied-pdes/data-assimilation-as-an-inverse-problem",{"children":["$","$L2",null,{"href":"/articles/mathematics/applied-pdes/data-assimilation-as-an-inverse-problem/","children":"Data assimilation as an inverse problem"}]}],["$","li","mathematics/mathematics",{"children":["$","$L2",null,{"href":"/articles/mathematics/mathematics/","children":"Mathematics"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","weather",{"children":"weather"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","physics",{"children":"physics"}],["$","li","modeling",{"children":"modeling"}]]}]]}]]}]
+6:["$","$L7",null,{"children":["$","$8",null,{"name":"Next.MetadataOutlet","children":"$@9"}]}]
+9:null

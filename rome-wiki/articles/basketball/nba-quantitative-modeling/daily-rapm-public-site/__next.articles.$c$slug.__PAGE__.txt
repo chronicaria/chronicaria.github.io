@@ -1,0 +1,95 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+7:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+8:"$Sreact.suspense"
+3:T1a51,<p>Public URL: <a href="https://andrewjparkus.github.io" target="_blank" rel="noopener noreferrer">andrewjparkus.github.io</a></p>
+<h2 id="what-the-site-exposes">What the site exposes</h2>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Main question</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Explorer</td>
+<td>How has this player's six-factor estimate moved across his career and leagues?</td>
+<td>descriptive, as-of-game-day curves with pure/prior/box modes</td>
+</tr>
+<tr>
+<td>Tables</td>
+<td>Who leads each factor and net on the common scale?</td>
+<td>descriptive sortable snapshots</td>
+</tr>
+<tr>
+<td>Teams</td>
+<td>How did roster-level RAPM and factor contributions look?</td>
+<td>measured team context, separate from the forward season</td>
+</tr>
+<tr>
+<td>2026-27</td>
+<td>What does the current roster model expect next season?</td>
+<td>explicit forward win distributions and playoff/title probabilities</td>
+</tr>
+<tr>
+<td>Draft</td>
+<td>How does feeder-league evidence translate at draft time?</td>
+<td>wide-interval NBA-equivalent comparison, not certainty</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>What does the method claim, and what are its limits?</td>
+<td>human-readable methodology and accuracy discussion</td>
+</tr>
+<tr>
+<td>Static API</td>
+<td>How can another tool consume the current outputs?</td>
+<td>versioned JSON files and manifest</td>
+</tr>
+</tbody>
+</table>
+<p>The central communication rule is the same as in <a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm/" class="wiki-link">RAPM</a>: measured and projected pages must remain visually and linguistically distinct. A daily curve records what the model estimated from evidence available by a date. An orange trajectory or 2026-27 win distribution is a forecast built on top of that curve.</p>
+<h2 id="generated-not-authored-in-place">Generated, not authored in place</h2>
+<p>The public repository is downstream of <code>unified-rapm</code>. Exporters write player series, tables, team data, projections, accuracy, and API files; the build copies the site shell and clears stale output. Andrew then reviews the staged diff and decides whether to commit and push.</p>
+<p>This arrangement has two benefits:</p>
+<ul>
+<li>public data can be reproduced from the model artifacts rather than manually edited;</li>
+<li>owner review remains a publication gate for claims, large diffs, and accidental private material.</li>
+</ul>
+<p>It also creates a sharp hazard: a hand edit in <code>andrewjparkus.github.io</code> will be overwritten by the next build. The durable fix for a page belongs in the corresponding source template or exporter recorded in <a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/daily-rapm-implementation-map/" class="wiki-link">Daily RAPM implementation map</a>.</p>
+<h2 id="public-explanation-versus-executable-truth">Public explanation versus executable truth</h2>
+<p>The site is unusually candid about weaknesses: external EPM beats the internal decomposition on the frozen preseason benchmark; game evaluation uses realized minutes; non-overlapping forward correlation is far below the overlap-inflated headline; cross-league jumps are weakly identified; and player standard errors approximate rather than fully invert the ridge geometry.</p>
+<p>That honesty must include documentation drift. At the inspected build, <code>model.html</code> says projected net is never modeled directly. The current forward code and <code>projection_2026_27.json</code> instead identify the production model as <strong>“xgboost (single-net aggregate re-decomposed to sum6) + aging fallback.”</strong> The public arithmetic remains coherent because the aggregate forecast is redistributed into the six factors, but the method prose should be refreshed. This is a documentation mismatch, not a reason to erase the more recent implementation from Rome.</p>
+<p>There are similar reasons to prefer artifact-backed prose:</p>
+<ul>
+<li>a simulation count can change;</li>
+<li>a minutes contract can be promoted or reverted;</li>
+<li>an ablation can leave some feature cells dormant;</li>
+<li>a ledger can refuse to render after a reproducibility drift;</li>
+<li>a generated page can lag a source-code correction.</li>
+</ul>
+<p>A future model manifest should let each prose claim point to the exact build contract it describes.</p>
+<h2 id="relationship-to-rome">Relationship to Rome</h2>
+<p>Rome should retain the conceptual map and durable lessons:</p>
+<ul>
+<li><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm-lineup-model/" class="wiki-link">RAPM lineup model</a> for the estimator;</li>
+<li><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/six-factor-rapm-decomposition/" class="wiki-link">Six-factor RAPM decomposition</a> for interpretation;</li>
+<li><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/cross-league-rapm-translation/" class="wiki-link">Cross-league RAPM translation</a> for league comparison;</li>
+<li><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/nba-player-forward-projection-model/" class="wiki-link">NBA player forward projection model</a> and <a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/nba-team-season-projection-model/" class="wiki-link">NBA team season projection model</a> for forecasting;</li>
+<li><a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm-evaluation-and-uncertainty/" class="wiki-link">RAPM evaluation and uncertainty</a> for claims and caveats;</li>
+<li><a href="/rome-wiki/articles/basketball/nba-multi-agent-forecasting-company/current-rapm-decomp-csv-export/" class="wiki-link">Current RAPM decomp CSV export</a> for a specific data delivery.</li>
+</ul>
+<p>The GitHub Pages repository remains the display artifact. Rome should not duplicate thousands of generated player JSON files or pretend a point-in-time ranking is evergreen knowledge. It should explain how to read the product, record important version changes, and connect the model to Andrew's broader <a href="/rome-wiki/wanted/nba-multi-agent-forecasting-company/" class="wiki-link wiki-link-missing" title="Unwritten article — a research thread waiting to be followed">NBA multi-agent forecasting company +</a>.</p>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>How should the site display model-version and data-as-of information without cluttering every page?</li>
+<li>Which public methodology claims can be generated directly from artifact metadata to prevent drift?</li>
+<li>Should the static API expose uncertainty provenance and fallback flags as prominently as point estimates?</li>
+<li>What privacy and licensing review is required before expanding the public data surface?</li>
+</ul>0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA quantitative modeling",{"children":"NBA quantitative modeling"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Daily RAPM public site"}],["$","p",null,{"className":"article-deck","children":"The Daily RAPM GitHub Pages site is the generated public interface for Andrew's measured player histories, league tables, team views, draft translations, forward projections, methods, and static data exports."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[4," min · ","680"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","what-the-site-exposes",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-the-site-exposes","children":"What the site exposes"}]}],["$","li","generated-not-authored-in-place",{"className":"toc-depth-2","children":["$","a",null,{"href":"#generated-not-authored-in-place","children":"Generated, not authored in place"}]}],["$","li","public-explanation-versus-executable-truth",{"className":"toc-depth-2","children":["$","a",null,{"href":"#public-explanation-versus-executable-truth","children":"Public explanation versus executable truth"}]}],["$","li","relationship-to-rome",{"className":"toc-depth-2","children":["$","a",null,{"href":"#relationship-to-rome","children":"Relationship to Rome"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","what-the-site-exposes",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-the-site-exposes","children":"What the site exposes"}]}],["$","li","generated-not-authored-in-place",{"className":"toc-depth-2","children":["$","a",null,{"href":"#generated-not-authored-in-place","children":"Generated, not authored in place"}]}],["$","li","public-explanation-versus-executable-truth",{"className":"toc-depth-2","children":["$","a",null,{"href":"#public-explanation-versus-executable-truth","children":"Public explanation versus executable truth"}]}],["$","li","relationship-to-rome",{"className":"toc-depth-2","children":["$","a",null,{"href":"#relationship-to-rome","children":"Relationship to Rome"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$3"}}],"$L4"]}],"$L5"]}]]}],null,"$L6"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+4:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/daily-rapm-implementation-map/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Daily RAPM implementation map"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/nba-player-forward-projection-model/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"NBA player forward projection model"}]]}]]}]
+5:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-quantitative-modeling/daily-rapm-implementation-map",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/daily-rapm-implementation-map/","children":"Daily RAPM implementation map"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","children":"NBA multi-agent forecasting company"}]}],["$","li","basketball/nba-quantitative-modeling/rapm",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm/","children":"RAPM"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-quantitative-modeling/daily-rapm-implementation-map",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/daily-rapm-implementation-map/","children":"Daily RAPM implementation map"}]}],["$","li","basketball/nba-quantitative-modeling/rapm",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm/","children":"RAPM"}]}],["$","li","basketball/nba-quantitative-modeling/nba-player-forward-projection-model",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/nba-player-forward-projection-model/","children":"NBA player forward projection model"}]}],["$","li","basketball/nba-quantitative-modeling/rapm-evaluation-and-uncertainty",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm-evaluation-and-uncertainty/","children":"RAPM evaluation and uncertainty"}]}],["$","li","basketball/nba-quantitative-modeling/rapm-lineup-model",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm-lineup-model/","children":"RAPM lineup model"}]}],["$","li","basketball/nba-quantitative-modeling/six-factor-rapm-decomposition",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/six-factor-rapm-decomposition/","children":"Six-factor RAPM decomposition"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","analytics",{"children":"analytics"}],["$","li","rapm",{"children":"rapm"}],["$","li","github-pages",{"children":"github-pages"}]]}]]}]]}]
+6:["$","$L7",null,{"children":["$","$8",null,{"name":"Next.MetadataOutlet","children":"$@9"}]}]
+9:null

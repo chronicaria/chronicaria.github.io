@@ -1,7 +1,7 @@
-/* sw.js — minimal offline cache for andrewjparkus.github.io */
+/* sw.js — minimal offline cache for chronicaria.github.io */
 "use strict";
 
-const VERSION = "broadsheet-v2";
+const VERSION = "broadsheet-v3";
 
 const PRECACHE = [
   "/",

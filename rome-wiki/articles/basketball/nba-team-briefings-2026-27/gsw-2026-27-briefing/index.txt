@@ -1,0 +1,548 @@
+1:"$Sreact.fragment"
+2:I[70359,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ReadingProgress"]
+3:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+4:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchTrigger"]
+5:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchExperience"]
+6:I[39756,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+7:I[37457,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+c:I[68027,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default",1]
+:HL["/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","style"]
+:HL["/rome-wiki/_next/static/media/5f402bd2d8eef81a-s.p.16whm0euli40m.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/9433d1a810498265-s.p.0h26ys03~gfbk.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"P":null,"c":["","articles","basketball","nba-team-briefings-2026-27","gsw-2026-27-briefing",""],"q":"","i":false,"f":[[["",{"children":["articles",{"children":[["slug","basketball/nba-team-briefings-2026-27/gsw-2026-27-briefing","c",null],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",16],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/rome-wiki/_next/static/chunks/14kbu79734gwo.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable newsreader_dccbc19-module__XM85IG__variable","children":[["$","a",null,{"href":"#main-content","className":"skip-link","children":"Skip to the article"}],["$","$L2",null,{}],["$","header",null,{"className":"site-header","children":[["$","div",null,{"className":"utility-strip","children":[["$","span",null,{"children":"Established 2026"}],["$","span",null,{"className":"utility-center","children":"A living external brain"}],["$","span",null,{"children":[980," articles · ","Jul 10, 2026"]}]]}],["$","div",null,{"className":"navigation-row","children":[["$","$L3",null,{"href":"/","className":"small-wordmark","aria-label":"Rome front page","children":"Rome"}],["$","nav",null,{"className":"primary-nav","aria-label":"Primary navigation","children":[["$","$L3",null,{"href":"/#reading-rooms","children":"Reading rooms"}],["$","$L3",null,{"href":"/#universe-map","children":"Map"}],["$","$L3",null,{"href":"/#updates","children":"Updates"}],["$","$L3",null,{"href":"/about/","children":"About"}]]}],["$","$L4",null,{}]]}],["$","nav",null,{"className":"topic-rail","aria-label":"Reading rooms","children":[["$","$L3","AI",{"href":"/topics/ai/","children":"AI"}],["$","$L3","Basketball",{"href":"/topics/basketball/","children":"Basketball"}],["$","$L3","Classical Music",{"href":"/topics/classical-music/","children":"Classical Music"}],["$","$L3","Crypto",{"href":"/topics/crypto/","children":"Crypto"}],["$","$L3","History",{"href":"/topics/history/","children":"History"}],["$","$L3","Investing",{"href":"/topics/investing/","children":"Investing"}],["$","$L3","Markets",{"href":"/topics/markets/","children":"Markets"}],["$","$L3","Mathematics",{"href":"/topics/mathematics/","children":"Mathematics"}],["$","$L3","Piano",{"href":"/topics/piano/","children":"Piano"}],["$","$L3","Politics",{"href":"/topics/politics/","children":"Politics"}],["$","$L3","Sports",{"href":"/topics/sports/","children":"Sports"}],["$","$L3","String Theory",{"href":"/topics/string-theory/","children":"String Theory"}],["$","$L3","Weather",{"href":"/topics/weather/","children":"Weather"}]]}]]}],["$","$L5",null,{}],["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main-content","className":"not-found-page page-shell narrow-page","children":[["$","p",null,{"className":"eyebrow","children":"404 · End of the footpath"}],["$","h1",null,{"children":"This page has not entered Rome yet."}],["$","p",null,{"children":["Open search with ",["$","kbd",null,{"children":"⌘ K"}],", explore the universe map, or return to the front page and follow another link."]}],["$","$L3",null,{"href":"/","className":"button-link","children":"Return to Rome"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","footer",null,{"className":"site-footer","children":[["$","div",null,{"children":[["$","$L3",null,{"href":"/","className":"footer-wordmark","children":"Rome"}],["$","p",null,{"children":"Andrew Park's second brain, set in type."}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"This edition"}],["$","p",null,{"children":[980," articles across ",16," reading rooms, with"," ",431," open research threads."]}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Ownership & provenance"}],["$","p",null,{"children":"Rome belongs to Andrew Park. Every article also carries its authoring source."}]]}],["$","div",null,{"className":"footer-links","children":[["$","$L3",null,{"href":"/about/","children":"About Rome"}],["$","$L3",null,{"href":"/#universe-map","children":"Explore the map"}]]}]]}]]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["$L8",{"children":["$L9",{},null,false,null]},null,false,"$@a"]},null,false,"$@a"]},null,false,null],"$Lb",false]],"m":"$undefined","G":["$c",["$Ld"]],"S":true,"h":null,"s":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"X6ZOd3MQP6S0cUC6FLNdS"}
+f:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+10:"$Sreact.suspense"
+13:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ViewportBoundary"]
+15:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"MetadataBoundary"]
+8:["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}]
+9:["$","$1","c",{"children":["$Le",null,["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]]}]
+12:[]
+a:"$W12"
+b:["$","$1","h",{"children":[null,["$","$L13",null,{"children":"$L14"}],["$","div",null,{"hidden":true,"children":["$","$L15",null,{"children":["$","$10",null,{"name":"Next.Metadata","children":"$L16"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+d:["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+e:["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L3",null,{"href":"/","children":"Front page"}],["$","$L3",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Golden State Warriors 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"Authoritative prior source: , row ."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[15," min · ","3,267"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":"$L17"}],"$L18","$L19","$L1a","$L1b"]}]]}],"$L1c","$L1d"]}]]}]
+17:["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]
+18:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+19:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+1a:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+1b:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+1e:T7fdf,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>47.5</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>42-53, with p50 48</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>+0.695 pts/100, se_strength 1.409</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>94.0%</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_TOO_HIGH</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>-1.4 pts/100, judgmental</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>-4.0 wins, judgmental</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>43.5</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>66/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>Golden State's corrected 47.5-win prior is plausible on pure talent, but it looks too high after layering Jimmy Butler's ACL recovery, Stephen Curry's age-39 knee/availability risk, Moses Moody's patellar-tendon surgery, Porzingis/Horford frontcourt fragility, and a stale Quinten Post roster row.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<p>Andrew's tuned public projection has Golden State at:</p>
+<ul>
+<li><code>mc_mean_wins</code>: 47.5.</li>
+<li><code>p10_wins</code>: 42.</li>
+<li><code>p50_wins</code>: 48.</li>
+<li><code>p90_wins</code>: 53.</li>
+<li><code>make_playoffs_prob</code>: 0.94.</li>
+<li><code>strength</code>: +0.695 points per 100.</li>
+<li><code>se_strength</code>: 1.409.</li>
+<li><code>n_cold_start</code>: 5.</li>
+</ul>
+<p>In the public standings prior, Golden State ranks 4th in the West by projected wins, behind Oklahoma City, Houston, and San Antonio, and ahead of Denver and Minnesota. The projection metadata describes this as a forward 2026-27 projection using <code>xgboost (per-factor per-horizon) + aging fallback</code>, availability-adjusted curated depth charts, expected-games modeling, and a Monte Carlo season simulation.</p>
+<p>Important prior hygiene: I did not use <code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code> for GSW team-level wins, strength, win bands, playoff odds, or cold-start count. I used only its GSW roster rows as non-authoritative roster/minutes context because the user explicitly identified the website repo JSON as the only authoritative team prior.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>Non-authoritative roster-row context from the team-detail artifact:</p>
+<p>Top projected win contributors:</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th align="right">Role</th>
+<th align="right">MPG</th>
+<th align="right">Exp GP</th>
+<th align="right">Net</th>
+<th>Rating band</th>
+<th align="right">Wins</th>
+<th>Flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stephen Curry</td>
+<td align="right">starter</td>
+<td align="right">27.3</td>
+<td align="right">58</td>
+<td align="right">+4.27</td>
+<td>+3.16 to +5.43</td>
+<td align="right">11.04</td>
+<td>high uncertainty</td>
+</tr>
+<tr>
+<td>Jimmy Butler</td>
+<td align="right">starter</td>
+<td align="right">27.5</td>
+<td align="right">52</td>
+<td align="right">+3.19</td>
+<td>+2.08 to +4.35</td>
+<td align="right">8.35</td>
+<td>high uncertainty</td>
+</tr>
+<tr>
+<td>Brandin Podziemski</td>
+<td align="right">starter</td>
+<td align="right">27.2</td>
+<td align="right">75</td>
+<td align="right">+1.06</td>
+<td>-0.04 to +2.22</td>
+<td align="right">7.48</td>
+<td>high uncertainty</td>
+</tr>
+<tr>
+<td>Draymond Green</td>
+<td align="right">starter</td>
+<td align="right">27.0</td>
+<td align="right">66</td>
+<td align="right">+0.78</td>
+<td>-0.33 to +1.94</td>
+<td align="right">6.06</td>
+<td>high uncertainty</td>
+</tr>
+<tr>
+<td>Kristaps Porzingis</td>
+<td align="right">starter</td>
+<td align="right">26.8</td>
+<td align="right">49</td>
+<td align="right">+1.34</td>
+<td>+0.24 to +2.50</td>
+<td align="right">5.17</td>
+<td>high uncertainty</td>
+</tr>
+<tr>
+<td>Gui Santos</td>
+<td align="right">rotation</td>
+<td align="right">12.5</td>
+<td align="right">41</td>
+<td align="right">+0.59</td>
+<td>-0.42 to +1.58</td>
+<td align="right">1.65</td>
+<td>high uncertainty</td>
+</tr>
+<tr>
+<td>Gary Payton II</td>
+<td align="right">rotation</td>
+<td align="right">12.0</td>
+<td align="right">45</td>
+<td align="right">+0.11</td>
+<td>-0.89 to +1.11</td>
+<td align="right">1.46</td>
+<td>high uncertainty</td>
+</tr>
+<tr>
+<td>Al Horford</td>
+<td align="right">rotation</td>
+<td align="right">12.2</td>
+<td align="right">27</td>
+<td align="right">+1.13</td>
+<td>+0.12 to +2.12</td>
+<td align="right">1.24</td>
+<td>high uncertainty</td>
+</tr>
+</tbody>
+</table>
+<p>Top projected MPG players:</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th align="right">MPG</th>
+<th align="right">Exp GP</th>
+<th>Rotation read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jimmy Butler</td>
+<td align="right">27.5</td>
+<td align="right">52</td>
+<td>Core wing value if healthy, but ACL recovery makes this the largest availability challenge.</td>
+</tr>
+<tr>
+<td>Stephen Curry</td>
+<td align="right">27.3</td>
+<td align="right">58</td>
+<td>Still elite in short bursts; the issue is age-39 workload, not skill.</td>
+</tr>
+<tr>
+<td>Brandin Podziemski</td>
+<td align="right">27.2</td>
+<td align="right">75</td>
+<td>High-availability young starter; model leans heavily on a third-year leap/hold.</td>
+</tr>
+<tr>
+<td>Draymond Green</td>
+<td align="right">27.0</td>
+<td align="right">66</td>
+<td>Defensive organizer, but value is tied to healthy shooting and frontcourt context.</td>
+</tr>
+<tr>
+<td>Kristaps Porzingis</td>
+<td align="right">26.8</td>
+<td align="right">49</td>
+<td>Clean theoretical fit with Curry; availability and ramp-up remain fragile.</td>
+</tr>
+<tr>
+<td>Moses Moody</td>
+<td align="right">13.0</td>
+<td align="right">38</td>
+<td>Surgery makes even a modest role uncertain.</td>
+</tr>
+<tr>
+<td>De'Anthony Melton</td>
+<td align="right">12.7</td>
+<td align="right">25</td>
+<td>Useful guard defense, but low expected games and prior ACL history limit stabilizing value.</td>
+</tr>
+<tr>
+<td>Gui Santos</td>
+<td align="right">12.5</td>
+<td align="right">41</td>
+<td>Plausible regular-season wing, not yet a proven high-leverage playoff piece.</td>
+</tr>
+<tr>
+<td>Will Richard</td>
+<td align="right">12.5</td>
+<td align="right">41</td>
+<td>Low-data role player; useful if shooting translates.</td>
+</tr>
+<tr>
+<td>Al Horford</td>
+<td align="right">12.2</td>
+<td align="right">27</td>
+<td>The model is cautious, but a 40/41-year-old depth big cannot be primary injury insurance.</td>
+</tr>
+<tr>
+<td>Quinten Post</td>
+<td align="right">12.2</td>
+<td align="right">38</td>
+<td>Stale if public reporting of Golden State not matching Memphis' offer sheet is final.</td>
+</tr>
+<tr>
+<td>LJ Cryer</td>
+<td align="right">12.1</td>
+<td align="right">23</td>
+<td>Low-data guard depth; not a robust answer to star availability.</td>
+</tr>
+</tbody>
+</table>
+<p>Expected-games concerns are the core of the challenge. The model context already discounts Curry, Butler, Porzingis, Horford, Melton, and Moody, but the public 47.5-win prior still requires multiple old or recently injured players to return useful value at the same time. The public prior's <code>n_cold_start</code> of 5 also matters: if Lendeborg, Lajae Jones, Nate Williams, LJ Cryer, Will Richard, or other low-data depth pieces are needed early, the regular-season floor can move quickly.</p>
+<p>Depth chart fragility is concentrated in the frontcourt. The local depth chart context lists Curry, Butler, Draymond, Brandin Podziemski, and Al Horford as starters, with Porzingis in rotation context, while the roster rows treat Porzingis as a starter and Horford as rotation. That conflict is not a prior; it is a warning that the frontcourt hierarchy and replacement tree are unsettled.</p>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>The authoritative public prior file does not expose a GSW team six-factor profile. The following is an inference from non-authoritative roster rows only, weighted by <code>mpg * exp_gp</code>, using the factor order from the model guide: <code>oTS</code>, <code>oTOV</code>, <code>oSC</code>, <code>dTS</code>, <code>dTOV</code>, <code>dSC</code>. Treat this as a diagnostic, not as the team-level prior.</p>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th align="right">Roster-row diagnostic</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>oTS</td>
+<td align="right">+0.67</td>
+<td>Curry, Butler, Porzingis, Horford, and enough guard shooting create a real efficiency path when healthy.</td>
+</tr>
+<tr>
+<td>oTOV</td>
+<td align="right">+0.16</td>
+<td>Butler/Podziemski/Porzingis help decision-making, but Draymond's negative row and aging ball-handling mix keep this from being a major edge.</td>
+</tr>
+<tr>
+<td>oSC</td>
+<td align="right">-0.11</td>
+<td>The roster is not projected as a second-chance offense; losing Post or relying on small lineups can worsen possession pressure.</td>
+</tr>
+<tr>
+<td>dTS</td>
+<td align="right">+0.31</td>
+<td>Porzingis, Draymond, Horford, Podziemski, and Moody give a shot-defense path, but it depends on health and lineup size.</td>
+</tr>
+<tr>
+<td>dTOV</td>
+<td align="right">+0.19</td>
+<td>Butler, Melton, Payton, Podziemski, and Moody can create events, though several are availability-constrained.</td>
+</tr>
+<tr>
+<td>dSC</td>
+<td align="right">+0.18</td>
+<td>Defensive second-chance value is mildly positive in the roster rows, but older bigs and cold-start depth make it fragile.</td>
+</tr>
+</tbody>
+</table>
+<p>Stylistically, the good version is coherent: Curry movement plus Porzingis/Horford spacing, Draymond short-roll passing, Butler rim pressure, Podziemski connective play, and enough defensive event creation from Melton/Payton/Moody-type guards. The concern is that this may be a best-lineup profile more than an 82-game ecosystem. If Butler ramps slowly or Curry is managed, the non-Curry offense can become Butler-dependent; if Butler is not fully explosive, it becomes Porzingis-dependent; if Porzingis/Horford are managed, it becomes small and older.</p>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>My best challenge is that the model is too high because the public prior prices Golden State as a 47.5-win, 94.0% playoff team while the real roster path is unusually dependent on synchronized health from old or recently injured players. This is not a claim that the healthy Warriors lack upside. A healthy Curry-Butler-Draymond-Porzingis-Podziemski core can absolutely play at a top-six conference level. The issue is that the prior's center appears too clean for the recovery sequencing.</p>
+<p>The biggest mechanism is Butler. The roster context credits him with 8.35 projected wins, 52 expected games, and +3.19 net. If he were entering camp fully healthy, that would be defensible. Public reporting says he underwent right ACL surgery in February 2026 after missing the rest of 2025-26; for an age-37 season, the cost is not just games missed. It can be fewer back-to-backs, minutes caps, reduced downhill pressure, lighter defensive assignments, and a slow first 20-30 games.</p>
+<p>The second mechanism is Curry. NBA.com still lists star-level production, and the model's +4.27 net roster-row context is reasonable. But he missed a large late-season stretch with right-knee patella-femoral pain syndrome/bone bruising in 2026. At this age, a 58-game expectation can be reasonable and still not capture the left-tail risk of a second maintenance season.</p>
+<p>The third mechanism is depth compounding. Porzingis and Horford fit the Warriors beautifully, but both are availability-sensitive bigs. Moody's patellar tendon surgery removes one trusted wing/guard innings-eater. Melton helps, but his own ACL history and 25-game roster-row expectation make him a limited stabilizer. Post's reported move to Memphis makes the local roster row stale and removes a stretch-center insurance option. The result is a roster that can look like a 50-win team in healthy snapshots but closer to low-40s over the full regular-season grind.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th align="right">Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authoritative prior is strong: GSW is priced as a 47.5-win, 94.0% playoff team.</td>
+<td>Public JSON row supplied for <code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>; accessed July 9, 2026.</td>
+<td>neutral</td>
+<td align="right">0.0 wins</td>
+<td align="right">100</td>
+</tr>
+<tr>
+<td>Curry is still good enough to make the model look right if the knee cooperates.</td>
+<td>NBA.com player page lists Curry at 26.6 PPG, 3.6 RPG, 4.7 APG and 38 years old; <a href="https://www.nba.com/player/201939/stephen-curry" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/201939/stephen-curry</a>; accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+1.0 wins</td>
+<td align="right">85</td>
+</tr>
+<tr>
+<td>Curry's late-season knee absence adds left-tail risk.</td>
+<td>Warriors updates said Curry had missed 20 games by March 21 and 25 games by April 1 with right-knee patella-femoral pain syndrome/bone bruising; <a href="https://warriors.com/news/stephen-curry-injury-update-20260321" target="_blank" rel="noopener noreferrer">https://warriors.com/news/stephen-curry-injury-update-20260321</a> and <a href="https://warriors.com/news/stephen-curry-injury-update-20260401" target="_blank" rel="noopener noreferrer">https://warriors.com/news/stephen-curry-injury-update-20260401</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-1.0 wins</td>
+<td align="right">78</td>
+</tr>
+<tr>
+<td>Butler's ACL recovery is the largest single downside to the 47.5-win mean.</td>
+<td>Warriors surgery update said Butler underwent successful surgery and would miss the rest of 2025-26; <a href="https://warriors.com/news/butler-iii-undergoes-successful-surgery-20260209" target="_blank" rel="noopener noreferrer">https://warriors.com/news/butler-iii-undergoes-successful-surgery-20260209</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-1.6 wins</td>
+<td align="right">84</td>
+</tr>
+<tr>
+<td>Porzingis' fit with Curry is a real counterweight.</td>
+<td>Warriors announced a multi-year Porzingis extension; NBA.com lists him at 16.7 PPG, 5.2 RPG, 2.5 APG; <a href="https://warriors.com/news/warriors-sign-kristaps-porzingis-to-a-multi-year-contract-extension-20260630" target="_blank" rel="noopener noreferrer">https://warriors.com/news/warriors-sign-kristaps-porzingis-to-a-multi-year-contract-extension-20260630</a> and <a href="https://www.nba.com/player/204001/kristaps-porzingis" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/204001/kristaps-porzingis</a>; accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.6 wins</td>
+<td align="right">70</td>
+</tr>
+<tr>
+<td>Horford is valuable but not robust regular-season insurance at this age.</td>
+<td>NBA.com player page lists Horford at 40 years old; Warriors announced his multi-year contract; Warriors injury update said he missed 11 games with a right soleus strain; <a href="https://www.nba.com/player/201143/al-horford" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/201143/al-horford</a>, <a href="https://warriors.com/news/al-horford-signs-contract-20260706" target="_blank" rel="noopener noreferrer">https://warriors.com/news/al-horford-signs-contract-20260706</a>, and <a href="https://warriors.com/news/horford-post-injury-updates-20260404" target="_blank" rel="noopener noreferrer">https://warriors.com/news/horford-post-injury-updates-20260404</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.5 wins</td>
+<td align="right">73</td>
+</tr>
+<tr>
+<td>Moody's injury weakens wing depth and regular-season durability.</td>
+<td>NBA.com player news and Warriors update reported Moody's ruptured/torn left patellar tendon and surgery; <a href="https://www.nba.com/player/1630541/moses-moody" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1630541/moses-moody</a> and <a href="https://warriors.com/news/moses-moody-undergoes-successful-surgery-20260328" target="_blank" rel="noopener noreferrer">https://warriors.com/news/moses-moody-undergoes-successful-surgery-20260328</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.5 wins</td>
+<td align="right">76</td>
+</tr>
+<tr>
+<td>Post's roster-row minutes are stale if he is gone.</td>
+<td>NBC Sports Bay Area reported Golden State did not match Memphis' offer sheet for Quinten Post; NBA.com reported the offer-sheet process; <a href="https://www.nbcsportsbayarea.com/nba/golden-state-warriors/quinten-post-offer-sheet-grizzlies/1948629/" target="_blank" rel="noopener noreferrer">https://www.nbcsportsbayarea.com/nba/golden-state-warriors/quinten-post-offer-sheet-grizzlies/1948629/</a> and <a href="https://www.nba.com/news/quinten-post-free-agency-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/quinten-post-free-agency-2026</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.4 wins</td>
+<td align="right">80</td>
+</tr>
+<tr>
+<td>Podziemski's development and availability are legitimate upside to my downgrade.</td>
+<td>NBA.com lists Brandin Podziemski at 13.8 PPG, 5.1 RPG, 3.7 APG at age 23; <a href="https://www.nba.com/player/1641764/brandin-podziemski" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1641764/brandin-podziemski</a>; accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.6 wins</td>
+<td align="right">68</td>
+</tr>
+<tr>
+<td>The 2025-26 baseline was much lower than the 2026-27 prior.</td>
+<td>Basketball-Reference and ESPN list the 2025-26 Warriors at 37-45; <a href="https://www.basketball-reference.com/teams/GSW/2026.html" target="_blank" rel="noopener noreferrer">https://www.basketball-reference.com/teams/GSW/2026.html</a> and <a href="https://www.espn.com/nba/team/roster/_/name/gs/golden-state-warriors" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/roster/_/name/gs/golden-state-warriors</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.6 wins</td>
+<td align="right">72</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Model role/value</th>
+<th>Concern or upside</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stephen Curry</td>
+<td>Non-authoritative roster context: starter, 27.3 MPG, 58 exp GP, +4.27 net, 11.04 wins</td>
+<td>Still elite, but knee/age risk can turn a fair 58-game mean into a dangerous center.</td>
+<td>The offense is still Curry-gravity dependent; if he misses 10 extra games or is managed harder, 47.5 wins is too high.</td>
+</tr>
+<tr>
+<td>Jimmy Butler</td>
+<td>Starter, 27.5 MPG, 52 exp GP, +3.19 net, 8.35 wins</td>
+<td>ACL recovery in an age-37 season may reduce availability, rim pressure, and defensive workload.</td>
+<td>He is the second-largest model win contributor and the main downside mechanism.</td>
+</tr>
+<tr>
+<td>Brandin Podziemski</td>
+<td>Starter, 27.2 MPG, 75 exp GP, +1.06 net, 7.48 wins</td>
+<td>Legit young-player upside, but the model asks him to be a durable third/fourth pillar.</td>
+<td>A Podziemski leap can erase much of my downgrade; a plateau makes the veteran fragility harder to cover.</td>
+</tr>
+<tr>
+<td>Draymond Green</td>
+<td>Starter, 27.0 MPG, 66 exp GP, +0.78 net, 6.06 wins</td>
+<td>Value depends on Curry gravity, spacing around Butler, and enough healthy size behind him.</td>
+<td>He can still organize a top defense, but the margin narrows if the lineup gets smaller or less spaced.</td>
+</tr>
+<tr>
+<td>Kristaps Porzingis</td>
+<td>Starter, 26.8 MPG, 49 exp GP, +1.34 net, 5.17 wins</td>
+<td>Excellent theoretical fit; availability and role stress are the concern.</td>
+<td>If he is a managed spacer, the model can be right; if he must be a second engine while Butler ramps, risk rises.</td>
+</tr>
+<tr>
+<td>Al Horford</td>
+<td>Rotation, 12.2 MPG, 27 exp GP, +1.13 net, 1.24 wins</td>
+<td>The model is already conservative, but the team may need more center innings than this.</td>
+<td>A 40/41-year-old Horford is a luxury matchup piece, not a dependable injury backstop.</td>
+</tr>
+<tr>
+<td>Moses Moody</td>
+<td>Rotation, 13.0 MPG, 38 exp GP, -0.10 net, 1.21 wins</td>
+<td>Patellar-tendon surgery threatens both availability and early-season sharpness.</td>
+<td>Moody is the kind of mid-rotation wing Golden State needs when Butler/Curry are managed.</td>
+</tr>
+<tr>
+<td>De'Anthony Melton</td>
+<td>Rotation, 12.7 MPG, 25 exp GP, +0.72 net, 1.05 wins</td>
+<td>Useful defender/secondary handler, but prior ACL history and low GP expectation limit the upside.</td>
+<td>He helps the best version; he does not fully solve the durability problem.</td>
+</tr>
+<tr>
+<td>Quinten Post</td>
+<td>Rotation-row context, 12.2 MPG, 38 exp GP, -0.78 net, 0.82 wins</td>
+<td>Public reporting says Golden State did not match Memphis' offer sheet.</td>
+<td>The direct value is small, but the stale row matters because frontcourt insurance is thin.</td>
+</tr>
+<tr>
+<td>Yaxel Lendeborg / Lajae Jones / LJ Cryer / Will Richard</td>
+<td>Cold-start or low-data depth context; public prior has <code>n_cold_start</code> 5</td>
+<td>One young player could become useful, but early-season reliability is uncertain.</td>
+<td>The veteran core needs cheap depth to survive maintenance nights; cold-start uncertainty lowers the floor.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>I am applying a judgmental adjustment of <strong>-1.4 points per 100</strong>, roughly <strong>-4.0 wins</strong>, because the public prior's center seems too clean for the Warriors' recovery and durability stack. This is not a new simulation and does not overwrite Andrew's projection pipeline.</p>
+<p>The adjustment starts with the public prior at 47.5 wins. I subtract for Butler's ACL ramp (-1.6 wins), Curry's knee/age left tail (-1.0), Porzingis/Horford/Moody/Melton compounded availability (-0.9), and the stale Post/frontcourt-depth issue (-0.4). I add back for Curry still being elite (+1.0), Porzingis' clean offensive fit (+0.6), and Podziemski development/availability (+0.6). The net is approximately -4.0 wins, taking the research view to <strong>43.5 adjusted wins</strong>.</p>
+<p>I chose <code>MODEL_TOO_HIGH</code>, not a more aggressive downgrade, because the model already incorporates availability and because the Warriors' healthy top-end lineups can plausibly play above the public mean for stretches.</p>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest argument against my MODEL_TOO_HIGH stance is that the model may already be doing the right amount of availability haircutting. The non-authoritative roster context gives Curry only 58 expected games, Butler 52, Porzingis 49, Horford 27, Moody 38, and Melton 25. That is not an 82-game fantasy forecast. If Butler's rehab is ahead of schedule, Curry's knee was a one-season maintenance issue, and Porzingis/Horford split center minutes cleanly, Golden State may have enough shooting, decision-making, and defensive intelligence to land near 48 wins.</p>
+<p>The second counter is Podziemski. If he is a real +1-ish regular-season starter across 70-plus games, the Warriors are not merely an old core trying to survive. They have a high-availability young connector who can absorb ball-handling, rebounding, and defensive rotation minutes. Add a useful rookie or low-cost wing, and the cold-start count can become upside rather than fragility.</p>
+<p>The third counter is that Curry's ceiling still breaks models and opponents. If he gives 60 games of top-15 offensive impact, the West middle is soft enough that Golden State can bank regular-season wins even with cautious veteran management.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>A training-camp report that Butler is cleared for contact, cutting, and back-to-back ramp work would reduce the downgrade.</li>
+<li>A clear Curry knee update showing no maintenance limitations entering camp would move me closer to the 47.5-win prior.</li>
+<li>A transaction replacing Post with a credible stretch/rim-protecting center would reduce the frontcourt-depth penalty.</li>
+<li>A preseason rotation with Porzingis comfortably starting and Horford preserved as a low-minute reserve would improve the durability read.</li>
+<li>Podziemski looking like a true third option rather than a connector would make the prior more believable.</li>
+<li>A model rerun using the same public JSON prior but updated roster rows without Post would clarify whether the stale depth context matters materially.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<p>The most important data issue is prior-source control. The only authoritative GSW team prior for this rerun is <code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>, with the exact values listed in <code>## Model Prior</code>. The richer team-detail artifact was used only for roster rows and six-factor diagnostics; its team-level totals were ignored.</p>
+<p>The local roster context still contains Quinten Post, while public reporting says Golden State did not match Memphis' offer sheet. I treated Post's row as stale and did not count him as dependable 2026-27 Warriors depth. The public JSON prior's <code>n_cold_start</code> is 5, while the non-authoritative roster rows identify several low-data/cold/replacement players; this is enough to flag depth uncertainty but not enough to make a precise rookie forecast.</p>
+<p>Some Warriors.com pages were visible through search snippets and NBA.com mirrors but not all rendered cleanly through direct command-line fetches because of access restrictions. I therefore used public official NBA/player pages, accessible article snippets from web search, NBC Sports Bay Area, Basketball-Reference, and ESPN as corroborating public/free sources. All online sources listed below were accessed July 9, 2026.</p>
+<h2 id="sources">Sources</h2>
+<p>Local/model sources:</p>
+<ul>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code> - authoritative GSW prior row; accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code> - non-authoritative GSW roster rows and six-factor diagnostic only; team-level fields ignored; accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code> - non-authoritative GSW roster/depth role context; accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/README.md</code> - v5 RAPM context; accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/MODEL_OVERVIEW.md</code> - six-factor and model context; accessed July 9, 2026.</li>
+<li><code>Rome/Basketball/NBA multi-agent forecasting company/Boss prompt for 30 NBA team research agents.md</code> - exact briefing template; accessed July 9, 2026.</li>
+</ul>
+<p>External public/free sources:</p>
+<ul>
+<li><a href="https://www.nba.com/player/201939/stephen-curry" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/201939/stephen-curry</a> - Curry official NBA player page; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/stephen-curry-injury-update-20260321" target="_blank" rel="noopener noreferrer">https://warriors.com/news/stephen-curry-injury-update-20260321</a> - Curry March 21 injury update; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/stephen-curry-injury-update-20260401" target="_blank" rel="noopener noreferrer">https://warriors.com/news/stephen-curry-injury-update-20260401</a> - Curry April 1 injury update; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/202710/jimmy-butler-iii" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/202710/jimmy-butler-iii</a> - Butler official NBA player page; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/butler-iii-undergoes-successful-surgery-20260209" target="_blank" rel="noopener noreferrer">https://warriors.com/news/butler-iii-undergoes-successful-surgery-20260209</a> - Butler surgery update; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/204001/kristaps-porzingis" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/204001/kristaps-porzingis</a> - Porzingis official NBA player page; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/warriors-sign-kristaps-porzingis-to-a-multi-year-contract-extension-20260630" target="_blank" rel="noopener noreferrer">https://warriors.com/news/warriors-sign-kristaps-porzingis-to-a-multi-year-contract-extension-20260630</a> - Porzingis extension announcement; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/201143/al-horford" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/201143/al-horford</a> - Horford official NBA player page; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/al-horford-signs-contract-20260706" target="_blank" rel="noopener noreferrer">https://warriors.com/news/al-horford-signs-contract-20260706</a> - Horford signing announcement; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/horford-post-injury-updates-20260404" target="_blank" rel="noopener noreferrer">https://warriors.com/news/horford-post-injury-updates-20260404</a> - Horford/Post injury update; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/1630541/moses-moody" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1630541/moses-moody</a> - Moody official NBA player page; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/moses-moody-undergoes-successful-surgery-20260328" target="_blank" rel="noopener noreferrer">https://warriors.com/news/moses-moody-undergoes-successful-surgery-20260328</a> - Moody surgery update; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/1629001/deanthony-melton" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1629001/deanthony-melton</a> - Melton official NBA player page; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/warriors-deanthony-melton-knee-surgery" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/warriors-deanthony-melton-knee-surgery</a> - Melton prior ACL surgery report; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/1641764/brandin-podziemski" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1641764/brandin-podziemski</a> - Podziemski official NBA player page; accessed July 9, 2026.</li>
+<li><a href="https://www.nbcsportsbayarea.com/nba/golden-state-warriors/quinten-post-offer-sheet-grizzlies/1948629/" target="_blank" rel="noopener noreferrer">https://www.nbcsportsbayarea.com/nba/golden-state-warriors/quinten-post-offer-sheet-grizzlies/1948629/</a> - Post offer-sheet/non-match report; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/2026-free-agency-options-and-qualifying-offers" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-free-agency-options-and-qualifying-offers</a> - 2026 qualifying-offer/free-agency tracker; accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/quinten-post-free-agency-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/quinten-post-free-agency-2026</a> - Post Memphis offer-sheet report; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/warriors-sign-2026-first-round-draft-pick-yaxel-lendeborg" target="_blank" rel="noopener noreferrer">https://warriors.com/news/warriors-sign-2026-first-round-draft-pick-yaxel-lendeborg</a> - Lendeborg signing announcement; accessed July 9, 2026.</li>
+<li><a href="https://warriors.com/news/warriors-round-2-20260624" target="_blank" rel="noopener noreferrer">https://warriors.com/news/warriors-round-2-20260624</a> - Lajae Jones draft announcement; accessed July 9, 2026.</li>
+<li><a href="https://www.basketball-reference.com/teams/GSW/2026.html" target="_blank" rel="noopener noreferrer">https://www.basketball-reference.com/teams/GSW/2026.html</a> - 2025-26 Warriors team page; accessed July 9, 2026.</li>
+<li><a href="https://www.espn.com/nba/team/roster/_/name/gs/golden-state-warriors" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/roster/_/name/gs/golden-state-warriors</a> - ESPN Warriors roster/team page; accessed July 9, 2026.</li>
+</ul>1c:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$1e"}}],"$L1f"]}]
+1d:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","p",null,{"className":"rail-empty","children":"Nothing points here yet."}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-team-briefings-2026-27/00-cross-team-findings",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-cross-team-findings/","children":"2026-27 NBA cross-team findings"}]}],["$","li","basketball/nba-team-briefings-2026-27/00-index",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-index/","children":"2026-27 NBA team briefing index"}]}],["$","li","basketball/nba-team-briefings-2026-27/atl-2026-27-briefing",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/atl-2026-27-briefing/","children":"Atlanta Hawks 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bos-2026-27-briefing",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","children":"BOS 2026-27 research briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing/","children":"Brooklyn Nets 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/cha-2026-27-briefing",{"children":["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","children":"Charlotte Hornets 2026-27 Research Briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+1f:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/det-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Detroit Pistons 2026-27 Research Briefing"}]]}],["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/hou-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Houston Rockets 2026-27 Research Briefing"}]]}]]}]
+14:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+11:null
+16:[["$","title","0",{"children":"Golden State Warriors 2026-27 Research Briefing · Rome"}],["$","meta","1",{"name":"description","content":"Authoritative prior source: , row ."}],["$","meta","2",{"name":"application-name","content":"Rome"}],["$","meta","3",{"name":"author","content":"Andrew Park"}],["$","meta","4",{"name":"keywords","content":"Rome,wiki,second brain,knowledge garden,research"}],["$","meta","5",{"name":"creator","content":"Andrew Park"}],["$","meta","6",{"name":"publisher","content":"Andrew Park"}],["$","meta","7",{"property":"og:title","content":"Golden State Warriors 2026-27 Research Briefing"}],["$","meta","8",{"property":"og:description","content":"Authoritative prior source: , row ."}],["$","meta","9",{"property":"og:type","content":"article"}],["$","meta","10",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","11",{"name":"twitter:title","content":"Rome — A Living Encyclopedia"}],["$","meta","12",{"name":"twitter:description","content":"Andrew Park's second brain, set in type."}],["$","meta","13",{"name":"twitter:image","content":"http://localhost:3000/og.png"}]]

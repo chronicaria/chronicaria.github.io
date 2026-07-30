@@ -1,0 +1,318 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+d:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+e:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Oklahoma City Thunder 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"The only authoritative team-level prior for this rerun is , row . It gives OKC:"}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[10," min · ","2,082"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],"$L3","$L4","$L5","$L6","$L7"]}]]}],"$L8","$L9"]}]]}],null,"$La"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}]
+4:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+5:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+6:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+7:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+b:T5084,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>64.7</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>59-70, with p50 65</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>+7.760 pts/100</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_ABOUT_RIGHT</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>-0.6 pts/100</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>-2.0 wins</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>62.7</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>57/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>OKC is still the league's safest No. 1-seed type team, but a 64.7-win center is a touch aggressive given Jalen Williams' availability risk, Joe/Wiggins spacing loss, rookie/cold-start depth, and aggressive Cason Wallace/Ajay Mitchell minute assumptions.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mc_mean_wins</code></td>
+<td align="right">64.7</td>
+</tr>
+<tr>
+<td><code>p10_wins</code></td>
+<td align="right">59</td>
+</tr>
+<tr>
+<td><code>p50_wins</code></td>
+<td align="right">65</td>
+</tr>
+<tr>
+<td><code>p90_wins</code></td>
+<td align="right">70</td>
+</tr>
+<tr>
+<td><code>make_playoffs_prob</code></td>
+<td align="right">100.0%</td>
+</tr>
+<tr>
+<td><code>strength</code></td>
+<td align="right">7.760</td>
+</tr>
+<tr>
+<td><code>se_strength</code></td>
+<td align="right">1.409</td>
+</tr>
+<tr>
+<td><code>n_cold_start</code></td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>This ranks OKC first in the Western Conference in the public projection table. The prior is not a generic power rating: it is the public standings JSON prior. I do not use <code>projection_2026_27_teams.json</code> as a team-level prior here; any references to that file below are roster/minutes context only and are flagged non-authoritative.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>The non-authoritative roster packet and depth chart show a strong but unusual OKC minute map. Top projected win contributors in the roster context are Shai Gilgeous-Alexander, Chet Holmgren, Cason Wallace, Ajay Mitchell, Isaiah Hartenstein, Alex Caruso, Jaylin Williams, Kenrich Williams, Jalen Williams, and Jared McCain. Top projected MPG players are SGA at 28.4, Chet at 27.8, Wallace at 27.5, Mitchell at 27.4, and Hartenstein at 27.1.</p>
+<p>The main issue is not whether OKC has talent; it clearly does. The pressure point is that the roster packet gets to a super-elite team through starter-level minute assumptions for Wallace and Mitchell while heavily discounting Jalen Williams at only 13.7 MPG and 30 expected games. Public reporting supports the Jalen caution because of wrist-surgery recovery and hamstring trouble, but if Jalen is healthy the packet underrates him. If he is not, OKC needs more creation from Wallace, Mitchell, McCain, Chet, and SGA than is ideal.</p>
+<p>The cold-start/deep group includes Aday Mara, Bennett Stirtz, Otega Oweh, Josh Dix, Thomas Sorber, Nikola Topic, and Brooks Barnhizer. That fits the public prior's <code>n_cold_start = 5</code>. The depth is interesting and long-term useful, but several of those names should be treated as developmental or emergency minutes rather than bankable 65-win rotation value.</p>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>The roster-context player factor vectors suggest OKC's profile remains defense-first with enough SGA offense to make the regular-season floor enormous.</p>
+<ul>
+<li><code>oTS</code>: SGA is the main positive engine, with Chet adding efficiency. The Joe/Wiggins exits put more pressure on McCain, Stirtz, Wallace, and Mitchell to maintain spacing.</li>
+<li><code>oTOV</code>: SGA and Mitchell help, but the offense can become SGA-dependent when Jalen Williams is out.</li>
+<li><code>oSC</code>: Hartenstein is the clearest positive second-chance lever, with Chet/Jaylin/Mara adding size paths.</li>
+<li><code>dTS</code>: Chet and Hartenstein drive a strong rim-protection profile, supported by public reporting on OKC's elite defense.</li>
+<li><code>dTOV</code>: Wallace, Caruso, Dort, Mitchell, SGA, and Jalen Williams fit the pressure-defense identity.</li>
+<li><code>dSC</code>: The Hartenstein/Chet/Jaylin size mix improves second-chance prevention relative to older small-ball OKC versions.</li>
+</ul>
+<p>Because the team-detail file is non-authoritative for team-level priors in this rerun, I use its factors only as player-style context. The public JSON prior remains the only team-level number source.</p>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>My challenge is modest downside, not a full fade. A 64.7-win mean is a very narrow target because it assumes OKC converts nearly every advantage into regular-season wins again. The model is right to love the Thunder: SGA is an MVP-level constant, Chet is now a two-way award player, Wallace/Caruso/Dort/Mitchell give waves of point-of-attack defense, and Hartenstein stabilizes the glass and rim.</p>
+<p>The mechanism for trimming the prior is that the last few wins from 63 to 65 are fragile. If Jalen Williams is not a full-time secondary star, OKC loses its cleanest non-SGA offensive release valve. If Joe and Wiggins are replaced by less proven shooting, spacing gets a little thinner. If Wallace and Mitchell settle into smaller roles than the roster packet implies, their large projected win contributions become less certain. Those are not collapse mechanisms; they are enough to pull a 65-win center closer to 63.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th align="right">Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OKC's elite prior is justified by recent team quality.</td>
+<td>NBA's team page lists OKC at 64-18, first in the West, 119.0 PPG, 107.9 opponent PPG, and a current roster including SGA, McCain, Dort, Jaylin Williams, Chet, Jalen Williams, Caruso, Sorber, Oweh, Stirtz, Mara, Wallace, Barnhizer, Mitchell, Kenrich Williams, Topic, and Hartenstein. URL: <a href="https://www.nba.com/team/1610612760/thunder" target="_blank" rel="noopener noreferrer">https://www.nba.com/team/1610612760/thunder</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.8 wins</td>
+<td align="right">88</td>
+</tr>
+<tr>
+<td>SGA's star prior is very secure.</td>
+<td>NBA lists SGA as 2025-26 MVP and Clutch Player of the Year, and Chet as a Defensive Player of the Year finalist. URL: <a href="https://www.nba.com/news/2025-2026-regular-season-awards" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2025-2026-regular-season-awards</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.6 wins</td>
+<td align="right">90</td>
+</tr>
+<tr>
+<td>SGA's underlying dominance supports the model's top-end rating.</td>
+<td>NBA's MVP feature says SGA played 68 games, averaged 31.1 points, led the league in clutch points, and had the league's highest total plus/minus. URL: <a href="https://www.nba.com/news/shai-gilgeous-alexander-2026-mvp-by-the-numbers" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/shai-gilgeous-alexander-2026-mvp-by-the-numbers</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.4 wins</td>
+<td align="right">88</td>
+</tr>
+<tr>
+<td>Chet and Wallace support the defensive floor.</td>
+<td>Chet made All-Defensive First Team and Cason Wallace made All-Defensive Second Team. URL: <a href="https://www.nba.com/news/2025-26-all-defensive-teams-announced" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2025-26-all-defensive-teams-announced</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.4 wins</td>
+<td align="right">84</td>
+</tr>
+<tr>
+<td>The model may be too optimistic if Jalen Williams is not fully healthy.</td>
+<td>Sportsnet reported Jalen Williams had a hamstring strain after earlier wrist-surgery recovery and noted lower 2025-26 production than his 2024-25 breakout. URL: <a href="https://www.sportsnet.ca/nba/article/thunders-jalen-williams-to-miss-multiple-weeks-with-hamstring-injury/" target="_blank" rel="noopener noreferrer">https://www.sportsnet.ca/nba/article/thunders-jalen-williams-to-miss-multiple-weeks-with-hamstring-injury/</a>, accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-1.0 wins</td>
+<td align="right">76</td>
+</tr>
+<tr>
+<td>Secondary creation got stressed in the playoffs.</td>
+<td>NBA.com wrote that Jalen Williams and Ajay Mitchell injuries strained OKC's depth and removed two double-digit scorers/initiators. URL: <a href="https://www.nba.com/news/3-things-to-watch-spurs-thunder-game-5" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/3-things-to-watch-spurs-thunder-game-5</a>, accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.8 wins</td>
+<td align="right">74</td>
+</tr>
+<tr>
+<td>Bench shooting is less proven after offseason moves.</td>
+<td>NBA.com reported Isaiah Joe was traded to Detroit and noted Aaron Wiggins had also been dealt. URL: <a href="https://www.nba.com/news/isaiah-joe-trade-pistons-thunder" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/isaiah-joe-trade-pistons-thunder</a>, accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.5 wins</td>
+<td align="right">72</td>
+</tr>
+<tr>
+<td>Rookie depth is interesting but not bankable for a 65-win center.</td>
+<td>NBA draft coverage says OKC selected Aday Mara at No. 12 and acquired No. 16 Bennett Stirtz; early Summer League recaps show mixed team results. URLs: <a href="https://www.nba.com/news/five-takeaways-2026-draft-1st-round" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/five-takeaways-2026-draft-1st-round</a> and <a href="https://www.nba.com/news/2026-salt-lake-city-summer-league-thunder-jazz" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-salt-lake-city-summer-league-thunder-jazz</a>, accessed July 9, 2026.</td>
+<td>neutral</td>
+<td align="right">-0.2 wins</td>
+<td align="right">60</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Model role/value</th>
+<th>Concern or upside</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shai Gilgeous-Alexander</td>
+<td>Roster context: 28.4 MPG, 70 expected games, +6.80 net.</td>
+<td>His MVP case is secure; only load management or injury meaningfully changes the view.</td>
+<td>The whole 64.7-win prior is believable only because SGA is a stable MVP-level engine.</td>
+</tr>
+<tr>
+<td>Chet Holmgren</td>
+<td>27.8 MPG, 66 expected games, +4.57 net.</td>
+<td>All-NBA and All-Defense evidence supports him, but physical matchups and offensive consistency still swing peak outcomes.</td>
+<td>He is the main reason OKC can pair elite defense with enough frontcourt offense.</td>
+</tr>
+<tr>
+<td>Jalen Williams</td>
+<td>13.7 MPG, 30 expected games, +0.36 net in roster context.</td>
+<td>Major upside if healthy; major downside if hamstring/wrist issues linger.</td>
+<td>This is the biggest gap between realistic rotation value and the non-authoritative packet.</td>
+</tr>
+<tr>
+<td>Cason Wallace</td>
+<td>27.5 MPG, 75 expected games, +2.28 net.</td>
+<td>Defensive rating is supported; starter-level minutes may be high if Dort, Jalen, McCain, Caruso, and Mitchell are all available.</td>
+<td>A few MPG of over-credit at this quality level matters for a 65-win projection.</td>
+</tr>
+<tr>
+<td>Ajay Mitchell</td>
+<td>27.4 MPG, 58 expected games, +3.48 net.</td>
+<td>Real breakout signals, but calf trouble and crowded guard minutes make the role/value aggressive.</td>
+<td>If Mitchell is merely good rather than +3.5-net good, OKC loses some secondary-creator cushion.</td>
+</tr>
+<tr>
+<td>Isaiah Hartenstein</td>
+<td>27.1 MPG, 61 expected games, +3.07 net.</td>
+<td>Strong rebounding/rim value, but two-big fit and health can vary by matchup.</td>
+<td>His regular-season value is one reason OKC's floor is so high.</td>
+</tr>
+<tr>
+<td>Luguentz Dort</td>
+<td>13.5 MPG, 42 expected games, -1.28 net in roster context.</td>
+<td>Packet may undervalue his scheme role if he remains a starter-level stopper.</td>
+<td>Dort's minutes can reduce Wallace/Mitchell MPG and alter the player-level path to the team prior.</td>
+</tr>
+<tr>
+<td>Alex Caruso</td>
+<td>12.5 MPG, 33 expected games, +3.50 net.</td>
+<td>Per-minute value is credible; age and games cap total impact.</td>
+<td>OKC's best defensive lineups may rely on him, but regular-season availability limits win volume.</td>
+</tr>
+<tr>
+<td>Jared McCain</td>
+<td>12.5 MPG, 36 expected games, -0.63 net.</td>
+<td>Shooting upside after Joe/Wiggins exits; defense and post-injury form are concerns.</td>
+<td>He is the cleanest candidate to replace lost bench spacing.</td>
+</tr>
+<tr>
+<td>Aday Mara / Bennett Stirtz / Otega Oweh</td>
+<td>Cold-start rookie depth.</td>
+<td>Developmental upside, but not reliable contender minutes yet.</td>
+<td>The public prior's <code>n_cold_start = 5</code> is a real uncertainty flag.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>I am applying a judgmental adjustment of <strong>-0.6 pts/100</strong>, roughly <strong>-2.0 wins</strong>, because the public prior's 64.7-win center is already near the top of the plausible regular-season range. The core still screams elite: SGA, Chet, Wallace, Hartenstein, Dort, Caruso, and Jalen Williams give OKC the league's cleanest defense-plus-star-offense profile.</p>
+<p>The trim is about marginal wins, not team identity. I subtract about one win for Jalen Williams/secondary-creation availability risk, about half a win for replacing Joe/Wiggins spacing with less proven McCain/Stirtz/rookie minutes, and about half a win for rotation/minute uncertainty around Wallace, Mitchell, Dort, Caruso, and the cold-start depth. That produces:</p>
+<pre><code class="language-text">strength_delta_pts_per_100 = -0.6
+win_delta = -2.0
+adjusted_wins = 62.7
+confidence_0_to_100 = 57
+</code></pre>
+<p>This is not a new simulation and does not replace the public JSON prior.</p>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest argument against my conclusion is that the model may already be conservative. The public JSON gives OKC a p10 of 59 and <code>se_strength</code> of 1.409, so some health and schedule uncertainty is already priced in. More importantly, the non-authoritative roster packet appears to heavily discount Jalen Williams. If Jalen returns close to his All-NBA/All-Defense level, his real minutes and value could more than offset the Joe/Wiggins departures and any Wallace/Mitchell over-minuting. OKC already won 64 games with real injuries and still has the best player in the league by recent awards, an All-NBA big, and multiple All-Defense guards/wings. In that world, 64.7 is not too high; it may be almost exactly right or even a touch low.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>A healthy preseason Jalen Williams playing 30-plus MPG with normal burst and shooting would push me back to the full 64.7 or slightly above.</li>
+<li>A confirmed rotation where Wallace and Mitchell both hold 27-plus MPG without squeezing Dort/Jalen/Caruso/McCain would reduce the minutes concern.</li>
+<li>McCain or Stirtz proving to be a trusted high-volume spacer by opening night would reduce the Joe/Wiggins penalty.</li>
+<li>Any setback for SGA, Chet, Jalen Williams, Mitchell, Hartenstein, or Caruso would push the adjustment further negative.</li>
+<li>A new public projection JSON rerun with changed <code>n_cold_start</code>, strength, or win band would supersede this research overlay.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<p>The team-level prior is clean because it comes only from <code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>. The roster/minutes context is less clean: <code>projection_2026_27_teams.json</code> contains conflicting OKC team-level fields, so I intentionally ignore those for team prior purposes and use only player rows as non-authoritative context. The player rows also show odd role/minute patterns, especially Jalen Williams at 13.7 MPG and Wallace/Mitchell near starter minutes. That may reflect health modeling, stale depth assumptions, or a known tuning choice. Treat this briefing as a challenge layer around the public prior, not as a corrected forecast.</p>
+<p>External reporting is also time-sensitive. All URLs were accessed July 9, 2026, and injuries, trades, and depth charts can change before training camp.</p>
+<h2 id="sources">Sources</h2>
+<p>Local sources:</p>
+<ul>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code> - authoritative public JSON prior, OKC row only.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code> - non-authoritative roster/minutes/player context only.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code> - non-authoritative depth chart context only.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/README.md</code> - model background.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/MODEL_OVERVIEW.md</code> - model background.</li>
+</ul>
+<p>External public sources, all accessed July 9, 2026:</p>
+<ul>
+<li><a href="https://www.nba.com/team/1610612760/thunder" target="_blank" rel="noopener noreferrer">https://www.nba.com/team/1610612760/thunder</a></li>
+<li><a href="https://www.nba.com/news/2025-2026-regular-season-awards" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2025-2026-regular-season-awards</a></li>
+<li><a href="https://www.nba.com/news/shai-gilgeous-alexander-2026-mvp-by-the-numbers" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/shai-gilgeous-alexander-2026-mvp-by-the-numbers</a></li>
+<li><a href="https://www.nba.com/news/2025-26-all-nba-teams-announced" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2025-26-all-nba-teams-announced</a></li>
+<li><a href="https://www.nba.com/news/2025-26-all-defensive-teams-announced" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2025-26-all-defensive-teams-announced</a></li>
+<li><a href="https://www.nba.com/news/the-athletic-why-the-thunders-dominant-defense-makes-them-historically-great" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/the-athletic-why-the-thunders-dominant-defense-makes-them-historically-great</a></li>
+<li><a href="https://www.sportsnet.ca/nba/article/thunders-jalen-williams-to-miss-multiple-weeks-with-hamstring-injury/" target="_blank" rel="noopener noreferrer">https://www.sportsnet.ca/nba/article/thunders-jalen-williams-to-miss-multiple-weeks-with-hamstring-injury/</a></li>
+<li><a href="https://www.nba.com/news/3-things-to-watch-spurs-thunder-game-5" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/3-things-to-watch-spurs-thunder-game-5</a></li>
+<li><a href="https://www.nba.com/news/suns-thunder-2026-playoffs-game-4-takeaways" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/suns-thunder-2026-playoffs-game-4-takeaways</a></li>
+<li><a href="https://www.nba.com/news/isaiah-joe-trade-pistons-thunder" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/isaiah-joe-trade-pistons-thunder</a></li>
+<li><a href="https://www.si.com/nba/thunder/onsi/every-move-the-okc-thunder-have-made-this-offseason-draft-picks-signings-and-trades" target="_blank" rel="noopener noreferrer">https://www.si.com/nba/thunder/onsi/every-move-the-okc-thunder-have-made-this-offseason-draft-picks-signings-and-trades</a></li>
+<li><a href="https://www.nba.com/news/five-takeaways-2026-draft-1st-round" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/five-takeaways-2026-draft-1st-round</a></li>
+<li><a href="https://www.nba.com/news/2026-salt-lake-city-summer-league-grizzlies-thunder" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-salt-lake-city-summer-league-grizzlies-thunder</a></li>
+<li><a href="https://www.nba.com/news/2026-salt-lake-city-summer-league-thunder-jazz" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-salt-lake-city-summer-league-thunder-jazz</a></li>
+</ul>8:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$b"}}],"$Lc"]}]
+9:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","p",null,{"className":"rail-empty","children":"Nothing points here yet."}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-team-briefings-2026-27/00-cross-team-findings",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-cross-team-findings/","children":"2026-27 NBA cross-team findings"}]}],["$","li","basketball/nba-team-briefings-2026-27/00-index",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-index/","children":"2026-27 NBA team briefing index"}]}],["$","li","basketball/nba-team-briefings-2026-27/atl-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/atl-2026-27-briefing/","children":"Atlanta Hawks 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bos-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","children":"BOS 2026-27 research briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing/","children":"Brooklyn Nets 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/cha-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","children":"Charlotte Hornets 2026-27 Research Briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+a:["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]
+c:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/nyk-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"New York Knicks 2026-27 Research Briefing"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/orl-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Orlando Magic 2026-27 Research Briefing"}]]}]]}]
+f:null

@@ -1,0 +1,1158 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+51:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+52:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA multi-agent forecasting company",{"children":"NBA multi-agent forecasting company"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"NBA agent company structure plan"}],["$","p",null,{"className":"article-deck","children":"A multi-agent NBA forecasting company should make every team committee an expert research desk, then force those desks through independent prediction, calibrated aggregation, market comparison, finance, and backtesting layers."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 8, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[15," min · ","3,095"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","design-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#design-thesis","children":"Design Thesis"}]}],["$","li","corporate-charter",{"className":"toc-depth-2","children":["$","a",null,{"href":"#corporate-charter","children":"Corporate Charter"}]}],["$","li","authority-pyramid",{"className":"toc-depth-2","children":["$","a",null,{"href":"#authority-pyramid","children":"Authority Pyramid"}]}],["$","li","agent-population",{"className":"toc-depth-2","children":["$","a",null,{"href":"#agent-population","children":"Agent Population"}]}],["$","li","executive-office",{"className":"toc-depth-2","children":["$","a",null,{"href":"#executive-office","children":"Executive Office"}]}],["$","li","ceo-agent--commissioner",{"className":"toc-depth-3","children":["$","a",null,{"href":"#ceo-agent--commissioner","children":"CEO Agent / Commissioner"}]}],["$","li","executive-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#executive-agents","children":"Executive Agents"}]}],["$","li","data--historical-archive",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data--historical-archive","children":"Data & Historical Archive"}]}],["$","li","data-sources",{"className":"toc-depth-3","children":["$","a",null,{"href":"#data-sources","children":"Data Sources"}]}],["$","li","data-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#data-agents","children":"Data Agents"}]}],["$","li","research-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#research-department","children":"Research Department"}]}],["$","li","hierarchy",{"className":"toc-depth-3","children":["$","a",null,{"href":"#hierarchy","children":"Hierarchy"}]}],["$","li","the-30-team-committees",{"className":"toc-depth-3","children":["$","a",null,{"href":"#the-30-team-committees","children":"The 30 Team Committees"}]}],["$","li","standard-team-committee",{"className":"toc-depth-3","children":["$","a",null,{"href":"#standard-team-committee","children":"Standard Team Committee"}]}],["$","li","team-state-packet",{"className":"toc-depth-3","children":["$","a",null,{"href":"#team-state-packet","children":"Team State Packet"}]}],["$","li","game-prep-packet",{"className":"toc-depth-3","children":["$","a",null,{"href":"#game-prep-packet","children":"Game Prep Packet"}]}],["$","li","prediction-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#prediction-department","children":"Prediction Department"}]}],["$","li","prediction-hierarchy",{"className":"toc-depth-3","children":["$","a",null,{"href":"#prediction-hierarchy","children":"Prediction Hierarchy"}]}],["$","li","season-forecast-committee",{"className":"toc-depth-3","children":["$","a",null,{"href":"#season-forecast-committee","children":"Season Forecast Committee"}]}],["$","li","game-forecast-committee",{"className":"toc-depth-3","children":["$","a",null,{"href":"#game-forecast-committee","children":"Game Forecast Committee"}]}],"$L3","$L4","$L5","$L6","$L7","$L8","$L9","$La","$Lb","$Lc","$Ld","$Le","$Lf","$L10","$L11","$L12","$L13","$L14","$L15","$L16","$L17","$L18","$L19","$L1a","$L1b","$L1c","$L1d","$L1e","$L1f","$L20","$L21","$L22","$L23","$L24","$L25","$L26","$L27","$L28","$L29","$L2a","$L2b"]}]]}],"$L2c"]}],null,"$L2d"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","player-availability--minutes-committee",{"className":"toc-depth-3","children":["$","a",null,{"href":"#player-availability--minutes-committee","children":"Player Availability & Minutes Committee"}]}]
+4:["$","li","market-blind-rule",{"className":"toc-depth-3","children":["$","a",null,{"href":"#market-blind-rule","children":"Market-Blind Rule"}]}]
+5:["$","li","forecast-packet",{"className":"toc-depth-3","children":["$","a",null,{"href":"#forecast-packet","children":"Forecast Packet"}]}]
+6:["$","li","aggregation-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#aggregation-department","children":"Aggregation Department"}]}]
+7:["$","li","agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#agents","children":"Agents"}]}]
+8:["$","li","house-line-packet",{"className":"toc-depth-3","children":["$","a",null,{"href":"#house-line-packet","children":"House Line Packet"}]}]
+9:["$","li","finance--markets-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#finance--markets-department","children":"Finance & Markets Department"}]}]
+a:["$","li","market-sources",{"className":"toc-depth-3","children":["$","a",null,{"href":"#market-sources","children":"Market Sources"}]}]
+b:["$","li","agents-1",{"className":"toc-depth-3","children":["$","a",null,{"href":"#agents-1","children":"Agents"}]}]
+c:["$","li","bet-ticket",{"className":"toc-depth-3","children":["$","a",null,{"href":"#bet-ticket","children":"Bet Ticket"}]}]
+d:["$","li","bet-issuance-rules",{"className":"toc-depth-3","children":["$","a",null,{"href":"#bet-issuance-rules","children":"Bet Issuance Rules"}]}]
+e:["$","li","backtesting--evaluation-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#backtesting--evaluation-department","children":"Backtesting & Evaluation Department"}]}]
+f:["$","li","chief-backtesting-officer",{"className":"toc-depth-3","children":["$","a",null,{"href":"#chief-backtesting-officer","children":"Chief Backtesting Officer"}]}]
+10:["$","li","2025-26-walk-forward-protocol",{"className":"toc-depth-3","children":["$","a",null,{"href":"#2025-26-walk-forward-protocol","children":"2025-26 Walk-Forward Protocol"}]}]
+11:["$","li","required-decision-timestamps",{"className":"toc-depth-3","children":["$","a",null,{"href":"#required-decision-timestamps","children":"Required Decision Timestamps"}]}]
+12:["$","li","leakage-rules",{"className":"toc-depth-3","children":["$","a",null,{"href":"#leakage-rules","children":"Leakage Rules"}]}]
+13:["$","li","evaluation-metrics",{"className":"toc-depth-3","children":["$","a",null,{"href":"#evaluation-metrics","children":"Evaluation Metrics"}]}]
+14:["$","li","risk-compliance--audit",{"className":"toc-depth-2","children":["$","a",null,{"href":"#risk-compliance--audit","children":"Risk, Compliance & Audit"}]}]
+15:["$","li","hard-vetoes",{"className":"toc-depth-3","children":["$","a",null,{"href":"#hard-vetoes","children":"Hard Vetoes"}]}]
+16:["$","li","risk-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#risk-agents","children":"Risk Agents"}]}]
+17:["$","li","public-website--story-desk",{"className":"toc-depth-2","children":["$","a",null,{"href":"#public-website--story-desk","children":"Public Website & Story Desk"}]}]
+18:["$","li","core-views",{"className":"toc-depth-3","children":["$","a",null,{"href":"#core-views","children":"Core Views"}]}]
+19:["$","li","daily-slate-cycle",{"className":"toc-depth-2","children":["$","a",null,{"href":"#daily-slate-cycle","children":"Daily Slate Cycle"}]}]
+1a:["$","li","morning-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#morning-cycle","children":"Morning Cycle"}]}]
+1b:["$","li","injury-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#injury-cycle","children":"Injury Cycle"}]}]
+1c:["$","li","pregame-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#pregame-cycle","children":"Pregame Cycle"}]}]
+1d:["$","li","postgame-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#postgame-cycle","children":"Postgame Cycle"}]}]
+1e:["$","li","preseason-cycle",{"className":"toc-depth-2","children":["$","a",null,{"href":"#preseason-cycle","children":"Preseason Cycle"}]}]
+1f:["$","li","preseason-research-outputs",{"className":"toc-depth-3","children":["$","a",null,{"href":"#preseason-research-outputs","children":"Preseason Research Outputs"}]}]
+20:["$","li","season-simulation",{"className":"toc-depth-3","children":["$","a",null,{"href":"#season-simulation","children":"Season Simulation"}]}]
+21:["$","li","versioned-build-plan",{"className":"toc-depth-2","children":["$","a",null,{"href":"#versioned-build-plan","children":"Versioned Build Plan"}]}]
+22:["$","li","v0---static-company-blueprint",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v0---static-company-blueprint","children":"V0 - Static Company Blueprint"}]}]
+23:["$","li","v1---data-backbone",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v1---data-backbone","children":"V1 - Data Backbone"}]}]
+24:["$","li","v2---30-team-research-committees",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v2---30-team-research-committees","children":"V2 - 30 Team Research Committees"}]}]
+25:["$","li","v3---game-prediction-engine",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v3---game-prediction-engine","children":"V3 - Game Prediction Engine"}]}]
+26:["$","li","v4---finance-and-paper-betting",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v4---finance-and-paper-betting","children":"V4 - Finance and Paper Betting"}]}]
+27:["$","li","v5---2025-26-walk-forward-backtest",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v5---2025-26-walk-forward-backtest","children":"V5 - 2025-26 Walk-Forward Backtest"}]}]
+28:["$","li","v6---full-agent-theater",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v6---full-agent-theater","children":"V6 - Full Agent Theater"}]}]
+29:["$","li","recommended-technical-architecture",{"className":"toc-depth-2","children":["$","a",null,{"href":"#recommended-technical-architecture","children":"Recommended Technical Architecture"}]}]
+2a:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+2b:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+2c:["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","design-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#design-thesis","children":"Design Thesis"}]}],["$","li","corporate-charter",{"className":"toc-depth-2","children":["$","a",null,{"href":"#corporate-charter","children":"Corporate Charter"}]}],["$","li","authority-pyramid",{"className":"toc-depth-2","children":["$","a",null,{"href":"#authority-pyramid","children":"Authority Pyramid"}]}],["$","li","agent-population",{"className":"toc-depth-2","children":["$","a",null,{"href":"#agent-population","children":"Agent Population"}]}],["$","li","executive-office",{"className":"toc-depth-2","children":["$","a",null,{"href":"#executive-office","children":"Executive Office"}]}],["$","li","ceo-agent--commissioner",{"className":"toc-depth-3","children":["$","a",null,{"href":"#ceo-agent--commissioner","children":"CEO Agent / Commissioner"}]}],["$","li","executive-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#executive-agents","children":"Executive Agents"}]}],["$","li","data--historical-archive",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data--historical-archive","children":"Data & Historical Archive"}]}],["$","li","data-sources",{"className":"toc-depth-3","children":["$","a",null,{"href":"#data-sources","children":"Data Sources"}]}],["$","li","data-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#data-agents","children":"Data Agents"}]}],["$","li","research-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#research-department","children":"Research Department"}]}],["$","li","hierarchy",{"className":"toc-depth-3","children":["$","a",null,{"href":"#hierarchy","children":"Hierarchy"}]}],["$","li","the-30-team-committees",{"className":"toc-depth-3","children":["$","a",null,{"href":"#the-30-team-committees","children":"The 30 Team Committees"}]}],["$","li","standard-team-committee",{"className":"toc-depth-3","children":["$","a",null,{"href":"#standard-team-committee","children":"Standard Team Committee"}]}],["$","li","team-state-packet",{"className":"toc-depth-3","children":["$","a",null,{"href":"#team-state-packet","children":"Team State Packet"}]}],["$","li","game-prep-packet",{"className":"toc-depth-3","children":["$","a",null,{"href":"#game-prep-packet","children":"Game Prep Packet"}]}],["$","li","prediction-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#prediction-department","children":"Prediction Department"}]}],["$","li","prediction-hierarchy",{"className":"toc-depth-3","children":["$","a",null,{"href":"#prediction-hierarchy","children":"Prediction Hierarchy"}]}],["$","li","season-forecast-committee",{"className":"toc-depth-3","children":["$","a",null,{"href":"#season-forecast-committee","children":"Season Forecast Committee"}]}],["$","li","game-forecast-committee",{"className":"toc-depth-3","children":["$","a",null,{"href":"#game-forecast-committee","children":"Game Forecast Committee"}]}],["$","li","player-availability--minutes-committee",{"className":"toc-depth-3","children":["$","a",null,{"href":"#player-availability--minutes-committee","children":"Player Availability & Minutes Committee"}]}],["$","li","market-blind-rule",{"className":"toc-depth-3","children":["$","a",null,{"href":"#market-blind-rule","children":"Market-Blind Rule"}]}],["$","li","forecast-packet",{"className":"toc-depth-3","children":["$","a",null,{"href":"#forecast-packet","children":"Forecast Packet"}]}],["$","li","aggregation-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#aggregation-department","children":"Aggregation Department"}]}],["$","li","agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#agents","children":"Agents"}]}],["$","li","house-line-packet",{"className":"toc-depth-3","children":["$","a",null,{"href":"#house-line-packet","children":"House Line Packet"}]}],["$","li","finance--markets-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#finance--markets-department","children":"Finance & Markets Department"}]}],["$","li","market-sources",{"className":"toc-depth-3","children":["$","a",null,{"href":"#market-sources","children":"Market Sources"}]}],"$L2e","$L2f","$L30","$L31","$L32","$L33","$L34","$L35","$L36","$L37","$L38","$L39","$L3a","$L3b","$L3c","$L3d","$L3e","$L3f","$L40","$L41","$L42","$L43","$L44","$L45","$L46","$L47","$L48","$L49","$L4a","$L4b","$L4c","$L4d","$L4e"]}]]}],"$L4f","$L50"]}]
+2d:["$","$L51",null,{"children":["$","$52",null,{"name":"Next.MetadataOutlet","children":"$@53"}]}]
+2e:["$","li","agents-1",{"className":"toc-depth-3","children":["$","a",null,{"href":"#agents-1","children":"Agents"}]}]
+2f:["$","li","bet-ticket",{"className":"toc-depth-3","children":["$","a",null,{"href":"#bet-ticket","children":"Bet Ticket"}]}]
+30:["$","li","bet-issuance-rules",{"className":"toc-depth-3","children":["$","a",null,{"href":"#bet-issuance-rules","children":"Bet Issuance Rules"}]}]
+31:["$","li","backtesting--evaluation-department",{"className":"toc-depth-2","children":["$","a",null,{"href":"#backtesting--evaluation-department","children":"Backtesting & Evaluation Department"}]}]
+32:["$","li","chief-backtesting-officer",{"className":"toc-depth-3","children":["$","a",null,{"href":"#chief-backtesting-officer","children":"Chief Backtesting Officer"}]}]
+33:["$","li","2025-26-walk-forward-protocol",{"className":"toc-depth-3","children":["$","a",null,{"href":"#2025-26-walk-forward-protocol","children":"2025-26 Walk-Forward Protocol"}]}]
+34:["$","li","required-decision-timestamps",{"className":"toc-depth-3","children":["$","a",null,{"href":"#required-decision-timestamps","children":"Required Decision Timestamps"}]}]
+35:["$","li","leakage-rules",{"className":"toc-depth-3","children":["$","a",null,{"href":"#leakage-rules","children":"Leakage Rules"}]}]
+36:["$","li","evaluation-metrics",{"className":"toc-depth-3","children":["$","a",null,{"href":"#evaluation-metrics","children":"Evaluation Metrics"}]}]
+37:["$","li","risk-compliance--audit",{"className":"toc-depth-2","children":["$","a",null,{"href":"#risk-compliance--audit","children":"Risk, Compliance & Audit"}]}]
+38:["$","li","hard-vetoes",{"className":"toc-depth-3","children":["$","a",null,{"href":"#hard-vetoes","children":"Hard Vetoes"}]}]
+39:["$","li","risk-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#risk-agents","children":"Risk Agents"}]}]
+3a:["$","li","public-website--story-desk",{"className":"toc-depth-2","children":["$","a",null,{"href":"#public-website--story-desk","children":"Public Website & Story Desk"}]}]
+3b:["$","li","core-views",{"className":"toc-depth-3","children":["$","a",null,{"href":"#core-views","children":"Core Views"}]}]
+3c:["$","li","daily-slate-cycle",{"className":"toc-depth-2","children":["$","a",null,{"href":"#daily-slate-cycle","children":"Daily Slate Cycle"}]}]
+3d:["$","li","morning-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#morning-cycle","children":"Morning Cycle"}]}]
+3e:["$","li","injury-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#injury-cycle","children":"Injury Cycle"}]}]
+3f:["$","li","pregame-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#pregame-cycle","children":"Pregame Cycle"}]}]
+40:["$","li","postgame-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#postgame-cycle","children":"Postgame Cycle"}]}]
+41:["$","li","preseason-cycle",{"className":"toc-depth-2","children":["$","a",null,{"href":"#preseason-cycle","children":"Preseason Cycle"}]}]
+42:["$","li","preseason-research-outputs",{"className":"toc-depth-3","children":["$","a",null,{"href":"#preseason-research-outputs","children":"Preseason Research Outputs"}]}]
+43:["$","li","season-simulation",{"className":"toc-depth-3","children":["$","a",null,{"href":"#season-simulation","children":"Season Simulation"}]}]
+44:["$","li","versioned-build-plan",{"className":"toc-depth-2","children":["$","a",null,{"href":"#versioned-build-plan","children":"Versioned Build Plan"}]}]
+45:["$","li","v0---static-company-blueprint",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v0---static-company-blueprint","children":"V0 - Static Company Blueprint"}]}]
+46:["$","li","v1---data-backbone",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v1---data-backbone","children":"V1 - Data Backbone"}]}]
+47:["$","li","v2---30-team-research-committees",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v2---30-team-research-committees","children":"V2 - 30 Team Research Committees"}]}]
+48:["$","li","v3---game-prediction-engine",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v3---game-prediction-engine","children":"V3 - Game Prediction Engine"}]}]
+49:["$","li","v4---finance-and-paper-betting",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v4---finance-and-paper-betting","children":"V4 - Finance and Paper Betting"}]}]
+4a:["$","li","v5---2025-26-walk-forward-backtest",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v5---2025-26-walk-forward-backtest","children":"V5 - 2025-26 Walk-Forward Backtest"}]}]
+4b:["$","li","v6---full-agent-theater",{"className":"toc-depth-3","children":["$","a",null,{"href":"#v6---full-agent-theater","children":"V6 - Full Agent Theater"}]}]
+4c:["$","li","recommended-technical-architecture",{"className":"toc-depth-2","children":["$","a",null,{"href":"#recommended-technical-architecture","children":"Recommended Technical Architecture"}]}]
+4d:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+4e:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+54:T946e,<p>Related: <a href="/rome-wiki/articles/basketball/basketball/" class="wiki-link">Basketball</a>, <a href="/rome-wiki/articles/ai/multi-agent-forecasting-frameworks/" class="wiki-link">Multi-agent forecasting frameworks</a>, <a href="/rome-wiki/articles/ai/designed-information-asymmetry-for-llm-forecasts/" class="wiki-link">Designed information asymmetry for LLM forecasts</a>, <a href="/rome-wiki/articles/weather/ensemble-forecasting/" class="wiki-link">Ensemble forecasting</a>, <a href="/rome-wiki/articles/weather/forecast-skill/" class="wiki-link">Forecast skill</a>.</p>
+<h2 id="design-thesis">Design Thesis</h2>
+<p>The company should feel like a basketball front office, a betting syndicate, and a forecasting lab braided together.</p>
+<p>The key split:</p>
+<ul>
+<li><strong>Research Department:</strong> 30 team subcommittees, each an expert on one NBA team.</li>
+<li><strong>Prediction Department:</strong> model and agent forecasters consume team research without becoming attached to any team narrative.</li>
+<li><strong>Aggregation Department:</strong> turns many forecasts into calibrated game and season probabilities.</li>
+<li><strong>Finance Department:</strong> compares probabilities against sportsbooks, Vegas-style lines, Kalshi, Polymarket, and other markets.</li>
+<li><strong>Backtesting Department:</strong> walks the system through the completed 2025-26 season as if it were live.</li>
+<li><strong>Risk, Compliance &#x26; Audit:</strong> prevents leakage, illegal wagering, overbetting, and untracked model drift.</li>
+</ul>
+<p>The core principle is the same as <a href="/rome-wiki/articles/ai/designed-information-asymmetry-for-llm-forecasts/" class="wiki-link">Designed information asymmetry for LLM forecasts</a>: do not give every agent the same blob of context. Team committees should develop private, team-specific expertise. Prediction agents should receive structured packets from the relevant teams, plus league context, and then produce scoreable probability distributions.</p>
+<h2 id="corporate-charter">Corporate Charter</h2>
+<p><strong>Mission:</strong> produce probabilistic NBA forecasts and paper-bet recommendations through an auditable multi-agent company.</p>
+<p><strong>Primary outputs:</strong></p>
+<ul>
+<li>preseason win projections for all 30 teams.</li>
+<li>playoff/play-in odds.</li>
+<li>game moneyline probabilities.</li>
+<li>spread cover probabilities.</li>
+<li>total over/under probabilities.</li>
+<li>player-availability-adjusted game simulations.</li>
+<li>market-edge board versus sportsbook odds, Kalshi, and Polymarket.</li>
+<li>backtested performance, calibration, and closing-line-value reports.</li>
+</ul>
+<p><strong>Default capital mode:</strong> paper betting. Real wagering is out of scope until the system has a leakage-free walk-forward backtest, legal/jurisdiction checks, stake limits, and a human approval gate.</p>
+<p><strong>Primary backtest:</strong> the completed 2025-26 NBA season, walked forward date by date with only information available at each decision timestamp.</p>
+<h2 id="authority-pyramid">Authority Pyramid</h2>
+<pre><code class="language-mermaid">flowchart TD
+  Owner["Human Owner / Board"]
+  CEO["CEO Agent / Commissioner"]
+  Exec["Executive Office"]
+  Data["Data &#x26; Historical Archive"]
+  Research["Research Department: 30 Team Committees"]
+  Prediction["Prediction Department"]
+  Aggregation["Aggregation Department"]
+  Finance["Finance &#x26; Markets Department"]
+  Backtest["Backtesting &#x26; Evaluation"]
+  Risk["Risk, Compliance &#x26; Audit"]
+  Product["Public Website &#x26; Story Desk"]
+
+  Owner --> CEO
+  CEO --> Exec
+  CEO --> Data
+  CEO --> Research
+  CEO --> Prediction
+  CEO --> Aggregation
+  CEO --> Finance
+  CEO --> Backtest
+  CEO --> Product
+  Risk -. veto .-> Prediction
+  Risk -. veto .-> Finance
+  Risk -. veto .-> CEO
+  Data --> Research
+  Data --> Prediction
+  Research --> Prediction
+  Prediction --> Aggregation
+  Aggregation --> Finance
+  Finance --> Risk
+  Backtest --> CEO
+  Backtest --> Risk
+</code></pre>
+<p>The CEO is a process agent, not a handicapper. It schedules the slate, routes packets, enforces deadlines, and writes the final memo. It cannot alter forecasts, override leakage warnings, or force a bet through risk.</p>
+<h2 id="agent-population">Agent Population</h2>
+<p>The full "company theater" is intentionally large, but agents are lazily activated. On a two-game night, only four team committees need full activation. On a 15-game slate, all 30 team committees activate.</p>
+<table>
+<thead>
+<tr>
+<th>Division</th>
+<th align="right">Full agents</th>
+<th>Head</th>
+<th>Main job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Executive Office</td>
+<td align="right">8</td>
+<td>CEO Agent</td>
+<td>Schedule, route, summarize, escalate.</td>
+</tr>
+<tr>
+<td>Data &#x26; Historical Archive</td>
+<td align="right">18</td>
+<td>Chief Data Officer</td>
+<td>Clean NBA, G League, injury, odds, and market data.</td>
+</tr>
+<tr>
+<td>Research Department</td>
+<td align="right">249</td>
+<td>Chief Research Officer</td>
+<td>Maintain 30 team expert committees.</td>
+</tr>
+<tr>
+<td>Prediction Department</td>
+<td align="right">65</td>
+<td>Chief Prediction Officer</td>
+<td>Produce season and game probability distributions.</td>
+</tr>
+<tr>
+<td>Aggregation Department</td>
+<td align="right">15</td>
+<td>Chief Aggregation Officer</td>
+<td>Calibrate, weight, and combine forecasts.</td>
+</tr>
+<tr>
+<td>Finance &#x26; Markets Department</td>
+<td align="right">18</td>
+<td>Chief Markets Officer</td>
+<td>Compare to odds and produce paper bet tickets.</td>
+</tr>
+<tr>
+<td>Backtesting &#x26; Evaluation</td>
+<td align="right">16</td>
+<td>Chief Backtesting Officer</td>
+<td>Walk-forward simulation, scoring, leakage audits.</td>
+</tr>
+<tr>
+<td>Risk, Compliance &#x26; Audit</td>
+<td align="right">12</td>
+<td>Chief Risk Officer</td>
+<td>Veto, legal gate, bankroll rules, audit logs.</td>
+</tr>
+<tr>
+<td>Public Website &#x26; Story Desk</td>
+<td align="right">7</td>
+<td>Head of Public Interface</td>
+<td>Make the company legible live.</td>
+</tr>
+</tbody>
+</table>
+<p>Total full roster: <strong>408 agents</strong>. Prototype roster: <strong>75 agents</strong> by compressing each team committee to one Team Chair plus two specialists. Runtime and cost control are handled separately in <a href="/rome-wiki/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/" class="wiki-link">Cheap model strategy for NBA agents</a>.</p>
+<h2 id="executive-office">Executive Office</h2>
+<h3 id="ceo-agent--commissioner">CEO Agent / Commissioner</h3>
+<p><strong>Inputs:</strong></p>
+<ul>
+<li>upcoming slate.</li>
+<li>current season date.</li>
+<li>active team committee status.</li>
+<li>data health checks.</li>
+<li>market feed status.</li>
+<li>current bankroll or paper bankroll.</li>
+<li>backtest mode or live mode.</li>
+</ul>
+<p><strong>Outputs:</strong></p>
+<ul>
+<li>daily slate agenda.</li>
+<li>committee activation plan.</li>
+<li>escalation list.</li>
+<li>final slate memo.</li>
+<li>public "Commissioner's note" for the website.</li>
+</ul>
+<p><strong>Permissions:</strong></p>
+<ul>
+<li>can open, pause, or cancel a slate cycle.</li>
+<li>can ask a committee to rerun a packet.</li>
+<li>can ask Risk to review a market.</li>
+<li>cannot change a probability.</li>
+<li>cannot place or approve a bet.</li>
+<li>cannot override leakage, legal, or bankroll gates.</li>
+</ul>
+<h3 id="executive-agents">Executive Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chief of Staff</td>
+<td>Tracks packet dependencies, missing teams, late forecasts, and reruns.</td>
+</tr>
+<tr>
+<td>COO</td>
+<td>Monitors runtime, cost, queue health, model availability, and data jobs.</td>
+</tr>
+<tr>
+<td>Chief Basketball Scientist</td>
+<td>Owns modeling philosophy and prevents narrative-only prediction.</td>
+</tr>
+<tr>
+<td>Chief Research Officer</td>
+<td>Runs the 30 team committees.</td>
+</tr>
+<tr>
+<td>Chief Prediction Officer</td>
+<td>Runs forecasting protocols.</td>
+</tr>
+<tr>
+<td>Chief Markets Officer</td>
+<td>Runs odds comparison and paper bet issuance.</td>
+</tr>
+<tr>
+<td>Board Secretary</td>
+<td>Writes immutable minutes and public audit summaries.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="data--historical-archive">Data &#x26; Historical Archive</h2>
+<p><strong>Purpose:</strong> create time-stamped, leakage-controlled data packets.</p>
+<p>This department should be more deterministic than agentic. Agents supervise schemas, provenance, and anomalies; code should perform the actual ingestion and joins.</p>
+<h3 id="data-sources">Data Sources</h3>
+<table>
+<thead>
+<tr>
+<th>Source class</th>
+<th>Examples</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Official NBA stats</td>
+<td>NBA.com/stats, nba_api</td>
+<td>box scores, advanced stats, tracking-adjacent tables, schedules, game IDs.</td>
+</tr>
+<tr>
+<td>Play-by-play and lineup data</td>
+<td>PBPStats, NBA play-by-play, hoopR/nba_api</td>
+<td>possessions, lineups, on/off, substitution patterns, clutch.</td>
+</tr>
+<tr>
+<td>Player impact metrics</td>
+<td>EPM, DARKO, RAPM, LEBRON/BPM-style metrics</td>
+<td>player-strength priors, rotation value, injuries.</td>
+</tr>
+<tr>
+<td>G League</td>
+<td>NBA G League stats, Basketball-Reference G League</td>
+<td>two-way players, call-ups, assignments, development depth.</td>
+</tr>
+<tr>
+<td>Injury/availability</td>
+<td>official NBA Injury Report PDFs/pages</td>
+<td>out/probable/questionable/rest/G League status.</td>
+</tr>
+<tr>
+<td>Odds and markets</td>
+<td>The Odds API, SportsDataIO/OddsJam/OpticOdds, Kalshi, Polymarket</td>
+<td>open/close lines, spreads, totals, moneylines, exchange prices.</td>
+</tr>
+<tr>
+<td>News/context</td>
+<td>team sites, transactions, beat reports, official announcements</td>
+<td>rotation changes, coaching comments, rest signals.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-agents">Data Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NBA Stats Ingest Agent</td>
+<td>Pulls team/player/game stats from official and mirrored APIs.</td>
+</tr>
+<tr>
+<td>Play-by-Play Agent</td>
+<td>Builds possessions, pace, lineups, garbage-time flags, and on/off tables.</td>
+</tr>
+<tr>
+<td>Player Metric Snapshot Agent</td>
+<td>Archives daily EPM, DARKO, RAPM-like, BPM, and other impact metric snapshots.</td>
+</tr>
+<tr>
+<td>G League Ingest Agent</td>
+<td>Tracks affiliates, two-way players, assignments, call-ups, and G League production.</td>
+</tr>
+<tr>
+<td>Injury Report Agent</td>
+<td>Parses official reports by timestamp and status.</td>
+</tr>
+<tr>
+<td>Odds Ingest Agent</td>
+<td>Stores sportsbook and exchange odds snapshots by timestamp.</td>
+</tr>
+<tr>
+<td>Entity Resolution Agent</td>
+<td>Maps players, teams, game IDs, market IDs, and book names across sources.</td>
+</tr>
+<tr>
+<td>Leakage Sentinel</td>
+<td>Verifies that no packet includes information from after the decision timestamp.</td>
+</tr>
+<tr>
+<td>Data QA Agents</td>
+<td>Flag missing games, stale lines, impossible minutes, duplicated players, bad timestamps.</td>
+</tr>
+<tr>
+<td>Archive Librarian</td>
+<td>Writes immutable packet manifests and source IDs.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="research-department">Research Department</h2>
+<p><strong>Purpose:</strong> make each NBA team committee an expert on one team.</p>
+<p>The Research Department does not output bets. It outputs team state, roster state, rotation state, and matchup-relevant facts.</p>
+<h3 id="hierarchy">Hierarchy</h3>
+<pre><code class="language-text">Chief Research Officer
+  -> Eastern Conference Research Director
+     -> Atlantic Division Lead
+     -> Central Division Lead
+     -> Southeast Division Lead
+  -> Western Conference Research Director
+     -> Northwest Division Lead
+     -> Pacific Division Lead
+     -> Southwest Division Lead
+  -> 30 Team Committees
+</code></pre>
+<h3 id="the-30-team-committees">The 30 Team Committees</h3>
+<table>
+<thead>
+<tr>
+<th>Conference</th>
+<th>Division</th>
+<th>Team committees</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>East</td>
+<td>Atlantic</td>
+<td>Celtics, Nets, Knicks, 76ers, Raptors</td>
+</tr>
+<tr>
+<td>East</td>
+<td>Central</td>
+<td>Bulls, Cavaliers, Pistons, Pacers, Bucks</td>
+</tr>
+<tr>
+<td>East</td>
+<td>Southeast</td>
+<td>Hawks, Hornets, Heat, Magic, Wizards</td>
+</tr>
+<tr>
+<td>West</td>
+<td>Northwest</td>
+<td>Nuggets, Timberwolves, Thunder, Trail Blazers, Jazz</td>
+</tr>
+<tr>
+<td>West</td>
+<td>Pacific</td>
+<td>Warriors, Clippers, Lakers, Suns, Kings</td>
+</tr>
+<tr>
+<td>West</td>
+<td>Southwest</td>
+<td>Mavericks, Rockets, Grizzlies, Pelicans, Spurs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="standard-team-committee">Standard Team Committee</h3>
+<p>Each team has 8 agents:</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Responsibility</th>
+<th>Key outputs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Team Chair</td>
+<td>Integrates the committee and defends the team packet.</td>
+<td>Team State Packet, uncertainty notes.</td>
+</tr>
+<tr>
+<td>Roster &#x26; Rotation Agent</td>
+<td>Depth chart, projected minutes, rotation stability, closing five.</td>
+<td>Rotation Packet.</td>
+</tr>
+<tr>
+<td>Player Impact Metrics Agent</td>
+<td>EPM, DARKO, RAPM, LEBRON/BPM-style priors, age curves.</td>
+<td>Player Value Board.</td>
+</tr>
+<tr>
+<td>Lineup &#x26; On/Off Agent</td>
+<td>Lineup net rating, RAPM-like context, teammate/opponent effects.</td>
+<td>Lineup Strength Packet.</td>
+</tr>
+<tr>
+<td>Scheme &#x26; Four Factors Agent</td>
+<td>Shot profile, rim/3PA/midrange, turnovers, rebounding, FTr, pace.</td>
+<td>Team Style Packet.</td>
+</tr>
+<tr>
+<td>Health &#x26; Availability Agent</td>
+<td>Injuries, rest, return-to-play, questionable-minute scenarios.</td>
+<td>Availability Packet.</td>
+</tr>
+<tr>
+<td>G League &#x26; Two-Way Agent</td>
+<td>Affiliate roster, two-way players, call-up readiness, emergency depth.</td>
+<td>Depth Pipeline Packet.</td>
+</tr>
+<tr>
+<td>Schedule &#x26; Context Agent</td>
+<td>Rest, travel, back-to-back, altitude, home/road, emotional spots.</td>
+<td>Context Packet.</td>
+</tr>
+</tbody>
+</table>
+<p>The advanced analytics center of gravity is the Player Impact Metrics Agent plus the Lineup &#x26; On/Off Agent. Their views should dominate the Team Chair's numerical strength estimate unless the Health or Rotation agents show a major minutes shock.</p>
+<h3 id="team-state-packet">Team State Packet</h3>
+<pre><code class="language-yaml">team_state_packet_id:
+team:
+as_of_timestamp:
+season_phase:
+current_record:
+net_rating:
+adjusted_net_rating:
+pace:
+offensive_profile:
+defensive_profile:
+projected_rotation:
+player_impact_board:
+lineup_strengths:
+injury_scenarios:
+g_league_depth:
+schedule_context:
+recent_form_regressed:
+known_unknowns:
+committee_confidence:
+</code></pre>
+<h3 id="game-prep-packet">Game Prep Packet</h3>
+<p>For each game, both team committees produce a matchup packet:</p>
+<pre><code class="language-yaml">game_prep_packet_id:
+game_id:
+team:
+opponent:
+as_of_timestamp:
+projected_starters:
+rotation_scenarios:
+team_strength_mean:
+team_strength_interval:
+offense_vs_opponent_defense:
+defense_vs_opponent_offense:
+pace_pressure:
+rebounding_matchup:
+turnover_matchup:
+shot_profile_matchup:
+injury_swing_players:
+rest_travel_context:
+team_chair_summary:
+</code></pre>
+<h2 id="prediction-department">Prediction Department</h2>
+<p><strong>Purpose:</strong> convert research packets into probabilities.</p>
+<p>Prediction agents cannot browse freely during a slate run. They receive time-stamped packets from Data and Research, then produce scoreable forecasts.</p>
+<h3 id="prediction-hierarchy">Prediction Hierarchy</h3>
+<pre><code class="language-text">Chief Prediction Officer
+  -> Season Forecast Committee
+  -> Game Forecast Committee
+  -> Player Availability &#x26; Minutes Committee
+  -> Matchup Simulation Committee
+  -> Market-Blind Probability Committee
+  -> Model Diversity Desk
+  -> Prediction QA Desk
+</code></pre>
+<h3 id="season-forecast-committee">Season Forecast Committee</h3>
+<p><strong>Job:</strong> before the season and weekly during the season, forecast:</p>
+<ul>
+<li>team win totals.</li>
+<li>playoff odds.</li>
+<li>play-in odds.</li>
+<li>division/conference title odds.</li>
+<li>championship odds.</li>
+<li>distribution of seed outcomes.</li>
+</ul>
+<p>Agents:</p>
+<ul>
+<li>Baseline Ratings Agent.</li>
+<li>Roster Continuity Agent.</li>
+<li>Aging/Development Agent.</li>
+<li>Injury Fragility Agent.</li>
+<li>Schedule Difficulty Agent.</li>
+<li>Depth/G League Upside Agent.</li>
+<li>Coaching/System Stability Agent.</li>
+<li>Monte Carlo Simulator Agent.</li>
+<li>Preseason Market Prior Agent.</li>
+<li>Season Forecast Secretary.</li>
+</ul>
+<h3 id="game-forecast-committee">Game Forecast Committee</h3>
+<p><strong>Job:</strong> for each slate, forecast:</p>
+<ul>
+<li>home win probability.</li>
+<li>neutral-court team strength.</li>
+<li>expected margin.</li>
+<li>margin distribution.</li>
+<li>total points distribution.</li>
+<li>spread cover probability.</li>
+<li>over/under probability.</li>
+</ul>
+<p>Agents:</p>
+<table>
+<thead>
+<tr>
+<th>Subcommittee</th>
+<th align="right">Agents</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline Power Rating Pod</td>
+<td align="right">4</td>
+<td>Elo-like, adjusted net rating, player-impact-weighted team ratings.</td>
+</tr>
+<tr>
+<td>Player Impact Pod</td>
+<td align="right">4</td>
+<td>Converts projected minutes and impact metrics into team strength.</td>
+</tr>
+<tr>
+<td>Matchup Pod</td>
+<td align="right">4</td>
+<td>Scheme/four-factor matchup: rim, threes, turnovers, rebounding, FTr.</td>
+</tr>
+<tr>
+<td>Availability Pod</td>
+<td align="right">4</td>
+<td>Questionable players, rest, minutes restrictions, late scratches.</td>
+</tr>
+<tr>
+<td>Schedule Pod</td>
+<td align="right">3</td>
+<td>Rest, travel, altitude, back-to-back, time zone, fatigue.</td>
+</tr>
+<tr>
+<td>Recent Form Pod</td>
+<td align="right">3</td>
+<td>Recent performance with regression and opponent adjustment.</td>
+</tr>
+<tr>
+<td>Total Points Pod</td>
+<td align="right">3</td>
+<td>Pace, shot profile, FT rate, offensive/defensive efficiency distribution.</td>
+</tr>
+<tr>
+<td>Upset &#x26; Tail Risk Pod</td>
+<td align="right">2</td>
+<td>Blowout, foul trouble, variance, bench volatility.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="player-availability--minutes-committee">Player Availability &#x26; Minutes Committee</h3>
+<p>This committee is crucial because a game model is mostly a minutes-weighted player-value model pretending to be a team model.</p>
+<p>Outputs:</p>
+<ul>
+<li>probability each questionable player plays.</li>
+<li>projected minutes distribution.</li>
+<li>replacement-minute allocation.</li>
+<li>starter/bench stagger assumptions.</li>
+<li>garbage-time likelihood.</li>
+<li>closing-lineup scenarios.</li>
+</ul>
+<h3 id="market-blind-rule">Market-Blind Rule</h3>
+<p>Most Prediction agents should be market-blind. They do not see sportsbook odds or Kalshi/Polymarket prices. This preserves an independent model probability.</p>
+<p>Only the Market Prior Agent and Finance Department see market prices before aggregation. Their job is to compare, not contaminate.</p>
+<h3 id="forecast-packet">Forecast Packet</h3>
+<pre><code class="language-yaml">forecast_packet_id:
+game_id:
+forecast_type:
+as_of_timestamp:
+inputs:
+home_win_probability:
+away_win_probability:
+expected_margin_home:
+margin_distribution:
+expected_total:
+total_distribution:
+spread_cover_probabilities:
+total_over_probabilities:
+key_drivers:
+injury_scenarios:
+confidence:
+model_family:
+agent_or_pod_id:
+</code></pre>
+<h2 id="aggregation-department">Aggregation Department</h2>
+<p><strong>Purpose:</strong> turn many forecasts into one calibrated house line.</p>
+<p>The Aggregation Department owns the company's official probability. It should be boring and statistical.</p>
+<h3 id="agents">Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chief Aggregation Officer</td>
+<td>Owns final house line and disagreement report.</td>
+</tr>
+<tr>
+<td>Calibration Agent</td>
+<td>Weights agents by historical Brier score, log loss, MAE, calibration.</td>
+</tr>
+<tr>
+<td>Diversity Agent</td>
+<td>Penalizes redundant models and correlated errors.</td>
+</tr>
+<tr>
+<td>Market Prior Agent</td>
+<td>Compares house line to market-implied probability after the blind forecast exists.</td>
+</tr>
+<tr>
+<td>Injury Scenario Aggregator</td>
+<td>Combines conditional forecasts across player availability scenarios.</td>
+</tr>
+<tr>
+<td>Spread Distribution Agent</td>
+<td>Converts margin distribution to spread probabilities.</td>
+</tr>
+<tr>
+<td>Totals Distribution Agent</td>
+<td>Converts scoring distribution to over/under probabilities.</td>
+</tr>
+<tr>
+<td>Season Simulation Aggregator</td>
+<td>Combines team win projections and playoff odds.</td>
+</tr>
+<tr>
+<td>Outlier Review Agent</td>
+<td>Inspects extreme minority forecasts before they are downweighted.</td>
+</tr>
+<tr>
+<td>Aggregation Secretary</td>
+<td>Writes the final House Line Packet.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="house-line-packet">House Line Packet</h3>
+<pre><code class="language-yaml">house_line_packet_id:
+game_id:
+as_of_timestamp:
+home_moneyline_probability:
+away_moneyline_probability:
+expected_margin_home:
+margin_sigma:
+expected_total:
+total_sigma:
+spread_probabilities:
+total_probabilities:
+top_drivers:
+forecast_dispersion:
+effective_forecaster_count:
+market_prior_comparison:
+calibration_warning:
+</code></pre>
+<h2 id="finance--markets-department">Finance &#x26; Markets Department</h2>
+<p><strong>Purpose:</strong> compare the house line to tradable prices and issue paper bet tickets.</p>
+<p>Finance agents do not decide who is better at basketball. They decide whether a probability edge survives price, vig, fees, liquidity, limits, and correlation.</p>
+<h3 id="market-sources">Market Sources</h3>
+<ul>
+<li>sportsbook moneyline, spread, and totals.</li>
+<li>open, current, and closing lines.</li>
+<li>Kalshi and Polymarket sports markets where available.</li>
+<li>season win totals and futures.</li>
+<li>exchange depth, bid/ask, volume, and settlement rules.</li>
+</ul>
+<h3 id="agents-1">Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chief Markets Officer</td>
+<td>Owns the market-edge board.</td>
+</tr>
+<tr>
+<td>Odds Normalization Agent</td>
+<td>Converts American odds, spreads, totals, and exchange prices into no-vig probabilities.</td>
+</tr>
+<tr>
+<td>Sportsbook Comparison Agent</td>
+<td>Tracks best available price across books.</td>
+</tr>
+<tr>
+<td>Prediction Market Agent</td>
+<td>Tracks Kalshi/Polymarket event contracts, liquidity, and resolution rules.</td>
+</tr>
+<tr>
+<td>EV Agent</td>
+<td>Computes expected value and edge thresholds.</td>
+</tr>
+<tr>
+<td>Bankroll Agent</td>
+<td>Sizes paper bets using flat stakes and fractional Kelly caps.</td>
+</tr>
+<tr>
+<td>Correlation Agent</td>
+<td>Prevents overexposure to the same game, team, player injury, or market factor.</td>
+</tr>
+<tr>
+<td>CLV Agent</td>
+<td>Tracks closing-line value as an early skill proxy.</td>
+</tr>
+<tr>
+<td>Bet Ticket Secretary</td>
+<td>Writes paper bet tickets.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bet-ticket">Bet Ticket</h3>
+<pre><code class="language-yaml">bet_ticket_id:
+game_id:
+market:
+selection:
+book_or_exchange:
+line:
+odds:
+no_vig_market_probability:
+house_probability:
+edge:
+recommended_stake:
+paper_or_real:
+correlation_group:
+risk_approval_id:
+expires_at:
+</code></pre>
+<h3 id="bet-issuance-rules">Bet Issuance Rules</h3>
+<ul>
+<li>Default is paper betting.</li>
+<li>Real betting requires human approval and legal eligibility.</li>
+<li>No bet if edge is below the minimum threshold.</li>
+<li>No bet if the line moved before ticket creation.</li>
+<li>No bet if the market has unclear settlement rules.</li>
+<li>No bet if the edge depends entirely on unconfirmed injury speculation.</li>
+<li>No parlaying by default.</li>
+<li>No player props until the game-level system is proven.</li>
+</ul>
+<h2 id="backtesting--evaluation-department">Backtesting &#x26; Evaluation Department</h2>
+<p><strong>Purpose:</strong> make the company prove itself in time.</p>
+<p>This is not optional. The backtest department is the referee of the entire company.</p>
+<h3 id="chief-backtesting-officer">Chief Backtesting Officer</h3>
+<p>Owns the 2025-26 walk-forward simulation. Has authority to invalidate results for leakage.</p>
+<h3 id="2025-26-walk-forward-protocol">2025-26 Walk-Forward Protocol</h3>
+<p>For each game day in the 2025-26 season:</p>
+<ol>
+<li>Set the simulation clock to the decision timestamp.</li>
+<li>Load only data available before that timestamp.</li>
+<li>Build Team State Packets for all teams.</li>
+<li>Activate team committees for that day's slate.</li>
+<li>Produce market-blind game forecasts.</li>
+<li>Aggregate house lines.</li>
+<li>Load odds snapshots available at the same timestamp.</li>
+<li>Issue paper bet tickets.</li>
+<li>Advance to game result.</li>
+<li>Score forecasts and bets.</li>
+<li>Repeat.</li>
+</ol>
+<h3 id="required-decision-timestamps">Required Decision Timestamps</h3>
+<table>
+<thead>
+<tr>
+<th>Timestamp</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preseason lock</td>
+<td>season win totals and futures forecast.</td>
+</tr>
+<tr>
+<td>Previous night</td>
+<td>early model line before day-of news.</td>
+</tr>
+<tr>
+<td>Morning of game</td>
+<td>slate forecast with latest stats and overnight news.</td>
+</tr>
+<tr>
+<td>Official injury report window</td>
+<td>availability-aware update.</td>
+</tr>
+<tr>
+<td>60 minutes pregame</td>
+<td>final pregame paper-bet decision, if data exists.</td>
+</tr>
+<tr>
+<td>Closing line</td>
+<td>CLV and benchmark comparison only, not decision input.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="leakage-rules">Leakage Rules</h3>
+<ul>
+<li>No final-season EPM, DARKO, RAPM, or Basketball-Reference advanced stats may be used for earlier dates unless daily snapshots exist.</li>
+<li>No final record, playoff outcome, or postgame box score may enter a pregame packet.</li>
+<li>No closing line may enter a bet decision made earlier.</li>
+<li>No official result may enter a same-day model update before the simulated game ends.</li>
+<li>No agent may search the web live during historical backtest unless search results are time-filtered and archived.</li>
+</ul>
+<h3 id="evaluation-metrics">Evaluation Metrics</h3>
+<p>Forecast quality:</p>
+<ul>
+<li>Brier score for moneyline.</li>
+<li>log loss for moneyline.</li>
+<li>calibration curves by probability bucket.</li>
+<li>spread MAE and RMSE.</li>
+<li>total MAE and RMSE.</li>
+<li>probability integral transform / distribution calibration.</li>
+</ul>
+<p>Betting quality:</p>
+<ul>
+<li>ROI by market.</li>
+<li>closing-line value.</li>
+<li>hit rate by edge bucket.</li>
+<li>max drawdown.</li>
+<li>Sharpe-like return over stake volatility.</li>
+<li>profit by book/exchange.</li>
+<li>profit by agent/committee driver.</li>
+</ul>
+<p>Process quality:</p>
+<ul>
+<li>packet completeness.</li>
+<li>data freshness.</li>
+<li>forecast dispersion.</li>
+<li>effective forecaster count.</li>
+<li>team committee accuracy.</li>
+<li>injury scenario accuracy.</li>
+<li>market movement after recommendation.</li>
+</ul>
+<h2 id="risk-compliance--audit">Risk, Compliance &#x26; Audit</h2>
+<p><strong>Purpose:</strong> keep the company legal, honest, and non-delusional.</p>
+<h3 id="hard-vetoes">Hard Vetoes</h3>
+<ul>
+<li>real wagering without human approval.</li>
+<li>wagering in an illegal jurisdiction or without meeting platform eligibility.</li>
+<li>missing odds timestamp.</li>
+<li>missing injury timestamp for an availability-sensitive forecast.</li>
+<li>stale team packet.</li>
+<li>unclear market settlement.</li>
+<li>bet size above bankroll cap.</li>
+<li>correlated exposure above slate cap.</li>
+<li>backtest leakage.</li>
+<li>prompt/model version not logged.</li>
+</ul>
+<h3 id="risk-agents">Risk Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chief Risk Officer</td>
+<td>Owns veto power.</td>
+</tr>
+<tr>
+<td>Legal/Jurisdiction Agent</td>
+<td>Checks whether any real-money action is allowed.</td>
+</tr>
+<tr>
+<td>Bankroll Risk Agent</td>
+<td>Enforces max stake, daily loss, and drawdown rules.</td>
+</tr>
+<tr>
+<td>Market Integrity Agent</td>
+<td>Flags suspicious lines, bad settlement, and injury-manipulation risk.</td>
+</tr>
+<tr>
+<td>Model Risk Agent</td>
+<td>Tracks overfitting, prompt drift, and metric monoculture.</td>
+</tr>
+<tr>
+<td>Leakage Auditor</td>
+<td>Audits historical runs for future information.</td>
+</tr>
+<tr>
+<td>Audit Clerk</td>
+<td>Writes immutable cycle and backtest logs.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-website--story-desk">Public Website &#x26; Story Desk</h2>
+<p><strong>Purpose:</strong> make the system visually understandable.</p>
+<p>The website should not only show picks. It should show how the company thinks.</p>
+<h3 id="core-views">Core Views</h3>
+<ul>
+<li><strong>Company org chart:</strong> live department and committee activity.</li>
+<li><strong>30 team war rooms:</strong> each team's roster, health, advanced metrics, G League depth, schedule context.</li>
+<li><strong>Slate board:</strong> all games, house probabilities, market odds, edge, confidence, status.</li>
+<li><strong>Matchup room:</strong> two team committees' packet summaries side by side.</li>
+<li><strong>Agent parliament:</strong> prediction pods grouped by game lean and rationale.</li>
+<li><strong>Injury scenario tree:</strong> probability-weighted outcomes if questionable players play or sit.</li>
+<li><strong>Market edge board:</strong> no-vig market probability vs house probability.</li>
+<li><strong>Bet ticket ledger:</strong> paper bets, rejected bets, veto reasons, CLV.</li>
+<li><strong>Backtest lab:</strong> 2025-26 walk-forward results, calibration, ROI, drawdown, mistakes.</li>
+<li><strong>Committee scorecards:</strong> which team committees and prediction pods add value.</li>
+</ul>
+<h2 id="daily-slate-cycle">Daily Slate Cycle</h2>
+<h3 id="morning-cycle">Morning Cycle</h3>
+<ol>
+<li>Data Department freezes overnight stats and odds.</li>
+<li>Research Department updates all 30 Team State Packets.</li>
+<li>CEO activates only teams on the slate.</li>
+<li>Prediction Department produces market-blind forecasts.</li>
+<li>Aggregation Department creates early house lines.</li>
+<li>Finance records current market deltas but does not issue final bets.</li>
+</ol>
+<h3 id="injury-cycle">Injury Cycle</h3>
+<ol>
+<li>Injury Report Agent ingests official availability reports.</li>
+<li>Health agents update team packets.</li>
+<li>Player Availability &#x26; Minutes Committee produces scenario probabilities.</li>
+<li>Prediction Department reruns affected games.</li>
+<li>Aggregation publishes updated house lines.</li>
+</ol>
+<h3 id="pregame-cycle">Pregame Cycle</h3>
+<ol>
+<li>Data QA checks odds and injury timestamps.</li>
+<li>Finance identifies edges against current lines.</li>
+<li>Risk reviews stake, correlation, and legality.</li>
+<li>Paper bet tickets are issued.</li>
+<li>Public website updates slate board and trade-court view.</li>
+</ol>
+<h3 id="postgame-cycle">Postgame Cycle</h3>
+<ol>
+<li>Results and box scores are ingested.</li>
+<li>Forecasts are scored.</li>
+<li>Paper bets are settled.</li>
+<li>CLV is updated.</li>
+<li>Team committees receive postgame diagnostic tasks.</li>
+<li>Backtesting logs are locked.</li>
+</ol>
+<h2 id="preseason-cycle">Preseason Cycle</h2>
+<p>The preseason product is different from the daily slate product.</p>
+<h3 id="preseason-research-outputs">Preseason Research Outputs</h3>
+<p>Each team committee writes:</p>
+<ul>
+<li>roster continuity report.</li>
+<li>projected rotation.</li>
+<li>player impact board.</li>
+<li>age/development curve.</li>
+<li>injury fragility report.</li>
+<li>G League and two-way depth report.</li>
+<li>coaching/system report.</li>
+<li>schedule difficulty note.</li>
+<li>win projection interval.</li>
+</ul>
+<h3 id="season-simulation">Season Simulation</h3>
+<p>The Season Forecast Committee runs an 82-game simulation:</p>
+<ul>
+<li>team strength distributions.</li>
+<li>game-by-game win probabilities.</li>
+<li>injury/rest uncertainty.</li>
+<li>schedule effects.</li>
+<li>trade-deadline uncertainty placeholder.</li>
+<li>play-in/playoff simulations.</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>mean wins.</li>
+<li>median wins.</li>
+<li>10th/90th percentile wins.</li>
+<li>division/conference seed probabilities.</li>
+<li>playoff/play-in odds.</li>
+<li>season win total edges versus market.</li>
+</ul>
+<h2 id="versioned-build-plan">Versioned Build Plan</h2>
+<h3 id="v0---static-company-blueprint">V0 - Static Company Blueprint</h3>
+<ul>
+<li>Build the website using static packets.</li>
+<li>Show all 30 team committees.</li>
+<li>No live data.</li>
+<li>Goal: make the company structure compelling.</li>
+</ul>
+<h3 id="v1---data-backbone">V1 - Data Backbone</h3>
+<ul>
+<li>Ingest schedules, scores, box scores, NBA stats, G League stats, and odds.</li>
+<li>Build entity mapping.</li>
+<li>Store timestamped snapshots.</li>
+<li>No LLM forecasts yet.</li>
+</ul>
+<h3 id="v2---30-team-research-committees">V2 - 30 Team Research Committees</h3>
+<ul>
+<li>One Team Chair plus two specialists per team.</li>
+<li>Produce daily Team State Packets.</li>
+<li>Add G League and injury modules.</li>
+</ul>
+<h3 id="v3---game-prediction-engine">V3 - Game Prediction Engine</h3>
+<ul>
+<li>Add market-blind game forecast packets.</li>
+<li>Model moneyline, spread, and total distributions.</li>
+<li>Add aggregation and calibration.</li>
+</ul>
+<h3 id="v4---finance-and-paper-betting">V4 - Finance and Paper Betting</h3>
+<ul>
+<li>Add odds comparison.</li>
+<li>Add no-vig conversion.</li>
+<li>Add paper bet tickets.</li>
+<li>Add CLV and ROI dashboard.</li>
+</ul>
+<h3 id="v5---2025-26-walk-forward-backtest">V5 - 2025-26 Walk-Forward Backtest</h3>
+<ul>
+<li>Freeze simulated date.</li>
+<li>Re-run the company through the full season.</li>
+<li>Publish leakage audit, calibration, and betting performance.</li>
+</ul>
+<h3 id="v6---full-agent-theater">V6 - Full Agent Theater</h3>
+<ul>
+<li>Expand to full 408-agent company.</li>
+<li>Add committee scorecards and visual agent parliament.</li>
+<li>Virtualize inactive agents so the full company can be displayed without paying for 408 fresh calls per slate.</li>
+<li>Keep real betting disabled by default.</li>
+</ul>
+<h2 id="recommended-technical-architecture">Recommended Technical Architecture</h2>
+<pre><code class="language-text">Scheduler
+  -> Data snapshot jobs
+  -> Team state packet generation
+  -> Slate activation
+  -> Prediction fanout
+  -> Aggregation
+  -> Odds comparison
+  -> Risk gate
+  -> Paper bet ledger
+  -> Postgame scorer
+  -> Website publisher
+</code></pre>
+<p>Recommended stack:</p>
+<ul>
+<li><strong>Backend:</strong> Python FastAPI.</li>
+<li><strong>Workflow:</strong> LangGraph for explicit state machines and supervisor routing.</li>
+<li><strong>Storage:</strong> Postgres plus parquet files for historical snapshots.</li>
+<li><strong>Modeling:</strong> Python, pandas, polars, scikit-learn/PyMC/Stan as needed.</li>
+<li><strong>Agent orchestration:</strong> LLM calls only around packet interpretation, debate, and summaries; deterministic code for scoring, odds math, joins, and bet settlement.</li>
+<li><strong>Frontend:</strong> Next.js or React dashboard with team pages, slate board, and backtest lab.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://www.nba.com/stats" target="_blank" rel="noopener noreferrer">Official NBA Stats</a></li>
+<li><a href="https://stats.gleague.nba.com/" target="_blank" rel="noopener noreferrer">NBA G League Stats</a></li>
+<li><a href="https://github.com/swar/nba_api" target="_blank" rel="noopener noreferrer">nba_api</a></li>
+<li><a href="https://www.pbpstats.com/" target="_blank" rel="noopener noreferrer">PBPStats</a></li>
+<li><a href="https://www.darko.app/" target="_blank" rel="noopener noreferrer">DARKO</a></li>
+<li><a href="https://dunksandthrees.com/epm" target="_blank" rel="noopener noreferrer">Dunks &#x26; Threes EPM</a></li>
+<li><a href="https://dunksandthrees.com/about/epm" target="_blank" rel="noopener noreferrer">Dunks &#x26; Threes EPM methodology</a></li>
+<li><a href="https://www.nbarapm.com/" target="_blank" rel="noopener noreferrer">nbarapm</a></li>
+<li><a href="https://official.nba.com/nba-injury-report-2025-26-season/" target="_blank" rel="noopener noreferrer">Official NBA Injury Report</a></li>
+<li><a href="https://www.basketball-reference.com/leagues/NBA_2026.html" target="_blank" rel="noopener noreferrer">Basketball-Reference 2025-26 season summary</a></li>
+<li><a href="https://www.basketball-reference.com/leagues/NBA_2026_preseason_odds.html" target="_blank" rel="noopener noreferrer">Basketball-Reference 2025-26 preseason odds</a></li>
+<li><a href="https://the-odds-api.com/sports-odds-data/nba-odds.html" target="_blank" rel="noopener noreferrer">The Odds API NBA odds</a></li>
+<li><a href="https://the-odds-api.com/historical-odds-data/" target="_blank" rel="noopener noreferrer">The Odds API historical odds</a></li>
+<li><a href="https://sportsdata.io/help/betting-data-integration-guide" target="_blank" rel="noopener noreferrer">SportsDataIO betting data guide</a></li>
+<li><a href="https://help.kalshi.com/en/articles/13823854-kalshi-api" target="_blank" rel="noopener noreferrer">Kalshi API</a></li>
+<li><a href="https://docs.polymarket.com/api-reference/sports/get-sports-metadata-information" target="_blank" rel="noopener noreferrer">Polymarket Sports API</a></li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Should team committees be active every day, or only when their team has a game within the next two days?</li>
+<li>Which player-impact metric should define the first baseline: DARKO, EPM, RAPM, or a blended in-house prior?</li>
+<li>Can daily historical EPM/DARKO snapshots be acquired or reconstructed for a leakage-clean 2025-26 backtest?</li>
+<li>Should the first betting markets be moneyline only, or moneyline plus spread and totals?</li>
+<li>Should player props be permanently excluded until the game-level model proves calibration?</li>
+</ul>4f:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$54"}}],"$L55"]}]
+50:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/","children":"Cheap model strategy for NBA agents"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/lean-nba-agent-company-structure-plan",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/lean-nba-agent-company-structure-plan/","children":"Lean NBA agent company structure plan"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","children":"NBA multi-agent forecasting company"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/","children":"Cheap model strategy for NBA agents"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","children":"NBA multi-agent forecasting company"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/lean-nba-agent-company-structure-plan",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/lean-nba-agent-company-structure-plan/","children":"Lean NBA agent company structure plan"}]}],["$","li","basketball/basketball",{"children":["$","$L2",null,{"href":"/articles/basketball/basketball/","children":"Basketball"}]}],["$","li","ai/designed-information-asymmetry-for-llm-forecasts",{"children":["$","$L2",null,{"href":"/articles/ai/designed-information-asymmetry-for-llm-forecasts/","children":"Designed information asymmetry for LLM forecasts"}]}],["$","li","ai/multi-agent-forecasting-frameworks",{"children":["$","$L2",null,{"href":"/articles/ai/multi-agent-forecasting-frameworks/","children":"Multi-agent forecasting frameworks"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","project",{"children":"project"}],["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","ai",{"children":"ai"}],["$","li","agents",{"children":"agents"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","betting",{"children":"betting"}],["$","li","analytics",{"children":"analytics"}]]}]]}]]}]
+53:null
+55:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/lean-nba-agent-company-structure-plan/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Lean NBA agent company structure plan"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"NBA multi-agent forecasting company"}]]}]]}]

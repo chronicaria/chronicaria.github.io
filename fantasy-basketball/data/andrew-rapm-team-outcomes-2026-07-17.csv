@@ -1,0 +1,31 @@
+abbr,name,conf,proj_wins,p10,p50,p90,playoff_prob,strength,se_strength,n_rookies,n_replacement,fallback_flags
+OKC,Oklahoma City Thunder,West,64.6,59.0,65.0,70.0,1.0,7.566,1.353,5,2,many_rookies;many_replacement_rows
+BOS,Boston Celtics,East,60.1,54.0,60.0,66.0,1.0,4.93,1.298,2,0,
+HOU,Houston Rockets,West,55.1,47.0,55.0,62.0,0.994,2.491,2.092,3,2,many_rookies;many_replacement_rows;high_rating_uncertainty
+NYK,New York Knicks,East,54.7,48.0,55.0,61.0,0.995,2.323,1.356,2,1,
+SAS,San Antonio Spurs,West,53.8,47.0,54.0,60.0,0.996,2.136,1.321,4,0,many_rookies
+TOR,Toronto Raptors,East,52.5,45.0,53.0,60.0,0.978,1.576,1.667,3,1,many_rookies
+DEN,Denver Nuggets,West,49.8,42.0,50.0,57.0,0.96,0.174,1.792,3,1,many_rookies
+ORL,Orlando Magic,East,46.7,40.0,47.0,53.0,0.87,-1.232,1.279,2,1,
+GSW,Golden State Warriors,West,46.1,39.0,46.0,53.0,0.878,-1.447,1.678,2,0,
+MIA,Miami Heat,East,46.1,39.0,46.0,53.0,0.815,-1.665,1.644,4,2,many_rookies;many_replacement_rows
+CLE,Cleveland Cavaliers,East,45.9,39.0,46.0,53.0,0.819,-1.629,1.41,2,1,
+MIN,Minnesota Timberwolves,West,44.3,38.0,44.0,51.0,0.83,-2.233,1.342,3,1,many_rookies
+CHA,Charlotte Hornets,East,44.0,37.0,44.0,51.0,0.716,-2.336,1.485,4,2,many_rookies;many_replacement_rows
+DET,Detroit Pistons,East,43.8,37.0,44.0,51.0,0.7,-2.679,1.484,2,0,
+ATL,Atlanta Hawks,East,43.7,37.0,44.0,51.0,0.704,-2.302,1.512,3,0,many_rookies
+LAL,Los Angeles Lakers,West,41.5,34.0,42.0,48.0,0.663,-3.423,1.544,3,2,many_rookies;many_replacement_rows
+POR,Portland Trail Blazers,West,41.5,35.0,42.0,48.0,0.671,-3.343,1.27,1,1,
+PHX,Phoenix Suns,West,39.6,33.0,40.0,46.0,0.522,-4.346,1.239,1,0,
+PHI,Philadelphia 76ers,East,36.6,30.0,37.0,43.0,0.21,-5.315,1.272,1,0,
+IND,Indiana Pacers,East,35.3,29.0,35.0,42.0,0.144,-6.042,1.209,1,0,
+DAL,Dallas Mavericks,West,34.4,27.0,34.0,41.0,0.196,-6.363,1.557,4,3,many_rookies;many_replacement_rows
+LAC,LA Clippers,West,32.0,25.0,32.0,40.0,0.116,-7.6,1.86,4,1,many_rookies
+MEM,Memphis Grizzlies,West,32.0,25.0,32.0,39.0,0.103,-7.635,1.664,4,2,many_rookies;many_replacement_rows
+MIL,Milwaukee Bucks,East,29.6,23.0,30.0,36.0,0.024,-8.555,1.533,3,2,many_rookies;many_replacement_rows
+SAC,Sacramento Kings,West,28.8,22.0,29.0,36.0,0.042,-8.951,1.843,3,0,many_rookies
+NOP,New Orleans Pelicans,West,28.7,22.0,29.0,35.0,0.023,-9.148,1.254,1,0,
+CHI,Chicago Bulls,East,27.8,20.0,28.0,35.0,0.02,-9.423,1.957,5,3,many_rookies;many_replacement_rows
+WAS,Washington Wizards,East,24.6,18.0,25.0,31.0,0.003,-10.802,1.702,2,0,
+BKN,Brooklyn Nets,East,24.5,18.0,24.0,31.0,0.004,-10.915,1.758,3,0,many_rookies
+UTA,Utah Jazz,West,22.0,15.0,22.0,30.0,0.005,-12.27,2.402,2,1,high_rating_uncertainty

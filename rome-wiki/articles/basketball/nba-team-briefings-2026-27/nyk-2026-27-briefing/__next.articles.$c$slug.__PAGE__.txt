@@ -1,0 +1,481 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+d:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+e:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"New York Knicks 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"Authoritative prior source: , using only the row where for team-level wins, strength, uncertainty, and odds."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[12," min · ","2,495"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],"$L3","$L4","$L5","$L6","$L7"]}]]}],"$L8","$L9"]}]]}],null,"$La"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}]
+4:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+5:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+6:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+7:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+b:T59ec,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>53.5</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>47-60</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>+1.980 pts/100</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>99.0%</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_ABOUT_RIGHT</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>+0.4 pts/100</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>+1.0 wins</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>54.5</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>60/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>The Knicks deserve a small title-continuity bump above the 53.5-win prior, but Brunson's wrist rehab, the Robinson-to-Drummond center downgrade, age, and stale/deep-bench uncertainty keep this in MODEL_ABOUT_RIGHT territory.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th align="right">Authoritative value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mc_mean_wins</td>
+<td align="right">53.5</td>
+</tr>
+<tr>
+<td>p10_wins</td>
+<td align="right">47.0</td>
+</tr>
+<tr>
+<td>p50_wins</td>
+<td align="right">54.0</td>
+</tr>
+<tr>
+<td>p90_wins</td>
+<td align="right">60.0</td>
+</tr>
+<tr>
+<td>make_playoffs_prob</td>
+<td align="right">0.990</td>
+</tr>
+<tr>
+<td>strength</td>
+<td align="right">+1.980</td>
+</tr>
+<tr>
+<td>se_strength</td>
+<td align="right">1.344</td>
+</tr>
+<tr>
+<td>n_cold_start</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>The model places New York second in the Eastern Conference behind Boston by mean projected wins. The model note in the projection artifacts describes a forward 2026-27 projection built from an <code>xgboost (per-factor per-horizon) + aging fallback</code> player pipeline, availability-adjusted minutes, and Monte Carlo season simulation. No team-level wins, strength, playoff odds, or win-band numbers from <code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code> are used as priors here.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>Non-authoritative roster-row context source: <code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code>. These rows are used only for player/minutes pressure tests.</p>
+<p>Top projected win contributors from the non-authoritative roster rows:</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Role</th>
+<th align="right">MPG</th>
+<th align="right">Exp GP</th>
+<th align="right">Net</th>
+<th>Rating band</th>
+<th align="right">Proj wins</th>
+<th>Flags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mikal Bridges</td>
+<td>starter</td>
+<td align="right">27.6</td>
+<td align="right">80</td>
+<td align="right">+2.21</td>
+<td>+1.10 to +3.37</td>
+<td align="right">9.26</td>
+<td>high uncertainty, rotation_delta +6.1</td>
+</tr>
+<tr>
+<td>Karl-Anthony Towns</td>
+<td>starter</td>
+<td align="right">27.4</td>
+<td align="right">70</td>
+<td align="right">+2.48</td>
+<td>+1.37 to +3.64</td>
+<td align="right">8.47</td>
+<td>high uncertainty, rotation_delta +3.5</td>
+</tr>
+<tr>
+<td>OG Anunoby</td>
+<td>starter</td>
+<td align="right">27.8</td>
+<td align="right">65</td>
+<td align="right">+2.62</td>
+<td>+1.51 to +3.78</td>
+<td align="right">8.31</td>
+<td>high uncertainty</td>
+</tr>
+<tr>
+<td>Jalen Brunson</td>
+<td>starter</td>
+<td align="right">27.9</td>
+<td align="right">70</td>
+<td align="right">+1.84</td>
+<td>+0.74 to +3.01</td>
+<td align="right">7.63</td>
+<td>high uncertainty, rotation_delta +3.1</td>
+</tr>
+<tr>
+<td>Josh Hart</td>
+<td>starter</td>
+<td align="right">27.3</td>
+<td align="right">70</td>
+<td align="right">+1.38</td>
+<td>+0.28 to +2.54</td>
+<td align="right">6.66</td>
+<td>high uncertainty, rotation_delta +3.4</td>
+</tr>
+<tr>
+<td>Jose Alvarado</td>
+<td>rotation</td>
+<td align="right">12.5</td>
+<td align="right">37</td>
+<td align="right">+1.29</td>
+<td>+0.28 to +2.28</td>
+<td align="right">1.56</td>
+<td>high uncertainty, rotation_delta -3.1</td>
+</tr>
+<tr>
+<td>Miles McBride</td>
+<td>rotation</td>
+<td align="right">13.0</td>
+<td align="right">28</td>
+<td align="right">+1.84</td>
+<td>+0.84 to +2.83</td>
+<td align="right">1.44</td>
+<td>high uncertainty, rotation_delta -3.4</td>
+</tr>
+<tr>
+<td>Tyler Kolek</td>
+<td>rotation</td>
+<td align="right">11.6</td>
+<td align="right">51</td>
+<td align="right">-0.44</td>
+<td>-1.45 to +0.55</td>
+<td align="right">1.10</td>
+<td>high uncertainty</td>
+</tr>
+</tbody>
+</table>
+<p>Top projected MPG players are Brunson, Anunoby, Bridges, Towns, Hart, McBride, Shamet, Alvarado, Drummond, Clarkson, Kolek, and Diawara. In basketball terms, the five title starters should still be the spine: Brunson, Bridges, Anunoby, Towns, and Hart. The official Knicks Finals game notes listed that group as the last-game starters, and NBA.com's team page lists Mike Brown as head coach.</p>
+<p>The minutes challenge is that the roster context looks too flat for real high-leverage minutes: all five starters sit around 27-28 MPG. I read those as allocation context, not literal regular-season usage. Brunson, Bridges, Anunoby, Towns, and Hart should be above that in competitive games, with McBride, Alvarado, Shamet, Drummond, Kolek, and Diawara forming the main bench. The context also contains Jordan Clarkson, but NBA.com's 2026 offseason tracker does not list him as a current Knicks re-signing; any Clarkson credit should be discounted until confirmed.</p>
+<p>Expected games-played concerns: Brunson's 70 expected GP is plausible but now carries wrist-rehab monitoring; Anunoby's 65 expected GP is a major leverage point because the defensive shell depends on him; Drummond's 38 expected GP reflects that backup center is now more fragile after Mitchell Robinson and Ariel Hukporti departed. The two cold-start/replacement names in the row context are Tyler Nickel and Jack Kayil, who should be treated as deep uncertainty rather than bankable rotation value.</p>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>The team-detail artifact should not be used for authoritative team-level strength, but the roster-row factor vectors are useful for cautious style inference.</p>
+<ul>
+<li>oTS: This should be a team strength. Towns and Brunson carry large positive shooting/efficiency signals, and the title group surrounds Brunson with enough shooting and connective finishing to sustain elite half-court offense.</li>
+<li>oTOV: Brunson, Bridges, and McBride are positive in the local factor rows, supporting a low-turnover profile. NBA.com's advanced leaderboard context also showed the Knicks among the better teams in AST/TO and turnover percentage.</li>
+<li>oSC: Towns and McBride help here, while Hart and Bridges are not pure second-chance creation engines in the rows. Losing Robinson removes a specialized offensive-glass and vertical-spacing pressure point.</li>
+<li>dTS: This is the most scheme-sensitive factor. Bridges and Anunoby support strong opponent-shot-quality suppression, but Brunson is negative in the local row and Towns needs perimeter help to keep center lineups clean.</li>
+<li>dTOV: Anunoby and Alvarado are the strongest pressure-event bets. This is one reason the guard bench matters even if its scoring is inconsistent.</li>
+<li>dSC: Hart, Anunoby, Towns, and Drummond should rebound well enough in the regular season. The Robinson departure still lowers the elite matchup ceiling because Drummond is a different kind of defensive rebounder/rim presence.</li>
+</ul>
+<p>The style conclusion: the Knicks can justify a top-tier regular-season profile through low turnovers, high shooting, and wing defense, but their championship ceiling remains more sensitive to center matchup quality than the official 53.5-win mean alone can show.</p>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>My main challenge is that the model is directionally about right but slightly conservative on continuity. New York just validated the Brunson-Bridges-Anunoby-Towns-Hart construction under Mike Brown with a 53-29 regular season and a championship run. NBA.com's Knicks page lists the 53-29 record and strong basic profile, while NBA.com playoff/Finals coverage credited Brown's fit with the veteran roster and the contributions of Brunson, Towns, Hart, Anunoby, Bridges, Shamet, McBride, and others.</p>
+<p>The argument against going further is equally concrete. Brunson had left-wrist surgery after playing through the injury, the center rotation downgraded from Robinson/Hukporti to Drummond and emergency depth, the core is entering older seasons, and the non-authoritative roster context still includes at least one stale-risk name in Clarkson. That combination keeps the adjustment humble: +0.4 pts/100, roughly +1.0 wins.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th align="right">Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The official prior already treats NYK as an elite East team.</td>
+<td><code>projection_2026_27.json</code> gives NYK 53.5 mean wins, 47-60 band, +1.980 strength, and 99.0% playoff probability.</td>
+<td>neutral</td>
+<td align="right">0.0 wins</td>
+<td align="right">100</td>
+</tr>
+<tr>
+<td>Title-run continuity modestly supports upside.</td>
+<td>NBA.com lists New York at 53-29 with Mike Brown as head coach; NBA.com Finals coverage described Brown's veteran-roster fit and the title-run core.</td>
+<td>helps</td>
+<td align="right">+0.8 wins</td>
+<td align="right">75</td>
+</tr>
+<tr>
+<td>The playoff/team profile was strong enough to trust the five-man construction.</td>
+<td>NBA.com advanced leaders context showed New York at or near the top in offensive rating, defensive rating, net rating, eFG%, offensive rebounding, and turnover profile during the relevant postseason context.</td>
+<td>helps</td>
+<td align="right">+0.5 wins</td>
+<td align="right">65</td>
+</tr>
+<tr>
+<td>Brunson's wrist surgery reduces confidence in a bigger bump.</td>
+<td>CBS Sports reported Brunson played through a left-wrist injury, was scheduled for surgery, and was expected back later in the summer if recovery goes well.</td>
+<td>hurts</td>
+<td align="right">-0.4 wins</td>
+<td align="right">70</td>
+</tr>
+<tr>
+<td>Backup center changed from Robinson to Drummond.</td>
+<td>NBA.com's 2026 offseason tracker lists Mitchell Robinson and Ariel Hukporti as Knicks departures and Andre Drummond as an addition.</td>
+<td>hurts</td>
+<td align="right">-0.5 wins</td>
+<td align="right">80</td>
+</tr>
+<tr>
+<td>Drummond is regular-season insurance, not a one-for-one Robinson replacement.</td>
+<td>Non-authoritative roster context has Drummond at 12.4 MPG, 38 expected GP, -0.85 net, and a -1.85 to +0.15 band.</td>
+<td>hurts</td>
+<td align="right">-0.3 wins</td>
+<td align="right">65</td>
+</tr>
+<tr>
+<td>McBride/Kolek/Diawara could create low-cost regular-season upside if trusted.</td>
+<td>Roster context likes McBride's per-minute value; Westchester reporting highlighted Kolek's G League scoring/playmaking flashes and Dadiet/Jones/Jemison developmental reps.</td>
+<td>helps</td>
+<td align="right">+0.3 wins</td>
+<td align="right">45</td>
+</tr>
+<tr>
+<td>Stale roster-row risk remains.</td>
+<td>The local row context includes Jordan Clarkson, but the NBA.com offseason tracker used here does not list Clarkson as a current Knicks re-signing.</td>
+<td>hurts</td>
+<td align="right">-0.2 wins</td>
+<td align="right">75</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Model role/value</th>
+<th>Concern or upside</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jalen Brunson</td>
+<td>Starter, 27.9 MPG, 70 exp GP, +1.84 net, 7.63 projected wins</td>
+<td>Slight undervalue if fully healthy; wrist rehab blocks a larger upgrade</td>
+<td>He is the offensive engine, and a healthy Brunson makes 54-56 wins easier than the prior.</td>
+</tr>
+<tr>
+<td>Mikal Bridges</td>
+<td>Starter, 27.6 MPG, 80 exp GP, +2.21 net, 9.26 projected wins</td>
+<td>About right; durability is the bankable edge</td>
+<td>His availability and two-way wing role justify the largest roster-row win contribution.</td>
+</tr>
+<tr>
+<td>Karl-Anthony Towns</td>
+<td>Starter, 27.4 MPG, 70 exp GP, +2.48 net, 8.47 projected wins</td>
+<td>About right, with aging/center-defense caveat</td>
+<td>His shooting lifts oTS, but he needs Anunoby/Bridges protection and is entering an older season.</td>
+</tr>
+<tr>
+<td>OG Anunoby</td>
+<td>Starter, 27.8 MPG, 65 exp GP, +2.62 net, 8.31 projected wins</td>
+<td>High-leverage availability risk</td>
+<td>If he misses time, the Towns-at-center defensive structure becomes much harder to hold.</td>
+</tr>
+<tr>
+<td>Josh Hart</td>
+<td>Starter, 27.3 MPG, 70 exp GP, +1.38 net, 6.66 projected wins</td>
+<td>Slight overvalue risk due to age/spacing</td>
+<td>His rebounding and connective value are real, but physical wings can age abruptly.</td>
+</tr>
+<tr>
+<td>Miles McBride</td>
+<td>Rotation, 13.0 MPG, 28 exp GP, +1.84 net, 1.44 projected wins</td>
+<td>Upside if minutes rise</td>
+<td>The model likes him per minute; if he earns more regular-season guard defense minutes, NYK has hidden depth.</td>
+</tr>
+<tr>
+<td>Jose Alvarado</td>
+<td>Rotation, 12.5 MPG, 37 exp GP, +1.29 net, 1.56 projected wins</td>
+<td>About right; size and shooting cap upside</td>
+<td>His pressure defense helps dTOV and pace, but he is matchup-specific.</td>
+</tr>
+<tr>
+<td>Andre Drummond</td>
+<td>Rotation, 12.4 MPG, 38 exp GP, -0.85 net, 0.70 projected wins</td>
+<td>Center-depth downgrade relative to Robinson</td>
+<td>He can rebound through regular-season innings, but playoff and switchability contexts are worse.</td>
+</tr>
+<tr>
+<td>Tyler Kolek</td>
+<td>Rotation, 11.6 MPG, 51 exp GP, -0.44 net, 1.10 projected wins</td>
+<td>Slight undervalue if offensive flashes translate</td>
+<td>Westchester context supports real offensive feel; NBA defensive viability is the question.</td>
+</tr>
+<tr>
+<td>Tyler Nickel / Jack Kayil</td>
+<td>Cold-start or replacement depth</td>
+<td>Deep-bench uncertainty</td>
+<td>These rows should not be treated as reliable rotation insurance.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>I am applying a judgmental adjustment of +0.4 pts/100, roughly +1.0 wins, because the defending-champion continuity evidence and Mike Brown fit are enough to nudge the Knicks above 53.5, but not enough to call the model materially too low. The model's own prior already has New York at 99.0% to make the playoffs with a 54-win median, so a large manual bump would double-count what is already known.</p>
+<p>The positive side is worth about +1.6 wins in my notes: title-run continuity, starter-fit validation, Brunson-led half-court reliability, and some McBride/Kolek/Diawara regular-season depth upside. The negative side gives back about -0.6 wins: Brunson wrist monitoring, Robinson-to-Drummond matchup downgrade, age curve risk for Towns/Hart/Bridges, and stale Clarkson/deep-bench uncertainty. Net: +1.0 win.</p>
+<p>This is not a new simulation and should not replace the official projection.</p>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest argument against my conclusion is that even +1.0 win may be too generous. The Knicks went 53-29 last year before a hot, clutch, physically demanding title run; Brunson needed wrist surgery; Hart, Towns, and Bridges are entering older seasons; and the Robinson/Hukporti departures reduce frontcourt optionality. The official 53.5-win prior may already be the right title-defense baseline, and any additional bump may overreact to postseason dominance.</p>
+<p>The strongest argument in the other direction is that the model is too low, not merely about right. If Brunson is fully ready for camp, Bridges again plays near 80 games, Anunoby clears 65 games, and Brown gives McBride/Kolek/Diawara a more sustainable regular-season role, this is a 56-58 win team hiding behind a conservative public prior.</p>
+<p>I still land at MODEL_ABOUT_RIGHT because both counterforces are credible.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>Brunson training-camp reports: full-contact, no wrist limitations would move me toward MODEL_TOO_LOW.</li>
+<li>Center rotation: a credible additional rim-protection signing or Drummond looking playable in switching coverages would add upside.</li>
+<li>McBride/Kolek role clarity: if Brown signals McBride as a 20-plus MPG guard and Kolek as a real rotation organizer, depth confidence rises.</li>
+<li>Anunoby availability: any preseason maintenance plan or new injury signal would move the stance toward MODEL_TOO_HIGH.</li>
+<li>Clarkson verification: if Clarkson is not actually on the roster, remove his local-context minutes from any roster read.</li>
+<li>Next model rerun: if the official projection updates <code>se_strength</code>, depth rows, or the team rank after final transactions, re-anchor the briefing.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<p>The only authoritative team-level prior used here is <code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code> for NYK. The older/unified RAPM team-detail JSON is used only for non-authoritative roster rows, player pressure points, MPG, expected GP, rating bands, and factor-vector context.</p>
+<p>The biggest data-quality issue is roster staleness. The non-authoritative context includes Jordan Clarkson, while the NBA.com offseason tracker used in this briefing does not list him as a current Knicks re-signing. The second issue is that the roster-context starter MPGs look too flat to represent actual Knicks competitive-game usage. The third issue is that playoff evidence is useful but noisy: it can validate a lineup while also overstating repeatable regular-season strength.</p>
+<p>External sources were accessed July 9, 2026. I did not use paid APIs or paid data sources.</p>
+<h2 id="sources">Sources</h2>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Access date</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code></td>
+<td>Local, July 9, 2026</td>
+<td>Only authoritative NYK team prior for wins, p10/p50/p90, playoff odds, strength, se_strength, and n_cold_start.</td>
+</tr>
+<tr>
+<td><code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code></td>
+<td>Local, July 9, 2026</td>
+<td>Non-authoritative roster-row context only; not used for team wins/strength/odds.</td>
+</tr>
+<tr>
+<td><code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code></td>
+<td>Local, July 9, 2026</td>
+<td>Non-authoritative curated role/depth context.</td>
+</tr>
+<tr>
+<td><code>Rome/Basketball/NBA multi-agent forecasting company/Boss prompt for 30 NBA team research agents.md</code></td>
+<td>Local, July 9, 2026</td>
+<td>Required briefing template and verification checklist.</td>
+</tr>
+<tr>
+<td><a href="https://www.nba.com/team/1610612752/knicks" target="_blank" rel="noopener noreferrer">https://www.nba.com/team/1610612752/knicks</a></td>
+<td>July 9, 2026</td>
+<td>Official team page for 2025-26 record, basic team stats, head coach, and G League affiliate.</td>
+</tr>
+<tr>
+<td><a href="https://www.nba.com/stats/teams/advanced-leaders" target="_blank" rel="noopener noreferrer">https://www.nba.com/stats/teams/advanced-leaders</a></td>
+<td>July 9, 2026</td>
+<td>NBA.com advanced leaderboard context for Knicks postseason/team profile.</td>
+</tr>
+<tr>
+<td><a href="https://www.nba.com/news/nba-offseason-deals-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nba-offseason-deals-2026</a></td>
+<td>July 9, 2026</td>
+<td>Official offseason tracker for Knicks re-signings, additions, and departures.</td>
+</tr>
+<tr>
+<td><a href="https://www.nba.com/gamenotes/knicks.pdf" target="_blank" rel="noopener noreferrer">https://www.nba.com/gamenotes/knicks.pdf</a></td>
+<td>July 9, 2026</td>
+<td>Official Knicks Finals game notes for starters, roster, and playoff statistical context.</td>
+</tr>
+<tr>
+<td><a href="https://www.nba.com/news/mike-brown-guides-knicks-2026-nba-finals" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/mike-brown-guides-knicks-2026-nba-finals</a></td>
+<td>July 9, 2026</td>
+<td>NBA.com/AP context on Mike Brown fit and Knicks Finals run.</td>
+</tr>
+<tr>
+<td><a href="https://www.nba.com/news/mike-brown-now-has-been-part-of-5-nba-championship-runs-the-knicks-got-this-one-right" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/mike-brown-now-has-been-part-of-5-nba-championship-runs-the-knicks-got-this-one-right</a></td>
+<td>July 9, 2026</td>
+<td>NBA.com/AP context on Brown's title run and coaching continuity.</td>
+</tr>
+<tr>
+<td><a href="https://www.nba.com/news/knicks-mike-brown-new-coach" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/knicks-mike-brown-new-coach</a></td>
+<td>July 9, 2026</td>
+<td>NBA.com/AP context on Mike Brown hire, prior Knicks expectations, and bench/rotation rationale.</td>
+</tr>
+<tr>
+<td><a href="https://www.cbssports.com/nba/news/jalen-brunson-injury-timeline-wrist-surgery-knicks/" target="_blank" rel="noopener noreferrer">https://www.cbssports.com/nba/news/jalen-brunson-injury-timeline-wrist-surgery-knicks/</a></td>
+<td>July 9, 2026</td>
+<td>Brunson wrist surgery, expected recovery timing, playoff load, and roster context.</td>
+</tr>
+<tr>
+<td><a href="https://www.cbssports.com/nba/news/new-york-knicks-roster-run-it-back/" target="_blank" rel="noopener noreferrer">https://www.cbssports.com/nba/news/new-york-knicks-roster-run-it-back/</a></td>
+<td>July 9, 2026</td>
+<td>Cap/continuity analysis and Robinson/free-agent depth context.</td>
+</tr>
+<tr>
+<td><a href="https://www.spotrac.com/nba/new-york-knicks/cap/_/year/2026" target="_blank" rel="noopener noreferrer">https://www.spotrac.com/nba/new-york-knicks/cap/_/year/2026</a></td>
+<td>July 9, 2026</td>
+<td>Contract/cap table context for core salary commitments and apron pressure.</td>
+</tr>
+<tr>
+<td><a href="https://bleacherreport.com/articles/25426380-knicks-active-roster-draft-class-2026-27-salary-info-and-free-agents-after-nba-draft-results" target="_blank" rel="noopener noreferrer">https://bleacherreport.com/articles/25426380-knicks-active-roster-draft-class-2026-27-salary-info-and-free-agents-after-nba-draft-results</a></td>
+<td>July 9, 2026</td>
+<td>Post-draft active roster and salary context.</td>
+</tr>
+<tr>
+<td><a href="https://www.postingandtoasting.com/knicks-features-profiles/87362/westchester-knicks-2025-26-season-recap" target="_blank" rel="noopener noreferrer">https://www.postingandtoasting.com/knicks-features-profiles/87362/westchester-knicks-2025-26-season-recap</a></td>
+<td>July 9, 2026</td>
+<td>Westchester/deep-bench developmental context.</td>
+</tr>
+</tbody>
+</table>8:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$b"}}],"$Lc"]}]
+9:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","p",null,{"className":"rail-empty","children":"Nothing points here yet."}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-team-briefings-2026-27/00-cross-team-findings",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-cross-team-findings/","children":"2026-27 NBA cross-team findings"}]}],["$","li","basketball/nba-team-briefings-2026-27/00-index",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-index/","children":"2026-27 NBA team briefing index"}]}],["$","li","basketball/nba-team-briefings-2026-27/atl-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/atl-2026-27-briefing/","children":"Atlanta Hawks 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bos-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","children":"BOS 2026-27 research briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing/","children":"Brooklyn Nets 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/cha-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","children":"Charlotte Hornets 2026-27 Research Briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+a:["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]
+c:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/nop-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"New Orleans Pelicans 2026-27 Research Briefing"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/okc-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Oklahoma City Thunder 2026-27 Research Briefing"}]]}]]}]
+f:null

@@ -1,0 +1,114 @@
+/* =============================================================================
+   tokens.css — The Personal Newspaper design system (Phase B1)
+   Self-hosted subset-Latin WOFF2 fonts + :root design tokens (PLAN §6.2).
+   Owns: public/css/tokens.css + public/fonts/*.woff2
+   =============================================================================
+
+   ───────────────────────────────────────────────────────────────────────────
+   HEAD SNIPPET FOR B4 — paste verbatim into the <head> of every page.
+   Preloads only the above-the-fold faces (Playfair Display 700 + Newsreader
+   regular), then tokens.css, then newspaper.css, then defers render.js.
+   ───────────────────────────────────────────────────────────────────────────
+
+   <link rel="preload" href="fonts/playfair-display-v40-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+   <link rel="preload" href="fonts/newsreader-v26-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+   <link rel="stylesheet" href="css/tokens.css">
+   <link rel="stylesheet" href="css/newspaper.css">
+   <script defer src="js/render.js"></script>
+
+   ============================================================================= */
+
+/* ─── @font-face — Newsreader (body + italic decks + bold) ─────────────────── */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/newsreader-v26-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/newsreader-v26-latin-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/newsreader-v26-latin-700.woff2') format('woff2');
+}
+
+/* ─── @font-face — Playfair Display (headlines / display) ───────────────────── */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/playfair-display-v40-latin-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('../fonts/playfair-display-v40-latin-900.woff2') format('woff2');
+}
+
+/* ─── @font-face — Libre Franklin (kickers/labels/bylines/captions/data) ────── */
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/libre-franklin-v20-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/libre-franklin-v20-latin-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/libre-franklin-v20-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Libre Franklin';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/libre-franklin-v20-latin-700.woff2') format('woff2');
+}
+
+/* ─── @font-face — UnifrakturMaguntia (blackletter nameplate) ───────────────── */
+@font-face {
+  font-family: 'UnifrakturMaguntia';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/unifrakturmaguntia-v22-latin-regular.woff2') format('woff2');
+}
+
+/* ─── :root tokens (PLAN §6.2 — verbatim) ──────────────────────────────────── */
+:root{
+  --paper:#F4F1EA; --paper-2:#EFEBE1; --ink:#1A1A1A; --ink-soft:#4A4A47;
+  --ink-faint:#6E6B63; --rule:#C9C4B8; --rule-strong:#8A8579;
+  --accent:#8B0000; --pos:#1B6B3A; --neg:#A01818; --link:#14315A;
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --font-body:'Newsreader','Source Serif 4',Georgia,serif;
+  --font-label:'Libre Franklin','Helvetica Neue',Arial,sans-serif;
+  --font-name:'UnifrakturMaguntia','Playfair Display',serif;
+  --fs-lead:clamp(2.5rem,5vw,4.5rem); --fs-h2:2rem; --fs-h3:1.4rem; --fs-deck:1.25rem;
+  --fs-body:1rem; --fs-byline:.85rem; --fs-kicker:.75rem; --fs-folio:.7rem; --fs-agate:.78rem;
+  --gap:1.5rem;
+}
+*{ box-sizing:border-box; border-radius:0!important; box-shadow:none!important; }
+body{ margin:0; background:var(--paper); color:var(--ink);
+      font-family:var(--font-body); font-size:var(--fs-body); line-height:1.5; }

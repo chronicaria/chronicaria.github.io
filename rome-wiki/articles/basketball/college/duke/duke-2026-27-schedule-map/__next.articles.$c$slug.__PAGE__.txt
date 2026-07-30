@@ -1,0 +1,204 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+a:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+b:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","College",{"children":"College"}],["$","span","Duke",{"children":"Duke"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Duke 2026-27 schedule map"}],["$","p",null,{"className":"article-deck","children":"Duke's partial 2026-27 schedule is best read as a sequence of diagnostic environments, not as a July strength-of-schedule ranking."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[14," min · ","2,926"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","the-verified-calendar",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-verified-calendar","children":"The verified calendar"}]}],["$","li","why-venue-categories-matter",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-venue-categories-matter","children":"Why venue categories matter"}]}],["$","li","the-opening-five-game-laboratory",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-opening-five-game-laboratory","children":"The opening five-game laboratory"}]}],["$","li","michigan-state-function-under-opening-night-pressure",{"className":"toc-depth-3","children":["$","a",null,{"href":"#michigan-state-function-under-opening-night-pressure","children":"Michigan State: function under opening-night pressure"}]}],["$","li","illinois-the-home-environment-control",{"className":"toc-depth-3","children":["$","a",null,{"href":"#illinois-the-home-environment-control","children":"Illinois: the home-environment control"}]}],["$","li","washington-state-the-hinge-game",{"className":"toc-depth-3","children":["$","a",null,{"href":"#washington-state-the-hinge-game","children":"Washington State: the hinge game"}]}],["$","li","uconn-rematch-without-identity-collapse",{"className":"toc-depth-3","children":["$","a",null,{"href":"#uconn-rematch-without-identity-collapse","children":"UConn: rematch without identity collapse"}]}],["$","li","florida-the-true-road-test",{"className":"toc-depth-3","children":["$","a",null,{"href":"#florida-the-true-road-test","children":"Florida: the true-road test"}]}],["$","li","the-december-bridge",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-december-bridge","children":"The December bridge"}]}],["$","li","the-acc-opponent-matrix",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-acc-opponent-matrix","children":"The ACC opponent matrix"}]}],["$","li","gonzaga-as-a-late-season-out-of-system-test",{"className":"toc-depth-2","children":["$","a",null,{"href":"#gonzaga-as-a-late-season-out-of-system-test","children":"Gonzaga as a late-season out-of-system test"}]}],["$","li","from-schedule-strength-to-résumé-evidence",{"className":"toc-depth-2","children":["$","a",null,{"href":"#from-schedule-strength-to-résumé-evidence","children":"From schedule strength to résumé evidence"}]}],["$","li","travel-and-recovery-without-pseudo-precision",{"className":"toc-depth-2","children":["$","a",null,{"href":"#travel-and-recovery-without-pseudo-precision","children":"Travel and recovery without pseudo-precision"}]}],["$","li","what-to-record-after-each-game",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-to-record-after-each-game","children":"What to record after each game"}]}],["$","li","what-remains-unknown",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-remains-unknown","children":"What remains unknown"}]}],"$L3","$L4"]}]]}],"$L5"]}],null,"$L6"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+4:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+7:T5b59,<p>Up: <a href="/rome-wiki/articles/basketball/college/duke/duke-mens-basketball-2026-27/" class="wiki-link">Duke men's basketball 2026-27</a> · Related: <a href="/rome-wiki/articles/basketball/college/duke/duke-2026-27-roster-construction/" class="wiki-link">Duke 2026-27 roster construction</a></p>
+<h2 id="the-verified-calendar">The verified calendar</h2>
+<p>As of July 9, Duke has published seven named nonconference games and the ACC tournament window. Conference opponents are known, but their dates, times, and networks are not. Most nonconference tip times are also listed as <code>TBA</code>. The distinction between a confirmed matchup and a complete schedule is essential: the live page is an authoritative ledger of what it contains, not evidence that no other games will be added.</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Opponent</th>
+<th>Site</th>
+<th>Event or broadcast</th>
+<th>Verified analytical role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nov. 10</td>
+<td>Michigan State</td>
+<td>United Center, Chicago</td>
+<td>Champions Classic; ESPN</td>
+<td>season-opening neutral test</td>
+</tr>
+<tr>
+<td>Nov. 17</td>
+<td>Illinois</td>
+<td>Cameron Indoor Stadium, Durham</td>
+<td>time/network TBA</td>
+<td>only currently announced home nonconference game</td>
+</tr>
+<tr>
+<td>Nov. 21</td>
+<td>Washington State</td>
+<td>Acrisure Arena, Palm Desert</td>
+<td>Acrisure Series</td>
+<td>first Duke–Washington State meeting</td>
+</tr>
+<tr>
+<td>Nov. 25</td>
+<td>UConn</td>
+<td>T-Mobile Arena, Las Vegas</td>
+<td>Prime Video</td>
+<td>neutral rematch of 2026 Elite Eight programs</td>
+</tr>
+<tr>
+<td>Dec. 1</td>
+<td>at Florida</td>
+<td>Gainesville</td>
+<td>ACC/SEC Challenge</td>
+<td>only currently announced true road nonconference game</td>
+</tr>
+<tr>
+<td>Dec. 21</td>
+<td>Michigan</td>
+<td>Madison Square Garden, New York</td>
+<td>Prime Video</td>
+<td>late-December neutral marker</td>
+</tr>
+<tr>
+<td>Feb. 20</td>
+<td>Gonzaga</td>
+<td>Little Caesars Arena, Detroit</td>
+<td>Prime Video</td>
+<td>late-season nonconference interruption</td>
+</tr>
+<tr>
+<td>Mar. 9-13</td>
+<td>ACC tournament</td>
+<td>First Horizon Coliseum, Greensboro</td>
+<td>ACC tournament</td>
+<td>conference postseason, qualification limited to top 15</td>
+</tr>
+</tbody>
+</table>
+<p>The table records function, not forecast. “Season-opening test” follows Duke's Champions Classic announcement. “Only currently announced” deliberately leaves room for schedule additions. “Rematch” refers to program continuity, not identical players or tactics.</p>
+<h2 id="why-venue-categories-matter">Why venue categories matter</h2>
+<p>College schedules are often reduced to opponent names. That loses information. Cameron, a true road arena, and a neutral-site event impose different demands even when the opponent is unchanged.</p>
+<p>A home game gives Duke its own routines, crowd, court, and travel-free preparation. It does not make the basketball task trivial, but it changes the conditions under which execution is observed. A true road game gives the opponent those advantages and asks Duke to communicate through hostile noise. A neutral event removes the opponent's campus environment but introduces travel, unfamiliar sightlines, event operations, and often a crowd whose allegiance is not truly neutral.</p>
+<p>Duke's published nonconference core is neutral-heavy: five of the seven named games are at event sites, one is home, and one is a true road game. That distribution should shape interpretation. If Duke performs well at branded events but struggles in Gainesville, the conclusion should not automatically be that one opponent was better. The environmental contrast may reveal communication or composure differences. Conversely, a neutral loss need not be dismissed as event noise; it still supplies possession evidence and, once played, becomes part of the NCAA record.</p>
+<p>The cities also create a broad travel map: Chicago, Durham, Palm Desert, Las Vegas, Gainesville, New York, and Detroit. Mileage alone is a weak burden metric. Travel direction, time zones, days between games, arrival plans, academic calendar, and adjacent unannounced games all matter. The Palm Desert-to-Las Vegas sequence has four days between listed dates and remains within the Pacific time zone. That is different from repeatedly returning to Durham, but the team's actual travel plan is not public and should not be invented. Florida comes six days after UConn and requires a shift back east. Exact tip times could materially change recovery windows.</p>
+<h2 id="the-opening-five-game-laboratory">The opening five-game laboratory</h2>
+<p>The first five named games fall within 22 days. This is the most coherent existing schedule cluster and the best place to define preseason questions without pretending to know the answers.</p>
+<h3 id="michigan-state-function-under-opening-night-pressure">Michigan State: function under opening-night pressure</h3>
+<p>The Champions Classic includes Duke, Michigan State, Kansas, and Kentucky, with Michigan State–Duke paired in Chicago. Duke's official release describes the event as season-opening. The game therefore tests readiness before a public competitive baseline exists. Coaches may use a broader rotation than they will later; players may be carrying roles established only in practice; the opponent will also be integrating its own roster.</p>
+<p>The useful review should separate design from execution. Which players are trusted to organize the first and last four minutes of each half? Does Duke enter offense cleanly when the first action is denied? How does it defend the first ball screen, and does that coverage change by lineup? Who closes defensive possessions? These questions can be answered descriptively from the game even if one-night efficiency is noisy.</p>
+<p>Michigan State's 2025-26 résumé offers context, not a 2026-27 scouting report. Duke's June announcement says the Spartans were among six scheduled opponents that earned at least a No. 3 seed in the 2026 NCAA tournament and finished in the AP top 20. Current personnel and form must be rechecked near the game.</p>
+<h3 id="illinois-the-home-environment-control">Illinois: the home-environment control</h3>
+<p>Illinois comes seven days later at Cameron. In a loose experimental sense, this is an environmental control: another major opponent, but with Duke at home and with a week of evidence after Chicago. It is not a controlled experiment in a scientific sense because the opponent, game plan, player availability, and circumstances all differ. Still, comparing how Duke organizes itself in the two settings can expose whether opening-night problems were persistent.</p>
+<p>The home date also matters because the rest of the named nonconference schedule offers no other Cameron game. Additional home opponents are likely in a complete college schedule, but they were not yet on the official page. Until they appear, this is the only confirmed opportunity to observe the marquee core at home before ACC play.</p>
+<h3 id="washington-state-the-hinge-game">Washington State: the hinge game</h3>
+<p>Washington State sits between Illinois and UConn. Duke says it will be the programs' first basketball meeting. Its placement makes it a hinge: close enough to Illinois to test recovery and close enough to UConn to tempt observers to look ahead.</p>
+<p>That narrative should not replace opponent study. Washington State's actual roster, coaching system, and early-season performance will determine the matchup. The program's different conference and stylistic context may also present actions Duke did not see against the first two opponents. A schedule map should ask what the Cougars force Duke to solve, not categorize them as merely the game between larger brands.</p>
+<p>The Palm Desert venue begins a western neutral sequence. Four calendar days later Duke plays in Las Vegas. Whether Duke remains in the region, returns home, or follows another plan is not stated in the official material. Any fatigue claim must wait for travel information or observable evidence.</p>
+<h3 id="uconn-rematch-without-identity-collapse">UConn: rematch without identity collapse</h3>
+<p>UConn beat Duke 73-72 in the 2026 Elite Eight. That makes the November game an obvious narrative event and an informative program-level comparison. It does not establish that the same mechanisms will decide the new game. College rosters change; roles expand and contract; schematic priorities adjust.</p>
+<p>The correct pregame dossier should begin with two layers. First, identify which coaches, players, and tactical concepts actually carry over from March. Second, analyze what each 2026-27 team has shown before November 25. The prior meeting can supply possession examples and adjustment history only where continuity makes them relevant.</p>
+<p>Prime Video's Duke agreement makes the game part of a three-game neutral-site package with Michigan and Gonzaga. That media structure explains why these opponents appear across the season. It does not make them more valuable to the NCAA committee simply because of distribution. The selection committee's official guidance says television influence is a myth and identifies results, schedule, venues, availability, observations, and metrics as evaluative material.</p>
+<h3 id="florida-the-true-road-test">Florida: the true-road test</h3>
+<p>Florida is both the ACC/SEC Challenge game and the only named campus road trip outside the league. It follows UConn by six days. The game can test whether Duke's organization transfers to a hostile arena after a neutral-site run.</p>
+<p>Road performance is specifically among the factors the NCAA says committees review. That does not mean one road game receives a fixed bonus or that a win guarantees a seed. It means venue belongs in the evidence. A close road loss, decisive road win, or poor process in victory must be recorded with opponent quality and availability rather than reduced to a binary résumé slogan.</p>
+<p>This is also an early point for schedule-adjusted caution. If Florida proves excellent, the game may become a valuable result. If the Gators struggle or are missing major players, preseason reputation should not freeze the evaluation. The same logic applies to every named opponent.</p>
+<h2 id="the-december-bridge">The December bridge</h2>
+<p>Michigan on December 21 is separated from Florida by 20 days on the current public page. It would be a mistake to label that a 20-day break. More games may be announced. The only defensible statement is that Michigan is the next currently listed game.</p>
+<p>Its placement near the ACC's late-December opening makes it a bridge. By then Duke should have more evidence about roles, but conference play will introduce repeated scouting, familiar coaches, and an imbalanced opponent matrix. Michigan can serve as a last prominent out-of-conference comparison before that transition, depending on the final calendar.</p>
+<p>Madison Square Garden is a neutral designation, but “neutral” is a competition category rather than a guarantee of equal crowd composition or travel burden. Duke has a substantial New York following; Michigan may travel well; the event atmosphere may resemble neither campus. Analysis should use the official site label for résumé classification and describe visible crowd effects without pretending they can be precisely quantified.</p>
+<h2 id="the-acc-opponent-matrix">The ACC opponent matrix</h2>
+<p>Duke's conference schedule consists of two home-and-away opponents, seven home-only opponents, and seven away-only opponents. Virginia Tech is omitted.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Opponents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home and away</td>
+<td>North Carolina, Virginia</td>
+</tr>
+<tr>
+<td>Home only</td>
+<td>California, Florida State, Miami, NC State, Notre Dame, Pitt, Stanford</td>
+</tr>
+<tr>
+<td>Away only</td>
+<td>Boston College, Clemson, Georgia Tech, Louisville, SMU, Syracuse, Wake Forest</td>
+</tr>
+<tr>
+<td>Not played</td>
+<td>Virginia Tech</td>
+</tr>
+</tbody>
+</table>
+<p>The ACC reintroduced an 18-game model in 2025-26. North Carolina is Duke's primary partner; Virginia is its variable repeat partner for 2026-27. Against every other scheduled team, Duke receives only one venue. This makes the matrix inherently asymmetric.</p>
+<p>Three implications follow.</p>
+<p>First, league-record comparisons require opponent and venue context. Duke does not travel to California or Stanford, while other teams may face different cross-country assignments. Duke must visit Clemson, Louisville, SMU, Syracuse, and Wake Forest without a home return game. No single fact settles schedule difficulty, but all belong in it.</p>
+<p>Second, sequence can dominate the static list. An away game at Syracuse followed quickly by another road trip poses a different problem from the same game surrounded by home dates. A California or Stanford home game could follow western nonconference travel or occur months later. Until the September date release, cluster analysis is speculative.</p>
+<p>Third, repeat opponents create adjustment evidence. North Carolina and Virginia will each face Duke twice. The second meeting allows analysts to ask how both staffs responded to the first: which coverage changed, whether a matchup was hunted more often, whether transition opportunities disappeared, and how personnel availability altered the plan. That is richer than treating season series as aggregate scores.</p>
+<h2 id="gonzaga-as-a-late-season-out-of-system-test">Gonzaga as a late-season out-of-system test</h2>
+<p>The February 20 Gonzaga game breaks the normal flow of conference play. Its Detroit venue adds a trip, and its Prime Video placement makes it nationally visible. Its real basketball importance is that it introduces an opponent outside the ACC after Duke has spent weeks adapting to conference scouting patterns.</p>
+<p>By February, opponents tend to possess more reliable film on Duke's preferred actions, substitutions, defensive calls, and late-game habits. ACC teams also share information indirectly through repeated competition and familiar styles. Gonzaga will have the same volume of film but will arrive from a different league ecology. The game can test whether Duke's solutions are general or merely tuned to conference opponents.</p>
+<p>That is a hypothesis, not a prediction of stylistic novelty. Gonzaga's 2026-27 team must be studied on its own terms. The game could resemble an ACC matchup in pace or coverage. Its value as a diagnostic comes from independent preparation and timing, not from assuming a permanent “Gonzaga style.”</p>
+<p>The adjacent ACC dates will determine the cost. A tight turnaround before or after Detroit could burden preparation. A wider gap could create a focused nonconference window. The schedule map should not score this until September.</p>
+<h2 id="from-schedule-strength-to-résumé-evidence">From schedule strength to résumé evidence</h2>
+<p>Duke's official release emphasizes that six named opponents were top-three NCAA seeds and final AP top-20 teams in 2025-26. This is legitimate evidence that Duke scheduled accomplished programs. It is not the same as a 2026-27 strength-of-schedule calculation.</p>
+<p>An opponent's value changes with its current results, venue, and metric profile. The NCAA identifies nonconference strength of schedule, quality wins and losses, road performance, head-to-head results, common opponents, imbalanced league schedules, availability, observations, and computer metrics among its resources. No public official formula assigns a fixed number of résumé points to a brand-name game.</p>
+<p>The schedule ledger should therefore mature in layers:</p>
+<ol>
+<li><strong>July:</strong> verified opponents, dates, sites, event names, and unresolved calendar gaps.</li>
+<li><strong>Preseason:</strong> official rosters, coaching changes, broad opponent strengths, and complete travel sequence.</li>
+<li><strong>In season:</strong> current opponent quality, result, venue, availability, and repeatable Duke processes.</li>
+<li><strong>Late season:</strong> NET, WAB, team-sheet quadrants if officially defined for 2026-27, conference standing, and selection/seeding scenarios.</li>
+</ol>
+<p>This prevents two opposite errors. The first is declaring the schedule historically difficult from last year's rankings. The second is ignoring the deliberate choice to play multiple accomplished programs. The correct July conclusion is that Duke has built a high-upside testing structure whose actual difficulty will be earned by 2026-27 teams.</p>
+<h2 id="travel-and-recovery-without-pseudo-precision">Travel and recovery without pseudo-precision</h2>
+<p>Schedule analysis often reaches for mileage because it is easy to calculate. Mileage is not recovery. A useful burden model would need departure and return timing, time-zone changes, tip times, sleep opportunities, practice schedules, academic obligations, charter arrangements, and player-specific availability. Most are not public in July.</p>
+<p>The map can still flag questions. November 21 in Palm Desert and November 25 in Las Vegas create a regional sequence. November 25 to December 1 moves from Pacific time back to Eastern time for a true road game. December 21 in New York may sit close to the start of ACC play. February 20 in Detroit will be embedded in a league schedule. These are points to investigate, not fatigue findings.</p>
+<p>Game analysis should also resist post hoc scheduling excuses. If Duke shoots poorly after travel, that alone does not prove fatigue. Evidence might include short attempts, reduced transition frequency, slow closeouts, coach comments, or tracking across multiple similar spots. Even then, opponent defense and random shooting remain alternatives.</p>
+<h2 id="what-to-record-after-each-game">What to record after each game</h2>
+<p>Every named matchup deserves a dated result record, but not every result needs an isolated long essay. The schedule map should receive compact factual updates while distinct mechanisms flow into player, lineup, or tactical articles.</p>
+<p>For each game, record:</p>
+<ul>
+<li>official date, time, site classification, score, and opponent record;</li>
+<li>Duke and opponent availability from authoritative sources;</li>
+<li>turnover, rebounding, free-throw, and shot-profile context with definitions;</li>
+<li>opening and closing lineup evidence where available;</li>
+<li>the opponent action or coverage that most changed Duke's choices;</li>
+<li>whether the observation confirms a multi-game trend or remains a single-game hypothesis;</li>
+<li>résumé context from the current official team sheet rather than preseason reputation.</li>
+</ul>
+<p>The analytical question should be narrow. Against Michigan State, it might be opening-night organization. Against Florida, road communication. Against a second meeting with Virginia, adjustment. Against Gonzaga, response to an out-of-conference opponent late in the season. If the game instead teaches something unexpected, the record should change rather than force evidence into a preseason frame.</p>
+<h2 id="what-remains-unknown">What remains unknown</h2>
+<p>The largest missing object is the complete chronological schedule. Duke's official page does not yet show ordinary nonconference home games or dated ACC contests. The ACC says full dates, times, and networks will arrive in September. Until then, no rigorous rest-disadvantage count, road-cluster ranking, or calendar difficulty estimate is possible.</p>
+<p>Opponent strength is also unresolved. Prior-year seeds validate the ambition of the schedule, but transfers and professional departures can transform teams. Duke's own roster remains incompletely represented on the official roster page. A schedule cannot be evaluated independently of the team asked to play it: a small roster may experience travel differently from a deep one, and a young backcourt may value early pressure tests differently from a veteran group.</p>
+<p>Finally, the 2027 NCAA tournament format has changed. The field expands to 76 and opens with 12 games across two cities. The selection process remains holistic, but official public materials may evolve to reflect the new field. Any eventual résumé article should use the current 2026-27 team-sheet definitions and bracket procedures rather than assuming the 68-team display survives unchanged.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://goduke.com/sports/mens-basketball/schedule/2026-27" target="_blank" rel="noopener noreferrer">Duke 2026-27 schedule</a> — canonical live dates, sites, broadcasts, and event labels; accessed July 9, 2026.</li>
+<li><a href="https://goduke.com/sports/mens-basketball/schedule/text/DukeROW" target="_blank" rel="noopener noreferrer">Duke 2026-27 schedule, text view</a> — independent rendering of the same official ledger; accessed July 9, 2026.</li>
+<li><a href="https://goduke.com/news/2026/5/28/mens-basketball-acc-announces-conference-matchups-for-2026-27-mens-basketball-season" target="_blank" rel="noopener noreferrer">Duke ACC opponent announcement</a> — home/away matrix, omitted opponent, and expected September date release; May 28, 2026.</li>
+<li><a href="https://theacc.com/news/2026/5/28/matchups-released-for-2026-27-acc-mens-basketball-conference-schedule.aspx" target="_blank" rel="noopener noreferrer">ACC 2026-27 matchup announcement</a> — conference confirmation of the 18-game scheduling model; May 28, 2026.</li>
+<li><a href="https://goduke.com/news/2025/11/18/mens-basketball-state-farm-champions-classic-returns-to-chicago-in-2026" target="_blank" rel="noopener noreferrer">Champions Classic returns to Chicago</a> — official event pairing and season-opening description.</li>
+<li><a href="https://goduke.com/news/2026/6/22/mens-basketball-duke-to-face-washington-state-in-acrisure-series-on-nov-21" target="_blank" rel="noopener noreferrer">Duke–Washington State announcement</a> — official first-meeting claim and prior-year opponent context.</li>
+<li><a href="https://goduke.com/news/2026/4/30/mens-basketball-prime-video-reaches-multiyear-agreement-with-duke-mens-basketball" target="_blank" rel="noopener noreferrer">Prime Video agreement</a> — official UConn, Michigan, and Gonzaga event structure.</li>
+<li><a href="https://www.ncaa.org/championships/march-madness/selections-101/" target="_blank" rel="noopener noreferrer">NCAA March Madness Selections 101</a> — official evaluation-factor description; accessed July 9, 2026.</li>
+<li><a href="https://www.ncaa.org/news/2026/5/7/media-center-ncaa-reveals-new-76-team-bracket-for-di-mens-and-womens-basketball-championships.aspx" target="_blank" rel="noopener noreferrer">NCAA 76-team bracket announcement</a> — 2027 field and Opening Round structure.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Which additional nonconference opponents and exhibitions will complete the calendar?</li>
+<li>What exact dates will the ACC assign, especially around Michigan and Gonzaga?</li>
+<li>Will travel plans keep Duke in the West between Palm Desert and Las Vegas?</li>
+<li>Which opponent roster changes materially weaken the usefulness of 2025-26 seed context?</li>
+<li>What official 2026-27 NET quadrant thresholds, WAB presentation, and team-sheet format will the NCAA use?</li>
+</ul>5:["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","the-verified-calendar",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-verified-calendar","children":"The verified calendar"}]}],["$","li","why-venue-categories-matter",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-venue-categories-matter","children":"Why venue categories matter"}]}],["$","li","the-opening-five-game-laboratory",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-opening-five-game-laboratory","children":"The opening five-game laboratory"}]}],["$","li","michigan-state-function-under-opening-night-pressure",{"className":"toc-depth-3","children":["$","a",null,{"href":"#michigan-state-function-under-opening-night-pressure","children":"Michigan State: function under opening-night pressure"}]}],["$","li","illinois-the-home-environment-control",{"className":"toc-depth-3","children":["$","a",null,{"href":"#illinois-the-home-environment-control","children":"Illinois: the home-environment control"}]}],["$","li","washington-state-the-hinge-game",{"className":"toc-depth-3","children":["$","a",null,{"href":"#washington-state-the-hinge-game","children":"Washington State: the hinge game"}]}],["$","li","uconn-rematch-without-identity-collapse",{"className":"toc-depth-3","children":["$","a",null,{"href":"#uconn-rematch-without-identity-collapse","children":"UConn: rematch without identity collapse"}]}],["$","li","florida-the-true-road-test",{"className":"toc-depth-3","children":["$","a",null,{"href":"#florida-the-true-road-test","children":"Florida: the true-road test"}]}],["$","li","the-december-bridge",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-december-bridge","children":"The December bridge"}]}],["$","li","the-acc-opponent-matrix",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-acc-opponent-matrix","children":"The ACC opponent matrix"}]}],["$","li","gonzaga-as-a-late-season-out-of-system-test",{"className":"toc-depth-2","children":["$","a",null,{"href":"#gonzaga-as-a-late-season-out-of-system-test","children":"Gonzaga as a late-season out-of-system test"}]}],["$","li","from-schedule-strength-to-résumé-evidence",{"className":"toc-depth-2","children":["$","a",null,{"href":"#from-schedule-strength-to-résumé-evidence","children":"From schedule strength to résumé evidence"}]}],["$","li","travel-and-recovery-without-pseudo-precision",{"className":"toc-depth-2","children":["$","a",null,{"href":"#travel-and-recovery-without-pseudo-precision","children":"Travel and recovery without pseudo-precision"}]}],["$","li","what-to-record-after-each-game",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-to-record-after-each-game","children":"What to record after each game"}]}],["$","li","what-remains-unknown",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-remains-unknown","children":"What remains unknown"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$7"}}],"$L8"]}],"$L9"]}]
+6:["$","$La",null,{"children":["$","$b",null,{"name":"Next.MetadataOutlet","children":"$@c"}]}]
+8:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-rotation-ledger/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Duke 2026-27 rotation ledger"}]]}],["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-shooting-and-spacing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Duke 2026-27 shooting and spacing"}]]}]]}]
+9:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/college/duke/duke-2026-27-lineup-scalability",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-lineup-scalability/","children":"Duke 2026-27 lineup scalability"}]}],["$","li","basketball/college/duke/duke-2026-27-nonconference-stress-tests",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-nonconference-stress-tests/","children":"Duke 2026-27 nonconference stress tests"}]}],["$","li","basketball/college/duke/duke-2026-27-shooting-and-spacing",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-shooting-and-spacing/","children":"Duke 2026-27 shooting and spacing"}]}],["$","li","basketball/college/duke/duke-freshman-translation-in-2026-27",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-freshman-translation-in-2026-27/","children":"Duke freshman translation in 2026-27"}]}],["$","li","basketball/college/duke/duke-mens-basketball-2026-27",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-mens-basketball-2026-27/","children":"Duke men's basketball 2026-27"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/college/duke/duke-mens-basketball-2026-27",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-mens-basketball-2026-27/","children":"Duke men's basketball 2026-27"}]}],["$","li","basketball/college/duke/duke-2026-27-roster-construction",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-roster-construction/","children":"Duke 2026-27 roster construction"}]}],["$","li","basketball/college/duke/duke-2026-27-nonconference-stress-tests",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-nonconference-stress-tests/","children":"Duke 2026-27 nonconference stress tests"}]}],["$","li","basketball/college/duke/duke-2026-27-lineup-scalability",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-lineup-scalability/","children":"Duke 2026-27 lineup scalability"}]}],["$","li","basketball/college/duke/duke-2026-27-shooting-and-spacing",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-2026-27-shooting-and-spacing/","children":"Duke 2026-27 shooting and spacing"}]}],["$","li","basketball/college/duke/duke-freshman-translation-in-2026-27",{"children":["$","$L2",null,{"href":"/articles/basketball/college/duke/duke-freshman-translation-in-2026-27/","children":"Duke freshman translation in 2026-27"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","college-basketball",{"children":"college-basketball"}],["$","li","duke",{"children":"duke"}],["$","li","schedule",{"children":"schedule"}]]}]]}]]}]
+c:null

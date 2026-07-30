@@ -1,0 +1,463 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+d:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+e:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Brooklyn Nets 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"The only authoritative team-level prior used here is the public JSON row for in ."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[12," min · ","2,618"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],"$L3","$L4","$L5","$L6","$L7"]}]]}],"$L8","$L9"]}]]}],null,"$La"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}]
+4:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+5:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+6:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+7:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+b:T5f3b,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>25.8</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>20.0-32.0, with p50 26.0</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>-10.116 points per 100</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>0.4%</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_ABOUT_RIGHT</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>+0.3 points per 100</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>+0.8 wins</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>26.6</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>55/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>The public JSON prior is broadly right: Brooklyn has more real shot creation than a 25.8-win team usually has, but the Claxton-to-Sharpe center transition, Porter availability, and young guard volatility keep the ceiling mostly in the high-20s.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<table>
+<thead>
+<tr>
+<th>Public JSON field</th>
+<th align="right">BKN value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mc_mean_wins</code></td>
+<td align="right">25.8</td>
+</tr>
+<tr>
+<td><code>p10_wins</code></td>
+<td align="right">20.0</td>
+</tr>
+<tr>
+<td><code>p50_wins</code></td>
+<td align="right">26.0</td>
+</tr>
+<tr>
+<td><code>p90_wins</code></td>
+<td align="right">32.0</td>
+</tr>
+<tr>
+<td><code>make_playoffs_prob</code></td>
+<td align="right">0.004 / 0.4%</td>
+</tr>
+<tr>
+<td><code>strength</code></td>
+<td align="right">-10.116</td>
+</tr>
+<tr>
+<td><code>se_strength</code></td>
+<td align="right">1.493</td>
+</tr>
+<tr>
+<td><code>n_cold_start</code></td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>That places Brooklyn 14th in the Eastern Conference in the public projection table, ahead of Washington but behind Chicago. The model is saying "better than last season's 20-win team, still not close to the play-in without upside breaks." The p10-p90 band of 20-32 wins is wide enough to respect the roster churn and young-player uncertainty, while the 0.4% playoff probability says the default case is still a rebuilding team.</p>
+<p>I do not use <code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code> for team wins, team strength, or odds. Where player rows are referenced below, they are non-authoritative roster context only.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>Non-authoritative local roster context has Brooklyn's main player-value and minutes bets clustered around Day'Ron Sharpe, Julius Randle, Michael Porter Jr., Keon Ellis, and Egor Demin, with Mikel Brown Jr. and other young players forming the main uncertainty tail.</p>
+<p>Top projected win contributors from non-authoritative roster rows:</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th align="right">Role</th>
+<th align="right">MPG</th>
+<th align="right">Exp GP</th>
+<th align="right">Net</th>
+<th align="right">Proj wins</th>
+<th>Pressure note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Day'Ron Sharpe</td>
+<td align="right">starter</td>
+<td align="right">25.8</td>
+<td align="right">67</td>
+<td align="right">+1.28</td>
+<td align="right">6.94</td>
+<td>Biggest local roster driver; promotion to starting center is fragile.</td>
+</tr>
+<tr>
+<td>Julius Randle</td>
+<td align="right">starter</td>
+<td align="right">26.9</td>
+<td align="right">71</td>
+<td align="right">+0.55</td>
+<td align="right">6.17</td>
+<td>Real offensive hub, but fit/defense can pull down value.</td>
+</tr>
+<tr>
+<td>Michael Porter Jr.</td>
+<td align="right">starter</td>
+<td align="right">26.9</td>
+<td align="right">63</td>
+<td align="right">+0.74</td>
+<td align="right">5.83</td>
+<td>High-end scorer; health is central after hamstring finish to 2025-26.</td>
+</tr>
+<tr>
+<td>Keon Ellis</td>
+<td align="right">starter</td>
+<td align="right">26.1</td>
+<td align="right">74</td>
+<td align="right">+0.04</td>
+<td align="right">5.22</td>
+<td>Useful defender, but 26 MPG and top-four value may be aggressive.</td>
+</tr>
+<tr>
+<td>Egor Demin</td>
+<td align="right">starter</td>
+<td align="right">26.3</td>
+<td align="right">56</td>
+<td align="right">-0.56</td>
+<td align="right">3.08</td>
+<td>Development swing guard/wing.</td>
+</tr>
+<tr>
+<td>Josh Minott</td>
+<td align="right">rotation</td>
+<td align="right">11.7</td>
+<td align="right">35</td>
+<td align="right">-0.55</td>
+<td align="right">0.85</td>
+<td>Energy depth, not a stable high-minute answer yet.</td>
+</tr>
+<tr>
+<td>Terance Mann</td>
+<td align="right">rotation</td>
+<td align="right">12.2</td>
+<td align="right">37</td>
+<td align="right">-0.97</td>
+<td align="right">0.76</td>
+<td>Veteran stabilizer who could be squeezed or traded.</td>
+</tr>
+<tr>
+<td>Moritz Wagner</td>
+<td align="right">rotation</td>
+<td align="right">11.3</td>
+<td align="right">32</td>
+<td align="right">-1.16</td>
+<td align="right">0.52</td>
+<td>Backup big, more offensive utility than rim protection.</td>
+</tr>
+</tbody>
+</table>
+<p>Top projected MPG players from those same non-authoritative rows: Randle 26.9, Porter 26.9, Demin 26.3, Ellis 26.1, Sharpe 25.8, Noah Clowney 12.4, Mann 12.2, Nolan Traore 12.0, Chaney Johnson 11.9, Minott 11.7, Wagner 11.3, and Mikel Brown Jr. 10.2.</p>
+<p>Expected games played concerns are concentrated in Porter, Sharpe, Brown, and the young bench. NBA.com lists Porter as ruled out for the rest of 2025-26 with a hamstring issue, while Sharpe's player page notes thumb surgery late in 2025-26 and a new top-center role after Claxton's departure. Brown is a cold-start rookie in the projection context. Brown, Joshua Jefferson, and Tyler Bilodeau are the key rookie/cold-start style players in the local roster context, while Traore, Saraf, Powell, Wolf, Johnson, and Clowney are development/deep-bench volatility points.</p>
+<p>My likely rotation read is:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Likely players</th>
+<th>Minutes issue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lead/creation guards</td>
+<td>Mikel Brown Jr., Egor Demin, Nolan Traore, Ben Saraf</td>
+<td>Brown and Demin need reps, but too much young on-ball play can hurt efficiency and turnovers.</td>
+</tr>
+<tr>
+<td>Wings</td>
+<td>Michael Porter Jr., Keon Ellis, Terance Mann, Drake Powell, Jalen Wilson, Ziaire Williams, Chaney Johnson</td>
+<td>Porter supplies scoring; Ellis supplies defense; the rest are role-definition bets.</td>
+</tr>
+<tr>
+<td>Forwards</td>
+<td>Julius Randle, Noah Clowney, Josh Minott, Danny Wolf, Tyler Bilodeau, Joshua Jefferson</td>
+<td>Randle should close; Clowney/Bilodeau/Wolf decide whether the frontcourt has enough spacing or mobility.</td>
+</tr>
+<tr>
+<td>Centers</td>
+<td>Day'Ron Sharpe, Moritz Wagner, Clowney/Wolf small-ball looks</td>
+<td>This is the fragile spot after Nic Claxton's reported departure.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>The public JSON does not expose a team six-factor profile, so this is a cautious inference from non-authoritative player factor vectors and public roster context.</p>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>oTS</td>
+<td>Porter and Randle lift shot-making and free-throw pressure; Brown/Demin development creates upside, but rookie guard efficiency can drag.</td>
+</tr>
+<tr>
+<td>oTOV</td>
+<td>Randle's passing helps, yet Brown, Demin, Traore, and Saraf create ball-security risk if the rotation leans young.</td>
+</tr>
+<tr>
+<td>oSC</td>
+<td>Sharpe is the standout local positive, with offensive rebounding/finishing as a real way Brooklyn can steal possessions.</td>
+</tr>
+<tr>
+<td>dTS</td>
+<td>The Claxton-to-Sharpe/Wagner center change is the main concern. The roster has fewer proven rim-protection answers.</td>
+</tr>
+<tr>
+<td>dTOV</td>
+<td>Ellis and Demin can create some pressure; Ellis is the cleanest point-of-attack defender in the likely rotation.</td>
+</tr>
+<tr>
+<td>dSC</td>
+<td>Brooklyn ranked last in rebounds per game on NBA.com's 2025-26 team page, so defensive rebounding and possession-ending remain central risks even if Sharpe helps.</td>
+</tr>
+</tbody>
+</table>
+<p>Stylistically, Brooklyn should be more functional on offense than last year's 30th-ranked scoring group because Randle and Porter give the team two credible half-court scoring hubs. The defensive style is harder to see: if Sharpe plays traditional drop, he must hold up as a real starter; if the Nets try to switch or play smaller, they may need Clowney/Wolf/Minott minutes that the model does not strongly trust.</p>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>My stance is <code>MODEL_ABOUT_RIGHT</code> with a small positive adjustment. The public prior may be a little low because Brooklyn's 2026-27 roster has more creation than a typical 25.8-win team: Randle is a 21/7/5 forward engine, Porter averaged 24.2 points per game when available, and Brown/Demin provide a higher-upside young guard path than the cold-start caution might capture.</p>
+<p>But I am not moving the team much. The same mechanisms that support upside also explain the low prior: Claxton's exit shifts the defense onto Sharpe/Wagner/Clowney; Porter has a fresh hamstring availability flag; Brown is a rookie guard; and Ellis being a 26-MPG, 5-win local roster driver is a strong assumption for a player who profiles more as a useful role player than a top-four team value engine.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th align="right">Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The public JSON prior is intentionally low, not stale.</td>
+<td>Public JSON row for BKN: 25.8 mean wins, 20-32 p10-p90, 0.4% playoff probability, -10.116 strength, 1.493 se_strength, 3 cold starts; accessed locally July 9, 2026.</td>
+<td>neutral</td>
+<td align="right">0.0 wins</td>
+<td align="right">100</td>
+</tr>
+<tr>
+<td>Brooklyn starts from a poor 2025-26 base.</td>
+<td>NBA.com team page lists the Nets at 20-62 and 30th in PPG and RPG; <a href="https://www.nba.com/team/1610612751" target="_blank" rel="noopener noreferrer">https://www.nba.com/team/1610612751</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-1.0 wins</td>
+<td align="right">88</td>
+</tr>
+<tr>
+<td>Randle adds a real half-court engine.</td>
+<td>NBA.com Randle page lists 21.1 PPG, 6.7 RPG, 5.0 APG and notes the trade to Brooklyn; <a href="https://www.nba.com/player/203944/julius-randle" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/203944/julius-randle</a>; accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+1.0 wins</td>
+<td align="right">78</td>
+</tr>
+<tr>
+<td>Claxton's reported departure creates a defensive-center hole.</td>
+<td>NBA.com reported Randle/No. 28 to Brooklyn with Nic Claxton going to Chicago; <a href="https://www.nba.com/news/reports-julius-randle-traded-to-nets-on-eve-of-draft" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/reports-julius-randle-traded-to-nets-on-eve-of-draft</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-1.1 wins</td>
+<td align="right">82</td>
+</tr>
+<tr>
+<td>Porter raises the offensive ceiling but carries health risk.</td>
+<td>NBA.com lists Porter at 24.2 PPG, 7.1 RPG, 3.0 APG, and says a hamstring ruled him out for the rest of 2025-26; <a href="https://www.nba.com/player/1629008/michael-porter-jr" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1629008/michael-porter-jr</a>; accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.6 wins</td>
+<td align="right">65</td>
+</tr>
+<tr>
+<td>Sharpe's larger role is both an upside and overextension risk.</td>
+<td>NBA.com Sharpe page lists 8.7 PPG, 6.7 RPG, 2.3 APG and says he is set for the top center role after Claxton's trade while also noting thumb surgery; <a href="https://www.nba.com/player/1630549/dayron-sharpe" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1630549/dayron-sharpe</a>; accessed July 9, 2026.</td>
+<td>neutral</td>
+<td align="right">0.0 wins</td>
+<td align="right">62</td>
+</tr>
+<tr>
+<td>Brown's rookie upside is real but volatile.</td>
+<td>NBA.com draft profile lists Mikel Brown Jr. as Brooklyn's No. 6 pick; NBA Communications notes a 45-point, 10-three Louisville game; <a href="https://www.nba.com/draft/2026/prospects/mikel-brown" target="_blank" rel="noopener noreferrer">https://www.nba.com/draft/2026/prospects/mikel-brown</a> and <a href="https://pr.nba.com/2026-nba-draft-notes/" target="_blank" rel="noopener noreferrer">https://pr.nba.com/2026-nba-draft-notes/</a>; accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.3 wins</td>
+<td align="right">55</td>
+</tr>
+<tr>
+<td>The summer-league signal is encouraging but should not drive a major delta.</td>
+<td>NBA.com California Classic report had Brown at 10 points/4 assists, Demin at 23/8/5 with 2 steals, Bilodeau with six threes, and Saraf with 15/7 assists; <a href="https://www.nba.com/news/2026-california-classic-summer-league-warriors-blue-nets" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-california-classic-summer-league-warriors-blue-nets</a>; accessed July 9, 2026.</td>
+<td>neutral</td>
+<td align="right">+0.1 wins</td>
+<td align="right">45</td>
+</tr>
+<tr>
+<td>Ellis helps the defense but may be overextended as a major value driver.</td>
+<td>NBA.com says Ellis joined Brooklyn after averaging 8.3 PPG and shooting 49.1% in 29 Cavs games; <a href="https://www.nba.com/news/reports-keon-ellis-nets-deal" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/reports-keon-ellis-nets-deal</a>; accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.4 wins</td>
+<td align="right">60</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Model role/value</th>
+<th>Concern or upside</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Day'Ron Sharpe</td>
+<td>Non-authoritative roster context: starter, 25.8 MPG, +1.28 net, 6.94 projected wins.</td>
+<td>Backup-to-starter translation and rim-protection burden after Claxton's reported exit.</td>
+<td>The model may be right on his offense but too optimistic on defensive scalability.</td>
+</tr>
+<tr>
+<td>Julius Randle</td>
+<td>Starter, 26.9 MPG, +0.55 net, 6.17 projected wins.</td>
+<td>Real creation hub, but spacing/defense fit with Sharpe is imperfect.</td>
+<td>He is the clearest reason to shade above 25.8 wins, but not enough to make Brooklyn a play-in favorite.</td>
+</tr>
+<tr>
+<td>Michael Porter Jr.</td>
+<td>Starter, 26.9 MPG, +0.74 net, 5.83 projected wins.</td>
+<td>24-point scorer with a recent hamstring availability flag.</td>
+<td>Brooklyn's offense can jump if he plays 65+ healthy games; it gets thin fast if he misses time.</td>
+</tr>
+<tr>
+<td>Keon Ellis</td>
+<td>Starter, 26.1 MPG, +0.04 net, 5.22 projected wins.</td>
+<td>Useful defender, but 26 MPG/top-four impact is an aggressive role assumption.</td>
+<td>If he is closer to a 20-minute specialist, the projected rotation loses a chunk of stability.</td>
+</tr>
+<tr>
+<td>Egor Demin</td>
+<td>Starter, 26.3 MPG, -0.56 net, 3.08 projected wins.</td>
+<td>Development upside after strong summer flashes, but ballhandling/efficiency must translate.</td>
+<td>A second-year leap is one of Brooklyn's clean paths above the prior.</td>
+</tr>
+<tr>
+<td>Mikel Brown Jr.</td>
+<td>Cold-start rookie context, 10.2 MPG, -1.24 net.</td>
+<td>May play more than the local roster row says, but rookie guards often cost wins early.</td>
+<td>Higher minutes can be good for development and still negative for 2026-27 wins.</td>
+</tr>
+<tr>
+<td>Noah Clowney</td>
+<td>Rotation, 12.4 MPG, -2.50 net, near-zero projected wins.</td>
+<td>Could be undervalued if Brooklyn needs mobile frontcourt defense next to Randle/Porter.</td>
+<td>He is the main internal candidate to patch the Sharpe/Wagner defensive limitations.</td>
+</tr>
+<tr>
+<td>Moritz Wagner</td>
+<td>Rotation, 11.3 MPG, -1.16 net.</td>
+<td>Offensive big, not a rim-protection fix.</td>
+<td>If he plays too much center, defensive shot quality may suffer.</td>
+</tr>
+<tr>
+<td>Tyler Bilodeau / Ben Saraf / Nolan Traore</td>
+<td>Deep or low-minute young-player context with negative ratings/wide bands.</td>
+<td>One surprise shooter/handler can stabilize bench minutes; multiple misses leave the bench fragile.</td>
+<td>The team's p10-p90 width depends on these development bets.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>I am applying a judgmental adjustment of <code>+0.3</code> points per 100, roughly <code>+0.8</code> wins, because the public JSON prior looks slightly too pessimistic about the offensive floor created by Randle plus Porter plus young guard upside.</p>
+<p>This is deliberately small. The negative mechanisms are also strong: Claxton's reported departure, center defense uncertainty, Porter's hamstring finish to 2025-26, Brown's rookie volatility, and Ellis/Sharpe role-size risk. I do not treat the non-authoritative roster-context team projection as a competing prior. The adjustment is a manual research lean from 25.8 wins to 26.6 wins, not a new simulation.</p>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest case against my <code>MODEL_ABOUT_RIGHT</code> with a small positive lean is that the model may still be too high. Brooklyn's best offensive names do not solve its weakest structural problems: rim protection, defensive rebounding, and reliable possession-ending. Randle and Porter can both raise the offense while leaving the defense vulnerable, and replacing Claxton with Sharpe/Wagner could be a larger defensive downgrade than a player-row aggregation captures. If Porter is not fully healthy and Brown/Demin are inefficient as primary handlers, this can easily look like another 20-23 win team.</p>
+<p>The strongest case that the model is too low is simpler: Randle and Porter are both legitimate NBA scorers, Brown was the No. 6 pick, Demin has development momentum, and the Nets do not need to be good to beat 25.8 wins. If Sharpe's rebounding/finishing scales to starter minutes and either Brown or Demin is better than expected, a 30-32 win season is in reach.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>A training-camp depth chart that starts Brown and Demin together with heavy on-ball reps would lower my short-term efficiency confidence.</li>
+<li>A clean Porter preseason workload with no hamstring limitations would push me toward a larger positive adjustment.</li>
+<li>Evidence that Clowney is a real rotation frontcourt defender would make the defense less fragile.</li>
+<li>A transaction adding a credible rim protector would move the team meaningfully above this prior.</li>
+<li>If Ellis is used as a 16-20 MPG specialist rather than a 26 MPG starter, I would lower the win adjustment.</li>
+<li>A public model rerun with updated roster accounting and the same public JSON source would supersede this memo's manual adjustment.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<p>The public JSON prior is authoritative and is the only team-level prior used here. The local team-detail JSON and depth chart are non-authoritative roster context only, and their team-level wins/strength/odds are intentionally ignored.</p>
+<p>There are source conflicts in public roster accounting. NBA.com's team page still lists Claxton, while NBA.com's transaction tracker and player-news pages report the Claxton/Randle deal. I defer to the transaction and player-news pages for the trade and use the roster page only for broad roster, coach, and 2025-26 team-stat context.</p>
+<p>This briefing should be treated cautiously because Brooklyn has multiple high-uncertainty young players, a new frontcourt structure, and several players whose expected minutes are not settled by July 9, 2026.</p>
+<h2 id="sources">Sources</h2>
+<p>Local/model sources:</p>
+<ul>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code> - public JSON authoritative prior for BKN; accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code> - non-authoritative roster-row context only; team-level numbers ignored; accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code> - non-authoritative depth/role context only; accessed July 9, 2026.</li>
+<li><code>Rome/Basketball/NBA multi-agent forecasting company/Boss prompt for 30 NBA team research agents.md</code> - boss template and verification checklist; accessed July 9, 2026.</li>
+</ul>
+<p>External public sources:</p>
+<ul>
+<li>NBA.com Brooklyn Nets team page and roster: <a href="https://www.nba.com/team/1610612751" target="_blank" rel="noopener noreferrer">https://www.nba.com/team/1610612751</a> - accessed July 9, 2026.</li>
+<li>NBA.com 2026 offseason deal tracker: <a href="https://www.nba.com/news/nba-offseason-deals-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nba-offseason-deals-2026</a> - accessed July 9, 2026.</li>
+<li>NBA.com Randle-to-Nets report: <a href="https://www.nba.com/news/reports-julius-randle-traded-to-nets-on-eve-of-draft" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/reports-julius-randle-traded-to-nets-on-eve-of-draft</a> - accessed July 9, 2026.</li>
+<li>NBA.com Day'Ron Sharpe/Josh Minott deal report: <a href="https://www.nba.com/news/dayron-sharpe-josh-minott-free-agency-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/dayron-sharpe-josh-minott-free-agency-2026</a> - accessed July 9, 2026.</li>
+<li>NBA.com Keon Ellis-to-Nets report: <a href="https://www.nba.com/news/reports-keon-ellis-nets-deal" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/reports-keon-ellis-nets-deal</a> - accessed July 9, 2026.</li>
+<li>NBA.com Moritz Wagner-to-Nets report: <a href="https://www.nba.com/news/moritz-wagner-nets-free-agency-2026" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/moritz-wagner-nets-free-agency-2026</a> - accessed July 9, 2026.</li>
+<li>NBA.com Mikel Brown Jr. draft profile: <a href="https://www.nba.com/draft/2026/prospects/mikel-brown" target="_blank" rel="noopener noreferrer">https://www.nba.com/draft/2026/prospects/mikel-brown</a> - accessed July 9, 2026.</li>
+<li>NBA.com Mikel Brown Jr. player page: <a href="https://www.nba.com/player/1643414/mikel-brown-jr" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1643414/mikel-brown-jr</a> - accessed July 9, 2026.</li>
+<li>NBA.com California Classic Nets-Warriors report: <a href="https://www.nba.com/news/2026-california-classic-summer-league-warriors-blue-nets" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/2026-california-classic-summer-league-warriors-blue-nets</a> - accessed July 9, 2026.</li>
+<li>NBA.com Michael Porter Jr. player page: <a href="https://www.nba.com/player/1629008/michael-porter-jr" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1629008/michael-porter-jr</a> - accessed July 9, 2026.</li>
+<li>NBA.com Julius Randle player page: <a href="https://www.nba.com/player/203944/julius-randle" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/203944/julius-randle</a> - accessed July 9, 2026.</li>
+<li>NBA.com Day'Ron Sharpe player page: <a href="https://www.nba.com/player/1630549/dayron-sharpe" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1630549/dayron-sharpe</a> - accessed July 9, 2026.</li>
+<li>NBA.com Noah Clowney player page: <a href="https://www.nba.com/player/1641730/noah-clowney" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1641730/noah-clowney</a> - accessed July 9, 2026.</li>
+<li>NBA.com Danny Wolf player page: <a href="https://www.nba.com/player/1642874/danny-wolf" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1642874/danny-wolf</a> - accessed July 9, 2026.</li>
+<li>NBA Communications 2026 Draft Notes: <a href="https://pr.nba.com/2026-nba-draft-notes/" target="_blank" rel="noopener noreferrer">https://pr.nba.com/2026-nba-draft-notes/</a> - accessed July 9, 2026.</li>
+</ul>8:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$b"}}],"$Lc"]}]
+9:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","p",null,{"className":"rail-empty","children":"Nothing points here yet."}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-team-briefings-2026-27/00-cross-team-findings",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-cross-team-findings/","children":"2026-27 NBA cross-team findings"}]}],["$","li","basketball/nba-team-briefings-2026-27/00-index",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-index/","children":"2026-27 NBA team briefing index"}]}],["$","li","basketball/nba-team-briefings-2026-27/atl-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/atl-2026-27-briefing/","children":"Atlanta Hawks 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bos-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","children":"BOS 2026-27 research briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/cha-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","children":"Charlotte Hornets 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/chi-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/chi-2026-27-briefing/","children":"Chicago Bulls 2026-27 Research Briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+a:["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]
+c:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"BOS 2026-27 research briefing"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Charlotte Hornets 2026-27 Research Briefing"}]]}]]}]
+f:null

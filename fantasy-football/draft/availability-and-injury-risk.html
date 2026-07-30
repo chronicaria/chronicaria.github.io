@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Availability and injury risk — The Fantasy Football Encyclopedia</title>
+<meta name="description" content="Who actually plays — measured from three seasons of games played, not from reputation.">
+<script>(function(){try{var t=localStorage.getItem('ff-theme');
+if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'lamp':'paper';
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<script defer src="/assets/hub.js"></script></head>
+<body>
+<header class="topnav"><a class="brand" href="../index.html">The Fantasy Football <b>Encyclopedia</b></a><div class="navsearch"><input id="q" type="search" placeholder="Search (press /)" autocomplete="off" aria-label="Search"><div id="qr" class="searchresults" hidden></div></div><nav class="navlinks"><a class="navflat" href="../draft-room.html">Draft Room</a><details class="navdrop"><summary>Start Here</summary><div class="navmenu"><a href="../start-here/fantasy-football-glossary.html">Fantasy football glossary</a><a href="../start-here/how-an-nfl-offense-makes-fantasy-points.html">How an NFL offense makes fantasy points</a><a href="../start-here/how-the-league-is-won.html">How the league is won</a><a href="../start-here/player-archetypes.html">Player archetypes</a><a href="../start-here/reading-an-nfl-depth-chart.html">Reading an NFL depth chart</a><a href="../start-here/the-2026-season-calendar.html">The 2026 season calendar</a><a href="../start-here/the-four-players-you-already-know.html">The four players you already know</a><a href="../start-here/what-basketball-teaches-you-wrong-about-football.html">What basketball teaches you wrong about football</a><a href="../start-here/what-each-fantasy-position-actually-does.html">What each fantasy position actually does</a><a href="../start-here/your-league-in-one-page.html">Your league, in one page</a></div></details><details class="navdrop"><summary>The Draft</summary><div class="navmenu"><a href="../draft/2026-draft-board.html">2026 draft board</a><a href="../draft/availability-and-injury-risk.html">Availability and injury risk</a><a href="../draft/drafting-from-the-1-01.html">Drafting from the 1.01</a><a href="../draft/how-much-to-spend-on-running-backs.html">How much to spend on running backs</a><a href="../draft/late-round-quarterback.html">Late-round quarterback</a><a href="../draft/reading-the-draft-room.html">Reading the draft room</a><a href="../draft/the-last-two-rounds-kicker-and-defence.html">The last two rounds — kicker and defence</a><a href="../draft/tiers-by-position.html">Tiers by position</a><a href="../draft/value-over-replacement-in-fantasy-football.html">Value over replacement in fantasy football</a><a href="../draft/when-to-start-drafting-for-upside.html">When to start drafting for upside</a><a href="../draft/who-to-take-at-1-01.html">Who to take at 1.01</a></div></details><details class="navdrop"><summary>The Season</summary><div class="navmenu"><a href="../season/bye-week-planning.html">Bye-week planning</a><a href="../season/implied-team-total.html">Implied team total</a><a href="../season/reading-the-nfl-injury-report.html">Reading the NFL injury report</a><a href="../season/start-sit-a-standing-rule-not-a-research-project.html">Start-sit — a standing rule, not a research project</a><a href="../season/the-fantasy-football-week.html">The fantasy football week</a><a href="../season/waivers.html">Waivers</a><a href="../season/weather-and-the-fantasy-playoffs.html">Weather and the fantasy playoffs</a></div></details><details class="navdrop"><summary>Concepts</summary><div class="navmenu"><a href="../concepts/adp-as-a-market-price.html">ADP as a market price</a><a href="../concepts/bye-weeks-as-a-roster-constraint.html">Bye weeks as a roster constraint</a><a href="../concepts/convex-payoffs-and-roster-variance.html">Convex payoffs and roster variance</a><a href="../concepts/draft-capital-dominance.html">Draft capital dominance</a><a href="../concepts/opportunity-share.html">Opportunity share</a><a href="../concepts/positional-scarcity-as-a-supply-constraint.html">Positional scarcity as a supply constraint</a><a href="../concepts/replacement-level.html">Replacement level</a><a href="../concepts/sample-size-in-a-17-game-season.html">Sample size in a 17-game season</a><a href="../concepts/streaming-a-position.html">Streaming a position</a><a href="../concepts/the-conserved-team-touch-budget.html">The conserved team touch budget</a><a href="../concepts/the-injury-inheritance-asymmetry.html">The injury-inheritance asymmetry</a><a href="../concepts/touchdown-variance.html">Touchdown variance</a></div></details><details class="navdrop"><summary>Teams</summary><div class="navmenu"><a href="../teams/the-32-offenses.html">The 32 offenses</a></div></details><details class="navdrop"><summary>Players</summary><div class="navmenu"><a href="../players/amon-ra-st-brown.html">Amon-Ra St. Brown</a><a href="../players/bijan-robinson.html">Bijan Robinson</a><a href="../players/breece-hall.html">Breece Hall</a><a href="../players/bucky-irving.html">Bucky Irving</a><a href="../players/chase-brown.html">Chase Brown</a><a href="../players/chris-godwin.html">Chris Godwin</a><a href="../players/chris-olave.html">Chris Olave</a><a href="../players/christian-mccaffrey.html">Christian McCaffrey</a><a href="../players/chuba-hubbard.html">Chuba Hubbard</a><a href="../players/colston-loveland.html">Colston Loveland</a><a href="../players/courtland-sutton.html">Courtland Sutton</a><a href="../players/dandre-swift.html">D&#x27;Andre Swift</a><a href="../players/d-j-moore.html">D.J. Moore</a><a href="../players/davante-adams.html">Davante Adams</a><a href="../players/david-montgomery.html">David Montgomery</a><a href="../players/devonta-smith.html">DeVonta Smith</a><a href="../players/derrick-henry.html">Derrick Henry</a><a href="../players/emeka-egbuka.html">Emeka Egbuka</a><a href="../players/garrett-wilson.html">Garrett Wilson</a><a href="../players/george-pickens.html">George Pickens</a><a href="../players/harold-fannin-jr.html">Harold Fannin Jr.</a><a href="../players/jamarr-chase.html">Ja&#x27;Marr Chase</a><a href="../players/jadarian-price.html">Jadarian Price</a><a href="../players/jahmyr-gibbs.html">Jahmyr Gibbs</a><a href="../players/jameson-williams.html">Jameson Williams</a><a href="../players/jaxon-smith-njigba.html">Jaxon Smith-Njigba</a><a href="../players/jaydon-blue.html">Jaydon Blue</a><a href="../players/jaylen-waddle.html">Jaylen Waddle</a><a href="../players/jaylen-warren.html">Jaylen Warren</a><a href="../players/jeremiyah-love.html">Jeremiyah Love</a><a href="../players/joe-burrow.html">Joe Burrow</a><a href="../players/jonathan-taylor.html">Jonathan Taylor</a><a href="../players/josh-allen.html">Josh Allen</a><a href="../players/josh-jacobs.html">Josh Jacobs</a><a href="../players/justin-herbert.html">Justin Herbert</a><a href="../players/kenneth-walker.html">Kenneth Walker</a><a href="../players/lamar-jackson.html">Lamar Jackson</a><a href="../players/luther-burden-iii.html">Luther Burden III</a><a href="../players/malik-nabers.html">Malik Nabers</a><a href="../players/marvin-harrison-jr.html">Marvin Harrison Jr.</a><a href="../players/michael-pittman-jr.html">Michael Pittman Jr.</a><a href="../players/mike-evans.html">Mike Evans</a><a href="../players/nico-collins.html">Nico Collins</a><a href="../players/omarion-hampton.html">Omarion Hampton</a><a href="../players/parker-washington.html">Parker Washington</a><a href="../players/puka-nacua.html">Puka Nacua</a><a href="../players/quinshon-judkins.html">Quinshon Judkins</a><a href="../players/rashee-rice.html">Rashee Rice</a><a href="../players/rhamondre-stevenson.html">Rhamondre Stevenson</a><a href="../players/rico-dowdle.html">Rico Dowdle</a><a href="../players/rome-odunze.html">Rome Odunze</a><a href="../players/sam-laporta.html">Sam LaPorta</a><a href="../players/saquon-barkley.html">Saquon Barkley</a><a href="../players/tee-higgins.html">Tee Higgins</a><a href="../players/the-2026-rookies-who-matter.html">The 2026 rookies who matter</a><a href="../players/tony-pollard.html">Tony Pollard</a><a href="../players/trey-mcbride.html">Trey McBride</a><a href="../players/tucker-kraft.html">Tucker Kraft</a><a href="../players/tyjae-spears.html">Tyjae Spears</a><a href="../players/tyler-warren.html">Tyler Warren</a><a href="../players/zay-flowers.html">Zay Flowers</a></div></details><details class="navdrop"><summary>Library</summary><div class="navmenu"><a href="../library/adp-rankings-and-projections-are-three-different-things.html">ADP, rankings, and projections are three different things</a><a href="../library/evidence-and-confidence.html">Evidence and confidence</a><a href="../library/what-i-checked-and-when.html">What I checked and when</a><a href="../library/where-fantasy-football-information-comes-from.html">Where fantasy football information comes from</a></div></details><details class="navdrop"><summary>Operations</summary><div class="navmenu"><a href="../meta/fantasy-football.html">Fantasy Football</a><a href="../meta/progress.html">Progress — 2026 Fantasy Football Encyclopedia</a></div></details><button class="themebtn" id="theme" type="button" aria-label="Toggle theme">◐</button></nav></header>
+<main class="page">
+<div class="crumbs"><a href="../index.html">Encyclopedia</a> · <a href="../draft/index.html">The Draft</a> · <span>Availability and injury risk</span></div>
+<div class="hero"><p class="kicker">The Draft</p><h1>Availability and injury risk</h1><p class="lede">Who actually plays — measured from three seasons of games played, not from reputation.</p><p class="metaline"><span class="mb"><i>as of</i> 2026-07-25</span> · <span class="mb"><i>expires</i> 2026-08-15</span> · <span class="mb"><i>status</i> seed</span> · <span class="mb"><i>format</i> espn-ppr1.0-12tm-std</span></p></div><p class="staleflag">Perishable — this page is built on July inputs and must be regenerated within 48 hours of the draft.</p><div class="jumpbar"><p>Up: <a href="../meta/fantasy-football.html">Fantasy Football</a> · <a href="../draft/2026-draft-board.html">2026 draft board</a> · <a href="../draft/value-over-replacement-in-fantasy-football.html">Value over replacement in fantasy football</a> · <a href="../season/reading-the-nfl-injury-report.html">Reading the NFL injury report</a> · <a href="../concepts/sample-size-in-a-17-game-season.html">Sample size in a 17-game season</a></p></div><article class="prose"><p><em>Built from <code>Data/player_context.csv</code>, which is joined from nflverse's 2026 rosters, 2023–2025 season stat lines, 2023–2025 official weekly injury reports and snap counts, and OverTheCap's live contract pages, all retrieved 2026-07-25. Games played and injury-report weeks are </em><em>observed</em><em>. <code>Avail</code> and <code>Adj VOR</code> are </em><em>models</em><em> and are marked as such.</em></p>
+<h2 id="why-this-note-exists">Why this note exists</h2>
+<p>The first version of this board carried a caveat it could not answer: value over replacement does not price injury risk, every projection on the board assumed seventeen games from everybody, and nothing in the build knew whether a given player had ever finished a season. That is now measured.</p>
+<h2 id="the-measurement">The measurement</h2>
+<p><strong>Avail</strong> is the share of his team's games a player has actually played across 2023–2025, shrunk toward his position's average by the weight of one full season. The shrinkage matters: without it a rookie who played 17 of 17 would score a perfect 1.00 on a single season of evidence, which is exactly the <a href="../concepts/sample-size-in-a-17-game-season.html">small-sample</a> mistake this build warns about everywhere else. Players with no NFL history carry their position's base rate, because there is nothing to measure.</p>
+<p><strong>Adj VOR</strong> scales each projection by <code>Avail ÷ the position's mean Avail</code>, then recomputes value over replacement on the adjusted numbers. The scaling is deliberately <em>relative</em>: a published projection already prices the average player's injury risk, so multiplying by raw availability would count it twice. An average-durability player is untouched; only players away from their position's norm move.</p>
+<p><strong>What <code>Avail</code> does not use:</strong> the official injury reports. Those columns — weeks listed Out, weeks Questionable, the body parts — are carried in <code>player_context.csv</code> and shown on player pages because they tell you <em>why</em> a player missed time, but the number itself is built only from games played. A game missed is a game missed whatever the cause.</p>
+<p>That last point has teeth, and the clearest case is below: a player can carry a punishing <code>Avail</code> for reasons that have nothing to do with his body.</p>
+<h2 id="the-finding-that-contradicts-the-received-wisdom">The finding that contradicts the received wisdom</h2>
+<p>This build — and most fantasy writing — repeats that running back is the most injury-prone position, and uses that to discount the running-back-heavy top of the board. <strong>Among the players you would actually draft, the data does not support it.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pos</th>
+<th style="text-align: right;">Players</th>
+<th style="text-align: right;">Mean availability</th>
+<th style="text-align: right;">Seasons missing 1+ game</th>
+<th style="text-align: right;">Missing 4+</th>
+<th style="text-align: right;">Eight games or fewer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QB</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0.806</td>
+<td style="text-align: right;">67%</td>
+<td style="text-align: right;">29%</td>
+<td style="text-align: right;">16%</td>
+</tr>
+<tr>
+<td>RB</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">0.857</td>
+<td style="text-align: right;">63%</td>
+<td style="text-align: right;">27%</td>
+<td style="text-align: right;">6%</td>
+</tr>
+<tr>
+<td>WR</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">0.861</td>
+<td style="text-align: right;">67%</td>
+<td style="text-align: right;">24%</td>
+<td style="text-align: right;">8%</td>
+</tr>
+<tr>
+<td>TE</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0.830</td>
+<td style="text-align: right;">70%</td>
+<td style="text-align: right;">32%</td>
+<td style="text-align: right;">6%</td>
+</tr>
+</tbody>
+</table>
+<p>Read the table, not the reputation. On <strong>none of the four measures is running back the worst position</strong>. Its mean availability (0.857) sits above tight end and quarterback and below receiver (0.861); it has the <strong>lowest</strong> rate of seasons missing at least one game of any position (63% against 67% for receivers); and its rate of near-lost seasons (6%) is the joint lowest, level with TE.
+The position that is consistently worst is <strong>quarterback</strong>, on 2 of the four measures — mean availability, near-lost seasons.</p>
+<p>So the honest correction is not "running backs are durable". It is that <strong>running back is not the position that misses the most time</strong>, and the board's old caveat — that a running-back-heavy top needs discounting because the position is uniquely fragile — is not what the games-played record shows. Receivers are modestly more durable; quarterbacks are markedly less.</p>
+<div class="callout co-warning"><p class="co-title">Two things that keep this from being the whole story</p>
+
+**The pool is survivor-selected.** These rows are players projected to matter in 2026 who were also in the league for all three of 2023, 2024 and 2025 — a back whose career was ended by injury is not in it, and neither is one who lost his job by missing a season. The measured claim is therefore narrow: *among the players on your draft board*, running back is not the position that misses the most time. The wider claim, that the position destroys careers fastest, is not tested here and may well be true.
+**Availability is not injury.** `Avail` counts a missed game whatever caused it. Suspensions, holdouts and benchings all land in it, and for some players that is most of the number — see the table below.
+
+</div>
+
+<h3 id="missed-time-that-was-not-medical">Missed time that was not medical</h3>
+<p>Players whose absences mostly never reached an official injury report. Reading their <code>Avail</code> as fragility would be a straightforward mistake.</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Pos</th>
+<th style="text-align: right;">Games missed, 3yr</th>
+<th style="text-align: right;">Weeks listed Out</th>
+<th style="text-align: right;">Missed off the report</th>
+<th style="text-align: right;">Avail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malik Willis</td>
+<td>QB</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">0.378</td>
+</tr>
+<tr>
+<td>Greg Dulcich</td>
+<td>TE</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.43</td>
+</tr>
+<tr>
+<td>Jacoby Brissett</td>
+<td>QB</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">0.539</td>
+</tr>
+<tr>
+<td>Keaton Mitchell</td>
+<td>RB</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.559</td>
+</tr>
+<tr>
+<td>J.K. Dobbins</td>
+<td>RB</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.559</td>
+</tr>
+<tr>
+<td>Chris Rodriguez Jr.</td>
+<td>RB</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">0.618</td>
+</tr>
+<tr>
+<td>Rashee Rice</td>
+<td>WR</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">0.624</td>
+</tr>
+<tr>
+<td>Daniel Jones</td>
+<td>QB</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.628</td>
+</tr>
+<tr>
+<td>## What the adjustment moves</td>
+<td></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+<p>The players the adjustment helps and hurts most, by change in board rank.</p>
+<h3 id="helped-most-durable-and-the-market-has-not-paid-for-it">Helped most — durable, and the market has not paid for it</h3>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Pos</th>
+<th style="text-align: right;">Age</th>
+<th style="text-align: right;">Avail</th>
+<th style="text-align: right;">Board rank</th>
+<th style="text-align: right;">Adjusted rank</th>
+<th style="text-align: right;">Move</th>
+<th style="text-align: right;">Games missed, 3yr</th>
+<th style="text-align: right;">Weeks listed Out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jared Goff</td>
+<td>QB</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">+43</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Matthew Stafford</td>
+<td>QB</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">+38</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Wan'Dale Robinson</td>
+<td>WR</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: right;">117</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">+36</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Courtland Sutton</td>
+<td>WR</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.93</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">+35</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Bo Nix</td>
+<td>QB</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">+34</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Caleb Williams</td>
+<td>QB</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">+32</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Michael Pittman Jr.</td>
+<td>WR</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0.93</td>
+<td style="text-align: right;">92</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">+32</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Rico Dowdle</td>
+<td>RB</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">0.93</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">97</td>
+<td style="text-align: right;">+31</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Jakobi Meyers</td>
+<td>WR</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0.90</td>
+<td style="text-align: right;">122</td>
+<td style="text-align: right;">94</td>
+<td style="text-align: right;">+28</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Justin Herbert</td>
+<td>QB</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">0.88</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">65</td>
+<td style="text-align: right;">+26</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hurt-most-the-projection-assumes-a-season-he-has-not-been-having">Hurt most — the projection assumes a season he has not been having</h3>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Pos</th>
+<th style="text-align: right;">Age</th>
+<th style="text-align: right;">Avail</th>
+<th style="text-align: right;">Board rank</th>
+<th style="text-align: right;">Adjusted rank</th>
+<th style="text-align: right;">Move</th>
+<th style="text-align: right;">Games missed, 3yr</th>
+<th style="text-align: right;">Weeks listed Out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malik Nabers</td>
+<td>WR</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0.66</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">-70</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>Rashee Rice</td>
+<td>WR</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.62</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: right;">-70</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>Cam Skattebo</td>
+<td>RB</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.65</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">-60</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Jayden Daniels</td>
+<td>QB</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.74</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">114</td>
+<td style="text-align: right;">-59</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td>Joe Burrow</td>
+<td>QB</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">0.72</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">-57</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>Christian Watson</td>
+<td>WR</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">0.70</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">122</td>
+<td style="text-align: right;">-55</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>Omarion Hampton</td>
+<td>RB</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">0.68</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">-45</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>Tyler Shough</td>
+<td>QB</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">0.73</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: right;">126</td>
+<td style="text-align: right;">-42</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Kyler Murray</td>
+<td>QB</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0.64</td>
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">-24</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Tee Higgins</td>
+<td>WR</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">0.79</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">92</td>
+<td style="text-align: right;">-23</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="position-mean-availability-used-for-the-adjustment">Position mean availability used for the adjustment</h2>
+<p>These are the divisors in <code>Adj VOR</code> — the mean <code>Avail</code> across <strong>every row on the board at that position</strong>, rookies included. They are deliberately not the same as the position base rates <code>build_context.py</code> prints, which are computed only over players with NFL history. Rookies carry the base rate as their <code>Avail</code>, so folding them back into this mean pulls it slightly toward the base rate and makes the adjustment marginally gentler. Both numbers are correct; they answer different questions.</p>
+<table>
+<thead>
+<tr>
+<th>Pos</th>
+<th style="text-align: right;">Mean Avail (adjustment divisor)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QB</td>
+<td style="text-align: right;">0.805</td>
+</tr>
+<tr>
+<td>RB</td>
+<td style="text-align: right;">0.813</td>
+</tr>
+<tr>
+<td>WR</td>
+<td style="text-align: right;">0.846</td>
+</tr>
+<tr>
+<td>TE</td>
+<td style="text-align: right;">0.840</td>
+</tr>
+</tbody>
+</table>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>The survivor selection above is the real limit on this note. Measuring the wider claim needs a pool defined <em>before</em> the injuries, not after.</li>
+<li><code>Avail</code> treats a missed game as a missed game, whether it cost a start in week 3 or in week 16. A playoff-weeks-weighted version would matter more to a league whose money is decided in weeks 15–17.</li>
+<li>Nothing here predicts <em>this</em> season's injuries, and three seasons is a thin sample for a rate. It prices what a player has done, not what he will do.</li>
+</ul></article>
+</main>
+<footer class="foot"><div class="rule"></div>
+Rendered from the Rome vault on July 25, 2026. Projections and ADP are dated inputs, not
+forecasts — every perishable page carries its own expiry. Built by
+<code>build.py</code>; nothing on this site is hand-typed HTML.</footer>
+<script src="../assets/site.js"></script>
+</body>
+</html>

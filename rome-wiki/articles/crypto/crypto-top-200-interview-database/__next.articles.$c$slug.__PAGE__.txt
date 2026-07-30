@@ -1,0 +1,55 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+7:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+8:"$Sreact.suspense"
+3:Ta2f,<p>Up: <a href="/rome-wiki/articles/crypto/crypto/" class="wiki-link">Crypto</a></p>
+<h2 id="retained-slate">Retained slate</h2>
+<table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Current role</th>
+<th>Dossier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JUP</td>
+<td>Tiny-only capital candidate; no size-up without harder passive capture.</td>
+<td><a href="/rome-wiki/articles/crypto/briefings/081-jup-briefing/" class="wiki-link">081 JUP briefing</a></td>
+</tr>
+<tr>
+<td>PENDLE</td>
+<td>Best proof-gated moonshot lead and strongest product-economics follow-up.</td>
+<td><a href="/rome-wiki/articles/crypto/pendle-memo/" class="wiki-link">PENDLE memo</a>, <a href="/rome-wiki/articles/crypto/pendle-deep-memo/" class="wiki-link">PENDLE deep memo</a>, <a href="/rome-wiki/articles/crypto/briefings/148-pendle-briefing/" class="wiki-link">148 PENDLE briefing</a></td>
+</tr>
+<tr>
+<td>SYRUP</td>
+<td>Best credit/RWA watch, gated by transparent and durable buyback policy.</td>
+<td><a href="/rome-wiki/articles/crypto/syrup-memo/" class="wiki-link">SYRUP memo</a>, <a href="/rome-wiki/articles/crypto/syrup-deep-memo/" class="wiki-link">SYRUP deep memo</a>, <a href="/rome-wiki/articles/crypto/briefings/166-syrup-briefing/" class="wiki-link">166 SYRUP briefing</a></td>
+</tr>
+<tr>
+<td>AERO</td>
+<td>Strong protocol surface, but the passive liquid token remains structurally weaker than active ve exposure.</td>
+<td><a href="/rome-wiki/articles/crypto/aero-memo/" class="wiki-link">AERO memo</a>, <a href="/rome-wiki/articles/crypto/aero-deep-memo/" class="wiki-link">AERO deep memo</a>, <a href="/rome-wiki/articles/crypto/briefings/098-aero-briefing/" class="wiki-link">098 AERO briefing</a></td>
+</tr>
+<tr>
+<td>PUMP</td>
+<td>Event-driven upside watch whose unlock, legal, content, and market-structure risks still dominate.</td>
+<td><a href="/rome-wiki/articles/crypto/briefings/092-pump-briefing/" class="wiki-link">092 PUMP briefing</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="decision-layer">Decision layer</h2>
+<h2 id="retention-rule">Retention rule</h2>
+<p>A candidate remains in the live wiki only while it is part of the current top slate or supplies evidence needed to distinguish those candidates. A scheduled research pass should revise the existing dossier, record changed gates, and retire a candidate when it no longer clears that bar.</p>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Does JUP ever justify promotion beyond tiny-only?</li>
+<li>Can PENDLE, SYRUP, or AERO clear all promotion gates at the same time?</li>
+<li>Does PUMP survive its event window well enough to merit a deeper memo?</li>
+</ul>0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/crypto/","children":"Crypto"}],[]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Crypto"]}],["$","h1",null,{"children":"Crypto top 200 interview database"}],["$","p",null,{"className":"article-deck","children":"The original top-200 interview corpus has been reduced to five candidates whose evidence still matters to the current decision."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Mixed provenance"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 7, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[1," min · ","204"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","retained-slate",{"className":"toc-depth-2","children":["$","a",null,{"href":"#retained-slate","children":"Retained slate"}]}],["$","li","decision-layer",{"className":"toc-depth-2","children":["$","a",null,{"href":"#decision-layer","children":"Decision layer"}]}],["$","li","retention-rule",{"className":"toc-depth-2","children":["$","a",null,{"href":"#retention-rule","children":"Retention rule"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","retained-slate",{"className":"toc-depth-2","children":["$","a",null,{"href":"#retained-slate","children":"Retained slate"}]}],["$","li","decision-layer",{"className":"toc-depth-2","children":["$","a",null,{"href":"#decision-layer","children":"Decision layer"}]}],["$","li","retention-rule",{"className":"toc-depth-2","children":["$","a",null,{"href":"#retention-rule","children":"Retention rule"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$3"}}],"$L4"]}],"$L5"]}]]}],null,"$L6"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+4:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/crypto/crypto-top-100-research-universe/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Crypto top 100 research universe"}]]}],["$","$L2",null,{"href":"/articles/crypto/custody-rehypothecation-and-counterparty-risk/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Custody rehypothecation and counterparty risk"}]]}]]}]
+5:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","crypto/briefings/081-jup-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/081-jup-briefing/","children":"081 JUP briefing"}]}],["$","li","crypto/briefings/092-pump-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/092-pump-briefing/","children":"092 PUMP briefing"}]}],["$","li","crypto/briefings/098-aero-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/098-aero-briefing/","children":"098 AERO briefing"}]}],["$","li","crypto/briefings/148-pendle-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/148-pendle-briefing/","children":"148 PENDLE briefing"}]}],["$","li","crypto/briefings/166-syrup-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/166-syrup-briefing/","children":"166 SYRUP briefing"}]}],["$","li","crypto/crypto",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto/","children":"Crypto"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","crypto/crypto",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto/","children":"Crypto"}]}],["$","li","crypto/briefings/081-jup-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/081-jup-briefing/","children":"081 JUP briefing"}]}],["$","li","crypto/briefings/092-pump-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/092-pump-briefing/","children":"092 PUMP briefing"}]}],["$","li","crypto/briefings/098-aero-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/098-aero-briefing/","children":"098 AERO briefing"}]}],["$","li","crypto/briefings/148-pendle-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/148-pendle-briefing/","children":"148 PENDLE briefing"}]}],["$","li","crypto/briefings/166-syrup-briefing",{"children":["$","$L2",null,{"href":"/articles/crypto/briefings/166-syrup-briefing/","children":"166 SYRUP briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","project",{"children":"project"}],["$","li","investing",{"children":"investing"}],["$","li","crypto",{"children":"crypto"}],["$","li","due-diligence",{"children":"due-diligence"}]]}]]}]]}]
+6:["$","$L7",null,{"children":["$","$8",null,{"name":"Next.MetadataOutlet","children":"$@9"}]}]
+9:null

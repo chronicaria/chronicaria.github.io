@@ -1,0 +1,86 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+9:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+a:"$Sreact.suspense"
+3:T1443,<p>Up: <a href="/rome-wiki/articles/sports/mlb/new-york-mets/new-york-mets-2026/" class="wiki-link">New York Mets 2026</a></p>
+<h2 id="dated-ledger">Dated ledger</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Official action</th>
+<th>Roster consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>July 7</td>
+<td>Activated Jorge Polanco from the 60-day injured list; optioned Ronny Mauricio to Syracuse</td>
+<td>Adds Polanco to the active/40-man state and removes Mauricio from the active roster.</td>
+</tr>
+<tr>
+<td>July 7</td>
+<td>Selected Matt Seelinger; designated Guillo Zuñiga and Alex Carrillo for assignment</td>
+<td>Opens a short-lived bullpen role for Seelinger and starts DFA resolution periods for Zuñiga and Carrillo.</td>
+</tr>
+<tr>
+<td>July 8</td>
+<td>Placed Austin Warren on the 15-day IL with a disclosed right forearm strain</td>
+<td>Removes Warren from the active bullpen; the transaction does not establish a return date.</td>
+</tr>
+<tr>
+<td>July 8</td>
+<td>Designated Matt Seelinger for assignment</td>
+<td>Ends Seelinger's active-roster stay and leaves his next organization/roster state unresolved.</td>
+</tr>
+<tr>
+<td>July 8</td>
+<td>Selected Xzavion Curry's contract from Syracuse; recalled Tobias Myers from Syracuse</td>
+<td>Added both right-handers to the active staff. Curry's selection also added him to the 40-man roster; the official log does not explicitly pair each addition with a particular removal.</td>
+</tr>
+<tr>
+<td>July 8</td>
+<td>Sent Dedniel Núñez on rehabilitation assignment to Syracuse and Luis Robert Jr. on rehabilitation assignment to Binghamton</td>
+<td>Establishes the location and continuation of each rehab assignment, not readiness, workload limits, or an activation date.</td>
+</tr>
+<tr>
+<td>July 9</td>
+<td>Optioned Tobias Myers to Syracuse; selected Dan Hammer's contract from Syracuse</td>
+<td>Supersedes Myers's July 8 active status after one day and adds Hammer to both the active and 40-man rosters. The post-move active roster listed Curry and Hammer, not Myers.</td>
+</tr>
+<tr>
+<td>July 9</td>
+<td>Designated Jared Oliva for assignment</td>
+<td>Removes Oliva from the current roster state while his DFA outcome remains unresolved.</td>
+</tr>
+<tr>
+<td>July 9</td>
+<td>Released Alex Carrillo; outrighted Guillo Zuñiga to Syracuse</td>
+<td>Resolves two July 7 DFA cases in different ways: Carrillo left the organization, while Zuñiga remained with Syracuse outside the 40-man roster.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-it-matters">Why it matters</h2>
+<p>The three-day sequence shows why individual transaction headlines are insufficient. Myers was accurately described as recalled on July 8 but no longer belonged on an active-roster snapshot after his July 9 option. Curry and Hammer were on the active roster after their contracts were selected, while the Carrillo and Zuñiga DFA cases had reached official resolutions. Seelinger's and Oliva's outcomes remained unresolved in the July 9 transaction log.</p>
+<p>For the rules behind these state changes, see <a href="/rome-wiki/articles/sports/mlb/new-york-mets/injured-list-moves-and-mets-roster-mechanics/" class="wiki-link">Injured-list moves and Mets roster mechanics</a>. For performance claims arising from a changed role or workload, use the controls in <a href="/rome-wiki/articles/sports/mlb/new-york-mets/how-to-read-mets-statcast-changes-without-overfitting/" class="wiki-link">How to read Mets Statcast changes without overfitting</a>.</p>
+<p>This ledger records only the league's stated actions. Same-day selections and removals make the roster arithmetic legible, but they do not prove that the club formally paired one named addition with one named subtraction unless the official record says so. Warren's disclosed forearm strain and the two rehab assignments likewise do not support independent recovery forecasts.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://www.mlb.com/transactions/2026/07/07/mets" target="_blank" rel="noopener noreferrer">MLB Mets transactions, July 7, 2026</a> — official transaction log.</li>
+<li><a href="https://www.mlb.com/mets/roster/transactions" target="_blank" rel="noopener noreferrer">Mets transactions</a> — official July 7–9 actions, including the Curry selection, Myers recall and option, Hammer selection, and DFA resolutions; accessed July 9, 2026.</li>
+<li><a href="https://www.mlb.com/transactions/2026/07/08/mets" target="_blank" rel="noopener noreferrer">MLB Mets transactions, July 8, 2026</a> — date-filtered official log.</li>
+<li><a href="https://www.mlb.com/transactions/2026/07/09/mets" target="_blank" rel="noopener noreferrer">MLB Mets transactions, July 9, 2026</a> — date-filtered official log.</li>
+<li><a href="https://www.mlb.com/mets/roster/" target="_blank" rel="noopener noreferrer">Mets roster</a> — post-move active state; accessed July 9, 2026.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>What roles and workloads will Curry and Hammer receive on the active staff?</li>
+<li>How will the club resolve Seelinger's and Oliva's DFA cases?</li>
+<li>What official evidence will establish readiness and activation timing for Núñez and Robert?</li>
+</ul>0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/sports/","children":"Sports"}],[["$","span","MLB",{"children":"MLB"}],["$","span","New York Mets",{"children":"New York Mets"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Sports"]}],["$","h1",null,{"children":"New York Mets 2026 roster and transaction ledger"}],["$","p",null,{"className":"article-deck","children":"The Mets' July 7–9 transaction chain activated Jorge Polanco and cycled four pitchers through short-lived or new roster states, with Tobias Myers recalled and optioned on consecutive days."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[3," min · ","581"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","dated-ledger",{"className":"toc-depth-2","children":["$","a",null,{"href":"#dated-ledger","children":"Dated ledger"}]}],["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","dated-ledger",{"className":"toc-depth-2","children":["$","a",null,{"href":"#dated-ledger","children":"Dated ledger"}]}],["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$3"}}],"$L4"]}],"$L5"]}]]}],null,"$L6"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+4:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026-health-and-workload-ledger/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"New York Mets 2026 health and workload ledger"}]]}],["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026-rotation-and-bullpen-map/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"New York Mets 2026 rotation and bullpen map"}]]}]]}]
+5:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","sports/mlb/new-york-mets/how-leverage-changes-mets-bullpen-evaluation",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-leverage-changes-mets-bullpen-evaluation/","children":"How leverage changes Mets bullpen evaluation"}]}],["$","li","sports/mlb/new-york-mets/how-mlb-option-assignments-shape-mets-roster-decisions",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-mlb-option-assignments-shape-mets-roster-decisions/","children":"How MLB option assignments shape Mets roster decisions"}]}],["$","li","sports/mlb/new-york-mets/how-recent-workload-shapes-mets-bullpen-availability",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-recent-workload-shapes-mets-bullpen-availability/","children":"How recent workload shapes Mets bullpen availability"}]}],["$","li","sports/mlb/new-york-mets/how-to-build-a-mets-bullpen-workload-ledger",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-to-build-a-mets-bullpen-workload-ledger/","children":"How to build a Mets bullpen workload ledger"}]}],["$","li","sports/mlb/new-york-mets/how-to-read-mets-statcast-changes-without-overfitting",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-to-read-mets-statcast-changes-without-overfitting/","children":"How to read Mets Statcast changes without overfitting"}]}],["$","li","sports/mlb/new-york-mets/injured-list-moves-and-mets-roster-mechanics",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/injured-list-moves-and-mets-roster-mechanics/","children":"Injured-list moves and Mets roster mechanics"}]}],["$","li","sports/mlb/new-york-mets/mets-minor-league-translation-ledger-2026",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/mets-minor-league-translation-ledger-2026/","children":"Mets minor-league translation ledger 2026"}]}],["$","li","sports/mlb/new-york-mets/mets-prospect-to-mlb-translation",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/mets-prospect-to-mlb-translation/","children":"Mets prospect-to-MLB translation"}]}],["$","li","sports/mlb/new-york-mets/mets-roster-control-and-option-ledger-2026",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/mets-roster-control-and-option-ledger-2026/","children":"Mets roster-control and option ledger 2026"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets/","children":"New York Mets"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026/","children":"New York Mets 2026"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026-health-and-workload-ledger",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026-health-and-workload-ledger/","children":"New York Mets 2026 health and workload ledger"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026-trade-deadline-needs",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026-trade-deadline-needs/","children":"New York Mets 2026 trade-deadline needs"}]}],["$","li","sports/sports",{"children":["$","$L2",null,{"href":"/articles/sports/sports/","children":"Sports"}]}],["$","li","sports/mlb/new-york-mets/why-mets-reliever-performance-is-volatile",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/why-mets-reliever-performance-is-volatile/","children":"Why Mets reliever performance is volatile"}]}]]}]]}],"$L7","$L8"]}]
+6:["$","$L9",null,{"children":["$","$a",null,{"name":"Next.MetadataOutlet","children":"$@b"}]}]
+7:["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","sports/mlb/new-york-mets/injured-list-moves-and-mets-roster-mechanics",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/injured-list-moves-and-mets-roster-mechanics/","children":"Injured-list moves and Mets roster mechanics"}]}],["$","li","sports/mlb/new-york-mets/how-to-read-mets-statcast-changes-without-overfitting",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-to-read-mets-statcast-changes-without-overfitting/","children":"How to read Mets Statcast changes without overfitting"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026/","children":"New York Mets 2026"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026-trade-deadline-needs",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026-trade-deadline-needs/","children":"New York Mets 2026 trade-deadline needs"}]}],["$","li","sports/mlb/new-york-mets/how-leverage-changes-mets-bullpen-evaluation",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-leverage-changes-mets-bullpen-evaluation/","children":"How leverage changes Mets bullpen evaluation"}]}],["$","li","sports/mlb/new-york-mets/how-mlb-option-assignments-shape-mets-roster-decisions",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-mlb-option-assignments-shape-mets-roster-decisions/","children":"How MLB option assignments shape Mets roster decisions"}]}]]}]]}]
+8:["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","sports",{"children":"sports"}],["$","li","baseball",{"children":"baseball"}],["$","li","mlb",{"children":"mlb"}],["$","li","new-york-mets",{"children":"new-york-mets"}],["$","li","roster-construction",{"children":"roster-construction"}]]}]]}]
+b:null

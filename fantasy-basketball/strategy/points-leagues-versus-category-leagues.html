@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){var t=null;try{t=localStorage.getItem("fbe-theme")}catch(e){}
+document.documentElement.dataset.theme=(t==="lamp"||t==="paper")?t:(matchMedia("(prefers-color-scheme: dark)").matches?"lamp":"paper");})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Points leagues versus category leagues — 2026-27 Fantasy Basketball Encyclopedia</title>
+<meta name="description" content="Points and category leagues price the same box score with different mathematics — points is a linear functional on eleven stats, 9-cat is nine independent binary contests — and the practical consequence is that punting is unavailable in points, availability dominates it, and no two platform &quot;points&quot; defaults are the same formula.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+<script defer src="/assets/hub.js"></script></head>
+<body data-rel="../">
+<header class="topnav">
+  <a class="brand" href="../index.html">The Fantasy Basketball <b>Encyclopedia</b></a>
+  <div class="navsearch"><input type="search" id="q" placeholder="Search players, teams, notes…"
+    autocomplete="off" role="combobox" aria-expanded="false" aria-label="Search the encyclopedia">
+    <div class="searchresults" id="qr" role="listbox" hidden></div></div>
+  <nav class="navlinks">
+    <details class="navdrop"><summary>Draft Room</summary><div class="navmenu"><a href="../rankings/2026-27-draft-boards-espn-points-and-nine-category.html">ESPN points + 9-cat boards</a><a href="../rankings/2026-27-tiers-espn-points-and-nine-category.html">Tiers — both formats</a><a href="../rankings/2026-27-volume-corrected-nine-category-board.html">Volume-corrected 9-cat board</a><a href="../rankings/2026-27-fantasy-basketball-rankings.html">Editorial top 200</a><a href="../rankings/2026-27-fantasy-basketball-tiers.html">Editorial tiers (pre-repair)</a><a href="../rankings/2026-27-rookies.html">Rookies</a><a href="../rankings/2026-27-sleepers-breakouts-and-fades.html">Sleepers &amp; fades</a><a href="../rankings/2026-27-dynasty-rankings.html">Dynasty</a><a href="../strategy/draft-day-checklist-and-decision-rules.html">Draft-day checklist</a></div></details>
+    <details class="navdrop"><summary>Teams</summary><div class="navmenu"><a href="../teams/2026-27-nba-fantasy-team-index.html">All teams (index)</a><a href="../teams/boston-celtics.html">Boston Celtics</a><a href="../teams/brooklyn-nets.html">Brooklyn Nets</a><a href="../teams/new-york-knicks.html">New York Knicks</a><a href="../teams/philadelphia-76ers.html">Philadelphia 76ers</a><a href="../teams/toronto-raptors.html">Toronto Raptors</a><a href="../teams/chicago-bulls.html">Chicago Bulls</a><a href="../teams/cleveland-cavaliers.html">Cleveland Cavaliers</a><a href="../teams/detroit-pistons.html">Detroit Pistons</a><a href="../teams/indiana-pacers.html">Indiana Pacers</a><a href="../teams/milwaukee-bucks.html">Milwaukee Bucks</a><a href="../teams/atlanta-hawks.html">Atlanta Hawks</a><a href="../teams/charlotte-hornets.html">Charlotte Hornets</a><a href="../teams/miami-heat.html">Miami Heat</a><a href="../teams/orlando-magic.html">Orlando Magic</a><a href="../teams/washington-wizards.html">Washington Wizards</a><a href="../teams/denver-nuggets.html">Denver Nuggets</a><a href="../teams/minnesota-timberwolves.html">Minnesota Timberwolves</a><a href="../teams/oklahoma-city-thunder.html">Oklahoma City Thunder</a><a href="../teams/portland-trail-blazers.html">Portland Trail Blazers</a><a href="../teams/utah-jazz.html">Utah Jazz</a><a href="../teams/golden-state-warriors.html">Golden State Warriors</a><a href="../teams/los-angeles-clippers.html">Los Angeles Clippers</a><a href="../teams/los-angeles-lakers.html">Los Angeles Lakers</a><a href="../teams/phoenix-suns.html">Phoenix Suns</a><a href="../teams/sacramento-kings.html">Sacramento Kings</a><a href="../teams/dallas-mavericks.html">Dallas Mavericks</a><a href="../teams/houston-rockets.html">Houston Rockets</a><a href="../teams/memphis-grizzlies.html">Memphis Grizzlies</a><a href="../teams/new-orleans-pelicans.html">New Orleans Pelicans</a><a href="../teams/san-antonio-spurs.html">San Antonio Spurs</a></div></details>
+    <details class="navdrop"><summary>Projections</summary><div class="navmenu"><a href="../projections/2026-27-nba-depth-charts.html">NBA depth charts</a><a href="../projections/2026-27-nba-minutes-projections.html">NBA minutes projections</a><a href="../projections/2026-27-nba-roster-and-transaction-ledger.html">NBA roster and transaction ledger</a><a href="../projections/2026-27-nba-team-outcomes.html">NBA team outcomes</a><a href="../projections/2026-27-fantasy-basketball-player-projections.html">fantasy basketball player projections</a><a href="../projections/2026-27-fantasy-basketball-projection-methodology.html">fantasy basketball projection methodology</a><a href="../projections/2026-27-fantasy-basketball-role-battles.html">fantasy basketball role battles</a><a href="../projections/2026-27-projection-uncertainty-ledger.html">projection uncertainty ledger</a><a href="../projections/projection-engine-defects-and-corrections.html">Projection engine defects and corrections</a></div></details>
+    <details class="navdrop"><summary>Strategy</summary><div class="navmenu"><a href="../strategy/10-team-versus-12-team-fantasy-basketball-strategy.html">10-team versus 12-team fantasy basketball strategy</a><a href="../strategy/category-correlations-and-roster-construction.html">Category correlations and roster construction</a><a href="../strategy/draft-day-checklist-and-decision-rules.html">Draft day checklist and decision rules</a><a href="../strategy/drafting-by-slot-in-snake-drafts.html">Drafting by slot in snake drafts</a><a href="../strategy/fantasy-basketball-value-stability-and-bust-rates.html">Fantasy basketball value stability and bust rates</a><a href="../strategy/nba-aging-curves-and-breakout-ages.html">NBA aging curves and breakout ages</a><a href="../strategy/points-leagues-versus-category-leagues.html">Points leagues versus category leagues</a><a href="../strategy/positional-scarcity-and-eligibility-in-2026-27.html">Positional scarcity and eligibility in 2026-27</a><a href="../strategy/projecting-games-played-and-availability.html">Projecting games played and availability</a><a href="../strategy/punt-strategies-for-nine-category-leagues.html">Punt strategies for nine-category leagues</a><a href="../strategy/reading-projections-and-disagreement.html">Reading projections and disagreement</a><a href="../strategy/streaming-and-in-season-roster-management.html">Streaming and in-season roster management</a></div></details>
+    <details class="navdrop"><summary>Library</summary><div class="navmenu"><a href="../library/2026-27-nba-transactions-roster-pressure-and-role-change-ledger.html">2026-27 nba transactions roster pressure and role-change ledger</a><a href="../library/2026-27-fantasy-basketball-injury-and-availability-ledger.html">Injury and availability ledger</a><a href="../library/2026-27-fantasy-basketball-news-ledger.html">News ledger</a><a href="../library/2026-27-fantasy-basketball-social-and-community-ledger.html">Social and community ledger</a><a href="../library/2026-27-fantasy-basketball-source-freshness-ledger.html">Source freshness ledger</a><a href="../library/2026-27-fantasy-basketball-source-index.html">Source index</a><a href="../library/2026-27-fantasy-basketball-video-and-podcast-library.html">Video and podcast library</a><a href="../library/basketball-monster.html">Basketball monster</a><a href="../library/fantrax.html">Fantrax</a><a href="../library/hashtag-basketball.html">Hashtag basketball</a><a href="../library/josh-lloyd-and-locked-on-fantasy-basketball.html">Josh lloyd and locked on fantasy basketball</a><a href="../library/major-fantasy-media.html">Major fantasy media</a><a href="../library/old-man-squad-sleepers-busts-and-late-round-flyers.html">Old man squad - sleepers, busts and late-round flyers</a><a href="../library/reddit-fantasy-basketball.html">Reddit fantasy basketball</a><a href="../library/rotowire.html">Rotowire</a><a href="../meta/2026-27-fantasy-basketball-evidence-and-confidence-policy.html">Evidence policy</a><a href="../meta/progress.html">Build progress</a><a href="../meta/audit.html">Audit</a></div></details>
+    <a class="navflat" href="../players/index.html">Players</a>
+  </nav>
+  <button class="themebtn" id="themebtn" type="button" aria-label="Toggle theme">☾</button>
+</header>
+<main class="page">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Encyclopedia</a> · <span>Strategy</span> · <span>Points leagues versus category leagues</span></nav>
+<div class="hero"><p class="kicker">Strategy</p><h1>Points leagues versus category leagues</h1><p class='lede'>Points and category leagues price the same box score with different mathematics — points is a linear functional on eleven stats, 9-cat is nine independent binary contests — and the practical consequence is that punting is unavailable in points, availability dominates it, and no two platform &quot;points&quot; defaults are the same formula.</p></div><nav class="jumpbar" aria-label="On this page"><a href="#the-five-defaults-verbatim">The five defaults, verbatim</a><a href="#espns-formula-is-not-points-plus-extras-rewrite-it">ESPN's formula is not "points plus extras" — rewrite it</a><a href="#worked-example-2025-26-lines-both-formulas">Worked example: 2025-26 lines, both formulas</a><a href="#steals-and-blocks-the-formats-real-fault-line">Steals and blocks: the format's real fault line</a><a href="#turnovers">Turnovers</a><a href="#punting-does-not-exist-in-points-leagues">Punting does not exist in points leagues</a><a href="#games-played-why-it-dominates-points-and-merely-matters-in-9-cat">Games played: why it dominates points and merely matters in 9-cat</a><a href="#efficiency-ratio-in-9-cat-linear-in-points">Efficiency: ratio in 9-cat, linear in points</a><a href="#critical-finding-this-vaults-two-points-boards-are-not-the-same-formula">Critical finding: this vault's two "points" boards are not the same formula</a><a href="#the-decision-for-a-10-or-12-team-autumn-draft">The decision, for a 10-or-12-team autumn draft</a><a href="#open-questions">Open questions</a></nav><article class="prose"><p>Up: <a href="../index.html">2026-27 Fantasy Basketball Encyclopedia</a></p>
+<p>Related: <a href="../rankings/2026-27-points-league-rankings.html">2026-27 points-league rankings</a> · <a href="../rankings/2026-27-category-rankings.html">2026-27 category rankings</a> · <a href="../rankings/2026-27-fantasy-basketball-rankings.html">2026-27 fantasy basketball rankings</a> · <a href="../rankings/2026-27-fantasy-basketball-tiers.html">2026-27 fantasy basketball tiers</a> · <a href="../projections/2026-27-fantasy-basketball-player-projections.html">2026-27 fantasy basketball player projections</a> · <a href="../projections/2026-27-nba-minutes-projections.html">2026-27 NBA minutes projections</a> · <a href="../projections/2026-27-fantasy-basketball-projection-methodology.html">2026-27 fantasy basketball projection methodology</a> · <a href="../library/2026-27-fantasy-basketball-injury-and-availability-ledger.html">2026-27 fantasy basketball injury and availability ledger</a> · <a href="../meta/2026-27-fantasy-basketball-evidence-and-confidence-policy.html">2026-27 fantasy basketball evidence and confidence policy</a> · <a href="../rankings/2026-27-sleepers-breakouts-and-fades.html">2026-27 sleepers, breakouts, and fades</a> · <span class="redlink" title="Not in this encyclopedia">Games played versus per-game value in fantasy basketball</span> · <span class="redlink" title="Not in this encyclopedia">Robust punt builds in fantasy basketball</span> · <span class="redlink" title="Not in this encyclopedia">Percentage categories and volume</span></p>
+<h2 id="the-five-defaults-verbatim">The five defaults, verbatim</h2>
+<p>Everything below rests on this table. "Points league" is not a format; it is a family of formats that disagree with each other.</p>
+<table>
+<thead>
+<tr>
+<th>Stat</th>
+<th style="text-align: right;"><strong>ESPN</strong> default</th>
+<th style="text-align: right;"><strong>Yahoo</strong> default</th>
+<th style="text-align: right;"><strong>CBS Free</strong></th>
+<th style="text-align: right;"><strong>Sleeper</strong> standard</th>
+<th style="text-align: right;"><strong>Fantrax / RotoWire "standard"</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PTS</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">+1</td>
+</tr>
+<tr>
+<td>REB</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">+1.2</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">+1.2</td>
+<td style="text-align: right;">+1.2</td>
+</tr>
+<tr>
+<td>AST</td>
+<td style="text-align: right;">+2</td>
+<td style="text-align: right;">+1.5</td>
+<td style="text-align: right;">+2</td>
+<td style="text-align: right;">+1.5</td>
+<td style="text-align: right;">+1.5</td>
+</tr>
+<tr>
+<td>STL</td>
+<td style="text-align: right;">+4</td>
+<td style="text-align: right;">+3</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">+3</td>
+<td style="text-align: right;">+3</td>
+</tr>
+<tr>
+<td>BLK</td>
+<td style="text-align: right;">+4</td>
+<td style="text-align: right;">+3</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">+3</td>
+<td style="text-align: right;">+3</td>
+</tr>
+<tr>
+<td>TO</td>
+<td style="text-align: right;">−2</td>
+<td style="text-align: right;">−1</td>
+<td style="text-align: right;">−1</td>
+<td style="text-align: right;">−1</td>
+<td style="text-align: right;">−1</td>
+</tr>
+<tr>
+<td>3PM</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">+1 (default <em>on</em>, value league-set)</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>FGM</td>
+<td style="text-align: right;">+2</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>FGA</td>
+<td style="text-align: right;">−1</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>FTM</td>
+<td style="text-align: right;">+1</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>FTA</td>
+<td style="text-align: right;">−1</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+<p>Sources: <a href="https://www.espn.com/fantasy/basketball/story/_/id/30296896/espn-fantasy-new">ESPN's default points-league scoring explainer</a> · <a href="https://help.yahoo.com/kb/SLN6919.html">Yahoo default league settings</a> · <a href="https://www.cbssports.com/fantasy/basketball/games/free/rules">CBS Free official rules</a> · <a href="https://sleeper.com/blog/fantasy-basketball-scoring-how-it-works/">Sleeper's scoring primer</a> and <a href="https://support.sleeper.com/en/articles/4645009-what-scoring-settings-are-available">Sleeper's scoring-settings list</a> · <a href="https://www.rotowire.com/faq/how-are-fantasy-basketball-points-calculated-51b51631">RotoWire's standard formula</a>.</p>
+<p>Two caveats worth carrying. Sleeper publishes <em>which</em> settings are on by default (points, rebounds, assists, steals, blocks, turnovers, 3PM, double-double, triple-double, technical and flagrant fouls) but does not publish the numeric defaults in its help centre; the values above are the ones Sleeper's own primer calls standard, and you should read them off the league-creation screen rather than trust this row. Fantrax exposes scoring per league in the League Rules Summary and does not publish a single canonical default page that survives a fetch; the row above is the value Fantrax's own editorial and RotoWire both call standard, not a verified product default. Both rows are <strong>lower-confidence than the ESPN, Yahoo, and CBS rows</strong>, which come from official product documentation. Note also that a sixth family exists — DFS-style scoring such as <a href="https://fantasydata.com/api/fantasy-scoring-system/nba">FantasyData's</a> 3/2/1 shot-value system with STL and BLK at +2 — which is not a season-long default anywhere but shows up in third-party projection exports.</p>
+<p>CBS Free is the outlier that nobody flags: <strong>steals and blocks at +1</strong> collapse the entire defensive-specialist archetype, and CBS averages a player's score across games in the scoring period rather than summing.</p>
+<h2 id="espns-formula-is-not-points-plus-extras-rewrite-it">ESPN's formula is not "points plus extras" — rewrite it</h2>
+<p>ESPN's eleven terms look intimidating and get misquoted constantly. Collapse them. Since <span class="math">\(2\cdot\mathrm{FGM}-\mathrm{FGA}=\mathrm{FGM}-\mathrm{FG_{miss}}\)</span> and <span class="math">\(\mathrm{FTM}-\mathrm{FTA}=-\mathrm{FT_{miss}}\)</span>:</p>
+<p><span class="math display">\[
+\mathrm{ESPN}=\underbrace{\mathrm{PTS}+\mathrm{3PM}+\mathrm{FGM}-\mathrm{FG_{miss}}-\mathrm{FT_{miss}}}_{\text{shooting}}+\mathrm{REB}+2\,\mathrm{AST}+4\,\mathrm{STL}+4\,\mathrm{BLK}-2\,\mathrm{TO}
+\]</span></p>
+<p>Per shot event that is: made three = <strong>+5</strong>, made two = <strong>+3</strong>, made free throw = <strong>+1</strong>, any miss = <strong>−1</strong>. ESPN says exactly this in its explainer.</p>
+<p>The useful question is not "does ESPN punish volume" — in isolation it barely does. A two-point attempt is worth $4p-1$, positive above 25%; a three is $6p-1$, positive above 16.7%. The useful question is <strong>ESPN minus Yahoo per attempt</strong>, because that is the rank-swing driver:</p>
+<table>
+<thead>
+<tr>
+<th>Shot type</th>
+<th>ESPN value</th>
+<th>Yahoo value</th>
+<th>ESPN − Yahoo</th>
+<th>Break-even</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Two-point attempt</td>
+<td>$4p-1$</td>
+<td>$2p$</td>
+<td>$2p-1$</td>
+<td><strong>FG% = 50.0%</strong></td>
+</tr>
+<tr>
+<td>Three-point attempt</td>
+<td>$6p-1$</td>
+<td>$3p$</td>
+<td>$3p-1$</td>
+<td><strong>3P% = 33.3%</strong></td>
+</tr>
+<tr>
+<td>Free-throw attempt</td>
+<td>$2p-1$</td>
+<td><span class="math">\(p\)</span></td>
+<td>$p-1$</td>
+<td><strong>FT% = 100%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Read the third row again. ESPN taxes <em>every free-throw attempt</em> by <span class="math">\((1-\mathrm{FT\%})\)</span>. There is no free-throw volume that is neutral. <a href="../players/lal/luka-doncic.html">Luka Dončić</a> shot 10.1 FTA at 78.0% in 2025-26 — that alone is <strong>−2.2 FP/G</strong> in ESPN relative to Yahoo, the largest FT penalty in the elite pool.</p>
+<h2 id="worked-example-2025-26-lines-both-formulas">Worked example: 2025-26 lines, both formulas</h2>
+<p>All inputs are real <a href="https://www.espn.com/nba/stats/player/_/season/2026/seasontype/2">2025-26 regular-season per-game stats from ESPN</a>. Team labels are 2025-26; dossier links go to 2026-27 rosters, so several players changed teams in the offseason.</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th style="text-align: center;">25-26 Tm</th>
+<th style="text-align: right;">GP</th>
+<th>FG% (FGA)</th>
+<th>FT% (FTA)</th>
+<th style="text-align: right;"><strong>ESPN FP/G</strong></th>
+<th style="text-align: right;">rank</th>
+<th style="text-align: right;"><strong>Yahoo FP/G</strong></th>
+<th style="text-align: right;">rank</th>
+<th style="text-align: right;">swing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../players/den/nikola-jokic.html">Nikola Jokić</a></td>
+<td style="text-align: center;">DEN</td>
+<td style="text-align: right;">65</td>
+<td>.569 (17.4)</td>
+<td>.831 (7.4)</td>
+<td style="text-align: right;">66.2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">62.1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td><a href="../players/lal/luka-doncic.html">Luka Dončić</a></td>
+<td style="text-align: center;">LAL</td>
+<td style="text-align: right;">64</td>
+<td>.476 (22.8)</td>
+<td>.780 (10.1)</td>
+<td style="text-align: right;">58.8</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">57.5</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td><a href="../players/okc/shai-gilgeous-alexander.html">Shai Gilgeous-Alexander</a></td>
+<td style="text-align: center;">OKC</td>
+<td style="text-align: right;">68</td>
+<td>.553 (19.4)</td>
+<td>.879 (9.0)</td>
+<td style="text-align: right;">55.8</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">50.6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;"><strong>+1</strong></td>
+</tr>
+<tr>
+<td><a href="../players/sas/victor-wembanyama.html">Victor Wembanyama</a></td>
+<td style="text-align: center;">SAS</td>
+<td style="text-align: right;">64</td>
+<td>.512 (16.9)</td>
+<td>.827 (7.0)</td>
+<td style="text-align: right;">55.3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">53.4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">−1</td>
+</tr>
+<tr>
+<td><a href="../players/nop/trey-murphy-iii.html">Trey Murphy III</a></td>
+<td style="text-align: center;">NO</td>
+<td style="text-align: right;">66</td>
+<td>.470 (15.9)</td>
+<td>.886 (3.7)</td>
+<td style="text-align: right;">40.7</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">37.9</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;"><strong>+7</strong></td>
+</tr>
+<tr>
+<td><a href="../players/phi/jaylen-brown.html">Jaylen Brown</a></td>
+<td style="text-align: center;">BOS</td>
+<td style="text-align: right;">71</td>
+<td>.477 (21.7)</td>
+<td>.795 (7.5)</td>
+<td style="text-align: right;">43.8</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">45.2</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;"><strong>−5</strong></td>
+</tr>
+<tr>
+<td><a href="../players/mia/bam-adebayo.html">Bam Adebayo</a></td>
+<td style="text-align: center;">MIA</td>
+<td style="text-align: right;">73</td>
+<td>.442 (15.7)</td>
+<td>.778 (5.8)</td>
+<td style="text-align: right;">39.4</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">41.0</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;"><strong>−7</strong></td>
+</tr>
+<tr>
+<td><a href="../players/nyk/mikal-bridges.html">Mikal Bridges</a></td>
+<td style="text-align: center;">NY</td>
+<td style="text-align: right;">82</td>
+<td>.490 (11.7)</td>
+<td>.827 (1.2)</td>
+<td style="text-align: right;">33.6</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">29.8</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;"><strong>+3</strong></td>
+</tr>
+<tr>
+<td><a href="../players/det/jalen-duren.html">Jalen Duren</a></td>
+<td style="text-align: center;">DET</td>
+<td style="text-align: right;">70</td>
+<td>.650 (11.5)</td>
+<td>.747 (6.1)</td>
+<td style="text-align: right;">38.6</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">38.0</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">−1</td>
+</tr>
+<tr>
+<td><a href="../players/min/lamelo-ball.html">LaMelo Ball</a></td>
+<td style="text-align: center;">CHA</td>
+<td style="text-align: right;">72</td>
+<td>.407 (17.3)</td>
+<td>.899 (2.5)</td>
+<td style="text-align: right;">39.7</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">38.2</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">+2</td>
+</tr>
+</tbody>
+</table>
+<p>Ranks are within a 37-player pool of 2025-26 top-100 scorers, so they are <em>relative</em>, not draft ranks. Across that pool the two formulas correlate at <strong>Spearman ρ = 0.974, Pearson r = 0.986</strong> and the largest rank swing is <strong>7 slots</strong>. The honest headline is therefore: <em>the formulas mostly agree, and the disagreement is worth about half a round.</em> Anyone who tells you a Yahoo board is useless in an ESPN league is overselling; anyone who tells you they are interchangeable is costing you a pick.</p>
+<p>Decomposing ESPN − Yahoo into its six sources makes the archetypes explicit (units: FP/G):</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th style="text-align: right;">shooting</th>
+<th style="text-align: right;">FT tax</th>
+<th style="text-align: right;">REB (−0.2×)</th>
+<th style="text-align: right;">AST (+0.5×)</th>
+<th style="text-align: right;">STL (+1×)</th>
+<th style="text-align: right;">BLK (+1×)</th>
+<th style="text-align: right;">TO (−1×)</th>
+<th style="text-align: right;"><strong>net</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shai Gilgeous-Alexander</td>
+<td style="text-align: right;">+3.9</td>
+<td style="text-align: right;">−1.1</td>
+<td style="text-align: right;">−0.9</td>
+<td style="text-align: right;">+3.3</td>
+<td style="text-align: right;">+1.4</td>
+<td style="text-align: right;">+0.8</td>
+<td style="text-align: right;">−2.2</td>
+<td style="text-align: right;"><strong>+5.2</strong></td>
+</tr>
+<tr>
+<td>Mikal Bridges</td>
+<td style="text-align: right;">+1.8</td>
+<td style="text-align: right;">−0.2</td>
+<td style="text-align: right;">−0.8</td>
+<td style="text-align: right;">+1.8</td>
+<td style="text-align: right;">+1.3</td>
+<td style="text-align: right;">+0.8</td>
+<td style="text-align: right;">−1.0</td>
+<td style="text-align: right;"><strong>+3.8</strong></td>
+</tr>
+<tr>
+<td>Trey Murphy III</td>
+<td style="text-align: right;">+2.3</td>
+<td style="text-align: right;">−0.4</td>
+<td style="text-align: right;">−1.1</td>
+<td style="text-align: right;">+1.9</td>
+<td style="text-align: right;">+1.5</td>
+<td style="text-align: right;">+0.4</td>
+<td style="text-align: right;">−1.8</td>
+<td style="text-align: right;"><strong>+2.8</strong></td>
+</tr>
+<tr>
+<td>Luka Dončić</td>
+<td style="text-align: right;">+2.8</td>
+<td style="text-align: right;"><strong>−2.2</strong></td>
+<td style="text-align: right;">−1.5</td>
+<td style="text-align: right;">+4.2</td>
+<td style="text-align: right;">+1.6</td>
+<td style="text-align: right;">+0.5</td>
+<td style="text-align: right;"><strong>−4.0</strong></td>
+<td style="text-align: right;">+1.3</td>
+</tr>
+<tr>
+<td>Alperen Şengün</td>
+<td style="text-align: right;">+1.2</td>
+<td style="text-align: right;">−1.6</td>
+<td style="text-align: right;">−1.8</td>
+<td style="text-align: right;">+3.1</td>
+<td style="text-align: right;">+1.2</td>
+<td style="text-align: right;">+1.1</td>
+<td style="text-align: right;">−3.2</td>
+<td style="text-align: right;">0.0</td>
+</tr>
+<tr>
+<td>Karl-Anthony Towns</td>
+<td style="text-align: right;">+1.5</td>
+<td style="text-align: right;">−0.7</td>
+<td style="text-align: right;"><strong>−2.4</strong></td>
+<td style="text-align: right;">+1.5</td>
+<td style="text-align: right;">+0.9</td>
+<td style="text-align: right;">+0.5</td>
+<td style="text-align: right;">−2.5</td>
+<td style="text-align: right;"><strong>−1.2</strong></td>
+</tr>
+<tr>
+<td>Jaylen Brown</td>
+<td style="text-align: right;">+1.1</td>
+<td style="text-align: right;">−1.5</td>
+<td style="text-align: right;">−1.4</td>
+<td style="text-align: right;">+2.5</td>
+<td style="text-align: right;">+1.0</td>
+<td style="text-align: right;">+0.4</td>
+<td style="text-align: right;"><strong>−3.6</strong></td>
+<td style="text-align: right;"><strong>−1.4</strong></td>
+</tr>
+<tr>
+<td>Bam Adebayo</td>
+<td style="text-align: right;"><strong>−0.2</strong></td>
+<td style="text-align: right;">−1.3</td>
+<td style="text-align: right;">−2.0</td>
+<td style="text-align: right;">+1.6</td>
+<td style="text-align: right;">+1.2</td>
+<td style="text-align: right;">+0.7</td>
+<td style="text-align: right;">−1.6</td>
+<td style="text-align: right;"><strong>−1.6</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The winners in ESPN are efficient, low-turnover, three-point-volume wings and guards (<a href="../players/nyk/mikal-bridges.html">Mikal Bridges</a> at 11.7 FGA/1.2 FTA/1.0 TO is almost purpose-built for it). The losers are <strong>volume bigs who shoot under 50% from the floor and rebound for a living</strong> — <a href="../players/mia/bam-adebayo.html">Bam Adebayo</a> and <a href="../players/nyk/karl-anthony-towns.html">Karl-Anthony Towns</a> both go negative, because ESPN's rebound weight is 1.0 instead of 1.2 and their shooting term stops subsidising them. The intuition "ESPN rewards efficient bigs" is only half right: it rewards <em>efficient</em> bigs like <a href="../players/det/jalen-duren.html">Jalen Duren</a> (+3.5 shooting) and punishes <em>inefficient high-usage</em> bigs, and the rebound downweight partially cancels the gain for both.</p>
+<h2 id="steals-and-blocks-the-formats-real-fault-line">Steals and blocks: the format's real fault line</h2>
+<p>In points, a steal is 3 or 4 fantasy points and nothing more. <a href="../players/atl/dyson-daniels.html">Dyson Daniels</a> led the NBA with 2.0 STL/G in 2025-26 and finished <strong>28th of 37</strong> in Yahoo FP/G in the elite pool above. His league-leading skill bought him 6.0 FP — about 17% of his own line, and roughly 3.6 FP of margin over a 0.8-STL replacement. That is a tenth of a starter. Points leagues do not care that the steals are scarce; they only care about the coefficient.</p>
+<p>Nine-cat cares about scarcity, because each category is a separate binary contest and <strong>aggregation compresses extremes</strong>. Within the same 37-player pool:</p>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">SD</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">max z</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STL/G</td>
+<td style="text-align: right;">1.11</td>
+<td style="text-align: right;">0.37</td>
+<td style="text-align: right;">2.00 (Daniels)</td>
+<td style="text-align: right;"><strong>+2.37</strong></td>
+</tr>
+<tr>
+<td>BLK/G</td>
+<td style="text-align: right;">0.79</td>
+<td style="text-align: right;">0.61</td>
+<td style="text-align: right;">3.10 (Wembanyama)</td>
+<td style="text-align: right;"><strong>+3.78</strong></td>
+</tr>
+<tr>
+<td>PTS/G</td>
+<td style="text-align: right;">20.98</td>
+<td style="text-align: right;">5.80</td>
+<td style="text-align: right;">33.5 (Dončić)</td>
+<td style="text-align: right;">+2.16</td>
+</tr>
+<tr>
+<td>Yahoo FP/G</td>
+<td style="text-align: right;">39.62</td>
+<td style="text-align: right;">8.58</td>
+<td style="text-align: right;">62.1 (Jokić)</td>
+<td style="text-align: right;">+2.62</td>
+</tr>
+</tbody>
+</table>
+<p><em>(These SDs come from a 37-player convenience sample of high-minute scorers and are narrower than a true 150-player rosterable pool would produce; the ordering is the point, not the decimals.)</em></p>
+<p><a href="../players/sas/victor-wembanyama.html">Victor Wembanyama</a> is <strong>+3.78σ in blocks</strong>. No player is +3.78σ in fantasy points — the best in the pool is Jokić at +2.62σ, because a sum of eleven imperfectly-correlated terms always has lower relative variance than its most extreme component. That is the whole format difference in one line: <strong>9-cat lets a single roster slot be more extreme than any player can ever be in aggregate, and lets that extremity decide a contest outright.</strong> A points league cannot express that, by construction. It is also why CBS Free's +1 stocks is a materially different game from Yahoo's +3, and why <a href="https://www.espn.com/fantasy/basketball/story/_/id/38604409/pros-cons-points-roto-category-leagues-nba-2023-24">ESPN's own format explainer</a> frames category leagues as rewarding "diverse collection of statistics" while points leagues make accumulation king.</p>
+<h2 id="turnovers">Turnovers</h2>
+<p>Nine-cat treats TO as a ninth category you can simply concede — punt-TO builds are a standard archetype and cost nothing beyond one of nine slots. Points leagues make TO a permanent linear drag that follows the player everywhere. The size of the drag differs by a factor of two across platforms: Dončić's 4.0 TO/G costs <strong>−4.0</strong> on Yahoo and <strong>−8.0</strong> on ESPN. Between an ESPN and a Yahoo league, his turnovers alone move 4.0 FP/G — more than the entire ESPN-vs-Yahoo net differential for any player in the table above. High-usage creators (<a href="../players/det/cade-cunningham.html">Cade Cunningham</a> 3.7, <a href="../players/phi/jaylen-brown.html">Jaylen Brown</a> 3.6, <a href="../players/hou/alperen-sengun.html">Alperen Şengün</a> 3.2) are the ones this hits, and on ESPN it is partly repaid by the doubled assist weight — Cunningham's +4.9 assist gain outruns his −3.7 turnover loss.</p>
+<h2 id="punting-does-not-exist-in-points-leagues">Punting does not exist in points leagues</h2>
+<p>This is structural, not stylistic. Punting works because in H2H categories <a href="https://sports.yahoo.com/fantasy-basketball-knowing-punt-categories-can-help-trophy-191736627.html">a 5–4 win counts the same as an 8–1 win</a>, so you can trade a guaranteed loss in FT% for a decisive edge in five others. Formally: 9-cat scoring is a sum of nine step functions of category margins, so margin above the win threshold is worthless and can be reallocated. Points scoring is a single monotone linear functional <span class="math">\(\sum_j w_j x_j\)</span> — there is no threshold, no wasted surplus, and no category you can concede for a rebate. Conceding a stat in points is simply scoring fewer points.</p>
+<p>What replaces it is <strong>volume, minutes, and games played</strong>, in that order, plus a lineup-slot discipline that has no 9-cat equivalent:</p>
+<ul>
+<li><strong>Minutes are the format's real currency.</strong> Points-per-minute is close to flat across the middle of the player pool; total minutes is not. Read <a href="../projections/2026-27-nba-minutes-projections.html">2026-27 NBA minutes projections</a> before <a href="../rankings/2026-27-points-league-rankings.html">2026-27 points-league rankings</a>, not after.</li>
+<li><strong>Roster-slot throughput.</strong> A points team with one more startable body playing four games this week beats a better team playing three, every time, and there is no offsetting category cost.</li>
+<li><strong>Streaming is unambiguously good.</strong> In 9-cat, streaming a low-efficiency body actively damages FG%/FT%; in points, any positive-FP body in an empty slot is free.</li>
+</ul>
+<h2 id="games-played-why-it-dominates-points-and-merely-matters-in-9-cat">Games played: why it dominates points and merely matters in 9-cat</h2>
+<p>Nine-cat H2H normalises much of the schedule automatically, because per-game rates decide FG%, FT%, and ratio contests regardless of volume, and roto leagues typically cap games at 82 per position (<a href="https://help.yahoo.com/kb/SLN6784.html">Yahoo</a>, <a href="https://support.espn.com/hc/en-us/articles/360056369011-Games-Played-Limit">ESPN</a>) — Yahoo's H2H default carries <strong>no games cap at all</strong>. Points leagues sum an unbounded total. The result is that availability is not a tiebreaker, it is a primary term.</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th style="text-align: right;">GP</th>
+<th style="text-align: right;">Yahoo FP/G</th>
+<th style="text-align: right;">per-game rank</th>
+<th style="text-align: right;"><strong>Season FP</strong></th>
+<th style="text-align: right;"><strong>season rank</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anthony Edwards</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">44.0</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">2687</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr>
+<td>LaMelo Ball</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">38.2</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">2751</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr>
+<td>Mikal Bridges</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">29.8</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;"><strong>2755</strong></td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr>
+<td>Desmond Bane</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">33.7</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;"><strong>2761</strong></td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr>
+<td>Scottie Barnes</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">42.1</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">3364</td>
+<td style="text-align: right;">6</td>
+</tr>
+</tbody>
+</table>
+<p><a href="../players/orl/desmond-bane.html">Desmond Bane</a> was the 29th-best per-game player in this pool and out-produced <a href="../players/min/anthony-edwards.html">Anthony Edwards</a>, the 11th, over the season. <a href="../players/nyk/mikal-bridges.html">Mikal Bridges</a> — 33rd per-game — matched <a href="../players/min/lamelo-ball.html">LaMelo Ball</a> exactly. In 9-cat those same three players are not remotely equivalent, because Bridges wins you nothing and Ball wins you 3PM and AST. This is why <a href="../rankings/2026-27-points-league-rankings.html">2026-27 points-league rankings</a> uses a draft index of <span class="math">\(\mathrm{FP/G}\times\sqrt{\mathrm{GP}/82}\)</span> rather than pure per-game value, and it is the single largest reason a points board and a category board should never be the same list. Cross-check every points pick against the <a href="../library/2026-27-fantasy-basketball-injury-and-availability-ledger.html">2026-27 fantasy basketball injury and availability ledger</a>.</p>
+<h2 id="efficiency-ratio-in-9-cat-linear-in-points">Efficiency: ratio in 9-cat, linear in points</h2>
+<p>The mathematical difference is real and produces reversals, not just re-weightings.</p>
+<p><strong>Nine-cat FG%</strong> is a team-level ratio <span class="math">\(\sum_i m_i / \sum_i a_i\)</span>. A player's marginal impact is approximately</p>
+<p><span class="math display">\[
+\Delta \approx \frac{a_i\,(p_i - P)}{A + a_i}
+\]</span></p>
+<p>— attempts multiplied by the gap from your team's rate. Three consequences: it is <strong>volume-weighted</strong> (a 67% centre on 4 FGA is nearly inert), it is <strong>context-dependent</strong> (the reference <span class="math">\(P\)</span> is your own roster, so the same player helps a bad-shooting team more), and it is <strong>non-additive</strong> (you cannot pre-compute a player's FG% value in isolation). See <span class="redlink" title="Not in this encyclopedia">Percentage categories and volume</span>.</p>
+<p><strong>ESPN points</strong> is <span class="math">\(\mathrm{FGM}-\mathrm{FG_{miss}}\)</span>: an absolute, context-free, additive constant per player. No reference rate, no teammates, no punt.</p>
+<p>The reversal case is free throws. Compare 2025-26:</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th style="text-align: right;">FTA</th>
+<th style="text-align: right;">FT%</th>
+<th style="text-align: right;">FT misses/G</th>
+<th style="text-align: right;">ESPN FT term</th>
+<th style="text-align: right;">9-cat impact vs .780 ref</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zion Williamson</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">.716</td>
+<td style="text-align: right;">2.13</td>
+<td style="text-align: right;"><strong>−2.13</strong></td>
+<td style="text-align: right;">−0.48</td>
+</tr>
+<tr>
+<td>Evan Mobley</td>
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">.606</td>
+<td style="text-align: right;">1.81</td>
+<td style="text-align: right;">−1.81</td>
+<td style="text-align: right;"><strong>−0.80</strong></td>
+</tr>
+</tbody>
+</table>
+<p>ESPN says <a href="../players/nop/zion-williamson.html">Zion Williamson</a> is the worse FT liability (he misses more shots). Nine-cat says <a href="../players/cle/evan-mobley.html">Evan Mobley</a> is roughly 1.7× worse (his <em>rate</em> is far further from reference). Both are correct within their own arithmetic, and they disagree about which player to avoid. The general rule: <strong>ESPN prices raw misses, 9-cat prices the rate gap times volume.</strong> Low-volume terrible shooters (<a href="../players/atl/dyson-daniels.html">Dyson Daniels</a>, 1.6 FTA at 61.5%) are close to harmless in ESPN points and only mildly damaging in 9-cat; high-volume mediocre shooters are the ones ESPN quietly hates.</p>
+<h2 id="critical-finding-this-vaults-two-points-boards-are-not-the-same-formula">Critical finding: this vault's two "points" boards are not the same formula</h2>
+<p><a href="../rankings/2026-27-points-league-rankings.html">2026-27 points-league rankings</a> is computed on the <strong>Yahoo</strong> formula — <span class="math">\(\mathrm{PTS}+1.2\,\mathrm{REB}+1.5\,\mathrm{AST}+3\,\mathrm{STL}+3\,\mathrm{BLK}-\mathrm{TO}\)</span> — and states so explicitly. Meanwhile a large number of individual player dossiers carry a bolded <strong>"ESPN-default points:"</strong> verdict line, and many cite ESPN's April 2026 way-too-early points board as a market anchor. <strong>These are different scoring systems and the verdicts are not interchangeable.</strong></p>
+<p>Worse, the discrepancy is currently <em>uncloseable</em> from the vault's own data. In <a href="../data/player-projections-2026-07-18.csv">Data/player-projections-2026-07-18.csv</a>, of the <strong>262</strong> rows that clear the 20 GP / 15 MPG screen, only <strong>54 carry <code>fga</code>, <code>fta</code>, <code>fg_pct</code>, and <code>ft_pct</code></strong> — the four fields ESPN's formula requires. Coverage is not random; it is by team desk:</p>
+<table>
+<thead>
+<tr>
+<th>Desks with complete shot data</th>
+<th>Desks with none</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DAL (11/11), MEM (11/11), DEN (8/8), MIL (8/8), PHX (8/8), LAL (7/7), FA (1/1)</td>
+<td>the other <strong>24 teams</strong>, 0 rows each</td>
+</tr>
+</tbody>
+</table>
+<p>So no ESPN-default board can be produced for <strong>79% of the projection pool</strong>, and the 54-player subpool that <em>can</em> be scored is a documentation artifact, not a talent tier. Within that subpool the Yahoo and ESPN draft indices correlate at ρ = 0.993 with a maximum swing of 5 slots — reassuring, but it is a sample of six teams' rosters and cannot be extrapolated.</p>
+<p>Where the discrepancy bites hardest, based on the archetype analysis above:</p>
+<ul>
+<li><strong>Overstated by an ESPN verdict on a Yahoo board:</strong> high-FGA sub-.470 shooters and heavy free-throw merchants — <a href="../players/phx/jalen-green.html">Jalen Green</a> (.435 on 16.1 FGA projected), <a href="../players/mia/bam-adebayo.html">Bam Adebayo</a>, <a href="../players/nyk/karl-anthony-towns.html">Karl-Anthony Towns</a>, <a href="../players/lal/luka-doncic.html">Luka Dončić</a>, <a href="../players/phi/jaylen-brown.html">Jaylen Brown</a>.</li>
+<li><strong>Understated:</strong> efficient low-turnover bigs and 3PM-volume wings — <a href="../players/dal/daniel-gafford.html">Daniel Gafford</a> (.660 projected FG%), <a href="../players/lal/walker-kessler.html">Walker Kessler</a>, <a href="../players/okc/chet-holmgren.html">Chet Holmgren</a>, <a href="../players/nyk/mikal-bridges.html">Mikal Bridges</a>, <a href="../players/bos/payton-pritchard.html">Payton Pritchard</a>, <a href="../players/hou/reed-sheppard.html">Reed Sheppard</a>.</li>
+<li><strong>Structurally understated on the Yahoo board only:</strong> elite stocks specialists, whose STL and BLK are worth 4 rather than 3 — <a href="../players/sas/victor-wembanyama.html">Victor Wembanyama</a>, <a href="../players/atl/dyson-daniels.html">Dyson Daniels</a>, <a href="../players/det/ausar-thompson.html">Ausar Thompson</a>, <a href="../players/por/donovan-clingan.html">Donovan Clingan</a>, <a href="../players/mil/myles-turner.html">Myles Turner</a>.</li>
+</ul>
+<p><strong>Remediation:</strong> the 24 team desks should backfill <code>fga</code>/<code>fta</code>/<code>fg_pct</code>/<code>ft_pct</code> into the projection export before draft season, at which point a genuine ESPN-default column can sit beside the Yahoo one. Until then, every dossier line that says "ESPN-default points" should be read as a <em>directional</em> claim, and the board rank next to it as a <em>Yahoo</em> number.</p>
+<h2 id="the-decision-for-a-10-or-12-team-autumn-draft">The decision, for a 10-or-12-team autumn draft</h2>
+<p>If you want the draft to be decided by preparation and in-season management, take <strong>9-cat</strong>: punt architecture, ratio management, and scarcity pricing give a prepared manager far more edge surface. If you want the season decided by roster throughput and injury luck, take <strong>points</strong> — it is a simpler, higher-variance, more football-like game where the winning skill is squeezing games played out of thirteen roster slots. And whichever you pick, <strong>read the scoring settings screen before you rank anything</strong>: the CBS-versus-Yahoo stocks gap (+1 vs +3) is a larger distortion than the entire ESPN-versus-Yahoo differential analysed above.</p>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Sleeper's and Fantrax's numeric defaults are not published in official documentation that survives a fetch. Both rows in the top table are sourced from editorial/primer text rather than product docs and should be verified on the league-creation screen before being treated as fact.</li>
+<li>The z-score and rank-swing figures here use a 37-player convenience pool of 2025-26 top-100 scorers. A proper 150-player rosterable pool would widen every SD and probably widen the maximum ESPN-vs-Yahoo swing beyond 7 slots — that recomputation has not been done.</li>
+<li>Whether 2026-27 platform defaults survive the offseason unchanged is unverified; ESPN's explainer was last updated 2025-09-11 and CBS's public Free rules were still labelled 2025-26 at cutoff.</li>
+<li>The 9-cat FG% impact model above uses a fixed reference rate. A proper treatment prices impact against <em>your own drafted roster's</em> running rate, which makes efficiency value path-dependent within a draft — no note in this vault currently models that.</li>
+</ul></article>
+</main>
+<footer class="foot">
+  <div class="rule"></div>
+  <p>The 2026-27 Fantasy Basketball Encyclopedia · research cutoff July 19, 2026 · built from the Rome vault.
+  Early-offseason projections, not camp-final depth charts. Every ranking names its format; never average boards across formats.</p>
+</footer>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="../assets/site.js"></script>
+</body>
+</html>

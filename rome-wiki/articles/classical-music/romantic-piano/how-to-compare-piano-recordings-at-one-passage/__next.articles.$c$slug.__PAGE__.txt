@@ -1,0 +1,190 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+13:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+14:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/classical-music/","children":"Classical Music"}],[["$","span","Romantic Piano",{"children":"Romantic Piano"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Classical Music"]}],["$","h1",null,{"children":"How to compare piano recordings at one passage"}],["$","p",null,{"className":"article-deck","children":"Comparing piano recordings works best when the unit is one exact passage, the evidence categories stay separate, and the result is a map of choices rather than a ranking of performers."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 10, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[15," min · ","3,118"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","why-the-passage-is-the-unit",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-the-passage-is-the-unit","children":"Why the passage is the unit"}]}],["$","li","the-five-labels",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-five-labels","children":"The five labels"}]}],["$","li","step-1-choose-a-passage-that-can-bear-comparison",{"className":"toc-depth-2","children":["$","a",null,{"href":"#step-1-choose-a-passage-that-can-bear-comparison","children":"Step 1: choose a passage that can bear comparison"}]}],["$","li","step-2-identify-the-objects-before-listening-for-meaning",{"className":"toc-depth-2","children":["$","a",null,{"href":"#step-2-identify-the-objects-before-listening-for-meaning","children":"Step 2: identify the objects before listening for meaning"}]}],["$","li","step-3-listen-in-passes-not-in-one-verdict",{"className":"toc-depth-2","children":["$","a",null,{"href":"#step-3-listen-in-passes-not-in-one-verdict","children":"Step 3: listen in passes, not in one verdict"}]}],["$","li","step-4-compare-two-to-four-recordings",{"className":"toc-depth-2","children":["$","a",null,{"href":"#step-4-compare-two-to-four-recordings","children":"Step 4: compare two to four recordings"}]}],["$","li","a-compact-comparison-grid",{"className":"toc-depth-2","children":["$","a",null,{"href":"#a-compact-comparison-grid","children":"A compact comparison grid"}]}],["$","li","what-not-to-infer",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-not-to-infer","children":"What not to infer"}]}],["$","li","a-model-paragraph-shape",{"className":"toc-depth-2","children":["$","a",null,{"href":"#a-model-paragraph-shape","children":"A model paragraph shape"}]}],["$","li","when-evidence-is-insufficient",{"className":"toc-depth-2","children":["$","a",null,{"href":"#when-evidence-is-insufficient","children":"When evidence is insufficient"}]}],["$","li","place-in-the-map",{"className":"toc-depth-2","children":["$","a",null,{"href":"#place-in-the-map","children":"Place in the map"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","why-the-passage-is-the-unit",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-the-passage-is-the-unit","children":"Why the passage is the unit"}]}],["$","li","the-five-labels",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-five-labels","children":"The five labels"}]}],"$L3","$L4","$L5","$L6","$L7","$L8","$L9","$La","$Lb","$Lc","$Ld"]}]]}],"$Le","$Lf"]}]]}],null,"$L10"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","step-1-choose-a-passage-that-can-bear-comparison",{"className":"toc-depth-2","children":["$","a",null,{"href":"#step-1-choose-a-passage-that-can-bear-comparison","children":"Step 1: choose a passage that can bear comparison"}]}]
+4:["$","li","step-2-identify-the-objects-before-listening-for-meaning",{"className":"toc-depth-2","children":["$","a",null,{"href":"#step-2-identify-the-objects-before-listening-for-meaning","children":"Step 2: identify the objects before listening for meaning"}]}]
+5:["$","li","step-3-listen-in-passes-not-in-one-verdict",{"className":"toc-depth-2","children":["$","a",null,{"href":"#step-3-listen-in-passes-not-in-one-verdict","children":"Step 3: listen in passes, not in one verdict"}]}]
+6:["$","li","step-4-compare-two-to-four-recordings",{"className":"toc-depth-2","children":["$","a",null,{"href":"#step-4-compare-two-to-four-recordings","children":"Step 4: compare two to four recordings"}]}]
+7:["$","li","a-compact-comparison-grid",{"className":"toc-depth-2","children":["$","a",null,{"href":"#a-compact-comparison-grid","children":"A compact comparison grid"}]}]
+8:["$","li","what-not-to-infer",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-not-to-infer","children":"What not to infer"}]}]
+9:["$","li","a-model-paragraph-shape",{"className":"toc-depth-2","children":["$","a",null,{"href":"#a-model-paragraph-shape","children":"A model paragraph shape"}]}]
+a:["$","li","when-evidence-is-insufficient",{"className":"toc-depth-2","children":["$","a",null,{"href":"#when-evidence-is-insufficient","children":"When evidence is insufficient"}]}]
+b:["$","li","place-in-the-map",{"className":"toc-depth-2","children":["$","a",null,{"href":"#place-in-the-map","children":"Place in the map"}]}]
+c:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+d:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+11:T6189,<p>Up: <a href="/rome-wiki/articles/classical-music/romantic-piano/romantic-piano-repertoire/" class="wiki-link">Romantic piano repertoire</a></p>
+<h2 id="why-the-passage-is-the-unit">Why the passage is the unit</h2>
+<p>A recording comparison becomes useful when it asks a question small enough for the ear to test. "Who plays Chopin better?" is not a research question. "At the return of the opening phrase, does the pianist let the melody arrive after the bass, and does that change the phrase's direction?" is a research question. It names a passage, a sonic feature, and a possible musical consequence. It can be checked against a score, a transfer, metadata, and repeated listening.</p>
+<p>The method matters especially for <a href="/rome-wiki/articles/classical-music/romantic-piano/romantic-piano-repertoire/" class="wiki-link">Romantic piano repertoire</a> because many of the most interesting differences are local. Rubato, melody-bass asynchrony, chord spreading, pedaling, phrase-boundary timing, inner-voice emphasis, and cadential delay do not usually define a whole performer in one stroke. They happen at places where score, instrument, convention, medium, and taste meet. One pianist may separate the hands in one texture and not in another. A second may keep a steadier pulse in the opening but broaden a later return. A third may sound more resonant partly because of touch and partly because of microphone placement, transfer equalization, or a modern hall acoustic.</p>
+<p>The goal is therefore not to produce a league table. A good comparison tells Andrew what to listen for, what the source can support, what remains uncertain, and what the different solutions make possible. The proper endpoint is a passage-specific statement such as: "In this transfer, A makes the bass arrival the phrase's anchor, B makes the melody the initiating event, and C treats the two as nearly simultaneous; the resulting analytical inference is that A emphasizes harmonic weight, B emphasizes line, and C emphasizes continuity." That is more durable than "A is freer" or "B is more Romantic."</p>
+<p>This note is a practical sequel to <a href="/rome-wiki/articles/classical-music/romantic-piano/shellac-recording-and-the-compression-of-romantic-performance/" class="wiki-link">Shellac recording and the compression of Romantic performance</a>. The shellac article explains why early discs are mediated evidence. This article gives a reusable protocol for comparing two to four recordings of one exact passage, whether the recordings are acoustic shellac, electrical shellac, piano rolls, LPs, broadcasts, or modern digital recordings. The same discipline applies across media, but the uncertainty profile changes with the source.</p>
+<h2 id="the-five-labels">The five labels</h2>
+<p>Use five labels before writing prose. They prevent the common error of mixing what was heard, what the artifact is, what the catalogue says, what the analyst infers, and what the listener likes.</p>
+<p><strong>Audible observation</strong> names what is heard in the inspected transfer or playback. Examples: "the melody attack follows the bass by a perceptible gap"; "the second statement takes less clock time than the first"; "the left-hand repeated notes are detached"; "surface noise partly obscures the release." This is not yet a cause or judgment. It should be tied to a timestamp, measure, beat, or visible score location.</p>
+<p><strong>Media artifact</strong> names a feature introduced or plausibly shaped by the recording, carrier, playback, transfer, or reproduction chain. Examples: acoustic horn capture, electrical microphone placement, side break, groove wear, speed uncertainty, wow, rumble, splice, piano-roll editing, digital noise reduction, streaming compression, or undisclosed equalization. A media artifact can be certain when documented, such as an acoustic pre-1925 Victor side, or only suspected when the sound suggests damage or processing.</p>
+<p><strong>Metadata fact</strong> names a catalogued or documented fact about the object. Examples: performer, composer, title, arrangement, label, matrix number, take, catalogue number, recording date, issue date, disc size, roll type, source archive, transfer engineer, or stable URL. Metadata must be sourced. The Library of Congress National Jukebox glossary is useful here because it distinguishes catalogue numbers, matrix numbers, takes, masters, stampers, and dubs; those are not interchangeable terms.</p>
+<p><strong>Analytical inference</strong> explains why an audible pattern matters musically. Examples: "the delayed melody separates singing line from harmonic support"; "the contracted reprise makes the return feel remembered rather than restated"; "the blurred bass weakens the dance accent"; "the arpeggiation turns a vertical cadence into a rhetorical arrival." Inference is legitimate, but it is not the same as observation. It should be presented as a reading of the heard and notated events, not as a fact about the performer's intention.</p>
+<p><strong>Taste</strong> names the listener's preference or evaluative reaction. Examples: "I find the steadier version more convincing"; "the dry transfer makes the passage less attractive to me"; "the broader cadence feels overdone." Taste is allowed, but it must not masquerade as evidence. A useful listening note can include taste at the end, after the observation and inference have done their work.</p>
+<p>These labels also keep criticism fair. If a transfer lacks bass, do not immediately call the pianist lightweight. If a passage sounds intensely flexible, do not immediately call the performance authentic. If a modern recording has more color, do not assume the pianist has a deeper conception than a horn-era pianist whose low register was poorly captured. Each category has its own burden of proof.</p>
+<h2 id="step-1-choose-a-passage-that-can-bear-comparison">Step 1: choose a passage that can bear comparison</h2>
+<p>The passage should be short enough to replay many times. A phrase, cadence, transition, reprise, variation opening, climactic preparation, or four-to-eight measure span is usually better than a whole movement. It should also contain a real interpretive decision: timing, voicing, articulation, texture, pedaling, repeated material, tempo relation, register balance, or treatment of a notated ambiguity.</p>
+<p>Name the score location precisely. If measure numbers differ by edition, identify the edition used and give an alternate landmark: "first return of the opening theme," "the cadence before the trio," "the reprise after the double bar," or "the left-hand chromatic descent two systems before the end." For public-domain repertoire, cite the score or edition inspected when possible. For modern copyrighted scores, cite the edition bibliographically but do not reproduce extended notation.</p>
+<p>Prefer passages where the sound source can actually preserve the feature under study. Attack timing and broad tempo relationship often survive even in rough early recordings. Absolute tone color, exact dynamic degree, and fine pedaling depth are more fragile. A horn-era disc may be strong evidence for melody-bass displacement but weak evidence for live bass sonority. A modern studio recording may be strong evidence for overall recorded balance but still mediated by microphone placement and editing.</p>
+<p>Good first questions include:</p>
+<ul>
+<li>Does the melody lead, follow, or align with the bass at repeated points?</li>
+<li>Does the return keep, broaden, or contract the opening tempo relationship?</li>
+<li>Are cadential chords vertical, spread upward, spread downward, or varied?</li>
+<li>Is a repeated accompaniment kept in strict pulse while the melody flexes?</li>
+<li>Does a pianist clarify an inner voice that another leaves submerged?</li>
+<li>Does the pedal seem to connect harmonies, blur them, or clear at structural points?</li>
+</ul>
+<p>Weak first questions include:</p>
+<ul>
+<li>Which pianist has the best tone?</li>
+<li>Which version is most Romantic?</li>
+<li>Which recording proves the composer's intention?</li>
+<li>Which performance should everyone imitate?</li>
+</ul>
+<p>Those questions may become meaningful only after many smaller comparisons, documentary sources, and explicit criteria.</p>
+<h2 id="step-2-identify-the-objects-before-listening-for-meaning">Step 2: identify the objects before listening for meaning</h2>
+<p>Before comparison, make a small source table. Do not rely on playlist titles. For each recording, capture:</p>
+<ul>
+<li>performer and instrument if known;</li>
+<li>work, movement, arrangement, and passage;</li>
+<li>recording date and place if known;</li>
+<li>label, catalogue number, matrix and take for discs when available;</li>
+<li>acoustic, electrical, broadcast, tape, LP, roll, digital, or unknown medium;</li>
+<li>transfer or playback source, including archive, engineer, speed, equalization, stylus, restoration, or player mechanism when disclosed;</li>
+<li>URL, shelfmark, album identifier, or other stable locator;</li>
+<li>known uncertainties.</li>
+</ul>
+<p>This is not pedantry. A catalogue number identifies an issued product; a matrix and take identify a recorded side or attempt; an issue date is not necessarily a recording date; a modern upload may combine several transfer decisions not visible in the filename. The Discography of American Historical Recordings and the Library of Congress National Jukebox illustrate how much object identity can matter before one makes musical claims.</p>
+<p>If the comparison uses early discs, check whether the capture was acoustic or electrical rather than guessing by ear. The Library of Congress describes acoustic recording before 1925 as a mechanical process without microphones or electrical amplification, with performers positioned relative to a horn and diaphragm. That fact affects how confidently one can compare balance, resonance, and dynamics. Electrical recording reduces some limits but does not remove the transfer chain.</p>
+<p>If the comparison uses piano rolls, separate roll evidence from disc evidence. A roll does not preserve sound in a groove. It encodes a performance or edited representation for a reproducing mechanism. Tempo, dynamics, pedaling, and note events can be affected by the roll system, editing, the reproducing piano, and modern realization. A roll may be valuable evidence, but it does not answer the same questions as an acoustic event captured on disc.</p>
+<p>If the comparison uses modern commercial recordings, document edition and production where possible. Modern recordings can involve patch editing, multiple takes, close microphones, artificial reverberation, post-production balance, and mastering. These do not make the performance invalid. They only mean that "what the pianist did in one continuous event" and "what the released track presents" may diverge.</p>
+<h2 id="step-3-listen-in-passes-not-in-one-verdict">Step 3: listen in passes, not in one verdict</h2>
+<p>First pass: orientation. Listen without writing judgments. Confirm that all chosen recordings contain the same passage and that no cut, repeat omission, wrong edition, or different arrangement invalidates the comparison. Mark the start and end timestamps for the passage in each source.</p>
+<p>Second pass: event logging. Use the score and record only audible observations. Avoid adjectives of approval. Write entries like: "m. 12 beat 1: bass precedes melody"; "m. 14: right-hand top voice remains prominent through accompaniment"; "cadence: chord spread upward"; "release obscured by surface noise"; "return reaches cadence about two seconds sooner than opening statement." For a two-to-four-recording comparison, a simple grid is enough.</p>
+<p>Third pass: media and metadata check. Ask whether each observation might be shaped by the source. Is one transfer noisier? Does one run at a suspect pitch? Does a side join interrupt the phrase? Does the bass vanish in an acoustic source but appear in an electrical or modern source? Is one recording a roll realization rather than a disc? Mark these as media artifacts or uncertainties before drawing meaning from them.</p>
+<p>Fourth pass: analytical inference. Now explain what the logged differences do. A delayed melody may project singing freedom, but in a dance it may also soften the meter. A broadened cadence may clarify form, but it may also interrupt a long line. A more blended pedal may create harmonic atmosphere, but it may obscure counterpoint. The inference should mention the score: harmony, phrase rhythm, texture, register, repetition, or formal placement.</p>
+<p>Fifth pass: taste and usefulness. Only after the evidence grid is stable should preference enter. Taste may be personal, contextual, and conditional: "For hearing the inner voice, I prefer B; for hearing the phrase as one sweep, A is more persuasive." This is better than declaring one performer superior.</p>
+<h2 id="step-4-compare-two-to-four-recordings">Step 4: compare two to four recordings</h2>
+<p>Two recordings are best for learning the method. They force contrast without drowning the ear. Choose them because they differ on the passage question, not because one is famous and one is obscure. A useful pair might be early versus modern, composer-performer versus later pianist, acoustic versus electrical, period piano versus modern grand, or two modern pianists with sharply different phrase timing.</p>
+<p>Three recordings add a control. If A and B differ, C helps show whether one choice is exceptional or whether the passage admits a spectrum. For example, if A delays the melody after the bass and B aligns the hands, C may show a smaller delay. The comparison becomes a range of solutions rather than a binary argument.</p>
+<p>Four recordings are the practical maximum for an article section. More than four usually turns listening into a survey, and surveys encourage shallow global ranking. Four can work when the categories are clean: two early discs and two modern recordings; one roll, one shellac disc, one mid-century LP, and one modern digital recording; or four recordings across a known lineage question. Even then, the passage grid should remain short.</p>
+<p>For each recording, write no more than two or three strong observations before comparing. If a source yields ten observations, choose the ones relevant to the question. A passage comparison should not become a miniature biography.</p>
+<h2 id="a-compact-comparison-grid">A compact comparison grid</h2>
+<p>Use this template before writing paragraphs:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Recording A</th>
+<th>Recording B</th>
+<th>Recording C</th>
+<th>Recording D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Metadata fact</td>
+<td>performer, date, label/source, matrix/take or album</td>
+<td>same</td>
+<td>same</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Media artifact / uncertainty</td>
+<td>acoustic horn, speed unknown, transfer opaque, edited roll, etc.</td>
+<td>same</td>
+<td>same</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Passage location</td>
+<td>measure, phrase, timestamp start-end</td>
+<td>same</td>
+<td>same</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Audible observation 1</td>
+<td>timing, attack, release, voice, pedal, tempo relation</td>
+<td>same</td>
+<td>same</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Audible observation 2</td>
+<td>second relevant event</td>
+<td>same</td>
+<td>same</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Analytical inference</td>
+<td>what the observations do musically</td>
+<td>same</td>
+<td>same</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Taste / use</td>
+<td>what this helps the listener hear, if anything</td>
+<td>same</td>
+<td>same</td>
+<td>same</td>
+</tr>
+</tbody>
+</table>
+<p>The grid is not the article. It is the guardrail. The article should turn the grid into prose that explains a small musical problem clearly.</p>
+<h2 id="what-not-to-infer">What not to infer</h2>
+<p>Do not infer intention from one audible choice. A pianist may broaden a cadence because of phrase structure, studio pressure, side timing, habit, instrument response, local acoustics, or a spontaneous decision. Unless letters, annotations, teaching reports, interviews, or repeated recordings support intention, keep the claim at the level of audible result.</p>
+<p>Do not infer a school from one performer. A Leschetizky pupil, a Russian-trained pianist, or a Paris Conservatoire pianist is not automatically a transparent representative of a lineage. Training matters, but it must be shown through multiple sources and counterexamples.</p>
+<p>Do not infer live tone from a transfer. Early acoustic discs especially distort frequency range and balance, while even modern recordings are produced artifacts. A defensible statement is: "this transfer presents less bass weight," not "the pianist had no bass."</p>
+<p>Do not infer exact tempo from an early disc without speed caution. If playback speed is uncertain, absolute timing may be shifted. Local relationships can still be useful: whether a return is faster than the opening in the same transfer, or whether a melody consistently lags behind accompaniment.</p>
+<p>Do not infer textual fidelity without checking the score and edition. A pianist may be following a different edition, an arrangement, a cut, a variant, or a local performance convention. The difference between a score fact and a performer choice matters.</p>
+<p>Do not hide taste inside method words. "Controlled," "natural," "excessive," "sentimental," "objective," and "distorted" often smuggle preference into analysis. They can be used, but only after the observable basis is plain.</p>
+<h2 id="a-model-paragraph-shape">A model paragraph shape</h2>
+<p>A disciplined comparison paragraph can follow this order:</p>
+<ol>
+<li>identify the passage and comparison question;</li>
+<li>state the relevant metadata and media limits;</li>
+<li>report the audible observations recording by recording;</li>
+<li>make the analytical inference;</li>
+<li>state the limit or uncertainty;</li>
+<li>optionally state a taste or listening-use conclusion.</li>
+</ol>
+<p>For example, in a future Chopin mazurka lab the paragraph should not begin, "Pianist A is more idiomatic." It should begin with the exact measure or phrase and the dance-timing question. It should then say what A, B, and C audibly do with bass, melody, accent, and phrase arrival. Only then may it infer that one performance foregrounds dance weight while another foregrounds melodic suspension. The result is a comparison of choices at a place, not a verdict on Chopin playing as a whole.</p>
+<h2 id="when-evidence-is-insufficient">When evidence is insufficient</h2>
+<p>Stop the comparison rather than forcing a claim when the passage cannot be aligned, the recording identity is uncertain, the transfer source is opaque and no alternative exists, the relevant feature is masked by damage, the score version is unknown, or the question depends on a feature the medium cannot carry. In that case, preserve a source packet instead: candidate recordings, URLs, known metadata, missing fields, and the exact question that remains unanswerable.</p>
+<p>Insufficient evidence is still useful. It tells the next worker whether to look for a better transfer, a matrix/take identification, a score edition, a side-change explanation, a roll-system source, or a narrower passage. The failed comparison should not become a public prose article unless it teaches the method itself.</p>
+<h2 id="place-in-the-map">Place in the map</h2>
+<p>This protocol sits between source-literacy notes such as <a href="/rome-wiki/articles/classical-music/romantic-piano/piano-source-layers-from-autograph-to-performer-edition/" class="wiki-link">Piano source layers from autograph to performer edition</a>, media-history notes such as <a href="/rome-wiki/articles/classical-music/romantic-piano/shellac-recording-and-the-compression-of-romantic-performance/" class="wiki-link">Shellac recording and the compression of Romantic performance</a>, and future listening laboratories such as <a href="/rome-wiki/wanted/rubato-in-chopin-mazurka-recordings/" class="wiki-link wiki-link-missing" title="Unwritten article — a research thread waiting to be followed">Rubato in Chopin mazurka recordings +</a>, <a href="/rome-wiki/wanted/voicing-the-return-in-schumann-traumerei/" class="wiki-link wiki-link-missing" title="Unwritten article — a research thread waiting to be followed">Voicing the return in Schumann Traumerei +</a>, <a href="/rome-wiki/wanted/pedal-and-bass-clarity-in-brahms-late-piano-works/" class="wiki-link wiki-link-missing" title="Unwritten article — a research thread waiting to be followed">Pedal and bass clarity in Brahms late piano works +</a>, <a href="/rome-wiki/wanted/acoustic-versus-electrical-recording-and-the-evidence-of-piano-tone/" class="wiki-link wiki-link-missing" title="Unwritten article — a research thread waiting to be followed">Acoustic versus electrical recording and the evidence of piano tone +</a>, and <a href="/rome-wiki/articles/classical-music/romantic-piano/piano-rolls-versus-shellac-as-performance-evidence/" class="wiki-link">Piano rolls versus shellac as performance evidence</a>. Its job is modest but important: make each later comparison auditable.</p>
+<p>The strongest Romantic-piano listening articles will not ask readers to admire a performer in general. They will teach readers to hear one decision at one passage, recognize what kind of evidence supports it, and then carry that sharper hearing into the next work.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Library of Congress, National Jukebox, "Acoustical Recording": <a href="https://www.loc.gov/collections/national-jukebox/articles-and-essays/acoustical-recording/" target="_blank" rel="noopener noreferrer">https://www.loc.gov/collections/national-jukebox/articles-and-essays/acoustical-recording/</a></li>
+<li>Library of Congress, National Jukebox, "Glossary of National Jukebox Terms": <a href="https://www.loc.gov/collections/national-jukebox/articles-and-essays/glossary-of-terms/" target="_blank" rel="noopener noreferrer">https://www.loc.gov/collections/national-jukebox/articles-and-essays/glossary-of-terms/</a></li>
+<li>Discography of American Historical Recordings, "About DAHR" and database resources: <a href="https://adp.library.ucsb.edu/" target="_blank" rel="noopener noreferrer">https://adp.library.ucsb.edu/</a></li>
+<li>Council on Library and Information Resources and Library of Congress, <em>Capturing Analog Sound for Digital Preservation</em> (2006): <a href="https://www.loc.gov/static/programs/national-recording-preservation-plan/publications-and-reports/documents/pub137.pdf" target="_blank" rel="noopener noreferrer">https://www.loc.gov/static/programs/national-recording-preservation-plan/publications-and-reports/documents/pub137.pdf</a></li>
+<li>International Association of Sound and Audiovisual Archives, <em>Guidelines on the Production and Preservation of Digital Audio Objects</em>, IASA-TC 04, 2nd ed. (2009): <a href="https://www.iasa-web.org/tc04/audio-preservation" target="_blank" rel="noopener noreferrer">https://www.iasa-web.org/tc04/audio-preservation</a></li>
+<li>University of Illinois Urbana-Champaign Preservation Self-Assessment Program, "Phonograph Record": <a href="https://psap.library.illinois.edu/collection-id-guide/phonodisc" target="_blank" rel="noopener noreferrer">https://psap.library.illinois.edu/collection-id-guide/phonodisc</a></li>
+<li>Neal Peres Da Costa, "Early Recordings: Their Value as Evidence," in <em>Off the Record: Performing Practices in Romantic Piano Playing</em>, Oxford University Press: <a href="https://academic.oup.com/book/7516/chapter/152451449" target="_blank" rel="noopener noreferrer">https://academic.oup.com/book/7516/chapter/152451449</a></li>
+<li>Robert Philip, "Pianists on record in the early twentieth century," in <em>The Cambridge Companion to the Piano</em>, Cambridge University Press, DOI: <a href="https://doi.org/10.1017/CCOL9780521474702.007" target="_blank" rel="noopener noreferrer">https://doi.org/10.1017/CCOL9780521474702.007</a></li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Which future listening laboratory should become the first worked example using this exact grid: a Chopin mazurka, Schumann's "Traumerei," a Brahms intermezzo, or a Rachmaninoff composer-performer comparison?</li>
+<li>How should Rome store passage-comparison grids so they remain reusable without turning public notes into data tables?</li>
+<li>Which archives expose enough matrix, take, transfer, speed, and stylus information to support early-piano comparison at the highest evidence tier?</li>
+<li>When comparing piano rolls with discs, which evidence labels need to be revised so roll editing and reproducing mechanisms are not mistaken for acoustic artifacts?</li>
+<li>How much listener taste should a public Rome note preserve once the audible observations and analytical inferences have already been stated?</li>
+</ul>e:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$11"}}],"$L12"]}]
+f:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","classical-music/romantic-piano/piano-rolls-versus-shellac-as-performance-evidence",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/piano-rolls-versus-shellac-as-performance-evidence/","children":"Piano rolls versus shellac as performance evidence"}]}],["$","li","classical-music/romantic-piano/romantic-piano-repertoire",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/romantic-piano-repertoire/","children":"Romantic piano repertoire"}]}],["$","li","classical-music/romantic-piano/romantic-rubato-across-prewar-and-interwar-recordings",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/romantic-rubato-across-prewar-and-interwar-recordings/","children":"Romantic rubato across prewar and interwar recordings"}]}],["$","li","classical-music/romantic-piano/rubato-as-several-historical-practices",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/rubato-as-several-historical-practices/","children":"Rubato as several historical practices"}]}],["$","li","classical-music/romantic-piano/the-nineteenth-century-piano-as-a-changing-instrument",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/the-nineteenth-century-piano-as-a-changing-instrument/","children":"The nineteenth-century piano as a changing instrument"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","classical-music/romantic-piano/piano-rolls-versus-shellac-as-performance-evidence",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/piano-rolls-versus-shellac-as-performance-evidence/","children":"Piano rolls versus shellac as performance evidence"}]}],["$","li","classical-music/romantic-piano/romantic-piano-repertoire",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/romantic-piano-repertoire/","children":"Romantic piano repertoire"}]}],["$","li","classical-music/romantic-piano/shellac-recording-and-the-compression-of-romantic-performance",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/shellac-recording-and-the-compression-of-romantic-performance/","children":"Shellac recording and the compression of Romantic performance"}]}],["$","li","classical-music/romantic-piano/piano-source-layers-from-autograph-to-performer-edition",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/piano-source-layers-from-autograph-to-performer-edition/","children":"Piano source layers from autograph to performer edition"}]}],["$","li","classical-music/romantic-piano/romantic-rubato-across-prewar-and-interwar-recordings",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/romantic-rubato-across-prewar-and-interwar-recordings/","children":"Romantic rubato across prewar and interwar recordings"}]}],["$","li","classical-music/romantic-piano/rubato-as-several-historical-practices",{"children":["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/rubato-as-several-historical-practices/","children":"Rubato as several historical practices"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","music",{"children":"music"}],["$","li","piano",{"children":"piano"}],["$","li","romantic",{"children":"romantic"}],["$","li","listening",{"children":"listening"}],["$","li","performance-practice",{"children":"performance-practice"}],["$","li","recording-history",{"children":"recording-history"}]]}]]}]]}]
+10:["$","$L13",null,{"children":["$","$14",null,{"name":"Next.MetadataOutlet","children":"$@15"}]}]
+12:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/franck-prelude-chorale-and-fugue/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Franck Prelude Chorale and Fugue"}]]}],["$","$L2",null,{"href":"/articles/classical-music/romantic-piano/john-field-and-the-nocturne-before-chopin/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"John Field and the nocturne before Chopin"}]]}]]}]
+15:null

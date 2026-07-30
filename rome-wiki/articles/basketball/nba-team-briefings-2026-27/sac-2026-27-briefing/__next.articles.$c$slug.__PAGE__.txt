@@ -1,0 +1,368 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+d:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+e:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Sacramento Kings 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"The only authoritative team prior for this briefing is , row . I did not use for team-level wins, strength, odds, or roster value."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[11," min · ","2,298"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],"$L3","$L4","$L5","$L6","$L7"]}]]}],"$L8","$L9"]}]]}],null,"$La"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}]
+4:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+5:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+6:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+7:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+b:T53f7,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>25.9</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>20.0-32.0, with p50 26.0</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>-10.107 pts/100, se_strength 1.370</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>0.9% make playoffs</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_TOO_HIGH</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>-0.7 pts/100, judgmental</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>-1.7 wins, judgmental</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>24.2</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>61/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>Sacramento's corrected prior is already very low, but I trim it because the public roster is still sorting through a DeRozan exit, heavy rookie/young-wing minutes, and recovery risk for Sabonis, LaVine, and Hunter after a 22-win season.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<p>Authoritative prior fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mc_mean_wins</code></td>
+<td align="right">25.9</td>
+</tr>
+<tr>
+<td><code>p10_wins</code></td>
+<td align="right">20.0</td>
+</tr>
+<tr>
+<td><code>p50_wins</code></td>
+<td align="right">26.0</td>
+</tr>
+<tr>
+<td><code>p90_wins</code></td>
+<td align="right">32.0</td>
+</tr>
+<tr>
+<td><code>make_playoffs_prob</code></td>
+<td align="right">0.009</td>
+</tr>
+<tr>
+<td><code>strength</code></td>
+<td align="right">-10.107</td>
+</tr>
+<tr>
+<td><code>se_strength</code></td>
+<td align="right">1.370</td>
+</tr>
+<tr>
+<td><code>n_cold_start</code></td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>This is a bottom-tier prior: 25.9 mean wins, a 20-32 win central band, -10.107 team strength, and only 0.9% playoff probability. Because the prior is already close to Sacramento's ugly 2025-26 baseline, the adjustment should be small. The research challenge is whether even this low number is still too generous once the rotation is cleaned for current public information.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>The public depth picture is not stable enough to treat any single rotation as settled. ESPN's depth chart lists Darius Acuff Jr. at starting point guard, Zach LaVine at shooting guard, De'Andre Hunter and Keegan Murray on the forward line, and Domantas Sabonis at center, with Malik Monk, Nique Clifford, Alex Karaban, Precious Achiuwa, Maxime Raynaud, Dylan Cardwell, Jonathan Mogbo, Emanuel Sharp, Daeqwon Plowden, and Isaiah Stevens among the depth names. ESPN does not list DeMar DeRozan in that depth chart, while Sportsnet and the Sacramento Bee both reported that Sacramento waived him.</p>
+<p>That produces three rotation pressure points:</p>
+<ol>
+<li>DeRozan's removal opens usage and wing minutes but also removes a real regular-season scorer from a team that already ranked poorly on offense.</li>
+<li>Acuff may be asked to start immediately. That can accelerate the rebuild, but rookie lead-guard minutes usually carry turnover and defensive-learning risk.</li>
+<li>The veteran core is more fragile than the names imply: Sabonis, LaVine, and Hunter all had season-ending 2025-26 procedures reported by NBA.com.</li>
+</ol>
+<p>The practical rotation is likely younger and more development-oriented than a traditional 26-win veteran floor team. That is the core reason for the mild downward adjustment.</p>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>Without using the non-authoritative team-detail artifact, the public style read is straightforward. Sacramento's 2025-26 profile was poor on both ends, and the 2026-27 roster changes do not yet create a clean scheme identity.</p>
+<p>Offensively, DeRozan's exit may improve shot diet and spacing, especially if Acuff, Monk, LaVine, Murray, Clifford, Karaban, and Sharp push more threes. The downside is that DeRozan was also the team's listed scoring leader on ESPN's 2025-26 team page, and a rookie point guard plus recovering LaVine is not a guaranteed replacement for stable half-court scoring.</p>
+<p>Defensively, the Murray-Hunter-Clifford-Achiuwa wing group gives Sacramento a plausible path to more size and athleticism. The problem is that Sabonis lineups still need point-of-attack containment and rim protection help, while a young guard rotation can leak advantages early in possessions. The model's -10.107 strength already captures a bad team; my issue is that the route to improving the defense is still mostly theoretical.</p>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>The model may be too high by about two wins because it appears to price Sacramento as a bad but reasonably functional team. The public evidence points to a bad team with several unresolved rotation dependencies.</p>
+<p>The biggest concrete update is DeRozan. Sportsnet reported that Sacramento was waiving him, and the Sacramento Bee reported the move makes him an unrestricted free agent while saving money. If any prior roster table still implicitly credited Sacramento with DeRozan minutes, that value should be removed. Even if DeRozan's fit was imperfect, shifting those minutes to rookies and younger wings lowers the median floor.</p>
+<p>The second update is availability. NBA.com reported Sabonis and LaVine had season-ending surgeries in February 2026, and NBA.com separately reported Hunter underwent eye surgery after a retinal detachment. All three can be ready and useful in 2026-27, but the clean health case should not be the median for a team already thin on bankable two-way veterans.</p>
+<p>The third update is rookie dependence. Acuff as a starting point guard is exciting; it is also a cold-start burden. With <code>n_cold_start = 3</code> in the authoritative prior, the model itself is telling us this roster has several low-data players. That should widen the band and slightly lower the central expectation unless camp produces unusually strong signals.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th>URL / access date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sacramento's baseline was bottom-tier in 2025-26.</td>
+<td>ESPN lists the Kings at 22-60 and fifth in the Pacific, with team history showing 22-60 in 2025-26.</td>
+<td>supports low prior</td>
+<td align="right">0.0 wins</td>
+<td><a href="https://www.espn.com/nba/team/_/name/sac/sacramento-kings" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/_/name/sac/sacramento-kings</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>The public team page confirms poor team output.</td>
+<td>NBA.com lists Sacramento at 22-60, 14th in the West, 111.0 PPG, and 121.0 opponent PPG.</td>
+<td>supports low prior</td>
+<td align="right">-0.2 wins</td>
+<td><a href="https://www.nba.com/stats/team/1610612758/matchups?CF=DEF_PLAYER_NAME%2AE%2AGeorge&#x26;Matchup=Offense&#x26;Season=2025-26&#x26;SeasonType=Playoffs" target="_blank" rel="noopener noreferrer">https://www.nba.com/stats/team/1610612758/matchups?CF=DEF_PLAYER_NAME%2AE%2AGeorge&#x26;Matchup=Offense&#x26;Season=2025-26&#x26;SeasonType=Playoffs</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>Team efficiency was awful, especially on defense.</td>
+<td>StatMuse lists Sacramento at 111.4 ORtg, 121.5 DRtg, -10.0 NetRtg, and 34.0% from three in 2025-26.</td>
+<td>too high</td>
+<td align="right">-0.4 wins</td>
+<td><a href="https://www.statmuse.com/nba/ask/kings-defensive-rating-and-offensive-rating" target="_blank" rel="noopener noreferrer">https://www.statmuse.com/nba/ask/kings-defensive-rating-and-offensive-rating</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>DeRozan should not be counted as a Kings rotation piece.</td>
+<td>Sportsnet reported the Kings were waiving DeRozan and that he was free to find a new team.</td>
+<td>too high</td>
+<td align="right">-0.6 wins</td>
+<td><a href="https://www.sportsnet.ca/nba/article/report-kings-waiving-demar-derozan/" target="_blank" rel="noopener noreferrer">https://www.sportsnet.ca/nba/article/report-kings-waiving-demar-derozan/</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>DeRozan's exit removes a real scorer, not just a bad fit.</td>
+<td>Sacramento Bee reported DeRozan averaged 20.3 points, 3.4 rebounds, and 4.3 assists over 154 games with Sacramento.</td>
+<td>too high</td>
+<td align="right">-0.3 wins</td>
+<td><a href="https://www.sacbee.com/sports/nba/sacramento-kings/article316402787.html" target="_blank" rel="noopener noreferrer">https://www.sacbee.com/sports/nba/sacramento-kings/article316402787.html</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>Sabonis and LaVine carry real recovery risk.</td>
+<td>NBA.com/AP reported Sabonis had meniscus surgery and LaVine had right pinky tendon surgery, both ending 2025-26.</td>
+<td>too high</td>
+<td align="right">-0.4 wins</td>
+<td><a href="https://www.nba.com/news/zach-lavine-domantas-sabonis-surgeries" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/zach-lavine-domantas-sabonis-surgeries</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>LaVine still offers scoring upside if healthy.</td>
+<td>NBA.com reported LaVine averaged 19.2 PPG in 39 games before the right-hand surgery.</td>
+<td>counterweight</td>
+<td align="right">+0.2 wins</td>
+<td><a href="https://www.nba.com/news/zach-lavine-injury-undergoes-season-ending-surgery-on-right-hand" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/zach-lavine-injury-undergoes-season-ending-surgery-on-right-hand</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>Hunter's wing minutes are not risk-free.</td>
+<td>NBA.com reported Hunter had surgery for a retinal detachment after being acquired by Sacramento.</td>
+<td>too high</td>
+<td align="right">-0.2 wins</td>
+<td><a href="https://www.nba.com/news/deandre-hunter-out-season-eye-surgery" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/deandre-hunter-out-season-eye-surgery</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>Current public depth chart puts a rookie in a major creation role.</td>
+<td>ESPN lists Darius Acuff Jr. as starting PG and Monk/Stevens behind him.</td>
+<td>high variance</td>
+<td align="right">-0.2 wins</td>
+<td><a href="https://www.espn.com/nba/team/depth/_/name/sac" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/depth/_/name/sac</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>Cap structure may push more moves.</td>
+<td>Spotrac shows large commitments to LaVine, Sabonis, Hunter, Monk, and Murray and tax/apron pressure.</td>
+<td>high variance</td>
+<td align="right">-0.1 wins</td>
+<td><a href="https://www.spotrac.com/nba/sacramento-kings/yearly" target="_blank" rel="noopener noreferrer">https://www.spotrac.com/nba/sacramento-kings/yearly</a>, accessed July 9, 2026</td>
+</tr>
+<tr>
+<td>A youth-forward rotation could improve fit.</td>
+<td>SI's Kings site projected Acuff, Clifford, Hunter, Murray, and Sabonis as a post-draft starting concept and treated DeRozan as expected to be traded or waived.</td>
+<td>counterweight</td>
+<td align="right">+0.4 wins</td>
+<td><a href="https://www.si.com/nba/kings/onsi/projecting-kings-starting-lineup-and-rotation-after-nba-draft" target="_blank" rel="noopener noreferrer">https://www.si.com/nba/kings/onsi/projecting-kings-starting-lineup-and-rotation-after-nba-draft</a>, accessed July 9, 2026</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Public role / evidence</th>
+<th>Concern or upside</th>
+<th>Model challenge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Darius Acuff Jr.</td>
+<td>ESPN depth chart lists him as starting PG.</td>
+<td>Upside is high because he can become the new offensive organizer; risk is rookie lead-guard volatility.</td>
+<td>If he is merely developmental in year one, the prior is too high; if he is immediately above-average, my trim is too harsh.</td>
+</tr>
+<tr>
+<td>Zach LaVine</td>
+<td>ESPN depth chart lists him as starting SG; NBA.com reported 19.2 PPG in 39 games before season-ending hand surgery.</td>
+<td>Efficient scoring can lift a thin offense, but hand recovery and trade/cap context create uncertainty.</td>
+<td>Needs healthy scoring volume to keep Sacramento near 26 wins.</td>
+</tr>
+<tr>
+<td>Domantas Sabonis</td>
+<td>ESPN depth chart lists him at center; NBA.com reported meniscus surgery and re-evaluation before camp.</td>
+<td>Still the best hub for regular-season offense and rebounding, but durability and defense remain central risks.</td>
+<td>If Sabonis misses time or loses mobility, the floor drops quickly.</td>
+</tr>
+<tr>
+<td>De'Andre Hunter</td>
+<td>ESPN depth chart lists him as starting SF; NBA.com reported eye surgery after retinal detachment.</td>
+<td>Big wing size is useful for a defense that needs it; recovery and role clarity are not automatic.</td>
+<td>Sacramento needs him to be more than a nominal starter.</td>
+</tr>
+<tr>
+<td>Keegan Murray</td>
+<td>ESPN depth chart lists him as starting PF.</td>
+<td>Best clean two-way age-curve candidate on the roster.</td>
+<td>Murray improving is the strongest internal reason the model could be about right.</td>
+</tr>
+<tr>
+<td>Malik Monk</td>
+<td>ESPN depth chart lists him as backup PG and third SG.</td>
+<td>Can supply creation and shooting, but a bench-guard role may grow if Acuff or LaVine misses time.</td>
+<td>More Monk can help offense, but too much Monk as primary organizer can expose defense.</td>
+</tr>
+<tr>
+<td>Nique Clifford</td>
+<td>ESPN depth chart lists him as LaVine/Hunter wing depth; SI projected him as a possible starter.</td>
+<td>Athletic wing minutes could modernize the roster.</td>
+<td>The model is too high if he is not ready for a real nightly role; too low if he is a day-one two-way starter.</td>
+</tr>
+<tr>
+<td>Alex Karaban</td>
+<td>ESPN depth chart lists him as SF/PF depth.</td>
+<td>Shooting and size can help after DeRozan's exit, but he is still a rookie.</td>
+<td>Useful fit piece, but not enough to stabilize a bad team immediately.</td>
+</tr>
+<tr>
+<td>Precious Achiuwa</td>
+<td>ESPN depth chart lists him as PF/C depth.</td>
+<td>Defensive energy and frontcourt coverage are valuable behind Sabonis/Murray.</td>
+<td>If Achiuwa plays large minutes, spacing and offensive efficiency can suffer.</td>
+</tr>
+<tr>
+<td>DeMar DeRozan</td>
+<td>Sportsnet and Sacramento Bee reported Sacramento waived him.</td>
+<td>Removing him improves youth minutes and maybe shot profile, but also removes bankable scoring.</td>
+<td>Any projection path still crediting DeRozan minutes is too high for current public roster context.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>My adjustment is intentionally modest because the authoritative prior is already low.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authoritative model wins</td>
+<td align="right">25.9</td>
+</tr>
+<tr>
+<td>Judgmental win delta</td>
+<td align="right">-1.7</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td align="right">24.2</td>
+</tr>
+<tr>
+<td>Authoritative model strength</td>
+<td align="right">-10.107</td>
+</tr>
+<tr>
+<td>Judgmental strength delta</td>
+<td align="right">-0.7</td>
+</tr>
+<tr>
+<td>Adjusted strength lens</td>
+<td align="right">-10.807 pts/100</td>
+</tr>
+</tbody>
+</table>
+<p>The -1.7 wins comes from three small cuts: about -0.6 for DeRozan's removal and redistributed young-wing minutes, about -0.7 for the combined Sabonis/LaVine/Hunter recovery stack, and about -0.4 for rookie lead-guard and cold-start volatility. I give some of that back for Murray growth, Acuff upside, and the possibility that a cleaner youth-forward rotation has better fit than last season's veteran mix.</p>
+<p>This is a judgmental research delta, not a new model output.</p>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest argument against <code>MODEL_TOO_HIGH</code> is that the corrected prior already bakes in most of this pain. A 25.9-win projection with a 20-32 p10-p90 band, -10.107 strength, 1.370 se_strength, and 0.9% playoff odds is not optimistic in the normal sense. DeRozan's exit could make the offense less sticky and open development minutes for Acuff, Clifford, Karaban, and Sharp. Sabonis, LaVine, and Hunter all have plausible paths back by 2026-27, and a healthy Sabonis-LaVine-Murray-Hunter core with Monk bench scoring can clear 26 wins even if it is not close to playoff quality. If Acuff is a real rookie starter and Murray takes another step, the model is probably about right rather than too high.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>Training-camp reporting that Sabonis, LaVine, and Hunter are fully cleared without restrictions.</li>
+<li>Confirmation that Acuff is not just starting by necessity, but actually organizing efficient half-court offense.</li>
+<li>A trade that converts one expensive veteran into cleaner defensive depth or another reliable guard.</li>
+<li>Murray or Clifford looking like a high-minute two-way forward in preseason.</li>
+<li>A backup-center solution that reduces dependence on Sabonis health.</li>
+<li>Updated public JSON showing the same 25.9 wins but with a lower <code>n_cold_start</code> than 3, indicating the cold-start risk has been resolved.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<ul>
+<li>The prior values in this briefing use only <code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>, row <code>franchise == "SAC"</code>: <code>mc_mean_wins</code> 25.9, <code>p10_wins</code> 20.0, <code>p50_wins</code> 26.0, <code>p90_wins</code> 32.0, <code>make_playoffs_prob</code> 0.009, <code>strength</code> -10.107, <code>se_strength</code> 1.370, and <code>n_cold_start</code> 3.</li>
+<li>I did not use <code>projection_2026_27_teams.json</code> for team-level prior, roster values, top projected win contributors, or minutes tables.</li>
+<li>Public depth charts are not official coaching rotations. ESPN depth is useful for current public roster ordering, but it should not be treated as a final camp rotation.</li>
+<li>Injury reporting documents 2025-26 procedures, not guaranteed 2026-27 limitations. The downside adjustment reflects uncertainty, not a claim that Sabonis, LaVine, or Hunter will miss opening night.</li>
+<li>External facts were taken from free public sources only, accessed July 9, 2026.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<p>Local/model source:</p>
+<ul>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>, accessed July 9, 2026. Authoritative SAC prior only.</li>
+</ul>
+<p>External public sources:</p>
+<ul>
+<li><a href="https://www.espn.com/nba/team/_/name/sac/sacramento-kings" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/_/name/sac/sacramento-kings</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/stats/team/1610612758/matchups?CF=DEF_PLAYER_NAME%2AE%2AGeorge&#x26;Matchup=Offense&#x26;Season=2025-26&#x26;SeasonType=Playoffs" target="_blank" rel="noopener noreferrer">https://www.nba.com/stats/team/1610612758/matchups?CF=DEF_PLAYER_NAME%2AE%2AGeorge&#x26;Matchup=Offense&#x26;Season=2025-26&#x26;SeasonType=Playoffs</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.statmuse.com/nba/ask/kings-defensive-rating-and-offensive-rating" target="_blank" rel="noopener noreferrer">https://www.statmuse.com/nba/ask/kings-defensive-rating-and-offensive-rating</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.sportsnet.ca/nba/article/report-kings-waiving-demar-derozan/" target="_blank" rel="noopener noreferrer">https://www.sportsnet.ca/nba/article/report-kings-waiving-demar-derozan/</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.sacbee.com/sports/nba/sacramento-kings/article316402787.html" target="_blank" rel="noopener noreferrer">https://www.sacbee.com/sports/nba/sacramento-kings/article316402787.html</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/zach-lavine-domantas-sabonis-surgeries" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/zach-lavine-domantas-sabonis-surgeries</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/zach-lavine-injury-undergoes-season-ending-surgery-on-right-hand" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/zach-lavine-injury-undergoes-season-ending-surgery-on-right-hand</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/deandre-hunter-out-season-eye-surgery" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/deandre-hunter-out-season-eye-surgery</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.espn.com/nba/team/depth/_/name/sac" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/depth/_/name/sac</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.spotrac.com/nba/sacramento-kings/yearly" target="_blank" rel="noopener noreferrer">https://www.spotrac.com/nba/sacramento-kings/yearly</a>, accessed July 9, 2026.</li>
+<li><a href="https://www.si.com/nba/kings/onsi/projecting-kings-starting-lineup-and-rotation-after-nba-draft" target="_blank" rel="noopener noreferrer">https://www.si.com/nba/kings/onsi/projecting-kings-starting-lineup-and-rotation-after-nba-draft</a>, accessed July 9, 2026.</li>
+</ul>8:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$b"}}],"$Lc"]}]
+9:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","p",null,{"className":"rail-empty","children":"Nothing points here yet."}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-team-briefings-2026-27/00-cross-team-findings",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-cross-team-findings/","children":"2026-27 NBA cross-team findings"}]}],["$","li","basketball/nba-team-briefings-2026-27/00-index",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-index/","children":"2026-27 NBA team briefing index"}]}],["$","li","basketball/nba-team-briefings-2026-27/atl-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/atl-2026-27-briefing/","children":"Atlanta Hawks 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bos-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","children":"BOS 2026-27 research briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing/","children":"Brooklyn Nets 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/cha-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","children":"Charlotte Hornets 2026-27 Research Briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+a:["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]
+c:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/por-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Portland Trail Blazers 2026-27 Research Briefing"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/sas-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"San Antonio Spurs 2026-27 Research Briefing"}]]}]]}]
+f:null

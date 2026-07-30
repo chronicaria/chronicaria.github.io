@@ -1,0 +1,272 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+d:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+e:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Cleveland Cavaliers 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"The authoritative prior is the public JSON row for in , accessed July 9, 2026. That row gives Cleveland , , , , , , , and ."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[10," min · ","2,170"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],"$L3","$L4","$L5","$L6","$L7"]}]]}],"$L8","$L9"]}]]}],null,"$La"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}]
+4:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+5:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+6:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+7:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+b:T4cc4,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>47.7</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>41-54, with p50 48</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>-0.610 pts/100</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>88.6%</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_TOO_LOW</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>+0.5 pts/100</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>+1.5 wins</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>49.2</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>55/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>The public JSON prior is appropriately cautious, but it likely underprices a full-camp Harden/Mitchell/Mobley/Allen core, healthier Strus minutes, and a more credible Jaylon Tyson wing role.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<p>On the projection table shown to the user, Cleveland sits 4th in the Eastern Conference behind Boston, New York, and Toronto, tied in projected wins with Miami but ahead on listed order. The model is effectively saying Cleveland is a high-playoff-probability team with a near-average underlying strength estimate and a wide enough band to contain both a mid-40s wobble and a low-to-mid-50s upper-tail season.</p>
+<p>This briefing treats those public JSON values as the only team-level projection prior. I did not use the stale local team projection file for Cleveland wins, strength, playoff odds, or rank.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>Non-authoritative roster context from local roster rows and public depth sources points to a main group of James Harden, Donovan Mitchell, Max Strus or Jaylon Tyson, Evan Mobley, and Jarrett Allen. ESPN's depth chart lists Harden, Mitchell, Strus, Mobley, and Allen as starters, with Dennis Schroder, Sam Merrill, Tyson, Nae'qwan Tomlin, Thomas Bryant, Craig Porter Jr., Tyrese Proctor, and Olivier Sarr behind them. Source: <a href="https://www.espn.com/nba/team/depth/_/name/cle" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/depth/_/name/cle</a>, accessed July 9, 2026.</p>
+<p>Top projected win contributors from non-authoritative roster rows: Donovan Mitchell, Jarrett Allen, Evan Mobley, Sam Merrill, James Harden, Nae'qwan Tomlin, Craig Porter Jr., and Thomas Bryant. Top projected MPG rows: Mitchell, Mobley, Harden, Allen, Merrill, Tyson, Schroder, Strus, Porter, and Tomlin. Those local roster rows are useful for pressure points, but not for the team-level prior.</p>
+<p>The key minutes challenges are:</p>
+<ul>
+<li>Strus is likely undercounted by any context that still gives him only a partial-season role after the 2025-26 foot surgery.</li>
+<li>Tyson looks undercounted if his 2025-26 starting stretch and shooting translate into a stable Year 3 rotation role.</li>
+<li>Merrill may be overcounted if Cleveland uses him more as a high-leverage movement shooter than a full-time starter.</li>
+<li>Harden's age-37 expected availability is the largest star-level downside.</li>
+<li>Allen/Mobley defensive minutes remain the floor of the team; any Allen knee recurrence would stress Bryant, Sarr, Udeh, and small-ball lineups.</li>
+<li>The cold-start players are Meleek Thomas and Ernest Udeh Jr.; both should be treated as developmental, not as reliable regular-season forecast movers.</li>
+</ul>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>The public JSON prior does not expose a team six-factor profile, so this section is a cautious style inference rather than an additional model prior.</p>
+<ul>
+<li><code>oTS</code>: Likely better than the public strength prior implies if Harden's passing keeps Mitchell, Mobley, Allen, Strus, Merrill, and Tyson in efficient shot diets. The counter is Harden/Mitchell playoff stagnation against switching defenses.</li>
+<li><code>oTOV</code>: The main danger factor. Cleveland's own season review credited Harden with 99 playoff assists but also 84 turnovers, which is a real warning for a high-touch creator.</li>
+<li><code>oSC</code>: Strong if Allen/Mobley rim pressure, offensive rebounding, and drive-and-kick possessions stay intact. Less convincing when opponents force Merrill/Strus/Tyson into off-the-bounce creation.</li>
+<li><code>dTS</code>: Still projects as a strength when Allen and Mobley share the floor, but perimeter containment depends on Harden/Merrill matchups and the Strus/Tyson/Wade/Ellis-type wing mix actually available.</li>
+<li><code>dTOV</code>: Potentially solid with Mitchell, Tyson, Tomlin, Porter, and Schroder activity, but not clearly elite.</li>
+<li><code>dSC</code>: The frontcourt can protect the rim and rebound when healthy; depth becomes fragile if Allen misses time and Mobley has to cover center minutes plus help-side creation.</li>
+</ul>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>My best challenge is that the public prior may be too low by a small amount because it bakes in real Cleveland uncertainty without fully crediting three stabilizers: a full camp with Harden, a normal-season Strus role after a one-off foot injury season, and Tyson becoming a more trustworthy wing than the older roster rows suggest.</p>
+<p>This is a mechanism-based, not vibes-based, upward adjustment. The mechanism is minutes quality. If the marginal wing and guard minutes shift away from emergency/committee lineups toward Strus, Tyson, Merrill in cleaner roles, and a Harden-Mitchell backcourt with more continuity, Cleveland should be somewhat better than 47.7 wins. The reason the adjustment is only +1.5 wins is that Harden age, turnover risk, Allen health, and thin backup-center depth all push the other way.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th align="right">Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cleveland's post-deadline Harden version was better than a 47.7-win baseline.</td>
+<td>Cavs.com wrote that Cleveland went 19-7 down the regular-season stretch after acquiring Harden, who averaged 20.5 PPG in 26 Cleveland games and led the team in assists in 19 of them. <a href="https://www.nba.com/cavaliers/news/features-backcourt-recap-260608" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/features-backcourt-recap-260608</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+1.0 wins</td>
+<td align="right">65</td>
+</tr>
+<tr>
+<td>The core lineup has real upside but a tiny sample.</td>
+<td>Cavs.com reported Harden/Mitchell/Mobley/Allen played only 97 minutes together, with a +26.7 net rating, 119.5 offensive rating, and 92.8 defensive rating. <a href="https://www.nba.com/cavaliers/news/features-round-1-preview-260417" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/features-round-1-preview-260417</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.8 wins</td>
+<td align="right">45</td>
+</tr>
+<tr>
+<td>Strus' 2025-26 availability was depressed by a specific foot injury, not just ordinary decline.</td>
+<td>NBA.com reported Strus had surgery for a Jones fracture in his left foot and was expected to resume basketball activities in three to four months. <a href="https://www.nba.com/news/cavaliers-max-strus-foot-surgery" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/cavaliers-max-strus-foot-surgery</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.5 wins</td>
+<td align="right">58</td>
+</tr>
+<tr>
+<td>Tyson may deserve more wing minutes than old roster context implies.</td>
+<td>Cavs.com said Tyson appeared in 66 games, started 42, and finished 4th in the NBA in three-point percentage at .441. <a href="https://www.nba.com/cavaliers/news/features-forward-recap-260610" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/features-forward-recap-260610</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.6 wins</td>
+<td align="right">56</td>
+</tr>
+<tr>
+<td>Harden's playoff ball security is a serious counterweight.</td>
+<td>Cavs.com credited Harden with 99 playoff assists but 84 turnovers over 18 playoff games. <a href="https://www.nba.com/cavaliers/news/features-backcourt-recap-260608" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/features-backcourt-recap-260608</a>, accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.7 wins</td>
+<td align="right">68</td>
+</tr>
+<tr>
+<td>Allen health is a real downside tail.</td>
+<td>Cavs.com noted Allen had been in and out over the final 19 games with a knee injury entering the playoffs. <a href="https://www.nba.com/cavaliers/news/features-round-1-preview-260417" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/features-round-1-preview-260417</a>, accessed July 9, 2026.</td>
+<td>hurts</td>
+<td align="right">-0.5 wins</td>
+<td align="right">55</td>
+</tr>
+<tr>
+<td>Cold-start depth should not be overcredited.</td>
+<td>Cleveland announced Meleek Thomas as a 2026 draft signing and Ernest Udeh Jr. on a two-way contract. <a href="https://www.nba.com/cavaliers/news/releases-thomas-udeh-signing-260701" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/releases-thomas-udeh-signing-260701</a>, accessed July 9, 2026.</td>
+<td>neutral</td>
+<td align="right">+0.0 wins</td>
+<td align="right">70</td>
+</tr>
+<tr>
+<td>The current depth chart gives Strus a starter slot, not just fringe minutes.</td>
+<td>ESPN lists Harden, Mitchell, Strus, Mobley, and Allen as the starters. <a href="https://www.espn.com/nba/team/depth/_/name/cle" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/depth/_/name/cle</a>, accessed July 9, 2026.</td>
+<td>helps</td>
+<td align="right">+0.3 wins</td>
+<td align="right">52</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Model role/value</th>
+<th>Concern or upside</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Donovan Mitchell</td>
+<td>Primary star and top projected contributor in roster context.</td>
+<td>Public 2025-26 evidence supports a high-usage, durable star after 70 games and another elite scoring year.</td>
+<td>If Mitchell is a 65-70 game star again, Cleveland's playoff-probability prior is sturdy.</td>
+</tr>
+<tr>
+<td>James Harden</td>
+<td>Starting lead guard, but aging creator.</td>
+<td>Regular-season fit helped; playoff turnovers and age-37 availability hurt.</td>
+<td>The entire MODEL_TOO_LOW case depends on Harden being a good regular-season organizer without collapsing defensively or physically.</td>
+</tr>
+<tr>
+<td>Evan Mobley</td>
+<td>Core frontcourt piece.</td>
+<td>Potentially undervalued if age-26 development and Harden-assisted rim/short-roll touches improve his offense.</td>
+<td>Mobley is the cleanest path for Cleveland to beat the public prior without relying on old guards.</td>
+</tr>
+<tr>
+<td>Jarrett Allen</td>
+<td>Starting center and defensive floor piece.</td>
+<td>Knee issue over the final 19 games creates downside.</td>
+<td>Backup-center depth is thin; Allen missed time would force Bryant/Sarr/Udeh or heavy Mobley-at-center usage.</td>
+</tr>
+<tr>
+<td>Max Strus</td>
+<td>Public depth chart starter or major wing.</td>
+<td>2025-26 missed time came from a Jones fracture; if healthy from camp, old partial-season minutes are too low.</td>
+<td>A real Strus season fixes spacing and wing continuity.</td>
+</tr>
+<tr>
+<td>Jaylon Tyson</td>
+<td>Emerging wing.</td>
+<td>Started 42 games and shot .441 from three in 2025-26; some regression is likely.</td>
+<td>Even with shooting regression, he may deserve more trust than a low-minutes development row.</td>
+</tr>
+<tr>
+<td>Sam Merrill</td>
+<td>Movement shooter and possible starter-level local value.</td>
+<td>Shooting is real, but defensive targeting and wing-size tradeoffs may cap minutes.</td>
+<td>If Merrill is more specialist than starter, some local player value should shift to Strus/Tyson.</td>
+</tr>
+<tr>
+<td>Dennis Schroder</td>
+<td>Backup guard.</td>
+<td>Useful regular-season stabilizer if retained and healthy; not a high-upside player.</td>
+<td>Keeps non-Harden minutes functional, but does not solve wing or center fragility.</td>
+</tr>
+<tr>
+<td>Thomas Bryant</td>
+<td>Backup big.</td>
+<td>Offensive finishing helps; defensive limitations make him a fragile Allen replacement.</td>
+<td>Center depth is the roster's clearest downside mechanism.</td>
+</tr>
+<tr>
+<td>Meleek Thomas</td>
+<td>Cold-start rookie guard.</td>
+<td>Long-term shot creation upside, but should not be counted on for 2026-27 wins.</td>
+<td>Confirms the public prior's <code>n_cold_start = 2</code> risk should remain small but visible.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>I am applying a judgmental adjustment of <strong>+0.5 pts/100</strong>, roughly <strong>+1.5 wins</strong>, because the public prior seems to price Cleveland closer to an ordinary high-40s playoff team than to a 52-win team whose 2025-26 best lineups arrived late and had limited continuity.</p>
+<p>The gross upward case is about +3 wins: full Harden camp, healthier Strus, larger Tyson role, and a Mobley development path. I subtract roughly 1.5 wins for Harden age and turnovers, Allen knee risk, shooting regression, and backup-center fragility. That leaves a net adjustment of +1.5 wins, moving the public prior from 47.7 to 49.2.</p>
+<p>This is not a new simulation and should not replace the public JSON projection.</p>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest argument against <code>MODEL_TOO_LOW</code> is that the public prior may already be correctly skeptical. Harden will be 37, and Cleveland's own playoff review shows an uncomfortable assist-to-turnover profile. The +26.7 core lineup number came in only 97 minutes, which is much too small to treat as a stable forecast. Allen had a knee issue late, Strus is coming off a Jones fracture season, and Tyson's .441 three-point shooting is a regression candidate. If those risks hit together, Cleveland can land below 47.7 wins without the model being too harsh.</p>
+<p>There is also a roster-depth argument for <code>MODEL_ABOUT_RIGHT</code>: if Merrill is not a full-time starter, Strus is only partially back, Tyson regresses, and Bryant/Sarr/Udeh have to cover real center minutes, the marginal rotation could be ordinary. In that world the playoff odds stay high because the East is soft, but the mean wins should stay near 48.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>A camp/preseason depth chart that puts Merrill clearly ahead of Strus and Tyson for major wing minutes would reduce my upward adjustment.</li>
+<li>Any report that Allen's knee requires management would move me toward <code>MODEL_ABOUT_RIGHT</code> or <code>MODEL_TOO_HIGH</code>.</li>
+<li>A Harden extension or camp report that explicitly targets lower regular-season workload would reduce expected wins.</li>
+<li>Strong preseason evidence that Tyson can defend starting wings while keeping enough shooting volume would increase my confidence in <code>MODEL_TOO_LOW</code>.</li>
+<li>A transaction adding a real backup center or two-way wing would push the adjustment upward.</li>
+<li>A model rerun with updated public JSON and current roster minutes should supersede this hand adjustment.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<p>The user-specified public JSON row is treated as authoritative for this revision: 47.7 wins, 41/48/54 band, 88.6% playoffs, -0.610 strength, 1.398 <code>se_strength</code>, and 2 cold-start players. I did not use stale local team-level projection values.</p>
+<p>Some roster context is inherently unsettled on July 9, 2026. Public depth charts, official roster pages, and local roster rows can differ at the fringe. The main core is clear, but deep bench roles, two-way availability, and final veteran movement remain fluid. The six-factor section is also cautious because the public JSON prior does not expose Cleveland's team factor decomposition.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li>Public projection JSON: <a href="https://andrewjparkus.github.io/projection_2026_27.json" target="_blank" rel="noopener noreferrer">https://andrewjparkus.github.io/projection_2026_27.json</a>, accessed July 9, 2026.</li>
+<li>User verification prior supplied in prompt: CLE <code>mc_mean_wins = 47.7</code>, <code>p10_wins = 41</code>, <code>p50_wins = 48</code>, <code>p90_wins = 54</code>, <code>make_playoffs_prob = 88.6%</code>, <code>strength = -0.610</code>, <code>se_strength = 1.398</code>, <code>n_cold_start = 2</code>.</li>
+<li>Boss prompt/template: <code>Rome/Basketball/NBA multi-agent forecasting company/Boss prompt for 30 NBA team research agents.md</code>, accessed July 9, 2026.</li>
+<li>Non-authoritative roster context only: <code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code>, accessed July 9, 2026.</li>
+<li>Cleveland depth chart: <a href="https://www.espn.com/nba/team/depth/_/name/cle" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/depth/_/name/cle</a>, accessed July 9, 2026.</li>
+<li>Cleveland official roster: <a href="https://www.nba.com/cavaliers/roster" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/roster</a>, accessed July 9, 2026.</li>
+<li>Harden/Garland trade report: <a href="https://www.nba.com/news/james-harden-darius-garland-trade" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/james-harden-darius-garland-trade</a>, accessed July 9, 2026.</li>
+<li>Cavaliers backcourt review: <a href="https://www.nba.com/cavaliers/news/features-backcourt-recap-260608" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/features-backcourt-recap-260608</a>, accessed July 9, 2026.</li>
+<li>Cavaliers playoff preview: <a href="https://www.nba.com/cavaliers/news/features-round-1-preview-260417" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/features-round-1-preview-260417</a>, accessed July 9, 2026.</li>
+<li>Cavaliers forward review: <a href="https://www.nba.com/cavaliers/news/features-forward-recap-260610" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/features-forward-recap-260610</a>, accessed July 9, 2026.</li>
+<li>Max Strus foot surgery report: <a href="https://www.nba.com/news/cavaliers-max-strus-foot-surgery" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/cavaliers-max-strus-foot-surgery</a>, accessed July 9, 2026.</li>
+<li>Thomas/Udeh signing release: <a href="https://www.nba.com/cavaliers/news/releases-thomas-udeh-signing-260701" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/releases-thomas-udeh-signing-260701</a>, accessed July 9, 2026.</li>
+<li>Cavaliers Summer League roster release: <a href="https://www.nba.com/cavaliers/news/releases-summer-league-roster-260702" target="_blank" rel="noopener noreferrer">https://www.nba.com/cavaliers/news/releases-summer-league-roster-260702</a>, accessed July 9, 2026.</li>
+<li>RealGM 2025-26 Cavaliers roster/stats context: <a href="https://basketball.realgm.com/nba/teams/Cleveland-Cavaliers/5/Rosters/Current/2026" target="_blank" rel="noopener noreferrer">https://basketball.realgm.com/nba/teams/Cleveland-Cavaliers/5/Rosters/Current/2026</a>, accessed July 9, 2026.</li>
+</ul>8:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$b"}}],"$Lc"]}]
+9:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","p",null,{"className":"rail-empty","children":"Nothing points here yet."}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-team-briefings-2026-27/00-cross-team-findings",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-cross-team-findings/","children":"2026-27 NBA cross-team findings"}]}],["$","li","basketball/nba-team-briefings-2026-27/00-index",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-index/","children":"2026-27 NBA team briefing index"}]}],["$","li","basketball/nba-team-briefings-2026-27/atl-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/atl-2026-27-briefing/","children":"Atlanta Hawks 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bos-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","children":"BOS 2026-27 research briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing/","children":"Brooklyn Nets 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/cha-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","children":"Charlotte Hornets 2026-27 Research Briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+a:["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]
+c:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/chi-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Chicago Bulls 2026-27 Research Briefing"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/dal-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Dallas Mavericks 2026-27 Research Briefing"}]]}]]}]
+f:null

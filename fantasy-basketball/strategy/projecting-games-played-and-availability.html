@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){var t=null;try{t=localStorage.getItem("fbe-theme")}catch(e){}
+document.documentElement.dataset.theme=(t==="lamp"||t==="paper")?t:(matchMedia("(prefers-color-scheme: dark)").matches?"lamp":"paper");})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projecting games played and availability — 2026-27 Fantasy Basketball Encyclopedia</title>
+<meta name="description" content="Games played carries roughly six times the variance of per-game rate projections, so availability — not skill forecasting — is where a 2026-27 draft is won, and the vault&#x27;s current \sqrt{GP/82} index systematically underprices that risk.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+<script defer src="/assets/hub.js"></script></head>
+<body data-rel="../">
+<header class="topnav">
+  <a class="brand" href="../index.html">The Fantasy Basketball <b>Encyclopedia</b></a>
+  <div class="navsearch"><input type="search" id="q" placeholder="Search players, teams, notes…"
+    autocomplete="off" role="combobox" aria-expanded="false" aria-label="Search the encyclopedia">
+    <div class="searchresults" id="qr" role="listbox" hidden></div></div>
+  <nav class="navlinks">
+    <details class="navdrop"><summary>Draft Room</summary><div class="navmenu"><a href="../rankings/2026-27-draft-boards-espn-points-and-nine-category.html">ESPN points + 9-cat boards</a><a href="../rankings/2026-27-tiers-espn-points-and-nine-category.html">Tiers — both formats</a><a href="../rankings/2026-27-volume-corrected-nine-category-board.html">Volume-corrected 9-cat board</a><a href="../rankings/2026-27-fantasy-basketball-rankings.html">Editorial top 200</a><a href="../rankings/2026-27-fantasy-basketball-tiers.html">Editorial tiers (pre-repair)</a><a href="../rankings/2026-27-rookies.html">Rookies</a><a href="../rankings/2026-27-sleepers-breakouts-and-fades.html">Sleepers &amp; fades</a><a href="../rankings/2026-27-dynasty-rankings.html">Dynasty</a><a href="../strategy/draft-day-checklist-and-decision-rules.html">Draft-day checklist</a></div></details>
+    <details class="navdrop"><summary>Teams</summary><div class="navmenu"><a href="../teams/2026-27-nba-fantasy-team-index.html">All teams (index)</a><a href="../teams/boston-celtics.html">Boston Celtics</a><a href="../teams/brooklyn-nets.html">Brooklyn Nets</a><a href="../teams/new-york-knicks.html">New York Knicks</a><a href="../teams/philadelphia-76ers.html">Philadelphia 76ers</a><a href="../teams/toronto-raptors.html">Toronto Raptors</a><a href="../teams/chicago-bulls.html">Chicago Bulls</a><a href="../teams/cleveland-cavaliers.html">Cleveland Cavaliers</a><a href="../teams/detroit-pistons.html">Detroit Pistons</a><a href="../teams/indiana-pacers.html">Indiana Pacers</a><a href="../teams/milwaukee-bucks.html">Milwaukee Bucks</a><a href="../teams/atlanta-hawks.html">Atlanta Hawks</a><a href="../teams/charlotte-hornets.html">Charlotte Hornets</a><a href="../teams/miami-heat.html">Miami Heat</a><a href="../teams/orlando-magic.html">Orlando Magic</a><a href="../teams/washington-wizards.html">Washington Wizards</a><a href="../teams/denver-nuggets.html">Denver Nuggets</a><a href="../teams/minnesota-timberwolves.html">Minnesota Timberwolves</a><a href="../teams/oklahoma-city-thunder.html">Oklahoma City Thunder</a><a href="../teams/portland-trail-blazers.html">Portland Trail Blazers</a><a href="../teams/utah-jazz.html">Utah Jazz</a><a href="../teams/golden-state-warriors.html">Golden State Warriors</a><a href="../teams/los-angeles-clippers.html">Los Angeles Clippers</a><a href="../teams/los-angeles-lakers.html">Los Angeles Lakers</a><a href="../teams/phoenix-suns.html">Phoenix Suns</a><a href="../teams/sacramento-kings.html">Sacramento Kings</a><a href="../teams/dallas-mavericks.html">Dallas Mavericks</a><a href="../teams/houston-rockets.html">Houston Rockets</a><a href="../teams/memphis-grizzlies.html">Memphis Grizzlies</a><a href="../teams/new-orleans-pelicans.html">New Orleans Pelicans</a><a href="../teams/san-antonio-spurs.html">San Antonio Spurs</a></div></details>
+    <details class="navdrop"><summary>Projections</summary><div class="navmenu"><a href="../projections/2026-27-nba-depth-charts.html">NBA depth charts</a><a href="../projections/2026-27-nba-minutes-projections.html">NBA minutes projections</a><a href="../projections/2026-27-nba-roster-and-transaction-ledger.html">NBA roster and transaction ledger</a><a href="../projections/2026-27-nba-team-outcomes.html">NBA team outcomes</a><a href="../projections/2026-27-fantasy-basketball-player-projections.html">fantasy basketball player projections</a><a href="../projections/2026-27-fantasy-basketball-projection-methodology.html">fantasy basketball projection methodology</a><a href="../projections/2026-27-fantasy-basketball-role-battles.html">fantasy basketball role battles</a><a href="../projections/2026-27-projection-uncertainty-ledger.html">projection uncertainty ledger</a><a href="../projections/projection-engine-defects-and-corrections.html">Projection engine defects and corrections</a></div></details>
+    <details class="navdrop"><summary>Strategy</summary><div class="navmenu"><a href="../strategy/10-team-versus-12-team-fantasy-basketball-strategy.html">10-team versus 12-team fantasy basketball strategy</a><a href="../strategy/category-correlations-and-roster-construction.html">Category correlations and roster construction</a><a href="../strategy/draft-day-checklist-and-decision-rules.html">Draft day checklist and decision rules</a><a href="../strategy/drafting-by-slot-in-snake-drafts.html">Drafting by slot in snake drafts</a><a href="../strategy/fantasy-basketball-value-stability-and-bust-rates.html">Fantasy basketball value stability and bust rates</a><a href="../strategy/nba-aging-curves-and-breakout-ages.html">NBA aging curves and breakout ages</a><a href="../strategy/points-leagues-versus-category-leagues.html">Points leagues versus category leagues</a><a href="../strategy/positional-scarcity-and-eligibility-in-2026-27.html">Positional scarcity and eligibility in 2026-27</a><a href="../strategy/projecting-games-played-and-availability.html">Projecting games played and availability</a><a href="../strategy/punt-strategies-for-nine-category-leagues.html">Punt strategies for nine-category leagues</a><a href="../strategy/reading-projections-and-disagreement.html">Reading projections and disagreement</a><a href="../strategy/streaming-and-in-season-roster-management.html">Streaming and in-season roster management</a></div></details>
+    <details class="navdrop"><summary>Library</summary><div class="navmenu"><a href="../library/2026-27-nba-transactions-roster-pressure-and-role-change-ledger.html">2026-27 nba transactions roster pressure and role-change ledger</a><a href="../library/2026-27-fantasy-basketball-injury-and-availability-ledger.html">Injury and availability ledger</a><a href="../library/2026-27-fantasy-basketball-news-ledger.html">News ledger</a><a href="../library/2026-27-fantasy-basketball-social-and-community-ledger.html">Social and community ledger</a><a href="../library/2026-27-fantasy-basketball-source-freshness-ledger.html">Source freshness ledger</a><a href="../library/2026-27-fantasy-basketball-source-index.html">Source index</a><a href="../library/2026-27-fantasy-basketball-video-and-podcast-library.html">Video and podcast library</a><a href="../library/basketball-monster.html">Basketball monster</a><a href="../library/fantrax.html">Fantrax</a><a href="../library/hashtag-basketball.html">Hashtag basketball</a><a href="../library/josh-lloyd-and-locked-on-fantasy-basketball.html">Josh lloyd and locked on fantasy basketball</a><a href="../library/major-fantasy-media.html">Major fantasy media</a><a href="../library/old-man-squad-sleepers-busts-and-late-round-flyers.html">Old man squad - sleepers, busts and late-round flyers</a><a href="../library/reddit-fantasy-basketball.html">Reddit fantasy basketball</a><a href="../library/rotowire.html">Rotowire</a><a href="../meta/2026-27-fantasy-basketball-evidence-and-confidence-policy.html">Evidence policy</a><a href="../meta/progress.html">Build progress</a><a href="../meta/audit.html">Audit</a></div></details>
+    <a class="navflat" href="../players/index.html">Players</a>
+  </nav>
+  <button class="themebtn" id="themebtn" type="button" aria-label="Toggle theme">☾</button>
+</header>
+<main class="page">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Encyclopedia</a> · <span>Strategy</span> · <span>Projecting games played and availability</span></nav>
+<div class="hero"><p class="kicker">Strategy</p><h1>Projecting games played and availability</h1><p class='lede'>Games played carries roughly six times the variance of per-game rate projections, so availability — not skill forecasting — is where a 2026-27 draft is won, and the vault&#x27;s current \sqrt{GP/82} index systematically underprices that risk.</p></div><nav class="jumpbar" aria-label="On this page"><a href="#why-gp-dominates-the-error-budget">Why GP dominates the error budget</a><a href="#how-predictive-is-prior-season-gp">How predictive is prior-season GP?</a><a href="#recurrence-taxonomy">Recurrence taxonomy</a><a href="#achilles-and-acl-the-actual-base-rates">Achilles and ACL: the actual base rates</a><a href="#load-management-and-the-65-game-rule">Load management and the 65-game rule</a><a href="#age-interaction">Age interaction</a><a href="#building-an-honest-gp-distribution">Building an honest GP distribution</a><a href="#the-math15-problem">The \(\sqrt{GP/82}\) problem</a><a href="#2026-27-the-highest-leverage-availability-questions">2026-27: the highest-leverage availability questions</a><a href="#open-questions">Open questions</a></nav><article class="prose"><p>Up: <a href="../index.html">2026-27 Fantasy Basketball Encyclopedia</a></p>
+<p>Related: <a href="../projections/2026-27-fantasy-basketball-projection-methodology.html">2026-27 fantasy basketball projection methodology</a> · <a href="../library/2026-27-fantasy-basketball-injury-and-availability-ledger.html">2026-27 fantasy basketball injury and availability ledger</a> · <a href="../rankings/2026-27-fantasy-basketball-rankings.html">2026-27 fantasy basketball rankings</a> · <a href="../rankings/2026-27-points-league-rankings.html">2026-27 points-league rankings</a> · <a href="../rankings/2026-27-category-rankings.html">2026-27 category rankings</a> · <a href="../projections/2026-27-nba-minutes-projections.html">2026-27 NBA minutes projections</a> · <a href="../projections/2026-27-projection-uncertainty-ledger.html">2026-27 projection uncertainty ledger</a> · <a href="../meta/2026-27-fantasy-basketball-evidence-and-confidence-policy.html">2026-27 fantasy basketball evidence and confidence policy</a> · <a href="../rankings/2026-27-sleepers-breakouts-and-fades.html">2026-27 sleepers, breakouts, and fades</a> · <span class="redlink" title="Not in this encyclopedia">Games played versus per-game value in fantasy basketball</span> · <span class="redlink" title="Not in this encyclopedia">How NBA injury reports should change fantasy decisions</span></p>
+<h2 id="why-gp-dominates-the-error-budget">Why GP dominates the error budget</h2>
+<p>Season total is <span class="math">\(T = G \times v\)</span>, where <span class="math">\(G\)</span> is games and <span class="math">\(v\)</span> is per-game fantasy value. In logs the errors separate:</p>
+<p><span class="math display">\[\operatorname{Var}(\ln T) \approx \operatorname{CV}_G^2 + \operatorname{CV}_v^2 + 2\rho\,\operatorname{CV}_G \operatorname{CV}_v\]</span></p>
+<p>For a mid-round veteran, a reasonable <strong>estimate</strong> (not a measured figure) is <span class="math">\(\operatorname{CV}_G \approx 0.20\)</span> — a 65-game mean with a 13-game standard deviation — against <span class="math">\(\operatorname{CV}_v \approx 0.08\)</span> for per-game value, which is a well-behaved quantity built from three or four prior seasons. Ignoring covariance:</p>
+<p><span class="math display">\[\frac{0.20^2}{0.20^2 + 0.08^2} = \frac{0.0400}{0.0464} = 86\%\]</span></p>
+<p>Roughly <strong>86% of the uncertainty in a season total is games</strong>. Every hour spent refining a usage estimate is an hour spent on the 14%.</p>
+<h2 id="how-predictive-is-prior-season-gp">How predictive is prior-season GP?</h2>
+<p>No published NBA study giving a clean year-over-year autocorrelation of games played was located; treat any specific <span class="math">\(r\)</span> you see quoted as unverified. What <em>is</em> published points at a modest but real persistent component:</p>
+<ul>
+<li>A multi-level model of injury events found <span class="math">\(r = 0.672\)</span> between a player's average modeled injury probability and his actual injury count in that season — i.e. observable characteristics do carry substantial signal (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6107769/">Lewis, <em>Sports Health</em></a>).</li>
+<li>The same work found injury odds rose <strong>2.87% per 96 minutes played</strong> and fell <strong>15.96% per day of rest</strong>, so GP is partly <em>endogenous</em>: playing more causes injury, which suppresses next season's GP. This mechanically drags the autocorrelation toward zero and is why naive "he's injury-prone" reasoning overfits.</li>
+<li>Minutes per game was the single largest risk factor for season-ending injury, and season-ending injuries clustered in the third and fourth quarters of the schedule (<a href="https://www.sciencedirect.com/science/article/abs/pii/S0749806324000628"><em>J Oral Maxillofac Surg</em> group, ScienceDirect</a>).</li>
+</ul>
+<p><strong>Mechanistic conclusion:</strong> prior GP is informative mostly through <em>what caused</em> the absence, not through the raw count. A 55-game season from one 27-game Achilles block and a 55-game season from nine separate two-to-four-game soft-tissue absences are the same number and completely different forecasts. Decompose every prior season into blocks before using it.</p>
+<h2 id="recurrence-taxonomy">Recurrence taxonomy</h2>
+<table>
+<thead>
+<tr>
+<th>Injury class</th>
+<th>Recurrence character</th>
+<th>Practical GP treatment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hamstring strain</td>
+<td><strong>High.</strong> A five-year NBA cohort was summarized by its author as showing an ~81.4% chance of some re-injury; that figure comes from <a href="https://www.threads.com/@drnkpandya/post/DWsK_uxGUUi/">a researcher's social post</a>, not a retrieved paper, so treat it as a D-grade lead. Cross-sport ranges of 12–34% are better established.</td>
+<td>Carry a permanent 4–8 game tax; re-injury risk is highest in the first two weeks back</td>
+</tr>
+<tr>
+<td>Calf strain</td>
+<td>High, and a known Achilles precursor</td>
+<td>Same tax; escalate if the player is 30+</td>
+</tr>
+<tr>
+<td>Low back</td>
+<td>High, episodic, poorly time-boxed</td>
+<td>Widen the distribution rather than shifting the mean</td>
+</tr>
+<tr>
+<td>Ankle sprain</td>
+<td>Moderately recurrent, but low games-per-episode</td>
+<td>Small mean shift, low variance</td>
+</tr>
+<tr>
+<td>Patellar tendinopathy / knee "management"</td>
+<td>Chronic; produces back-to-back rest rather than blocks</td>
+<td>Model as a minutes and B2B haircut, not an injury</td>
+</tr>
+<tr>
+<td>Fractures (hand, foot, facial, ribs)</td>
+<td><strong>Largely one-off</strong> once united</td>
+<td>Do not carry forward; price the healed player</td>
+</tr>
+<tr>
+<td>Meniscus / arthroscopy</td>
+<td>Mostly one-off; some progression risk in bigs</td>
+<td>One-year orange tag, then release</td>
+</tr>
+<tr>
+<td>Achilles, ACL, patellar tendon, Lisfranc</td>
+<td>Structural — reshapes the whole career curve</td>
+<td>Use the return-to-play literature below, not intuition</td>
+</tr>
+</tbody>
+</table>
+<p>Blood clots (Wembanyama's 2024-25 DVT) belong in their own bucket: medically managed, low recurrence on anticoagulation, but the <em>anticoagulation window itself</em> can force games off. That is an administrative absence, not a tissue-failure absence.</p>
+<h2 id="achilles-and-acl-the-actual-base-rates">Achilles and ACL: the actual base rates</h2>
+<p><strong>Achilles rupture</strong> (37 NBA players, 1990–2023, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11558755/"><em>Foot &amp; Ankle Ortho</em> / PMC</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Returned to any NBA game</td>
+<td>78.4% (29/37)</td>
+</tr>
+<tr>
+<td>Still in the NBA three years post-injury</td>
+<td>54.1% (20/37)</td>
+</tr>
+<tr>
+<td>Returned to prior performance level</td>
+<td>27.0% (10/37)</td>
+</tr>
+<tr>
+<td>Mean days to return, All-Star tier</td>
+<td>267.6</td>
+</tr>
+<tr>
+<td>Mean days to return, starter tier</td>
+<td>367.1</td>
+</tr>
+</tbody>
+</table>
+<p>The performance split is the useful part: <strong>100% of reserves regained their level versus 22% of All-Stars and 0% of starters</strong>. Elite explosive production is the thing that does not come back. A separate <a href="https://journals.sagepub.com/doi/10.1177/23259671231212479">NBA/WNBA comparison</a> found shortened careers post-rupture (3.1 ± 2.3 vs 5.8 ± 3.5 remaining seasons).</p>
+<p><strong>ACL reconstruction</strong> is materially kinder (<a href="https://sites.brown.edu/sports-injury/2021/03/05/publication-performance-after-acl-reconstruction-in-nba-players/">Brown University sports injury lab</a>; <a href="https://pubmed.ncbi.nlm.nih.gov/33738307/">PubMed 33738307</a>; <a href="https://www.sciencedirect.com/science/article/pii/S2059775425006418">systematic review, ScienceDirect</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Return to play</td>
+<td>84–98% depending on cohort</td>
+</tr>
+<tr>
+<td>Mean return</td>
+<td>~372 days / 11.6 ± 4.1 months</td>
+</tr>
+<tr>
+<td>Share of team games played, pre-injury</td>
+<td>78.5%</td>
+</tr>
+<tr>
+<td>Share of team games played, <strong>season 1 back</strong></td>
+<td>48.4%</td>
+</tr>
+<tr>
+<td>Share of team games played, <strong>season 2 back</strong></td>
+<td>62.1%</td>
+</tr>
+<tr>
+<td>PER, season 1 back</td>
+<td>−19.3% vs pre-injury</td>
+</tr>
+<tr>
+<td>PER, season 2 back</td>
+<td>not significantly different from pre-injury</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The single most exploitable number here is 48.4% → 62.1%.</strong> Year 1 back is a ~40-game season; year 2 is a ~51-game season with restored rates. This is the mechanism behind the classic "fade the return year, buy the second year" heuristic, and it is measured, not folklore.</p>
+<p>Critically, the relevant clock is <strong>months since surgery</strong>, not seasons since last appearance. A player who sat out an entire season is entering his post-op year two even though it is his first year back — a strictly better cohort than someone who returned mid-season on an accelerated ramp.</p>
+<h2 id="load-management-and-the-65-game-rule">Load management and the 65-game rule</h2>
+<p>The Player Participation Policy (2023-24 onward) gates MVP, All-NBA, DPOY and the rest behind 65 games at 20+ minutes. It has not fixed availability. In 2025-26 the ineligible list included <a href="../players/lal/luka-doncic.html">Luka Dončić</a>, <a href="../players/min/anthony-edwards.html">Anthony Edwards</a>, <a href="../players/det/cade-cunningham.html">Cade Cunningham</a>, <a href="../players/mia/giannis-antetokounmpo.html">Giannis Antetokounmpo</a>, <a href="../players/fa/lebron-james.html">LeBron James</a> and <a href="../players/gsw/stephen-curry.html">Stephen Curry</a>, while <a href="../players/den/nikola-jokic.html">Nikola Jokić</a>, <a href="../players/sas/victor-wembanyama.html">Victor Wembanyama</a> and <a href="../players/lac/kawhi-leonard.html">Kawhi Leonard</a> cleared it only in the final week (<a href="https://www.inquirer.com/sixers/nba-tyrese-maxey-luka-doncic-anthony-edwards-cade-cunningham-20260406.html">Philadelphia Inquirer, 2026-04-06</a>; <a href="https://sports.yahoo.com/articles/why-nbas-65-game-rule-121013981.html">Yahoo Sports</a>).</p>
+<p>Three fantasy consequences:</p>
+<ol>
+<li><strong>The rule creates a floor, not a ceiling.</strong> Award-relevant players are pushed toward 65–72 games and away from 55. Players with no award case face no such pressure.</li>
+<li><strong>It creates a cliff.</strong> Once a star is mathematically out of award range — usually late February — his marginal incentive to play collapses. Expect March/April shutdowns for eliminated teams. This is precisely fantasy-playoff season.</li>
+<li><strong>It creates perverse early returns.</strong> Players rush back to bank games, which is exactly the pattern hamstring and calf recurrence data punishes.</li>
+</ol>
+<p>Back-to-backs remain the cleanest observable: the 15.96%-per-rest-day figure above means a healthy 30-year-old big on the second night is a genuinely different player. Track team-level B2B rest policy separately from injury.</p>
+<h2 id="age-interaction">Age interaction</h2>
+<p>The <a href="https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0263354">PLOS One epidemiology study</a> (625 players, 3,543 injuries, 2017-18 to 2020-21) found the <strong>30–34 bracket carried the highest injury-rate ratio</strong>, and that NBA experience above the 4.7-year league average raised risk independent of chronological age. The operational form: age does not raise the <em>probability of an injury event</em> linearly so much as it raises <strong>games lost per event</strong> and lowers the chance of a full return. Suggested prior, clearly an estimate:</p>
+<table>
+<thead>
+<tr>
+<th>Age</th>
+<th>Mean GP shift vs. role-implied baseline</th>
+<th>SD of GP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>≤ 23</td>
+<td>+1</td>
+<td>8</td>
+</tr>
+<tr>
+<td>24–28</td>
+<td>0</td>
+<td>10</td>
+</tr>
+<tr>
+<td>29–31</td>
+<td>−3</td>
+<td>12</td>
+</tr>
+<tr>
+<td>32–34</td>
+<td>−6</td>
+<td>14</td>
+</tr>
+<tr>
+<td>35+</td>
+<td>−10</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<h2 id="building-an-honest-gp-distribution">Building an honest GP distribution</h2>
+<p>Do not project a point estimate. Project a three-state mixture and report the mean <em>and</em> the branch structure:</p>
+<p><span class="math display">\[E[G] = \pi_H \mu_H + \pi_N \mu_N + \pi_M \mu_M\]</span></p>
+<p>where <span class="math">\(H\)</span> = clean season (μ ≈ 70–76 — nobody plays 82), <span class="math">\(N\)</span> = nagging season of scattered absences (μ ≈ 55–62), <span class="math">\(M\)</span> = major event (μ ≈ 20–40).</p>
+<p><strong>Worked example, <a href="../players/gsw/stephen-curry.html">Stephen Curry</a> at 38.</strong> He played 43 games in 2025-26, including a 27-game runner's-knee block (<a href="https://www.nbcsportsbayarea.com/nba/golden-state-warriors/steph-curry-draymond-green-grades-analysis/1933513/">NBC Sports Bay Area</a>). Age 35+ prior, chronic-knee tag, no award incentive on a 37-win roster:</p>
+<p><span class="math display">\[E[G] = 0.20(68) + 0.45(55) + 0.35(28) = 13.6 + 24.8 + 9.8 = 48.2\]</span></p>
+<p>The vault carries <strong>52</strong>. The mixture says 48 with an interquartile range of roughly 30–62. That is a two-round difference in a totals league and almost none in a per-game league — which is the whole point of the next section.</p>
+<h2 id="the-math15-problem">The <span class="math">\(\sqrt{GP/82}\)</span> problem</h2>
+<p><code>build_encyclopedia.py</code> sets <code>nine_cat_total_z = per_game_z × sqrt(gp/82)</code>, and <a href="../rankings/2026-27-points-league-rankings.html">2026-27 points-league rankings</a> orders by <code>FP/G × sqrt(GP/82)</code>. This is a deliberate compromise between per-game (exponent 0) and totals (exponent 1). It matches neither, and the error is large.</p>
+<p>The correct season-total formulation for a roster slot accounts for the fact that missed games are backfilled by streamers at replacement level <span class="math">\(v_R\)</span>, with coverage fraction <span class="math">\(\rho &lt; 1\)</span> (roster limits, waiver quality, IL slots):</p>
+<p><span class="math display">\[V_i = G_i v_i + (82 - G_i)\,\rho\, v_R = 82\rho v_R + G_i\,(v_i - \rho v_R)\]</span></p>
+<p><strong>Worked comparison.</strong> Player A: <span class="math">\(v = 1.20\)</span> z-units, <span class="math">\(G = 76\)</span>. Player B (Curry-like): <span class="math">\(v = 1.60\)</span>, <span class="math">\(G = 52\)</span>. Take <span class="math">\(v_R = -0.30\)</span> and <span class="math">\(\rho = 0.8\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>A</th>
+<th>B</th>
+<th>B as % of A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math">\(\sqrt{GP/82}\)</span> index</td>
+<td><span class="math">\(1.20 \times 0.963 = 1.155\)</span></td>
+<td><span class="math">\(1.60 \times 0.796 = 1.274\)</span></td>
+<td><strong>110%</strong></td>
+</tr>
+<tr>
+<td>Pure linear totals</td>
+<td><span class="math">\(1.20 \times 76 = 91.2\)</span></td>
+<td><span class="math">\(1.60 \times 52 = 83.2\)</span></td>
+<td>91%</td>
+</tr>
+<tr>
+<td>Replacement-adjusted slot value</td>
+<td><span class="math">\(-19.7 + 76(1.44) = 89.8\)</span></td>
+<td><span class="math">\(-19.7 + 52(1.84) = 76.0\)</span></td>
+<td><strong>85%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The square root says the fragile star is <em>better</em>; the correct totals math says he is worth 85% as much. That is a 25-point swing and it is systematic — it inflates every low-GP star on the board.</p>
+<p>Two further defects. First, the index scales an already-aggregated z-score rather than each primitive category, so it never recomputes <span class="math">\(\sigma\)</span> over the <em>totals</em> distribution of the rosterable population — and <span class="math">\(\sigma^{\text{tot}}_c \neq 82\,\sigma^{\text{pg}}_c\)</span>, because totals dispersion absorbs GP dispersion. Second, it treats turnovers symmetrically with counting stats, when in a totals frame extra games strictly <em>add</em> turnovers.</p>
+<p><strong>The correct computation:</strong> project <span class="math">\(G_i\)</span> and per-game rates separately, form <span class="math">\(T_{ic} = G_i m_{ic}\)</span> for every category, then z-score each category against the totals distribution of the actual rosterable pool, then sum. Ratio categories use summed makes over summed attempts, never a z-score of a percentage.</p>
+<h3 id="which-exponent-for-which-format">Which exponent for which format</h3>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Effective GP exponent</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Roto, season totals (9-cat or points)</td>
+<td><strong>1.0</strong></td>
+<td>Value is literally the sum; a missed game is a permanent zero</td>
+</tr>
+<tr>
+<td>Best-ball / no-transaction</td>
+<td>1.0</td>
+<td>No backfill available</td>
+</tr>
+<tr>
+<td>H2H points, weekly totals</td>
+<td>0.8–0.9</td>
+<td>Weekly totals, but blowout weeks waste surplus</td>
+</tr>
+<tr>
+<td>H2H 9-cat, weekly totals</td>
+<td>0.6–0.8</td>
+<td>You need to win 5 of 9, not maximize; locked categories waste surplus, and known absences can be streamed around</td>
+</tr>
+<tr>
+<td>True per-game scoring</td>
+<td>0.0</td>
+<td>GP irrelevant except for roster friction</td>
+</tr>
+</tbody>
+</table>
+<p>Two modifiers that matter more than most drafters think: <strong>league depth</strong> (a 10-team league has a strong waiver wire, so <span class="math">\(v_R\)</span> is high and <span class="math">\(\rho\)</span> near 1, muting the GP penalty; a 12-team league amplifies it) and <strong>IL slots</strong> (two or more IL slots make a <em>known</em> long absence far cheaper than an unpredictable 55-game grind — predictability is worth more than the raw count).</p>
+<h2 id="2026-27-the-highest-leverage-availability-questions">2026-27: the highest-leverage availability questions</h2>
+<p>Leverage = draft cost × GP uncertainty. Statuses below are as of the <a href="../library/2026-27-fantasy-basketball-injury-and-availability-ledger.html">2026-27 fantasy basketball injury and availability ledger</a> cutoff, 2026-07-18.</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Vault GP / 9-cat rank</th>
+<th>The actual question</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../players/ind/tyrese-haliburton.html">Tyrese Haliburton</a></td>
+<td>66 / 12</td>
+<td>Achilles repair June 2025; sat all of 2025-26; IND warned of early "ups and downs"</td>
+<td>The favorable Achilles cohort — full-year runway means 2026-27 is <em>post-op year two</em>, not the 48%-of-games return year. 66 is defensible; the risk is efficiency and B2B, not a season-ender</td>
+</tr>
+<tr>
+<td><a href="../players/gsw/stephen-curry.html">Stephen Curry</a></td>
+<td>52 / 11</td>
+<td>43 games in 2025-26, 27-game knee block, age 38, no award incentive</td>
+<td>Rank 11 on 52 games is the board's single largest <span class="math">\(\sqrt{\cdot}\)</span> artifact. In a totals league he is not a top-25 asset</td>
+</tr>
+<tr>
+<td><a href="../players/phi/joel-embiid.html">Joel Embiid</a></td>
+<td>44 / 30</td>
+<td>First offseason since 2023 with <strong>no scheduled surgery</strong>; says knee is "figured out" (<a href="https://www.espn.com/nba/story/_/id/48737189/embiid-feeling-confident-knee-health-going-forward">ESPN</a>)</td>
+<td>44 may now be too <em>low</em>. The asymmetry has flipped: this is the rare case where the availability branch is upside</td>
+</tr>
+<tr>
+<td><a href="../players/mia/giannis-antetokounmpo.html">Giannis Antetokounmpo</a></td>
+<td>60 / 21</td>
+<td>Missed 46 games with two calf strains in 2025-26 before the <a href="https://www.espn.com/nba/story/_/id/49149967/bucks-trading-giannis-antetokounmpo-bobby-portis-heat-tyler-herro-kelel-ware-jaime-jaquez-jr-kasparas-jakucionis-picks">Miami trade</a></td>
+<td>Recurrent calf at 31 is the highest-recurrence, highest-consequence combination in the taxonomy. 60 is optimistic; new-team incentive to play cuts the other way</td>
+</tr>
+<tr>
+<td><a href="../players/cha/brandon-miller.html">Brandon Miller</a></td>
+<td>62 / <strong>25</strong></td>
+<td>May shoulder stabilization, <strong>Red</strong> tag, no camp date</td>
+<td>Internal inconsistency in the board: a Red ledger tag with a 62-game projection and a top-25 rank. Resolve before the draft</td>
+</tr>
+<tr>
+<td><a href="../players/lac/kawhi-leonard.html">Kawhi Leonard</a></td>
+<td>60 / 5</td>
+<td>Played 65 games in 2025-26, no restriction; trade <a href="https://www.nba.com/news/raptors-clippers-kawhi-leonard-trade-on-hold">on hold pending investigation</a></td>
+<td>The risk here is administrative and role-based, not medical — a rare shape. Do not apply a knee-history discount he no longer earns</td>
+</tr>
+<tr>
+<td><a href="../players/lal/luka-doncic.html">Luka Dončić</a></td>
+<td>66 / 4</td>
+<td>Grade 2 left hamstring, April 2026, season-ending; <a href="https://www.nba.com/news/luka-doncic-out-for-remainder-of-regular-season-with-left-hamstring-strain">deeper than first imaged</a></td>
+<td>Hamstring is the top-recurrence class. Six-plus months of rest is the good version; still tax 4–6 games off 66</td>
+</tr>
+<tr>
+<td><a href="../players/was/anthony-davis.html">Anthony Davis</a></td>
+<td>50 / 26</td>
+<td>Hand ligament; last formal step was light contact, no clearance located</td>
+<td>50 games on a rebuilding Washington roster with no award case — the March-shutdown scenario is live</td>
+</tr>
+<tr>
+<td><a href="../players/por/damian-lillard.html">Damian Lillard</a></td>
+<td>58 / 81</td>
+<td>Achilles; missed 2025-26; age 36; crowded POR guard room</td>
+<td>Post-op year two helps, but he is in the All-Star cohort where only 22% regain their level. Rank 81 already prices this</td>
+</tr>
+<tr>
+<td><a href="../players/dal/kyrie-irving.html">Kyrie Irving</a></td>
+<td>60 / 29</td>
+<td>March 2025 ACL; sat all 2025-26; ~19 months post-op at tip-off</td>
+<td>Textbook post-op-year-two case: the literature's 62.1%-of-games and restored-rate cohort. 60 is well calibrated</td>
+</tr>
+<tr>
+<td><a href="../players/sas/victor-wembanyama.html">Victor Wembanyama</a></td>
+<td>68 / 2</td>
+<td>46 games in 2024-25 (DVT), <a href="https://www.nba.com/news/spurs-victor-wembanyama-out-calf-strain">calf strain in 2025-26</a>, cleared 65 in the final week</td>
+<td>Two different mechanisms, neither strongly recurrent. 68 is fair; the tail is fat but not thick</td>
+</tr>
+<tr>
+<td><a href="../players/gsw/jimmy-butler-iii.html">Jimmy Butler III</a></td>
+<td>30 / 110</td>
+<td>ACL; not running as of late June; GSW planning a midseason return</td>
+<td>Correctly priced as a stash. In a two-IL-slot league this is a genuine value; in a no-IL league he is undraftable</td>
+</tr>
+<tr>
+<td><a href="../players/hou/fred-vanvleet.html">Fred VanVleet</a></td>
+<td>62 / 102</td>
+<td>ACL + bilateral meniscus; local optimism, no formal clearance</td>
+<td>Post-op year two at age 32 — the age term, not the ligament, is the binding constraint</td>
+</tr>
+<tr>
+<td><a href="../players/sac/domantas-sabonis.html">Domantas Sabonis</a></td>
+<td>62 / 68</td>
+<td>February meniscus surgery, pre-camp reevaluation, no later update</td>
+<td>Meniscus is mostly one-off. If camp reporting is clean, 62 → 68 is a cheap upgrade nobody else will make</td>
+</tr>
+</tbody>
+</table>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>No published NBA year-over-year GP autocorrelation was found. Is the raw lag-1 correlation actually above ~0.3 once block-decomposed, or is nearly all the apparent persistence explained by age, minutes load, and a handful of structural injuries?</li>
+<li>What is the true value of <span class="math">\(\rho\)</span> (missed-game coverage) in a 10- vs 12-team league? It drives the entire GP-discount magnitude and could be measured directly from a prior season's transaction logs, but has not been.</li>
+<li>Does the 65-game rule's late-season cliff show up as a measurable March/April GP drop for eliminated teams' award-ineligible stars? If so it should be modelled as a schedule-position effect, not a season-long mean.</li>
+<li>Should the encyclopedia publish two ranking columns — per-game and true totals — rather than one hybrid index? The <span class="math">\(\sqrt{\cdot}\)</span> compromise appears to serve no format exactly.</li>
+</ul></article>
+</main>
+<footer class="foot">
+  <div class="rule"></div>
+  <p>The 2026-27 Fantasy Basketball Encyclopedia · research cutoff July 19, 2026 · built from the Rome vault.
+  Early-offseason projections, not camp-final depth charts. Every ranking names its format; never average boards across formats.</p>
+</footer>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="../assets/site.js"></script>
+</body>
+</html>

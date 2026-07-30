@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" font-family="sans-serif">
+  <style>
+    .brane { fill: #b9d4f0; stroke: #2b6cb0; stroke-width: 2; opacity: 0.85; }
+    .braneline { stroke: #2b6cb0; stroke-width: 5; }
+    .string { fill: none; stroke: #c0392b; stroke-width: 2.5; }
+    .endpt { fill: #c0392b; }
+    .lbl { font-size: 15px; fill: #1a202c; }
+    .sub { font-size: 12px; fill: #555; }
+    .title { font-size: 15px; font-weight: bold; fill: #1a202c; }
+  </style>
+
+  <!-- ===================== Panel (a): one brane ===================== -->
+  <text class="title" x="55" y="28">(a) one brane</text>
+  <!-- brane sheet (a D2 drawn as a parallelogram) -->
+  <polygon class="brane" points="60,90 200,60 200,250 60,280"/>
+  <text class="sub" x="95" y="305">D-brane</text>
+  <!-- open string with both ends (Neumann/Dirichlet) on the same brane -->
+  <path class="string" d="M150,120 C 230,90 230,180 150,150"/>
+  <circle class="endpt" cx="150" cy="120" r="4.5"/>
+  <circle class="endpt" cx="150" cy="150" r="4.5"/>
+  <!-- a second string, a loose loop ending on brane -->
+  <path class="string" d="M140,200 C 250,160 250,260 140,225"/>
+  <circle class="endpt" cx="140" cy="200" r="4.5"/>
+  <circle class="endpt" cx="140" cy="225" r="4.5"/>
+
+  <!-- ===================== Panel (b): two parallel branes ===================== -->
+  <text class="title" x="330" y="28">(b) two parallel branes</text>
+  <polygon class="brane" points="330,90 410,70 410,250 330,270"/>
+  <polygon class="brane" points="470,90 550,70 550,250 470,270"/>
+  <text class="sub" x="345" y="292">brane 1</text>
+  <text class="sub" x="485" y="292">brane 2</text>
+  <!-- [11] string: both ends on brane 1 -->
+  <path class="string" d="M378,110 C 430,95 430,165 378,150"/>
+  <circle class="endpt" cx="378" cy="110" r="4.5"/>
+  <circle class="endpt" cx="378" cy="150" r="4.5"/>
+  <text class="sub" x="360" y="132">[11]</text>
+  <!-- [12] stretched string: brane 1 to brane 2 -->
+  <path class="string" d="M385,205 C 430,180 475,235 515,205"/>
+  <circle class="endpt" cx="385" cy="205" r="4.5"/>
+  <circle class="endpt" cx="515" cy="205" r="4.5"/>
+  <text class="sub" x="435" y="245">[12] stretched</text>
+
+  <!-- ===================== Panel (c): branes of different dimension ===================== -->
+  <text class="title" x="620" y="28">(c) different dimension</text>
+  <!-- big brane (Dp) as a sheet -->
+  <polygon class="brane" points="620,90 720,65 720,250 620,275"/>
+  <text class="sub" x="635" y="295">Dp (sheet)</text>
+  <!-- small brane (Dq) as a line/rod -->
+  <line class="braneline" x1="830" y1="80" x2="830" y2="255"/>
+  <text class="sub" x="800" y="275">Dq (line)</text>
+  <!-- string from sheet (Neumann end) to line (Dirichlet end) -->
+  <path class="string" d="M690,150 C 760,120 770,200 830,165"/>
+  <circle class="endpt" cx="690" cy="150" r="4.5"/>
+  <circle class="endpt" cx="830" cy="165" r="4.5"/>
+  <text class="sub" x="725" y="205">ND string</text>
+</svg>

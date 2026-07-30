@@ -1,0 +1,71 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+7:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+8:"$Sreact.suspense"
+3:T1067,<p>Related: <a href="/rome-wiki/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/" class="wiki-link">NBA multi-agent forecasting company</a>, <a href="/rome-wiki/articles/basketball/nba-multi-agent-forecasting-company/2026-27-projection-roster-audit/" class="wiki-link">2026-27 projection roster audit</a>, <a href="/rome-wiki/articles/basketball/nba-multi-agent-forecasting-company/2026-27-nba-team-briefing-corrected-prior-run/" class="wiki-link">2026-27 NBA team briefing corrected-prior run</a>.</p>
+<h2 id="what-changed">What changed</h2>
+<p>The corrected roster source is <code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code>.</p>
+<p>The applied correction manifest is <code>private-model-workspace/unified-rapm/research/roster_audit_2026_07_08_2206/applied_roster_update_manifest.json</code>.</p>
+<p>Policy used: keep reported/provisional pre-cutoff moves already used by the projection baseline, remove stale or unconfirmed free-agent holds from the audit, move hard wrong-team rows, and add material official or reported roster omissions that fit the projection scope.</p>
+<p>Correction counts:</p>
+<ul>
+<li>590 roster rows before, 561 after.</li>
+<li>73 PID fixes.</li>
+<li>7 display-name fixes.</li>
+<li>2 hard moves: Nate Ament to MIL and Quinten Post to MEM.</li>
+<li>36 removals.</li>
+<li>7 additions.</li>
+<li>0 duplicate team-name rows and 0 duplicate PID rows after correction.</li>
+</ul>
+<h2 id="model-rerun">Model rerun</h2>
+<p>Pipeline rerun:</p>
+<ul>
+<li><code>daily_v5/build_minutes_model.py --skip-distribution</code></li>
+<li><code>daily_v5/build_gp_model.py</code></li>
+<li><code>daily_v5/build_rotation_distributions.py --n-samples 1000 --write-samples</code></li>
+<li><code>daily_v5/build_projection.py</code></li>
+<li><code>daily_v5/project_2027.py --game-model p2_0_production</code></li>
+<li><code>daily_v5/build_projection_teams.py --game-model p2_0_production</code></li>
+<li><code>daily_v5/project_2027.py --mode distribution --n-rotation-samples 5000 --write-rotation-samples --game-model p2_0_production</code></li>
+<li>final point/team-detail refresh with <code>p2_0_production</code></li>
+</ul>
+<p>Validation:</p>
+<ul>
+<li>Minutes model passed the leakage-free MPG gate and the 240 weighted-minute invariant for all 30 teams.</li>
+<li>GP model passed its availability gates and wrote <code>gp_projection.parquet</code>.</li>
+<li>Point projection read back as 30 teams and 1229.8 total projected wins.</li>
+<li>Distribution projection read back as 30 teams, 5000 rotation samples, and 1230.3 total projected wins.</li>
+<li>Focused tests passed: 17/17 across depth-owner guard, site JSON contracts, and projection calibration.</li>
+</ul>
+<h2 id="public-output">Public output</h2>
+<p>Pushed GitHub Pages commit: <code>9260e10ff0 Refresh 2026-27 projections after roster audit</code>.</p>
+<p>Updated public files:</p>
+<ul>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code></li>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27_distribution.json</code></li>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27_teams.json</code></li>
+</ul>
+<p>Before/after artifacts:</p>
+<ul>
+<li><code>private-model-workspace/unified-rapm/research/roster_audit_2026_07_08_2206/before_after_wins.csv</code></li>
+<li><code>private-model-workspace/unified-rapm/research/roster_audit_2026_07_08_2206/before_after_wins.md</code></li>
+<li><code>private-model-workspace/unified-rapm/research/roster_audit_2026_07_08_2206/before_after_wins.svg</code></li>
+</ul>
+<p>Largest point-projection changes:</p>
+<ul>
+<li>UTA: +3.2 wins.</li>
+<li>DEN: +2.0 wins.</li>
+<li>HOU: +1.9 wins.</li>
+<li>MIA: +1.5 wins.</li>
+<li>CLE: -1.5 wins.</li>
+<li>OKC: -1.0 wins.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Should future roster updates use this reported-transaction projection baseline by default, or should there be a separate strict official-ledger roster mode?</li>
+<li>Should the ignored <code>daily_v5/out</code> source artifacts be mirrored into a tracked release bundle for exact reproducibility?</li>
+</ul>0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA multi-agent forecasting company",{"children":"NBA multi-agent forecasting company"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"2026-27 roster audit projection rerun"}],["$","p",null,{"className":"article-deck","children":"The audited 2026-27 roster file was applied to the projection pipeline, reducing unknown roster IDs from 75 to 4 and pushing refreshed public projection JSONs."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[2," min · ","286"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","what-changed",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-changed","children":"What changed"}]}],["$","li","model-rerun",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-rerun","children":"Model rerun"}]}],["$","li","public-output",{"className":"toc-depth-2","children":["$","a",null,{"href":"#public-output","children":"Public output"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","what-changed",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-changed","children":"What changed"}]}],["$","li","model-rerun",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-rerun","children":"Model rerun"}]}],["$","li","public-output",{"className":"toc-depth-2","children":["$","a",null,{"href":"#public-output","children":"Public output"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$3"}}],"$L4"]}],"$L5"]}]]}],null,"$L6"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+4:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/2026-27-projection-roster-audit/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"2026-27 projection roster audit"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Cheap model strategy for NBA agents"}]]}]]}]
+5:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-multi-agent-forecasting-company/2026-27-nba-team-briefing-corrected-prior-run",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/2026-27-nba-team-briefing-corrected-prior-run/","children":"2026-27 NBA team briefing corrected-prior run"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","children":"NBA multi-agent forecasting company"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-multi-agent-forecasting-company/2026-27-nba-team-briefing-corrected-prior-run",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/2026-27-nba-team-briefing-corrected-prior-run/","children":"2026-27 NBA team briefing corrected-prior run"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","children":"NBA multi-agent forecasting company"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/2026-27-projection-roster-audit",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/2026-27-projection-roster-audit/","children":"2026-27 projection roster audit"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/","children":"Cheap model strategy for NBA agents"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/lean-nba-agent-company-structure-plan",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/lean-nba-agent-company-structure-plan/","children":"Lean NBA agent company structure plan"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan/","children":"NBA agent company structure plan"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","project",{"children":"project"}],["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","projections",{"children":"projections"}]]}]]}]]}]
+6:["$","$L7",null,{"children":["$","$8",null,{"name":"Next.MetadataOutlet","children":"$@9"}]}]
+9:null

@@ -1,0 +1,350 @@
+1:"$Sreact.fragment"
+2:I[70359,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ReadingProgress"]
+3:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+4:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchTrigger"]
+5:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchExperience"]
+6:I[39756,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+7:I[37457,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+c:I[68027,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default",1]
+:HL["/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","style"]
+:HL["/rome-wiki/_next/static/media/5f402bd2d8eef81a-s.p.16whm0euli40m.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/9433d1a810498265-s.p.0h26ys03~gfbk.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"P":null,"c":["","articles","sports","football","tottenham","tottenham-2026-27-fixture-map",""],"q":"","i":false,"f":[[["",{"children":["articles",{"children":[["slug","sports/football/tottenham/tottenham-2026-27-fixture-map","c",null],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",16],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/rome-wiki/_next/static/chunks/14kbu79734gwo.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable newsreader_dccbc19-module__XM85IG__variable","children":[["$","a",null,{"href":"#main-content","className":"skip-link","children":"Skip to the article"}],["$","$L2",null,{}],["$","header",null,{"className":"site-header","children":[["$","div",null,{"className":"utility-strip","children":[["$","span",null,{"children":"Established 2026"}],["$","span",null,{"className":"utility-center","children":"A living external brain"}],["$","span",null,{"children":[980," articles · ","Jul 10, 2026"]}]]}],["$","div",null,{"className":"navigation-row","children":[["$","$L3",null,{"href":"/","className":"small-wordmark","aria-label":"Rome front page","children":"Rome"}],["$","nav",null,{"className":"primary-nav","aria-label":"Primary navigation","children":[["$","$L3",null,{"href":"/#reading-rooms","children":"Reading rooms"}],["$","$L3",null,{"href":"/#universe-map","children":"Map"}],["$","$L3",null,{"href":"/#updates","children":"Updates"}],["$","$L3",null,{"href":"/about/","children":"About"}]]}],["$","$L4",null,{}]]}],["$","nav",null,{"className":"topic-rail","aria-label":"Reading rooms","children":[["$","$L3","AI",{"href":"/topics/ai/","children":"AI"}],["$","$L3","Basketball",{"href":"/topics/basketball/","children":"Basketball"}],["$","$L3","Classical Music",{"href":"/topics/classical-music/","children":"Classical Music"}],["$","$L3","Crypto",{"href":"/topics/crypto/","children":"Crypto"}],["$","$L3","History",{"href":"/topics/history/","children":"History"}],["$","$L3","Investing",{"href":"/topics/investing/","children":"Investing"}],["$","$L3","Markets",{"href":"/topics/markets/","children":"Markets"}],["$","$L3","Mathematics",{"href":"/topics/mathematics/","children":"Mathematics"}],["$","$L3","Piano",{"href":"/topics/piano/","children":"Piano"}],["$","$L3","Politics",{"href":"/topics/politics/","children":"Politics"}],["$","$L3","Sports",{"href":"/topics/sports/","children":"Sports"}],["$","$L3","String Theory",{"href":"/topics/string-theory/","children":"String Theory"}],["$","$L3","Weather",{"href":"/topics/weather/","children":"Weather"}]]}]]}],["$","$L5",null,{}],["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main-content","className":"not-found-page page-shell narrow-page","children":[["$","p",null,{"className":"eyebrow","children":"404 · End of the footpath"}],["$","h1",null,{"children":"This page has not entered Rome yet."}],["$","p",null,{"children":["Open search with ",["$","kbd",null,{"children":"⌘ K"}],", explore the universe map, or return to the front page and follow another link."]}],["$","$L3",null,{"href":"/","className":"button-link","children":"Return to Rome"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","footer",null,{"className":"site-footer","children":[["$","div",null,{"children":[["$","$L3",null,{"href":"/","className":"footer-wordmark","children":"Rome"}],["$","p",null,{"children":"Andrew Park's second brain, set in type."}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"This edition"}],["$","p",null,{"children":[980," articles across ",16," reading rooms, with"," ",431," open research threads."]}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Ownership & provenance"}],["$","p",null,{"children":"Rome belongs to Andrew Park. Every article also carries its authoring source."}]]}],["$","div",null,{"className":"footer-links","children":[["$","$L3",null,{"href":"/about/","children":"About Rome"}],["$","$L3",null,{"href":"/#universe-map","children":"Explore the map"}]]}]]}]]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["$L8",{"children":["$L9",{},null,false,null]},null,false,"$@a"]},null,false,"$@a"]},null,false,null],"$Lb",false]],"m":"$undefined","G":["$c",["$Ld"]],"S":true,"h":null,"s":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"X6ZOd3MQP6S0cUC6FLNdS"}
+f:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+10:"$Sreact.suspense"
+13:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ViewportBoundary"]
+15:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"MetadataBoundary"]
+8:["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}]
+9:["$","$1","c",{"children":["$Le",null,["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]]}]
+12:[]
+a:"$W12"
+b:["$","$1","h",{"children":[null,["$","$L13",null,{"children":"$L14"}],["$","div",null,{"hidden":true,"children":["$","$L15",null,{"children":["$","$10",null,{"name":"Next.Metadata","children":"$L16"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+d:["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+e:["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L3",null,{"href":"/","children":"Front page"}],["$","$L3",null,{"href":"/topics/sports/","children":"Sports"}],[["$","span","Football",{"children":"Football"}],["$","span","Tottenham",{"children":"Tottenham"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Sports"]}],["$","h1",null,{"children":"Tottenham 2026-27 fixture map"}],["$","p",null,{"className":"article-deck","children":"Tottenham's 2026–27 calendar is unusually legible because there is no European competition: the principal scheduling problem is a 38-match league campaign intersecting with two domestic cups, three international windows, and a concentrated winter run."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[13," min · ","2,779"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","calendar-at-a-glance",{"className":"toc-depth-2","children":["$","a",null,{"href":"#calendar-at-a-glance","children":"Calendar at a glance"}]}],["$","li","premier-league-fixtures",{"className":"toc-depth-3","children":["$","a",null,{"href":"#premier-league-fixtures","children":"Premier League fixtures"}]}],["$","li","the-calendars-mechanism",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-calendars-mechanism","children":"The calendar's mechanism"}]}],["$","li","no-europe-changes-the-weekly-operating-rhythm",{"className":"toc-depth-3","children":["$","a",null,{"href":"#no-europe-changes-the-weekly-operating-rhythm","children":"No Europe changes the weekly operating rhythm"}]}],["$","li","the-long-autumn-international-window-creates-two-mini-seasons",{"className":"toc-depth-3","children":["$","a",null,{"href":"#the-long-autumn-international-window-creates-two-mini-seasons","children":"The long autumn international window creates two mini-seasons"}]}],["$","li","december-and-early-january-are-the-core-congestion-block",{"className":"toc-depth-3","children":["$","a",null,{"href":"#december-and-early-january-are-the-core-congestion-block","children":"December and early January are the core congestion block"}]}],["$","li","cup-progress-can-rewrite-the-spring",{"className":"toc-depth-3","children":["$","a",null,{"href":"#cup-progress-can-rewrite-the-spring","children":"Cup progress can rewrite the spring"}]}],["$","li","opponent-and-venue-clusters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#opponent-and-venue-clusters","children":"Opponent and venue clusters"}]}],["$","li","how-to-use-this-map",{"className":"toc-depth-2","children":["$","a",null,{"href":"#how-to-use-this-map","children":"How to use this map"}]}],["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","calendar-at-a-glance",{"className":"toc-depth-2","children":["$","a",null,{"href":"#calendar-at-a-glance","children":"Calendar at a glance"}]}],["$","li","premier-league-fixtures",{"className":"toc-depth-3","children":["$","a",null,{"href":"#premier-league-fixtures","children":"Premier League fixtures"}]}],["$","li","the-calendars-mechanism",{"className":"toc-depth-2","children":"$L17"}],"$L18","$L19","$L1a","$L1b","$L1c","$L1d","$L1e","$L1f","$L20"]}]]}],"$L21","$L22"]}]]}]
+17:["$","a",null,{"href":"#the-calendars-mechanism","children":"The calendar's mechanism"}]
+18:["$","li","no-europe-changes-the-weekly-operating-rhythm",{"className":"toc-depth-3","children":["$","a",null,{"href":"#no-europe-changes-the-weekly-operating-rhythm","children":"No Europe changes the weekly operating rhythm"}]}]
+19:["$","li","the-long-autumn-international-window-creates-two-mini-seasons",{"className":"toc-depth-3","children":["$","a",null,{"href":"#the-long-autumn-international-window-creates-two-mini-seasons","children":"The long autumn international window creates two mini-seasons"}]}]
+1a:["$","li","december-and-early-january-are-the-core-congestion-block",{"className":"toc-depth-3","children":["$","a",null,{"href":"#december-and-early-january-are-the-core-congestion-block","children":"December and early January are the core congestion block"}]}]
+1b:["$","li","cup-progress-can-rewrite-the-spring",{"className":"toc-depth-3","children":["$","a",null,{"href":"#cup-progress-can-rewrite-the-spring","children":"Cup progress can rewrite the spring"}]}]
+1c:["$","li","opponent-and-venue-clusters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#opponent-and-venue-clusters","children":"Opponent and venue clusters"}]}]
+1d:["$","li","how-to-use-this-map",{"className":"toc-depth-2","children":["$","a",null,{"href":"#how-to-use-this-map","children":"How to use this map"}]}]
+1e:["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}]
+1f:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+20:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+23:T54b3,<p>Up: <a href="/rome-wiki/articles/sports/football/tottenham/tottenham-hotspur-2026-27/" class="wiki-link">Tottenham Hotspur 2026-27</a></p>
+<aside class="callout callout-warning">
+<p class="callout-title">Warning</p>
+<p>Provisional calendar
+Every date and kickoff below remains subject to change. Only the first five league matches have completed the initial UK broadcast-selection process as of 9 July 2026. Recheck the official Tottenham fixture page before making travel plans.</p>
+</aside>
+<h2 id="calendar-at-a-glance">Calendar at a glance</h2>
+<p>Tottenham begin away to Brentford at 17:30 UK on Saturday 22 August 2026 and finish away to Aston Villa at 16:00 UK on Sunday 30 May 2027. The Premier League campaign spans 33 weekends and five midweek match rounds. Unlike nine other Premier League clubs, Spurs have no UEFA competition in 2026–27. That sends them into the Carabao Cup in round two rather than round three and leaves most European midweeks open for training, recovery, and postponed matches.</p>
+<p>The absence of Europe is an advantage only in a relative sense. Spurs can still face six matches in 19 days from 19 December through 6 January, before a possible FA Cup third-round tie on 9–10 January. Progress to the Carabao Cup semi-finals would add two more January/February matches. The meaningful map is therefore not simply the sequence of opponents; it is the set of points at which cup progress, international duty, television selection, or another club's European commitments can alter rest and preparation.</p>
+<h3 id="premier-league-fixtures">Premier League fixtures</h3>
+<p>Times are UK local time. <code>15:00*</code> identifies the standard placeholder time supplied at fixture release, not a confirmed kickoff. The August and September television selections announced on 7 July are shown without an asterisk.</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Opponent</th>
+<th>Venue</th>
+<th>Kickoff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sat 22 Aug 2026</td>
+<td>Brentford</td>
+<td>Away</td>
+<td>17:30</td>
+</tr>
+<tr>
+<td>Sat 29 Aug 2026</td>
+<td>Newcastle United</td>
+<td>Home</td>
+<td>17:30</td>
+</tr>
+<tr>
+<td>Sat 5 Sep 2026</td>
+<td>Nottingham Forest</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 12 Sep 2026</td>
+<td>Everton</td>
+<td>Home</td>
+<td>17:30</td>
+</tr>
+<tr>
+<td>Sat 19 Sep 2026</td>
+<td>Aston Villa</td>
+<td>Home</td>
+<td>12:30</td>
+</tr>
+<tr>
+<td>Sat 10 Oct 2026</td>
+<td>Manchester United</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 17 Oct 2026</td>
+<td>Coventry City</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 24 Oct 2026</td>
+<td>Chelsea</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 31 Oct 2026</td>
+<td>Crystal Palace</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 7 Nov 2026</td>
+<td>Leeds United</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 21 Nov 2026</td>
+<td>Ipswich Town</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 28 Nov 2026</td>
+<td>Sunderland</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Wed 2 Dec 2026</td>
+<td>Fulham</td>
+<td>Home</td>
+<td>20:00*</td>
+</tr>
+<tr>
+<td>Sat 5 Dec 2026</td>
+<td>Arsenal</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 12 Dec 2026</td>
+<td>Hull City</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 19 Dec 2026</td>
+<td>Liverpool</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 26 Dec 2026</td>
+<td>AFC Bournemouth</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Wed 30 Dec 2026</td>
+<td>Brighton &#x26; Hove Albion</td>
+<td>Home</td>
+<td>20:00*</td>
+</tr>
+<tr>
+<td>Sat 2 Jan 2027</td>
+<td>Manchester City</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Wed 6 Jan 2027</td>
+<td>Fulham</td>
+<td>Away</td>
+<td>20:00*</td>
+</tr>
+<tr>
+<td>Sat 16 Jan 2027</td>
+<td>Leeds United</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 23 Jan 2027</td>
+<td>Crystal Palace</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 30 Jan 2027</td>
+<td>Sunderland</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 6 Feb 2027</td>
+<td>Ipswich Town</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Wed 10 Feb 2027</td>
+<td>Manchester City</td>
+<td>Home</td>
+<td>20:00*</td>
+</tr>
+<tr>
+<td>Sat 20 Feb 2027</td>
+<td>Brighton &#x26; Hove Albion</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 27 Feb 2027</td>
+<td>Liverpool</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Wed 3 Mar 2027</td>
+<td>AFC Bournemouth</td>
+<td>Away</td>
+<td>20:00*</td>
+</tr>
+<tr>
+<td>Sat 13 Mar 2027</td>
+<td>Nottingham Forest</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 20 Mar 2027</td>
+<td>Everton</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 10 Apr 2027</td>
+<td>Brentford</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 17 Apr 2027</td>
+<td>Newcastle United</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 24 Apr 2027</td>
+<td>Hull City</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 1 May 2027</td>
+<td>Arsenal</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 8 May 2027</td>
+<td>Chelsea</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sat 15 May 2027</td>
+<td>Coventry City</td>
+<td>Away</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sun 23 May 2027</td>
+<td>Manchester United</td>
+<td>Home</td>
+<td>15:00*</td>
+</tr>
+<tr>
+<td>Sun 30 May 2027</td>
+<td>Aston Villa</td>
+<td>Away</td>
+<td>16:00</td>
+</tr>
+</tbody>
+</table>
+<p>The table is a snapshot, not a promise. Weekend and Bank Holiday matches were initially assigned 15:00 and midweek matches 20:00 unless otherwise stated. Broadcast choices, policing, cup progression, and the schedule of opponents in UEFA competition can move dates or times. The Premier League says it aims to provide at least six weeks' notice through the end of 2026 and five weeks from January, but late cup-driven changes remain possible.</p>
+<h2 id="the-calendars-mechanism">The calendar's mechanism</h2>
+<h3 id="no-europe-changes-the-weekly-operating-rhythm">No Europe changes the weekly operating rhythm</h3>
+<p>The strongest structural fact is Tottenham's absence from UEFA competition. Spurs are not listed among the five Champions League clubs, three Europa League clubs, or Brighton, the Conference League entrant. This removes the repeated Tuesday–Thursday match demand that shapes the calendar for almost half the league. It also means Spurs enter the Carabao Cup on 26 August, between the Brentford opener and Newcastle at home.</p>
+<p>That difference matters in three ways. First, most ordinary weeks can support a full training cycle rather than a recovery–travel–match cycle. This is especially useful early in a new coaching project, when repeated pitch time can be more valuable than video-only preparation. Second, opponents in Europe may have less preparation or recovery before playing Spurs. That is not a fixed advantage: UEFA participants often possess deeper squads, and European scheduling rules can move their league games to protect minimum rest. Third, domestic cup progress has a larger marginal effect on Tottenham's calendar because it converts otherwise open midweeks into matches.</p>
+<p>The 26 August Carabao Cup second round creates the first immediate test. It falls four days after Brentford and three days before Newcastle under the published dates. Round three is split across 9 and 16 September because of European scheduling. Spurs' league dates on 12 and 19 September mean either cup slot would produce a three-match week, while the precise rest intervals depend on which date the draw assigns. A fourth-round tie is scheduled for 28 October, between Chelsea away and Crystal Palace at home. The fifth round on 16 December lies between Hull away and Liverpool away. A semi-final run would add legs on 13 January and 3 February, while the final on 21 March would displace Everton away from the league schedule.</p>
+<h3 id="the-long-autumn-international-window-creates-two-mini-seasons">The long autumn international window creates two mini-seasons</h3>
+<p>The 2026 international calendar replaces the familiar separate September and October breaks with a single window from 21 September through 6 October, allowing up to four national-team matchdays. Tottenham's published league sequence stops after Aston Villa at home on 19 September and resumes at Manchester United away on 10 October. For players not called up, that is a long club training block. For senior internationals, it may mean four matches, travel, and only a short reintegration period before Old Trafford.</p>
+<p>This asymmetry is more important than the apparent 20-day gap between league fixtures. The coaching staff does not receive the entire squad for a three-week camp. It receives a partial group while selected internationals accumulate playing and travel load. Any evaluation of Tottenham's performance immediately after the break should therefore distinguish between team-level preparation time and player-level recovery.</p>
+<p>The November window runs 9–17 November, between Leeds away on 7 November and Ipswich at home on 21 November. The spring window runs 22–30 March, after Everton away and before the league returns on 10 April. The latter break precedes the final eight-match run-in. It may offer recovery for non-internationals, but it can also return important players with fatigue or limited tactical rehearsal before Brentford at home.</p>
+<p>One player-level conflict is already official. Tottenham announced on 10 July that Yang Min-hyeok was selected for South Korea's under-23 squad for the Asian Games men's tournament from 15 September to 3 October. If he remains with Tottenham and joins the tournament as selected, that window overlaps Aston Villa at home on 19 September and the opening portion of the extended international break. The selection is an availability fact, not an injury and not proof of the exact travel or release dates; those details should be updated only if the club or association confirms them.</p>
+<h3 id="december-and-early-january-are-the-core-congestion-block">December and early January are the core congestion block</h3>
+<p>The league's five midweek rounds include Fulham at home on 2 December, Brighton at home on 30 December, Fulham away on 6 January, Manchester City at home on 10 February, and Bournemouth away on 3 March. The winter block is the densest because several ordinary weekend rounds surround three of those midweeks.</p>
+<p>From Sunderland away on 28 November to Arsenal at home on 5 December, Spurs are scheduled for three league matches in eight days. The north London derby follows Fulham by only three days under the provisional dates. A Carabao Cup fifth-round appearance on 16 December would sit between Hull away on 12 December and Liverpool away on 19 December. Tottenham then play Bournemouth on Boxing Day, Brighton four days later, Manchester City three days after that, and Fulham four days later. The Premier League guarantees at least 60 hours between festive match rounds, but that standard is a floor, not a normal weekly recovery cycle.</p>
+<p>The FA Cup third round on 9–10 January comes only three or four days after Fulham away. If Tottenham also reach the Carabao Cup semi-final, the first leg follows on 13 January. In the maximal domestic-cup scenario, the team could move almost continuously from the 19 December Liverpool trip through mid-January. This is the clearest period in which <a href="/rome-wiki/articles/sports/football/tottenham/tottenham-2026-27-squad-architecture/" class="wiki-link">squad depth</a>, rotation, and availability can affect results independently of the preferred first XI.</p>
+<h3 id="cup-progress-can-rewrite-the-spring">Cup progress can rewrite the spring</h3>
+<p>The FA Cup's protected dates are 9–10 January, 13–14 February, 6–7 March, 3–4 April, 24–25 April, and 22 May. Tottenham's league fixtures do not appear on the first four of those weekends, which limits immediate collisions. The semi-final weekend coincides with Premier League Matchweek 33, when Spurs are listed to host Hull City, and the final precedes Matchweek 37, when Spurs are listed to host Manchester United on 23 May. The Premier League explicitly says league fixtures involving semi-finalists or finalists will be rearranged.</p>
+<p>That creates two conditional branches. An FA Cup semi-final would move Hull at home into an available midweek and compress the run-in. Reaching the final would move Manchester United at home and place another high-stakes match close to the league finale at Aston Villa. A Carabao Cup final appearance would similarly move Everton away from 20 March. These are not forecast changes; they are schedule dependencies worth tracking.</p>
+<h2 id="opponent-and-venue-clusters">Opponent and venue clusters</h2>
+<p>The opening five matches are London away, then three home matches in four rounds, with Nottingham Forest the only trip between Newcastle, Everton, and Aston Villa at Tottenham Hotspur Stadium. The initial broadcast changes preserve every date, so there is no current postponement to reconcile. The three selected home games are Newcastle at 17:30, Everton at 17:30, and Aston Villa at 12:30.</p>
+<p>October provides a different test: Manchester United away after the long international window, Coventry at home, Chelsea away, a possible Carabao Cup fourth round, then Crystal Palace at home. The issue is not only opponent strength. It is the alternation between a post-international return, a promoted opponent, a London away match, and a conditional cup midweek. This can reveal whether Tottenham maintain performance across different preparation lengths and match demands.</p>
+<p>The league schedule places both north London derbies adjacent to midweek rounds or cup-risk periods. Arsenal at home on 5 December follows Fulham at home on 2 December. Arsenal away on 1 May follows the FA Cup semi-final weekend, when Spurs' Hull fixture could be moved if Tottenham advance. The first derby's short turnaround is definite at the match-round level; the second's exact context is conditional on cup progress and television selection.</p>
+<p>The closing six league fixtures are Newcastle away, Hull at home, Arsenal away, Chelsea at home, Coventry away, Manchester United at home, and then Aston Villa away if counting the final seven. Four of those opponents are established high-resource clubs, while Hull and Coventry are newly promoted. The sequence makes simplistic “easy” and “hard” labels unreliable. Relegation and qualification incentives will be clearer only in spring, and cup rearrangements may change the rest intervals between them.</p>
+<p>The three promoted teams are distributed rather than clustered: Coventry at home in October and away in May; Ipswich at home in November and away in February; Hull away in December and at home in April. This offers spaced checkpoints rather than one concentrated promoted-team block. Results against those sides may matter greatly to the table, but the fixture map itself cannot establish their playing level or tactical style before the season begins.</p>
+<h2 id="how-to-use-this-map">How to use this map</h2>
+<p>This note should be updated by changing facts, not by accumulating stale preview prose. A fixture change should update the table and be logged with the official announcement date. A cup draw should replace the generic round placeholder with opponent, venue, and confirmed time. A postponed league game should remain visible with its old date marked postponed until a replacement is official.</p>
+<p>For analysis, compare matches by available preparation and recovery rather than by calendar month alone. Useful categories include:</p>
+<ul>
+<li><strong>Full club week:</strong> no midweek match and no immediate international return.</li>
+<li><strong>Domestic-cup turnaround:</strong> league match within three or four days of a Carabao or FA Cup tie.</li>
+<li><strong>Post-international return:</strong> first fixture after a FIFA window, with player-level travel noted separately.</li>
+<li><strong>Festive compression:</strong> the 19 December–6 January league sequence, plus any cup tie immediately after it.</li>
+<li><strong>Conditional rearrangement:</strong> Everton away, Hull at home, or Manchester United at home if Tottenham reach the relevant cup stages.</li>
+</ul>
+<p>These categories do not prove fatigue or explain a result by themselves. They identify when rotation, player availability, opponent rest, and training time deserve explicit treatment. Claims that congestion caused an injury or defeat require evidence beyond proximity on the calendar.</p>
+<h2 id="why-it-matters">Why it matters</h2>
+<p>The fixture map is the season's constraint diagram. Tottenham's lack of European football grants more open midweeks and, potentially, more time to install <a href="/rome-wiki/articles/sports/football/tottenham/roberto-de-zerbi-at-tottenham/" class="wiki-link">Roberto De Zerbi's</a> methods. It also raises the opportunity cost of domestic-cup elimination: progressing in the cups uses the schedule capacity that Europe would otherwise occupy, while early exits would leave a league-focused calendar.</p>
+<p>The schedule also prevents misleading comparisons. A performance after the four-match international window is not produced under the same conditions as one after a full training week. Arsenal at home after a Wednesday league game is not an ordinary weekend fixture. Manchester City away on 2 January sits inside the season's most compressed sequence. If those contexts are recorded before results arrive, they can discipline later analysis and reduce hindsight storytelling.</p>
+<p>Finally, the map shows what is truly known. Dates beyond September are placeholders, cup opponents are unknown, and several spring league fixtures could move if Tottenham progress. Treating uncertainty as part of the schedule is more accurate than publishing a static list that will quietly become wrong.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://www.tottenhamhotspur.com/news/1074144/fixtures-202627-list-in-full" target="_blank" rel="noopener noreferrer">Tottenham Hotspur, “Fixtures 2026/27 – list in full”</a>, 19 June 2026 (accessed 9 July 2026). Official provisional Tottenham league calendar and domestic-cup placeholders; confirms no European football and Carabao Cup round-two entry.</li>
+<li><a href="https://www.tottenhamhotspur.com/news/1076768/fixture-changes-august-and-september" target="_blank" rel="noopener noreferrer">Tottenham Hotspur, “Fixture changes | August and September”</a>, 7 July 2026 (accessed 9 July 2026). Official confirmation of Newcastle, Everton, and Aston Villa kickoff changes.</li>
+<li><a href="https://www.premierleague.com/en/news/4675097/all-380-fixtures-for-202627-premier-league-season/" target="_blank" rel="noopener noreferrer">Premier League, “All 380 fixtures for 2026/27 Premier League season”</a>, 19 June 2026 (accessed 9 July 2026). Governing competition's complete fixture list, default kickoff convention, and change warning.</li>
+<li><a href="https://www.premierleague.com/en/news/4675508/premier-league-fixture-schedulereleased-for-season-202627" target="_blank" rel="noopener noreferrer">Premier League, “Fixture Schedule Released for Season 2026/27”</a>, 19 June 2026 (accessed 9 July 2026). Season structure, festive-rest provision, broadcast-selection timetable, and final-day time.</li>
+<li><a href="https://www.premierleague.com/en/news/4675720/how-do-other-competitions-fixtures-affect-the-premier-league-and-its-clubs" target="_blank" rel="noopener noreferrer">Premier League, “How do other competitions' fixtures affect Premier League and its clubs?”</a>, 23 June 2026 (accessed 9 July 2026). UEFA participants, domestic-cup dates, international windows, and conditional league rearrangements.</li>
+<li><a href="https://www.thefa.com/competitions/thefacup/round-dates" target="_blank" rel="noopener noreferrer">The FA, “Emirates FA Cup round dates for the 2026–27 season”</a>, accessed 9 July 2026. Official round calendar from third round through the 22 May final.</li>
+<li><a href="https://www.efl.com/news/2026/june/23/carabao-cup-round-one-draw-details-confirmed/" target="_blank" rel="noopener noreferrer">English Football League, “Carabao Cup Round One draw details confirmed”</a>, 23 June 2026 (accessed 9 July 2026). Official 2026–27 Carabao Cup round dates.</li>
+<li><a href="https://www.fifa.com/tournament-organisation/international-match-calendars" target="_blank" rel="noopener noreferrer">FIFA, “International Match Calendars”</a>, updated 29 April 2026 (accessed 9 July 2026). Official men's international windows, including 21 September–6 October and 9–17 November 2026.</li>
+<li><a href="https://www.tottenhamhotspur.com/news/1077013/yang-named-in-south-koreas-squad-for-asian-games" target="_blank" rel="noopener noreferrer">Tottenham Hotspur, “Yang named in South Korea's squad for Asian Games”</a>, 10 July 2026 (accessed 10 July 2026). Official selection and tournament dates of 15 September–3 October.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Which Carabao Cup third-round midweek will Tottenham receive if they advance from round two?</li>
+<li>Which October and later league fixtures will move after future broadcast selections?</li>
+<li>How many Tottenham players will participate in all four possible matchdays of the extended September–October international window?</li>
+<li>Will domestic-cup progress force the provisional Everton, Hull, or Manchester United league fixtures to move?</li>
+<li>Which open European midweeks will remain genuine training blocks rather than become slots for rearranged league matches?</li>
+</ul>21:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$23"}}],"$L24"]}]
+22:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","sports/football/tottenham/premier-league-schedule-congestion-through-tottenham",{"children":["$","$L3",null,{"href":"/articles/sports/football/tottenham/premier-league-schedule-congestion-through-tottenham/","children":"Premier League schedule congestion through Tottenham"}]}],["$","li","sports/football/tottenham/tottenham-hotspur-2026-27",{"children":["$","$L3",null,{"href":"/articles/sports/football/tottenham/tottenham-hotspur-2026-27/","children":"Tottenham Hotspur 2026-27"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","sports/football/tottenham/tottenham-hotspur-2026-27",{"children":["$","$L3",null,{"href":"/articles/sports/football/tottenham/tottenham-hotspur-2026-27/","children":"Tottenham Hotspur 2026-27"}]}],["$","li","sports/football/tottenham/roberto-de-zerbi-at-tottenham",{"children":["$","$L3",null,{"href":"/articles/sports/football/tottenham/roberto-de-zerbi-at-tottenham/","children":"Roberto De Zerbi at Tottenham"}]}],["$","li","sports/football/tottenham/tottenham-2026-27-squad-architecture",{"children":["$","$L3",null,{"href":"/articles/sports/football/tottenham/tottenham-2026-27-squad-architecture/","children":"Tottenham 2026-27 squad architecture"}]}],["$","li","sports/football/tottenham/premier-league-schedule-congestion-through-tottenham",{"children":["$","$L3",null,{"href":"/articles/sports/football/tottenham/premier-league-schedule-congestion-through-tottenham/","children":"Premier League schedule congestion through Tottenham"}]}],["$","li","sports/football/tottenham/tottenham-centre-back-architecture-under-roberto-de-zerbi",{"children":["$","$L3",null,{"href":"/articles/sports/football/tottenham/tottenham-centre-back-architecture-under-roberto-de-zerbi/","children":"Tottenham centre-back architecture under Roberto De Zerbi"}]}],["$","li","sports/football/tottenham/tottenham-financial-and-governance-decisions",{"children":["$","$L3",null,{"href":"/articles/sports/football/tottenham/tottenham-financial-and-governance-decisions/","children":"Tottenham financial and governance decisions"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","sports",{"children":"sports"}],["$","li","football",{"children":"football"}],["$","li","premier-league",{"children":"premier-league"}],["$","li","tottenham-hotspur",{"children":"tottenham-hotspur"}],["$","li","fixtures",{"children":"fixtures"}]]}]]}]]}]
+24:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L3",null,{"href":"/articles/sports/football/tottenham/roberto-de-zerbi-at-tottenham/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Roberto De Zerbi at Tottenham"}]]}],["$","$L3",null,{"href":"/articles/sports/football/tottenham/tottenham-2026-27-squad-architecture/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Tottenham 2026-27 squad architecture"}]]}]]}]
+14:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+11:null
+16:[["$","title","0",{"children":"Tottenham 2026-27 fixture map · Rome"}],["$","meta","1",{"name":"description","content":"Tottenham's 2026–27 calendar is unusually legible because there is no European competition: the principal scheduling problem is a 38-match league campaign intersecting with two domestic cups, three international windows, and a concentrated winter run."}],["$","meta","2",{"name":"application-name","content":"Rome"}],["$","meta","3",{"name":"author","content":"Andrew Park"}],["$","meta","4",{"name":"keywords","content":"Rome,wiki,second brain,knowledge garden,research"}],["$","meta","5",{"name":"creator","content":"Andrew Park"}],["$","meta","6",{"name":"publisher","content":"Andrew Park"}],["$","meta","7",{"property":"og:title","content":"Tottenham 2026-27 fixture map"}],["$","meta","8",{"property":"og:description","content":"Tottenham's 2026–27 calendar is unusually legible because there is no European competition: the principal scheduling problem is a 38-match league campaign intersecting with two domestic cups, three international windows, and a concentrated winter run."}],["$","meta","9",{"property":"og:type","content":"article"}],["$","meta","10",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","11",{"name":"twitter:title","content":"Rome — A Living Encyclopedia"}],["$","meta","12",{"name":"twitter:description","content":"Andrew Park's second brain, set in type."}],["$","meta","13",{"name":"twitter:image","content":"http://localhost:3000/og.png"}]]

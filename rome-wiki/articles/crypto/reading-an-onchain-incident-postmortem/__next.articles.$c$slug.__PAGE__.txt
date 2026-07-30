@@ -1,0 +1,217 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+13:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+14:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/crypto/","children":"Crypto"}],[]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Crypto"]}],["$","h1",null,{"children":"Reading an onchain incident postmortem"}],["$","p",null,{"className":"article-deck","children":"An onchain incident postmortem is useful only when it reconciles intended rules, deployed state, transaction evidence, economic loss, response actions, and durable remediation without confusing the project's narrative with the complete record."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 10, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[14," min · ","2,908"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","start-with-the-systems-promised-invariant",{"className":"toc-depth-2","children":["$","a",null,{"href":"#start-with-the-systems-promised-invariant","children":"Start with the system's promised invariant"}]}],["$","li","build-four-synchronized-timelines",{"className":"toc-depth-2","children":["$","a",null,{"href":"#build-four-synchronized-timelines","children":"Build four synchronized timelines"}]}],["$","li","distinguish-trigger-enabling-condition-root-cause-and-amplification",{"className":"toc-depth-2","children":["$","a",null,{"href":"#distinguish-trigger-enabling-condition-root-cause-and-amplification","children":"Distinguish trigger, enabling condition, root cause, and amplification"}]}],["$","li","verify-identity-before-tracing-value",{"className":"toc-depth-2","children":["$","a",null,{"href":"#verify-identity-before-tracing-value","children":"Verify identity before tracing value"}]}],["$","li","reconcile-loss-as-a-balance-sheet",{"className":"toc-depth-2","children":["$","a",null,{"href":"#reconcile-loss-as-a-balance-sheet","children":"Reconcile loss as a balance sheet"}]}],["$","li","evaluate-the-response-as-a-control-system",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evaluate-the-response-as-a-control-system","children":"Evaluate the response as a control system"}]}],["$","li","test-whether-remediation-is-durable",{"className":"toc-depth-2","children":["$","a",null,{"href":"#test-whether-remediation-is-durable","children":"Test whether remediation is durable"}]}],["$","li","read-omissions-and-rhetoric-carefully",{"className":"toc-depth-2","children":["$","a",null,{"href":"#read-omissions-and-rhetoric-carefully","children":"Read omissions and rhetoric carefully"}]}],["$","li","a-reusable-reading-sequence",{"className":"toc-depth-2","children":["$","a",null,{"href":"#a-reusable-reading-sequence","children":"A reusable reading sequence"}]}],["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","start-with-the-systems-promised-invariant",{"className":"toc-depth-2","children":["$","a",null,{"href":"#start-with-the-systems-promised-invariant","children":"Start with the system's promised invariant"}]}],["$","li","build-four-synchronized-timelines",{"className":"toc-depth-2","children":"$L3"}],"$L4","$L5","$L6","$L7","$L8","$L9","$La","$Lb","$Lc","$Ld"]}]]}],"$Le","$Lf"]}]]}],null,"$L10"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","a",null,{"href":"#build-four-synchronized-timelines","children":"Build four synchronized timelines"}]
+4:["$","li","distinguish-trigger-enabling-condition-root-cause-and-amplification",{"className":"toc-depth-2","children":["$","a",null,{"href":"#distinguish-trigger-enabling-condition-root-cause-and-amplification","children":"Distinguish trigger, enabling condition, root cause, and amplification"}]}]
+5:["$","li","verify-identity-before-tracing-value",{"className":"toc-depth-2","children":["$","a",null,{"href":"#verify-identity-before-tracing-value","children":"Verify identity before tracing value"}]}]
+6:["$","li","reconcile-loss-as-a-balance-sheet",{"className":"toc-depth-2","children":["$","a",null,{"href":"#reconcile-loss-as-a-balance-sheet","children":"Reconcile loss as a balance sheet"}]}]
+7:["$","li","evaluate-the-response-as-a-control-system",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evaluate-the-response-as-a-control-system","children":"Evaluate the response as a control system"}]}]
+8:["$","li","test-whether-remediation-is-durable",{"className":"toc-depth-2","children":["$","a",null,{"href":"#test-whether-remediation-is-durable","children":"Test whether remediation is durable"}]}]
+9:["$","li","read-omissions-and-rhetoric-carefully",{"className":"toc-depth-2","children":["$","a",null,{"href":"#read-omissions-and-rhetoric-carefully","children":"Read omissions and rhetoric carefully"}]}]
+a:["$","li","a-reusable-reading-sequence",{"className":"toc-depth-2","children":["$","a",null,{"href":"#a-reusable-reading-sequence","children":"A reusable reading sequence"}]}]
+b:["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}]
+c:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+d:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+11:T6a18,<p>Up: <a href="/rome-wiki/articles/crypto/crypto/" class="wiki-link">Crypto</a></p>
+<p>An onchain incident appears unusually observable. Transactions are public, contract code may be verified, and asset movements can often be followed block by block. That visibility is real, but it does not make interpretation automatic. The chain records what state transitions were accepted; it does not by itself identify the intended invariant, the human decision that deployed a vulnerable version, the offchain credential that was compromised, the ownership of every address, or whether affected users were ultimately made whole.</p>
+<p>A good reading therefore separates six questions: <strong>what happened, why the system accepted it, how much economic value was impaired, who could respond, what changed, and what remains unverified?</strong> A project postmortem is primary evidence about the project's own account and actions. It is not a neutral audit. Treating it as one layer in an evidence stack produces a more reliable conclusion than either accepting it wholesale or dismissing it because the author has incentives.</p>
+<p>This note is a research method, not an exploit-reproduction guide. It deliberately keeps attack mechanics at the level needed to understand controls, losses, and remediation. During an active incident, do not publish novel operational details, interact with contracts, connect a wallet, sign messages, probe systems, or move funds. Preserve public references and defer to responsible response channels.</p>
+<h2 id="start-with-the-systems-promised-invariant">Start with the system's promised invariant</h2>
+<p>Before reading the timeline, write down the rule that was supposed to remain true. Examples include:</p>
+<ul>
+<li>a wrapped token is minted only after a valid source-chain lock or burn;</li>
+<li>withdrawals require authorization from the stated validator or signer threshold;</li>
+<li>a lending account cannot remove value while leaving debt undercollateralized;</li>
+<li>a governance proposal cannot borrow its voting majority and execute before defenders can react;</li>
+<li>an oracle-dependent action uses a sufficiently fresh and representative price;</li>
+<li>an upgrade cannot bypass the announced delay and authorization path.</li>
+</ul>
+<p>The invariant is more informative than a label such as “smart-contract hack.” A bridge can fail because signatures were compromised, because verification logic accepted an invalid message, because initialization established an unsafe trusted value, or because a privileged upgrade changed the rules. Those are distinct control failures even if each ends with assets leaving a bridge.</p>
+<p>Write the invariant as a falsifiable sentence. Then ask which accepted state transition contradicted it. This prevents a common analytical error: describing the attacker's sequence while never stating why the protocol believed the sequence was legitimate. The decisive fact is usually not that someone called a function; it is that the system authorized an outcome its economic design promised to reject.</p>
+<p>The invariant also bounds the investigation. <a href="/rome-wiki/articles/crypto/oracle-bridge-and-sequencer-risk/" class="wiki-link">Oracle bridge and sequencer risk</a> shows how one position may depend on several state machines. A lending loss after a bridge failure may involve a sound lending contract accepting an impaired representation at a stale parent-asset price. The direct bridge defect and the downstream credit loss belong in the same incident graph but should not be collapsed into one root cause.</p>
+<h2 id="build-four-synchronized-timelines">Build four synchronized timelines</h2>
+<p>Do not begin with a single prose chronology. Build four timelines and reconcile them.</p>
+<p><strong>Chain timeline.</strong> Record chain, transaction hash, block number, block timestamp, relevant contract address, event or state change, and source explorer. Separate setup transactions, first anomalous action, repetitions, swaps, bridging, pauses, upgrades, and recoveries. Block timestamps are evidence about chain ordering, not perfect wall-clock measurements. Reorganizations, multiple chains, sequencer ordering, and delayed finality can complicate comparison.</p>
+<p><strong>Control timeline.</strong> Record deployment, initialization, upgrades, signer or validator changes, governance votes, timelock operations, emergency actions, oracle changes, and configuration updates. A vulnerability may have existed for months while the exploitable state was introduced by a later upgrade or permission change. The deployed bytecode and live configuration matter more than the version that documentation describes.</p>
+<p><strong>Communication timeline.</strong> Preserve the first acknowledgement, pause notice, preliminary diagnosis, loss estimate, recovery plan, postmortem, and later corrections. Use publication times and archived URLs where possible. Do not silently apply a final narrative to what responders knew earlier. A delayed warning and a prompt technical fix are different facts.</p>
+<p><strong>Economic timeline.</strong> Track assets removed, assets swapped, liabilities created, collateral impairment, recovery, backstop funding, reimbursements, and residual claims. Use quantities and valuation timestamps separately. “$100 million lost” may mean value at execution, value at announcement, gross outflow, net unrecovered assets, or user claims. These are not interchangeable.</p>
+<p>Only after the four timelines align should they be compressed into prose. A compact evidence table is often enough:</p>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Exact object</th>
+<th>Time basis</th>
+<th>Primary evidence</th>
+<th>Independent check</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unauthorized issuance occurred</td>
+<td>token, chain, contracts, transactions</td>
+<td>block range</td>
+<td>logs and verified code</td>
+<td>separate trace or analyst</td>
+<td>high/medium/low</td>
+</tr>
+<tr>
+<td>Emergency pause executed</td>
+<td>controller and pause transaction</td>
+<td>block and UTC</td>
+<td>transaction plus project notice</td>
+<td>contract state</td>
+<td>high</td>
+</tr>
+<tr>
+<td>Users remain impaired</td>
+<td>asset and claim class</td>
+<td>stated as-of time</td>
+<td>recovery accounting</td>
+<td>liability reconciliation</td>
+<td>provisional</td>
+</tr>
+</tbody>
+</table>
+<p>The table forces every claim to name its object. It also exposes gaps: a postmortem may explain code while omitting the exact deployment, or announce reimbursement while omitting claim eligibility and funding.</p>
+<h2 id="distinguish-trigger-enabling-condition-root-cause-and-amplification">Distinguish trigger, enabling condition, root cause, and amplification</h2>
+<p>“Root cause” is often used too broadly. A disciplined postmortem separates at least four layers.</p>
+<p>The <strong>trigger</strong> is the action that began the observed failure: an invalid message was submitted, a compromised signer threshold authorized a withdrawal, a governance proposal executed, or a price moved through a fragile market.</p>
+<p>The <strong>enabling condition</strong> is the live state that allowed that action to succeed: unsafe initialization, insufficient validation, excessive privilege, a weak signer topology, stale pricing, missing caps, or a vulnerable deployed version.</p>
+<p>The <strong>root causes</strong> are the technical and organizational reasons the enabling condition reached production and remained undetected. These may include an incomplete threat model, an upgrade outside the audited commit, tests that asserted happy paths but not invariants, poor key separation, ambiguous ownership, missing deployment verification, or response authority that could not act quickly.</p>
+<p>The <strong>amplifiers</strong> determine impact after the first failure: unlimited minting or withdrawal capacity, deep integration of the impaired asset, no rate limit, thin liquidity, automated liquidation, repeated public transactions, common signers, and delayed communication. Amplifiers are not necessarily the original bug, but remediation that fixes only the original line of code leaves the loss distribution largely unchanged for the next defect.</p>
+<p>Nomad's project root-cause analysis is a useful example of this layering. Its account attributes fraudulent message processing to initialization and message-status behavior following an upgrade. The broader lesson is not merely “check zero values.” A reader should also ask which deployed version was audited, which invariant test should have rejected an unproven message, why the upgrade process permitted the state, whether monitoring detected the first invalid acceptance, and why repeated transactions could continue. The project account is essential primary evidence, but those process questions require code, deployment, audit, and independent review.</p>
+<p>Wormhole's report describes unauthorized wrapped-ETH minting through a verification failure and subsequent replenishment by Jump Crypto. That separates a protocol-integrity event from a balance-sheet response: restoring backing reduces holder impairment but does not erase the fact that the verification invariant failed. Ronin's recovery account similarly describes revised controls and bridge reopening after the validator compromise. Reopening, recapitalization, and remediation are three different gates; none proves the other two.</p>
+<h2 id="verify-identity-before-tracing-value">Verify identity before tracing value</h2>
+<p>Symbols are not assets and addresses are not self-explanatory. For every affected object, establish the chain, canonical contract, proxy and implementation relationship, token decimals, deployment transaction, privileged controller, and whether it is native, wrapped, bridged, receipt-like, or synthetic. <a href="/rome-wiki/articles/crypto/wrapped-assets-and-duplicate-crypto-exposure/" class="wiki-link">Wrapped assets and duplicate crypto exposure</a> explains why identical tickers can represent different claims.</p>
+<p>When a proxy is involved, verified source for the implementation is not enough. Confirm which implementation the proxy referenced during the incident and whether an upgrade occurred before or after the relevant blocks. When a multisig or governance contract acted, identify the threshold and the onchain operation without seeking private signer details. <a href="/rome-wiki/articles/crypto/governance-capture-and-admin-key-risk/" class="wiki-link">Governance capture and admin-key risk</a> provides the control vocabulary.</p>
+<p>Transaction traces are interpretations produced by clients, explorers, or analytics tools. Preserve the raw transaction hash and block context, record the tool and retrieval time, and cross-check consequential decoding. Internal calls, delegate calls, token decimal mistakes, rebasing balances, fee-on-transfer behavior, and cross-chain representations can make a visually plausible trace economically wrong.</p>
+<p>Address labels are claims. “Attacker,” “whitehat,” “team,” “market maker,” and “recovery wallet” require attribution evidence. An address can receive funds without controlling the initiating exploit, and an exchange deposit address does not identify the depositor publicly. Prefer neutral labels such as “recipient address A” until a project, court filing, law-enforcement record, signed statement, or strong independent analysis supports a role.</p>
+<h2 id="reconcile-loss-as-a-balance-sheet">Reconcile loss as a balance sheet</h2>
+<p>The headline number is usually the least stable fact. Construct an asset-by-asset reconciliation:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>gross unauthorized outflow</mtext><mo>−</mo><mtext>immediate returns</mtext><mo>−</mo><mtext>later recoveries</mtext><mo>−</mo><mtext>unaffected or frozen balances</mtext><mo>=</mo><mtext>net unrecovered assets</mtext><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\text{gross unauthorized outflow}
+- \text{immediate returns}
+- \text{later recoveries}
+- \text{unaffected or frozen balances}
+= \text{net unrecovered assets}.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">gross unauthorized outflow</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord">immediate returns</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord">later recoveries</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">unaffected or frozen balances</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">net unrecovered assets</span></span><span class="mord">.</span></span></span></span></span>
+<p>That still may not equal user impairment. Add changes in asset prices, slippage, bad debt, unbacked representations, recovery expenses, insurance or treasury payments, new financing, and eligibility rules. State whether value is measured at execution time, a common incident timestamp, recovery time, or current as-of time. Report native units alongside dollar values so later readers can revalue rather than inherit a transient price.</p>
+<p>Avoid adding transfers that represent the same economic loss. An asset drained from a bridge, swapped through a pool, and deposited at an exchange is one flow through several addresses, not three losses. Conversely, a protocol may report net treasury loss while users hold impaired receipt tokens whose claim is not captured by treasury accounting.</p>
+<p>Backstop funding deserves its own line. If a sponsor replenishes collateral, the immediate representation may become whole while the sponsor absorbs a claim or equity loss. If governance mints new tokens, liability is redistributed through dilution. If reimbursement depends on future revenue, users hold duration and execution risk. “Fully reimbursed” should specify eligible claimants, asset and valuation basis, payment form, completion state, exclusions, and source of funds.</p>
+<h2 id="evaluate-the-response-as-a-control-system">Evaluate the response as a control system</h2>
+<p>Incident response is not only communications. Ask what authority existed and what it could actually do.</p>
+<ol>
+<li><strong>Detection:</strong> Which invariant, balance, event, or external report triggered the alert? How much time passed after the first anomalous block?</li>
+<li><strong>Containment:</strong> Could responders pause only the affected path, or did they halt an entire system? Which contracts and chains remained active?</li>
+<li><strong>Preservation:</strong> Were hashes, addresses, deployments, logs, and public notices preserved without exposing secrets or active exploit details?</li>
+<li><strong>Eradication:</strong> Was the faulty code or compromised authority removed, or merely paused?</li>
+<li><strong>Recovery:</strong> What conditions were required before restart—new deployment, audit, recapitalization, governance approval, monitoring, caps, or staged limits?</li>
+<li><strong>Learning:</strong> Did the remediation address the failure class across related contracts, or patch only the observed instance?</li>
+</ol>
+<p>Emergency power creates a tradeoff. A narrow pause can limit damage; a broad upgrade key can itself be the dominant risk. Judge the response by scope, observability, expiry, separation of duties, and whether restart required a slower independent gate. Do not infer that a system is decentralized because responders could not stop it, or safe because administrators could.</p>
+<p>NIST's incident-response guidance is not blockchain-specific, but its emphasis on integrating response across risk management is a useful external frame. Onchain systems add public state and irreversible settlement; they do not eliminate preparation, role clarity, evidence handling, communication, or lessons learned.</p>
+<h2 id="test-whether-remediation-is-durable">Test whether remediation is durable</h2>
+<p>A credible remediation maps each cause and amplifier to a control plus evidence that the control is live.</p>
+<table>
+<thead>
+<tr>
+<th>Failure layer</th>
+<th>Weak claim</th>
+<th>Stronger evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>code</td>
+<td>“bug fixed”</td>
+<td>linked change, deployed address/version, invariant test, bounded review</td>
+</tr>
+<tr>
+<td>deployment</td>
+<td>“contracts upgraded”</td>
+<td>upgrade transaction, implementation identity, initialized state</td>
+</tr>
+<tr>
+<td>authority</td>
+<td>“security improved”</td>
+<td>new threshold, signer separation policy, timelock or scoped guardian</td>
+</tr>
+<tr>
+<td>blast radius</td>
+<td>“monitoring added”</td>
+<td>caps, rate limits, pause scope, alert condition and response owner</td>
+</tr>
+<tr>
+<td>balance sheet</td>
+<td>“users protected”</td>
+<td>asset-by-asset funding and completed claims accounting</td>
+</tr>
+<tr>
+<td>process</td>
+<td>“audited”</td>
+<td>named scope, commit, date, findings disposition, deployment match</td>
+</tr>
+</tbody>
+</table>
+<p>An audit is evidence about a bounded scope, not a warranty. Confirm that the reviewed commit corresponds to the deployed implementation and configuration. A new audit can support restart while leaving key management, oracle dependence, cross-chain state, front-end compromise, or economic insolvency outside scope.</p>
+<p>Look for negative tests: invalid messages, zero or default values, repeated actions, stale prices, partial signer compromise, delayed relayers, chain reorganization, failed upgrades, and emergency-action failure. The safest public analysis identifies the invariant these tests should enforce without publishing a fresh recipe against a live system.</p>
+<p>Then ask whether the blast radius is smaller even if an unknown defect survives. Withdrawal and mint caps, delayed large actions, exposure ceilings, representation-specific oracles, circuit breakers, limited approvals, diversified signers, and staged restarts cannot make software correct, but they can convert an existential loss into a containable incident.</p>
+<h2 id="read-omissions-and-rhetoric-carefully">Read omissions and rhetoric carefully</h2>
+<p>Postmortems vary in purpose. A technical root-cause report may omit compensation; a recovery notice may omit code; a legal statement may avoid attribution; an early notice may be intentionally sparse during containment. Absence is a research gap, not automatic proof of deception.</p>
+<p>Still, recurring rhetorical substitutions are warning signs:</p>
+<ul>
+<li>“sophisticated attack” in place of the accepted-state condition;</li>
+<li>“no users lost funds” when a sponsor or treasury absorbed the loss;</li>
+<li>“funds are safe” without chain, asset, contract, and as-of scope;</li>
+<li>“audited” without commit and deployment match;</li>
+<li>“decentralized” without authority topology;</li>
+<li>“recovered” when funds are merely frozen, identified, promised, or subject to claims;</li>
+<li>“fully operational” when caps, routes, assets, or withdrawals remain restricted.</li>
+</ul>
+<p>Maintain a claim ledger with <strong>confirmed</strong>, <strong>project-asserted</strong>, <strong>independently supported</strong>, <strong>inferred</strong>, <strong>disputed</strong>, and <strong>unknown</strong> states. Update it as evidence changes; do not rewrite early uncertainty out of history. A responsible conclusion can remain narrow: the chain shows an unauthorized state transition and a pause, while attribution, total net loss, and durable remediation remain unresolved.</p>
+<h2 id="a-reusable-reading-sequence">A reusable reading sequence</h2>
+<p>For a completed incident—not an active exploit—use this order:</p>
+<ol>
+<li>Define the affected protocol, assets, chains, contracts, and time window.</li>
+<li>State the promised invariant in one sentence.</li>
+<li>Preserve primary notices, postmortems, transaction hashes, deployments, governance actions, and audit scopes.</li>
+<li>Build chain, control, communication, and economic timelines separately.</li>
+<li>Identify trigger, enabling condition, root causes, and amplifiers.</li>
+<li>Verify proxy implementations, live configuration, permissions, and representation identity at the incident blocks.</li>
+<li>Reconcile gross outflow, recoveries, liabilities, backstops, and user impairment in native units and timestamped values.</li>
+<li>Compare the project account with independent traces or reviews, resolving disagreements explicitly.</li>
+<li>Map each remediation to deployment evidence and a failure layer.</li>
+<li>Record residual risk, excluded scope, unresolved attribution, and the next falsifying check.</li>
+</ol>
+<p>This produces a postmortem reading that can inform <a href="/rome-wiki/wanted/crypto-security-incident-ledger/" class="wiki-link wiki-link-missing" title="Unwritten article — a research thread waiting to be followed">Crypto security incident ledger +</a>, protocol dossiers, and risk comparisons without turning an incident into spectacle or a trading signal.</p>
+<h2 id="why-it-matters">Why it matters</h2>
+<p>Security history is often flattened into “hacked before” or “never hacked.” Both are weak categories. A prior incident may reveal a narrow, well-understood failure followed by strong containment and verifiable redesign. A protocol with no public loss may still have concentrated authority, unlimited blast radius, and no tested response process. The quality of the postmortem and remediation changes what the historical event teaches, though it never proves future safety.</p>
+<p>For markets, incident accounting determines who bears loss. Unauthorized issuance can impair a wrapper; a stale oracle can transfer that impairment into lending bad debt; a treasury backstop can move it to tokenholders or investors; a governance mint can socialize it through dilution. Reading the full chain from technical invariant to final balance sheet prevents “recovery” language from hiding redistributed risk.</p>
+<p>The practical goal is not to award a protocol a safety score. It is to establish a reproducible record: the rule that failed, the live state that enabled failure, the economic incidence, the response authority, the controls now deployed, and the uncertainties still capable of changing the conclusion.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://csrc.nist.gov/pubs/sp/800/61/r3/final" target="_blank" rel="noopener noreferrer">NIST, “Incident Response Recommendations and Considerations for Cybersecurity Risk Management: A CSF 2.0 Community Profile” (SP 800-61 Rev. 3)</a> — authoritative general incident-response lifecycle and risk-management frame; not blockchain-specific.</li>
+<li><a href="https://medium.com/nomad-xyz-blog/nomad-bridge-hack-root-cause-analysis-875ad2e5aacd" target="_blank" rel="noopener noreferrer">Nomad, “Nomad Bridge Hack: Root Cause Analysis”</a> — project primary account of the Replica initialization and fraudulent-message acceptance failure.</li>
+<li><a href="https://medium.com/nomad-xyz-blog/the-road-to-recovery-6abe5eec8ff1" target="_blank" rel="noopener noreferrer">Nomad, “The Road to Recovery”</a> — project primary recovery account separating fund recovery, bridge upgrades, restart, and distribution.</li>
+<li><a href="https://wormholecrypto.medium.com/wormhole-incident-report-02-02-22-ad9b8f21eec6" target="_blank" rel="noopener noreferrer">Wormhole, “Wormhole Incident Report 02/02/22”</a> — project primary report on the verification failure, unauthorized wrapped-ETH mint, and restoration of backing.</li>
+<li><a href="https://blog.roninchain.com/p/the-ronin-bridge-is-open-" target="_blank" rel="noopener noreferrer">Ronin Network, “The Ronin Bridge Is Open”</a> — project primary recovery account describing the validator compromise, replenishment, revised controls, audit work, and restart.</li>
+<li><a href="https://ethereum.org/en/developers/docs/blocks/" target="_blank" rel="noopener noreferrer">Ethereum.org, “Blocks”</a> — primary ecosystem documentation for block structure, timestamps, and transaction ordering context.</li>
+<li><a href="https://ethereum.org/en/developers/docs/smart-contracts/" target="_blank" rel="noopener noreferrer">Ethereum.org, “Smart contracts”</a> — primary ecosystem background on deployed code and contract state.</li>
+<li><a href="https://docs.openzeppelin.com/contracts/5.x/api/proxy" target="_blank" rel="noopener noreferrer">OpenZeppelin Contracts, “Proxy” API</a> — primary implementation documentation for proxy and upgrade patterns relevant to deployment identity.</li>
+<li><a href="https://docs.bean.money/almanac/disclosures" target="_blank" rel="noopener noreferrer">Beanstalk, “Disclosures”</a> — project primary disclosure history illustrating how a protocol records a governance exploit and later control changes.</li>
+<li><a href="https://l2beat.com/scaling/risk" target="_blank" rel="noopener noreferrer">L2Beat, “Risk Analysis”</a> — independent comparative framework for separating state validation, data availability, sequencer, proposer, and exit risks.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>What minimum public evidence should be required before marking an incident “resolved” rather than “contained” or “recapitalized”?</li>
+<li>How should loss ledgers value volatile assets without privileging a project-friendly timestamp?</li>
+<li>Which explorers and trace implementations disagree materially on historical internal-call decoding, and how should those discrepancies be preserved?</li>
+<li>Can protocol teams publish machine-readable incident manifests linking contracts, blocks, code commits, audit scopes, and remediation transactions without increasing active-system risk?</li>
+<li>How should researchers score remediation when a technical fix is verifiable but compensation, legal recovery, or operational key controls remain opaque?</li>
+</ul>e:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$11"}}],"$L12"]}]
+f:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","crypto/crypto",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto/","children":"Crypto"}]}],["$","li","crypto/crypto-insurance-and-risk-transfer",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-insurance-and-risk-transfer/","children":"Crypto insurance and risk transfer"}]}],["$","li","crypto/onchain-lending-liquidation-mechanics",{"children":["$","$L2",null,{"href":"/articles/crypto/onchain-lending-liquidation-mechanics/","children":"Onchain lending liquidation mechanics"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","crypto/crypto",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto/","children":"Crypto"}]}],["$","li","crypto/oracle-bridge-and-sequencer-risk",{"children":["$","$L2",null,{"href":"/articles/crypto/oracle-bridge-and-sequencer-risk/","children":"Oracle bridge and sequencer risk"}]}],["$","li","crypto/wrapped-assets-and-duplicate-crypto-exposure",{"children":["$","$L2",null,{"href":"/articles/crypto/wrapped-assets-and-duplicate-crypto-exposure/","children":"Wrapped assets and duplicate crypto exposure"}]}],["$","li","crypto/governance-capture-and-admin-key-risk",{"children":["$","$L2",null,{"href":"/articles/crypto/governance-capture-and-admin-key-risk/","children":"Governance capture and admin-key risk"}]}],["$","li","crypto/crypto-insurance-and-risk-transfer",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-insurance-and-risk-transfer/","children":"Crypto insurance and risk transfer"}]}],["$","li","crypto/onchain-lending-liquidation-mechanics",{"children":["$","$L2",null,{"href":"/articles/crypto/onchain-lending-liquidation-mechanics/","children":"Onchain lending liquidation mechanics"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","crypto",{"children":"crypto"}],["$","li","markets",{"children":"markets"}],["$","li","defi",{"children":"defi"}],["$","li","security",{"children":"security"}],["$","li","incident-response",{"children":"incident-response"}],["$","li","research-methods",{"children":"research-methods"}]]}]]}]]}]
+10:["$","$L13",null,{"children":["$","$14",null,{"name":"Next.MetadataOutlet","children":"$@15"}]}]
+12:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/crypto/protocol-treasury-management-and-runway/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Protocol treasury management and runway"}]]}],["$","$L2",null,{"href":"/articles/crypto/restaking-risk-is-correlated-leverage/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Restaking risk is correlated leverage"}]]}]]}]
+15:null

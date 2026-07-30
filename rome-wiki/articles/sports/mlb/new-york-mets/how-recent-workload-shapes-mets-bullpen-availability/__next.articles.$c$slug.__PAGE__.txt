@@ -1,0 +1,211 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+8:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+9:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/sports/","children":"Sports"}],[["$","span","MLB",{"children":"MLB"}],["$","span","New York Mets",{"children":"New York Mets"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Sports"]}],["$","h1",null,{"children":"How recent workload shapes Mets bullpen availability"}],["$","p",null,{"className":"article-deck","children":"Recent workload does not turn Mets relievers into a simple available/unavailable list; it changes the cost, likely role, and evidentiary confidence attached to every bullpen option."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 10, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[13," min · ","2,777"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","availability-is-a-daily-state-not-a-depth-chart-label",{"className":"toc-depth-2","children":["$","a",null,{"href":"#availability-is-a-daily-state-not-a-depth-chart-label","children":"Availability is a daily state, not a depth-chart label"}]}],["$","li","what-public-records-can-actually-establish",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-public-records-can-actually-establish","children":"What public records can actually establish"}]}],["$","li","the-july-19-staff-sequence-shows-workload-cascading",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-july-19-staff-sequence-shows-workload-cascading","children":"The July 1–9 staff sequence shows workload cascading"}]}],["$","li","dense-use-changes-which-pitcher-is-best-tonight",{"className":"toc-depth-2","children":["$","a",null,{"href":"#dense-use-changes-which-pitcher-is-best-tonight","children":"Dense use changes which pitcher is “best” tonight"}]}],["$","li","five-workload-signals-and-what-each-one-misses",{"className":"toc-depth-2","children":["$","a",null,{"href":"#five-workload-signals-and-what-each-one-misses","children":"Five workload signals, and what each one misses"}]}],["$","li","consecutive-day-appearances",{"className":"toc-depth-3","children":["$","a",null,{"href":"#consecutive-day-appearances","children":"Consecutive-day appearances"}]}],["$","li","pitches-and-batters-faced",{"className":"toc-depth-3","children":["$","a",null,{"href":"#pitches-and-batters-faced","children":"Pitches and batters faced"}]}],["$","li","multi-inning-and-mid-inning-work",{"className":"toc-depth-3","children":["$","a",null,{"href":"#multi-inning-and-mid-inning-work","children":"Multi-inning and mid-inning work"}]}],["$","li","warm-ups-without-entry",{"className":"toc-depth-3","children":["$","a",null,{"href":"#warm-ups-without-entry","children":"Warm-ups without entry"}]}],["$","li","recent-roster-movement",{"className":"toc-depth-3","children":["$","a",null,{"href":"#recent-roster-movement","children":"Recent roster movement"}]}],["$","li","a-reproducible-pregame-availability-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#a-reproducible-pregame-availability-card","children":"A reproducible pregame availability card"}]}],["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}],["$","li","verification-notes",{"className":"toc-depth-2","children":["$","a",null,{"href":"#verification-notes","children":"Verification notes"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],"$L3"]}],null,"$L4"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+5:T5ae7,<p>Up: <a href="/rome-wiki/articles/sports/mlb/new-york-mets/new-york-mets-2026/" class="wiki-link">New York Mets 2026</a></p>
+<p>Related: <a href="/rome-wiki/articles/sports/mlb/new-york-mets/new-york-mets-2026-rotation-and-bullpen-map/" class="wiki-link">New York Mets 2026 rotation and bullpen map</a> · <a href="/rome-wiki/articles/sports/mlb/new-york-mets/how-leverage-changes-mets-bullpen-evaluation/" class="wiki-link">How leverage changes Mets bullpen evaluation</a> · <a href="/rome-wiki/articles/sports/mlb/new-york-mets/why-mets-reliever-performance-is-volatile/" class="wiki-link">Why Mets reliever performance is volatile</a> · <a href="/rome-wiki/articles/sports/mlb/new-york-mets/new-york-mets-2026-health-and-workload-ledger/" class="wiki-link">New York Mets 2026 health and workload ledger</a> · <a href="/rome-wiki/articles/sports/mlb/new-york-mets/new-york-mets-2026-roster-and-transaction-ledger/" class="wiki-link">New York Mets 2026 roster and transaction ledger</a></p>
+<h2 id="availability-is-a-daily-state-not-a-depth-chart-label">Availability is a daily state, not a depth-chart label</h2>
+<p>A season roster answers who belongs to the club. A bullpen availability map answers a narrower and more urgent question: <strong>which pitchers can reasonably cover which outs tonight, given what the staff has already spent?</strong> The two lists are never quite identical.</p>
+<p>An active reliever may be fully usable, usable only for a short lane, reserved for emergency length, or effectively avoided after concentrated work. A pitcher who did not enter yesterday may still have warmed multiple times. A recently recalled arm may be fresh in game appearances but constrained by minor-league work that does not appear in the major-league box-score strip. A pitcher returning from the injured list may be active without being prepared for consecutive days or an unusually long outing. Public evidence rarely resolves every category.</p>
+<p>That uncertainty matters when evaluating the Mets. “Why did the manager use Pitcher B instead of Pitcher A?” cannot be answered from season ERA or a static closer chart. The analyst first needs the recent game ledger, pitch counts, days used, innings covered, roster moves, starter length, and the number of outs still likely to be required. Even then, the answer is conditional because bullpen warm-ups, treatment, soreness, and explicit pregame declarations are incompletely public.</p>
+<p>The right model is therefore not a traffic light. It is a <strong>graded, time-dependent menu</strong>:</p>
+<ul>
+<li><strong>Demonstrably active:</strong> on the active roster and recently used, with no public restriction.</li>
+<li><strong>Visibly burdened:</strong> active, but carrying consecutive-day work, a long outing, a dense appearance cluster, or a recent high pitch count.</li>
+<li><strong>Fresh in MLB game records:</strong> little or no recent major-league work, while minor-league appearances and warm-ups still require checking.</li>
+<li><strong>Roster-available but role-uncertain:</strong> newly selected, recalled, or activated, with insufficient current use to infer a lane.</li>
+<li><strong>Officially unavailable:</strong> on an injured, bereavement, paternity, suspended, or other inactive list, or explicitly ruled out by the club.</li>
+<li><strong>Unknown:</strong> public records do not establish the manager’s private availability decision.</li>
+</ul>
+<p>These categories prevent two opposite mistakes. The first is declaring a reliever unavailable merely because he pitched the previous day. MLB teams do use relievers on consecutive days. The second is treating every active pitcher as equally usable merely because no transaction removed him. Recent workload changes risk and tactics even when it does not produce a formal roster designation.</p>
+<h2 id="what-public-records-can-actually-establish">What public records can actually establish</h2>
+<p>Official box scores provide the strongest visible workload facts: appearance date, innings, batters faced, pitches and strikes, and the events that ended the outing. The schedule supplies intervening rest days, travel sequence, extra innings, and upcoming off days. Transactions establish when a pitcher joined or left the active roster. Those are records, not estimates.</p>
+<p>From them, a Mets workload card can calculate or describe:</p>
+<ol>
+<li>appearances in the last three, five, seven, and fourteen calendar days;</li>
+<li>use on consecutive days or three days in a short span;</li>
+<li>pitches and batters faced in each appearance, not only innings;</li>
+<li>multi-inning work and partial innings with inherited or bequeathed runners;</li>
+<li>days since the last game appearance;</li>
+<li>starter and bulk-pitcher length, which determines how many relief outs were purchased;</li>
+<li>roster entry, option, selection, activation, or injured-list dates; and</li>
+<li>the next schedule context, including an off day or a likely bullpen game.</li>
+</ol>
+<p>No single field controls availability. Innings can conceal labor: a pitcher may record one out only after a long plate appearance, multiple baserunners, or a mid-inning entry. Pitch count improves the picture but does not show how many times he warmed, how aggressively he threw in the bullpen, or whether he performed recovery work. Appearances capture frequency but not intensity. Batters faced capture opportunity but not stressful pitches, pickoff throws, fielding plays, or physical symptoms.</p>
+<p>The official record is consequently best used to establish a lower bound on known throwing, not a complete physiological measurement. If the box score says a reliever threw 24 pitches, he threw at least those 24 competitive pitches. It does not follow that his total high-intensity throwing burden was exactly 24. Treating unobserved warm-ups as zero would create false precision.</p>
+<p>Nor should a general workload study be converted into a universal one-day rule for an individual Met. Pitchers differ in age, delivery, repertoire, injury history, conditioning, recovery, role, and the intensity of a particular outing. Team medical and performance staffs possess information the public does not. Public analysis can identify workload patterns and decision costs; it usually cannot certify a player’s readiness.</p>
+<h2 id="the-july-19-staff-sequence-shows-workload-cascading">The July 1–9 staff sequence shows workload cascading</h2>
+<p>The official game records through July 9 give a concrete example. The Mets played eight games from July 1 through July 9, with July 2 an off day. Their starters or opening pitchers covered the following innings:</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>First Mets pitcher</th>
+<th align="right">IP / pitches</th>
+<th align="right">Relief innings required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>July 1 at Toronto</td>
+<td>Freddy Peralta</td>
+<td align="right">4 / 91</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td>July 3 at Atlanta</td>
+<td>Christian Scott</td>
+<td align="right">4 / 82</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td>July 4 at Atlanta</td>
+<td>Sean Manaea</td>
+<td align="right">5 / 108</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>July 5 at Atlanta</td>
+<td>Nolan McLean</td>
+<td align="right">6 / 96</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>July 6 at Atlanta</td>
+<td>Freddy Peralta</td>
+<td align="right">4⅔ / 103</td>
+<td align="right">4⅓</td>
+</tr>
+<tr>
+<td>July 7 vs. Kansas City</td>
+<td>Cionel Pérez</td>
+<td align="right">1 / 14</td>
+<td align="right">8</td>
+</tr>
+<tr>
+<td>July 8 vs. Kansas City</td>
+<td>Christian Scott</td>
+<td align="right">5 / 90</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td>July 9 vs. Kansas City</td>
+<td>Sean Manaea</td>
+<td align="right">7 / 97</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>The “relief innings required” column describes regulation outs after the first pitcher; it does not mean every inning was handled by a conventional one-inning reliever. Kodai Senga, for example, followed Scott for 2⅔ innings on July 3 and followed Pérez for three on July 7. That distinction is central: multi-inning followers can protect the short bullpen, but when their outing ends early the remaining burden still cascades downstream.</p>
+<p>Across the first seven games in this window, the first pitcher reached six innings only once. On July 7 the opener–follower pairing supplied four combined innings, leaving five more after Senga. Austin Warren then left injured without recording an out, and the game eventually required Pérez, Senga, A.J. Minter, Warren, Matt Seelinger, and Huascar Brazobán. The Mets lost 16–12, but the cost extended beyond the score: many outs and pitches had been drawn from a staff that had another game the following day.</p>
+<p>That night’s workload changed the roster itself. MLB’s July 8 transaction log records Warren’s placement on the 15-day injured list with a right forearm strain, Seelinger’s designation for assignment, Tobias Myers’s recall, and Xzavion Curry’s selection. Scott then supplied five scoreless innings on July 8. Brooks Raley covered the sixth, Myers the seventh and eighth, and Curry the ninth. The newly added pitchers absorbed three innings immediately.</p>
+<p>On July 9 the Mets optioned Myers and selected Dan Hammer. Myers’s one-day stay illustrates why workload is partly a roster-management problem. His value was not captured only by whether he ranked among the organization’s best thirteen pitchers. He delivered six outs at a moment when fresh coverage had become scarce, then his optionable roster place made another refresh possible. The move does not prove the club considered him tired or ineffective; it shows that the active-pitcher menu was deliberately changed again.</p>
+<p>Manaea’s seven innings on July 9 then reduced the bullpen requirement to Brazobán and Devin Williams, one inning each. This was not merely an excellent starter workload in isolation. It allowed most of the bullpen to pass a game without a recorded appearance after the July 7–8 demand. Starter length therefore creates future bullpen availability: every out supplied by a starter or bulk arm is an out a short reliever does not need to purchase.</p>
+<h2 id="dense-use-changes-which-pitcher-is-best-tonight">Dense use changes which pitcher is “best” tonight</h2>
+<p>The late-inning group’s appearance pattern makes the daily movement visible. Minter appeared July 1, 3, 6, and 7. Raley appeared July 5, 6, and 8. Luke Weaver pitched July 5 and 6. Williams appeared July 5, 6, and 9. These dates do not prove that any pitcher was unavailable between outings. They do establish that the manager’s choice set could not responsibly be reconstructed from talent rankings alone.</p>
+<p>Suppose a preferred arm worked on each of the previous two days. The relevant decision is not automatically “use him” or “rest him.” It depends on the present game’s leverage, the upcoming lineup pocket, the length of the prior outings, the remaining schedule, other relievers’ workloads, and whether tomorrow’s starter is likely to provide length. A tie game in the eighth creates a different benefit than a four-run deficit in the sixth. An off day tomorrow changes the future cost. A staff game tomorrow raises it.</p>
+<p>Recent workload also changes roles. A closer-quality pitcher may be held for the opponent’s most dangerous pocket but never enter if the Mets cannot reach that pocket with a lead. A bridge arm may inherit the seventh instead of the sixth because another pitcher is fresher. A left-hander may be the only rested answer to two left-handed hitters separated by a right-handed batter. A bulk pitcher may remain unused in a close game because the club needs him to protect the entire staff the following day.</p>
+<p>This is why <a href="/rome-wiki/articles/sports/mlb/new-york-mets/how-leverage-changes-mets-bullpen-evaluation/" class="wiki-link">How leverage changes Mets bullpen evaluation</a> and workload analysis belong together. Leverage measures the potential swing in the current situation. Workload changes the cost of assigning a particular pitcher to it. A high-leverage spot does not erase tomorrow, but tomorrow’s uncertainty does not make today irrelevant. The manager is allocating scarce, perishable pitching capacity across both dimensions.</p>
+<h2 id="five-workload-signals-and-what-each-one-misses">Five workload signals, and what each one misses</h2>
+<h3 id="consecutive-day-appearances">Consecutive-day appearances</h3>
+<p>Back-to-back use is the easiest pattern to see and the easiest to overinterpret. It tells us the pitcher recorded game work on adjacent dates. It does not tell us that he cannot pitch a third day, that he was fully available on the second, or that a one-batter outing imposed the same load as a 30-pitch inning. Report the dates, pitch counts, and batters faced before attaching meaning.</p>
+<h3 id="pitches-and-batters-faced">Pitches and batters faced</h3>
+<p>Pitch total captures more effort than innings alone, while batters faced shows how many competitive confrontations occurred. Together they distinguish a clean ten-pitch inning from a prolonged inning with traffic. They still omit warm-ups and cannot convert directly into fatigue. A pitcher can throw few pitches at unusually high intensity; another can throw more efficiently within his normal routine.</p>
+<h3 id="multi-inning-and-mid-inning-work">Multi-inning and mid-inning work</h3>
+<p>Multi-inning appearances may affect the next day’s role because the pitcher completed more outs and often sat between innings. Mid-inning entries add a different preparation problem: the reliever may warm quickly and inherit runners. Neither format is inherently more damaging, but both provide context missing from a one-line appearance count.</p>
+<h3 id="warm-ups-without-entry">Warm-ups without entry</h3>
+<p>This is the most important routinely missing variable. A reliever can get hot, sit down, and warm again without appearing in the box score. Broadcasts and game stories sometimes document it, but there is no complete standardized public warm-up ledger. The honest notation is “not observed” or “unknown,” not “did not throw.” A robust future Mets ledger should preserve sourced warm-up observations separately from official game pitches.</p>
+<h3 id="recent-roster-movement">Recent roster movement</h3>
+<p>A recalled or selected pitcher may look fresh when only MLB games are counted. His Triple-A schedule may say otherwise. Conversely, a pitcher optioned after a long outing may be moved because the club needs a replacement who can pitch immediately, not because the optioned player has lost organizational standing. <a href="/rome-wiki/articles/sports/mlb/new-york-mets/new-york-mets-2026-roster-and-transaction-ledger/" class="wiki-link">New York Mets 2026 roster and transaction ledger</a> supplies the legal sequence; game records explain the coverage purpose. Neither alone proves motive.</p>
+<h2 id="a-reproducible-pregame-availability-card">A reproducible pregame availability card</h2>
+<p>An honest Mets pregame card should freeze a timestamp and separate facts from judgments.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Record</th>
+<th>Interpretation boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active status</td>
+<td>Official roster and dated transactions</td>
+<td>Active does not guarantee unrestricted use</td>
+</tr>
+<tr>
+<td>Last appearance</td>
+<td>Date, pitches, batters, innings</td>
+<td>Does not include hidden warm-ups</td>
+</tr>
+<tr>
+<td>Short-window load</td>
+<td>Last 3/5/7 days, consecutive days</td>
+<td>No universal threshold proves fatigue</td>
+</tr>
+<tr>
+<td>Long outing</td>
+<td>Multi-inning work or unusually many batters/pitches</td>
+<td>“Long” should be defined relative to role and reported numerically</td>
+</tr>
+<tr>
+<td>Role need</td>
+<td>Leverage, handedness pocket, remaining outs</td>
+<td>Role is a staff-level decision, not a permanent title</td>
+</tr>
+<tr>
+<td>Next-day cost</td>
+<td>Probable starter, bullpen-game risk, off day</td>
+<td>Probables and plans can change</td>
+</tr>
+<tr>
+<td>Public restriction</td>
+<td>Club statement, IL move, activation condition</td>
+<td>Silence is not proof of full health</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>confirmed / supported / uncertain / unknown</td>
+<td>Makes missing private evidence explicit</td>
+</tr>
+</tbody>
+</table>
+<p>The judgment column can then say “likely preferred,” “usable with elevated recent load,” “fresh in recorded MLB appearances,” or “status unknown.” It should not declare medical fatigue from box scores. If the manager states before the game that a pitcher is down, quote and link that statement. If the pitcher later appears, preserve both facts rather than silently rewriting the earlier report.</p>
+<p>The cutoff matters. This article is current through <strong>07:00 EDT on July 10, 2026</strong>, and its game evidence ends with July 9. Live roster pages and transaction feeds will change. A future update should append the July 10 result and any moves, not treat this snapshot as if it had always contained them.</p>
+<h2 id="why-it-matters">Why it matters</h2>
+<p>Workload is the bridge between individual performance and staff architecture. A deep bullpen is not merely a collection of talented names. It is a staff that can cover tonight’s high-leverage outs without making tomorrow structurally impossible. Starter length, multi-inning coverage, handedness, options, injuries, and recent use all determine whether that depth is real at a particular moment.</p>
+<p>For the Mets’ July 1–9 sequence, the clearest lesson is causal but limited. Repeated short starts increased relief demand; the July 7 opener game and injury intensified it; July 8 roster moves supplied immediate fresh innings; and Manaea’s seven innings on July 9 restored breathing room. That chain is verified. Claims that a specific reliever was fatigued, secretly unavailable, or protected for a particular reason would require a club statement or other direct evidence.</p>
+<p>This framework also improves criticism. It does not excuse every managerial choice. It makes the criticism testable. Ask which pitchers were on the active roster, what they had thrown recently, what public restrictions existed, which hitter pocket was due, how many outs remained, and what the next day demanded. Then distinguish the best choice under known information from the best result in hindsight.</p>
+<p>The practical question is not “Who are the Mets’ best relievers?” It is: <strong>which combination of rested-enough skills can solve the largest remaining threats while leaving a credible path through the next game?</strong> Recent workload continually changes that answer.</p>
+<h2 id="verification-notes">Verification notes</h2>
+<ul>
+<li>The July 1–9 first-pitcher innings and pitch counts, bullpen sequences, and named reliever appearance dates were checked against MLB StatsAPI’s official schedule and box-score records for game IDs 822791, 824904, 824903, 824902, 824900, 823607, 823605, and 823606.</li>
+<li>The July 8 Warren/Seelinger/Myers/Curry moves and July 9 Myers/Hammer moves were checked against MLB’s dated official transaction pages.</li>
+<li>The article makes no player-specific medical diagnosis and applies no unsupported universal pitch-count or rest threshold.</li>
+<li>“Fresh” always means fresh in the identified public game record, not proven physiologically fresh.</li>
+<li>Role and decision-cost language is analytical synthesis, not a quoted Mets policy.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://www.mlb.com/mets/roster/" target="_blank" rel="noopener noreferrer">MLB — Mets active roster</a> — official live roster; must be reconciled with dated transactions for historical snapshots; accessed July 10, 2026.</li>
+<li><a href="https://www.mlb.com/transactions/2026/07/08/mets" target="_blank" rel="noopener noreferrer">MLB — Mets transactions, July 8, 2026</a> — Warren injured-list placement, Seelinger designation, Myers recall, and Curry selection.</li>
+<li><a href="https://www.mlb.com/transactions/2026/07/09/mets" target="_blank" rel="noopener noreferrer">MLB — Mets transactions, July 9, 2026</a> — Myers option and Hammer selection.</li>
+<li><a href="https://statsapi.mlb.com/api/v1/schedule?sportId=1&#x26;teamId=121&#x26;startDate=2026-07-01&#x26;endDate=2026-07-09&#x26;hydrate=probablePitcher,linescore" target="_blank" rel="noopener noreferrer">MLB StatsAPI — Mets schedule, July 1–9, 2026</a> — official game identifiers, dates, and results.</li>
+<li>MLB StatsAPI official box scores: <a href="https://statsapi.mlb.com/api/v1/game/822791/boxscore" target="_blank" rel="noopener noreferrer">July 1</a>, <a href="https://statsapi.mlb.com/api/v1/game/824904/boxscore" target="_blank" rel="noopener noreferrer">July 3</a>, <a href="https://statsapi.mlb.com/api/v1/game/824903/boxscore" target="_blank" rel="noopener noreferrer">July 4</a>, <a href="https://statsapi.mlb.com/api/v1/game/824902/boxscore" target="_blank" rel="noopener noreferrer">July 5</a>, <a href="https://statsapi.mlb.com/api/v1/game/824900/boxscore" target="_blank" rel="noopener noreferrer">July 6</a>, <a href="https://statsapi.mlb.com/api/v1/game/823607/boxscore" target="_blank" rel="noopener noreferrer">July 7</a>, <a href="https://statsapi.mlb.com/api/v1/game/823605/boxscore" target="_blank" rel="noopener noreferrer">July 8</a>, and <a href="https://statsapi.mlb.com/api/v1/game/823606/boxscore" target="_blank" rel="noopener noreferrer">July 9</a> — official appearances, innings, pitches, batters faced, and pitching sequence.</li>
+<li><a href="https://www.mlb.com/glossary/advanced-stats/leverage-index" target="_blank" rel="noopener noreferrer">MLB Glossary — Leverage Index</a> — official definition of situational importance through potential win-probability change.</li>
+<li><a href="https://www.mlb.com/glossary/rules/three-batter-minimum" target="_blank" rel="noopener noreferrer">MLB Glossary — Three-Batter Minimum</a> — official deployment rule and inning-ending/injury exceptions.</li>
+<li><a href="https://www.mlb.com/glossary/transactions/injured-list" target="_blank" rel="noopener noreferrer">MLB Glossary — Injured List</a> — official transaction framework distinguishing roster status from informal availability judgments.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Can the Mets’ public workload ledger capture sourced warm-ups without implying that undocumented bullpen activity did not occur?</li>
+<li>Which short-window combination of appearances, pitches, batters faced, and multi-inning work best predicts the Mets’ actual next-day deployment decisions?</li>
+<li>When the club activates Dedniel Núñez, will it publicly describe limits on consecutive-day or multi-inning use?</li>
+<li>How often do Mets fresh-arm transactions follow a heavy team bullpen game, and how frequently does the arriving pitcher work immediately?</li>
+<li>How should an availability model distinguish deliberate rest from matchup choice when the manager gives no pregame explanation?</li>
+</ul>3:["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","availability-is-a-daily-state-not-a-depth-chart-label",{"className":"toc-depth-2","children":["$","a",null,{"href":"#availability-is-a-daily-state-not-a-depth-chart-label","children":"Availability is a daily state, not a depth-chart label"}]}],["$","li","what-public-records-can-actually-establish",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-public-records-can-actually-establish","children":"What public records can actually establish"}]}],["$","li","the-july-19-staff-sequence-shows-workload-cascading",{"className":"toc-depth-2","children":["$","a",null,{"href":"#the-july-19-staff-sequence-shows-workload-cascading","children":"The July 1–9 staff sequence shows workload cascading"}]}],["$","li","dense-use-changes-which-pitcher-is-best-tonight",{"className":"toc-depth-2","children":["$","a",null,{"href":"#dense-use-changes-which-pitcher-is-best-tonight","children":"Dense use changes which pitcher is “best” tonight"}]}],["$","li","five-workload-signals-and-what-each-one-misses",{"className":"toc-depth-2","children":["$","a",null,{"href":"#five-workload-signals-and-what-each-one-misses","children":"Five workload signals, and what each one misses"}]}],["$","li","consecutive-day-appearances",{"className":"toc-depth-3","children":["$","a",null,{"href":"#consecutive-day-appearances","children":"Consecutive-day appearances"}]}],["$","li","pitches-and-batters-faced",{"className":"toc-depth-3","children":["$","a",null,{"href":"#pitches-and-batters-faced","children":"Pitches and batters faced"}]}],["$","li","multi-inning-and-mid-inning-work",{"className":"toc-depth-3","children":["$","a",null,{"href":"#multi-inning-and-mid-inning-work","children":"Multi-inning and mid-inning work"}]}],["$","li","warm-ups-without-entry",{"className":"toc-depth-3","children":["$","a",null,{"href":"#warm-ups-without-entry","children":"Warm-ups without entry"}]}],["$","li","recent-roster-movement",{"className":"toc-depth-3","children":["$","a",null,{"href":"#recent-roster-movement","children":"Recent roster movement"}]}],["$","li","a-reproducible-pregame-availability-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#a-reproducible-pregame-availability-card","children":"A reproducible pregame availability card"}]}],["$","li","why-it-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-it-matters","children":"Why it matters"}]}],["$","li","verification-notes",{"className":"toc-depth-2","children":["$","a",null,{"href":"#verification-notes","children":"Verification notes"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$5"}}],"$L6"]}],"$L7"]}]
+4:["$","$L8",null,{"children":["$","$9",null,{"name":"Next.MetadataOutlet","children":"$@a"}]}]
+6:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-platoons-and-bench-roles-shape-the-mets-lineup/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"How platoons and bench roles shape the Mets lineup"}]]}],["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-service-time-and-assignment-consent-constrain-mets-trades/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"How service time and assignment consent constrain Mets trades"}]]}]]}]
+7:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","sports/mlb/new-york-mets/how-bullpen-warm-ups-complicate-mets-availability-estimates",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-bullpen-warm-ups-complicate-mets-availability-estimates/","children":"How bullpen warm-ups complicate Mets availability estimates"}]}],["$","li","sports/mlb/new-york-mets/how-to-build-a-mets-bullpen-workload-ledger",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-to-build-a-mets-bullpen-workload-ledger/","children":"How to build a Mets bullpen workload ledger"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets/","children":"New York Mets"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026/","children":"New York Mets 2026"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","sports/mlb/new-york-mets/new-york-mets-2026",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026/","children":"New York Mets 2026"}]}],["$","li","sports/mlb/new-york-mets/how-leverage-changes-mets-bullpen-evaluation",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/how-leverage-changes-mets-bullpen-evaluation/","children":"How leverage changes Mets bullpen evaluation"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026-rotation-and-bullpen-map",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026-rotation-and-bullpen-map/","children":"New York Mets 2026 rotation and bullpen map"}]}],["$","li","sports/mlb/new-york-mets/why-mets-reliever-performance-is-volatile",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/why-mets-reliever-performance-is-volatile/","children":"Why Mets reliever performance is volatile"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026-health-and-workload-ledger",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026-health-and-workload-ledger/","children":"New York Mets 2026 health and workload ledger"}]}],["$","li","sports/mlb/new-york-mets/new-york-mets-2026-roster-and-transaction-ledger",{"children":["$","$L2",null,{"href":"/articles/sports/mlb/new-york-mets/new-york-mets-2026-roster-and-transaction-ledger/","children":"New York Mets 2026 roster and transaction ledger"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","sports",{"children":"sports"}],["$","li","baseball",{"children":"baseball"}],["$","li","mlb",{"children":"mlb"}],["$","li","new-york-mets",{"children":"new-york-mets"}],["$","li","pitching",{"children":"pitching"}],["$","li","bullpen",{"children":"bullpen"}],["$","li","workload",{"children":"workload"}]]}]]}]]}]
+a:null

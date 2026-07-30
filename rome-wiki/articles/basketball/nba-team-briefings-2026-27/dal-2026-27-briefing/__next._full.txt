@@ -1,0 +1,378 @@
+1:"$Sreact.fragment"
+2:I[70359,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ReadingProgress"]
+3:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+4:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchTrigger"]
+5:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchExperience"]
+6:I[39756,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+7:I[37457,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+c:I[68027,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default",1]
+:HL["/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","style"]
+:HL["/rome-wiki/_next/static/media/5f402bd2d8eef81a-s.p.16whm0euli40m.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/9433d1a810498265-s.p.0h26ys03~gfbk.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"P":null,"c":["","articles","basketball","nba-team-briefings-2026-27","dal-2026-27-briefing",""],"q":"","i":false,"f":[[["",{"children":["articles",{"children":[["slug","basketball/nba-team-briefings-2026-27/dal-2026-27-briefing","c",null],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",16],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/rome-wiki/_next/static/chunks/14kbu79734gwo.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable newsreader_dccbc19-module__XM85IG__variable","children":[["$","a",null,{"href":"#main-content","className":"skip-link","children":"Skip to the article"}],["$","$L2",null,{}],["$","header",null,{"className":"site-header","children":[["$","div",null,{"className":"utility-strip","children":[["$","span",null,{"children":"Established 2026"}],["$","span",null,{"className":"utility-center","children":"A living external brain"}],["$","span",null,{"children":[980," articles · ","Jul 10, 2026"]}]]}],["$","div",null,{"className":"navigation-row","children":[["$","$L3",null,{"href":"/","className":"small-wordmark","aria-label":"Rome front page","children":"Rome"}],["$","nav",null,{"className":"primary-nav","aria-label":"Primary navigation","children":[["$","$L3",null,{"href":"/#reading-rooms","children":"Reading rooms"}],["$","$L3",null,{"href":"/#universe-map","children":"Map"}],["$","$L3",null,{"href":"/#updates","children":"Updates"}],["$","$L3",null,{"href":"/about/","children":"About"}]]}],["$","$L4",null,{}]]}],["$","nav",null,{"className":"topic-rail","aria-label":"Reading rooms","children":[["$","$L3","AI",{"href":"/topics/ai/","children":"AI"}],["$","$L3","Basketball",{"href":"/topics/basketball/","children":"Basketball"}],["$","$L3","Classical Music",{"href":"/topics/classical-music/","children":"Classical Music"}],["$","$L3","Crypto",{"href":"/topics/crypto/","children":"Crypto"}],["$","$L3","History",{"href":"/topics/history/","children":"History"}],["$","$L3","Investing",{"href":"/topics/investing/","children":"Investing"}],["$","$L3","Markets",{"href":"/topics/markets/","children":"Markets"}],["$","$L3","Mathematics",{"href":"/topics/mathematics/","children":"Mathematics"}],["$","$L3","Piano",{"href":"/topics/piano/","children":"Piano"}],["$","$L3","Politics",{"href":"/topics/politics/","children":"Politics"}],["$","$L3","Sports",{"href":"/topics/sports/","children":"Sports"}],["$","$L3","String Theory",{"href":"/topics/string-theory/","children":"String Theory"}],["$","$L3","Weather",{"href":"/topics/weather/","children":"Weather"}]]}]]}],["$","$L5",null,{}],["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main-content","className":"not-found-page page-shell narrow-page","children":[["$","p",null,{"className":"eyebrow","children":"404 · End of the footpath"}],["$","h1",null,{"children":"This page has not entered Rome yet."}],["$","p",null,{"children":["Open search with ",["$","kbd",null,{"children":"⌘ K"}],", explore the universe map, or return to the front page and follow another link."]}],["$","$L3",null,{"href":"/","className":"button-link","children":"Return to Rome"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","footer",null,{"className":"site-footer","children":[["$","div",null,{"children":[["$","$L3",null,{"href":"/","className":"footer-wordmark","children":"Rome"}],["$","p",null,{"children":"Andrew Park's second brain, set in type."}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"This edition"}],["$","p",null,{"children":[980," articles across ",16," reading rooms, with"," ",431," open research threads."]}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Ownership & provenance"}],["$","p",null,{"children":"Rome belongs to Andrew Park. Every article also carries its authoring source."}]]}],["$","div",null,{"className":"footer-links","children":[["$","$L3",null,{"href":"/about/","children":"About Rome"}],["$","$L3",null,{"href":"/#universe-map","children":"Explore the map"}]]}]]}]]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["$L8",{"children":["$L9",{},null,false,null]},null,false,"$@a"]},null,false,"$@a"]},null,false,null],"$Lb",false]],"m":"$undefined","G":["$c",["$Ld"]],"S":true,"h":null,"s":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"X6ZOd3MQP6S0cUC6FLNdS"}
+f:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+10:"$Sreact.suspense"
+13:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ViewportBoundary"]
+15:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"MetadataBoundary"]
+8:["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}]
+9:["$","$1","c",{"children":["$Le",null,["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]]}]
+12:[]
+a:"$W12"
+b:["$","$1","h",{"children":[null,["$","$L13",null,{"children":"$L14"}],["$","div",null,{"hidden":true,"children":["$","$L15",null,{"children":["$","$10",null,{"name":"Next.Metadata","children":"$L16"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+d:["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+e:["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L3",null,{"href":"/","children":"Front page"}],["$","$L3",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Dallas Mavericks 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"Authoritative prior source: , row . I did not use for Dallas' team-level prior because the corrected instruction says the standings JSON is the only authoritative prior."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[14," min · ","2,882"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":"$L17"}],"$L18","$L19","$L1a","$L1b","$L1c"]}]]}],"$L1d","$L1e"]}]]}]
+17:["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]
+18:["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}]
+19:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+1a:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+1b:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+1c:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+1f:T6118,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>34.4 (<code>mc_mean_wins</code>)</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>28.0-41.0 (<code>p50_wins</code> 34.0)</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>-6.294 pts/100 (<code>se_strength</code> 1.414)</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>19.2% (<code>make_playoffs_prob</code> 0.192; play-in/top-10 probability 49.3%)</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_ABOUT_RIGHT</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>-0.3 pts/100, judgmental</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>-1.0 wins, judgmental</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>33.4</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>55/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>The corrected 34.4-win prior is already appropriately skeptical for a 26-win team built around a second-year star and two major health bets, but I trim it slightly because the rotation context still appears stale around Khris Middleton and optimistic on Kyrie Irving/Dereck Lively II availability.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<p>Required quoted fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th align="right">Authoritative value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mc_mean_wins</code></td>
+<td align="right">34.4</td>
+</tr>
+<tr>
+<td><code>p10_wins</code></td>
+<td align="right">28.0</td>
+</tr>
+<tr>
+<td><code>p50_wins</code></td>
+<td align="right">34.0</td>
+</tr>
+<tr>
+<td><code>p90_wins</code></td>
+<td align="right">41.0</td>
+</tr>
+<tr>
+<td><code>make_playoffs_prob</code></td>
+<td align="right">0.192</td>
+</tr>
+<tr>
+<td><code>strength</code></td>
+<td align="right">-6.294</td>
+</tr>
+<tr>
+<td><code>se_strength</code></td>
+<td align="right">1.414</td>
+</tr>
+<tr>
+<td><code>n_cold_start</code></td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+<p>The corrected standings prior puts Dallas 10th in the West by projected wins, with a 49.3% play-in/top-10 probability. The model metadata describes this as a 2026-27 forward projection using <code>xgboost (per-factor per-horizon) + aging fallback</code>, curated depth-chart minutes, availability adjustment, and a 10,000-simulation Monte Carlo over synthetic schedules. The p10-p90 band is 13 wins wide, which is appropriate for a team with four cold-start players and several high-leverage availability assumptions.</p>
+<p>Important source conflict: the richer team-detail JSON currently has a non-authoritative Dallas team line of 33.3 wins and +1.454 strength, while the corrected standings row has 34.4 wins and -6.294 strength. Per instruction, I ignore the team-detail team-level values and use that file only for roster-context pressure points.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>Non-authoritative roster-context rows from <code>projection_2026_27_teams.json</code> list these top projected win contributors: Kyrie Irving 8.95, Dereck Lively II 5.93, Naji Marshall 4.97, Cooper Flagg 4.52, P.J. Washington 3.22, Dwight Powell 1.36, Ryan Nembhard 0.98, Daniel Gafford 0.85. These are not a team prior; they are useful only for understanding which assumptions the model-like roster packet is leaning on.</p>
+<p>Top projected MPG in that same roster context: Cooper Flagg 27.2, Kyrie Irving 27.0, Naji Marshall 27.0, P.J. Washington 27.0, Dereck Lively II 25.8, Max Christie 12.9, Santi Aldama 12.8, Khris Middleton 12.4, Daniel Gafford 12.2, Klay Thompson 12.1, Ryan Nembhard 12.1, Dwight Powell 11.6, Morez Johnson 10.3.</p>
+<p>The first major minutes challenge is health. The roster context gives Irving 56 expected games and 27.0 MPG even though NBA.com reported that he missed the entire 2025-26 season while recovering from ACL reconstruction. Lively is assigned 51 expected games and a +1.95 net rating, but NBA.com player news on June 26, 2026 said he still had not progressed to running after right-foot surgery. Those two players account for a large share of the positive roster-context value.</p>
+<p>The second major minutes challenge is roster staleness. The roster-context file still includes Khris Middleton for 12.4 MPG, 28 expected games, and 0.53 projected wins, but public reporting and the Mavericks' official transaction page say Dallas acquired Santi Aldama, Tarik Biberovic's rights, and Marcus Sasser in the Middleton-related multi-team deal. I therefore treat Middleton's row as stale and not part of the live Dallas rotation.</p>
+<p>The third challenge is frontcourt congestion. ESPN's Dallas depth chart shows Flagg, Washington, Lively, Gafford, Aldama, Morez Johnson, and several wings/frontcourt hybrids all competing for finite frontcourt minutes. That makes Lively/Gafford/Morez/Aldama/Washington minute allocation fragile, especially if Lively is not fully ready or if Dusty May tries to raise pace and passing without sacrificing spacing.</p>
+<p>Cold-start and low-data context: the corrected standings row has <code>n_cold_start = 4</code>. The depth chart has no-pid entries for Morez Johnson, Toibu Lawal, Vsevolod Ishchenko, and Sergio De Larrea. The non-authoritative roster context flags Morez as a rookie/cold row and Sergio, Vsevolod, and Toibu as replacement/cold rows with very wide bands.</p>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>The corrected authoritative standings JSON does not provide team six-factor splits. The public <code>team2027.html</code> computes them client-side from roster rows as an <code>mpg * exp_gp</code> weighted average of player factor vectors, scaled by five on-court players. Using that method on the non-authoritative roster-context rows gives:</p>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th align="right">Roster-context value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>oTS</td>
+<td align="right">-0.1</td>
+</tr>
+<tr>
+<td>oTOV</td>
+<td align="right">+1.1</td>
+</tr>
+<tr>
+<td>oSC</td>
+<td align="right">-0.7</td>
+</tr>
+<tr>
+<td>dTS</td>
+<td align="right">+1.9</td>
+</tr>
+<tr>
+<td>dTOV</td>
+<td align="right">-0.6</td>
+</tr>
+<tr>
+<td>dSC</td>
+<td align="right">+0.0</td>
+</tr>
+<tr>
+<td>Sum</td>
+<td align="right">+1.7</td>
+</tr>
+</tbody>
+</table>
+<p>This profile conflicts with the corrected prior's <code>strength = -6.294</code>, so I treat it only as a style hint, not as a second team forecast. Interpreted cautiously, the roster-context profile says Dallas is supposed to protect the ball and defend shots, while struggling to create second chances and force turnovers. That fits the live roster tension: Flagg, Washington, Aldama, Lively, Gafford, and Morez provide size, but the team still needs enough creation, spacing, and healthy guard play to avoid a half-court offense that bogs down.</p>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>My stance is <code>MODEL_ABOUT_RIGHT</code>, with a small downside adjustment. The corrected 34.4-win prior is not an aggressive hype projection; it is only an 8.4-win improvement from Dallas' 26-56 2025-26 record shown on ESPN, despite Cooper Flagg's strong rookie season and a possible Kyrie return. That skepticism is directionally sensible.</p>
+<p>The best downside challenge is that the path to 34-35 wins still depends on two medical/role assumptions that are easy to overstate: Irving being a high-value 35-year-old lead guard after a missed season, and Lively being ready to provide starter-level center value after a right-foot surgery and late-June running limitation. The current public roster also makes the Middleton row stale, and replacing theoretical Middleton minutes with Sasser/rookie/deep-bench minutes probably raises volatility more than it raises the median.</p>
+<p>The best upside challenge is Flagg. ESPN lists him at 21.0 points, 6.7 rebounds, and 4.5 assists as a rookie, and NBA.com player news says he won 2025-26 Rookie of the Year and made All-Rookie First Team. The non-authoritative roster context rates him near neutral, so a real second-year leap could beat that assumption by multiple wins. Aldama also gives Dallas a live 7-foot forward with recent 14.0/6.7/2.9 production, and Dusty May's stated pace/passing/defensive identity could clean up last year's low-assist, low-three-volume profile.</p>
+<p>On balance, the corrected prior already prices a lot of bad news. I would not push Dallas much lower than 34 wins without firmer evidence that Kyrie or Lively will miss major time again. I trim only one win.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th align="right">Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The authoritative prior is a low, play-in-borderline view rather than a bullish team-page carryover.</td>
+<td>Corrected standings row: <code>mc_mean_wins = 34.4</code>, p10-p90 28.0-41.0, <code>make_playoffs_prob = 0.192</code>, <code>strength = -6.294</code>, <code>n_cold_start = 4</code>.</td>
+<td>neutral</td>
+<td align="right">0.0 wins</td>
+<td align="right">100</td>
+</tr>
+<tr>
+<td>Kyrie Irving's 56 expected games and top-contributor value are fragile.</td>
+<td>NBA.com reported Irving would miss the entire 2025-26 season while recovering from ACL reconstruction, and his NBA.com player page says the surgery was March 26.</td>
+<td>hurts</td>
+<td align="right">-1.2 wins</td>
+<td align="right">70</td>
+</tr>
+<tr>
+<td>Lively's starter-level center assumption is high variance.</td>
+<td>NBA.com player news says Lively had right-foot surgery in December 2025 and, as of June 26, 2026, still had not progressed to running.</td>
+<td>hurts</td>
+<td align="right">-0.8 wins</td>
+<td align="right">68</td>
+</tr>
+<tr>
+<td>Cooper Flagg can plausibly beat the roster-context rating.</td>
+<td>ESPN lists Flagg's 2025-26 line at 21.0 PPG, 6.7 RPG, 4.5 APG, and NBA.com says he won Rookie of the Year. The non-authoritative roster context gives him only -0.13 net.</td>
+<td>helps</td>
+<td align="right">+1.2 wins</td>
+<td align="right">64</td>
+</tr>
+<tr>
+<td>Santi Aldama probably deserves more than the roster-context 12.8 MPG/27 expected games if healthy.</td>
+<td>NBA.com lists Aldama at 14.0 PPG, 6.7 RPG, 2.9 APG, and the Mavericks announced his acquisition with Marcus Sasser and Biberovic's rights.</td>
+<td>helps</td>
+<td align="right">+0.5 wins</td>
+<td align="right">58</td>
+</tr>
+<tr>
+<td>The live roster makes the Khris Middleton row stale.</td>
+<td>Dallas' official acquisition page and CBS/NBA reporting place Middleton in the multi-team transaction while Aldama/Sasser move to Dallas; the local roster-context file still gives Middleton 12.4 MPG.</td>
+<td>hurts</td>
+<td align="right">-0.3 wins</td>
+<td align="right">75</td>
+</tr>
+<tr>
+<td>Dusty May's scheme could create a real, non-model upside if it raises pace and passing without losing defensive structure.</td>
+<td>NBA.com says May was hired after leading Michigan to the 2026 NCAA title; Mavs Moneyball reported May's stated identity goals as top-five pace, competitive defense, and best-in-league passing.</td>
+<td>helps</td>
+<td align="right">+0.4 wins</td>
+<td align="right">45</td>
+</tr>
+<tr>
+<td>The deep rotation is thin and cold-start heavy if injuries hit.</td>
+<td>Corrected prior has four cold-start players; local depth chart no-pid names include Morez Johnson, Toibu Lawal, Vsevolod Ishchenko, and Sergio De Larrea.</td>
+<td>hurts</td>
+<td align="right">-0.8 wins</td>
+<td align="right">65</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Model role/value</th>
+<th>Concern or upside</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kyrie Irving</td>
+<td>Non-authoritative roster context: starter, 27.0 MPG, 56 exp GP, +3.39 net, 8.95 projected wins.</td>
+<td>ACL recovery and age-35 season make both games played and burst/defensive value uncertain; upside is that even a 50-game version stabilizes Dallas' creation.</td>
+<td>He is the largest single swing between a bottom-five offense and a competent play-in offense.</td>
+</tr>
+<tr>
+<td>Cooper Flagg</td>
+<td>Starter, 27.2 MPG, 69 exp GP, -0.13 net, 4.52 projected wins in roster context.</td>
+<td>His rookie box production and ROY profile suggest the rating may be too conservative if Year 2 shooting/creation improves; 29.5% rookie three-point shooting is the counterweight.</td>
+<td>If Flagg is already a positive star, the corrected 34.4-win prior may be too low.</td>
+</tr>
+<tr>
+<td>Dereck Lively II</td>
+<td>Starter, 25.8 MPG, 51 exp GP, +1.95 net, 5.93 projected wins.</td>
+<td>Foot surgery and late-June non-running status make a starter workload risky; Morez/Gafford/Aldama competition also clouds role.</td>
+<td>Dallas' defensive ceiling depends heavily on whether Lively is healthy enough to anchor.</td>
+</tr>
+<tr>
+<td>P.J. Washington</td>
+<td>Starter, 27.0 MPG, 60 exp GP, -0.55 net, 3.22 projected wins.</td>
+<td>ESPN lists him as day-to-day, and the roster has overlapping forwards/bigs who may squeeze his clean role; still a useful two-way connector if spacing holds.</td>
+<td>Washington is the hinge between big, defensive lineups and cramped half-court lineups.</td>
+</tr>
+<tr>
+<td>Naji Marshall</td>
+<td>Starter, 27.0 MPG, 72 exp GP, +0.03 net, 4.97 projected wins.</td>
+<td>The roster-context file gives him a large durability/role share, but Flagg/Aldama/Christie/Washington could cut into wing minutes.</td>
+<td>If Marshall plays 72 games at neutral value, the floor is steadier; if his role shrinks, replacement quality matters.</td>
+</tr>
+<tr>
+<td>Santi Aldama</td>
+<td>Rotation, 12.8 MPG, 27 exp GP, -0.86 net, 0.57 projected wins.</td>
+<td>Public NBA.com stats and the Mavericks' trade investment imply he may have a larger role than the context file gives him, though prior knee issues and defense cap the upside.</td>
+<td>He is the cleanest candidate to raise spacing and frontcourt skill without relying on Klay minutes.</td>
+</tr>
+<tr>
+<td>Klay Thompson</td>
+<td>Rotation, 12.1 MPG, 39 exp GP, -1.44 net, 0.51 projected wins.</td>
+<td>ESPN lists 11.7 PPG and 39.3 FG% in 2025-26; the model already marks him as a negative, but a new coach must resist reputation minutes.</td>
+<td>Too many Klay minutes could undercut May's defensive and pace goals; a smaller specialist role is manageable.</td>
+</tr>
+<tr>
+<td>Max Christie</td>
+<td>Rotation, 12.9 MPG, 46 exp GP, -1.86 net, 0.39 projected wins.</td>
+<td>ESPN lists 12.3 PPG on 44.1 FG%; if he defends and shoots enough, he may be under-credited versus the very negative roster-context net.</td>
+<td>Christie could absorb some guard/wing minutes if Sasser is not ready or Klay declines further.</td>
+</tr>
+<tr>
+<td>Daniel Gafford</td>
+<td>Rotation, 12.2 MPG, 34 exp GP, -0.46 net, 0.85 projected wins.</td>
+<td>NBA.com notes added competition from Morez Johnson, but Gafford may need more minutes if Lively is delayed.</td>
+<td>Backup-center allocation can swing several regular-season games if Lively misses time.</td>
+</tr>
+<tr>
+<td>Morez Johnson</td>
+<td>Rotation, 10.3 MPG, 34 exp GP, rookie/cold, -1.11 net, 0.49 projected wins.</td>
+<td>NBA draft profile calls him a depth frontcourt option with physical, high-motor, switchable defensive traits; cold-start uncertainty is large.</td>
+<td>He is both injury insurance and a possible spacing drag if pressed into heavy minutes early.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>I am applying a judgmental adjustment of -0.3 pts/100, roughly -1.0 win, because the corrected prior already moved Dallas down to a skeptical 34.4-win baseline, but the most concrete current research items are slightly negative: Kyrie is coming off a full missed season, Lively's foot recovery was still not at a running stage in late June, the roster-context file still has stale Middleton minutes, and the deep bench has four cold-start names.</p>
+<p>I am not treating the non-authoritative roster-detail team's +1.454 strength as valid. I am also not giving the full downside implied by Irving/Lively injury risk because the upside case is real: Flagg may already be better than his roster-context net, Aldama may be under-minuted, and May's staff could create a cleaner offensive identity. The final adjusted view is 33.4 wins, not a new simulation.</p>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest argument against my small downside trim is that the model may actually be too low. Flagg's rookie production and awards profile point toward a player who can leap from "neutral young starter" to clear positive. Dallas also had a 26-win season with Kyrie absent; even an imperfect Kyrie return gives them late-clock shot creation that last year's patchwork backcourt lacked. Aldama/Sasser add live rotation options, and May's pace/passing goals are coherent with a roster that has more frontcourt passing and more transition athleticism than the 2025-26 Mavericks. If Kyrie is healthy by opening night and Lively is running without setbacks in camp, 38-40 wins is a plausible outcome inside the model's p90 range.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>Kyrie Irving camp reports showing unrestricted participation, normal burst, and no planned early-season games limit.</li>
+<li>Dereck Lively II progressing from non-running to full-speed practice and preseason contact without foot setbacks.</li>
+<li>Updated depth chart removing Khris Middleton and assigning real Sasser/Aldama/Morez minutes.</li>
+<li>Dusty May preseason rotations showing Flagg as a high-usage initiator with enough shooting around him.</li>
+<li>Transaction follow-up that turns one crowded frontcourt piece into a healthier guard or wing creator.</li>
+<li>A corrected model rerun where the team-detail roster rows and authoritative standings row use the same Dallas prior.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<p>The most important data-quality issue is source separation. The only authoritative team-level prior used here is <code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code>. The richer <code>projection_2026_27_teams.json</code> is useful for roster/minutes diagnostics but currently conflicts with the corrected standings prior at the team level, so I did not use its Dallas <code>proj_wins</code>, <code>p10</code>, <code>p50</code>, <code>p90</code>, <code>playoff_prob</code>, or <code>strength</code> as the model prior.</p>
+<p>The roster-context file also appears stale because it includes Khris Middleton while public Mavericks/NBA reporting says Dallas acquired Aldama/Sasser through the Middleton-related multi-team transaction. Online depth charts are volatile in early July, and day-to-day/GTD tags on ESPN are not the same as season availability forecasts. The exact win delta should therefore be treated as low-precision.</p>
+<p>The prior itself has wide uncertainty: <code>se_strength = 1.414</code>, p10-p90 width 13 wins, and <code>n_cold_start = 4</code>. That is a large enough band that my -1.0 win adjustment is a small lean, not a strong disagreement.</p>
+<h2 id="sources">Sources</h2>
+<p>Local/model sources:</p>
+<ul>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection_2026_27.json</code> - authoritative DAL prior row, accessed July 9, 2026.</li>
+<li><code>private-model-workspace/andrewjparkus.github.io/projection.html</code> - public standings page code reading <code>projection_2026_27.json</code>, accessed July 9, 2026.</li>
+<li><code>private-model-workspace/andrewjparkus.github.io/team2027.html</code> - team page factor/roster display logic, accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code> - roster context only; team-level prior not used, accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code> - curated depth-chart rows, accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/README.md</code> - model-output overview, accessed July 9, 2026.</li>
+<li><code>private-model-workspace/unified-rapm/daily_v5/MODEL_OVERVIEW.md</code> - model methodology overview, accessed July 9, 2026.</li>
+</ul>
+<p>External public sources:</p>
+<ul>
+<li><a href="https://www.espn.com/nba/team/depth/_/name/dal" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/depth/_/name/dal</a> - ESPN Dallas depth chart and 2025-26 record, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/kyrie-irving-wont-return-2025-26-season" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/kyrie-irving-wont-return-2025-26-season</a> - NBA.com/AP report on Kyrie Irving missing 2025-26 while recovering from ACL injury, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/202681/kyrie-irving" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/202681/kyrie-irving</a> - NBA.com Kyrie Irving player page/news, accessed July 9, 2026.</li>
+<li><a href="https://www.espn.com/nba/player/_/id/5041939/cooper-flagg" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/player/_/id/5041939/cooper-flagg</a> - ESPN Cooper Flagg profile and 2025-26 stats, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/1642843/cooper-flagg" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1642843/cooper-flagg</a> - NBA.com Cooper Flagg player page/news and awards, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/1641726/dereck-lively-ii" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1641726/dereck-lively-ii</a> - NBA.com Dereck Lively II player page/news, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/mavericks-dereck-lively-foot-injury" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/mavericks-dereck-lively-foot-injury</a> - NBA.com report on Lively foot injury, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/1629655/daniel-gafford" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1629655/daniel-gafford</a> - NBA.com Daniel Gafford player page/news, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/mavs/news/mavericks-acquire-santi-aldama-tarik-biberovic-and-marcus-sasser" target="_blank" rel="noopener noreferrer">https://www.nba.com/mavs/news/mavericks-acquire-santi-aldama-tarik-biberovic-and-marcus-sasser</a> - Mavericks official acquisition news, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/player/1630583/santi-aldama" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1630583/santi-aldama</a> - NBA.com Santi Aldama player page/stats, accessed July 9, 2026.</li>
+<li><a href="https://www.cbssports.com/nba/news/khris-middleton-six-team-trade-nba-wizards-mavericks-clippers-grizzlies-pistons-bucks/" target="_blank" rel="noopener noreferrer">https://www.cbssports.com/nba/news/khris-middleton-six-team-trade-nba-wizards-mavericks-clippers-grizzlies-pistons-bucks/</a> - CBS Sports six-team trade explainer, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/news/mavs-hire-dusty-may-coach" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/mavs-hire-dusty-may-coach</a> - NBA.com report on Dusty May hire, accessed July 9, 2026.</li>
+<li><a href="https://www.mavsmoneyball.com/mavericks-analysis/60412/dusty-may-cooper-flagg-kyrie-irving-morez-johnson-santi-aldama-willie-green" target="_blank" rel="noopener noreferrer">https://www.mavsmoneyball.com/mavericks-analysis/60412/dusty-may-cooper-flagg-kyrie-irving-morez-johnson-santi-aldama-willie-green</a> - Mavs Moneyball report on May's stated team identity, accessed July 9, 2026.</li>
+<li><a href="https://www.nba.com/draft/2026/prospects/morez-johnson-jr" target="_blank" rel="noopener noreferrer">https://www.nba.com/draft/2026/prospects/morez-johnson-jr</a> - NBA.com Morez Johnson Jr. draft profile, accessed July 9, 2026.</li>
+<li><a href="https://www.espn.com/nba/player/_/id/4278078/pj-washington" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/player/_/id/4278078/pj-washington</a> - ESPN P.J. Washington profile/stats/status, accessed July 9, 2026.</li>
+<li><a href="https://www.espn.com/nba/player/_/id/6475/klay-thompson" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/player/_/id/6475/klay-thompson</a> - ESPN Klay Thompson profile/stats, accessed July 9, 2026.</li>
+<li><a href="https://www.espn.com/nba/player/_/id/4432582/max-christie" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/player/_/id/4432582/max-christie</a> - ESPN Max Christie profile/stats, accessed July 9, 2026.</li>
+</ul>1d:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$1f"}}],"$L20"]}]
+1e:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba/dallas-center-rotation-without-full-lively-availability",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-center-rotation-without-full-lively-availability/","children":"Dallas center rotation without full Lively availability"}]}],["$","li","basketball/nba/dallas-frontcourt-geometry",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-frontcourt-geometry/","children":"Dallas frontcourt geometry"}]}],["$","li","basketball/nba/dallas-guard-creation-after-roster-turnover",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-guard-creation-after-roster-turnover/","children":"Dallas guard creation after roster turnover"}]}],["$","li","basketball/nba/dallas-mavericks-2026-27-roster-construction-dossier",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-mavericks-2026-27-roster-construction-dossier/","children":"Dallas Mavericks 2026-27 roster construction dossier"}]}],["$","li","basketball/nba/dallas-mavericks-2026-27-season",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-mavericks-2026-27-season/","children":"Dallas Mavericks 2026-27 season"}]}],["$","li","basketball/nba/dallas-mavericks-availability-scenarios",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-mavericks-availability-scenarios/","children":"Dallas Mavericks availability scenarios"}]}],["$","li","basketball/nba/dallas-mavericks-model-pressure-points",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-mavericks-model-pressure-points/","children":"Dallas Mavericks model pressure points"}]}],["$","li","basketball/nba/dallas-mavericks-roster-and-minutes-ledger",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-mavericks-roster-and-minutes-ledger/","children":"Dallas Mavericks roster and minutes ledger"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba/dallas-mavericks-availability-scenarios",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-mavericks-availability-scenarios/","children":"Dallas Mavericks availability scenarios"}]}],["$","li","basketball/nba/dallas-mavericks-model-pressure-points",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-mavericks-model-pressure-points/","children":"Dallas Mavericks model pressure points"}]}],["$","li","basketball/nba/dallas-center-rotation-without-full-lively-availability",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-center-rotation-without-full-lively-availability/","children":"Dallas center rotation without full Lively availability"}]}],["$","li","basketball/nba/dallas-frontcourt-geometry",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-frontcourt-geometry/","children":"Dallas frontcourt geometry"}]}],["$","li","basketball/nba/dallas-guard-creation-after-roster-turnover",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-guard-creation-after-roster-turnover/","children":"Dallas guard creation after roster turnover"}]}],["$","li","basketball/nba/dallas-mavericks-2026-27-roster-construction-dossier",{"children":["$","$L3",null,{"href":"/articles/basketball/nba/dallas-mavericks-2026-27-roster-construction-dossier/","children":"Dallas Mavericks 2026-27 roster construction dossier"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+20:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cle-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Cleveland Cavaliers 2026-27 Research Briefing"}]]}],["$","$L3",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/den-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Denver Nuggets 2026-27 Research Briefing"}]]}]]}]
+14:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+11:null
+16:[["$","title","0",{"children":"Dallas Mavericks 2026-27 Research Briefing · Rome"}],["$","meta","1",{"name":"description","content":"Authoritative prior source: , row . I did not use for Dallas' team-level prior because the corrected instruction says the standings JSON is the only authoritative prior."}],["$","meta","2",{"name":"application-name","content":"Rome"}],["$","meta","3",{"name":"author","content":"Andrew Park"}],["$","meta","4",{"name":"keywords","content":"Rome,wiki,second brain,knowledge garden,research"}],["$","meta","5",{"name":"creator","content":"Andrew Park"}],["$","meta","6",{"name":"publisher","content":"Andrew Park"}],["$","meta","7",{"property":"og:title","content":"Dallas Mavericks 2026-27 Research Briefing"}],["$","meta","8",{"property":"og:description","content":"Authoritative prior source: , row . I did not use for Dallas' team-level prior because the corrected instruction says the standings JSON is the only authoritative prior."}],["$","meta","9",{"property":"og:type","content":"article"}],["$","meta","10",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","11",{"name":"twitter:title","content":"Rome — A Living Encyclopedia"}],["$","meta","12",{"name":"twitter:description","content":"Andrew Park's second brain, set in type."}],["$","meta","13",{"name":"twitter:image","content":"http://localhost:3000/og.png"}]]

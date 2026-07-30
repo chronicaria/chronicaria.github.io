@@ -1,0 +1,686 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+2d:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+2e:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA multi-agent forecasting company",{"children":"NBA multi-agent forecasting company"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Lean NBA agent company structure plan"}],["$","p",null,{"className":"article-deck","children":"A lean NBA agent company should treat Andrew's daily RAPM-decomp model as the forecasting engine, then use free agents for team context, scenario review, audit, market comparison, and public explanation."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 8, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[10," min · ","2,141"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","design-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#design-thesis","children":"Design Thesis"}]}],["$","li","company-size",{"className":"toc-depth-2","children":["$","a",null,{"href":"#company-size","children":"Company Size"}]}],["$","li","core-lean-company-41-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#core-lean-company-41-agents","children":"Core Lean Company: 41 Agents"}]}],["$","li","expanded-lean-company-53-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#expanded-lean-company-53-agents","children":"Expanded Lean Company: 53 Agents"}]}],["$","li","authority-pyramid",{"className":"toc-depth-2","children":["$","a",null,{"href":"#authority-pyramid","children":"Authority Pyramid"}]}],["$","li","free-only-runtime-policy",{"className":"toc-depth-2","children":["$","a",null,{"href":"#free-only-runtime-policy","children":"Free-Only Runtime Policy"}]}],["$","li","proprietary-data-rule",{"className":"toc-depth-3","children":["$","a",null,{"href":"#proprietary-data-rule","children":"Proprietary Data Rule"}]}],["$","li","executive--ops",{"className":"toc-depth-2","children":["$","a",null,{"href":"#executive--ops","children":"Executive & Ops"}]}],["$","li","1-commissioner-agent",{"className":"toc-depth-3","children":["$","a",null,{"href":"#1-commissioner-agent","children":"1. Commissioner Agent"}]}],["$","li","2-cost-governor",{"className":"toc-depth-3","children":["$","a",null,{"href":"#2-cost-governor","children":"2. Cost Governor"}]}],["$","li","quant--data-core",{"className":"toc-depth-2","children":["$","a",null,{"href":"#quant--data-core","children":"Quant & Data Core"}]}],["$","li","3-rapm-model-steward",{"className":"toc-depth-3","children":["$","a",null,{"href":"#3-rapm-model-steward","children":"3. RAPM Model Steward"}]}],["$","li","4-data-integrity-agent",{"className":"toc-depth-3","children":["$","a",null,{"href":"#4-data-integrity-agent","children":"4. Data Integrity Agent"}]}],["$","li","5-packet-builder",{"className":"toc-depth-3","children":["$","a",null,{"href":"#5-packet-builder","children":"5. Packet Builder"}]}],["$","li","team-research-committee",{"className":"toc-depth-2","children":["$","a",null,{"href":"#team-research-committee","children":"Team Research Committee"}]}],["$","li","team-agent-responsibilities",{"className":"toc-depth-3","children":["$","a",null,{"href":"#team-agent-responsibilities","children":"Team Agent Responsibilities"}]}],["$","li","standard-team-agent-output",{"className":"toc-depth-3","children":["$","a",null,{"href":"#standard-team-agent-output","children":"Standard Team Agent Output"}]}],["$","li","virtual-grouping",{"className":"toc-depth-3","children":["$","a",null,{"href":"#virtual-grouping","children":"Virtual Grouping"}]}],["$","li","prediction-desk",{"className":"toc-depth-2","children":["$","a",null,{"href":"#prediction-desk","children":"Prediction Desk"}]}],"$L3","$L4","$L5","$L6","$L7","$L8","$L9","$La","$Lb","$Lc","$Ld","$Le","$Lf","$L10","$L11","$L12","$L13","$L14","$L15","$L16","$L17","$L18","$L19"]}]]}],"$L1a"]}],null,"$L1b"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","36-season-forecaster",{"className":"toc-depth-3","children":["$","a",null,{"href":"#36-season-forecaster","children":"36. Season Forecaster"}]}]
+4:["$","li","37-game-forecaster",{"className":"toc-depth-3","children":["$","a",null,{"href":"#37-game-forecaster","children":"37. Game Forecaster"}]}]
+5:["$","li","38-scenario-skeptic",{"className":"toc-depth-3","children":["$","a",null,{"href":"#38-scenario-skeptic","children":"38. Scenario Skeptic"}]}]
+6:["$","li","markets--risk",{"className":"toc-depth-2","children":["$","a",null,{"href":"#markets--risk","children":"Markets & Risk"}]}]
+7:["$","li","39-market-comparator",{"className":"toc-depth-3","children":["$","a",null,{"href":"#39-market-comparator","children":"39. Market Comparator"}]}]
+8:["$","li","40-paper-risk-manager",{"className":"toc-depth-3","children":["$","a",null,{"href":"#40-paper-risk-manager","children":"40. Paper Risk Manager"}]}]
+9:["$","li","product-desk",{"className":"toc-depth-2","children":["$","a",null,{"href":"#product-desk","children":"Product Desk"}]}]
+a:["$","li","41-dashboard-narrator",{"className":"toc-depth-3","children":["$","a",null,{"href":"#41-dashboard-narrator","children":"41. Dashboard Narrator"}]}]
+b:["$","li","optional-expanded-agents",{"className":"toc-depth-2","children":["$","a",null,{"href":"#optional-expanded-agents","children":"Optional Expanded Agents"}]}]
+c:["$","li","daily-run",{"className":"toc-depth-2","children":["$","a",null,{"href":"#daily-run","children":"Daily Run"}]}]
+d:["$","li","morning-model-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#morning-model-cycle","children":"Morning Model Cycle"}]}]
+e:["$","li","team-research-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#team-research-cycle","children":"Team Research Cycle"}]}]
+f:["$","li","prediction-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#prediction-cycle","children":"Prediction Cycle"}]}]
+10:["$","li","market-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#market-cycle","children":"Market Cycle"}]}]
+11:["$","li","postgame-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#postgame-cycle","children":"Postgame Cycle"}]}]
+12:["$","li","backtesting-plan",{"className":"toc-depth-2","children":["$","a",null,{"href":"#backtesting-plan","children":"Backtesting Plan"}]}]
+13:["$","li","prompt-pattern",{"className":"toc-depth-2","children":["$","a",null,{"href":"#prompt-pattern","children":"Prompt Pattern"}]}]
+14:["$","li","free-model-stack",{"className":"toc-depth-2","children":["$","a",null,{"href":"#free-model-stack","children":"Free Model Stack"}]}]
+15:["$","li","local-first",{"className":"toc-depth-3","children":["$","a",null,{"href":"#local-first","children":"Local First"}]}]
+16:["$","li","optional-free-hosted",{"className":"toc-depth-3","children":["$","a",null,{"href":"#optional-free-hosted","children":"Optional Free Hosted"}]}]
+17:["$","li","minimum-viable-company",{"className":"toc-depth-2","children":["$","a",null,{"href":"#minimum-viable-company","children":"Minimum Viable Company"}]}]
+18:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+19:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+1a:["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","design-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#design-thesis","children":"Design Thesis"}]}],["$","li","company-size",{"className":"toc-depth-2","children":["$","a",null,{"href":"#company-size","children":"Company Size"}]}],["$","li","core-lean-company-41-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#core-lean-company-41-agents","children":"Core Lean Company: 41 Agents"}]}],["$","li","expanded-lean-company-53-agents",{"className":"toc-depth-3","children":["$","a",null,{"href":"#expanded-lean-company-53-agents","children":"Expanded Lean Company: 53 Agents"}]}],["$","li","authority-pyramid",{"className":"toc-depth-2","children":["$","a",null,{"href":"#authority-pyramid","children":"Authority Pyramid"}]}],["$","li","free-only-runtime-policy",{"className":"toc-depth-2","children":["$","a",null,{"href":"#free-only-runtime-policy","children":"Free-Only Runtime Policy"}]}],["$","li","proprietary-data-rule",{"className":"toc-depth-3","children":["$","a",null,{"href":"#proprietary-data-rule","children":"Proprietary Data Rule"}]}],["$","li","executive--ops",{"className":"toc-depth-2","children":["$","a",null,{"href":"#executive--ops","children":"Executive & Ops"}]}],["$","li","1-commissioner-agent",{"className":"toc-depth-3","children":["$","a",null,{"href":"#1-commissioner-agent","children":"1. Commissioner Agent"}]}],["$","li","2-cost-governor",{"className":"toc-depth-3","children":["$","a",null,{"href":"#2-cost-governor","children":"2. Cost Governor"}]}],["$","li","quant--data-core",{"className":"toc-depth-2","children":["$","a",null,{"href":"#quant--data-core","children":"Quant & Data Core"}]}],["$","li","3-rapm-model-steward",{"className":"toc-depth-3","children":["$","a",null,{"href":"#3-rapm-model-steward","children":"3. RAPM Model Steward"}]}],["$","li","4-data-integrity-agent",{"className":"toc-depth-3","children":["$","a",null,{"href":"#4-data-integrity-agent","children":"4. Data Integrity Agent"}]}],["$","li","5-packet-builder",{"className":"toc-depth-3","children":["$","a",null,{"href":"#5-packet-builder","children":"5. Packet Builder"}]}],["$","li","team-research-committee",{"className":"toc-depth-2","children":["$","a",null,{"href":"#team-research-committee","children":"Team Research Committee"}]}],["$","li","team-agent-responsibilities",{"className":"toc-depth-3","children":["$","a",null,{"href":"#team-agent-responsibilities","children":"Team Agent Responsibilities"}]}],["$","li","standard-team-agent-output",{"className":"toc-depth-3","children":["$","a",null,{"href":"#standard-team-agent-output","children":"Standard Team Agent Output"}]}],["$","li","virtual-grouping",{"className":"toc-depth-3","children":["$","a",null,{"href":"#virtual-grouping","children":"Virtual Grouping"}]}],["$","li","prediction-desk",{"className":"toc-depth-2","children":["$","a",null,{"href":"#prediction-desk","children":"Prediction Desk"}]}],["$","li","36-season-forecaster",{"className":"toc-depth-3","children":["$","a",null,{"href":"#36-season-forecaster","children":"36. Season Forecaster"}]}],["$","li","37-game-forecaster",{"className":"toc-depth-3","children":["$","a",null,{"href":"#37-game-forecaster","children":"37. Game Forecaster"}]}],["$","li","38-scenario-skeptic",{"className":"toc-depth-3","children":["$","a",null,{"href":"#38-scenario-skeptic","children":"38. Scenario Skeptic"}]}],["$","li","markets--risk",{"className":"toc-depth-2","children":["$","a",null,{"href":"#markets--risk","children":"Markets & Risk"}]}],["$","li","39-market-comparator",{"className":"toc-depth-3","children":["$","a",null,{"href":"#39-market-comparator","children":"39. Market Comparator"}]}],["$","li","40-paper-risk-manager",{"className":"toc-depth-3","children":["$","a",null,{"href":"#40-paper-risk-manager","children":"40. Paper Risk Manager"}]}],["$","li","product-desk",{"className":"toc-depth-2","children":["$","a",null,{"href":"#product-desk","children":"Product Desk"}]}],["$","li","41-dashboard-narrator",{"className":"toc-depth-3","children":["$","a",null,{"href":"#41-dashboard-narrator","children":"41. Dashboard Narrator"}]}],["$","li","optional-expanded-agents",{"className":"toc-depth-2","children":"$L1c"}],"$L1d","$L1e","$L1f","$L20","$L21","$L22","$L23","$L24","$L25","$L26","$L27","$L28","$L29","$L2a"]}]]}],"$L2b","$L2c"]}]
+1b:["$","$L2d",null,{"children":["$","$2e",null,{"name":"Next.MetadataOutlet","children":"$@2f"}]}]
+1c:["$","a",null,{"href":"#optional-expanded-agents","children":"Optional Expanded Agents"}]
+1d:["$","li","daily-run",{"className":"toc-depth-2","children":["$","a",null,{"href":"#daily-run","children":"Daily Run"}]}]
+1e:["$","li","morning-model-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#morning-model-cycle","children":"Morning Model Cycle"}]}]
+1f:["$","li","team-research-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#team-research-cycle","children":"Team Research Cycle"}]}]
+20:["$","li","prediction-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#prediction-cycle","children":"Prediction Cycle"}]}]
+21:["$","li","market-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#market-cycle","children":"Market Cycle"}]}]
+22:["$","li","postgame-cycle",{"className":"toc-depth-3","children":["$","a",null,{"href":"#postgame-cycle","children":"Postgame Cycle"}]}]
+23:["$","li","backtesting-plan",{"className":"toc-depth-2","children":["$","a",null,{"href":"#backtesting-plan","children":"Backtesting Plan"}]}]
+24:["$","li","prompt-pattern",{"className":"toc-depth-2","children":["$","a",null,{"href":"#prompt-pattern","children":"Prompt Pattern"}]}]
+25:["$","li","free-model-stack",{"className":"toc-depth-2","children":["$","a",null,{"href":"#free-model-stack","children":"Free Model Stack"}]}]
+26:["$","li","local-first",{"className":"toc-depth-3","children":["$","a",null,{"href":"#local-first","children":"Local First"}]}]
+27:["$","li","optional-free-hosted",{"className":"toc-depth-3","children":["$","a",null,{"href":"#optional-free-hosted","children":"Optional Free Hosted"}]}]
+28:["$","li","minimum-viable-company",{"className":"toc-depth-2","children":["$","a",null,{"href":"#minimum-viable-company","children":"Minimum Viable Company"}]}]
+29:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+2a:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+30:T60fb,<p>Related: <a href="/rome-wiki/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/" class="wiki-link">NBA multi-agent forecasting company</a>, <a href="/rome-wiki/articles/basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan/" class="wiki-link">NBA agent company structure plan</a>, <a href="/rome-wiki/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/" class="wiki-link">Cheap model strategy for NBA agents</a>, <a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm/" class="wiki-link">RAPM</a>, <a href="/rome-wiki/articles/weather/forecast-skill/" class="wiki-link">Forecast skill</a>.</p>
+<h2 id="design-thesis">Design Thesis</h2>
+<p>The smaller company should not try to recreate the 408-agent design with fewer bodies. It should change the center of gravity.</p>
+<p>The proprietary daily <a href="/rome-wiki/articles/basketball/nba-quantitative-modeling/rapm/" class="wiki-link">RAPM</a> decomp model is the quant desk. It owns player values, team ratings, and baseline predictions for the 2026-27 season. The agent company should sit around that model as:</p>
+<ul>
+<li><strong>research layer:</strong> one agent per NBA team.</li>
+<li><strong>scenario layer:</strong> agents translate injuries, rotations, trades, and schedule context into deltas.</li>
+<li><strong>forecast layer:</strong> agents package model outputs into scoreable season and game probabilities.</li>
+<li><strong>market layer:</strong> agents compare house lines to markets, but only for paper trading.</li>
+<li><strong>audit layer:</strong> agents track leakage, calibration, drift, and model-vs-agent lift.</li>
+<li><strong>product layer:</strong> agents make the live dashboard feel like a company.</li>
+</ul>
+<p>The rule is simple: <strong>agents can explain, challenge, and scenario-adjust the model; they cannot silently replace it.</strong></p>
+<h2 id="company-size">Company Size</h2>
+<h3 id="core-lean-company-41-agents">Core Lean Company: 41 Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th align="right">Agents</th>
+<th>Main job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Executive &#x26; Ops</td>
+<td align="right">2</td>
+<td>Run the slate cycle and enforce zero-dollar inference.</td>
+</tr>
+<tr>
+<td>Quant &#x26; Data Core</td>
+<td align="right">3</td>
+<td>Package RAPM snapshots, validate data, and prevent leakage.</td>
+</tr>
+<tr>
+<td>Team Research Committee</td>
+<td align="right">30</td>
+<td>One agent per team, responsible for context and scenario notes.</td>
+</tr>
+<tr>
+<td>Prediction Desk</td>
+<td align="right">3</td>
+<td>Convert model/team packets into season and game forecasts.</td>
+</tr>
+<tr>
+<td>Markets &#x26; Risk</td>
+<td align="right">2</td>
+<td>Compare to odds and issue paper-bet decisions.</td>
+</tr>
+<tr>
+<td>Product Desk</td>
+<td align="right">1</td>
+<td>Turn outputs into website-readable company narration.</td>
+</tr>
+</tbody>
+</table>
+<p>Total: <strong>41 agents</strong>.</p>
+<h3 id="expanded-lean-company-53-agents">Expanded Lean Company: 53 Agents</h3>
+<p>The 53-agent version adds more specialization without returning to the 408-agent overhead:</p>
+<table>
+<thead>
+<tr>
+<th>Add-on</th>
+<th align="right">Agents</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Calibration &#x26; Backtest Pod</td>
+<td align="right">4</td>
+<td>Walk-forward replay, Brier/log score, CLV, leakage reports.</td>
+</tr>
+<tr>
+<td>Scenario Pod</td>
+<td align="right">4</td>
+<td>Injury, trade, rotation, and rest/travel scenario stress tests.</td>
+</tr>
+<tr>
+<td>Market Microstructure Pod</td>
+<td align="right">2</td>
+<td>No-vig, book shopping, exchange liquidity, stale-line flags.</td>
+</tr>
+<tr>
+<td>Website Story Pod</td>
+<td align="right">2</td>
+<td>Dashboard copy, agent status cards, public recaps.</td>
+</tr>
+</tbody>
+</table>
+<p>The 41-agent company should be the default. The 53-agent company is for when the website needs more visible motion.</p>
+<h2 id="authority-pyramid">Authority Pyramid</h2>
+<pre><code class="language-mermaid">flowchart TD
+  Human["Human Owner"]
+  CEO["Commissioner Agent"]
+  Cost["Cost Governor"]
+  Quant["Quant &#x26; Data Core"]
+  Research["30 Team Research Agents"]
+  Prediction["Prediction Desk"]
+  Markets["Markets &#x26; Risk"]
+  Product["Product Desk"]
+  Backtest["Backtest &#x26; Calibration Pod"]
+
+  Human --> CEO
+  CEO --> Cost
+  CEO --> Quant
+  CEO --> Research
+  Quant --> Research
+  Quant --> Prediction
+  Research --> Prediction
+  Prediction --> Markets
+  Markets --> Product
+  Prediction --> Backtest
+  Markets --> Backtest
+  Backtest --> CEO
+  Cost -. veto .-> CEO
+  Cost -. veto .-> Prediction
+</code></pre>
+<p>The Commissioner Agent is not a handicapper. It schedules the daily cycle, requests packets, routes disputes, and writes the final slate memo. It cannot change the RAPM model output or push through a paper bet that fails risk rules.</p>
+<h2 id="free-only-runtime-policy">Free-Only Runtime Policy</h2>
+<p>The core system must run at <strong>$0 inference cost</strong>.</p>
+<p>Default order:</p>
+<ol>
+<li><strong>Deterministic code</strong> for model runs, odds math, joins, scoring, and leakage checks.</li>
+<li><strong>Local LLMs</strong> through Ollama, llama.cpp, vLLM, or another local OpenAI-compatible server.</li>
+<li><strong>Free hosted APIs</strong> only as opportunistic accelerators with strict quotas.</li>
+<li><strong>No paid fallback</strong> in the default runtime.</li>
+</ol>
+<p>Hosted free APIs are useful, but they should never be required for the nightly run. If all hosted free quotas fail, the company should still publish:</p>
+<ul>
+<li>RAPM model ratings.</li>
+<li>team ratings.</li>
+<li>game probabilities.</li>
+<li>paper-bet board.</li>
+<li>cached team-agent memos.</li>
+<li>dashboard status showing which agents slept.</li>
+</ul>
+<h3 id="proprietary-data-rule">Proprietary Data Rule</h3>
+<p>Because the RAPM decomp model is proprietary, raw model internals should stay local by default. Free hosted APIs may have data-use terms, retention policies, rate limits, or model-provider routing that are not ideal for private research.</p>
+<p>Use this split:</p>
+<table>
+<thead>
+<tr>
+<th>Packet</th>
+<th>Allowed runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Raw player RAPM decomp, model coefficients, proprietary features</td>
+<td>Local only.</td>
+</tr>
+<tr>
+<td>Rounded player ratings, team ratings, public injury/news summaries</td>
+<td>Local or hosted free.</td>
+</tr>
+<tr>
+<td>Public dashboard explanations</td>
+<td>Local or hosted free.</td>
+</tr>
+<tr>
+<td>Paper-bet recommendations with no private coefficients</td>
+<td>Local or hosted free.</td>
+</tr>
+</tbody>
+</table>
+<p>The cleanest MVP is local-only for everything agentic. Free hosted models can be added later for speed or variety.</p>
+<h2 id="executive--ops">Executive &#x26; Ops</h2>
+<h3 id="1-commissioner-agent">1. Commissioner Agent</h3>
+<p><strong>Purpose:</strong> run the company day.</p>
+<p><strong>Inputs:</strong></p>
+<ul>
+<li>current date and slate.</li>
+<li>RAPM model snapshot ID.</li>
+<li>team-agent packet status.</li>
+<li>market feed status.</li>
+<li>backtest/live mode.</li>
+<li>cost governor status.</li>
+</ul>
+<p><strong>Outputs:</strong></p>
+<ul>
+<li>daily run agenda.</li>
+<li>list of active team agents.</li>
+<li>final slate memo.</li>
+<li>skipped-agent report.</li>
+<li>website "front office note."</li>
+</ul>
+<p><strong>Cannot:</strong></p>
+<ul>
+<li>alter model ratings.</li>
+<li>override leakage gates.</li>
+<li>fabricate missing source data.</li>
+<li>approve real betting.</li>
+</ul>
+<h3 id="2-cost-governor">2. Cost Governor</h3>
+<p><strong>Purpose:</strong> enforce the free-only constraint.</p>
+<p>This can be mostly code with an agent-facing identity. It refuses any model call where expected cost is above zero, quota is exhausted, or a proprietary packet would leave the local machine.</p>
+<pre><code class="language-yaml">cost_policy:
+  max_daily_usd: 0
+  paid_models_allowed: false
+  proprietary_packet_cloud_allowed: false
+  hosted_free_calls_optional: true
+  local_fallback_required: true
+</code></pre>
+<h2 id="quant--data-core">Quant &#x26; Data Core</h2>
+<p>This is the real engine room. Most of it should be code, not LLMs.</p>
+<h3 id="3-rapm-model-steward">3. RAPM Model Steward</h3>
+<p><strong>Purpose:</strong> own the daily model snapshot.</p>
+<p><strong>Inputs:</strong></p>
+<ul>
+<li>player RAPM decomp ratings.</li>
+<li>projected minutes.</li>
+<li>team aggregation.</li>
+<li>season simulations for 2026-27.</li>
+<li>game-level model predictions.</li>
+</ul>
+<p><strong>Outputs:</strong></p>
+<ul>
+<li>Model Snapshot Manifest.</li>
+<li>Player Value Board.</li>
+<li>Team Strength Board.</li>
+<li>Season Projection Packet.</li>
+<li>Game Baseline Packet.</li>
+</ul>
+<p>The steward does not make narrative arguments. It tells the rest of the company what the model currently says.</p>
+<h3 id="4-data-integrity-agent">4. Data Integrity Agent</h3>
+<p><strong>Purpose:</strong> check that the model inputs and public context are sane.</p>
+<p>Checks:</p>
+<ul>
+<li>missing players.</li>
+<li>stale team assignments.</li>
+<li>impossible minutes projections.</li>
+<li>duplicated game IDs.</li>
+<li>injury statuses after decision timestamp.</li>
+<li>transaction timing.</li>
+<li>home/away and rest-day errors.</li>
+</ul>
+<h3 id="5-packet-builder">5. Packet Builder</h3>
+<p><strong>Purpose:</strong> translate model outputs into agent-readable packets.</p>
+<p>The Packet Builder should hide raw coefficients and expose structured summaries:</p>
+<pre><code class="language-yaml">team_packet:
+  team:
+  as_of_timestamp:
+  model_snapshot_id:
+  team_rating:
+  offensive_rating_component:
+  defensive_rating_component:
+  pace_adjustment:
+  projected_wins:
+  playoff_odds:
+  top_positive_players:
+  top_negative_players:
+  rotation_minutes:
+  uncertainty_band:
+  recent_rating_change:
+  known_context:
+</code></pre>
+<p>This is how the team agents get useful information without receiving the full proprietary model.</p>
+<h2 id="team-research-committee">Team Research Committee</h2>
+<p>The Research Department has exactly <strong>30 agents</strong>, one per NBA team.</p>
+<p>Each team agent is a "team desk chair," not an eight-agent subcommittee. It owns one team packet, one context memo, and one scenario board.</p>
+<h3 id="team-agent-responsibilities">Team Agent Responsibilities</h3>
+<p>Each team agent answers five questions:</p>
+<ol>
+<li>What does the RAPM-decomp model believe about this team?</li>
+<li>Which players or rotation assumptions drive that rating?</li>
+<li>What current context might make the model stale?</li>
+<li>What scenarios would materially move the team rating?</li>
+<li>How confident is the agent that the model's view is still valid?</li>
+</ol>
+<h3 id="standard-team-agent-output">Standard Team Agent Output</h3>
+<pre><code class="language-yaml">team_agent_report:
+  team:
+  as_of_timestamp:
+  model_snapshot_id:
+  model_rating_summary:
+  rating_driver_notes:
+  rotation_fragility:
+  injury_scenarios:
+  trade_or_transaction_notes:
+  g_league_or_two_way_notes:
+  schedule_context:
+  model_challenge:
+  proposed_context_delta:
+    points_per_100:
+    probability:
+    reason:
+  confidence:
+  citations_or_packet_fields:
+</code></pre>
+<p>The most important field is <code>model_challenge</code>. The team agent should not say "I like this roster." It should say: "the model may be overstating this team by 1.2 points per 100 if the projected backup center minutes are wrong."</p>
+<h3 id="virtual-grouping">Virtual Grouping</h3>
+<p>Do not add division leads in the core version. The interface can still show:</p>
+<ul>
+<li>Atlantic room.</li>
+<li>Central room.</li>
+<li>Southeast room.</li>
+<li>Northwest room.</li>
+<li>Pacific room.</li>
+<li>Southwest room.</li>
+</ul>
+<p>Those are display groups, not extra agents. The 30 team agents are the whole research committee.</p>
+<h2 id="prediction-desk">Prediction Desk</h2>
+<p>The Prediction Desk is deliberately tiny because the proprietary model already produces predictions.</p>
+<h3 id="36-season-forecaster">36. Season Forecaster</h3>
+<p><strong>Purpose:</strong> publish 2026-27 season projections.</p>
+<p>Inputs:</p>
+<ul>
+<li>RAPM team ratings.</li>
+<li>win simulations.</li>
+<li>team-agent context deltas.</li>
+<li>uncertainty bands.</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>projected wins.</li>
+<li>division/conference ranks.</li>
+<li>playoff/play-in odds.</li>
+<li>finals odds if modeled.</li>
+<li>biggest model-vs-agent disagreements.</li>
+</ul>
+<h3 id="37-game-forecaster">37. Game Forecaster</h3>
+<p><strong>Purpose:</strong> produce game probabilities from the model baseline.</p>
+<p>Inputs:</p>
+<ul>
+<li>Game Baseline Packet.</li>
+<li>active team-agent reports.</li>
+<li>home/away, rest, travel, injuries.</li>
+<li>calibrated uncertainty.</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>moneyline probability.</li>
+<li>spread distribution.</li>
+<li>total distribution if modeled.</li>
+<li>fair line.</li>
+<li>context-adjusted line.</li>
+<li>confidence.</li>
+</ul>
+<h3 id="38-scenario-skeptic">38. Scenario Skeptic</h3>
+<p><strong>Purpose:</strong> be the anti-overfitting voice.</p>
+<p>The Scenario Skeptic asks whether a team-agent delta is real or just narrative dressing around the latest news. It should favor the model unless there is a concrete minutes, injury, role, or matchup mechanism.</p>
+<p>Typical veto:</p>
+<pre><code class="language-yaml">skeptic_review:
+  target_game_or_team:
+  challenged_delta:
+  reason_for_veto:
+  base_rate_note:
+  final_recommended_delta:
+</code></pre>
+<h2 id="markets--risk">Markets &#x26; Risk</h2>
+<p>This department is small because the project is paper trading.</p>
+<h3 id="39-market-comparator">39. Market Comparator</h3>
+<p><strong>Purpose:</strong> compare house probabilities to available markets.</p>
+<p>Inputs:</p>
+<ul>
+<li>model/agent fair line.</li>
+<li>sportsbook odds.</li>
+<li>exchange odds if available.</li>
+<li>closing line snapshots.</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>no-vig market probability.</li>
+<li>edge estimate.</li>
+<li>stale-line warning.</li>
+<li>market disagreement summary.</li>
+</ul>
+<h3 id="40-paper-risk-manager">40. Paper Risk Manager</h3>
+<p><strong>Purpose:</strong> turn edge into a paper bet or no-bet.</p>
+<p>The risk manager should be mostly deterministic:</p>
+<ul>
+<li>no bet below edge threshold.</li>
+<li>cap stake by fractional Kelly.</li>
+<li>cap total slate exposure.</li>
+<li>cap same-team correlated exposure.</li>
+<li>require liquidity sanity for exchange markets.</li>
+<li>tag all bets as paper-only.</li>
+</ul>
+<p>The agent's job is to explain the decision, not compute the math by hand.</p>
+<h2 id="product-desk">Product Desk</h2>
+<h3 id="41-dashboard-narrator">41. Dashboard Narrator</h3>
+<p><strong>Purpose:</strong> make the system legible.</p>
+<p>Outputs:</p>
+<ul>
+<li>daily front page recap.</li>
+<li>team-agent status cards.</li>
+<li>model movers.</li>
+<li>biggest disagreements.</li>
+<li>paper-bet board explanation.</li>
+<li>postgame scoring recap.</li>
+</ul>
+<p>This agent is allowed to be theatrical. It should never invent facts, but it can make the dashboard feel like a living company.</p>
+<h2 id="optional-expanded-agents">Optional Expanded Agents</h2>
+<p>Use these only if the 41-agent version feels too quiet.</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Department</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Injury Scenario Agent</td>
+<td>Scenario Pod</td>
+<td>high-value questionable player.</td>
+</tr>
+<tr>
+<td>Rotation Scenario Agent</td>
+<td>Scenario Pod</td>
+<td>preseason, trades, new coach, unstable bench.</td>
+</tr>
+<tr>
+<td>Trade/Transaction Agent</td>
+<td>Scenario Pod</td>
+<td>signing, trade, waiver, two-way change.</td>
+</tr>
+<tr>
+<td>Rest/Travel Agent</td>
+<td>Scenario Pod</td>
+<td>dense schedule or altitude/travel spot.</td>
+</tr>
+<tr>
+<td>Calibration Analyst</td>
+<td>Backtest Pod</td>
+<td>weekly scoring review.</td>
+</tr>
+<tr>
+<td>Closing Line Value Analyst</td>
+<td>Backtest Pod</td>
+<td>market comparison review.</td>
+</tr>
+<tr>
+<td>Leakage Auditor</td>
+<td>Backtest Pod</td>
+<td>every historical replay.</td>
+</tr>
+<tr>
+<td>Agent Lift Analyst</td>
+<td>Backtest Pod</td>
+<td>measures whether agents improved over model-only.</td>
+</tr>
+<tr>
+<td>Exchange Liquidity Agent</td>
+<td>Market Pod</td>
+<td>Kalshi/Polymarket style market available.</td>
+</tr>
+<tr>
+<td>Book Shopping Agent</td>
+<td>Market Pod</td>
+<td>multiple sportsbook lines available.</td>
+</tr>
+<tr>
+<td>Agent Status Designer</td>
+<td>Website Pod</td>
+<td>live org-chart animation.</td>
+</tr>
+<tr>
+<td>Postgame Recap Writer</td>
+<td>Website Pod</td>
+<td>daily dashboard recap.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="daily-run">Daily Run</h2>
+<h3 id="morning-model-cycle">Morning Model Cycle</h3>
+<ol>
+<li>RAPM model produces player decomp ratings.</li>
+<li>Model aggregates to team ratings and season/game predictions.</li>
+<li>RAPM Model Steward writes the snapshot manifest.</li>
+<li>Data Integrity Agent checks obvious schema and timestamp problems.</li>
+<li>Packet Builder creates team and game packets.</li>
+</ol>
+<h3 id="team-research-cycle">Team Research Cycle</h3>
+<ol>
+<li>Activate only teams with games, injuries, transactions, or meaningful rating movement.</li>
+<li>Team agents read their packet and write context deltas.</li>
+<li>Inactive teams keep cached reports.</li>
+<li>Commissioner checks missing packets.</li>
+</ol>
+<h3 id="prediction-cycle">Prediction Cycle</h3>
+<ol>
+<li>Game Forecaster starts from model baseline.</li>
+<li>Team-agent deltas are applied only if the Scenario Skeptic accepts them.</li>
+<li>Season Forecaster updates season board if the game or news meaningfully shifts projections.</li>
+<li>Outputs are saved as scoreable JSON.</li>
+</ol>
+<h3 id="market-cycle">Market Cycle</h3>
+<ol>
+<li>Market Comparator converts odds to no-vig probabilities.</li>
+<li>Paper Risk Manager applies edge and exposure rules.</li>
+<li>Paper bet tickets are written.</li>
+<li>Dashboard Narrator publishes the slate page.</li>
+</ol>
+<h3 id="postgame-cycle">Postgame Cycle</h3>
+<ol>
+<li>Results are attached to forecast IDs.</li>
+<li>Brier score, log score, calibration, and CLV are updated.</li>
+<li>Team-agent deltas are scored against model-only baseline.</li>
+<li>Agents with poor repeated deltas get lower future weight.</li>
+</ol>
+<h2 id="backtesting-plan">Backtesting Plan</h2>
+<p>The key question is not "did the agents sound smart?" It is:</p>
+<blockquote>
+<p>Did the agents improve the proprietary model's forecasts after costs, latency, and leakage controls?</p>
+</blockquote>
+<p>Run three tracks:</p>
+<table>
+<thead>
+<tr>
+<th>Track</th>
+<th>Description</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model-only</td>
+<td>RAPM model predictions with no agent adjustments.</td>
+<td>Baseline.</td>
+</tr>
+<tr>
+<td>Model plus team agents</td>
+<td>30 team agents can propose context deltas.</td>
+<td>Tests research layer.</td>
+</tr>
+<tr>
+<td>Model plus full lean company</td>
+<td>Prediction, markets, risk, and dashboard agents active.</td>
+<td>Tests full workflow.</td>
+</tr>
+</tbody>
+</table>
+<p>Score:</p>
+<ul>
+<li>Brier score.</li>
+<li>log loss.</li>
+<li>calibration by probability bucket.</li>
+<li>spread error.</li>
+<li>closing-line value.</li>
+<li>edge-bucket ROI in paper mode.</li>
+<li>model-only versus agent-adjusted lift.</li>
+</ul>
+<p>Agents should have weights. If a team agent repeatedly worsens predictions, the system should keep the agent for explanation but reduce its quantitative influence.</p>
+<h2 id="prompt-pattern">Prompt Pattern</h2>
+<p>Each team agent should receive a small, structured packet:</p>
+<pre><code class="language-text">You are the [TEAM] Research Agent.
+
+Your job is not to forecast from scratch. Andrew's RAPM-decomp model is the baseline.
+You may challenge the model only through concrete mechanisms:
+minutes, availability, role, rotation, schedule, transaction, or matchup.
+
+Return JSON only.
+Do not invent injuries, quotes, or transactions.
+If the packet is stale or insufficient, say so.
+</code></pre>
+<p>This keeps the agents honest and cheap.</p>
+<h2 id="free-model-stack">Free Model Stack</h2>
+<h3 id="local-first">Local First</h3>
+<p>Use local inference for the default run:</p>
+<ul>
+<li>Ollama for easiest local API.</li>
+<li>llama.cpp or llama-cpp-python if small quantized models are the best fit.</li>
+<li>vLLM if Andrew has hardware that benefits from higher-throughput serving.</li>
+</ul>
+<p>The local model does not need to be brilliant. It needs to reliably summarize structured packets, produce JSON, and avoid making up facts.</p>
+<h3 id="optional-free-hosted">Optional Free Hosted</h3>
+<p>Use only with the Cost Governor:</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Use</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemini API free tier</td>
+<td>occasional structured summaries or disagreement reviews.</td>
+<td>Free-tier data may be used to improve products; do not send raw proprietary packets.</td>
+</tr>
+<tr>
+<td>Groq Free</td>
+<td>fast open-model calls for active slate teams.</td>
+<td>Rate limits can bind by requests and tokens.</td>
+</tr>
+<tr>
+<td>OpenRouter free models</td>
+<td>model diversity and public-facing commentary.</td>
+<td>Free model availability and terms vary by route/model.</td>
+</tr>
+<tr>
+<td>Cloudflare Workers AI</td>
+<td>tiny website-adjacent calls if deployed on Cloudflare.</td>
+<td>Free allocation is daily and measured in Neurons.</td>
+</tr>
+<tr>
+<td>Mistral Free mode</td>
+<td>occasional free API experimentation.</td>
+<td>Limits are tied to the account's free mode and can change.</td>
+</tr>
+</tbody>
+</table>
+<p>The free hosted lane is a bonus. Local inference is the real guarantee.</p>
+<h2 id="minimum-viable-company">Minimum Viable Company</h2>
+<p>Build in this order:</p>
+<ol>
+<li><strong>Model spine:</strong> RAPM snapshot, team ratings, game predictions, output manifest.</li>
+<li><strong>Packet layer:</strong> team packets and game packets.</li>
+<li><strong>30 team agents:</strong> local-only JSON reports.</li>
+<li><strong>Game Forecaster + Scenario Skeptic:</strong> model baseline plus accepted deltas.</li>
+<li><strong>Market Comparator + Paper Risk Manager:</strong> no-vig odds and paper tickets.</li>
+<li><strong>Dashboard Narrator:</strong> make it feel alive.</li>
+<li><strong>Backtest harness:</strong> model-only versus agent-adjusted scoring.</li>
+</ol>
+<p>This version is small enough to actually build, but still has the fun company shape: a CEO, a quant core, 30 team desks, a prediction desk, a market desk, and a public face.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://docs.ollama.com/api/introduction" target="_blank" rel="noopener noreferrer">Ollama API documentation</a>.</li>
+<li><a href="https://docs.ollama.com/api/authentication" target="_blank" rel="noopener noreferrer">Ollama local authentication note</a>.</li>
+<li><a href="https://llama-cpp-python.readthedocs.io/en/latest/server/" target="_blank" rel="noopener noreferrer">llama-cpp-python OpenAI-compatible server</a>.</li>
+<li><a href="https://docs.vllm.ai/en/stable/serving/online_serving/" target="_blank" rel="noopener noreferrer">vLLM OpenAI-compatible server</a>.</li>
+<li><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">Gemini API pricing</a> and <a href="https://ai.google.dev/gemini-api/docs/rate-limits" target="_blank" rel="noopener noreferrer">Gemini API rate limits</a>.</li>
+<li><a href="https://console.groq.com/docs/rate-limits" target="_blank" rel="noopener noreferrer">Groq rate limits</a> and <a href="https://console.groq.com/docs/models" target="_blank" rel="noopener noreferrer">Groq models</a>.</li>
+<li><a href="https://openrouter.ai/collections/free-models" target="_blank" rel="noopener noreferrer">OpenRouter free models</a>, <a href="https://openrouter.ai/openrouter/free" target="_blank" rel="noopener noreferrer">OpenRouter free router</a>, and <a href="https://openrouter.ai/pricing" target="_blank" rel="noopener noreferrer">OpenRouter pricing</a>.</li>
+<li><a href="https://developers.cloudflare.com/workers-ai/platform/pricing/" target="_blank" rel="noopener noreferrer">Cloudflare Workers AI pricing</a>.</li>
+<li><a href="https://docs.mistral.ai/admin/billing-usage/usage-limits" target="_blank" rel="noopener noreferrer">Mistral usage limits</a>.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Which local model is reliable enough for strict JSON team-agent reports on Andrew's hardware?</li>
+<li>How much of each player RAPM decomp can be exposed to team agents without leaking proprietary model internals?</li>
+<li>What threshold should a team-agent context delta clear before it can move the model baseline?</li>
+<li>Does the 30-agent research layer beat the RAPM-only baseline in walk-forward scoring?</li>
+</ul>2b:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$30"}}],"$L31"]}]
+2c:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/","children":"Cheap model strategy for NBA agents"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","children":"NBA multi-agent forecasting company"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/","children":"Cheap model strategy for NBA agents"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","children":"NBA multi-agent forecasting company"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan/","children":"NBA agent company structure plan"}]}],["$","li","basketball/nba-quantitative-modeling/rapm",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-quantitative-modeling/rapm/","children":"RAPM"}]}],["$","li","weather/forecast-skill",{"children":["$","$L2",null,{"href":"/articles/weather/forecast-skill/","children":"Forecast skill"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/2026-27-nba-team-briefing-corrected-prior-run",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/2026-27-nba-team-briefing-corrected-prior-run/","children":"2026-27 NBA team briefing corrected-prior run"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","project",{"children":"project"}],["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","ai",{"children":"ai"}],["$","li","agents",{"children":"agents"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","rapm",{"children":"rapm"}]]}]]}]]}]
+2f:null
+31:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/current-rapm-decomp-csv-export/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Current RAPM decomp CSV export"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"NBA agent company structure plan"}]]}]]}]

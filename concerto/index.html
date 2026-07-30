@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en" data-theme="paper"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concerto Ranker</title>
+<link rel="icon" href="data:,">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+:root{
+  --paper:#f4efe4; --panel:#fbf8f1; --panel-hi:#ffffff;
+  --ink:#241f1a; --muted:#6a5d52; --faint:#7a6d60;
+  --rule:#d3c8b5; --rule-2:#e5dccb; --rule-ink:#a89a84;
+  --accent:#7c1f2b; --gold:#8c7231;
+  --font:"EB Garamond",Garamond,"Hoefler Text","Times New Roman",serif;
+  --maxw:820px;
+}
+:root[data-theme=lamp]{
+  --paper:#16120f; --panel:#1c1714; --panel-hi:#221c18;
+  --ink:#ece3d4; --muted:#a3917d; --faint:#8d7e6e;
+  --rule:#332b23; --rule-2:#272019; --rule-ink:#4d4136;
+  --accent:#cd7a83; --gold:#bfa163;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:19px;
+  line-height:1.55;-webkit-font-smoothing:antialiased;font-variant-numeric:oldstyle-nums}
+:focus-visible{outline:1px solid var(--accent);outline-offset:3px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:34px 26px 80px}
+
+/* ── masthead ─────────────────────────────────────────────────────────────── */
+.mast{text-align:center;border-bottom:1px solid var(--rule-ink);padding-bottom:20px}
+.kicker{font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--faint);
+  font-variant-numeric:lining-nums}
+h1{font-size:44px;font-weight:400;letter-spacing:-.01em;margin:8px 0 4px;line-height:1.06}
+h1 em{font-style:italic;color:var(--accent)}
+.dek{font-style:italic;color:var(--muted);font-size:17.5px;margin:0}
+.pick-inst{margin:16px 0 0;font-size:13px;letter-spacing:.2em;text-transform:uppercase}
+.pick-inst button{font:inherit;font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  background:none;border:none;padding:2px 4px;color:var(--faint);cursor:pointer}
+.pick-inst button:hover{color:var(--ink)}
+.pick-inst button.on{color:var(--accent);border-bottom:1px solid var(--accent)}
+.pick-inst .sep{color:var(--rule-ink);margin:0 8px}
+/* The theme toggle lives in the footer, not the top-right corner: absolutely positioned up
+   there it collided with the centred kicker line on any viewport under ~900px. */
+
+/* ── the duel ─────────────────────────────────────────────────────────────── */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;margin:38px 0 0}
+.side{display:flex;flex-direction:column;align-items:center;text-align:center}
+.pick{font:inherit;color:var(--ink);background:var(--panel);width:100%;flex:1;cursor:pointer;
+  border:1px solid var(--rule);border-radius:2px;padding:26px 22px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  transition:background .15s,border-color .15s}
+.pick:hover{background:var(--panel-hi);border-color:var(--rule-ink)}
+.pick .cmp{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.pick .ttl{font-size:30px;line-height:1.14;letter-spacing:-.01em}
+.pick .det{font-style:italic;font-size:17px;color:var(--muted)}
+.pick .yr{font-size:16px;color:var(--faint);margin-top:auto;padding-top:16px}
+.pick .yr kbd{font-family:inherit;font-size:13px;color:var(--rule-ink);margin-left:9px;
+  font-variant-numeric:lining-nums}
+.unk{font:inherit;font-style:italic;font-size:15.5px;color:var(--faint);background:none;border:none;
+  cursor:pointer;padding:9px 4px 0}
+.unk:hover{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.unk kbd{font-family:inherit;font-style:normal;font-size:13px;color:var(--rule-ink);margin-left:7px;
+  font-variant-numeric:lining-nums}
+.mid{display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 22px}
+.mid i{flex:1;width:1px;background:var(--rule)}
+.mid span{font-style:italic;font-size:16px;color:var(--faint)}
+
+.controls{display:flex;align-items:baseline;justify-content:center;gap:14px;margin:22px 0 0;
+  flex-wrap:wrap}
+.btn{font:inherit;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  background:none;border:1px solid var(--rule);border-radius:2px;padding:7px 14px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--rule-ink);background:var(--panel)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:disabled:hover{color:var(--muted);border-color:var(--rule);background:none}
+.tally{text-align:center;font-style:italic;color:var(--faint);font-size:16px;margin:16px 0 0}
+
+/* ── standings ────────────────────────────────────────────────────────────── */
+h2{font-size:14px;letter-spacing:.24em;text-transform:uppercase;font-weight:400;color:var(--faint);
+  text-align:center;margin:52px 0 0;font-variant-numeric:lining-nums}
+h2+.orn{text-align:center;color:var(--gold);font-size:15px;margin:6px 0 14px;letter-spacing:.4em}
+table{width:100%;border-collapse:collapse;font-size:17.5px}
+th{font-weight:400;font-style:italic;font-size:15.5px;color:var(--faint);text-align:right;
+  padding:0 8px 7px;border-bottom:1px solid var(--rule-ink);white-space:nowrap}
+th.l{text-align:left}
+td{padding:7px 8px;border-bottom:1px solid var(--rule-2);text-align:right;vertical-align:baseline}
+td.l{text-align:left}
+tbody tr:hover>td{background:var(--panel)}
+td.rk{color:var(--faint);width:34px;text-align:right;padding-right:12px}
+td.mv{width:34px;font-size:14px;color:var(--rule-ink);font-variant-numeric:lining-nums}
+td.mv.up{color:var(--accent)} td.mv.dn{color:var(--faint)}
+td.wk{width:auto}
+td.wk .det{font-style:italic;color:var(--muted)}
+td.wk .det::before{content:' · '}
+td.wk .cmi{display:none}   /* the composer column carries this until the column is dropped */
+td.cm{color:var(--muted);font-size:14px;letter-spacing:.13em;text-transform:uppercase;
+  white-space:nowrap}
+td.rt{font-variant-numeric:lining-nums tabular-nums;font-size:18px;width:66px}
+td.se{font-variant-numeric:lining-nums tabular-nums;font-style:italic;color:var(--faint);
+  font-size:15px;width:58px}
+td.n{font-variant-numeric:lining-nums tabular-nums;color:var(--faint);font-size:15px;width:40px}
+tr.new>td{background:var(--panel)}
+tr.cold td.rt,tr.cold td.wk{color:var(--faint)}
+
+.unklist{font-size:16.5px;color:var(--muted);line-height:1.9;text-align:center;margin:0}
+.unklist button{font:inherit;font-size:16.5px;background:none;border:none;padding:0;cursor:pointer;
+  color:var(--muted);border-bottom:1px dotted var(--rule-ink)}
+.unklist button:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.foot{margin-top:54px;padding-top:16px;border-top:1px solid var(--rule);font-style:italic;
+  font-size:15.5px;color:var(--faint);line-height:1.8}
+.foot kbd{font-family:inherit;font-style:normal;color:var(--muted);
+  font-variant-numeric:lining-nums}
+.foot button{font:inherit;font-style:italic;font-size:15.5px;background:none;border:none;padding:0;
+  color:var(--faint);cursor:pointer;border-bottom:1px dotted var(--rule-ink)}
+.foot button:hover{color:var(--accent)}
+.empty{text-align:center;font-style:italic;color:var(--muted);padding:60px 0}
+
+@media(max-width:680px){
+  body{font-size:18px}
+  .wrap{padding:30px 18px 60px}
+  h1{font-size:33px}
+  .duel{grid-template-columns:1fr}
+  .mid{flex-direction:row;padding:14px 0;gap:14px}
+  .mid i{height:1px;width:auto;flex:1}
+  .pick .ttl{font-size:25px}
+  .pick{padding:20px 16px 16px}
+  .pick kbd,.unk kbd{display:none}   /* no keyboard to hint at */
+  th,td{white-space:normal}
+  /* the Composer column is dropped for width, so the composer moves INTO the work cell and
+     becomes its first line — "Piano Concerto No. 1" is not an identity on its own. */
+  td.cm,th.cm{display:none}
+  td.wk .cmi{display:block;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent)}
+  td.wk .det{display:block}
+  td.wk .det::before{content:none}
+  td.rk{width:26px;padding-right:6px}
+}
+</style>
+<script defer src="/assets/hub.js"></script></head><body>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="kicker">A ranking by pairwise comparison</div>
+    <h1 id="h1">Piano <em>Concertos</em></h1>
+    <p class="dek">The Romantic era and after</p>
+    <p class="pick-inst" id="inst">
+      <button data-k="piano">Piano</button><span class="sep">·</span><button data-k="violin">Violin</button>
+    </p>
+  </header>
+
+  <div id="duel"></div>
+
+  <div class="controls">
+    <button class="btn" id="tie">Too close to call</button>
+    <button class="btn" id="skip">Another pair</button>
+    <button class="btn" id="undo" disabled>Undo</button>
+  </div>
+  <p class="tally" id="tally"></p>
+
+  <h2>Standings</h2><div class="orn">❖</div>
+  <table>
+    <thead><tr>
+      <th class="l">№</th><th></th><th class="l">Work</th><th class="l cm">Composer</th>
+      <th>Rating</th><th>±</th><th>n</th>
+    </tr></thead>
+    <tbody id="board"></tbody>
+  </table>
+
+  <div id="unkwrap"></div>
+
+  <p class="foot">
+    <kbd>←</kbd> <kbd>→</kbd> choose · <kbd>↓</kbd> too close to call · <kbd>1</kbd> <kbd>2</kbd>
+    don't know that one · <kbd>S</kbd> another pair · <kbd>U</kbd> undo.
+    Ratings come from a Bradley–Terry fit over every comparison you have made, re-solved on each
+    click; ± is the standard error, so it narrows as a work accumulates comparisons. The scale is
+    Elo-like — 100 points of difference is roughly 64 : 36 odds. Everything is stored in this
+    browser only.
+    <br><button id="lamp">Lamplight</button> &nbsp;·&nbsp;
+    <button id="reset">Erase this instrument's comparisons</button>
+  </p>
+</div>
+
+<script>
+/* composer, work, key + catalogue, year — Romantic era onward */
+const DATA = {
+piano: [
+ ["Weber","Konzertstück","F minor · Op. 79","1821"],
+ ["Chopin","Piano Concerto No. 2","F minor · Op. 21","1829"],
+ ["Chopin","Piano Concerto No. 1","E minor · Op. 11","1830"],
+ ["Mendelssohn","Piano Concerto No. 1","G minor · Op. 25","1831"],
+ ["Chopin","Andante spianato et Grande polonaise","E-flat · Op. 22","1834"],
+ ["Mendelssohn","Piano Concerto No. 2","D minor · Op. 40","1837"],
+ ["Schumann","Piano Concerto","A minor · Op. 54","1845"],
+ ["Liszt","Totentanz","S. 126","1849"],
+ ["Liszt","Fantasia on Hungarian Folk Themes","S. 123","1852"],
+ ["Liszt","Piano Concerto No. 1","E-flat · S. 124","1855"],
+ ["Liszt","Piano Concerto No. 2","A major · S. 125","1857"],
+ ["Brahms","Piano Concerto No. 1","D minor · Op. 15","1858"],
+ ["Rubinstein","Piano Concerto No. 4","D minor · Op. 70","1864"],
+ ["Grieg","Piano Concerto","A minor · Op. 16","1868"],
+ ["Saint-Saëns","Piano Concerto No. 2","G minor · Op. 22","1868"],
+ ["Saint-Saëns","Piano Concerto No. 4","C minor · Op. 44","1875"],
+ ["Tchaikovsky","Piano Concerto No. 1","B-flat minor · Op. 23","1875"],
+ ["Dvořák","Piano Concerto","G minor · Op. 33","1876"],
+ ["Tchaikovsky","Piano Concerto No. 2","G major · Op. 44","1880"],
+ ["Brahms","Piano Concerto No. 2","B-flat · Op. 83","1881"],
+ ["Fauré","Ballade","F-sharp · Op. 19","1881"],
+ ["MacDowell","Piano Concerto No. 2","D minor · Op. 23","1885"],
+ ["Franck","Symphonic Variations","M. 46","1885"],
+ ["Rachmaninoff","Piano Concerto No. 1","F-sharp minor · Op. 1","1891"],
+ ["Saint-Saëns","Piano Concerto No. 5 “Egyptian”","F major · Op. 103","1896"],
+ ["Scriabin","Piano Concerto","F-sharp minor · Op. 20","1896"],
+ ["Rachmaninoff","Piano Concerto No. 2","C minor · Op. 18","1901"],
+ ["Rachmaninoff","Piano Concerto No. 3","D minor · Op. 30","1909"],
+ ["Prokofiev","Piano Concerto No. 1","D-flat · Op. 10","1912"],
+ ["Prokofiev","Piano Concerto No. 2","G minor · Op. 16","1913"],
+ ["Falla","Nights in the Gardens of Spain","—","1915"],
+ ["Prokofiev","Piano Concerto No. 3","C major · Op. 26","1921"],
+ ["Gershwin","Rhapsody in Blue","—","1924"],
+ ["Gershwin","Concerto in F","—","1925"],
+ ["Bartók","Piano Concerto No. 1","Sz. 83","1926"],
+ ["Rachmaninoff","Piano Concerto No. 4","G minor · Op. 40","1926"],
+ ["Ravel","Concerto for the Left Hand","D major","1930"],
+ ["Bartók","Piano Concerto No. 2","Sz. 95","1931"],
+ ["Ravel","Piano Concerto","G major","1931"],
+ ["Shostakovich","Piano Concerto No. 1","C minor · Op. 35","1933"],
+ ["Rachmaninoff","Rhapsody on a Theme of Paganini","Op. 43","1934"],
+ ["Khachaturian","Piano Concerto","D-flat","1936"],
+ ["Bartók","Piano Concerto No. 3","Sz. 119","1945"],
+ ["Shostakovich","Piano Concerto No. 2","F major · Op. 102","1957"],
+ ["Barber","Piano Concerto","Op. 38","1962"]
+],
+violin: [
+ ["Paganini","Violin Concerto No. 1","D major · Op. 6","1817"],
+ ["Paganini","Violin Concerto No. 2 “La campanella”","B minor · Op. 7","1826"],
+ ["Mendelssohn","Violin Concerto","E minor · Op. 64","1844"],
+ ["Vieuxtemps","Violin Concerto No. 4","D minor · Op. 31","1850"],
+ ["Wieniawski","Violin Concerto No. 1","F-sharp minor · Op. 14","1853"],
+ ["Schumann","Violin Concerto","D minor · WoO 23","1853"],
+ ["Wieniawski","Légende","Op. 17","1860"],
+ ["Vieuxtemps","Violin Concerto No. 5","A minor · Op. 37","1861"],
+ ["Wieniawski","Violin Concerto No. 2","D minor · Op. 22","1862"],
+ ["Saint-Saëns","Introduction and Rondo capriccioso","Op. 28","1863"],
+ ["Bruch","Violin Concerto No. 1","G minor · Op. 26","1866"],
+ ["Lalo","Symphonie espagnole","Op. 21","1874"],
+ ["Bruch","Violin Concerto No. 2","D minor · Op. 44","1877"],
+ ["Goldmark","Violin Concerto No. 1","A minor · Op. 28","1877"],
+ ["Brahms","Violin Concerto","D major · Op. 77","1878"],
+ ["Sarasate","Zigeunerweisen","Op. 20","1878"],
+ ["Tchaikovsky","Violin Concerto","D major · Op. 35","1878"],
+ ["Dvořák","Violin Concerto","A minor · Op. 53","1879"],
+ ["Bruch","Scottish Fantasy","Op. 46","1880"],
+ ["Saint-Saëns","Violin Concerto No. 3","B minor · Op. 61","1880"],
+ ["Sarasate","Carmen Fantasy","Op. 25","1883"],
+ ["Saint-Saëns","Havanaise","Op. 83","1887"],
+ ["Brahms","Double Concerto, violin & cello","A minor · Op. 102","1887"],
+ ["Chausson","Poème","Op. 25","1896"],
+ ["Glazunov","Violin Concerto","A minor · Op. 82","1904"],
+ ["Sibelius","Violin Concerto","D minor · Op. 47","1905"],
+ ["Bartók","Violin Concerto No. 1","Sz. 36","1908"],
+ ["Elgar","Violin Concerto","B minor · Op. 61","1910"],
+ ["Nielsen","Violin Concerto","Op. 33","1911"],
+ ["Szymanowski","Violin Concerto No. 1","Op. 35","1916"],
+ ["Prokofiev","Violin Concerto No. 1","D major · Op. 19","1917"],
+ ["Vaughan Williams","The Lark Ascending","—","1920"],
+ ["Ravel","Tzigane","—","1924"],
+ ["Stravinsky","Violin Concerto","D major","1931"],
+ ["Berg","Violin Concerto “To the memory of an angel”","—","1935"],
+ ["Prokofiev","Violin Concerto No. 2","G minor · Op. 63","1935"],
+ ["Bartók","Violin Concerto No. 2","Sz. 112","1938"],
+ ["Barber","Violin Concerto","Op. 14","1939"],
+ ["Britten","Violin Concerto","Op. 15","1939"],
+ ["Walton","Violin Concerto","B minor","1939"],
+ ["Khachaturian","Violin Concerto","D minor","1940"],
+ ["Korngold","Violin Concerto","D major · Op. 35","1945"],
+ ["Shostakovich","Violin Concerto No. 1","A minor · Op. 77","1948"],
+ ["Bernstein","Serenade after Plato’s Symposium","—","1954"],
+ ["Shostakovich","Violin Concerto No. 2","C-sharp minor · Op. 129","1967"]
+]};
+
+/* ── state ─────────────────────────────────────────────────────────────────────
+   v2 stores the RESULTS, not the ratings: res["a<SEP>b"] = [wins of a, wins of b],
+   halves for a draw. The fit is derived, so the model can change without losing
+   a single comparison. (v1 kept only running Elo numbers and could not be
+   converted, so its key is abandoned rather than migrated.) */
+const LS = 'concerto-ranker-v2';
+const SEP = '\u0001';   // cannot occur in an id, so split(SEP) is unambiguous
+let store = {};
+try { store = JSON.parse(localStorage.getItem(LS)) || {}; } catch(e) { store = {}; }
+let cur = localStorage.getItem(LS+':inst') || 'piano';
+let pair = null, undos = [], prevRank = {};
+
+function st(){
+  return store[cur] || (store[cur] = {res:{}, unknown:{}, total:0});
+}
+function save(){
+  localStorage.setItem(LS, JSON.stringify(store));
+  localStorage.setItem(LS+':inst', cur);
+}
+/* Keyed on composer + title + catalogue: the catalogue is load-bearing, because it is all that
+   separates Bruch's two concertos or Wieniawski's. Ceiling: rewording any of the three fields
+   for a work starts that work over. The check below catches a collision if this list is edited. */
+function id(w){ return w.slice(0,3).join(' · '); }
+for (const k in DATA) {
+  const n = new Set(DATA[k].map(id)).size;
+  if (n !== DATA[k].length) console.error(`${DATA[k].length-n} duplicate id(s) in ${k}: two works would share one rating`);
+}
+const rkey = (a,b) => a < b ? a+SEP+b : b+SEP+a;
+const rnd = n => Math.floor(Math.random()*n);
+
+/* ── Bradley–Terry ────────────────────────────────────────────────────────────
+   Strength p_i > 0 with P(i beats j) = p_i/(p_i+p_j); a draw counts half a win
+   each way. Fitted by the standard MM (Zermelo) iteration
+       p_i ← W_i / Σ_j n_ij/(p_i+p_j)
+   run in place until it stops moving.
+
+   PRIOR is what makes it usable from the first click: every work also plays
+   PRIOR half-wins and PRIOR half-losses against a virtual opponent of fixed
+   strength 1. Without it an undefeated work's strength diverges — the board
+   would read ±∞ for the first several comparisons — and the scale would need a
+   separate normalisation. With it, an unplayed work sits exactly at the anchor.
+
+   Returns Elo-like ratings (400/decade, anchor = 1500) plus a standard error
+   from the Fisher information.
+   ponytail: SE is the DIAGONAL of the information matrix, i.e. it ignores
+   correlation between works and so runs a little optimistic. Invert the full
+   matrix if the ± ever needs to be defensible rather than indicative. */
+const PRIOR = 1;
+const SCALE = 400/Math.LN10;
+function fit(ids, res){
+  const n = ids.length, ix = {};
+  ids.forEach((k,i) => ix[k] = i);
+  const W = new Float64Array(n), G = new Float64Array(n);   // wins, games
+  const N = Array.from({length:n}, () => new Float64Array(n));
+  for (const key in res){
+    const [a,b] = key.split(SEP), i = ix[a], j = ix[b];
+    if (i === undefined || j === undefined) continue;        // work no longer in DATA
+    const [wa,wb] = res[key], tot = wa+wb;
+    W[i] += wa; W[j] += wb; G[i] += tot; G[j] += tot;
+    N[i][j] += tot; N[j][i] += tot;
+  }
+  const p = new Float64Array(n).fill(1);
+  for (let it = 0; it < 500; it++){
+    let delta = 0;
+    for (let i = 0; i < n; i++){
+      let den = 2*PRIOR/(p[i]+1);                           // the virtual opponent
+      for (let j = 0; j < n; j++) if (N[i][j]) den += N[i][j]/(p[i]+p[j]);
+      const np = (W[i]+PRIOR)/den;
+      delta = Math.max(delta, Math.abs(np-p[i])/np);
+      p[i] = np;
+    }
+    if (delta < 1e-10) break;
+  }
+  const out = {};
+  for (let i = 0; i < n; i++){
+    let info = 2*PRIOR*p[i]/((p[i]+1)*(p[i]+1));
+    for (let j = 0; j < n; j++) if (N[i][j]) {
+      const s = p[i]+p[j];
+      info += N[i][j]*p[i]*p[j]/(s*s);
+    }
+    out[ids[i]] = {r: 1500 + SCALE*Math.log(p[i]), se: SCALE/Math.sqrt(info), n: G[i]};
+  }
+  return out;
+}
+
+function works(){
+  const s = st();
+  return DATA[cur].filter(w => !s.unknown[id(w)]).map(w => ({k:id(w), cmp:w[0], ttl:w[1], det:w[2], yr:w[3]}));
+}
+let RT = {};                                   // latest fit, id -> {r, se, n}
+function refit(){
+  const it = works();
+  RT = fit(it.map(x => x.k), st().res);
+  return it.map(x => Object.assign(x, RT[x.k]));
+}
+
+/* Least-compared work first, then the opponent it has met least, ties broken toward the
+   closest rating — a close pair is where a comparison buys the most information.
+   ponytail: greedy, not D-optimal design. Fine at ~45 works. */
+function nextPair(){
+  const it = refit(), s = st();
+  if (it.length < 2) { pair = null; return; }
+  const met = (a,b) => { const v = s.res[rkey(a.k,b.k)]; return v ? v[0]+v[1] : 0; };
+  const min = Math.min(...it.map(x => x.n));
+  const pool = it.filter(x => x.n <= min+1);
+  const a = pool[rnd(pool.length)];
+  const rest = it.filter(x => x.k !== a.k).sort((x,y) =>
+    (met(a,x) - met(a,y)) || (Math.abs(x.r-a.r) - Math.abs(y.r-a.r)));
+  const b = rest[rnd(Math.min(4, rest.length))];
+  pair = Math.random() < .5 ? [a,b] : [b,a];
+}
+
+function record(a, b, sa){                     // sa = score for a: 1, 0 or 0.5
+  const s = st(), key = rkey(a.k, b.k), aFirst = key.split(SEP)[0] === a.k;
+  const v = s.res[key] || [0,0];
+  v[aFirst ? 0 : 1] += sa;
+  v[aFirst ? 1 : 0] += 1-sa;
+  s.res[key] = v;
+  s.total++;
+  undos.push({t:'res', key, sa, aFirst});
+  if (undos.length > 200) undos.shift();
+  const fresh = [a.k, b.k];
+  nextPair(); save(); render(fresh);
+}
+function setUnknown(w){
+  st().unknown[w.k] = 1;
+  undos.push({t:'unk', k:w.k});
+  nextPair(); save(); render();
+}
+function restore(k){
+  delete st().unknown[k];
+  nextPair(); save(); render();
+}
+function undo(){
+  const u = undos.pop(); if (!u) return;
+  const s = st();
+  if (u.t === 'unk') { delete s.unknown[u.k]; }
+  else {
+    const v = s.res[u.key];
+    v[u.aFirst ? 0 : 1] -= u.sa;
+    v[u.aFirst ? 1 : 0] -= 1-u.sa;
+    if (v[0] + v[1] < 1e-9) delete s.res[u.key];
+    s.total--;
+  }
+  nextPair(); save(); render();
+}
+
+const esc = t => String(t).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function render(fresh){
+  const label = cur === 'piano' ? 'Piano' : 'Violin';
+  document.getElementById('h1').innerHTML = `${label} <em>Concertos</em>`;
+  document.title = `${label} Concertos · Concerto Ranker`;
+  document.querySelectorAll('#inst button').forEach(b => b.classList.toggle('on', b.dataset.k === cur));
+
+  const it = refit().sort((a,b) => b.r - a.r);
+  const s = st();
+
+  document.getElementById('duel').innerHTML = pair ? `
+    <div class="duel">
+      ${[0,1].map(i => { const w = pair[i]; return `
+      <div class="side">
+        <button class="pick" data-p="${i}">
+          <span class="cmp">${esc(w.cmp)}</span>
+          <span class="ttl">${esc(w.ttl)}</span>
+          ${w.det === '—' ? '' : `<span class="det">${esc(w.det)}</span>`}
+          <span class="yr">${esc(w.yr)}<kbd>${i ? '→' : '←'}</kbd></span>
+        </button>
+        <button class="unk" data-u="${i}">I don’t know this one <kbd>${i+1}</kbd></button>
+      </div>`; }).join('<div class="mid"><i></i><span>or</span><i></i></div>')}
+    </div>` : `<p class="empty">Fewer than two works left — restore one below.</p>`;
+  document.querySelectorAll('.pick').forEach(b => b.onclick = () => choose(+b.dataset.p));
+  document.querySelectorAll('.unk').forEach(b => b.onclick = () => setUnknown(pair[+b.dataset.u]));
+  document.getElementById('undo').disabled = !undos.length;
+  document.getElementById('tie').disabled = document.getElementById('skip').disabled = !pair;
+
+  const seen = it.filter(x => x.n > 0).map(x => x.se).sort((a,b) => a-b);
+  const med = seen.length ? Math.round(seen[seen.length >> 1]) : null;
+  document.getElementById('tally').textContent =
+    `${s.total} comparison${s.total === 1 ? '' : 's'} · ${it.length} works in the running`
+    + (med === null ? '' : ` · typical ± ${med}`);
+
+  document.getElementById('board').innerHTML = it.map((x,i) => {
+    const p = prevRank[x.k], d = p === undefined ? 0 : p-i;
+    return `<tr class="${fresh && fresh.includes(x.k) ? 'new' : ''} ${x.n ? '' : 'cold'}">
+      <td class="rk">${i+1}</td>
+      <td class="mv ${d>0?'up':d<0?'dn':''}">${d>0?'▲'+d:d<0?'▼'+(-d):''}</td>
+      <td class="wk l"><span class="cmi">${esc(x.cmp)}</span>${esc(x.ttl)}${
+        x.det === '—' ? '' : `<span class="det">${esc(x.det)}</span>`}</td>
+      <td class="cm l">${esc(x.cmp)}</td>
+      <td class="rt">${Math.round(x.r)}</td>
+      <td class="se">${x.n ? '±'+Math.round(x.se) : '—'}</td>
+      <td class="n">${x.n}</td></tr>`;   // n is integral: a draw splits one game, it does not add half of one
+  }).join('');
+  it.forEach((x,i) => prevRank[x.k] = i);
+
+  const unk = DATA[cur].filter(w => s.unknown[id(w)]);
+  document.getElementById('unkwrap').innerHTML = !unk.length ? '' :
+    `<h2>Not known to me</h2><div class="orn">❖</div><p class="unklist">` +
+    unk.map(w => `<button data-r="${esc(id(w))}">${esc(w[0])}, ${esc(w[1])}</button>`).join(' &nbsp;·&nbsp; ') +
+    `</p>`;
+  document.querySelectorAll('[data-r]').forEach(b => b.onclick = () => restore(b.dataset.r));
+}
+
+function choose(i){ if (pair) record(pair[i], pair[1-i], 1); }
+document.getElementById('tie').onclick = () => { if (pair) record(pair[0], pair[1], 0.5); };
+document.getElementById('skip').onclick = () => { nextPair(); render(); };
+document.getElementById('undo').onclick = undo;
+document.getElementById('reset').onclick = () => {
+  if (!confirm(`Erase every ${cur} comparison? This cannot be undone.`)) return;
+  delete store[cur]; undos = []; prevRank = {}; nextPair(); save(); render();
+};
+document.querySelectorAll('#inst button').forEach(b => b.onclick = () => {
+  cur = b.dataset.k; undos = []; prevRank = {}; nextPair(); save(); render();
+});
+document.onkeydown = e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if (k === 'arrowleft') choose(0);
+  else if (k === 'arrowright') choose(1);
+  else if (k === 'arrowdown' || k === '=') { if (pair) record(pair[0], pair[1], 0.5); }
+  else if (k === '1') { if (pair) setUnknown(pair[0]); }
+  else if (k === '2') { if (pair) setUnknown(pair[1]); }
+  else if (k === 's') { nextPair(); render(); }
+  else if (k === 'u') undo();
+  else return;
+  e.preventDefault();
+};
+
+const lampBtn = document.getElementById('lamp');
+function setTheme(t){
+  document.documentElement.dataset.theme = t;
+  lampBtn.textContent = t === 'lamp' ? 'Daylight' : 'Lamplight';
+  localStorage.setItem(LS+':theme', t);
+}
+lampBtn.onclick = () => setTheme(document.documentElement.dataset.theme === 'lamp' ? 'paper' : 'lamp');
+setTheme(localStorage.getItem(LS+':theme') || 'paper');
+
+/* One runnable check on the fit — open index.html#selftest and watch the console. */
+function selftest(){
+  const R = (ids, res) => fit(ids, res);
+  const fails = [];
+  const ok = (name, cond) => { if (!cond) fails.push(name); };
+  const key = (a,b) => rkey(a,b);
+
+  // symmetric record -> equal strength, and both sit at the anchor
+  let r = R(['a','b'], {[key('a','b')]: [3,3]});
+  ok('draw is symmetric', Math.abs(r.a.r - r.b.r) < 1e-6);
+  ok('draw sits at anchor', Math.abs(r.a.r - 1500) < 1e-6);
+
+  // a always beats b -> a above b, and neither diverges
+  r = R(['a','b'], {[key('a','b')]: key('a','b')[0] === 'a' ? [10,0] : [0,10]});
+  ok('winner ranks above loser', r.a.r > r.b.r + 100);
+  ok('undefeated stays finite', isFinite(r.a.r) && r.a.r < 3000);
+
+  // transitivity: a>b, b>c => a>b>c
+  const res = {};
+  const put = (w,l,n) => { const k = key(w,l); res[k] = k.split(SEP)[0] === w ? [n,0] : [0,n]; };
+  put('a','b',8); put('b','c',8);
+  r = R(['a','b','c'], res);
+  ok('transitive ordering', r.a.r > r.b.r && r.b.r > r.c.r);
+
+  // more comparisons must shrink the error bar
+  const few = R(['a','b'], {[key('a','b')]: [2,2]}).a.se;
+  const many = R(['a','b'], {[key('a','b')]: [40,40]}).a.se;
+  ok('se shrinks with n', many < few);
+
+  // an unplayed work sits at the anchor with a wide bar
+  r = R(['a','b','z'], {[key('a','b')]: [5,1]});
+  ok('unplayed work at anchor', Math.abs(r.z.r - 1500) < 1e-6);
+  ok('unplayed work has widest bar', r.z.se > r.a.se);
+
+  if (fails.length) { console.error('selftest FAILED:', fails); throw new Error('BT selftest failed'); }
+  console.log('selftest: all checks passed');
+  return true;
+}
+if (location.hash === '#selftest') selftest();
+
+nextPair(); render();
+</script>
+</body></html>

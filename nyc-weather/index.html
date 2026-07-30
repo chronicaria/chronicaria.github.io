@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Weather Dashboard — with honest uncertainty</title>
+  <link rel="stylesheet" href="vendor/uPlot.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+<script defer src="/assets/hub.js"></script></head>
+<body>
+  <main>
+    <header>
+      <h1>Weather Dashboard <span class="beta">ensemble</span></h1>
+      <p class="tagline">Hourly, 7 days out — with the uncertainty shown, not hidden.</p>
+    </header>
+
+    <div id="alerts" hidden></div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="side-title">Places</div>
+        <div id="place-list"></div>
+      </aside>
+
+      <div class="content">
+        <div id="status" class="muted status"></div>
+        <div id="daycards" class="daycards"></div>
+        <div id="now" class="card now-card"></div>
+        <div id="share-btn" class="share-wrap"></div>
+
+        <!-- Wave-2 glance panels (populated by feature modules; hidden if empty) -->
+        <div class="glance">
+          <div id="panel-rain" class="card panel"></div>
+          <div id="panel-wear" class="card panel"></div>
+          <div id="panel-comfort" class="card panel"></div>
+          <div id="panel-uv" class="card panel"></div>
+          <div id="panel-aqi" class="card panel"></div>
+          <div id="panel-climate" class="card panel"></div>
+          <div id="panel-astro" class="card panel panel-wide"></div>
+        </div>
+
+        <section class="card">
+          <h2>Temperature &amp; feels-like
+            <span class="key"><span class="key-item"><span class="key-dot" style="background:#4d9bff"></span>Temp</span><span class="key-item"><span class="key-dot" style="background:#ff9f45"></span>Feels-like</span></span>
+            <label class="toggle"><input type="checkbox" id="spaghetti-toggle"> spaghetti</label>
+          </h2>
+          <div id="chart-tempfeels" class="chart"></div>
+        </section>
+
+        <section class="card">
+          <h2>Chance of precipitation</h2>
+          <div id="chart-precip" class="chart"></div>
+        </section>
+
+        <div id="panel-radar" class="card panel-full"></div>
+        <div id="panel-marine" class="card panel-full"></div>
+
+        <section class="card">
+          <h2>Wind &amp; gusts</h2>
+          <div id="chart-wind" class="chart"></div>
+        </section>
+
+        <section class="card">
+          <h2>Humidity</h2>
+          <div id="chart-humidity" class="chart"></div>
+        </section>
+
+        <footer>
+          <p>
+            Forecast &amp; bands: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>
+            (GEFS + ECMWF ENS + ICON-EPS ensemble), CC-BY 4.0.
+            Alerts: <a href="https://www.weather.gov" target="_blank" rel="noopener">US NWS</a>.
+            Charts: uPlot. · Personal, non-commercial project.
+          </p>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <!-- classic scripts, in dependency order (works from file:// too) -->
+  <script src="vendor/uPlot.iife.min.js"></script>
+  <script src="vendor/suncalc.js"></script>
+  <script src="data/places.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/derive.js"></script>
+  <script src="js/astro.js"></script>
+  <script src="js/aqi.js"></script>
+  <script src="js/climate.js"></script>
+  <script src="js/marine.js"></script>
+  <script src="js/radar.js"></script>
+  <script src="js/snapshot.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

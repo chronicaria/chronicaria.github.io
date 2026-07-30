@@ -1,0 +1,395 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+d:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+e:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/basketball/","children":"Basketball"}],[["$","span","NBA team briefings 2026-27",{"children":"NBA team briefings 2026-27"}]]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Basketball"]}],["$","h1",null,{"children":"Denver Nuggets 2026-27 Research Briefing"}],["$","p",null,{"className":"article-deck","children":"The authoritative team prior is the corrected public standings JSON row for :"}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Web research"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"draft"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[11," min · ","2,358"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}],["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}],["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}],["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","thesis-card",{"className":"toc-depth-2","children":["$","a",null,{"href":"#thesis-card","children":"Thesis Card"}]}],["$","li","model-prior",{"className":"toc-depth-2","children":["$","a",null,{"href":"#model-prior","children":"Model Prior"}]}],["$","li","roster-and-minutes-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#roster-and-minutes-read","children":"Roster And Minutes Read"}]}],["$","li","six-factor-and-style-read",{"className":"toc-depth-2","children":["$","a",null,{"href":"#six-factor-and-style-read","children":"Six-Factor And Style Read"}]}],["$","li","main-challenge-to-the-model",{"className":"toc-depth-2","children":["$","a",null,{"href":"#main-challenge-to-the-model","children":"Main Challenge To The Model"}]}],["$","li","evidence-board",{"className":"toc-depth-2","children":["$","a",null,{"href":"#evidence-board","children":"Evidence Board"}]}],["$","li","player-level-pressure-points",{"className":"toc-depth-2","children":["$","a",null,{"href":"#player-level-pressure-points","children":"Player-Level Pressure Points"}]}],"$L3","$L4","$L5","$L6","$L7"]}]]}],"$L8","$L9"]}]]}],null,"$La"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","adjustment-logic",{"className":"toc-depth-2","children":["$","a",null,{"href":"#adjustment-logic","children":"Adjustment Logic"}]}]
+4:["$","li","counter-thesis",{"className":"toc-depth-2","children":["$","a",null,{"href":"#counter-thesis","children":"Counter-Thesis"}]}]
+5:["$","li","what-would-change-my-mind",{"className":"toc-depth-2","children":["$","a",null,{"href":"#what-would-change-my-mind","children":"What Would Change My Mind"}]}]
+6:["$","li","data-quality-and-uncertainty",{"className":"toc-depth-2","children":["$","a",null,{"href":"#data-quality-and-uncertainty","children":"Data Quality And Uncertainty"}]}]
+7:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+b:T5bee,<h2 id="thesis-card">Thesis Card</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model projected wins</td>
+<td>45.3 (<code>mc_mean_wins</code>)</td>
+</tr>
+<tr>
+<td>Model p10-p90 wins</td>
+<td>39-52, with p50 45</td>
+</tr>
+<tr>
+<td>Model strength</td>
+<td>-1.753 pts/100; <code>se_strength</code> 1.310</td>
+</tr>
+<tr>
+<td>Playoff probability</td>
+<td>88.3% (<code>make_playoffs_prob</code> 0.883)</td>
+</tr>
+<tr>
+<td>Agent stance</td>
+<td>MODEL_TOO_LOW</td>
+</tr>
+<tr>
+<td>Strength delta</td>
+<td>+0.8 pts/100 (<code>strength_delta_pts_per_100 = +0.8</code>)</td>
+</tr>
+<tr>
+<td>Win delta</td>
+<td>+2.6 wins (<code>win_delta = +2.6</code>)</td>
+</tr>
+<tr>
+<td>Adjusted wins</td>
+<td>47.9</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>58/100</td>
+</tr>
+<tr>
+<td>One-sentence thesis</td>
+<td>The corrected 45.3-win prior properly discounts Denver's age, health, and depth, but it likely over-discounts the regular-season floor of a Jokić-Murray-Gordon-Johnson-Braun top group with better veteran reserve structure than last year's weakest versions.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="model-prior">Model Prior</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th align="right">DEN value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mc_mean_wins</code></td>
+<td align="right">45.3</td>
+</tr>
+<tr>
+<td><code>p10_wins</code></td>
+<td align="right">39</td>
+</tr>
+<tr>
+<td><code>p50_wins</code></td>
+<td align="right">45</td>
+</tr>
+<tr>
+<td><code>p90_wins</code></td>
+<td align="right">52</td>
+</tr>
+<tr>
+<td><code>make_playoffs_prob</code></td>
+<td align="right">0.883</td>
+</tr>
+<tr>
+<td><code>strength</code></td>
+<td align="right">-1.753</td>
+</tr>
+<tr>
+<td><code>se_strength</code></td>
+<td align="right">1.310</td>
+</tr>
+<tr>
+<td><code>n_cold_start</code></td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>The model places Denver around the middle of the West playoff picture, roughly fifth by projected wins in the corrected standings view. The projection is not treating Denver as a title favorite; it is saying the median case is a 45-win team with a fairly wide 39-52 band, an 88.3% playoff probability, and meaningful uncertainty from a 1.310-point team-strength standard error plus three cold-start players. The model note is Andrew's forward RAPM-decomp projection: xgboost per-factor/per-horizon player projections with aging fallback, availability adjustment, and Monte Carlo season simulation.</p>
+<h2 id="roster-and-minutes-read">Roster And Minutes Read</h2>
+<p>The authoritative prior above comes only from the public standings JSON. The rotation notes below use non-authoritative roster context from the local team-detail/depth-chart artifacts and public depth charts; they are used to challenge minutes and player value, not to replace the team prior.</p>
+<p>Top projected win contributors in the non-authoritative roster context:</p>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th align="right">Role</th>
+<th align="right">MPG</th>
+<th align="right">Exp GP</th>
+<th align="right">Net</th>
+<th align="right">Rating band</th>
+<th align="right">Context wins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nikola Jokić</td>
+<td align="right">starter</td>
+<td align="right">27.5</td>
+<td align="right">68</td>
+<td align="right">+6.74</td>
+<td align="right">+5.64 to +7.90</td>
+<td align="right">17.04</td>
+</tr>
+<tr>
+<td>Jamal Murray</td>
+<td align="right">starter</td>
+<td align="right">27.5</td>
+<td align="right">69</td>
+<td align="right">+2.23</td>
+<td align="right">+1.13 to +3.40</td>
+<td align="right">8.82</td>
+</tr>
+<tr>
+<td>Aaron Gordon</td>
+<td align="right">starter</td>
+<td align="right">26.9</td>
+<td align="right">54</td>
+<td align="right">+3.15</td>
+<td align="right">+2.04 to +4.31</td>
+<td align="right">8.08</td>
+</tr>
+<tr>
+<td>Cameron Johnson</td>
+<td align="right">starter</td>
+<td align="right">27.0</td>
+<td align="right">57</td>
+<td align="right">+1.89</td>
+<td align="right">+0.78 to +3.05</td>
+<td align="right">6.62</td>
+</tr>
+<tr>
+<td>Christian Braun</td>
+<td align="right">starter</td>
+<td align="right">27.3</td>
+<td align="right">64</td>
+<td align="right">+0.71</td>
+<td align="right">-0.39 to +1.88</td>
+<td align="right">5.51</td>
+</tr>
+<tr>
+<td>Jonas Valančiūnas</td>
+<td align="right">rotation</td>
+<td align="right">11.5</td>
+<td align="right">49</td>
+<td align="right">-0.28</td>
+<td align="right">-1.29 to +0.71</td>
+<td align="right">1.22</td>
+</tr>
+<tr>
+<td>Spencer Jones</td>
+<td align="right">rotation</td>
+<td align="right">12.4</td>
+<td align="right">36</td>
+<td align="right">-0.98</td>
+<td align="right">-1.99 to +0.01</td>
+<td align="right">0.66</td>
+</tr>
+<tr>
+<td>Jalen Pickett</td>
+<td align="right">rotation</td>
+<td align="right">11.8</td>
+<td align="right">35</td>
+<td align="right">-1.06</td>
+<td align="right">-2.06 to -0.06</td>
+<td align="right">0.59</td>
+</tr>
+</tbody>
+</table>
+<p>Top projected MPG players in that context are Jokić and Murray at 27.5, Braun at 27.3, Johnson at 27.0, Gordon at 26.9, Peyton Watson at 13.1, Bruce Brown at 12.6, Spencer Jones and Marvin Bagley III at 12.4, Jalen Pickett at 11.8, Julian Strawther at 11.7, and Valančiūnas at 11.5. The current public ESPN depth chart also has Murray, Braun, Johnson, Gordon, and Jokić as starters, with Tyus Jones, Strawther, Watson, Spencer Jones, Bagley, Gordon, Nnaji, and DaRon Holmes appearing as reserve options.</p>
+<p>The main expected-games concern is Gordon: the roster context has him at only 54 expected games, and public playoff reporting tied Denver's 2026 first-round problems partly to Gordon and Watson injuries. Watson is a high-uncertainty swing piece after a hamstring-affected finish. Jokić and Murray are still modeled for high-60s games, which is plausible but leaves Denver very exposed if either slips into the low-60s. The cold-start count in the corrected prior is three, so deep rotation and two-way minutes should be treated as fragile rather than bankable.</p>
+<h2 id="six-factor-and-style-read">Six-Factor And Style Read</h2>
+<p>The corrected public standings JSON does not expose a team six-factor profile, so this read is cautious and partly inferred from player factor vectors in the non-authoritative roster context.</p>
+<p>oTS: Denver's offensive true-shooting environment should remain a strength because Jokić bends defenses, Murray adds pull-up scoring, and Johnson is a clean spacing fit. The risk is that replacing Michael Porter Jr. with Johnson lowers some above-the-defense shot volume.</p>
+<p>oTOV: Jokić lineups usually protect structure through passing reads, but Murray's on-ball burden and the bench's lack of self-creation can raise late-clock turnover risk. Tyus Jones helps if he is a real rotation guard rather than a deep-depth emergency.</p>
+<p>oSC: Jokić and Gordon support second-chance creation through size, touch, and cutting, while Valančiūnas can help regular-season bench rebounding. Johnson-at-forward lineups may be lighter on the glass than Porter versions.</p>
+<p>dTS: This is the pressure point. Gordon and Watson are the best answers for physical wings and big forwards; if either is limited, Braun/Johnson must defend harder matchups and Jokić must cover more rim pressure.</p>
+<p>dTOV: Denver is not built as a chaos defense. Brown and Watson can add activity, but the best version is more positional than disruptive.</p>
+<p>dSC: Jokić and Gordon are strong enough to keep the defensive glass viable, but small-wing or slow-center bench combinations can give back second chances. The Valančiūnas/Bagley reserve big mix helps size but can stress coverage.</p>
+<h2 id="main-challenge-to-the-model">Main Challenge To The Model</h2>
+<p>My challenge is <code>MODEL_TOO_LOW</code>, but only modestly. The corrected prior already discounts the right things: older core, Gordon/Watson injury risk, expensive starters, uncertain deep bench, and the fact that Denver was exposed by Minnesota's length in the 2026 playoffs. I still think 45.3 wins undershoots the regular-season base case.</p>
+<p>The mechanism is lineup quality and offensive floor. If Jokić and Murray are healthy enough for the high-60s games implied by the roster context, Denver's starting group has a strong offensive identity and enough credible spacing around Jokić to punish regular-season defenses. Johnson should be an easier low-usage fit than a generic wing because his movement shooting and quick decisions are amplified by Jokić. The bench is imperfect, but Tyus Jones, Bruce Brown, Valančiūnas, Watson, Strawther, and Bagley create more plausible regular-season coverage than a pure stars-and-kids depth chart. That is enough for a small upward adjustment, not enough to erase the downside cases.</p>
+<h2 id="evidence-board">Evidence Board</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Evidence</th>
+<th>Direction</th>
+<th align="right">Estimated impact</th>
+<th align="right">Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Denver's most recent team quality was above the corrected prior.</td>
+<td>ESPN lists Denver at 54-28 in 2025-26; accessed July 9, 2026: <a href="https://www.espn.com/nba/team/stats/_/name/den/denver-nuggets" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/stats/_/name/den/denver-nuggets</a></td>
+<td>helps</td>
+<td align="right">+1.2 wins</td>
+<td align="right">72</td>
+</tr>
+<tr>
+<td>The starting five has coherent role fit.</td>
+<td>ESPN depth chart lists Murray/Braun/Johnson/Gordon/Jokić as starters; accessed July 9, 2026: <a href="https://www.espn.com/nba/team/depth/_/name/den" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/depth/_/name/den</a></td>
+<td>helps</td>
+<td align="right">+0.7 wins</td>
+<td align="right">67</td>
+</tr>
+<tr>
+<td>Cameron Johnson is a real rotation/starter fit, not an abstract name.</td>
+<td>NBA.com reported Denver acquired Johnson for Michael Porter Jr.; Johnson's NBA.com page shows him as a Denver forward and playoff-minute player; accessed July 9, 2026: <a href="https://www.nba.com/news/nuggets-trade-michael-porter-jr-nets-cameron-johnson" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-trade-michael-porter-jr-nets-cameron-johnson</a> and <a href="https://www.nba.com/player/1629661/cameron-johnson" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1629661/cameron-johnson</a></td>
+<td>helps</td>
+<td align="right">+0.5 wins</td>
+<td align="right">61</td>
+</tr>
+<tr>
+<td>Backup guard and veteran connector depth lower the non-Jokić floor.</td>
+<td>Tyus Jones' NBA.com page reports a one-year deal to remain in Denver; the Johnson trade article also reported Bruce Brown returning; accessed July 9, 2026: <a href="https://www.nba.com/player/1626145/tyus-jones" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1626145/tyus-jones</a> and <a href="https://www.nba.com/news/nuggets-trade-michael-porter-jr-nets-cameron-johnson" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-trade-michael-porter-jr-nets-cameron-johnson</a></td>
+<td>helps</td>
+<td align="right">+0.4 wins</td>
+<td align="right">55</td>
+</tr>
+<tr>
+<td>Backup center depth is improved but matchup-dependent.</td>
+<td>NBA.com reported Denver expected Jonas Valančiūnas to be with the team after acquiring him from Sacramento; accessed July 9, 2026: <a href="https://www.nba.com/news/nuggets-no-concerns-about-valanciunas-status" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-no-concerns-about-valanciunas-status</a></td>
+<td>neutral</td>
+<td align="right">+0.2 wins</td>
+<td align="right">52</td>
+</tr>
+<tr>
+<td>Gordon/Watson health can erase the upside quickly.</td>
+<td>NBA.com reported Gordon missed Game 3 with calf tightness and that Watson had been out with a right hamstring strain; accessed July 9, 2026: <a href="https://www.nba.com/news/nuggets-rule-aaron-gordon-out-of-game-3-against-the-timberwolves-with-tightness-in-his-calf" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-rule-aaron-gordon-out-of-game-3-against-the-timberwolves-with-tightness-in-his-calf</a></td>
+<td>hurts</td>
+<td align="right">-0.8 wins</td>
+<td align="right">75</td>
+</tr>
+<tr>
+<td>Denver's playoff loss showed the bench and physical-defense problems are real.</td>
+<td>NBA.com's Game 6 takeaways noted Minnesota held Denver under 100 three times in Minnesota and that Denver was missing Gordon and Watson; accessed July 9, 2026: <a href="https://www.nba.com/news/nuggets-timberwolves-2026-playoffs-game-6-takeaways" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-timberwolves-2026-playoffs-game-6-takeaways</a></td>
+<td>hurts</td>
+<td align="right">-0.6 wins</td>
+<td align="right">66</td>
+</tr>
+<tr>
+<td>Financial/roster pressure limits easy fixes.</td>
+<td>NBA.com/AP reported major salary pressure, missed games, and possible roster-change tension after the playoff exit; accessed July 9, 2026: <a href="https://www.nba.com/news/denvers-playoff-struggle-didnt-cost-david-adelman-the-roster-though-could-be-wide-open" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/denvers-playoff-struggle-didnt-cost-david-adelman-the-roster-though-could-be-wide-open</a></td>
+<td>hurts</td>
+<td align="right">-0.4 wins</td>
+<td align="right">60</td>
+</tr>
+</tbody>
+</table>
+<h2 id="player-level-pressure-points">Player-Level Pressure Points</h2>
+<table>
+<thead>
+<tr>
+<th>Player</th>
+<th>Model role/value</th>
+<th>Concern or upside</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nikola Jokić</td>
+<td>Elite starter; roster-context net +6.74, 68 expected games</td>
+<td>Upside if aging curve is too conservative; downside if workload has to cover every bench weakness</td>
+<td>The team's regular-season floor is mostly his offensive ecosystem.</td>
+</tr>
+<tr>
+<td>Jamal Murray</td>
+<td>Starter; roster-context net +2.23, 69 expected games</td>
+<td>Needs to be a reliable regular-season engine, not only a playoff-shot-maker</td>
+<td>A small Murray miss changes Denver from high-40s to mid-40s quickly.</td>
+</tr>
+<tr>
+<td>Aaron Gordon</td>
+<td>Starter; roster-context net +3.15, 54 expected games</td>
+<td>Health is the key defensive variable after calf/hamstring-type playoff issues across recent runs</td>
+<td>He is the lineup's physical defender, cutter, and frontcourt glue.</td>
+</tr>
+<tr>
+<td>Cameron Johnson</td>
+<td>Starter; roster-context net +1.89, 57 expected games</td>
+<td>Upside as an optimized Jokić spacer; concern as a lighter rebounder/defender than bigger forwards</td>
+<td>His fit is the best reason the Porter trade may not lower regular-season quality much.</td>
+</tr>
+<tr>
+<td>Christian Braun</td>
+<td>Starter; roster-context net +0.71, 64 expected games</td>
+<td>Extension-level role requires stable shooting and wing defense</td>
+<td>If he is merely neutral, Denver's top five still works; if below neutral, depth gets squeezed.</td>
+</tr>
+<tr>
+<td>Peyton Watson</td>
+<td>Rotation wing; roster-context net -1.14, 34 expected games</td>
+<td>Upside if healthy and retained; hamstring/free-agency uncertainty lowers confidence</td>
+<td>He is the cleanest internal answer to athletic wing defense and bench energy.</td>
+</tr>
+<tr>
+<td>Tyus Jones</td>
+<td>Deep/guard context locally, but public reporting says he remained with Denver</td>
+<td>Upside if he takes real backup-PG minutes; concern if the model/local context is right that he is low-minute depth</td>
+<td>Denver badly needs non-Murray ballhandling to survive regular-season bench stretches.</td>
+</tr>
+<tr>
+<td>Jonas Valančiūnas</td>
+<td>Rotation center; roster-context net -0.28, 49 expected games</td>
+<td>Regular-season rebounding/size help, but playoff coverage risk</td>
+<td>Backup center minutes are a swing between "stabilized bench" and "targeted in space."</td>
+</tr>
+<tr>
+<td>Bruce Brown</td>
+<td>Rotation connector; roster-context net -2.35, 42 expected games</td>
+<td>Familiar fit and defense help; scoring efficiency and role size are uncertain</td>
+<td>He can make bench groups functional without solving shot creation.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adjustment-logic">Adjustment Logic</h2>
+<p>I am applying a judgmental adjustment of +0.8 pts/100, roughly +2.6 wins, because the corrected 45.3-win prior appears to overprice the chance that Denver's health/depth weaknesses all show up at once. This is not a new simulation and does not replace Andrew's projection.</p>
+<p>The positive side of the adjustment is Jokić's regular-season offensive floor, Murray's second-engine value, Johnson's fit, a coherent starting five, and a more plausible veteran reserve set with Tyus Jones, Brown, and Valančiūnas. The negative side is real and keeps the adjustment modest: Gordon and Watson health, cold-start depth, a non-chaos defense, financial constraints, and the playoff evidence that long, physical teams can make Denver's offense look less automatic.</p>
+<p>Numerically:</p>
+<ul>
+<li><code>strength_delta_pts_per_100 = +0.8</code></li>
+<li><code>win_delta = +2.6</code></li>
+<li><code>adjusted_wins = 45.3 + 2.6 = 47.9</code></li>
+<li>Adjusted implied strength: <code>-1.753 + 0.8 = -0.953 pts/100</code></li>
+</ul>
+<h2 id="counter-thesis">Counter-Thesis</h2>
+<p>The strongest counter-thesis is that the model is already right, or even still too high. Denver's 54-win season may overstate 2026-27 because the roster is older, expensive, and increasingly dependent on fragile frontcourt defenders. Gordon has been hurt in high-leverage moments, Watson's hamstring and contract status make him unreliable as a penciled-in stopper, Valančiūnas and Bagley can be targeted defensively, and the bench still lacks a true high-end scorer. If Jokić or Murray misses more time than expected, or if the team cannot retain/empower enough useful reserves, 45 wins is a fair midpoint rather than an insult.</p>
+<h2 id="what-would-change-my-mind">What Would Change My Mind</h2>
+<ul>
+<li>A verified minutes update that moves Tyus Jones, Peyton Watson, or Bruce Brown out of the rotation would pull the adjustment down.</li>
+<li>Any preseason or training-camp signal that Gordon is not fully healthy would pull the adjustment toward zero or negative.</li>
+<li>A confirmed Watson departure or restricted-free-agency outcome that removes him from Denver would lower the defensive-depth assumption.</li>
+<li>Evidence that Johnson is being used mostly as a stationary spacer rather than an active movement/cutting fit would reduce the upside.</li>
+<li>A model rerun with updated public JSON, schedule, and depth chart that keeps Denver at 45 wins despite the corrected roster would make me more deferential to the prior.</li>
+<li>A clean preseason rotation with Jokić/Murray/Gordon/Johnson/Braun plus Jones/Watson/Brown/Valančiūnas all healthy would support an even larger upward challenge.</li>
+</ul>
+<h2 id="data-quality-and-uncertainty">Data Quality And Uncertainty</h2>
+<p>This briefing treats the corrected public standings JSON values supplied for DEN as the only authoritative team prior: 45.3 mean wins, 39/45/52 win band, 88.3% playoff probability, -1.753 strength, 1.310 strength SE, and three cold-start players. The local team-detail JSON is not used for the team-level prior because prior mismatches have already caused verification failures; it is used only as non-authoritative roster context for names, minutes, expected games, and player pressure points. Public web pages also mix current roster pages, depth charts, and news blurbs, so every external claim above is limited to what the cited page supports and was accessed July 9, 2026.</p>
+<h2 id="sources">Sources</h2>
+<p>Local/model sources:</p>
+<ul>
+<li>Corrected public standings prior: <a href="https://andrewjparkus.github.io/projection_2026_27.json" target="_blank" rel="noopener noreferrer">https://andrewjparkus.github.io/projection_2026_27.json</a>, DEN row supplied for this corrected-prior rerun; accessed July 9, 2026.</li>
+<li>Non-authoritative roster context only: <code>private-model-workspace/unified-rapm/daily_v5/out/p2_0/projections/projection_2026_27_teams.json</code>.</li>
+<li>Non-authoritative depth-chart context only: <code>private-model-workspace/unified-rapm/daily_v5/out/depthcharts_2026_27.csv</code>.</li>
+<li>Model context: <code>private-model-workspace/unified-rapm/daily_v5/README.md</code>.</li>
+<li>Model context: <code>private-model-workspace/unified-rapm/daily_v5/MODEL_OVERVIEW.md</code>.</li>
+</ul>
+<p>External public sources, all accessed July 9, 2026:</p>
+<ul>
+<li>NBA.com, Nuggets trade Michael Porter Jr. to Nets for Cameron Johnson: <a href="https://www.nba.com/news/nuggets-trade-michael-porter-jr-nets-cameron-johnson" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-trade-michael-porter-jr-nets-cameron-johnson</a></li>
+<li>NBA.com, Nuggets introduce Cam Johnson and address Jonas Valančiūnas status: <a href="https://www.nba.com/news/nuggets-no-concerns-about-valanciunas-status" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-no-concerns-about-valanciunas-status</a></li>
+<li>ESPN, Denver Nuggets depth chart: <a href="https://www.espn.com/nba/team/depth/_/name/den" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/depth/_/name/den</a></li>
+<li>ESPN, Denver Nuggets team stats page: <a href="https://www.espn.com/nba/team/stats/_/name/den/denver-nuggets" target="_blank" rel="noopener noreferrer">https://www.espn.com/nba/team/stats/_/name/den/denver-nuggets</a></li>
+<li>NBA.com, Timberwolves-Nuggets Game 6 takeaways: <a href="https://www.nba.com/news/nuggets-timberwolves-2026-playoffs-game-6-takeaways" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-timberwolves-2026-playoffs-game-6-takeaways</a></li>
+<li>NBA.com, Aaron Gordon ruled out of Game 3 with calf tightness: <a href="https://www.nba.com/news/nuggets-rule-aaron-gordon-out-of-game-3-against-the-timberwolves-with-tightness-in-his-calf" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-rule-aaron-gordon-out-of-game-3-against-the-timberwolves-with-tightness-in-his-calf</a></li>
+<li>NBA.com, Denver playoff struggle and roster uncertainty: <a href="https://www.nba.com/news/denvers-playoff-struggle-didnt-cost-david-adelman-the-roster-though-could-be-wide-open" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/denvers-playoff-struggle-didnt-cost-david-adelman-the-roster-though-could-be-wide-open</a></li>
+<li>NBA.com, Nuggets promote David Adelman to full-time coach: <a href="https://www.nba.com/news/nuggets-promote-david-adelman-to-full-time-coach" target="_blank" rel="noopener noreferrer">https://www.nba.com/news/nuggets-promote-david-adelman-to-full-time-coach</a></li>
+<li>NBA.com, Tyus Jones player page: <a href="https://www.nba.com/player/1626145/tyus-jones" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1626145/tyus-jones</a></li>
+<li>NBA.com, Cameron Johnson player page: <a href="https://www.nba.com/player/1629661/cameron-johnson" target="_blank" rel="noopener noreferrer">https://www.nba.com/player/1629661/cameron-johnson</a></li>
+<li>CBS Sports/RotoWire, Peyton Watson late-season hamstring context: <a href="https://www.cbssports.com/fantasy/basketball/news/nuggets-peyton-watson-will-miss-regular-season-finale/" target="_blank" rel="noopener noreferrer">https://www.cbssports.com/fantasy/basketball/news/nuggets-peyton-watson-will-miss-regular-season-finale/</a></li>
+</ul>8:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$b"}}],"$Lc"]}]
+9:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","p",null,{"className":"rail-empty","children":"Nothing points here yet."}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","basketball/nba-team-briefings-2026-27/00-cross-team-findings",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-cross-team-findings/","children":"2026-27 NBA cross-team findings"}]}],["$","li","basketball/nba-team-briefings-2026-27/00-index",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/00-index/","children":"2026-27 NBA team briefing index"}]}],["$","li","basketball/nba-team-briefings-2026-27/atl-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/atl-2026-27-briefing/","children":"Atlanta Hawks 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bos-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bos-2026-27-briefing/","children":"BOS 2026-27 research briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/bkn-2026-27-briefing/","children":"Brooklyn Nets 2026-27 Research Briefing"}]}],["$","li","basketball/nba-team-briefings-2026-27/cha-2026-27-briefing",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/cha-2026-27-briefing/","children":"Charlotte Hornets 2026-27 Research Briefing"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","basketball",{"children":"basketball"}],["$","li","nba",{"children":"nba"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","research",{"children":"research"}]]}]]}]]}]
+a:["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]
+c:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/dal-2026-27-briefing/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Dallas Mavericks 2026-27 Research Briefing"}]]}],["$","$L2",null,{"href":"/articles/basketball/nba-team-briefings-2026-27/det-2026-27-briefing/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Detroit Pistons 2026-27 Research Briefing"}]]}]]}]
+f:null

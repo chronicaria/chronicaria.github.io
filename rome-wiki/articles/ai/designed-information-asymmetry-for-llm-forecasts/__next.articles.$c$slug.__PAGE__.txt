@@ -1,0 +1,67 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+7:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+8:"$Sreact.suspense"
+3:T1258,<p>The core problem in <a href="/rome-wiki/articles/ai/llm-agent-ensembles-for-forecasting/" class="wiki-link">LLM agent ensembles for forecasting</a> is correlation. If 100 agents use the same model, prompt, search results, and market data, they may converge beautifully toward a wrong probability. The crowd looks large, but its effective number of independent forecasters is small.</p>
+<h2 id="infodelphi-pattern">InfoDelphi pattern</h2>
+<p><a href="/rome-wiki/articles/ai/multi-agent-forecasting-frameworks/" class="wiki-link">InfoDelphi</a> solves this by splitting the evidence corpus into:</p>
+<ul>
+<li><strong>public evidence</strong>: the strongest, most relevant common context all agents need to communicate coherently.</li>
+<li><strong>private evidence</strong>: disjoint peripheral evidence slices routed to different agents.</li>
+</ul>
+<p>Agents first forecast from their own packet. Then they exchange rationales and forecast again. The load-bearing trick is that agents share the reasoning trace, not just the number. A probability like "68%" is too compressed; a rationale can carry the private source, causal model, and uncertainty that led there.</p>
+<h2 id="why-public-plus-private-matters">Why public plus private matters</h2>
+<p>Too much public evidence makes agents redundant. Too little public evidence makes them talk past each other. The useful middle is common ground plus private specialization:</p>
+<ul>
+<li>common ground lets agents understand each other's claims.</li>
+<li>private evidence reduces correlated error.</li>
+<li>rationale exchange lets private evidence propagate.</li>
+<li>confidence-weighted aggregation lets better-supported private views matter more.</li>
+</ul>
+<h2 id="for-a-crypto-portfolio-swarm">For a crypto portfolio swarm</h2>
+<p>For a live altcoin system, the public packet might include:</p>
+<ul>
+<li>recent price and volume bars.</li>
+<li>BTC and ETH regime.</li>
+<li>market-wide risk-on or risk-off indicators.</li>
+<li>current portfolio state.</li>
+<li>fees, spreads, and liquidity limits.</li>
+</ul>
+<p>Private packets could be routed by desk:</p>
+<ul>
+<li><strong>momentum desk</strong>: returns, volume breakouts, cross-sectional strength.</li>
+<li><strong>mean-reversion desk</strong>: stretched moves, funding extremes, RSI-style exhaustion.</li>
+<li><strong>order-book desk</strong>: spread, depth, slippage, imbalance, liquidity gaps.</li>
+<li><strong>news desk</strong>: token-specific announcements, exchange listings, regulatory items.</li>
+<li><strong>social desk</strong>: narrative velocity, influencer concentration, bot-like spikes.</li>
+<li><strong>on-chain desk</strong>: flows, active addresses, bridge activity, whale movements.</li>
+<li><strong>tokenomics desk</strong>: unlocks, emissions, treasury behavior.</li>
+<li><strong>regime desk</strong>: BTC dominance, volatility, correlations, macro calendar.</li>
+<li><strong>skeptic desk</strong>: data-quality failures, manipulation risk, unavailable execution.</li>
+</ul>
+<p>The visual payoff is excellent: the site can show which private packets pulled the ensemble away from the market prior.</p>
+<h2 id="failure-modes">Failure modes</h2>
+<ul>
+<li>Private packets that are different but not useful create noise, not wisdom.</li>
+<li>If agents see each other's forecasts too early, they herd.</li>
+<li>If the aggregator rewards confidence without calibration, persuasive agents dominate.</li>
+<li>If all agents share the same aligned model family, private evidence helps but does not remove structural monoculture.</li>
+<li>More deliberation rounds can make the system look more thoughtful while reducing independence.</li>
+</ul>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://arxiv.org/html/2607.01661v1" target="_blank" rel="noopener noreferrer">Diverse Evidence, Better Forecasts</a></li>
+<li><a href="https://arxiv.org/abs/2512.22625" target="_blank" rel="noopener noreferrer">The Wisdom of Deliberating AI Crowds</a></li>
+<li><a href="https://arxiv.org/html/2606.29661v1" target="_blank" rel="noopener noreferrer">Diversity is the Strength of the AI Crowd</a></li>
+<li><a href="https://arxiv.org/html/2606.26583v1" target="_blank" rel="noopener noreferrer">Preference Optimization Drives Monoculture in LLM Prediction Markets</a></li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>What is the optimal public/private split for liquid crypto markets, where almost everyone sees the same price data?</li>
+<li>Should private packets be assigned randomly, by agent skill, or by learned specialization?</li>
+<li>Can a dashboard estimate "effective number of independent agents" from forecast covariance before enough outcomes resolve?</li>
+</ul>0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/ai/","children":"AI"}],[]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","AI"]}],["$","h1",null,{"children":"Designed information asymmetry for LLM forecasts"}],["$","p",null,{"className":"article-deck","children":"Designed information asymmetry deliberately gives forecasting agents different evidence so deliberation can transmit private signals instead of amplifying shared mistakes."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 8, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[3," min · ","486"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","infodelphi-pattern",{"className":"toc-depth-2","children":["$","a",null,{"href":"#infodelphi-pattern","children":"InfoDelphi pattern"}]}],["$","li","why-public-plus-private-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-public-plus-private-matters","children":"Why public plus private matters"}]}],["$","li","for-a-crypto-portfolio-swarm",{"className":"toc-depth-2","children":["$","a",null,{"href":"#for-a-crypto-portfolio-swarm","children":"For a crypto portfolio swarm"}]}],["$","li","failure-modes",{"className":"toc-depth-2","children":["$","a",null,{"href":"#failure-modes","children":"Failure modes"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","infodelphi-pattern",{"className":"toc-depth-2","children":["$","a",null,{"href":"#infodelphi-pattern","children":"InfoDelphi pattern"}]}],["$","li","why-public-plus-private-matters",{"className":"toc-depth-2","children":["$","a",null,{"href":"#why-public-plus-private-matters","children":"Why public plus private matters"}]}],["$","li","for-a-crypto-portfolio-swarm",{"className":"toc-depth-2","children":["$","a",null,{"href":"#for-a-crypto-portfolio-swarm","children":"For a crypto portfolio swarm"}]}],["$","li","failure-modes",{"className":"toc-depth-2","children":["$","a",null,{"href":"#failure-modes","children":"Failure modes"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$3"}}],"$L4"]}],"$L5"]}]]}],null,"$L6"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+4:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/ai/cost-adjusted-frontier-model-performance/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Cost-adjusted frontier model performance"}]]}],["$","$L2",null,{"href":"/articles/ai/from-agent-task-horizons-to-deployment-decisions/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"From agent task horizons to deployment decisions"}]]}]]}]
+5:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","ai/ai-agents-moc",{"children":["$","$L2",null,{"href":"/articles/ai/ai-agents-moc/","children":"AI agents (MOC)"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/","children":"Cheap model strategy for NBA agents"}]}],["$","li","ai/llm-agent-ensembles-for-forecasting",{"children":["$","$L2",null,{"href":"/articles/ai/llm-agent-ensembles-for-forecasting/","children":"LLM agent ensembles for forecasting"}]}],["$","li","ai/multi-agent-forecasting-frameworks",{"children":["$","$L2",null,{"href":"/articles/ai/multi-agent-forecasting-frameworks/","children":"Multi-agent forecasting frameworks"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan/","children":"NBA agent company structure plan"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-multi-agent-forecasting-company/","children":"NBA multi-agent forecasting company"}]}],["$","li","ai/orca-workflow-patterns",{"children":["$","$L2",null,{"href":"/articles/ai/orca-workflow-patterns/","children":"Orca workflow patterns"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","ai/llm-agent-ensembles-for-forecasting",{"children":["$","$L2",null,{"href":"/articles/ai/llm-agent-ensembles-for-forecasting/","children":"LLM agent ensembles for forecasting"}]}],["$","li","ai/multi-agent-forecasting-frameworks",{"children":["$","$L2",null,{"href":"/articles/ai/multi-agent-forecasting-frameworks/","children":"Multi-agent forecasting frameworks"}]}],["$","li","ai/ai-agents-moc",{"children":["$","$L2",null,{"href":"/articles/ai/ai-agents-moc/","children":"AI agents (MOC)"}]}],["$","li","ai/orca-workflow-patterns",{"children":["$","$L2",null,{"href":"/articles/ai/orca-workflow-patterns/","children":"Orca workflow patterns"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/cheap-model-strategy-for-nba-agents/","children":"Cheap model strategy for NBA agents"}]}],["$","li","basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan",{"children":["$","$L2",null,{"href":"/articles/basketball/nba-multi-agent-forecasting-company/nba-agent-company-structure-plan/","children":"NBA agent company structure plan"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","ai",{"children":"ai"}],["$","li","agents",{"children":"agents"}],["$","li","forecasting",{"children":"forecasting"}],["$","li","information-asymmetry",{"children":"information-asymmetry"}]]}]]}]]}]
+6:["$","$L7",null,{"children":["$","$8",null,{"name":"Next.MetadataOutlet","children":"$@9"}]}]
+9:null

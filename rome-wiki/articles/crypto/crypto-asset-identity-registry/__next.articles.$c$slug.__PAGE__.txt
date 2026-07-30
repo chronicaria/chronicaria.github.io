@@ -1,0 +1,276 @@
+1:"$Sreact.fragment"
+2:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+f:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+10:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L2",null,{"href":"/","children":"Front page"}],["$","$L2",null,{"href":"/topics/crypto/","children":"Crypto"}],[]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","Crypto"]}],["$","h1",null,{"children":"Crypto asset identity registry"}],["$","p",null,{"className":"article-deck","children":"This provider-ID registry distinguishes assets, liabilities, protocol tokens, and representations near the top-100 cutoff so identical symbols or correlated economic exposures are not silently merged."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"AI-written"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[8," min · ","1,612"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","classification-key",{"className":"toc-depth-2","children":["$","a",null,{"href":"#classification-key","children":"Classification key"}]}],["$","li","ranks-90110",{"className":"toc-depth-2","children":["$","a",null,{"href":"#ranks-90110","children":"Ranks 90–110"}]}],["$","li","duplicate-and-dependency-findings",{"className":"toc-depth-2","children":["$","a",null,{"href":"#duplicate-and-dependency-findings","children":"Duplicate and dependency findings"}]}],["$","li","0613-utc-identity-delta",{"className":"toc-depth-2","children":["$","a",null,{"href":"#0613-utc-identity-delta","children":"06:13 UTC identity delta"}]}],["$","li","0702-utc-audiera-identity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#0702-utc-audiera-identity-checkpoint","children":"07:02 UTC Audiera identity checkpoint"}]}],["$","li","0806-utc-continuity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#0806-utc-continuity-checkpoint","children":"08:06 UTC continuity checkpoint"}]}],["$","li","0903-utc-boundary-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#0903-utc-boundary-checkpoint","children":"09:03 UTC boundary checkpoint"}]}],["$","li","1003-utc-continuity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#1003-utc-continuity-checkpoint","children":"10:03 UTC continuity checkpoint"}]}],["$","li","1103-utc-continuity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#1103-utc-continuity-checkpoint","children":"11:03 UTC continuity checkpoint"}]}],["$","li","1203-utc-continuity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#1203-utc-continuity-checkpoint","children":"12:03 UTC continuity checkpoint"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","classification-key",{"className":"toc-depth-2","children":["$","a",null,{"href":"#classification-key","children":"Classification key"}]}],["$","li","ranks-90110",{"className":"toc-depth-2","children":["$","a",null,{"href":"#ranks-90110","children":"Ranks 90–110"}]}],["$","li","duplicate-and-dependency-findings",{"className":"toc-depth-2","children":["$","a",null,{"href":"#duplicate-and-dependency-findings","children":"Duplicate and dependency findings"}]}],["$","li","0613-utc-identity-delta",{"className":"toc-depth-2","children":["$","a",null,{"href":"#0613-utc-identity-delta","children":"06:13 UTC identity delta"}]}],["$","li","0702-utc-audiera-identity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#0702-utc-audiera-identity-checkpoint","children":"07:02 UTC Audiera identity checkpoint"}]}],"$L3","$L4","$L5","$L6","$L7","$L8","$L9"]}]]}],"$La","$Lb"]}]]}],null,"$Lc"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"X6ZOd3MQP6S0cUC6FLNdS"}
+3:["$","li","0806-utc-continuity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#0806-utc-continuity-checkpoint","children":"08:06 UTC continuity checkpoint"}]}]
+4:["$","li","0903-utc-boundary-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#0903-utc-boundary-checkpoint","children":"09:03 UTC boundary checkpoint"}]}]
+5:["$","li","1003-utc-continuity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#1003-utc-continuity-checkpoint","children":"10:03 UTC continuity checkpoint"}]}]
+6:["$","li","1103-utc-continuity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#1103-utc-continuity-checkpoint","children":"11:03 UTC continuity checkpoint"}]}]
+7:["$","li","1203-utc-continuity-checkpoint",{"className":"toc-depth-2","children":["$","a",null,{"href":"#1203-utc-continuity-checkpoint","children":"12:03 UTC continuity checkpoint"}]}]
+8:["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}]
+9:["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]
+d:T498b,<p>Up: <a href="/rome-wiki/articles/crypto/crypto-top-100-research-universe/" class="wiki-link">Crypto top 100 research universe</a></p>
+<p>Related: <a href="/rome-wiki/articles/crypto/crypto-top-100-hourly-snapshot-ledger/" class="wiki-link">Crypto top 100 hourly snapshot ledger</a> · <a href="/rome-wiki/articles/crypto/crypto-top-100-dossier-backlog/" class="wiki-link">Crypto top 100 dossier backlog</a></p>
+<h2 id="classification-key">Classification key</h2>
+<ul>
+<li><strong>Native:</strong> base fee/security asset of its own network.</li>
+<li><strong>Protocol token:</strong> governance, utility, or incentive token whose economics depend on an application or protocol.</li>
+<li><strong>Stable liability:</strong> an issuer/protocol claim designed to track a reference asset; market cap is not independent risk capital.</li>
+<li><strong>RWA/security claim:</strong> tokenized regulated or contractual financial claim.</li>
+<li><strong>Meme token:</strong> fungible token whose identity is primarily cultural rather than a cash-flow or network-security claim.</li>
+</ul>
+<p>Contracts below are included only where the CoinGecko identity response was retrieved successfully in this run. “Pending” is intentional: provider rate limiting prevented complete metadata retrieval, and no address is inferred from memory.</p>
+<h2 id="ranks-90110">Ranks 90–110</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Rank</th>
+<th>Provider ID</th>
+<th>Canonical identity</th>
+<th>Economic parent / issuer</th>
+<th>Type and exposure treatment</th>
+<th>Verified network / contract</th>
+<th>Identity state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">90</td>
+<td><code>janus-henderson-anemoy-aaa-clo-fund</code></td>
+<td>JAAA</td>
+<td>Janus Henderson Anemoy AAA CLO Fund</td>
+<td>tokenized regulated fund claim; not independent crypto beta</td>
+<td>pending primary chain/contract verification</td>
+<td>entered rank 90 in second observation; legal and token identity packet required</td>
+</tr>
+<tr>
+<td align="right">91</td>
+<td><code>filecoin</code></td>
+<td>Filecoin</td>
+<td>Filecoin network</td>
+<td>native network asset; independent exposure</td>
+<td>Filecoin native asset</td>
+<td>canonical identity clear</td>
+</tr>
+<tr>
+<td align="right">92</td>
+<td><code>lighter</code></td>
+<td>Lighter</td>
+<td>Lighter derivatives protocol</td>
+<td>protocol token; application-dependent exposure</td>
+<td>Ethereum <code>0x232ce3bd40fcd6f80f3d55a522d03f25df784ee2</code></td>
+<td>provider contract captured; governance/value-flow review pending</td>
+</tr>
+<tr>
+<td align="right">93</td>
+<td><code>pump-fun</code></td>
+<td>Pump.fun</td>
+<td>Pump.fun launchpad / exchange</td>
+<td>protocol token; application-dependent exposure</td>
+<td>Solana <code>pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn</code></td>
+<td>provider contract captured</td>
+</tr>
+<tr>
+<td align="right">94</td>
+<td><code>gho</code></td>
+<td>GHO</td>
+<td>Aave protocol</td>
+<td>USD stable liability; do not count as independent market beta</td>
+<td>Ethereum canonical contract <code>0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f</code>; provider also lists Base, Arbitrum, Avalanche, Gnosis, Ink, Monad, and Plasma representations</td>
+<td>multi-chain canonical/bridge status needs Aave verification</td>
+</tr>
+<tr>
+<td align="right">95</td>
+<td><code>flare-networks</code></td>
+<td>Flare</td>
+<td>Flare network</td>
+<td>native network asset; independent exposure</td>
+<td>Flare native asset; metadata retrieval pending</td>
+<td>canonical identity clear; technical fields pending</td>
+</tr>
+<tr>
+<td align="right">96</td>
+<td><code>arbitrum</code></td>
+<td>Arbitrum</td>
+<td>Arbitrum DAO / L2 ecosystem</td>
+<td>governance token; not the gas asset and not a wrapped ETH claim</td>
+<td>pending official/provider verification</td>
+<td>identity clear; contract and admin lineage pending</td>
+</tr>
+<tr>
+<td align="right">97</td>
+<td><code>usual-usd</code></td>
+<td>USD0</td>
+<td>Usual protocol</td>
+<td>USD stable liability / RWA-backed claim; correlated with reserve and redemption risk</td>
+<td>pending official/provider verification</td>
+<td>reserve, issuer, and redemption mechanics pending</td>
+</tr>
+<tr>
+<td align="right">98</td>
+<td><code>venice-token</code></td>
+<td>Venice Token</td>
+<td>Venice AI</td>
+<td>protocol utility token; application-dependent exposure</td>
+<td>pending official/provider verification</td>
+<td>contract and value-flow verification pending</td>
+</tr>
+<tr>
+<td align="right">99</td>
+<td><code>xdce-crowd-sale</code></td>
+<td>XDC</td>
+<td>XDC Network</td>
+<td>native network asset; independent exposure</td>
+<td>XDC native asset; metadata retrieval pending</td>
+<td>legacy provider ID retained as alias</td>
+</tr>
+<tr>
+<td align="right">100</td>
+<td><code>ylds</code></td>
+<td>YLDS</td>
+<td>Figure Certificate Company / Figure</td>
+<td>yield-bearing registered fixed-income security; dollar-referenced RWA claim, not ordinary independent crypto beta</td>
+<td>Provenance Blockchain and additional representations require primary verification</td>
+<td>issuer and type confirmed; chain contracts pending</td>
+</tr>
+<tr>
+<td align="right">101</td>
+<td><code>aptos</code></td>
+<td>Aptos</td>
+<td>Aptos network</td>
+<td>native network asset; independent exposure</td>
+<td>Aptos native asset; metadata retrieval pending</td>
+<td>canonical identity clear</td>
+</tr>
+<tr>
+<td align="right">102</td>
+<td><code>midnight-3</code></td>
+<td>NIGHT</td>
+<td>Midnight network</td>
+<td>native/network utility asset associated with the Midnight partner-chain system</td>
+<td>pending official/provider verification</td>
+<td>relationship to Cardano is dependency, not duplicate asset exposure</td>
+</tr>
+<tr>
+<td align="right">103</td>
+<td><code>usx</code></td>
+<td>USX</td>
+<td>Solstice Finance</td>
+<td>USD stable liability; CoinGecko currently describes Solana-native reserve-backed USX</td>
+<td>pending official/provider verification</td>
+<td><strong>symbol collision:</strong> do not merge with dForce USX; contract is required</td>
+</tr>
+<tr>
+<td align="right">104</td>
+<td><code>aerodrome-finance</code></td>
+<td>Aerodrome Finance</td>
+<td>Aerodrome on Base</td>
+<td>protocol governance/incentive token</td>
+<td>pending official/provider verification</td>
+<td>existing <a href="/rome-wiki/articles/crypto/aero-deep-memo/" class="wiki-link">AERO deep memo</a> owns the thesis layer</td>
+</tr>
+<tr>
+<td align="right">105</td>
+<td><code>a7a5</code></td>
+<td>A7A5</td>
+<td>A7A5 issuer under Kyrgyz framework</td>
+<td>Russian-ruble stable liability; sanctions and issuer concentration are material</td>
+<td>Ethereum/Tron claims require primary contract verification</td>
+<td>type confirmed; issuer/legal and contracts need enhanced verification</td>
+</tr>
+<tr>
+<td align="right">106</td>
+<td><code>true-usd</code></td>
+<td>TrueUSD</td>
+<td>Techteryx / TrueUSD arrangement</td>
+<td>USD stable liability; issuer, reserves, redemption, and venue access drive exposure</td>
+<td>pending official/provider verification</td>
+<td>issuer/control lineage and live attestations pending</td>
+</tr>
+<tr>
+<td align="right">107</td>
+<td><code>injective-protocol</code></td>
+<td>Injective</td>
+<td>Injective network</td>
+<td>native network asset; independent exposure</td>
+<td>Injective native asset; metadata retrieval pending</td>
+<td>canonical identity clear</td>
+</tr>
+<tr>
+<td align="right">108</td>
+<td><code>hash-2</code></td>
+<td>HASH</td>
+<td>Provenance Blockchain</td>
+<td>native fee, staking, security, and governance asset; independent network exposure</td>
+<td>Provenance Blockchain native asset</td>
+<td>official utility confirmed; provider ID distinguishes it from symbol collisions</td>
+</tr>
+<tr>
+<td align="right">109</td>
+<td><code>pancakeswap-token</code></td>
+<td>PancakeSwap</td>
+<td>PancakeSwap protocol</td>
+<td>protocol governance/incentive token; application-dependent exposure</td>
+<td>pending official/provider verification</td>
+<td>multi-chain representation map pending</td>
+</tr>
+<tr>
+<td align="right">110</td>
+<td><code>dash</code></td>
+<td>Dash</td>
+<td>Dash network</td>
+<td>native payment-network asset; independent exposure</td>
+<td>Dash native asset; metadata retrieval pending</td>
+<td>canonical identity clear</td>
+</tr>
+</tbody>
+</table>
+<h2 id="duplicate-and-dependency-findings">Duplicate and dependency findings</h2>
+<p>Ranks 90–110 contain six clearly dollar-referenced or ruble-referenced claims—GHO, USD0, YLDS, USX, A7A5, and TUSD—whose capitalization should not be interpreted as six independent risk-on assets. YLDS is additionally a registered fixed-income security claim. ARB is governance exposure to an L2 ecosystem but ETH, not ARB, is the gas/economic settlement asset. USX has a consequential symbol collision: the observed CoinGecko page describes the Solstice Finance asset, while dForce also documents a token called USX. Provider ID and a verified contract must remain the identity keys.</p>
+<p>The second observation replaced BinanceLife with JAAA at rank 90 while preserving ranks 91–110. BinanceLife therefore remains in the historical ledger rather than being deleted from the identity graph; JAAA needs a primary issuer, legal-form, chain, and contract packet before its tokenized-fund classification is treated as complete.</p>
+<h2 id="0613-utc-identity-delta">06:13 UTC identity delta</h2>
+<p>The latest boundary observation placed JAAA at rank 88 and BinanceLife at rank 89, so both provider identities were simultaneously inside the top 100. Audiera (<code>audiera</code>, BEAT) appeared at rank 90 and requires a primary identity packet before classification. VVV was rank 100 and APT rank 101. The numbered table above remains the immutable first-observation map; these later ranks are recorded as a delta rather than silently rewriting history.</p>
+<p>No contract or economic-parent claim is inferred for Audiera from its ticker or provider name. Its official project, chain, canonical contract, decimals, supply controls, and venue liquidity remain unverified. The existing Venice Token row already establishes the VVV provider identity, so its cutoff move creates a persistence check rather than a duplicate dossier.</p>
+<h2 id="0702-utc-audiera-identity-checkpoint">07:02 UTC Audiera identity checkpoint</h2>
+<p>Audiera persisted at provider rank 90. CoinGecko's identity endpoint maps provider ID <code>audiera</code> to symbol BEAT and BNB Smart Chain contract <code>0xcf3232b85b43bca90e51d38cc06cc8bb8c8a3e36</code>; it links <code>audiera.fi</code> and the corresponding BscScan token page. The markets endpoint reports 309,266,666 circulating units against one billion total/max units.</p>
+<p>These fields establish the provider-to-contract locator, not the complete economic identity. The provider description is promotional issuer-supplied material and is not accepted as proof of utility, governance, value capture, circulating-supply methodology, or contract control. Official token documentation, verified source/admin inspection, holder distribution, and named-venue depth remain required before a full classification or dossier can be promoted.</p>
+<h2 id="0806-utc-continuity-checkpoint">08:06 UTC continuity checkpoint</h2>
+<p>Audiera remained rank 90, VVV rank 100, and APT rank 101. The repeated ranks add no new identity evidence, so no issuer, controller, contract-privilege, or liquidity claim is promoted. BinanceLife appeared at rank 89 while JAAA was outside the narrow preserved slice; this is recorded as provider churn rather than an identity retirement.</p>
+<h2 id="0903-utc-boundary-checkpoint">09:03 UTC boundary checkpoint</h2>
+<p>The provider placed JAAA, Audiera, and BinanceLife at ranks 88, 89, and 90, while VVV, YLDS, and APT occupied ranks 99, 100, and 101. These are rank deltas among already known provider IDs, not new identities. The same response printed YLDS capitalization slightly above VVV while ranking it below VVV, so the registry preserves provider order and timestamps instead of locally re-sorting asynchronous fields. No Audiera controller/economics claim or Solstice/dForce USX contract identity was resolved.</p>
+<h2 id="1003-utc-continuity-checkpoint">10:03 UTC continuity checkpoint</h2>
+<p>Jupiter, BinanceLife, and JAAA occupied ranks 88, 89, and 90; VVV, YLDS, and APT remained ranks 99, 100, and 101. Audiera was outside the preserved 88–102 slice, but a one-snapshot absence is not an identity retirement and does not invalidate its known provider ID or BNB Smart Chain locator. No primary evidence resolved Audiera's controller privileges and economics or the Solstice/dForce USX collision. The response's XDC/USD0 row-order discontinuity was preserved rather than locally repaired.</p>
+<h2 id="1103-utc-continuity-checkpoint">11:03 UTC continuity checkpoint</h2>
+<p>The same provider IDs occupied the cutoff: VVV, YLDS, and APT at ranks 99, 100, and 101, with Jupiter, BinanceLife, and JAAA at ranks 88, 89, and 90. USX appeared at rank 102. No new provider identity entered this slice, Audiera remained outside it, and neither the Audiera controller/economics packet nor the Solstice/dForce USX contract collision was resolved. Rank continuity therefore changes no canonical classification.</p>
+<h2 id="1203-utc-continuity-checkpoint">12:03 UTC continuity checkpoint</h2>
+<p>VVV, YLDS, and APT remained ranks 99, 100, and 101; BinanceLife, Jupiter, and JAAA occupied ranks 88, 89, and 90. The preserved rank-88–110 slice contained no new provider identity. Audiera remained outside the slice, and neither its controller/economics packet nor the Solstice/dForce USX contract collision was resolved. No canonical classification changed.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&#x26;order=market_cap_desc&#x26;per_page=110&#x26;page=1&#x26;sparkline=false" target="_blank" rel="noopener noreferrer">CoinGecko markets API observation</a>, retrieved 2026-07-10T01:47:59Z.</li>
+<li><a href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&#x26;order=market_cap_desc&#x26;per_page=110&#x26;page=1&#x26;sparkline=false" target="_blank" rel="noopener noreferrer">CoinGecko markets API persistence observation</a>, retrieved 2026-07-10T01:56:30Z.</li>
+<li>CoinGecko identity endpoints for <a href="https://api.coingecko.com/api/v3/coins/bianrensheng" target="_blank" rel="noopener noreferrer"><code>bianrensheng</code></a>, <a href="https://api.coingecko.com/api/v3/coins/filecoin" target="_blank" rel="noopener noreferrer"><code>filecoin</code></a>, <a href="https://api.coingecko.com/api/v3/coins/lighter" target="_blank" rel="noopener noreferrer"><code>lighter</code></a>, <a href="https://api.coingecko.com/api/v3/coins/pump-fun" target="_blank" rel="noopener noreferrer"><code>pump-fun</code></a>, and <a href="https://api.coingecko.com/api/v3/coins/gho" target="_blank" rel="noopener noreferrer"><code>gho</code></a>, retrieved 2026-07-10; later requests returned HTTP 429.</li>
+<li><a href="https://www.ylds.dev/crypto/" target="_blank" rel="noopener noreferrer">Figure YLDS product disclosures</a>, accessed 2026-07-09.</li>
+<li><a href="https://investors.figure.com/static-files/368c35d1-1dc8-401a-a9b3-2f3bfc9a7ff8" target="_blank" rel="noopener noreferrer">Figure SEC filing discussing YLDS</a>, filed 2026-01-27.</li>
+<li><a href="https://docs.a7a5.io/introduction-to-a7a5" target="_blank" rel="noopener noreferrer">A7A5 introduction</a> and <a href="https://docs.a7a5.io/legal/terms-of-use" target="_blank" rel="noopener noreferrer">terms</a>, accessed 2026-07-09.</li>
+<li><a href="https://developer.provenance.io/docs/discover/hash/" target="_blank" rel="noopener noreferrer">Provenance Blockchain HASH documentation</a>, accessed 2026-07-09.</li>
+<li><a href="https://www.coingecko.com/en/coins/usx" target="_blank" rel="noopener noreferrer">CoinGecko USX page</a> and <a href="https://docs.usx.finance/overview/introduction" target="_blank" rel="noopener noreferrer">dForce USX documentation</a>, accessed 2026-07-09; used to preserve rather than collapse the symbol collision.</li>
+<li><a href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&#x26;order=market_cap_desc&#x26;per_page=110&#x26;page=1&#x26;sparkline=false&#x26;price_change_percentage=24h%2C7d" target="_blank" rel="noopener noreferrer">CoinGecko 06:13 UTC markets observation</a>, retrieved 2026-07-10T06:13:16Z; used only for provider identity and rank deltas.</li>
+<li><a href="https://api.coingecko.com/api/v3/coins/audiera" target="_blank" rel="noopener noreferrer">CoinGecko Audiera identity endpoint</a>, retrieved 2026-07-10; provider ID, linked homepage, platform contract, and supply fields only.</li>
+<li><a href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&#x26;order=market_cap_desc&#x26;per_page=110&#x26;page=1&#x26;sparkline=false&#x26;price_change_percentage=24h%2C7d" target="_blank" rel="noopener noreferrer">CoinGecko 07:02 UTC markets observation</a>, retrieved 2026-07-10T07:02:56Z.</li>
+<li><a href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&#x26;order=market_cap_desc&#x26;per_page=110&#x26;page=1&#x26;sparkline=false&#x26;price_change_percentage=24h%2C7d" target="_blank" rel="noopener noreferrer">CoinGecko 08:06 UTC markets observation</a>, retrieved 2026-07-10T08:06:10Z.</li>
+<li><a href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&#x26;order=market_cap_desc&#x26;per_page=110&#x26;page=1&#x26;sparkline=false&#x26;price_change_percentage=24h%2C7d" target="_blank" rel="noopener noreferrer">CoinGecko 09:03 UTC markets observation</a>, retrieved 2026-07-10T09:03:38Z.</li>
+<li><a href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&#x26;order=market_cap_desc&#x26;per_page=110&#x26;page=1&#x26;sparkline=false&#x26;price_change_percentage=24h%2C7d" target="_blank" rel="noopener noreferrer">CoinGecko 11:03 UTC markets observation</a>, retrieved 2026-07-10T11:03:15Z.</li>
+<li><a href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&#x26;order=market_cap_desc&#x26;per_page=110&#x26;page=1&#x26;sparkline=false&#x26;price_change_percentage=24h%2C7d" target="_blank" rel="noopener noreferrer">CoinGecko 12:03 UTC markets observation</a>, retrieved 2026-07-10T12:03:16Z.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>What are the official canonical contracts, decimals, and bridge issuers for every non-native asset whose metadata request was rate-limited?</li>
+<li>Is CoinGecko's Solstice USX provider identity stable across the next snapshot, and which Solana mint uniquely identifies it?</li>
+<li>Which USD0 and GHO representations are canonical issuer-controlled deployments versus bridged claims?</li>
+<li>What current primary legal and reserve records define A7A5's issuer and sanctions exposure?</li>
+</ul>a:["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$d"}}],"$Le"]}]
+b:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","crypto/crypto",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto/","children":"Crypto"}]}],["$","li","crypto/crypto-top-100-dossier-backlog",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-top-100-dossier-backlog/","children":"Crypto top 100 dossier backlog"}]}],["$","li","crypto/crypto-top-100-hourly-snapshot-ledger",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-top-100-hourly-snapshot-ledger/","children":"Crypto top 100 hourly snapshot ledger"}]}],["$","li","crypto/decentralized-exchange-volume-quality",{"children":["$","$L2",null,{"href":"/articles/crypto/decentralized-exchange-volume-quality/","children":"Decentralized exchange volume quality"}]}],["$","li","crypto/from-protocol-fees-to-tokenholder-value",{"children":["$","$L2",null,{"href":"/articles/crypto/from-protocol-fees-to-tokenholder-value/","children":"From protocol fees to tokenholder value"}]}],["$","li","crypto/stablecoin-liquidity-fragmentation",{"children":["$","$L2",null,{"href":"/articles/crypto/stablecoin-liquidity-fragmentation/","children":"Stablecoin liquidity fragmentation"}]}],["$","li","crypto/wrapped-assets-and-duplicate-crypto-exposure",{"children":["$","$L2",null,{"href":"/articles/crypto/wrapped-assets-and-duplicate-crypto-exposure/","children":"Wrapped assets and duplicate crypto exposure"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","crypto/crypto-top-100-dossier-backlog",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-top-100-dossier-backlog/","children":"Crypto top 100 dossier backlog"}]}],["$","li","crypto/crypto-top-100-hourly-snapshot-ledger",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-top-100-hourly-snapshot-ledger/","children":"Crypto top 100 hourly snapshot ledger"}]}],["$","li","crypto/aero-deep-memo",{"children":["$","$L2",null,{"href":"/articles/crypto/aero-deep-memo/","children":"AERO deep memo"}]}],["$","li","crypto/crypto-top-100-research-universe",{"children":["$","$L2",null,{"href":"/articles/crypto/crypto-top-100-research-universe/","children":"Crypto top 100 research universe"}]}],["$","li","crypto/wrapped-assets-and-duplicate-crypto-exposure",{"children":["$","$L2",null,{"href":"/articles/crypto/wrapped-assets-and-duplicate-crypto-exposure/","children":"Wrapped assets and duplicate crypto exposure"}]}],["$","li","crypto/stablecoin-liquidity-fragmentation",{"children":["$","$L2",null,{"href":"/articles/crypto/stablecoin-liquidity-fragmentation/","children":"Stablecoin liquidity fragmentation"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","crypto",{"children":"crypto"}],["$","li","top-100",{"children":"top-100"}],["$","li","identity",{"children":"identity"}],["$","li","stablecoins",{"children":"stablecoins"}],["$","li","wrapped-assets",{"children":"wrapped-assets"}]]}]]}]]}]
+c:["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]
+e:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L2",null,{"href":"/articles/crypto/crypto/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Crypto"}]]}],["$","$L2",null,{"href":"/articles/crypto/crypto-bankruptcy-claims-and-recovery-waterfalls/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Crypto bankruptcy claims and recovery waterfalls"}]]}]]}]
+11:null

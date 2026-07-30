@@ -1,0 +1,124 @@
+1:"$Sreact.fragment"
+2:I[70359,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ReadingProgress"]
+3:I[22016,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],""]
+4:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchTrigger"]
+5:I[13004,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"SearchExperience"]
+6:I[39756,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+7:I[37457,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default"]
+c:I[68027,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"default",1]
+:HL["/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","style"]
+:HL["/rome-wiki/_next/static/media/5f402bd2d8eef81a-s.p.16whm0euli40m.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/9433d1a810498265-s.p.0h26ys03~gfbk.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/rome-wiki/_next/static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"P":null,"c":["","articles","ai","orca-inter-agent-orchestration",""],"q":"","i":false,"f":[[["",{"children":["articles",{"children":[["slug","ai/orca-inter-agent-orchestration","c",null],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",16],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/rome-wiki/_next/static/chunks/14kbu79734gwo.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable newsreader_dccbc19-module__XM85IG__variable","children":[["$","a",null,{"href":"#main-content","className":"skip-link","children":"Skip to the article"}],["$","$L2",null,{}],["$","header",null,{"className":"site-header","children":[["$","div",null,{"className":"utility-strip","children":[["$","span",null,{"children":"Established 2026"}],["$","span",null,{"className":"utility-center","children":"A living external brain"}],["$","span",null,{"children":[980," articles · ","Jul 10, 2026"]}]]}],["$","div",null,{"className":"navigation-row","children":[["$","$L3",null,{"href":"/","className":"small-wordmark","aria-label":"Rome front page","children":"Rome"}],["$","nav",null,{"className":"primary-nav","aria-label":"Primary navigation","children":[["$","$L3",null,{"href":"/#reading-rooms","children":"Reading rooms"}],["$","$L3",null,{"href":"/#universe-map","children":"Map"}],["$","$L3",null,{"href":"/#updates","children":"Updates"}],["$","$L3",null,{"href":"/about/","children":"About"}]]}],["$","$L4",null,{}]]}],["$","nav",null,{"className":"topic-rail","aria-label":"Reading rooms","children":[["$","$L3","AI",{"href":"/topics/ai/","children":"AI"}],["$","$L3","Basketball",{"href":"/topics/basketball/","children":"Basketball"}],["$","$L3","Classical Music",{"href":"/topics/classical-music/","children":"Classical Music"}],["$","$L3","Crypto",{"href":"/topics/crypto/","children":"Crypto"}],["$","$L3","History",{"href":"/topics/history/","children":"History"}],["$","$L3","Investing",{"href":"/topics/investing/","children":"Investing"}],["$","$L3","Markets",{"href":"/topics/markets/","children":"Markets"}],["$","$L3","Mathematics",{"href":"/topics/mathematics/","children":"Mathematics"}],["$","$L3","Piano",{"href":"/topics/piano/","children":"Piano"}],["$","$L3","Politics",{"href":"/topics/politics/","children":"Politics"}],["$","$L3","Sports",{"href":"/topics/sports/","children":"Sports"}],["$","$L3","String Theory",{"href":"/topics/string-theory/","children":"String Theory"}],["$","$L3","Weather",{"href":"/topics/weather/","children":"Weather"}]]}]]}],["$","$L5",null,{}],["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main-content","className":"not-found-page page-shell narrow-page","children":[["$","p",null,{"className":"eyebrow","children":"404 · End of the footpath"}],["$","h1",null,{"children":"This page has not entered Rome yet."}],["$","p",null,{"children":["Open search with ",["$","kbd",null,{"children":"⌘ K"}],", explore the universe map, or return to the front page and follow another link."]}],["$","$L3",null,{"href":"/","className":"button-link","children":"Return to Rome"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","footer",null,{"className":"site-footer","children":[["$","div",null,{"children":[["$","$L3",null,{"href":"/","className":"footer-wordmark","children":"Rome"}],["$","p",null,{"children":"Andrew Park's second brain, set in type."}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"This edition"}],["$","p",null,{"children":[980," articles across ",16," reading rooms, with"," ",431," open research threads."]}]]}],["$","div",null,{"children":[["$","p",null,{"className":"eyebrow","children":"Ownership & provenance"}],["$","p",null,{"children":"Rome belongs to Andrew Park. Every article also carries its authoring source."}]]}],["$","div",null,{"className":"footer-links","children":[["$","$L3",null,{"href":"/about/","children":"About Rome"}],["$","$L3",null,{"href":"/#universe-map","children":"Explore the map"}]]}]]}]]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L7",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":"$L8","templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["$L9",{},null,false,null]},null,false,"$@a"]},null,false,"$@a"]},null,false,null],"$Lb",false]],"m":"$undefined","G":["$c",["$Ld"]],"S":true,"h":null,"s":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"X6ZOd3MQP6S0cUC6FLNdS"}
+f:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"OutletBoundary"]
+10:"$Sreact.suspense"
+13:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"ViewportBoundary"]
+15:I[97367,["/rome-wiki/_next/static/chunks/0ooysfgo3rsa7.js","/rome-wiki/_next/static/chunks/14kbu79734gwo.js"],"MetadataBoundary"]
+8:["$","$L7",null,{}]
+9:["$","$1","c",{"children":["$Le",null,["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]]}]
+12:[]
+a:"$W12"
+b:["$","$1","h",{"children":[null,["$","$L13",null,{"children":"$L14"}],["$","div",null,{"hidden":true,"children":["$","$L15",null,{"children":["$","$10",null,{"name":"Next.Metadata","children":"$L16"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+d:["$","link","0",{"rel":"stylesheet","href":"/rome-wiki/_next/static/chunks/12c__bjq37j_4.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+17:T14c9,<h2 id="three-levels">Three levels</h2>
+<p>Use the lightest level that creates enough structure.</p>
+<h2 id="level-1-direct-messages">Level 1: direct messages</h2>
+<p>Use this when one agent needs to nudge, review, or ask another agent something.</p>
+<pre><code class="language-bash">orca terminal list --json
+
+orca orchestration send \
+  --to &#x3C;codexTerminalHandle> \
+  --subject "Please review Claude's API plan" \
+  --body "Focus on backwards compatibility and tests. Reply with the top risks." \
+  --type status \
+  --json
+
+orca orchestration check --terminal &#x3C;codexTerminalHandle> --unread --json
+</code></pre>
+<p>Group addresses also exist, including <code>@all</code>, <code>@idle</code>, <code>@codex</code>, <code>@claude</code>, and <code>@worktree:&#x3C;id></code>. Use groups for broadcasts, not for dispatch completion.</p>
+<p>This is a message bus, not magic telepathy. An agent must either be instructed to check its inbox, or the coordinator must inject/deliver the relevant message into the terminal session.</p>
+<h2 id="level-2-task-dispatch">Level 2: task dispatch</h2>
+<p>Use this when a worker needs ownership and must report completion.</p>
+<pre><code class="language-bash">orca orchestration task-create \
+  --task-title "Claude reviews Codex diff" \
+  --display-name "Review Codex diff" \
+  --spec "Review the current worktree diff as a skeptical maintainer. Report correctness bugs, missing tests, and behavior risks. Do not edit files." \
+  --json
+
+orca terminal create --worktree active --title claude-reviewer --command "claude" --json
+orca terminal wait --terminal &#x3C;claudeHandle> --for tui-idle --timeout-ms 60000 --json
+
+orca orchestration dispatch \
+  --task &#x3C;taskId> \
+  --to &#x3C;claudeHandle> \
+  --inject \
+  --json
+
+orca orchestration check \
+  --wait \
+  --types worker_done,escalation,decision_gate \
+  --timeout-ms 900000 \
+  --json
+</code></pre>
+<p><code>dispatch --inject</code> gives the worker a live preamble. That preamble tells the worker how to send <code>worker_done</code>, how to ask blocking questions, and which <code>taskId</code>/<code>dispatchId</code> define completion authority.</p>
+<h2 id="level-3-coordinator-loop">Level 3: coordinator loop</h2>
+<p>Use this for larger decomposition where Orca should manage dispatching ready work across available terminals.</p>
+<pre><code class="language-bash">orca orchestration run \
+  --spec "Split the checkout QA across available Claude and Codex agents, collect worker_done reports, and summarize blockers." \
+  --max-concurrent 3 \
+  --worktree active \
+  --json
+</code></pre>
+<p>Then inspect:</p>
+<pre><code class="language-bash">orca orchestration task-list --json
+orca orchestration task-list --ready --json
+orca orchestration gate-list --status pending --json
+</code></pre>
+<p>This is the most powerful form, but it is also the easiest to overuse. Start with manual dispatch until the coordination pattern is obvious.</p>
+<h2 id="good-claude-plus-codex-patterns">Good Claude plus Codex patterns</h2>
+<ul>
+<li>Codex implements; Claude reviews the diff.</li>
+<li>Claude proposes an architecture; Codex implements the smallest patch.</li>
+<li>Codex writes tests; Claude searches for missing edge cases.</li>
+<li>Claude summarizes docs and design constraints; Codex makes code changes.</li>
+<li>Both independently investigate a bug; a coordinator compares reports before editing.</li>
+</ul>
+<p>Avoid letting both edit the same checkout at once unless the scope is extremely clear. For independent implementations, use separate worktrees. For review-only collaboration, same worktree plus separate terminals is often fine.</p>
+<h2 id="worker-contract">Worker contract</h2>
+<p>A dispatched worker should:</p>
+<ul>
+<li>Do only the assigned task.</li>
+<li>Use <code>orca orchestration ask</code> for blocking questions.</li>
+<li>Send exactly one <code>worker_done</code>, even on failure.</li>
+<li>Include what it did, what it found, what remains, and relevant file paths.</li>
+<li>Stop after completion so the coordinator can decide the next move.</li>
+</ul>
+<p>Example completion:</p>
+<pre><code class="language-bash">orca orchestration send \
+  --to &#x3C;coordinatorHandle> \
+  --type worker_done \
+  --subject "Review complete" \
+  --body "Reviewed the Codex diff. Found one missing regression test and one edge-case bug in the empty-state path. No files modified." \
+  --task-id &#x3C;taskId> \
+  --dispatch-id &#x3C;dispatchId> \
+  --json
+</code></pre>
+<h2 id="sources">Sources</h2>
+<ul>
+<li><a href="https://www.onorca.dev/docs/cli/orchestration" target="_blank" rel="noopener noreferrer">Orca docs: Orchestration</a></li>
+<li><a href="https://www.onorca.dev/docs/cli/overview" target="_blank" rel="noopener noreferrer">Orca docs: CLI overview</a></li>
+<li><a href="https://www.onorca.dev/docs/cli/worktree-checkpoints" target="_blank" rel="noopener noreferrer">Orca docs: Worktree checkpoints</a></li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Should Andrew's default coordinator be himself, Codex, Claude Code, or an Orca <code>orchestration run</code> loop?</li>
+<li>Which local repos are safe for same-worktree reviewer terminals versus separate-worktree implementation races?</li>
+<li>What standard worker prompts should live in reusable snippets or Orca Skills?</li>
+</ul>e:["$","main",null,{"id":"main-content","className":"article-page page-shell","children":[["$","nav",null,{"className":"breadcrumbs","aria-label":"Breadcrumb","children":[["$","$L3",null,{"href":"/","children":"Front page"}],["$","$L3",null,{"href":"/topics/ai/","children":"AI"}],[]]}],["$","header",null,{"className":"article-header","children":[["$","p",null,{"className":"eyebrow","children":["Encyclopedia article"," · ","AI"]}],["$","h1",null,{"children":"Orca inter-agent orchestration"}],["$","p",null,{"className":"article-deck","children":"Orca agents can collaborate through persistent terminal-to-terminal messages, tracked task dispatches, blocking questions, completion messages, and coordinator loops."}],["$","dl",null,{"className":"article-byline","children":[["$","div",null,{"children":[["$","dt",null,{"children":"Source"}],["$","dd",null,{"children":"Mixed provenance"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Status"}],["$","dd",null,{"children":"To learn"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Published"}],["$","dd",null,{"children":"Jul 9, 2026"}]]}],["$","div",null,{"children":[["$","dt",null,{"children":"Reading time"}],["$","dd",null,{"children":[2," min · ","356"," words"]}]]}]]}]]}],["$","details",null,{"className":"mobile-toc","children":[["$","summary",null,{"children":"On this page"}],["$","ol",null,{"children":[["$","li","three-levels",{"className":"toc-depth-2","children":["$","a",null,{"href":"#three-levels","children":"Three levels"}]}],["$","li","level-1-direct-messages",{"className":"toc-depth-2","children":["$","a",null,{"href":"#level-1-direct-messages","children":"Level 1: direct messages"}]}],["$","li","level-2-task-dispatch",{"className":"toc-depth-2","children":["$","a",null,{"href":"#level-2-task-dispatch","children":"Level 2: task dispatch"}]}],["$","li","level-3-coordinator-loop",{"className":"toc-depth-2","children":["$","a",null,{"href":"#level-3-coordinator-loop","children":"Level 3: coordinator loop"}]}],["$","li","good-claude-plus-codex-patterns",{"className":"toc-depth-2","children":["$","a",null,{"href":"#good-claude-plus-codex-patterns","children":"Good Claude plus Codex patterns"}]}],["$","li","worker-contract",{"className":"toc-depth-2","children":["$","a",null,{"href":"#worker-contract","children":"Worker contract"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","div",null,{"className":"article-layout","children":[["$","aside",null,{"className":"article-toc","aria-label":"On this page","children":[["$","p",null,{"className":"rail-heading","children":"On this page"}],["$","ol",null,{"children":[["$","li","three-levels",{"className":"toc-depth-2","children":["$","a",null,{"href":"#three-levels","children":"Three levels"}]}],["$","li","level-1-direct-messages",{"className":"toc-depth-2","children":["$","a",null,{"href":"#level-1-direct-messages","children":"Level 1: direct messages"}]}],["$","li","level-2-task-dispatch",{"className":"toc-depth-2","children":["$","a",null,{"href":"#level-2-task-dispatch","children":"Level 2: task dispatch"}]}],["$","li","level-3-coordinator-loop",{"className":"toc-depth-2","children":["$","a",null,{"href":"#level-3-coordinator-loop","children":"Level 3: coordinator loop"}]}],["$","li","good-claude-plus-codex-patterns",{"className":"toc-depth-2","children":["$","a",null,{"href":"#good-claude-plus-codex-patterns","children":"Good Claude plus Codex patterns"}]}],["$","li","worker-contract",{"className":"toc-depth-2","children":["$","a",null,{"href":"#worker-contract","children":"Worker contract"}]}],["$","li","sources",{"className":"toc-depth-2","children":["$","a",null,{"href":"#sources","children":"Sources"}]}],["$","li","open-questions",{"className":"toc-depth-2","children":["$","a",null,{"href":"#open-questions","children":"Open questions"}]}]]}]]}],["$","article",null,{"className":"wiki-article","data-pagefind-body":true,"children":[["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$17"}}],"$L18"]}],"$L19"]}]]}]
+18:["$","nav",null,{"className":"article-pagination","aria-label":"Adjacent articles","children":[["$","$L3",null,{"href":"/articles/ai/open-weight-frontier-models/","rel":"prev","children":[["$","span",null,{"children":"Previous in this section"}],["$","strong",null,{"children":"Open-weight frontier models"}]]}],["$","$L3",null,{"href":"/articles/ai/orca-workflow-patterns/","rel":"next","children":[["$","span",null,{"children":"Next in this section"}],["$","strong",null,{"children":"Orca workflow patterns"}]]}]]}]
+19:["$","aside",null,{"className":"article-rail","data-pagefind-ignore":true,"children":[["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Backlinks"}],["$","ul",null,{"className":"rail-links","children":[["$","li","ai/ai-agents-moc",{"children":["$","$L3",null,{"href":"/articles/ai/ai-agents-moc/","children":"AI agents (MOC)"}]}],["$","li","ai/orca-workflow-patterns",{"children":["$","$L3",null,{"href":"/articles/ai/orca-workflow-patterns/","children":"Orca workflow patterns"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Related reading"}],["$","ul",null,{"className":"rail-links","children":[["$","li","ai/orca-workflow-patterns",{"children":["$","$L3",null,{"href":"/articles/ai/orca-workflow-patterns/","children":"Orca workflow patterns"}]}],["$","li","ai/ai-agents-moc",{"children":["$","$L3",null,{"href":"/articles/ai/ai-agents-moc/","children":"AI agents (MOC)"}]}],["$","li","ai/agent-memory-architectures",{"children":["$","$L3",null,{"href":"/articles/ai/agent-memory-architectures/","children":"Agent memory architectures"}]}],["$","li","ai/ai-r-and-d-automation-evidence",{"children":["$","$L3",null,{"href":"/articles/ai/ai-r-and-d-automation-evidence/","children":"AI R&D automation evidence"}]}],["$","li","ai/computer-use-evaluation",{"children":["$","$L3",null,{"href":"/articles/ai/computer-use-evaluation/","children":"Computer-use evaluation"}]}],["$","li","ai/designed-information-asymmetry-for-llm-forecasts",{"children":["$","$L3",null,{"href":"/articles/ai/designed-information-asymmetry-for-llm-forecasts/","children":"Designed information asymmetry for LLM forecasts"}]}]]}]]}],["$","section",null,{"children":[["$","p",null,{"className":"rail-heading","children":"Filed under"}],["$","ul",null,{"className":"tag-list","children":[["$","li","ai",{"children":"ai"}],["$","li","agents",{"children":"agents"}],["$","li","orchestration",{"children":"orchestration"}],["$","li","tooling",{"children":"tooling"}]]}]]}]]}]
+14:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+11:null
+16:[["$","title","0",{"children":"Orca inter-agent orchestration · Rome"}],["$","meta","1",{"name":"description","content":"Orca agents can collaborate through persistent terminal-to-terminal messages, tracked task dispatches, blocking questions, completion messages, and coordinator loops."}],["$","meta","2",{"name":"application-name","content":"Rome"}],["$","meta","3",{"name":"author","content":"Andrew Park"}],["$","meta","4",{"name":"keywords","content":"Rome,wiki,second brain,knowledge garden,research"}],["$","meta","5",{"name":"creator","content":"Andrew Park"}],["$","meta","6",{"name":"publisher","content":"Andrew Park"}],["$","meta","7",{"property":"og:title","content":"Orca inter-agent orchestration"}],["$","meta","8",{"property":"og:description","content":"Orca agents can collaborate through persistent terminal-to-terminal messages, tracked task dispatches, blocking questions, completion messages, and coordinator loops."}],["$","meta","9",{"property":"og:type","content":"article"}],["$","meta","10",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","11",{"name":"twitter:title","content":"Rome — A Living Encyclopedia"}],["$","meta","12",{"name":"twitter:description","content":"Andrew Park's second brain, set in type."}],["$","meta","13",{"name":"twitter:image","content":"http://localhost:3000/og.png"}]]

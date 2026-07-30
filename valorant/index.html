@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RWPA · MartinLutherKing &amp; SN0RLAX</title>
+<meta name="description" content="Round win probability added for MartinLutherKing and SN0RLAX across their shared competitive Valorant cohort — every match, every round, with the intervals that decide what it means.">
+<meta name="robots" content="noindex">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("rwpa-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark")}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script defer src="/assets/hub.js"></script></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <p class="brand"><a href="#/">R<em>W</em>PA</a></p>
+    <p class="header-meta" data-header-meta>Round win probability added · shared competitive cohort</p>
+    <button class="theme-toggle" type="button">◐ light</button>
+  </div>
+</header>
+
+<main class="shell" id="main">
+
+  <!-- ====================== COHORT VIEW ====================== -->
+  <section id="view-cohort">
+
+    <div class="masthead">
+      <h1>Every round we played, and what each of us <em>did</em> to it.</h1>
+    </div>
+
+    <!-- signature: the cumulative walk -->
+    <div class="walk" data-walk>
+      <div class="walk-readout" data-walk-readout></div>
+      <svg class="walk-figure" data-walk-figure
+           role="img" aria-labelledby="walk-title walk-desc">
+        <title id="walk-title">Cumulative round win probability added across the cohort</title>
+        <desc id="walk-desc" data-walk-desc>A line per player, accumulating each round's credited probability in match order.</desc>
+      </svg>
+      <p class="walk-legend" data-walk-legend>
+        <span><i class="swatch m"></i>MartinLutherKing</span>
+        <span><i class="swatch s"></i>SN0RLAX</span>
+      </p>
+    </div>
+
+    <!-- F1: every round played, once, to scale -->
+    <div class="fig fig-wide" data-disposition></div>
+
+    <!-- the honest comparison -->
+    <div class="section-head">
+      <h2>Cohort totals</h2>
+    </div>
+    <div class="verdict" data-verdict></div>
+
+    <!-- match table -->
+    <div class="section-head">
+      <h2>Matches</h2>
+    </div>
+    <div class="table-wrap">
+      <table data-match-table></table>
+    </div>
+
+    <!-- everything that is not the headline -->
+    <div class="section-head">
+      <h2>Diagnostics and exploratory layers</h2>
+      <p class="note" data-layer-sum>Separate models with separate denominators. They do not add up.</p>
+    </div>
+    <div data-layers></div>
+
+    <div class="foot" data-provenance></div>
+
+  </section>
+
+  <!-- ====================== MATCH VIEW ====================== -->
+  <section id="view-match" hidden>
+    <button class="back" type="button" data-back>&larr; All matches</button>
+    <div data-match-body></div>
+  </section>
+
+</main>
+
+<noscript>
+  <p class="note" style="max-width:60ch;margin:24px auto">This dashboard renders its tables and figures
+  from a local data file with JavaScript. Enable it, or read the CSVs in the release directory named in
+  <code>data/model_suite_release_config_2026-07-27.json</code>.</p>
+</noscript>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

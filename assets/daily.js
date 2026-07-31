@@ -463,7 +463,7 @@
       }
     }
 
-    /* puzzle + league pulse (back page) */
+    /* puzzle (back page) */
     const puzzleBox = $("[data-gt-puzzle]");
     if (puzzleBox && data.puzzle) {
       puzzleBox.appendChild(el("p", "blurb", data.puzzle.q));

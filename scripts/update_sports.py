@@ -20,7 +20,6 @@ TEAMS = [
     {"key": "duke-mbb", "label": "Duke MBB", "tier": 1, "league": "NCAA MBB", "path": "basketball/mens-college-basketball", "slug": "150"},
     {"key": "duke-fb",  "label": "Duke FB",  "tier": 1, "league": "NCAA FB",  "path": "football/college-football",         "slug": "150"},
     {"key": "mavs",     "label": "Mavs",     "tier": 1, "league": "NBA",      "path": "basketball/nba",                    "slug": "dal"},
-    {"key": "mets",     "label": "Mets",     "tier": 2, "league": "MLB",      "path": "baseball/mlb",                      "slug": "nym"},
     {"key": "spurs",    "label": "Spurs",    "tier": 2, "league": "Premier League", "path": "soccer/eng.1",                "slug": "367"},
     {"key": "colts",    "label": "Colts",    "tier": 3, "league": "NFL",      "path": "football/nfl",                      "slug": "ind"},
     {"key": "canes",    "label": "Canes",    "tier": 3, "league": "NHL",      "path": "hockey/nhl",                        "slug": "car"},

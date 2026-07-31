@@ -25,9 +25,9 @@ Drag this folder to **Netlify**, or push to a **GitHub Pages** repo. No backend 
 
 ## What's built
 Newspaper **serif** theme, dark mode, left **grouped place sidebar** — *New York, NY* (Murray Hill
-default, Columbia Univ., Battery Park, Elmhurst, Flushing), *Other U.S. cities* (Durham,
-Minneapolis, Cambridge, Rochester, Stony Brook, Nashville, Austin, Houston), and *International*
-(Toronto, Seoul). Each place renders in **its own local timezone**, and each has a **shareable URL**
+default, Battery Park, Elmhurst, Flushing), *Other U.S. cities* (Durham, Cambridge, Rochester,
+Stony Brook, Nashville, Austin, Houston), and *International* (Toronto, Seoul). Each place renders
+in **its own local timezone**, and each has a **shareable URL**
 (`#seoul`, `#murray-hill`, …) with a matching page title — deep-linkable and back/forward-aware.
 - **7-day cards** across the top (icon, high/low, precip chance) — the at-a-glance week.
 - 7-day **hourly** **temperature + feels-like** in one **full-width chart** — two p10–p90 ensemble
@@ -51,8 +51,7 @@ Minneapolis, Cambridge, Rochester, Stony Brook, Nashville, Austin, Houston), and
   the 7-day cards.
 - **New data layers (all free, no key, CORS):** **air quality** + wildfire-smoke flag (Open-Meteo
   AQI), **today-vs-normal + records** (Open-Meteo ERA5 archive), **sun & moon** strip (SunCalc math),
-  **live radar** map (RainViewer on a CARTO base), **marine** waves/SST + **tides** for coastal
-  places (Open-Meteo Marine + NOAA CO-OPS).
+  **marine** waves/SST + **tides** for coastal places (Open-Meteo Marine + NOAA CO-OPS).
 - **Share:** a one-click **PNG snapshot** of the current view (client-side canvas, no API).
 
 _(Earlier experiments dropped for simplicity: a PurpleAir live-sensor layer, an NWS "observed now"
@@ -68,7 +67,7 @@ js/app.js         orchestration: routing, sidebar, day cards, charts, glance pan
 js/derive.js      pure logic: rain windows, threshold probs, nice-day score, what-to-wear, UV window
 js/astro.js       sun & moon (SunCalc)      js/aqi.js      air quality + smoke
 js/climate.js     today-vs-normal (ERA5)    js/marine.js   waves/SST + tides (coastal)
-js/radar.js       RainViewer radar map      js/snapshot.js PNG share export
+js/snapshot.js    PNG share export
 data/places.js    grouped places (lat/lon, timezone, slug, NYC UHI offsets)
 vendor/           uPlot + SunCalc (vendored, no CDN)
 ```

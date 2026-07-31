@@ -10,7 +10,6 @@ const PLACE_GROUPS = [
     group: "New York, NY",
     places: [
       { name: "Murray Hill",    slug: "murray-hill",  lat: 40.748, lon: -73.976, tz: "America/New_York", offsetF: { day: 0.5,  night: 2.5 } },
-      { name: "Columbia Univ.", slug: "columbia",      lat: 40.807, lon: -73.963, tz: "America/New_York", offsetF: { day: 0.3,  night: 1.7 } },
       { name: "Battery Park",   slug: "battery-park",  lat: 40.703, lon: -74.017, tz: "America/New_York", offsetF: { day: -0.3, night: 0.5 } },
       { name: "Elmhurst",       slug: "elmhurst",      lat: 40.742, lon: -73.882, tz: "America/New_York", offsetF: { day: 0.3,  night: 2.0 } },
       { name: "Flushing",       slug: "flushing",      lat: 40.759, lon: -73.830, tz: "America/New_York", offsetF: { day: 0.0,  night: 2.0 } },
@@ -20,7 +19,6 @@ const PLACE_GROUPS = [
     group: "Other U.S. cities",
     places: [
       { name: "Durham, NC",      slug: "durham",      lat: 35.994, lon: -78.899, tz: "America/New_York" },
-      { name: "Minneapolis, MN", slug: "minneapolis", lat: 44.978, lon: -93.265, tz: "America/Chicago" },
       { name: "Cambridge, MA",   slug: "cambridge",   lat: 42.373, lon: -71.109, tz: "America/New_York" },
       { name: "Rochester, NY",   slug: "rochester",   lat: 43.161, lon: -77.611, tz: "America/New_York" },
       { name: "Stony Brook, NY", slug: "stony-brook", lat: 40.906, lon: -73.141, tz: "America/New_York" },

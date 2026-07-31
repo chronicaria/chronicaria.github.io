@@ -62,47 +62,8 @@
     { n: "Newspaper: Archive", u: "daily/archive.html", k: "daily" },
     { n: "Sports trackers", u: "sports.html", k: "page" },
     { n: "Music", u: "music.html", k: "page" },
-    { n: "Literature", u: "literature.html", k: "page" },
-    { n: "SMP Basketball League", u: "league/index.html", k: "league" }
+    { n: "Literature", u: "literature.html", k: "page" }
   ];
-
-  var leagueEntries = null;   // null = not loaded, [] = loaded (possibly empty/failed)
-  var leagueLoading = false;
-  var leaguePlayers = [];     // players only, for the random-player action
-  var pendingRandomPlayer = false;
-
-  function loadLeagueIndex() {
-    if (leagueEntries !== null || leagueLoading || isFile) return;
-    leagueLoading = true;
-    fetch(PREFIX + "league/assets/search-index.json")
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (data) {
-        var out = [];
-        if (data) {
-          (data.teams || []).forEach(function (t) {
-            out.push({ n: "SMP: " + t.n, u: "league/" + t.u, k: "team" });
-          });
-          (data.players || []).forEach(function (p) {
-            var e = { n: "SMP: " + p.n, u: "league/" + p.u, k: p.t || "player" };
-            out.push(e);
-            leaguePlayers.push(e);
-          });
-        }
-        leagueEntries = out;
-        if (pendingRandomPlayer) {
-          pendingRandomPlayer = false;
-          if (leaguePlayers.length) { goRandomPlayer(); return; }
-        }
-        if (!overlay.hidden) renderResults(input.value);
-      })
-      .catch(function () { leagueEntries = []; pendingRandomPlayer = false; });
-  }
-
-  function goRandomPlayer() {
-    var p = leaguePlayers[Math.floor(Math.random() * leaguePlayers.length)];
-    closePalette();
-    location.href = PREFIX + p.u;
-  }
 
   /* ---------------- saved-for-later shelf (localStorage contract: gtShelf) ---------------- */
   function readShelf() {
@@ -212,15 +173,6 @@
       }
     },
     {
-      n: "Random SMP player", k: "action",
-      run: function () {
-        if (leaguePlayers.length) { goRandomPlayer(); return; }
-        if (leagueEntries !== null) return; // index loaded; no players to pick from
-        pendingRandomPlayer = true;
-        loadLeagueIndex();
-      }
-    },
-    {
       n: "Open today's puzzle", k: "action",
       run: function () {
         closePalette();
@@ -270,7 +222,7 @@
     q = q.trim().toLowerCase();
     var actions = actionEntries();
     if (!q) return STATIC_ENTRIES.concat(actions); // page links first, then actions
-    var pool = STATIC_ENTRIES.concat(leagueEntries || []).concat(actions);
+    var pool = STATIC_ENTRIES.concat(actions);
     var scored = [];
     for (var i = 0; i < pool.length; i++) {
       var s = score(q, pool[i].n);
@@ -372,7 +324,6 @@
     overlay.hidden = false;
     input.value = "";
     renderResults("");
-    loadLeagueIndex();
     input.focus();
   }
   function closePalette() { overlay.hidden = true; }

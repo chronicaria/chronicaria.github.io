@@ -7,9 +7,6 @@ is how a project ends up listed in the dropdown but missing from the band. Edit
 PROJECTS below and run this; it rewrites all three.
 
     python3 scripts/site_nav.py
-
-The home page's Published work shelf is deliberately NOT generated: each card
-carries prose that should be written, not templated. Add the card by hand.
 """
 
 import pathlib
@@ -26,14 +23,13 @@ INTERESTS = [
 ]
 
 PROJECTS = [
-    ("/rome-wiki/", "Rome Wiki"),
-    ("/fantasy-basketball/", "Fantasy Basketball"),
-    ("/fantasy-football/", "Fantasy Football"),
+    ("/fantasy/", "Fantasy Encyclopedias"),
     ("/valorant/", "Valorant RWPA"),
     ("/quant-internships/", "Quant Internships"),
     ("/concerto/", "Concerto Ranker"),
     ("/nyc-weather/", "Weather Dashboard"),
     ("/winter-trip/", "Italy, winter 2026–27"),
+    ("/equipotential/", "Live Paper"),
 ]
 
 # Top-level pages, and the href each should mark as the current page.

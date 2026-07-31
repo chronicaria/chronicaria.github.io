@@ -237,7 +237,6 @@ function renderFeatures(fc, days) {
   callPanel("renderAQI", fc, "panel-aqi");
   callPanel("renderClimate", fc, "panel-climate");
   callPanel("renderMarine", fc, "panel-marine");
-  callPanel("renderRadar", fc, "panel-radar");
   callPanel("renderShareButton", fc, "share-btn");
 }
 
@@ -259,7 +258,7 @@ async function load(place) {
     renderDayCards(fc, days, chips);
     renderNow(fc, place.name, place.offsetF, days[0]);
     renderCharts(fc);
-    renderFeatures(fc, days); // Wave-2 feature panels (derive/astro/aqi/climate/marine/radar/snapshot)
+    renderFeatures(fc, days); // Wave-2 feature panels (derive/astro/aqi/climate/marine/snapshot)
   } else {
     $("now").innerHTML = `<div class="muted">Forecast unavailable — check your connection and reload.</div>`;
   }

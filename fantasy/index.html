@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){var t=null;try{t=localStorage.getItem("fantasy-theme")
+  /* No landing-page choice yet? Inherit whichever hub the reader last set, so
+     arriving here from either encyclopedia does not flip the lights. */
+  ||localStorage.getItem("fbe-theme")||localStorage.getItem("ff-theme")}catch(e){}
+document.documentElement.dataset.theme=(t==="lamp"||t==="paper")?t:(matchMedia("(prefers-color-scheme: dark)").matches?"lamp":"paper");
+var s=null;try{s=localStorage.getItem("fantasy-side")}catch(e){}
+document.documentElement.dataset.side=(s==="football")?"football":"basketball";})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fantasy Encyclopedias</title>
+<meta name="description" content="Two fantasy sports encyclopedias — the 2026-27 NBA season and the 2026 NFL season — behind one door.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Tokens lifted verbatim from the two encyclopedias' style.css — the base palette
+   is byte-identical between them; only the accent family forks, and that fork is
+   applied per-side below rather than baked in here. */
+:root{
+  --bg:#f5efe3; --panel:#fbf7ee; --panel-2:#efe7d6; --card:#faf5ea;
+  --ink:#241f16; --muted:#6d6350; --faint:#988c74;
+  --line:#d8cdb4; --line-soft:#e6ddc9; --rule:#3a3122;
+  --redlink:#a5522f;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --display:"EB Garamond",Georgia,serif;
+  --maxw:960px;
+  color-scheme: light;
+}
+:root[data-theme=lamp]{
+  --bg:#171310; --panel:#1f1a14; --panel-2:#262017; --card:#211c15;
+  --ink:#e8dfc9; --muted:#a2957c; --faint:#7a6f5c;
+  --line:#3b3324; --line-soft:#2e2820; --rule:#c9bda0;
+  --redlink:#c96f4e;
+  color-scheme: dark;
+}
+/* The accent fork: oxblood for basketball, pine for football, exactly the values
+   each encyclopedia uses, so crossing the threshold is not a colour change. */
+:root[data-side=basketball]{--accent:#7d2a20; --accent-2:#8a5a20; --link:#7d2a20; --link-visited:#5f3126}
+:root[data-side=football]  {--accent:#245c3f; --accent-2:#8a6a20; --link:#245c3f; --link-visited:#3d5348}
+:root[data-theme=lamp][data-side=basketball]{--accent:#d08a52; --accent-2:#c9a45c; --link:#d08a52; --link-visited:#b98a6e}
+:root[data-theme=lamp][data-side=football]  {--accent:#7fb894; --accent-2:#c9a45c; --link:#7fb894; --link-visited:#8fa89a}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.62;-webkit-text-size-adjust:100%}
+.page{max-width:var(--maxw);margin:0 auto;padding:0 22px 72px}
+a{color:var(--link);text-underline-offset:2px}
+a:visited{color:var(--link-visited)}
+
+/* ---- the thin top bar, echoing the encyclopedias' sticky nav ---- */
+.topbar{border-bottom:1px solid var(--line);background:var(--panel);
+  margin-bottom:6px}
+.topbar-in{max-width:var(--maxw);margin:0 auto;padding:10px 22px;
+  display:flex;align-items:center;gap:14px}
+.brand{font-family:var(--display);font-size:19px;letter-spacing:.3px;
+  color:var(--ink);text-decoration:none}
+.brand b{color:var(--accent);font-weight:600}
+.spacer{flex:1}
+.barlink{font-size:13px;color:var(--muted);text-decoration:none;
+  font-variant:small-caps;letter-spacing:1.2px}
+.barlink:hover{color:var(--accent)}
+.themebtn{font:inherit;font-size:15px;line-height:1;cursor:pointer;
+  background:var(--card);color:var(--ink);border:1px solid var(--line);
+  border-radius:2px;padding:5px 9px}
+.themebtn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---- masthead: copied verbatim from both style.css files, which agree ---- */
+.masthead{text-align:center;padding:26px 0 8px;margin-bottom:26px}
+.mh-date{font-size:12px;color:var(--faint);font-variant:small-caps;letter-spacing:2.2px;margin:0}
+.mh-title{font-family:var(--display);font-weight:500;font-size:clamp(34px,6vw,56px);
+  letter-spacing:.5px;margin:10px 0 6px;line-height:1.12}
+.mh-sub{font-size:14px;color:var(--muted);font-variant:small-caps;letter-spacing:1.6px;margin:0 0 18px}
+.mh-rule{height:7px;border-top:1px solid var(--rule);border-bottom:3px double var(--rule);
+  max-width:520px;margin:0 auto 18px}
+.mh-note{max-width:640px;margin:0 auto;font-size:15px;color:var(--muted);font-style:italic}
+
+/* ---- the door: a two-panel masthead of its own ---- */
+.door{text-align:center;padding:34px 0 4px}
+.door-kicker{font-size:12px;color:var(--faint);font-variant:small-caps;
+  letter-spacing:2.2px;margin:0}
+.door-title{font-family:var(--display);font-weight:500;
+  font-size:clamp(30px,5.2vw,46px);letter-spacing:.5px;margin:10px 0 6px;line-height:1.12}
+.door-sub{font-size:14px;color:var(--muted);font-variant:small-caps;
+  letter-spacing:1.6px;margin:0 0 20px}
+
+/* ---- the toggle: a segmented control, real buttons ---- */
+.switch{display:inline-flex;border:1px solid var(--line);border-radius:2px;
+  overflow:hidden;background:var(--panel)}
+.switch button{font:inherit;font-family:var(--display);font-size:18px;
+  cursor:pointer;border:0;background:transparent;color:var(--muted);
+  padding:9px 26px;letter-spacing:.4px;
+  border-right:1px solid var(--line)}
+.switch button:last-child{border-right:0}
+.switch button:hover{color:var(--ink);background:var(--panel-2)}
+.switch button[aria-selected=true]{background:var(--accent);color:var(--panel);
+  font-weight:600}
+:root[data-theme=lamp] .switch button[aria-selected=true]{color:#171310}
+.switch button:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+
+/* ---- section grid inside each panel ---- */
+.enter{display:block;text-align:center;margin:0 auto 30px;max-width:420px;
+  border:1px solid var(--accent);border-radius:2px;padding:12px 18px;
+  font-family:var(--display);font-size:20px;letter-spacing:.4px;
+  text-decoration:none;color:var(--accent);background:var(--card)}
+.enter:visited{color:var(--accent)}
+.enter:hover{background:var(--accent);color:var(--panel)}
+:root[data-theme=lamp] .enter:hover{color:#171310}
+
+.sectitle{font-size:12px;color:var(--faint);font-variant:small-caps;
+  letter-spacing:2.2px;text-align:center;margin:0 0 14px;
+  border-top:1px solid var(--line-soft);padding-top:18px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(232px,1fr))}
+.cardlink{display:block;border:1px solid var(--line);border-radius:2px;
+  background:var(--card);padding:13px 15px;text-decoration:none;color:var(--ink)}
+.cardlink:visited{color:var(--ink)}
+.cardlink:hover{border-color:var(--accent)}
+.cardlink b{display:block;font-family:var(--display);font-size:19px;
+  font-weight:500;color:var(--accent);letter-spacing:.3px;margin-bottom:2px}
+.cardlink span{display:block;font-size:14px;color:var(--muted);line-height:1.45}
+
+.footnote{margin:34px auto 0;max-width:640px;text-align:center;font-size:14px;
+  color:var(--faint);font-style:italic;border-top:1px solid var(--line-soft);
+  padding-top:18px}
+@media (max-width:520px){
+  .switch button{padding:9px 18px;font-size:17px}
+  .topbar-in{gap:10px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="/">Andrew <b>Park</b></a>
+    <span class="spacer"></span>
+    <a class="barlink" href="/sports.html">Sports</a>
+    <button type="button" class="themebtn" id="themebtn" aria-label="Toggle light and dark">☾</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="door">
+    <p class="door-kicker">Two encyclopedias · one door</p>
+    <h1 class="door-title">The Fantasy Encyclopedias</h1>
+    <p class="door-sub">Pick a sport</p>
+    <div class="switch" role="tablist" aria-label="Choose a sport">
+      <button type="button" role="tab" id="tab-basketball" aria-controls="panel-basketball"
+        aria-selected="true" data-side="basketball">Basketball</button>
+      <button type="button" role="tab" id="tab-football" aria-controls="panel-football"
+        aria-selected="false" data-side="football">Football</button>
+    </div>
+  </div>
+
+  <!-- ================= BASKETBALL ================= -->
+  <section role="tabpanel" id="panel-basketball" aria-labelledby="tab-basketball" tabindex="0">
+    <div class="masthead">
+      <p class="mh-date">Research cutoff · July 19, 2026 · Volume I</p>
+      <h2 class="mh-title">The Fantasy Basketball Encyclopedia</h2>
+      <p class="mh-sub">2026–27 Season · 555 player dossiers · 30 team desks · 646 linked entries</p>
+      <div class="mh-rule"></div>
+      <p class="mh-note">Built for ESPN-points and nine-category leagues of ten or twelve teams.
+        The factual record is verified against primary sources; the projection engine has been
+        repaired and its defects documented. A July board is not a draft board — re-verify in October.</p>
+    </div>
+
+    <a class="enter" href="basketball/index.html">Enter the encyclopedia →</a>
+
+    <p class="sectitle">The sections</p>
+    <div class="grid">
+      <a class="cardlink" href="basketball/rankings/2026-27-draft-boards-espn-points-and-nine-category.html">
+        <b>Draft Room</b><span>Both formats side by side, and the 147 players who move fifteen slots between them.</span></a>
+      <a class="cardlink" href="basketball/projections/2026-27-fantasy-basketball-player-projections.html">
+        <b>Projections</b><span>Per-player numbers, the methodology, and the engine's documented repairs.</span></a>
+      <a class="cardlink" href="basketball/teams/2026-27-nba-fantasy-team-index.html">
+        <b>Teams</b><span>Thirty team desks — depth charts, roles, and the transaction ledger.</span></a>
+      <a class="cardlink" href="basketball/players/index.html">
+        <b>Players</b><span>555 dossiers, sortable, including unsigned and draft-rights cases.</span></a>
+      <a class="cardlink" href="basketball/strategy/draft-day-checklist-and-decision-rules.html">
+        <b>Strategy</b><span>Draft-day checklists, punt builds, and why points and category leagues diverge.</span></a>
+      <a class="cardlink" href="basketball/library/2026-27-fantasy-basketball-source-index.html">
+        <b>Library</b><span>The source index, the news ledger, and the injury and availability record.</span></a>
+    </div>
+  </section>
+
+  <!-- ================= FOOTBALL ================= -->
+  <section role="tabpanel" id="panel-football" aria-labelledby="tab-football" tabindex="0" hidden>
+    <div class="masthead">
+      <p class="mh-date">Full PPR · 12 teams · ESPN · the 1.01 is locked</p>
+      <h2 class="mh-title">The Fantasy Football Encyclopedia</h2>
+      <p class="mh-sub">2026 season · built for someone who does not watch football</p>
+      <div class="mh-rule"></div>
+      <p class="mh-note">Fantasy football is a points league decided almost entirely at the draft,
+        where opportunity beats talent, position scarcity beats raw scoring, and the league's payout
+        structure decides whether you should build for ceiling or floor.</p>
+    </div>
+
+    <a class="enter" href="football/index.html">Enter the encyclopedia →</a>
+
+    <p class="sectitle">The sections</p>
+    <div class="grid">
+      <a class="cardlink" href="football/draft-room.html">
+        <b>Draft Room</b><span>The whole board, sortable and filterable, built straight from the CSVs.</span></a>
+      <a class="cardlink" href="football/start-here/your-league-in-one-page.html">
+        <b>Start Here</b><span>Your league on one page — the thing to reread on draft day.</span></a>
+      <a class="cardlink" href="football/draft/2026-draft-board.html">
+        <b>The Draft</b><span>Board, tiers, and a written script for picks 1, 24 and 25.</span></a>
+      <a class="cardlink" href="football/season/bye-week-planning.html">
+        <b>The Season</b><span>Byes, waivers, and start-sit as a standing rule rather than a weekly project.</span></a>
+      <a class="cardlink" href="football/concepts/replacement-level.html">
+        <b>Concepts</b><span>Replacement level, ADP as a market price, and positional scarcity.</span></a>
+      <a class="cardlink" href="football/teams/the-32-offenses.html">
+        <b>Teams</b><span>All thirty-two offenses, and how each divides its pie.</span></a>
+      <a class="cardlink" href="football/players/index.html">
+        <b>Players</b><span>Sixty-two player pages, each resolving to one of twelve archetypes.</span></a>
+      <a class="cardlink" href="football/library/index.html">
+        <b>Library</b><span>Where the numbers come from, what was checked, and when.</span></a>
+    </div>
+  </section>
+
+  <p class="footnote">Both encyclopedias are rendered from Obsidian vaults and are perishable by
+    design: every page carries the date it was built, and the boards die the moment the draft ends.</p>
+
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var SIDES = ["basketball", "football"];
+
+  /* ---- theme ------------------------------------------------------------
+     The landing page owns "fantasy-theme". The two encyclopedias keep their
+     own long-standing keys ("fbe-theme" and "ff-theme"); rather than racing
+     them, a toggle here mirrors the choice into both, so the lights stay put
+     when the reader walks through the door. Neither hub's site.js is touched. */
+  var THEME_KEYS = ["fantasy-theme", "fbe-theme", "ff-theme"];
+  var btn = document.getElementById("themebtn");
+
+  function paintThemeBtn() {
+    btn.textContent = root.dataset.theme === "lamp" ? "☀" : "☾";
+  }
+  paintThemeBtn();
+
+  btn.addEventListener("click", function () {
+    var next = root.dataset.theme === "lamp" ? "paper" : "lamp";
+    root.dataset.theme = next;
+    for (var i = 0; i < THEME_KEYS.length; i++) {
+      try { localStorage.setItem(THEME_KEYS[i], next); } catch (e) {}
+    }
+    paintThemeBtn();
+  });
+
+  /* ---- the sport toggle -------------------------------------------------- */
+  var tabs = {};
+  var panels = {};
+  SIDES.forEach(function (s) {
+    tabs[s] = document.getElementById("tab-" + s);
+    panels[s] = document.getElementById("panel-" + s);
+  });
+
+  function show(side, focus) {
+    if (SIDES.indexOf(side) === -1) side = "basketball";
+    root.dataset.side = side;
+    SIDES.forEach(function (s) {
+      var on = s === side;
+      tabs[s].setAttribute("aria-selected", on ? "true" : "false");
+      tabs[s].tabIndex = on ? 0 : -1;
+      panels[s].hidden = !on;
+    });
+    if (focus) tabs[side].focus();
+    try { localStorage.setItem("fantasy-side", side); } catch (e) {}
+  }
+
+  SIDES.forEach(function (s) {
+    tabs[s].addEventListener("click", function () { show(s, false); });
+  });
+
+  /* Left/right arrows move between tabs, per the tablist convention. */
+  document.querySelector(".switch").addEventListener("keydown", function (e) {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    var i = SIDES.indexOf(root.dataset.side);
+    show(SIDES[(i + (e.key === "ArrowRight" ? 1 : SIDES.length - 1)) % SIDES.length], true);
+  });
+
+  /* The pre-paint script already set data-side from localStorage; sync the
+     tabs and panels to it now that they exist. */
+  show(root.dataset.side, false);
+})();
+</script>
+<script defer src="/assets/hub.js"></script></body>
+</html>

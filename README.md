@@ -7,7 +7,7 @@ repositories. Plain HTML/CSS/JS at the top level, no build step, served from the
 ## Structure
 
 ```
-index.html            Home — résumé, coursework, and the Published work shelf
+index.html            Home — résumé and coursework
 daily/                The Gothic Times — the live morning paper (front page + 5 desks)
 sports.html           Team trackers
 music.html            Classical repertoire
@@ -15,9 +15,10 @@ literature.html       Reading log
 weather.html          County temperature map
 404.html              Themed not-found
 
-rome-wiki/            980-article linked knowledge base (Next.js static export)
-fantasy-basketball/   2026-27 Fantasy Basketball Encyclopedia — 646 pages
-fantasy-football/     2026 Fantasy Football Encyclopedia — 118 pages
+fantasy/              The Fantasy Encyclopedias — sport picker over two corpora
+  index.html          Hand-written toggle shell; not generated, edit directly
+  basketball/         2026-27 Fantasy Basketball Encyclopedia — 646 pages
+  football/           2026 Fantasy Football Encyclopedia — 118 pages
 valorant/             RWPA dashboard — 21 matches, 454 rounds
 concerto/             Piano concerto pairwise ranker
 nyc-weather/          Hourly forecasts with ensemble uncertainty bands
@@ -50,7 +51,7 @@ The band links home, names the section you are in, and carries a menu of everyth
 The top-level pages don't load it — they already have the real navigation, which now
 carries a Projects dropdown alongside Interests.
 
-All navigation is root-absolute (`/sports.html`, `/rome-wiki/`), so the same nav block
+All navigation is root-absolute (`/sports.html`, `/fantasy/`), so the same nav block
 works at any depth. That means **the site must be served from a domain root**, not a
 subpath. Locally:
 
@@ -67,9 +68,9 @@ for most of them.
 | Path | How to rebuild |
 |---|---|
 | `concerto/`, `valorant/`, `nyc-weather/`, `winter-trip/`, `quant-internships/` | Nothing to build — edit the files in place. |
-| `fantasy-basketball/` | `cd fantasy-basketball && python3 build.py` — reads the vault at `~/Desktop/Rome/Basketball/Fantasy Basketball/2026-27 Fantasy Basketball Encyclopedia`. |
-| `fantasy-football/` | `cd fantasy-football && python3 build.py` — reads `~/Desktop/Rome/Sports/NFL/Fantasy Football`. |
-| `rome-wiki/` | **The exception.** Only the export lives here; the Next.js source is at [chronicaria/rome-wiki](https://github.com/chronicaria/rome-wiki). Clone it, `PAGES_BASE_PATH=/rome-wiki npm run build:pages`, and copy `out/` over `rome-wiki/`. That repo is kept for exactly this reason — do not delete it. |
+| `fantasy/basketball/` | `cd fantasy/basketball && python3 build.py` — reads the vault at `~/Desktop/Rome/Basketball/Fantasy Basketball/2026-27 Fantasy Basketball Encyclopedia`. |
+| `fantasy/football/` | `cd fantasy/football && python3 build.py` — reads `~/Desktop/Rome/Sports/NFL/Fantasy Football`. |
+| `fantasy/index.html` | Nothing to build — the sport picker is hand-written and self-contained. Keep its two panels in step with the corpora's own section links. |
 
 After any rebuild:
 
@@ -79,8 +80,7 @@ python3 scripts/inject_hub.py    # re-adds the hub tag to new pages, skips the r
 
 To add or remove a project, edit `PROJECTS` in `scripts/site_nav.py` and run it — it
 regenerates the nav, the `SECTIONS` array in `hub.js`, and the sitemap from that one list.
-`inject_hub.py` reads the same list. The home page's Published work shelf is deliberately
-hand-written and needs its card added by hand.
+`inject_hub.py` reads the same list.
 
 ## The newspaper
 
@@ -123,3 +123,9 @@ Project repositories that used to publish `chronicaria.github.io/<name>/` — `v
 over the org site at the same path. Their Pages deployments were disabled on 2026-07-30;
 the repositories themselves are untouched. If you ever re-enable Pages on one of them, it
 will silently take that path back.
+
+The Rome wiki was removed from this repo on 2026-07-31 and no longer deploys. Its export
+was moved to `~/Desktop/Code/rome-wiki-archive/` and its Next.js source remains at
+[chronicaria/rome-wiki](https://github.com/chronicaria/rome-wiki). Do not copy it back
+here, and leave that repo's Pages deployment disabled — re-enabling it would republish the
+wiki at `chronicaria.github.io/rome-wiki/`.

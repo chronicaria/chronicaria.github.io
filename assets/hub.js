@@ -12,14 +12,13 @@
   "use strict";
 
   var SECTIONS = [
-    { href: "/rome-wiki/", label: "Rome Wiki" },
-    { href: "/fantasy-basketball/", label: "Fantasy Basketball" },
-    { href: "/fantasy-football/", label: "Fantasy Football" },
+    { href: "/fantasy/", label: "Fantasy Encyclopedias" },
     { href: "/valorant/", label: "Valorant RWPA" },
     { href: "/quant-internships/", label: "Quant Internships" },
     { href: "/concerto/", label: "Concerto Ranker" },
     { href: "/nyc-weather/", label: "Weather Dashboard" },
     { href: "/winter-trip/", label: "Italy, winter 2026–27" },
+    { href: "/equipotential/", label: "Live Paper" },
   ];
 
   var ELSEWHERE = [
@@ -31,7 +30,7 @@
     { href: "/weather.html", label: "Temperature" },
   ];
 
-  // Longest matching prefix wins, so /fantasy-football/ doesn't answer to /fantasy-.
+  // Longest matching prefix wins, so a nested project doesn't answer to its parent.
   function currentSection() {
     var path = location.pathname;
     var best = null;
@@ -137,9 +136,10 @@
     });
   }
 
-  // The Rome wiki is a hydrated Next.js export; React owns <body>'s children and
-  // will discard a node inserted before hydration finishes. Waiting for load
-  // covers that, and the re-check covers a client-side route change dropping it.
+  // Waiting for load, plus the re-check below, covers any page whose scripts own
+  // <body>'s children and would discard a node inserted before they finish.
+  // Originally for the Rome wiki's Next.js hydration (removed 2026-07-31); kept
+  // because the live paper and the fantasy corpora also rewrite the body.
   if (document.readyState === "complete") mount();
   else window.addEventListener("load", mount);
 

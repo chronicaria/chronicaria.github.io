@@ -25,8 +25,6 @@ CARDS = [
      "Duke '28 · mathematics · computer science · quant research"),
     ("daily.png", "The Daily",
      "Sports · AI & Models · Markets · The 2026 Midterms — printed every morning at 6:10"),
-    ("league.png", "SMP Basketball League",
-     "Ten teams · 435 players · every box score"),
 ]
 
 

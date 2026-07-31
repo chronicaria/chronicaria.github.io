@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Farticles\u002F[...slug]","\u002Ftopics\u002F[topic]","\u002Fwanted\u002F[slug]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

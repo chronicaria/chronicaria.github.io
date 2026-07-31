@@ -184,7 +184,6 @@ TEAMS = [
     {"key": "duke-mbb", "label": "Duke MBB", "tier": 1, "path": "basketball/mens-college-basketball", "id": "150"},
     {"key": "duke-fb",  "label": "Duke FB",  "tier": 1, "path": "football/college-football",          "id": "150"},
     {"key": "mavs",     "label": "Mavericks","tier": 1, "path": "basketball/nba",                     "id": "6"},
-    {"key": "mets",     "label": "Mets",     "tier": 2, "path": "baseball/mlb",                       "id": "21"},
     {"key": "spurs",    "label": "Spurs",    "tier": 2, "path": "soccer/eng.1",                       "id": "367"},
     {"key": "colts",    "label": "Colts",    "tier": 3, "path": "football/nfl",                       "id": "11"},
     {"key": "canes",    "label": "Hurricanes","tier": 3, "path": "hockey/nhl",                        "id": "7"},
@@ -193,9 +192,12 @@ TEAMS = [
 FAN_FEEDS = [  # SB Nation team blogs (Atom)
     {"url": "https://www.dukebasketballreport.com/rss/index.xml", "source": "Duke Basketball Report", "team": "duke-mbb", "tier": 1, "weight": 1.15},
     {"url": "https://www.mavsmoneyball.com/rss/index.xml",        "source": "Mavs Moneyball",         "team": "mavs",     "tier": 1, "weight": 1.0},
-    {"url": "https://www.amazinavenue.com/rss/index.xml",         "source": "Amazin' Avenue",         "team": "mets",     "tier": 2, "weight": 1.0},
     {"url": "https://cartilagefreecaptain.sbnation.com/rss/index.xml", "source": "Cartilage Free Captain", "team": "spurs", "tier": 2, "weight": 1.0},
 ]
+# SB Nation blogs double as beats for other clubs in the same market — Mavs
+# Moneyball also runs the WNBA's Dallas Wings under /dallas-wings/. The URL
+# path is the reliable signal; a title match alone would eat Mavs headlines.
+FAN_EXCLUDE = re.compile(r"/dallas-wings/|\bwnba\b", re.I)
 GENERAL_SPORTS_FEEDS = [  # league-wide feeds; items only kept when they match a team
     {"url": "https://www.nytimes.com/athletic/rss/news/",                "source": "The Athletic", "weight": 1.3, "paywalled": True},
     {"url": "https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml",   "source": "NYT",          "weight": 1.2, "paywalled": True},
@@ -205,7 +207,6 @@ TEAM_PATTERNS = [  # (regex, team key) — order matters; first match wins
     (re.compile(r"\bduke\b.*football|football.*\bduke\b", re.I), "duke-fb"),
     (re.compile(r"\bduke\b|\bblue devils?\b", re.I), "duke-mbb"),
     (re.compile(r"\bmavericks\b|\bmavs\b|\bluka\b.*dallas|dallas.*\bnba\b", re.I), "mavs"),
-    (re.compile(r"\bmets\b", re.I), "mets"),
     (re.compile(r"\btottenham\b|\bhotspur\b", re.I), "spurs"),
     # bare "Spurs" is ambiguous (San Antonio) — require soccer context
     (re.compile(r"\bspurs\b(?=[\s\S]*(premier league|north london|postecoglou|epl|soccer|football club))", re.I), "spurs"),
@@ -244,9 +245,11 @@ def fetch_espn_team_news(cfg):
 
 def fetch_fan_feed(cfg):
     team = next(t for t in TEAMS if t["key"] == cfg["team"])
+    feed = [f for f in parse_feed(fetch(cfg["url"]))
+            if not FAN_EXCLUDE.search(f["url"] + " " + f["title"])]
     return [item("sports", cfg["source"], f["title"], f["url"], f["published"], f["summary"],
                  weight=cfg["weight"], tags=[team["key"], team["label"], f"tier{cfg['tier']}"])
-            for f in parse_feed(fetch(cfg["url"]))[:8]]
+            for f in feed[:8]]
 
 
 # ---------------------------------------------------------------- ai
@@ -963,17 +966,6 @@ def main():
     except Exception:
         pass
 
-    # SMP league pulse: day number from the newest export in league-data/
-    league = None
-    try:
-        exports = sorted((OUT_DIR.parent.parent / "league-data").glob("day*.json"),
-                         key=lambda p: int(re.sub(r"\D", "", p.stem) or 0))
-        if exports:
-            league = {"day": int(re.sub(r"\D", "", exports[-1].stem)),
-                      "label": json.loads(exports[-1].read_text()).get("meta", {}).get("name", "")}
-    except Exception:
-        pass
-
     # Sunday edition: the week in review, from the archives
     week = None
     if today.weekday() == 6:
@@ -987,7 +979,6 @@ def main():
         "lead": lead,
         "briefs": briefs,
         "puzzle": puzzle,
-        "league": league,
         "week": week,
         "sections": {
             "sports": {"items": sports_items},

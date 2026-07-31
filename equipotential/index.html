@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A cut-point method for flow on equipotential figures — the live paper</title>
+<meta name="description" content="A numerical-methods preprint you can take apart. The cut points are located in the browser, the figure morphs from sphere to tidal egg under your cursor, and the stability classifier re-measures its own envelope as you refine the grid.">
+<link rel="canonical" href="https://chronicaria.github.io/equipotential/">
+<meta property="og:title" content="A cut-point method for flow on equipotential figures — the live paper">
+<meta property="og:description" content="A numerical-methods preprint you can take apart. Three live figures; every printed number says whether it was computed here or measured by the solver.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://chronicaria.github.io/equipotential/">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("equipotential-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark")}catch(e){}</script>
+<script>document.documentElement.classList.add("js")</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/paper.css">
+<script defer src="/assets/hub.js"></script></head>
+<body>
+<a class="skip-link" href="#main">Skip to the paper</a>
+
+<main class="paper" id="main">
+
+  <header class="masthead">
+    <p class="byline">Andrew Park · independent researcher</p>
+    <h1>A cut-point shallow-water method for atmospheric flow on rotational and tidal equipotential figures</h1>
+    <p class="standfirst">The numerical method (§§2–5) is the rigorous contribution; the brown-dwarf
+      application (§§6–7) is an exploratory forward model on a dimensionless layer-thickness proxy,
+      not an observational measurement.</p>
+    <p class="byline">Preprint · compiled 19 June 2026 · this edition covers §§2, 3 and 5</p>
+    <div class="chips">
+      <a class="chip" href="https://github.com/chronicaria/BealeSurfaceSolver">Solver, MIT ↗</a>
+      <a class="chip" href="tests/golden.html">Golden tests ↗</a>
+      <a class="chip" href="#cite">Cite this ↓</a>
+      <a class="chip" href="#colophon">Colophon ↓</a>
+    </div>
+    <p class="affordance">Every figure below is live and closed form: nothing on this page replays a
+      stored solver run. Drag a control and the figure is rebuilt from the equations. Every slider
+      carries a tick at the value the paper printed, and a <span class="num">↺</span> that returns
+      it there. Numbers set in <span class="calc">italic monospace</span> were computed in your
+      browser; numbers set in <span class="val">upright monospace with a dotted rule</span> were
+      measured by the solver and are named in the colophon. Press <span class="num">?</span> for
+      the keyboard map.</p>
+  </header>
+
+  <div class="oxford"></div>
+
+  <section id="abstract">
+    <h2>Abstract</h2>
+    <p>A body in hydrostatic equilibrium — a fast-rotating brown dwarf, a tidally distorted close
+      binary — is bounded by an equipotential of its own effective potential, a closed surface that
+      is not a sphere and that a standard sphere-based spherical-harmonic or latitude–longitude
+      atmospheric core structurally cannot carry without new geometry. We present a
+      surface-mesh-free, harmonic-free finite-difference method that solves the forced–damped
+      shallow-water equations directly on such a figure, deep into the extreme rapid-rotation and
+      near-Roche-fill regime, by embedding it as the zero level set
+      <span class="num">S = {<span class="fig-phi">φ</span> = 0}</span> of a scalar on a background
+      Cartesian grid and building difference operators at the cut points where <span class="num">S</span>
+      crosses grid edges. The method rests on a single structural identity: taking the level-set
+      function to <em>be</em> the effective potential makes one ambient gradient supply the surface
+      normal and metric, the Coriolis projection <span class="num">f = 2<b>Ω</b>·n̂</span>, and the
+      gravity-darkened forcing, because <span class="num">‖∇<span class="fig-phi">φ</span>‖|<sub>S</sub>
+      = g<sub>eff</sub></span>. We verify the surface operators to second order <em>in space</em> by
+      manufactured solutions across a one-parameter figure family (sphere, two oblate spheroids, and
+      a triaxial tidal “egg”), with fitted orders 1.998, 2.014, 2.005 and 2.001 (the time stepping is
+      first order); the figure limits hold bit-exactly as the mass ratio vanishes and every control
+      null collapses to machine zero. We then introduce a checkerboard-mode classifier, read as a
+      refinement-trend dichotomy: a von Neumann analysis shows the classifier scales as
+      <span class="num">O(h²)</span> on a resolved field but <span class="num">O(1)</span> on a
+      grid-scale null mode — invisible to the scale-blind dissipation that damps resolved modes — so
+      its decrease under refinement <em>diagnoses</em> a run as grid-resolved. Read this way as a
+      sufficient empirical diagnostic, the re-measured admitted envelope reaches a
+      <span class="num">q<sub>stab</sub></span> of about 0.24 at the coarsest grid and a
+      <em>measured</em> 0.25 at the finer grids. As an exploratory forward model on a disclosed
+      dimensionless layer-thickness proxy, the verified method then produces a companion-locked,
+      even-dominated disk-integrated brightness-proxy lightcurve on the tidal egg that no
+      axisymmetric figure can produce, scaling sharply toward Roche-lobe fill (odd-harmonic
+      dominance appears only in a classifier-marginal high-fill regime). The operators and
+      verification are rigorous and self-contained; the application is a forward model, never a
+      measured figure, and the proxy is not a brightness.</p>
+  </section>
+
+  <section id="contributions">
+    <h2>Contributions</h2>
+    <ol class="contrib">
+      <li><strong>The one-gradient identity.</strong> Taking the level-set function to be the body's
+        effective potential makes a single ambient gradient supply the surface metric, the Coriolis
+        projection, and the gravity-darkening forcing simultaneously, unifying geometry and forcing
+        in one field (<a href="#fig-family">Figure 2</a>).</li>
+      <li><strong>A cut-point discretization of the shallow-water operators.</strong> Beale's
+        cut-point surface-gradient and surface-divergence operators, specialized to the
+        forced–damped shallow-water system on the embedded figure — second order in space — with
+        semi-Lagrangian departure-point transport, a conservative mass fixer, and the explicit
+        stability treatment, all built from cut-point data on the Cartesian grid
+        (<a href="#fig-cutpoint">Figure 3</a>).</li>
+      <li><strong>Manufactured-solution verification across the figure family.</strong> Second-order
+        convergence by the method of manufactured solutions on the sphere, two oblate figures, and
+        the tidal egg alike (fitted orders 1.998, 2.014, 2.005 and 2.001), with the construction
+        reducing bit-exactly to the sphere as the distortion vanishes.</li>
+      <li><strong>A checkerboard-mode stability diagnostic.</strong> A spectral classifier that
+        distinguishes the grid-scale checkerboard artifact of the explicit core — whose amplitude
+        <em>decreases</em> under refinement — from genuine physical instability, used as a
+        sufficient empirical diagnostic that runs are grid-resolved out to a critical oblateness
+        well beyond what a simple test of whether the simulation merely remains finite can
+        establish (<a href="#fig-classifier">Figure 4</a>).</li>
+      <li><strong>A demonstration with a figure-only signature.</strong> On the tidal egg, a
+        companion-locked, even-dominated disk-integrated brightness-proxy lightcurve that arises
+        from the broken axisymmetry of the figure alone, with no weather required, and that no
+        axisymmetric figure can produce within the disclosed figure-only forward model. The
+        discrimination is geometric only within that matched control: on a real body a spot or
+        cloud pattern on an axisymmetric figure can mimic the same harmonic structure, a degeneracy
+        the paper makes explicit.</li>
+    </ol>
+    <p>The first four contributions are rigorous numerical analysis; the fifth opens the exploratory
+      application that occupies the later sections. The paper separates the two explicitly in the
+      scope note below, and so does this page.</p>
+  </section>
+
+  <aside class="scope-note" data-slug="intro-scope">
+    <p>The numerics of Sections 2–5 are rigorous: every operator is defined and every order and
+      stability claim is backed by a derivation or a manufactured-solution measurement. The
+      application of Sections 6–7 is, by contrast, an <em>exploratory</em> forward model. Throughout
+      it, the dynamical field <span class="dyn-Phi">Φ</span>, distinct from the figure's effective
+      potential, is a dimensionless layer-thickness / figure proxy, never a brightness, and any
+      quantity we call a “contrast”, a “rotational signal”, or a brightness map is built from
+      <span class="dyn-Phi">Φ</span> through a fixed, disclosed map
+      <span class="num">B = exp[κ(Φ − Φ̄)]</span> with <span class="num">κ = 2</span> held constant.
+      We quote no absolute photometric amplitudes — no per cent of a real star, no ppm, no
+      magnitudes — and we never invert a lightcurve to claim that a figure was measured. The
+      shallow-water model is 1.5-layer (or, where stated, two-surface), not three-dimensional, and
+      not magnetohydrodynamic.</p>
+  </aside>
+
+  <p><strong>What this edition contains.</strong> The three figures below are the paper's Figures 2,
+    3 and 4 — the figure family, the cut-point construction, and the classifier — rebuilt as things
+    you can operate. They are the three that are entirely closed form, so this page carries no
+    exported data and no stored solver output; the preprint's prose, its equations, its tables, and
+    the exploratory §§6–7 are not here yet. Where a section is absent, the claim it supports is
+    absent too rather than summarized.</p>
+
+  <section id="model">
+    <h2>2 · The model problem</h2>
+
+    <aside class="scope-note" data-slug="phi-Phi">
+      <p>Throughout this article the word “figure” is reserved for the <em>lower-case</em>
+        effective-potential field <span class="fig-phi">φ</span> and its level set: “the figure” is
+        the surface <span class="num">S = {<span class="fig-phi">φ</span> = 0}</span>, never the
+        prognostic field. The <em>upper-case</em> <span class="dyn-Phi">Φ</span> is the dimensionless
+        dynamical layer-thickness / geopotential proxy that <em>evolves on</em>
+        <span class="num">S</span>; it is a nondimensional code-unit geopotential (the layer
+        thickness <span class="num">H</span> scaled to its reference value,
+        <span class="num">Φ = H/H₀</span>, so that <span class="dyn-Phi">Φ</span> and
+        <span class="num">∇<sub>s</sub>Φ</span> are dimensionless), and it is not a brightness or a
+        temperature. Every “contrast”, rotational fractional standard deviation, and
+        gravity-darkened map reported later is a dimensionless single-layer dynamical quantity.
+        Where a photometric quantity is needed it is obtained from <span class="dyn-Phi">Φ</span>
+        through the fixed, disclosed brightness proxy of the preprint; it is never an absolute
+        photometric amplitude (no per cent, parts-per-million (ppm), or magnitude). The model is
+        single-layer (“1.5-layer”), not three-dimensional and not magnetohydrodynamic. The
+        distinction between the figure potential <span class="fig-phi">φ</span>, which
+        <em>defines</em> the surface, and the prognostic proxy <span class="dyn-Phi">Φ</span>, which
+        <em>evolves on</em> it, is maintained without exception.</p>
+    </aside>
+
+    <p>Two figures carry everything below. The Roche oblate is the point-mass effective potential of
+      a rotator with the polar radius scaled to exactly 1,</p>
+    <p class="num" style="text-align:center;font-size:1rem">
+      <span class="fig-phi">φ</span><sub>ob</sub>(<b>x</b>) = 1 − 1/r − ½ q ρ²,
+      &nbsp;&nbsp; ∇<span class="fig-phi">φ</span><sub>ob</sub> = <b>x</b>/r³ − q (x, y, 0)ᵀ,
+    </p>
+    <p>with <span class="num">ρ² = x² + y²</span> and <span class="num">q = Ω²R³<sub>pole</sub>/GM</span>
+      the centrifugal-to-gravity ratio at the pole. The tidal figure adds a companion of mass ratio
+      <span class="num">μ</span> at separation <span class="num">D</span>, co-rotating at
+      <span class="num">Ω² = (1+μ)/D³</span> about the centre of mass
+      <span class="num">x<sub>cm</sub> = μD/(1+μ)</span>:</p>
+    <p class="num" style="text-align:center;font-size:1rem">
+      <span class="fig-phi">φ</span><sub>td</sub>(<b>x</b>) = C − 1/r − μ/r<sub>c</sub>
+      − ½ Ω² [(x − x<sub>cm</sub>)² + y²].
+    </p>
+    <p>Because <span class="fig-phi">φ</span> <em>is</em> the effective potential rather than a
+      signed distance, its gradient magnitude on the surface is the local effective gravity —
+      <span class="num">‖∇<span class="fig-phi">φ</span>‖|<sub>S</sub> = g<sub>eff</sub>/Ψ₀</span>,
+      and with lengths scaled by the polar radius and the potential by
+      <span class="num">Ψ₀ = GM/R<sub>pole</sub></span> the two are numerically equal. One field
+      therefore supplies the normal, the metric, the Coriolis projection, and the gravity-darkened
+      forcing target <span class="num">Φ<sub>eq</sub> ∝ (‖∇<span class="fig-phi">φ</span>‖/g<sub>pole</sub>)<sup>β</sup></span>.
+      That is the identity the next figure is built to make obvious: switch the colouring to the
+      forcing view and drag <span class="scrub" data-var="q" data-min="0" data-max="0.2963"
+        data-step="0.0005" data-value="0.12" data-digits="4" data-label="q, the centrifugal ratio">0.1200</span>
+      down to zero, and the forcing goes flat — not because it was turned off, but because a sphere
+      has nothing for it to vary over.</p>
+
+    <figure class="plate l-page" id="fig-family" data-fig="2" data-widget="w03_family">
+      <div class="plate-head">
+        <span class="fig-num">Figure 2</span>
+        <span class="fig-title">The figure family, as one continuous parameter.</span>
+      </div>
+      <div class="plate-controls" role="group" aria-label="Figure 2 parameters"></div>
+      <div class="plate-frame">
+        <div class="live plate-split">
+          <div class="frame-main"><canvas role="img" aria-labelledby="f2-t f2-d"></canvas></div>
+          <svg class="fold" role="img" aria-label="The break-up curve q(R) = 2/R² − 2/R³, with the two equatorial roots of the current q marked. They meet at R = 3/2, where q reaches 8/27."></svg>
+        </div>
+        <svg class="still" viewBox="0 0 600 400" role="img" aria-labelledby="f2-t f2-d">
+          <title id="f2-t">Sphere and Roche oblate, in meridional section</title>
+          <path class="s-faint" d="M300.0 50.0L314.7 50.7L329.3 52.9L343.5 56.5L357.4 61.4L370.7 67.7L383.3 75.3L395.2 84.0L406.1 93.9L416.0 104.8L424.7 116.7L432.3 129.3L438.6 142.6L443.5 156.5L447.1 170.7L449.3 185.3L450.0 200.0L449.3 214.7L447.1 229.3L443.5 243.5L438.6 257.4L432.3 270.7L424.7 283.3L416.0 295.2L406.1 306.1L395.2 316.0L383.3 324.7L370.7 332.3L357.4 338.6L343.5 343.5L329.3 347.1L314.7 349.3L300.0 350.0L285.3 349.3L270.7 347.1L256.5 343.5L242.6 338.6L229.3 332.3L216.7 324.7L204.8 316.0L193.9 306.1L184.0 295.2L175.3 283.3L167.7 270.7L161.4 257.4L156.5 243.5L152.9 229.3L150.7 214.7L150.0 200.0L150.7 185.3L152.9 170.7L156.5 156.5L161.4 142.6L167.7 129.3L175.3 116.7L184.0 104.8L193.9 93.9L204.8 84.0L216.7 75.3L229.3 67.7L242.6 61.4L256.5 56.5L270.7 52.9L285.3 50.7L300.0 50.0Z"/>
+          <path class="s-ink" d="M300.0 50.0L314.7 50.6L329.3 52.5L343.8 55.7L357.9 60.2L371.7 65.9L385.0 72.8L397.6 81.0L409.6 90.4L420.6 101.0L430.7 112.7L439.5 125.4L447.1 139.1L453.1 153.6L457.5 168.7L460.3 184.2L461.2 200.0L460.3 215.8L457.5 231.3L453.1 246.4L447.1 260.9L439.5 274.6L430.7 287.3L420.6 299.0L409.6 309.6L397.6 319.0L385.0 327.2L371.7 334.1L357.9 339.8L343.8 344.3L329.3 347.5L314.7 349.4L300.0 350.0L285.3 349.4L270.7 347.5L256.2 344.3L242.1 339.8L228.3 334.1L215.0 327.2L202.4 319.0L190.4 309.6L179.4 299.0L169.3 287.3L160.5 274.6L152.9 260.9L146.9 246.4L142.5 231.3L139.7 215.8L138.8 200.0L139.7 184.2L142.5 168.7L146.9 153.6L152.9 139.1L160.5 125.4L169.3 112.7L179.4 101.0L190.4 90.4L202.4 81.0L215.0 72.8L228.3 65.9L242.1 60.2L256.2 55.7L270.7 52.5L285.3 50.6L300.0 50.0Z"/>
+          <path class="s-faint" d="M227.1 66.5L372.9 66.5M167.6 115.0L432.4 115.0M138.8 200.0L461.2 200.0M167.6 285.0L432.4 285.0M227.1 333.5L372.9 333.5"/>
+          <text x="474" y="204" font-size="12">R_e = 1.0744</text>
+          <text x="306" y="46" font-size="12">R_pole = 1</text>
+          <text x="20" y="24" font-size="12">Roche oblate at q = 0.12, over the unit sphere (faint)</text>
+          <text x="20" y="386" font-size="12">enable JavaScript for the live figure</text>
+        </svg>
+      </div>
+      <div class="readouts"></div>
+      <figcaption>
+        <p id="f2-d">Sphere, oblate and tidal egg as one path, coloured by
+          <span class="num">g<sub>eff</sub> = ‖∇<span class="fig-phi">φ</span>‖</span> or by the
+          gravity-darkened forcing <span class="num">(g<sub>eff</sub>/g<sub>pole</sub>)<sup>β</sup></span>,
+          with eight iso-contour hairlines so the field is never carried by hue alone. Drag the
+          canvas to orbit; one finger turns azimuth only, so the page still scrolls. The panel at
+          the right is the break-up curve <span class="num">q(R) = 2/R² − 2/R³</span>: the two
+          equatorial roots of the current <span class="num">q</span> slide together as you push it
+          up and annihilate at <span class="num">R<sub>e</sub> = 3/2</span>, which is
+          <span class="num">q<sub>break</sub> = (2/3)³ = 8/27 = 0.2963</span>. The
+          <span class="num">μ → 0</span> button swaps the tidal figure for the oblate one at
+          <span class="num">q = 1/D³</span>; the mesh does not move, because the reduction is exact
+          to the last bit, and the widget measures the residual rather than claiming it.</p>
+        <p class="fig-credit">Computed live in the browser from the closed forms above — not a
+          measured result, and not a solver output. <span class="verdict" data-v="live">live</span>
+          &nbsp;·&nbsp; The equatorial radius is the exact trigonometric root of the depressed
+          cubic, not an iteration. Agreement with the solver is asserted per assertion in the
+          <a href="tests/golden.html">golden tests</a>.</p>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="discretization">
+    <h2>3 · The cut-point discretization</h2>
+    <p>The surface is never meshed. A background Cartesian grid is laid down once; the nodes are
+      labelled by the sign of <span class="fig-phi">φ</span>; every grid edge whose two ends
+      disagree carries exactly one cut point, found by a safeguarded Newton iteration that falls
+      back to bisection whenever a step would leave its bracket. Cuts whose surface normal lies too
+      far from their own edge are inadmissible and thrown away — the parameter is
+      <span class="num">η = 0.45</span> — because a grazing cut has no well-conditioned difference
+      to offer. What survives is bucketed to the nearest grid node: the closest cut in each bucket
+      is the <em>primary</em>, and the rest become <em>secondaries</em> that interpolate from it
+      with three quadratic weights summing to one.</p>
+    <p>The figure below runs that construction rather than depicting it. The one thing to watch for
+      is what the grid does when you move <span class="num">q</span>: nothing. The cut points slide
+      along fixed edges. That is the whole content of “no remeshing”, and it is not something a
+      still can show.</p>
+
+    <figure class="plate l-page" id="fig-cutpoint" data-fig="3" data-widget="w01_cutpoint">
+      <div class="plate-head">
+        <span class="fig-num">Figure 3</span>
+        <span class="fig-title">Cut points, found edge by edge.</span>
+      </div>
+      <div class="plate-controls" role="group" aria-label="Figure 3 parameters"></div>
+      <div class="plate-frame">
+        <div class="live frame-main frame-main--square"><canvas role="img" aria-labelledby="f3-t f3-d"></canvas></div>
+        <svg class="still" viewBox="0 0 600 400" role="img" aria-labelledby="f3-t f3-d">
+          <title id="f3-t">The cut-point construction on a meridional slice</title>
+          <path class="s-faint" d="M57.0 443.0L57.0 -43.0M57.0 443.0L543.0 443.0M87.4 443.0L87.4 -43.0M57.0 412.6L543.0 412.6M117.8 443.0L117.8 -43.0M57.0 382.3L543.0 382.3M148.1 443.0L148.1 -43.0M57.0 351.9L543.0 351.9M178.5 443.0L178.5 -43.0M57.0 321.5L543.0 321.5M208.9 443.0L208.9 -43.0M57.0 291.1L543.0 291.1M239.3 443.0L239.3 -43.0M57.0 260.8L543.0 260.8M269.6 443.0L269.6 -43.0M57.0 230.4L543.0 230.4M300.0 443.0L300.0 -43.0M57.0 200.0L543.0 200.0M330.4 443.0L330.4 -43.0M57.0 169.6L543.0 169.6M360.8 443.0L360.8 -43.0M57.0 139.2L543.0 139.2M391.1 443.0L391.1 -43.0M57.0 108.9L543.0 108.9M421.5 443.0L421.5 -43.0M57.0 78.5L543.0 78.5M451.9 443.0L451.9 -43.0M57.0 48.1L543.0 48.1M482.3 443.0L482.3 -43.0M57.0 17.8L543.0 17.8M512.6 443.0L512.6 -43.0M57.0 -12.6L543.0 -12.6M543.0 443.0L543.0 -43.0M57.0 -43.0L543.0 -43.0"/>
+          <path class="s-ink" d="M300.0 50.0L314.7 50.6L329.3 52.5L343.8 55.7L357.9 60.2L371.7 65.9L385.0 72.8L397.6 81.0L409.6 90.4L420.6 101.0L430.7 112.7L439.5 125.4L447.1 139.1L453.1 153.6L457.5 168.7L460.3 184.2L461.2 200.0L460.3 215.8L457.5 231.3L453.1 246.4L447.1 260.9L439.5 274.6L430.7 287.3L420.6 299.0L409.6 309.6L397.6 319.0L385.0 327.2L371.7 334.1L357.9 339.8L343.8 344.3L329.3 347.5L314.7 349.4L300.0 350.0L285.3 349.4L270.7 347.5L256.2 344.3L242.1 339.8L228.3 334.1L215.0 327.2L202.4 319.0L190.4 309.6L179.4 299.0L169.3 287.3L160.5 274.6L152.9 260.9L146.9 246.4L142.5 231.3L139.7 215.8L138.8 200.0L139.7 184.2L142.5 168.7L146.9 153.6L152.9 139.1L160.5 125.4L169.3 112.7L179.4 101.0L190.4 90.4L202.4 81.0L215.0 72.8L228.3 65.9L242.1 60.2L256.2 55.7L270.7 52.5L285.3 50.6L300.0 50.0Z"/>
+          <path class="s-mark" d="M139.8 228.0h4.8v4.8h-4.8ZM136.4 197.6h4.8v4.8h-4.8ZM139.8 167.2h4.8v4.8h-4.8ZM170.0 288.7h4.8v4.8h-4.8ZM150.5 258.4h4.8v4.8h-4.8ZM150.5 136.8h4.8v4.8h-4.8ZM170.0 106.5h4.8v4.8h-4.8ZM203.6 319.1h4.8v4.8h-4.8ZM203.6 76.1h4.8v4.8h-4.8ZM391.6 319.1h4.8v4.8h-4.8ZM391.6 76.1h4.8v4.8h-4.8ZM425.2 288.7h4.8v4.8h-4.8ZM444.7 258.4h4.8v4.8h-4.8ZM444.7 136.8h4.8v4.8h-4.8ZM425.2 106.5h4.8v4.8h-4.8ZM455.4 228.0h4.8v4.8h-4.8ZM458.8 197.6h4.8v4.8h-4.8ZM455.4 167.2h4.8v4.8h-4.8ZM176.1 295.7h4.8v4.8h-4.8ZM176.1 99.5h4.8v4.8h-4.8ZM206.5 321.0h4.8v4.8h-4.8ZM206.5 74.2h4.8v4.8h-4.8ZM236.9 336.4h4.8v4.8h-4.8ZM236.9 58.8h4.8v4.8h-4.8ZM267.2 344.9h4.8v4.8h-4.8ZM267.2 50.3h4.8v4.8h-4.8ZM297.6 347.6h4.8v4.8h-4.8ZM297.6 47.6h4.8v4.8h-4.8ZM328.0 344.9h4.8v4.8h-4.8ZM328.0 50.3h4.8v4.8h-4.8ZM358.4 336.4h4.8v4.8h-4.8ZM358.4 58.8h4.8v4.8h-4.8ZM388.7 321.0h4.8v4.8h-4.8ZM388.7 74.2h4.8v4.8h-4.8ZM419.1 295.7h4.8v4.8h-4.8ZM419.1 99.5h4.8v4.8h-4.8Z"/>
+          <g class="s-rule"><circle cx="148.1" cy="249.8" r="2.3"/><circle cx="148.1" cy="150.2" r="2.3"/><circle cx="451.9" cy="249.8" r="2.3"/><circle cx="451.9" cy="150.2" r="2.3"/></g>
+          <text x="20" y="24" font-size="12">N = 16, q = 0.12 — 36 admissible cuts, 4 rejected by η = 0.45 (rings)</text>
+          <text x="20" y="386" font-size="12">enable JavaScript for the live construction</text>
+        </svg>
+      </div>
+      <span class="stage-label"></span>
+      <div class="readouts"></div>
+      <figcaption>
+        <p id="f3-d">The construction on the meridional slice, one stage at a time: node signs,
+          then the <span class="num">x</span>-edge sweep, then the <span class="num">z</span>-edge
+          sweep — the order is load-bearing, because it sets the tie-break that decides which cut in
+          a bucket becomes the primary — then the <span class="num">η = 0.45</span> rejection, then
+          bucketing, then the stencil. The blue rings during a sweep are the Newton iterates
+          themselves, converging on the edge. In the last stage a primary that has lost an arm is
+          ringed: that is where a centred difference becomes one-sided, and where the paper's
+          Appendix A fallback is the thing standing between the method and a silent drop to first
+          order.</p>
+        <p class="fig-credit">Computed live in the browser — the same safeguarded root find,
+          admissibility filter, bucketing rule and neighbour scan as the solver, ported fresh.
+          <span class="verdict" data-v="live">live</span> &nbsp;·&nbsp; The grid half-width is
+          frozen at <span class="calc">1.62</span> across the whole <span class="num">q</span>
+          range so that it can be seen not moving; the solver sizes its own box per figure.</p>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="classifier">
+    <h2>5 · The checkerboard-mode classifier</h2>
+    <p>“Did it blow up?” is the wrong question, and it mislabels the failure. The explicit core can
+      support a grid-scale checkerboard mode that is invisible to a dissipation term acting equally
+      on every wavenumber, and a run carrying one may stay perfectly finite. The classifier is the
+      residual of a field against its own four-neighbour average,</p>
+    <p class="num" style="text-align:center;font-size:1rem">
+      (𝒜Φ)<sub>p</sub> = mean over the neighbours of p, &nbsp; ℛ = I − 𝒜, &nbsp;
+      𝒞 = ‖ℛ Φ‖<sub>rms</sub>,
+    </p>
+    <p>and its content is a <em>trend</em>, not a threshold. A von Neumann analysis gives
+      <span class="num">ℛ̂ = ¼(k<sub>x</sub>² + k<sub>y</sub>²)h² + O((kh)⁴) = O(h²)</span> on a
+      resolved mode but <span class="num">ℛ̂(π/h, π/h) = 1 − (−1) = 2 = O(1)</span> on the
+      checkerboard, which is its maximal eigenvector. So at any single grid a clean field and a
+      contaminated one are two numbers that look alike; only refinement separates them, and that is
+      what the figure below is for. Drag <span class="num">N</span> and the traces do what the
+      theorem says.</p>
+
+    <figure class="plate l-page" id="fig-classifier" data-fig="4" data-widget="w05_classifier">
+      <div class="plate-head">
+        <span class="fig-num">Figure 4</span>
+        <span class="fig-title">The refinement-trend dichotomy.</span>
+      </div>
+      <div class="plate-controls" role="group" aria-label="Figure 4 parameters"></div>
+      <div class="plate-frame">
+        <div class="live">
+          <div class="heat-pair">
+            <div class="heat"><canvas role="img" aria-label="The resolved field cos(2 pi x) cos(2 pi y) on the current chart."></canvas><span>Φ resolved</span></div>
+            <div class="heat"><canvas role="img" aria-label="The same field plus a one per cent grid-scale checkerboard. At any single N the two are indistinguishable."></canvas><span>Φ + a·χ contaminated</span></div>
+          </div>
+          <div class="chart-wrap"><svg class="chart" role="img" aria-labelledby="f4-t f4-d"></svg></div>
+          <div class="legend">
+            <span><i class="k1"></i>resolved, ○</span>
+            <span><i class="k2"></i>contaminated, ●</span>
+            <span><i class="k3"></i>pure checkerboard, ◆</span>
+            <span><i class="k4"></i>✕ the four shipped solver values</span>
+          </div>
+        </div>
+        <svg class="still" viewBox="0 0 600 300" role="img" aria-labelledby="f4-t f4-d">
+<title id="f4-t">The refinement-trend dichotomy</title>
+<line class="s-faint" x1="58" y1="260.0" x2="582" y2="260.0"/><text x="52" y="264" font-size="11" text-anchor="end">1e-5</text><line class="s-faint" x1="58" y1="215.6" x2="582" y2="215.6"/><text x="52" y="219.6" font-size="11" text-anchor="end">1e-4</text><line class="s-faint" x1="58" y1="171.3" x2="582" y2="171.3"/><text x="52" y="175.3" font-size="11" text-anchor="end">1e-3</text><line class="s-faint" x1="58" y1="126.9" x2="582" y2="126.9"/><text x="52" y="130.9" font-size="11" text-anchor="end">1e-2</text><line class="s-faint" x1="58" y1="82.5" x2="582" y2="82.5"/><text x="52" y="86.5" font-size="11" text-anchor="end">1e-1</text><line class="s-faint" x1="58" y1="38.2" x2="582" y2="38.2"/><text x="52" y="42.2" font-size="11" text-anchor="end">1e0</text><text x="58.0" y="276" font-size="11" text-anchor="middle">16</text><text x="189.0" y="276" font-size="11" text-anchor="middle">32</text><text x="320.0" y="276" font-size="11" text-anchor="middle">64</text><text x="451.0" y="276" font-size="11" text-anchor="middle">128</text><text x="582.0" y="276" font-size="11" text-anchor="middle">256</text>
+<path class="s-ink" d="M58.0 24.8L189.0 24.8L320.0 24.8L451.0 24.8L582.0 24.8"/><g class="s-mark"><circle cx="58.0" cy="24.8" r="2.4"/><circle cx="189.0" cy="24.8" r="2.4"/><circle cx="320.0" cy="24.8" r="2.4"/><circle cx="451.0" cy="24.8" r="2.4"/><circle cx="582.0" cy="24.8" r="2.4"/></g>
+<path class="s-ink" style="stroke-dasharray:6 3" d="M58.0 98.8L189.0 111.6L320.0 113.4L451.0 113.5L582.0 113.6"/><g class="s-mark"><circle cx="58.0" cy="98.8" r="2.4"/><circle cx="189.0" cy="111.6" r="2.4"/><circle cx="320.0" cy="113.4" r="2.4"/><circle cx="451.0" cy="113.5" r="2.4"/><circle cx="582.0" cy="113.6" r="2.4"/></g>
+<path class="s-ink" d="M58.0 101.2L189.0 127.7L320.0 154.3L451.0 181.0L582.0 207.7"/><g class="s-mark"><circle cx="58.0" cy="101.2" r="2.4"/><circle cx="189.0" cy="127.7" r="2.4"/><circle cx="320.0" cy="154.3" r="2.4"/><circle cx="451.0" cy="181.0" r="2.4"/><circle cx="582.0" cy="207.7" r="2.4"/></g>
+<text x="70" y="17" font-size="11">pure checkerboard — 2.000 at every N</text>
+<text x="200" y="106" font-size="11">1% contaminated — floor 0.0200</text>
+<text x="340" y="174" font-size="11">resolved — slope −2</text>
+<line class="s-rule" x1="58" y1="16" x2="58" y2="260"/>
+<line class="s-rule" x1="58" y1="260" x2="582" y2="260"/>
+<text x="300" y="294" font-size="11" text-anchor="middle">N</text>
+<text x="8" y="26" font-size="11">C</text>
+</svg>
+      </div>
+      <div class="readouts"></div>
+      <figcaption>
+        <p id="f4-d">Left, the resolved field <span class="num">cos 2πx · cos 2πy</span>; right, the
+          same field plus a one-per-cent grid-scale checkerboard. At any single
+          <span class="num">N</span> they are the same picture. Below, their classifier values
+          against <span class="num">N</span> on log–log: the resolved trace falls on slope −2, the
+          pure checkerboard sits at exactly 2.000 at every resolution because it is the
+          <span class="num">−1</span> eigenvector of <span class="num">𝒜</span>, and the
+          contaminated trace flattens onto a floor of <span class="num">2a</span>, which the smooth
+          part vanishing underneath it cannot mask. The four ✕ marks are the values the solver
+          shipped; the readout prints the distance between them and the browser's own computation
+          rather than asserting agreement. <strong>What this figure does not say:</strong> the
+          classifier is a statement about the discretization, not about any star, and the
+          <span class="num">q<sub>break</sub> = 0.2963</span> of Figure 2 is an analytic, physical
+          quantity while the measured envelope <span class="num">q<sub>stab</sub>(N)</span> is a
+          numerical one. They are different quantities, and the envelope itself is not in this
+          edition.</p>
+        <p class="fig-credit">Computed live in the browser on a uniform periodic chart —
+          <span class="verdict" data-v="live">live</span> &nbsp;·&nbsp; the four overlaid ✕ values
+          are the only measured numbers on this page; their source file is named in the colophon.
+          The classifier here runs on a regular periodic chart, which is the paper's synthetic
+          control, not on the realized cut-point neighbour graph.</p>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="colophon" class="colophon">
+    <h2>Colophon</h2>
+    <p>Every figure on this page is computed in the browser from the closed forms printed above.
+      None of them replays a stored solver run, and no run parameters, run directories or driver
+      names appear anywhere on it. The one exception is Figure 4's four ✕ markers, which are
+      transcribed from the solver's synthetic-classifier output so that the page can check itself in
+      front of the reader; that file is named below because this is the section where file names
+      belong.</p>
+
+    <table>
+      <thead><tr><th>What</th><th>Where it comes from</th></tr></thead>
+      <tbody>
+        <tr><td>Figures 2 and 3, in full</td><td>closed form, computed in the browser — no data</td></tr>
+        <tr><td>Figure 4, the live traces and heatmaps</td><td>closed form, computed in the browser — no data</td></tr>
+        <tr><td>Figure 4, the four ✕ markers</td><td>expansion/classifier_synthetic.csv, 4 rows, n = 64…160</td></tr>
+        <tr><td>Solver</td><td>BealeSurfaceSolver.jl v0.1.0 · Julia 1.12.6 · MIT · stdlib only</td></tr>
+        <tr><td>Geometry kernel on this page</td><td>assets/core/geometry.js, written fresh — checked in <a href="tests/golden.html">tests/golden.html</a></td></tr>
+      </tbody>
+    </table>
+
+    <details id="keys">
+      <summary>Keyboard</summary>
+      <p><span class="num">?</span> opens this card. <span class="num">S</span> freezes every figure
+        at its current frame; <span class="num">R</span> resumes. Every slider is reachable by
+        <span class="num">Tab</span> and moves with the arrow keys. Every drag on this page has a
+        real range input behind it, and printing renders whatever state you left the figures in
+        rather than the state the paper published.</p>
+    </details>
+
+    <details id="cite">
+      <summary>Cite this</summary>
+<pre class="cite">@misc{Park2026CutPoint,
+  author = {Park, Andrew},
+  title  = {A Cut-Point Shallow-Water Method for Atmospheric Flow on Rotational and
+            Tidal Equipotential Figures, with a Mode-Based Stability Diagnostic},
+  year   = {2026},
+  month  = {jun},
+  note   = {Preprint, compiled 19 June 2026. Live edition:
+            \url{https://chronicaria.github.io/equipotential/}},
+  url    = {https://chronicaria.github.io/equipotential/}
+}</pre>
+    </details>
+
+    <p class="license">The prose on this page and the figures redrawn from the preprint are
+      © <span data-year>2026</span> Andrew Park and are offered under
+      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. The solver they
+      describe, <code>BealeSurfaceSolver.jl</code>, is MIT, © 2026 Andrew Park. Figures 2, 3 and 4
+      are redrawn by their own author from the preprint. Cited works are the property of their
+      authors.</p>
+  </section>
+
+</main>
+
+<button class="theme-toggle" type="button">◐ evening</button>
+<script type="module" src="assets/paper.js"></script>
+</body>
+</html>

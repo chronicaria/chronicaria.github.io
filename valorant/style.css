@@ -1244,3 +1244,28 @@ th.sortable { cursor: pointer; }
 .refusal-k { font-weight: 600; font-size: var(--fs-1); text-transform: uppercase; letter-spacing: .06em; }
 .refusal-n { font-size: var(--fs-1); color: var(--muted); font-variant-numeric: tabular-nums; }
 .refusal-b { color: var(--muted); }
+
+/* third identity swatch and third walk line, for the act's shared clock */
+.swatch.t { background: var(--themarias); }
+.walk-line.t { stroke: var(--themarias); }
+.walk-end.t { fill: var(--themarias); }
+
+/* expandable per-round sheets under a lane's match rows */
+.msrow { cursor: pointer; }
+.msrow:hover td { background: var(--hover, rgba(127,127,127,.07)); }
+.msrow.open td { font-weight: 600; }
+.sheetrow > td { padding: 0 0 14px; }
+.sheet { padding: 8px 0 2px; }
+.sheet-table { width: 100%; border-collapse: collapse; font-size: var(--fs-1); }
+.sheet-table th { font-weight: 600; color: var(--muted); text-align: right; padding: 3px 8px; }
+.sheet-table th.l { text-align: left; }
+.sheet-table td { text-align: right; padding: 2px 8px; font-variant-numeric: tabular-nums; }
+.sheet-table td.l { text-align: left; }
+/* a round the player was present for but inactive in: a measured zero, marked
+   rather than blanked, because they were in the match */
+.afkround td { opacity: .72; }
+.afkflag {
+  margin-left: 6px; font-size: .8em; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+  border: 1px solid var(--line); border-radius: var(--r); padding: 0 4px;
+}

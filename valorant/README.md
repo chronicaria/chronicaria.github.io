@@ -24,12 +24,21 @@ and date span sit on every row because the eras barely overlap.
 
 ## The act, and the pair
 
-The default page is the act: three players over e11a4, one lane each. They did not play together —
-56 matches involve at least one of them, 35 involve exactly one, and only 2 involve all three — so
-there is no joint or paired estimand across them and the page does not draw one. Each lane carries
-its own bootstrap, its own scale, and a cumulative walk indexed by that player's own rounds, with a
-panel width proportional to their exposure so two lanes cannot be raced by eye. The three intervals
-sit on three separate frames whose zeros deliberately do not align; all three include zero.
+The default page is the act: three players over e11a4. It opens on one clock — cumulative RWPA for
+all three against match time, where a flat span is a match that player was not in. Height there is a
+running total, so a line also climbs by playing more; the rate estimates that control for that sit
+below it, each on its own frame with its own zero, because 56 matches involve at least one of these
+players, 35 involve exactly one, and only 2 involve all three. That last fact is why no joint or
+paired estimand across the three is computed: a replicate resamples matches once and applies the
+same draw to every entity. All three intervals include zero.
+
+Each player then gets a lane: their estimate, their credit waterfall, their own walk indexed by
+their own rounds, and every match they played. Match rows open into a per-round sheet with the
+round's RWPA, its five credit components, and the box score.
+
+Nothing is excluded for inactivity. Every round of every match is scored, and a round a player was
+present for but inactive in is a marked zero rather than an absence — they were in the match and
+changed nothing, which is a measurement. An absence is reserved for a match they were never in.
 
 `#/duo` is the MartinLutherKing–SN0RLAX cohort described below. It is a different population — two
 players who shared every one of 21 rounds-in-common matches — and the only place a paired difference
@@ -60,7 +69,10 @@ and `app.js` so a later edit cannot quietly break them.
   not in: a 4v5 round is fully scored for everyone who played it, and the absent player has no
   ledger rows at all, so their cells are em dashes rather than zeros. A zero would say they were
   present and did nothing.
-- **A per-100 rate is suppressed below the exposure floor** of 20 eligible rounds.
+- **A per-100 rate is suppressed below the exposure floor** of 20 eligible rounds on
+  the `#/duo` route. The act page publishes a rate at whatever exposure produced it,
+  with that exposure in the column beside it, so a short match reads as short rather
+  than as missing.
 - **Green is up, red is down, and a zero is neither.** Sign colour means the direction a
   probability moved; it never touches a name, a neutral count, or a win/loss chip. Sign is carried
   three times over — a `+`/`−` glyph, direction from a zero rule, and colour — because red/green is

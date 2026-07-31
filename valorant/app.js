@@ -302,9 +302,13 @@
     }
     document.querySelector("[data-header-meta]").textContent = text;
 
+    /* renderHeader now runs on every route change, so the info button has to be
+       idempotent — appending unconditionally left one glyph per navigation. */
     var h1 = document.querySelector(".masthead h1");
-    var ib = infoButton(["rwpa"], "round win probability added");
-    if (h1 && ib) h1.appendChild(ib);
+    if (h1 && !h1.querySelector("[data-info]")) {
+      var ib = infoButton(["rwpa"], "round win probability added");
+      if (ib) { ib.setAttribute("data-info", ""); h1.appendChild(ib); }
+    }
   }
 
   /* ---------- the walk ---------- */
@@ -1016,6 +1020,98 @@
     return row;
   }
 
+  /* Three cumulative lines on one clock, x = match time.
+
+     A shared axis is legal here in a way it is not for the rate estimates:
+     this is each player's own running total against real time, not a
+     comparison of per-round performance. The cost is that a line climbs partly
+     by playing more — SN0RLAX has 51 matches to TheMarias's 7 — so the caption
+     says height is cumulative, and the per-player rates with their intervals
+     live in the panel below where no shared axis is drawn. A flat span means
+     that player was not in that match; it is carried forward, never dropped to
+     zero, because their total did not change. */
+  function renderTimeline() {
+    var host = document.querySelector("[data-timeline-figure]");
+    var T = D.lanes && D.lanes.timeline;
+    if (!host || !T) { return; }
+    while (host.childNodes.length > 2) { host.removeChild(host.lastChild); }
+
+    var box = host.getBoundingClientRect();
+    var W = Math.max(320, Math.round(box.width || 900)), H = 300;
+    var L = 44, R = 58, TOP = 16, BOT = 30;
+
+    var t0 = Date.parse(T.axis[0].t), t1 = Date.parse(T.axis[T.axis.length - 1].t);
+    var lo = 0, hi = 0;
+    D.lanes.order.forEach(function (pid) {
+      T.series[pid].forEach(function (v) { lo = Math.min(lo, v); hi = Math.max(hi, v); });
+    });
+    var pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
+
+    var x = function (ms) { return L + ((ms - t0) / Math.max(1, t1 - t0)) * (W - L - R); };
+    var y = function (v) { return TOP + (1 - (v - lo) / (hi - lo)) * (H - TOP - BOT); };
+
+    host.setAttribute("viewBox", "0 0 " + W + " " + H);
+    host.setAttribute("width", W); host.setAttribute("height", H);
+    var ns = "http://www.w3.org/2000/svg";
+    var add = function (tag, attrs, cls) {
+      var n = document.createElementNS(ns, tag);
+      Object.keys(attrs).forEach(function (k) { n.setAttribute(k, attrs[k]); });
+      if (cls) { n.setAttribute("class", cls); }
+      host.appendChild(n); return n;
+    };
+
+    /* zero rule, then a tick per play-date */
+    add("line", { x1: L, x2: W - R, y1: y(0), y2: y(0) }, "walk-zero");
+    /* A grid line per play-date, but a label only where one fits: these are
+       clustered nights, so labelling every day overlapped them into mush. */
+    var seenDay = {}, lastLabel = -Infinity;
+    T.axis.forEach(function (a) {
+      if (seenDay[a.d]) { return; }
+      seenDay[a.d] = true;
+      var px = x(Date.parse(a.t));
+      add("line", { x1: px, x2: px, y1: TOP, y2: H - BOT }, "walk-grid");
+      if (px - lastLabel < 52) { return; }
+      lastLabel = px;
+      var lab = add("text", { x: px, y: H - 10, "text-anchor": "middle" }, "walk-tick");
+      lab.textContent = a.d.slice(5);
+    });
+
+    D.lanes.order.forEach(function (pid) {
+      var s = T.series[pid], d = "";
+      for (var i = 0; i < s.length; i++) {
+        var px = x(Date.parse(T.axis[i].t));
+        d += (i ? " L" : "M") + px + " " + y(s[i]);
+      }
+      add("path", { d: d }, "walk-line " + pid);
+      var end = s[s.length - 1];
+      var tag = add("text", {
+        x: W - R + 6, y: y(end) + 4, "text-anchor": "start",
+      }, "walk-end " + pid);
+      tag.textContent = signed(end, 2);
+    });
+
+    var legend = document.querySelector("[data-timeline-legend]");
+    if (legend) {
+      legend.innerHTML = "";
+      D.lanes.order.forEach(function (pid) {
+        var span = el("span");
+        var sw = el("i", "swatch " + pid);
+        span.appendChild(sw);
+        span.appendChild(document.createTextNode(D.lanes.p[pid].nm.split("#")[0]));
+        legend.appendChild(span);
+      });
+    }
+    var note = document.querySelector("[data-timeline-note]");
+    if (note) { note.textContent = T.note; }
+    var desc = document.querySelector("[data-timeline-desc]");
+    if (desc) {
+      desc.textContent = "Cumulative RWPA for "
+        + D.lanes.order.map(function (p) { return D.lanes.p[p].nm; }).join(", ")
+        + " across " + T.axis.length + " matches of " + D.season.id
+        + ". A flat span is a match that player was not in.";
+    }
+  }
+
   function renderNulls() {
     var host = document.querySelector("[data-nulls]");
     var note = document.querySelector("[data-null-note]");
@@ -1137,6 +1233,52 @@
     return svg;
   }
 
+  /* Per-round sheet for one match in one lane. Every round the player was
+     present for appears, including rounds they were AFK: those are a measured
+     zero for someone who was in the match, not an absence, so they carry a
+     marker rather than an em dash. Credit columns are the same five the
+     waterfall totals. */
+  function roundSheet(pid, mi, m) {
+    var rows = D.lanes.p[pid].rs.filter(function (r) { return r.mi === mi; });
+    var wrap = el("div", "sheet");
+    wrap.appendChild(el("p", "fig-title",
+      m.d + " · " + m.mp + " · " + rows.length + " rounds"));
+
+    var table = el("table", "sheet-table");
+    var thead = el("thead"), hr = el("tr");
+    [["Rd", "l"], ["RWPA", null], ["kill", null], ["death", null],
+     ["plant", null], ["defuse", null], ["clock", null],
+     ["K", null], ["Dmg", null], ["Cr", null]].forEach(function (h) {
+      hr.appendChild(el("th", h[1], h[0]));
+    });
+    thead.appendChild(hr); table.appendChild(thead);
+
+    var tbody = el("tbody");
+    rows.forEach(function (r) {
+      var tr = el("tr", r.afk ? "afkround" : null);
+      var n = el("td", "l", String(r.n));
+      if (r.afk) {
+        n.appendChild(el("span", "afkflag", "afk"));
+        n.title = "Present but inactive for this round — a measured zero, "
+          + "not an absence.";
+      }
+      tr.appendChild(n);
+      tr.appendChild(el("td", signCls(r.rw), signed(r.rw, 3)));
+      ["kc", "dd", "pl", "df", "rc"].forEach(function (k) {
+        tr.appendChild(r[k] === undefined
+          ? el("td", "dim", "·")
+          : el("td", signCls(r[k]), signed(r[k], 3)));
+      });
+      tr.appendChild(el("td", null, String(r.k)));
+      tr.appendChild(el("td", null, String(r.dmg)));
+      tr.appendChild(el("td", null, String(r.cr)));
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    return wrap;
+  }
+
   function renderLane(pid) {
     var p = D.lanes.p[pid];
     var wrap = el("section", "lane");
@@ -1195,27 +1337,41 @@
     });
     thead.appendChild(hr); table.appendChild(thead);
     var tbody = el("tbody");
-    p.ms.forEach(function (m) {
-      var tr = el("tr");
+    p.ms.forEach(function (m, mi) {
+      var tr = el("tr", "msrow");
+      tr.tabIndex = 0;
+      tr.setAttribute("role", "button");
+      tr.setAttribute("aria-expanded", "false");
       tr.appendChild(el("td", "l", m.d));
       tr.appendChild(el("td", "l", m.mp));
       tr.appendChild(el("td", null, String(m.rn)));
       tr.appendChild(el("td", signCls(m.rw), signed(m.rw, 3)));
-      /* below the exposure floor the rate is not published — an em dash and a
-         reason, never a number the denominator cannot support */
-      if (m.r100 === undefined) {
-        var cell = el("td", "dim", "—");
-        cell.title = "fewer than " + D.meta.gate.min_elig_rounds_for_rate
-          + " eligible rounds — the release does not publish a rate below its "
-          + "exposure floor";
-        tr.appendChild(cell);
-      } else {
-        tr.appendChild(el("td", signCls(m.r100), signed(m.r100, 2)));
-      }
+      /* The rate is published at whatever exposure produced it. The exposure is
+         in the column to the left, so a reader can see a short match for what
+         it is rather than being shown an em dash instead of a number. */
+      tr.appendChild(el("td", signCls(m.r100), signed(m.r100, 2)));
       tr.appendChild(el("td", "dim", m.with.length
         ? m.with.map(function (k) { return laneName(k).split("#")[0]; }).join(", ")
         : "—"));
       tbody.appendChild(tr);
+
+      var sheet = el("tr", "sheetrow");
+      sheet.hidden = true;
+      var cell = el("td");
+      cell.colSpan = 6;
+      cell.appendChild(roundSheet(pid, mi, m));
+      sheet.appendChild(cell);
+      tbody.appendChild(sheet);
+
+      var toggle = function () {
+        sheet.hidden = !sheet.hidden;
+        tr.setAttribute("aria-expanded", sheet.hidden ? "false" : "true");
+        tr.classList.toggle("open", !sheet.hidden);
+      };
+      tr.addEventListener("click", toggle);
+      tr.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+      });
     });
     table.appendChild(tbody);
     tw.appendChild(table);
@@ -1265,6 +1421,7 @@
         + ". Each player is scored over the matches they actually played, "
         + "which are mostly not the same matches.";
     }
+    renderTimeline();
     renderNulls();
     renderRoster();
     renderLanes();
@@ -2522,6 +2679,7 @@
     resizeTimer = setTimeout(function () {
       if (currentMatch) renderStrip(currentMatch);
       else { renderWalk(); renderDisposition(); renderProvenance(); }
+      if (D.lanes) { renderTimeline(); }
     }, 120);
   });
 

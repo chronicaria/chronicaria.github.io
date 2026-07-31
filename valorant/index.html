@@ -26,7 +26,45 @@
 <main class="shell" id="main">
 
   <!-- ====================== COHORT VIEW ====================== -->
-  <section id="view-cohort">
+  <!-- ====================== SEASON VIEW (default) ====================== -->
+  <section id="view-season">
+
+    <div class="masthead">
+      <h1>Three of us, one act, and what each of us <em>did</em> to it.</h1>
+      <p class="note" data-season-sub></p>
+    </div>
+
+    <!-- the result, first: three nulls on three separate axes -->
+    <div class="section-head">
+      <h2>What the act actually shows</h2>
+      <p class="note" data-null-note></p>
+    </div>
+    <div class="nulls" data-nulls></div>
+
+    <!-- who played, and how much -->
+    <div class="section-head">
+      <h2>Who played</h2>
+      <p class="note" data-roster-note></p>
+    </div>
+    <div class="table-wrap">
+      <table data-roster></table>
+    </div>
+
+    <!-- one lane per player -->
+    <div data-lanes></div>
+
+    <!-- the census and the refusals -->
+    <div class="section-head">
+      <h2>How these three overlap, and what that rules out</h2>
+    </div>
+    <div data-census></div>
+
+    <div class="foot" data-season-foot></div>
+
+  </section>
+
+  <!-- ====================== DUO COHORT VIEW (#/duo) ====================== -->
+  <section id="view-cohort" hidden>
 
     <div class="masthead">
       <h1>Every round we played, and what each of us <em>did</em> to it.</h1>

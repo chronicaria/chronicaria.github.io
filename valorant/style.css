@@ -81,6 +81,7 @@
   --accent-ink: #0a0f16;
   --martin: #eaa947;
   --snorlax: #3fb9c9;
+  --themarias: #b98ce6;
   --win: #4fc48a;
   --loss: #f0757f;
   --pos: #66c77e;
@@ -131,6 +132,7 @@
   --accent-ink: #fbfaf7;
   --martin: #7c5007;
   --snorlax: #0a6070;
+  --themarias: #5b2d8e;
   --win: #136a41;
   --loss: #bb2731;
   --pos: #106a32;
@@ -1177,3 +1179,68 @@ th.sortable { cursor: pointer; }
   .sheet th, .sheet td { padding: 5px var(--sp-2); }
   .sheet-host { padding: var(--sp-3); }
 }
+
+/* ======================================================================
+   SEASON VIEW — three lanes over one act.
+
+   The rule these styles exist to enforce: no two players ever share a
+   continuous scale. Each null gets its own frame, each walk its own SVG
+   sized to that player's own exposure. Nothing here may be rewritten to
+   put three players on one axis — the estimand that would imply does not
+   exist for this data.
+   ====================================================================== */
+
+.nulls { display: flex; flex-direction: column; gap: 18px; margin: 14px 0 6px; }
+.nullrow-head { display: flex; align-items: baseline; gap: 10px; }
+.nullrow-nm { font-weight: 600; }
+/* width is set inline, per row, from that row's own interval */
+.nullframe {
+  position: relative;
+  height: 26px;
+  margin: 6px 0 4px;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  max-width: 100%;
+}
+.nullzero {
+  position: absolute; top: 0; bottom: 0; width: 1px;
+  background: var(--fg); opacity: .5;
+}
+.nullbar { position: absolute; top: 11px; height: 4px; border-radius: 2px; opacity: .55; }
+.nullbar.pos { background: var(--pos); }
+.nullbar.neg { background: var(--neg); }
+.nullbar.zero { background: var(--muted); }
+.nullpt { position: absolute; top: 6px; height: 14px; width: 2px; background: var(--fg); }
+.nullread { font-size: var(--fs-1); }
+
+.rosterrow .lanelink { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.rosterrow .lanelink:hover { color: var(--accent); }
+
+.lane { margin: 34px 0 8px; padding-top: 6px; border-top: 1px solid var(--line); }
+.lane-total { font-size: var(--fs-1); color: var(--muted); margin-top: 4px; }
+
+.waterfall { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 0 4px; }
+.wf-cell { display: flex; flex-direction: column; min-width: 84px; }
+.wf-k { font-size: var(--fs-1); color: var(--muted); text-transform: lowercase; }
+.wf-v { font-variant-numeric: tabular-nums; }
+.wf-net { border-left: 1px solid var(--line); padding-left: 14px; }
+
+/* width is set per lane from that lane's round count — do not force to 100% */
+.lanewalk { display: block; max-width: 100%; height: auto; }
+.lanewalk-env { fill: var(--muted); opacity: .13; stroke: none; }
+.lanewalk-zero { stroke: var(--fg); opacity: .45; stroke-width: 1; }
+.lanewalk-line { fill: none; stroke-width: 1.6; }
+.lanewalk-line.m { stroke: var(--martin); }
+.lanewalk-line.s { stroke: var(--snorlax); }
+.lanewalk-line.t { stroke: var(--themarias); }
+
+.refusals { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.refusal {
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 9px 11px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.refusal-k { font-weight: 600; font-size: var(--fs-1); text-transform: uppercase; letter-spacing: .06em; }
+.refusal-n { font-size: var(--fs-1); color: var(--muted); font-variant-numeric: tabular-nums; }
+.refusal-b { color: var(--muted); }

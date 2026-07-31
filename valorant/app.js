@@ -281,14 +281,26 @@
     m.rs.forEach(function (r) { SEQ.push({ m: m, r: r }); });
   });
 
-  function renderHeader() {
+  /* The masthead counts describe whichever population is on screen. Carrying
+     the cohort's 21/454 above a 56-match act would put a denominator over data
+     it does not denominate — the same defect c_raw_den warns about, one level
+     up. `season` is false for the duo route. */
+  function renderHeader(season) {
     var c = D.meta.cohort;
-    /* One denominator in the masthead. The eligible/raw split is the entire
-       subject of F1 a screen below, and c_raw_den warns against carrying two
-       denominators side by side where neither is labelled. */
-    document.querySelector("[data-header-meta]").textContent =
-      c.matches + " matches · " + c.rec.w + "W " + c.rec.l + "L" + (c.rec.d ? " " + c.rec.d + "D" : "") +
-      " · " + c.raw_rounds + " rounds · " + D.meta.season;
+    var text;
+    if (season && D.season && D.lanes) {
+      var players = D.lanes.order.length;
+      text = D.season.union_matches + " matches · " + players + " players · "
+        + D.season.all_three + " with all three · " + D.meta.season;
+    } else {
+      /* One denominator in the masthead. The eligible/raw split is the entire
+         subject of F1 a screen below, and c_raw_den warns against carrying two
+         denominators side by side where neither is labelled. */
+      text = c.matches + " matches · " + c.rec.w + "W " + c.rec.l + "L"
+        + (c.rec.d ? " " + c.rec.d + "D" : "")
+        + " · " + c.raw_rounds + " rounds · " + D.meta.season;
+    }
+    document.querySelector("[data-header-meta]").textContent = text;
 
     var h1 = document.querySelector(".masthead h1");
     var ib = infoButton(["rwpa"], "round win probability added");
@@ -955,6 +967,320 @@
      a comparison the data cannot support.  Ordered by exposure, which is a
      property of each row rather than a verdict about it, and the span column
      is there because these careers barely overlap in time. */
+  /* ---------------------------------------------------------------------
+     SEASON VIEW — three lanes, one act.
+
+     The load-bearing rule: these three did not play together. 35 of the act's
+     56 matches contain exactly one of them, and only 2 contain all three, so
+     the bootstrap cannot produce any joint or paired estimand across them.
+     Everything below therefore gives each player its own axis, its own scale
+     and its own panel width, and never places two players on a shared
+     continuous rule that a reader could slide a ranking along.
+     --------------------------------------------------------------------- */
+
+  function laneName(pid) { return (D.lanes.p[pid] || {}).nm || pid; }
+
+  /* Each null gets its OWN axis at a shared units-per-pixel. Frames therefore
+     differ in width — TheMarias's interval is ~3x SN0RLAX's — and their zeros
+     do not line up. That is deliberate: width still reads as uncertainty, but
+     there is no common baseline to rank along. */
+  function nullRow(pid, uppPx) {
+    var p = D.lanes.p[pid];
+    var ci = p.rw100;
+    var row = el("div", "nullrow");
+
+    var head = el("div", "nullrow-head");
+    head.appendChild(el("span", "nullrow-nm", p.nm));
+    head.appendChild(el("span", "dim", p.n + " matches · " + p.rn + " rounds"));
+    row.appendChild(head);
+
+    var span = Math.max(Math.abs(ci.lo), Math.abs(ci.hi));
+    var frame = el("div", "nullframe");
+    frame.style.width = Math.round(2 * span * uppPx) + "px";
+
+    var zero = el("div", "nullzero");
+    zero.style.left = "50%";
+    var bar = el("div", "nullbar " + signCls(ci.v));
+    bar.style.left = (((ci.lo + span) / (2 * span)) * 100) + "%";
+    bar.style.width = (((ci.hi - ci.lo) / (2 * span)) * 100) + "%";
+    var pt = el("div", "nullpt");
+    pt.style.left = "calc(" + (((ci.v + span) / (2 * span)) * 100) + "% - 1px)";
+    frame.appendChild(zero); frame.appendChild(bar); frame.appendChild(pt);
+    row.appendChild(frame);
+
+    var read = el("div", "nullread");
+    read.appendChild(el("span", signCls(ci.v), signed(ci.v, 3)));
+    read.appendChild(el("span", "dim",
+      " per 100 · [" + signed(ci.lo, 2) + ", " + signed(ci.hi, 2) + "] · includes zero"));
+    row.appendChild(read);
+    return row;
+  }
+
+  function renderNulls() {
+    var host = document.querySelector("[data-nulls]");
+    var note = document.querySelector("[data-null-note]");
+    if (!host || !D.lanes) { return; }
+    host.innerHTML = "";
+
+    var widest = 0;
+    D.lanes.order.forEach(function (pid) {
+      var ci = D.lanes.p[pid].rw100;
+      widest = Math.max(widest, Math.abs(ci.lo), Math.abs(ci.hi));
+    });
+    var uppPx = 300 / (2 * widest);   /* shared units-per-pixel, not shared axis */
+
+    note.textContent =
+      "One interval per player, each from its own bootstrap over its own matches. "
+      + "Every frame is drawn at the same units per pixel, so widths are honest — "
+      + "but each has its own zero and there is no shared axis, because a "
+      + "difference between these three is not something this data can estimate. "
+      + "All three intervals include zero.";
+
+    D.lanes.order.forEach(function (pid) { host.appendChild(nullRow(pid, uppPx)); });
+  }
+
+  function renderRoster() {
+    var host = document.querySelector("[data-roster]");
+    var note = document.querySelector("[data-roster-note]");
+    if (!host || !D.lanes) { return; }
+    Array.prototype.slice.call(host.querySelectorAll("thead,tbody")).forEach(function (n) { n.remove(); });
+
+    note.textContent = "Ordered by " + D.lanes.order_rule
+      + " — not by any measured quantity. Denominators only; no estimate on this table.";
+
+    var thead = el("thead"), hr = el("tr");
+    ["Player", "Matches", "Rounds", "Credited", "Played with"].forEach(function (h, i) {
+      hr.appendChild(el("th", i === 0 ? "l" : null, h));
+    });
+    thead.appendChild(hr); host.appendChild(thead);
+
+    var tbody = el("tbody");
+    D.lanes.order.forEach(function (pid) {
+      var p = D.lanes.p[pid];
+      var tr = el("tr", "rosterrow");
+      var name = el("td", "l");
+      var link = el("a", null, p.nm);
+      link.href = "#"; link.className = "lanelink";
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        var lane = document.querySelector('[data-lane="' + pid + '"]');
+        if (lane) { lane.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      });
+      name.appendChild(link);
+      tr.appendChild(name);
+      tr.appendChild(el("td", null, String(p.n)));
+      tr.appendChild(el("td", null, String(p.rn)));
+      tr.appendChild(el("td", "dim", String(p.rn_credited)));
+      var wit = Object.keys(p.with).filter(function (k) { return p.with[k] > 0; })
+        .map(function (k) { return laneName(k).split("#")[0] + " ×" + p.with[k]; });
+      tr.appendChild(el("td", "dim", wit.length ? wit.join(", ") : "no one else tracked"));
+      tbody.appendChild(tr);
+    });
+    host.appendChild(tbody);
+  }
+
+  /* The walk is indexed by THIS player's own eligible rounds, never by date.
+     Panel width is proportional to that player's exposure, so SN0RLAX's panel
+     is ~8x TheMarias's and the two cannot be raced. The hatched band is that
+     player's own +/-1.96se null envelope widening as sqrt(n): the question the
+     figure answers is "does this line leave its own noise", not "whose is
+     higher". */
+  function laneWalk(pid) {
+    var p = D.lanes.p[pid];
+    var n = p.walk.length;
+    var maxRounds = 0;
+    D.lanes.order.forEach(function (k) { maxRounds = Math.max(maxRounds, D.lanes.p[k].walk.length); });
+
+    var W = Math.max(220, Math.round(880 * (n / maxRounds)));
+    var H = 150, PAD = 22;
+    var se = p.rw.se || 0;
+    var envAt = function (i) { return 1.96 * se * Math.sqrt((i + 1) / n); };
+
+    var lo = 0, hi = 0;
+    p.walk.forEach(function (v, i) {
+      lo = Math.min(lo, v, -envAt(i)); hi = Math.max(hi, v, envAt(i));
+    });
+    var pad = (hi - lo) * 0.12 || 1;
+    lo -= pad; hi += pad;
+    var x = function (i) { return PAD + (i / Math.max(1, n - 1)) * (W - PAD * 2); };
+    var y = function (v) { return H - PAD - ((v - lo) / (hi - lo)) * (H - PAD * 2); };
+
+    var ns = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("class", "lanewalk");
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    svg.setAttribute("width", W); svg.setAttribute("height", H);
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label",
+      p.nm + ": cumulative RWPA across " + n + " credited rounds, against its own null band.");
+
+    var band = "", back = "";
+    for (var i = 0; i < n; i++) { band += (i ? " L" : "M") + x(i) + " " + y(envAt(i)); }
+    for (var j = n - 1; j >= 0; j--) { back += " L" + x(j) + " " + y(-envAt(j)); }
+    var env = document.createElementNS(ns, "path");
+    env.setAttribute("d", band + back + " Z");
+    env.setAttribute("class", "lanewalk-env");
+    svg.appendChild(env);
+
+    var zero = document.createElementNS(ns, "line");
+    zero.setAttribute("x1", PAD); zero.setAttribute("x2", W - PAD);
+    zero.setAttribute("y1", y(0)); zero.setAttribute("y2", y(0));
+    zero.setAttribute("class", "lanewalk-zero");
+    svg.appendChild(zero);
+
+    var d = "";
+    p.walk.forEach(function (v, i) { d += (i ? " L" : "M") + x(i) + " " + y(v); });
+    var line = document.createElementNS(ns, "path");
+    line.setAttribute("d", d);
+    line.setAttribute("class", "lanewalk-line " + pid);
+    svg.appendChild(line);
+    return svg;
+  }
+
+  function renderLane(pid) {
+    var p = D.lanes.p[pid];
+    var wrap = el("section", "lane");
+    wrap.setAttribute("data-lane", pid);
+
+    var head = el("div", "section-head");
+    head.appendChild(el("h2", null, p.nm));
+    var facts = p.n + " matches · " + p.rn + " rounds of exposure · "
+      + p.rn_credited + " with credited events";
+    var wit = Object.keys(p.with).filter(function (k) { return p.with[k] > 0; });
+    if (wit.length) {
+      facts += " · shared " + wit.map(function (k) {
+        return p.with[k] + " with " + laneName(k).split("#")[0];
+      }).join(" and ");
+    }
+    head.appendChild(el("p", "note", facts));
+    wrap.appendChild(head);
+
+    /* headline is the RATE with its interval; the total is subordinate,
+       because a 25-unit interval is not a headline glyph */
+    var card = el("div", "card " + pid);
+    card.appendChild(el("span", "big " + signCls(p.rw100.v), signed(p.rw100.v, 3)));
+    card.appendChild(el("span", "big-sub", "per 100 rounds · ["
+      + signed(p.rw100.lo, 2) + ", " + signed(p.rw100.hi, 2) + "] · includes zero"));
+    card.appendChild(el("div", "lane-total", "Total " + signed(p.rw.v, 3)
+      + "  [" + signed(p.rw.lo, 2) + ", " + signed(p.rw.hi, 2) + "]"));
+    wrap.appendChild(card);
+
+    /* the waterfall: the best uncertainty communicator on the page, because it
+       shows a small net as the residue of two large opposing quantities */
+    var wf = el("div", "waterfall");
+    p.comp.forEach(function (c) {
+      var cell = el("div", "wf-cell");
+      cell.appendChild(el("span", "wf-k", c.k.replace(/_/g, " ")));
+      cell.appendChild(el("span", "wf-v " + signCls(c.v), signed(c.v, 2)));
+      wf.appendChild(cell);
+    });
+    var net = el("div", "wf-cell wf-net");
+    net.appendChild(el("span", "wf-k", "net"));
+    net.appendChild(el("span", "wf-v " + signCls(p.rw.v), signed(p.rw.v, 2)));
+    wf.appendChild(net);
+    wrap.appendChild(wf);
+
+    var fig = el("div", "fig");
+    fig.appendChild(el("p", "fig-title",
+      "Cumulative RWPA over " + p.rn_credited
+      + " credited rounds, against this player's own null band"));
+    fig.appendChild(laneWalk(pid));
+    wrap.appendChild(fig);
+
+    var tw = el("div", "table-wrap");
+    var table = el("table");
+    var thead = el("thead"), hr = el("tr");
+    ["Date", "Map", "Rounds", "RWPA", "per 100", "Also playing"].forEach(function (h, i) {
+      hr.appendChild(el("th", i === 0 ? "l" : null, h));
+    });
+    thead.appendChild(hr); table.appendChild(thead);
+    var tbody = el("tbody");
+    p.ms.forEach(function (m) {
+      var tr = el("tr");
+      tr.appendChild(el("td", "l", m.d));
+      tr.appendChild(el("td", "l", m.mp));
+      tr.appendChild(el("td", null, String(m.rn)));
+      tr.appendChild(el("td", signCls(m.rw), signed(m.rw, 3)));
+      /* below the exposure floor the rate is not published — an em dash and a
+         reason, never a number the denominator cannot support */
+      if (m.r100 === undefined) {
+        var cell = el("td", "dim", "—");
+        cell.title = "fewer than " + D.meta.gate.min_elig_rounds_for_rate
+          + " eligible rounds — the release does not publish a rate below its "
+          + "exposure floor";
+        tr.appendChild(cell);
+      } else {
+        tr.appendChild(el("td", signCls(m.r100), signed(m.r100, 2)));
+      }
+      tr.appendChild(el("td", "dim", m.with.length
+        ? m.with.map(function (k) { return laneName(k).split("#")[0]; }).join(", ")
+        : "—"));
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    tw.appendChild(table);
+    wrap.appendChild(tw);
+    return wrap;
+  }
+
+  function renderLanes() {
+    var host = document.querySelector("[data-lanes]");
+    if (!host || !D.lanes) { return; }
+    host.innerHTML = "";
+    D.lanes.order.forEach(function (pid) { host.appendChild(renderLane(pid)); });
+  }
+
+  function renderCensus() {
+    var host = document.querySelector("[data-census]");
+    if (!host || !D.season) { return; }
+    host.innerHTML = "";
+    var S = D.season;
+
+    var cens = el("p", "note",
+      S.union_matches + " matches in " + S.id + " involve at least one of the three. "
+      + S.co_presence["1"] + " contain exactly one of them, "
+      + S.co_presence["2"] + " contain two, and "
+      + S.all_three + " contain all three. "
+      + "Every one of MartinLutherKing's " + D.lanes.p.m.n
+      + " matches this act also contains SN0RLAX — the duo cohort is not a slice "
+      + "of his act, it is his act.");
+    host.appendChild(cens);
+
+    var tiles = el("div", "refusals");
+    S.refusals.forEach(function (r) {
+      var t = el("div", "refusal");
+      t.appendChild(el("span", "refusal-k", r.estimand.replace(/_/g, " ")));
+      t.appendChild(el("span", "refusal-n",
+        r.common + (r.common === 1 ? " match in common" : " matches in common")));
+      t.appendChild(el("span", "refusal-b", r.reason));
+      tiles.appendChild(t);
+    });
+    host.appendChild(tiles);
+  }
+
+  function renderSeason() {
+    var sub = document.querySelector("[data-season-sub]");
+    if (sub && D.season) {
+      sub.textContent = "Round win probability added across " + D.season.id
+        + ". Each player is scored over the matches they actually played, "
+        + "which are mostly not the same matches.";
+    }
+    renderNulls();
+    renderRoster();
+    renderLanes();
+    renderCensus();
+    var foot = document.querySelector("[data-season-foot]");
+    if (foot) {
+      foot.innerHTML = "";
+      var a = el("a", null, "The MartinLutherKing–SN0RLAX paired cohort →");
+      a.href = "#/duo";
+      foot.appendChild(el("p", "note",
+        "Those two shared every one of 21 matches, which is the one place a paired "
+        + "difference is identified here."));
+      foot.appendChild(a);
+    }
+  }
+
   function renderCorpus() {
     var host = document.querySelector("[data-corpus-table]");
     var note = document.querySelector("[data-corpus-note]");
@@ -2146,10 +2472,12 @@
 
   function route() {
     var hash = location.hash || "#/";
+    var vSeason = document.getElementById("view-season");
     var mm = hash.match(/^#\/m\/(.+)$/);
     if (mm) {
       var m = matchById(mm[1]);
       if (m) {
+        if (vSeason) { vSeason.hidden = true; }
         vCohort.hidden = true;
         vMatch.hidden = false;
         renderMatch(m);
@@ -2159,11 +2487,28 @@
       }
     }
     vMatch.hidden = true;
-    vCohort.hidden = false;
+
+    /* The paired cohort is its own route. It is a different population from the
+       act — two players who shared every round — and the only place a paired
+       difference is identified, so it gets a page rather than a section that
+       would sit a +0.790 next to a +0.263 with nothing reconciling them. */
+    if (/^#\/duo/.test(hash) || !vSeason || !D.lanes) {
+      if (vSeason) { vSeason.hidden = true; }
+      vCohort.hidden = false;
+      renderHeader(false);
+      currentMatch = null;
+      document.title = "RWPA · MartinLutherKing & SN0RLAX";
+      renderWalk();
+      renderDisposition();
+      return;
+    }
+
+    vCohort.hidden = true;
+    vSeason.hidden = false;
+    renderHeader(true);
     currentMatch = null;
-    document.title = "RWPA · MartinLutherKing & SN0RLAX";
-    renderWalk();
-    renderDisposition();
+    document.title = "RWPA · " + (D.season ? D.season.id : "season");
+    window.scrollTo(0, 0);
   }
 
   document.querySelector("[data-back]").addEventListener("click", function () { location.hash = "#/"; });
@@ -2199,5 +2544,6 @@
   renderCorpus();
   renderLayers();
   renderProvenance();
+  if (D.lanes) { renderSeason(); }
   route();
 })();

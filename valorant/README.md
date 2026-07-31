@@ -18,13 +18,24 @@ single most important fact about this dataset is visible there: every interval i
 the pair taken together comes closest, at +2.10 per 100 with an interval of [−0.29, +4.70], and
 still does not clear it.
 
-**Every player, over their own matches.** A second population, kept deliberately apart from the
-cohort above. It carries two scopes: the current act, and every match the corpus holds for that
-player. These four share no match at all, so the intervals come from four separate bootstraps and
-are *not* comparable with one another — exposure is printed on every row, and the corpus scope also
-shows each player's date span, because the eras barely overlap. A player with no games in a scope
-gets no row rather than a zero: Trzzcko last played this cohort's game in 2025 and so is absent
-from the current act entirely.
+**Every player, over their own matches.** A career-scoped table under provenance: all four
+players, each over every match the corpus holds for them, from four separate bootstraps. Exposure
+and date span sit on every row because the eras barely overlap.
+
+## The act, and the pair
+
+The default page is the act: three players over e11a4, one lane each. They did not play together —
+56 matches involve at least one of them, 35 involve exactly one, and only 2 involve all three — so
+there is no joint or paired estimand across them and the page does not draw one. Each lane carries
+its own bootstrap, its own scale, and a cumulative walk indexed by that player's own rounds, with a
+panel width proportional to their exposure so two lanes cannot be raced by eye. The three intervals
+sit on three separate frames whose zeros deliberately do not align; all three include zero.
+
+`#/duo` is the MartinLutherKing–SN0RLAX cohort described below. It is a different population — two
+players who shared every one of 21 rounds-in-common matches — and the only place a paired difference
+is identified here, which is why it is a route rather than a section: putting SN0RLAX's act figure
+and his cohort figure in one scroll invites a with/without reading that this data cannot support.
+The page names that quantity and refuses it.
 
 **Match.** Per-player summary, a per-round bar panel for each player against their own zero line,
 and a round ledger.
@@ -81,8 +92,8 @@ fails loudly if the sign pair stops separating.
 
 The payload is generated, not hand-written. It is built by `valorant_impact.dashboard_data` in the
 research lab (kept separately, outside this repo) from the immutable release
-`model_suite_release_2026-07-31_v8`, manifest SHA-256
-`c4de59b3ee41e2c88d83e75b4dc380bfdc6c458722c3949d8277e7a0a8cc6792`:
+`model_suite_release_2026-07-31_v9`, manifest SHA-256
+`a932cd7ee87f624a7f4242ad814677d92fe6888e906b23b1f4caa02eb4db0f3a`:
 
 ```bash
 python3 -m valorant_impact.dashboard_data --output dashboard/data.js

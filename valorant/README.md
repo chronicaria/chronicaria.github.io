@@ -18,33 +18,13 @@ single most important fact about this dataset is visible there: every interval i
 the pair taken together comes closest, at +2.10 per 100 with an interval of [−0.29, +4.70], and
 still does not clear it.
 
-**Every player, over their own matches.** A career-scoped table under provenance: all four
-players, each over every match the corpus holds for them, from four separate bootstraps. Exposure
-and date span sit on every row because the eras barely overlap.
-
-## The act, and the pair
-
-The default page is the act: three players over e11a4. It opens on one clock — cumulative RWPA for
-all three against match time, where a flat span is a match that player was not in. Height there is a
-running total, so a line also climbs by playing more; the rate estimates that control for that sit
-below it, each on its own frame with its own zero, because 56 matches involve at least one of these
-players, 35 involve exactly one, and only 2 involve all three. That last fact is why no joint or
-paired estimand across the three is computed: a replicate resamples matches once and applies the
-same draw to every entity. All three intervals include zero.
-
-Each player then gets a lane: their estimate, their credit waterfall, their own walk indexed by
-their own rounds, and every match they played. Match rows open into a per-round sheet with the
-round's RWPA, its five credit components, and the box score.
-
-Nothing is excluded for inactivity. Every round of every match is scored, and a round a player was
-present for but inactive in is a marked zero rather than an absence — they were in the match and
-changed nothing, which is a measurement. An absence is reserved for a match they were never in.
-
-`#/duo` is the MartinLutherKing–SN0RLAX cohort described below. It is a different population — two
-players who shared every one of 21 rounds-in-common matches — and the only place a paired difference
-is identified here, which is why it is a route rather than a section: putting SN0RLAX's act figure
-and his cohort figure in one scroll invites a with/without reading that this data cannot support.
-The page names that quantity and refuses it.
+**Every player, over their own matches.** A second population, kept deliberately apart from the
+cohort above. It carries two scopes: the current act, and every match the corpus holds for that
+player. These four share no match at all, so the intervals come from four separate bootstraps and
+are *not* comparable with one another — exposure is printed on every row, and the corpus scope also
+shows each player's date span, because the eras barely overlap. A player with no games in a scope
+gets no row rather than a zero: Trzzcko last played this cohort's game in 2025 and so is absent
+from the current act entirely.
 
 **Match.** Per-player summary, a per-round bar panel for each player against their own zero line,
 and a round ledger.
@@ -69,10 +49,7 @@ and `app.js` so a later edit cannot quietly break them.
   not in: a 4v5 round is fully scored for everyone who played it, and the absent player has no
   ledger rows at all, so their cells are em dashes rather than zeros. A zero would say they were
   present and did nothing.
-- **A per-100 rate is suppressed below the exposure floor** of 20 eligible rounds on
-  the `#/duo` route. The act page publishes a rate at whatever exposure produced it,
-  with that exposure in the column beside it, so a short match reads as short rather
-  than as missing.
+- **A per-100 rate is suppressed below the exposure floor** of 20 eligible rounds.
 - **Green is up, red is down, and a zero is neither.** Sign colour means the direction a
   probability moved; it never touches a name, a neutral count, or a win/loss chip. Sign is carried
   three times over — a `+`/`−` glyph, direction from a zero rule, and colour — because red/green is
@@ -104,8 +81,8 @@ fails loudly if the sign pair stops separating.
 
 The payload is generated, not hand-written. It is built by `valorant_impact.dashboard_data` in the
 research lab (kept separately, outside this repo) from the immutable release
-`model_suite_release_2026-07-31_v9`, manifest SHA-256
-`a932cd7ee87f624a7f4242ad814677d92fe6888e906b23b1f4caa02eb4db0f3a`:
+`model_suite_release_2026-07-31_v8`, manifest SHA-256
+`c4de59b3ee41e2c88d83e75b4dc380bfdc6c458722c3949d8277e7a0a8cc6792`:
 
 ```bash
 python3 -m valorant_impact.dashboard_data --output dashboard/data.js

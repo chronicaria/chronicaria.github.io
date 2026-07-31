@@ -650,6 +650,23 @@ td.mag::after {
   color: var(--muted);
   white-space: nowrap;
 }
+/* Scope toggle. A chip here is a control, not a label, so it needs a hit
+   target and a pressed state; `.on` is mirrored by aria-pressed so the state
+   is not carried by colour alone. */
+button.chip {
+  cursor: pointer;
+  background: none;
+  font-family: inherit;
+  padding: 4px 9px;
+}
+button.chip:hover { color: var(--fg); }
+button.chip.on {
+  color: var(--fg);
+  border-color: currentColor;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+button.chip:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
 .chip.w { color: var(--win); border-color: color-mix(in srgb, var(--win) 45%, transparent); }
 .chip.l { color: var(--loss); border-color: color-mix(in srgb, var(--loss) 45%, transparent); }
 .chip.atk, .chip.def { color: var(--muted); }

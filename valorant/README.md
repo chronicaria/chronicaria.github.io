@@ -1,7 +1,7 @@
 # RWPA — MartinLutherKing & SN0RLAX
 
 A static dashboard over round win probability added (RWPA) for one shared competitive Valorant
-cohort: 19 matches, 410 rounds, every one of them scored.
+cohort: 21 matches, 454 rounds, every one of them scored.
 
 Open `index.html`. That is the whole install — no framework, no build step, no server, no network
 beyond a Google Fonts stylesheet. The data ships as `window.VAL_DATA` in `data.js` rather than
@@ -14,8 +14,17 @@ range so the variation reads. Then a round-disposition bar, per-player totals wi
 intervals, a credit-type waterfall showing that each total is the residue of about forty units of
 churn either way, and a forest plot of every estimand under all three eligibility scenarios — which
 is where the intervals live, in the per-100 units everything else on the page is quoted in. The
-single most important fact about this dataset is visible there: every interval that matters
-includes zero except the two players taken together.
+single most important fact about this dataset is visible there: every interval includes zero —
+the pair taken together comes closest, at +2.10 per 100 with an interval of [−0.29, +4.70], and
+still does not clear it.
+
+**Every player, over their own matches.** A second population, kept deliberately apart from the
+cohort above. It carries two scopes: the current act, and every match the corpus holds for that
+player. These four share no match at all, so the intervals come from four separate bootstraps and
+are *not* comparable with one another — exposure is printed on every row, and the corpus scope also
+shows each player's date span, because the eras barely overlap. A player with no games in a scope
+gets no row rather than a zero: Trzzcko last played this cohort's game in 2025 and so is absent
+from the current act entirely.
 
 **Match.** Per-player summary, a per-round bar panel for each player against their own zero line,
 and a round ledger.
@@ -72,8 +81,8 @@ fails loudly if the sign pair stops separating.
 
 The payload is generated, not hand-written. It is built by `valorant_impact.dashboard_data` in the
 research lab (kept separately, outside this repo) from the immutable release
-`model_suite_release_2026-07-30_v4`, manifest SHA-256
-`bab0ed0c8d177d9ca5cb1dca86cebd1bc610bb9acb0f4b9d8209793152637e17`:
+`model_suite_release_2026-07-31_v8`, manifest SHA-256
+`c4de59b3ee41e2c88d83e75b4dc380bfdc6c458722c3949d8277e7a0a8cc6792`:
 
 ```bash
 python3 -m valorant_impact.dashboard_data --output dashboard/data.js
@@ -89,7 +98,7 @@ A round where somebody was inactive used to be discarded entirely. It is now sco
 roster already omits the absent player, so the alive counts describe a genuine 4v5 and the
 win-probability model conditions on exactly those counts. All 37 such rounds in this cohort are
 kept and marked `4v5` in the ledger; only the absent player is left uncredited. That took the
-cohort from 341 of 376 rounds to 410 of 410.
+cohort from 417 of 454 rounds to 454 of 454.
 
 It moved the numbers, and not cosmetically: the two players' point ordering reverses. Which is
 precisely why the page does not rank them.
@@ -110,6 +119,23 @@ export HENRIK_API_KEY='...'
 python3 -m valorant_impact.collect --all --page-size 10 --rate-floor 12 --output data/updates/refresh.json
 ```
 
+`collect` pages the v4 matchlist, which serves a recent window and stops on a short page — that
+short page means "no more results for this query", not "no more matches". Henrik's own archive
+index reaches considerably further back, and every id it lists can still be re-fetched at full
+round-and-kill detail:
+
+```bash
+python3 -m valorant_impact.backfill --dry-run
+python3 -m valorant_impact.backfill --output data/updates/backfill.json
+```
+
+That recovered 79 matches the matchlist never returned, taking the corpus from 120 to 198. It
+identifies cohort members by PUUID rather than Riot ID, because handles change — TheMarias played
+as `mahoraga#AWDGR` until after 2024, and name matching would have pseudonymized them as a stranger
+in their own archive. None of this repairs the underlying coverage gap: Henrik holds roughly 8% of
+these players' careers, and what it never ingested is not retrievable from any endpoint.
+
 Then merge, rebuild the SQLite box scores, run the model suite into a fresh release directory, and
 regenerate `data.js`. The suite re-derives the cross-fitted ledger and the bootstrap intervals, so
-the numbers on the page move with it.
+the numbers on the page move with it — pass `--reuse <previous run>` to adopt the models that did
+not change instead of refitting all twelve to reach the thirteenth.

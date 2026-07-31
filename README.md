@@ -18,7 +18,7 @@ weather.html          County temperature map
 rome-wiki/            980-article linked knowledge base (Next.js static export)
 fantasy-basketball/   2026-27 Fantasy Basketball Encyclopedia — 646 pages
 fantasy-football/     2026 Fantasy Football Encyclopedia — 118 pages
-valorant/             RWPA dashboard — 19 matches, 410 rounds
+valorant/             RWPA dashboard — 21 matches, 454 rounds
 concerto/             Piano concerto pairwise ranker
 nyc-weather/          Hourly forecasts with ensemble uncertainty bands
 winter-trip/          Italy, winter 2026-27 — itinerary and logistics

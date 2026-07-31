@@ -948,6 +948,97 @@
     return wrap;
   }
 
+  /* A different population from the rest of the page: not the shared cohort,
+     but whatever each player individually played.  The payload says cmp:false
+     because the four share no match, so the four intervals come from four
+     separate bootstraps -- sorting these rows against each other would invent
+     a comparison the data cannot support.  Ordered by exposure, which is a
+     property of each row rather than a verdict about it, and the span column
+     is there because these careers barely overlap in time. */
+  function renderCorpus() {
+    var host = document.querySelector("[data-corpus-table]");
+    var note = document.querySelector("[data-corpus-note]");
+    var tabs = document.querySelector("[data-corpus-scopes]");
+    var C = D.corpus;
+    if (!host || !C) { return; }
+
+    var scopeKeys = Object.keys(C.scopes || { corpus: C.p });
+    /* current season first: it is the population a reader arriving at this
+       page is most likely to mean by "how are they doing". */
+    scopeKeys.sort(function (a, b) { return a === "corpus" ? 1 : b === "corpus" ? -1 : 0; });
+    var active = scopeKeys[0];
+
+    function label(scope) {
+      return scope === "corpus" ? "All matches held" : "This season (" + scope + ")";
+    }
+
+    function draw() {
+      var people = (C.scopes || { corpus: C.p })[active];
+      var seasonScope = active !== "corpus";
+
+      note.textContent =
+        (seasonScope
+          ? "Only matches from " + active + ". "
+          : "Every match we hold for each player. ")
+        + "Each interval covers one player's own matches and is not comparable "
+        + "with the others — the four share " + C.shared
+        + " matches. Exposure is on every row"
+        + (seasonScope
+          ? "; a player with no games this season has no row."
+          : ", and the spans show the eras barely overlap.");
+
+      Array.prototype.slice.call(host.querySelectorAll("thead,tbody"))
+        .forEach(function (n) { n.remove(); });
+
+      var cols = ["Player", "RWPA", "per 100", "95% interval", "Matches", "Rounds"];
+      if (!seasonScope) { cols.push("Span"); }
+      var thead = el("thead");
+      var hr = el("tr");
+      cols.forEach(function (h, i) { hr.appendChild(el("th", i === 0 ? "l" : null, h)); });
+      thead.appendChild(hr);
+      host.appendChild(thead);
+
+      var rows = Object.keys(people).map(function (k) { return people[k]; });
+      rows.sort(function (a, b) { return b.rn - a.rn; });
+
+      var tbody = el("tbody");
+      rows.forEach(function (p) {
+        var tr = el("tr");
+        tr.appendChild(el("td", "l", p.nm));
+        tr.appendChild(el("td", signCls(p.rw.v), signed(p.rw.v, 3)));
+        tr.appendChild(el("td", signCls(p.rw100.v), signed(p.rw100.v, 3)));
+        tr.appendChild(el("td", "dim",
+          "[" + signed(p.rw100.lo, 2) + ", " + signed(p.rw100.hi, 2) + "]"
+          + (p.rw100.lo * p.rw100.hi > 0 ? "" : " · includes zero")));
+        tr.appendChild(el("td", null, String(p.n)));
+        tr.appendChild(el("td", null, String(p.rn)));
+        if (!seasonScope) { tr.appendChild(el("td", "dim", p.from + " → " + p.to)); }
+        tbody.appendChild(tr);
+      });
+      host.appendChild(tbody);
+
+      if (tabs) {
+        Array.prototype.slice.call(tabs.querySelectorAll("button")).forEach(function (b) {
+          var on = b.getAttribute("data-scope") === active;
+          b.classList.toggle("on", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+    }
+
+    if (tabs && scopeKeys.length > 1) {
+      tabs.innerHTML = "";
+      scopeKeys.forEach(function (scope) {
+        var b = el("button", "chip", label(scope));
+        b.type = "button";
+        b.setAttribute("data-scope", scope);
+        b.addEventListener("click", function () { active = scope; draw(); });
+        tabs.appendChild(b);
+      });
+    }
+    draw();
+  }
+
   function renderMatchTable() {
     var table = document.querySelector("[data-match-table]");
     Array.prototype.slice.call(table.querySelectorAll("thead,tbody")).forEach(function (n) { n.remove(); });
@@ -2098,6 +2189,7 @@
   renderHeader();
   renderVerdict();
   renderMatchTable();
+  renderCorpus();
   renderLayers();
   renderProvenance();
   route();

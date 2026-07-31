@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-30T23:48:59Z",
+ "updated": "2026-07-31T03:56:36Z",
  "errors": [],
  "teams": [
   {
@@ -409,20 +409,11 @@
    "id": "21",
    "name": "New York Mets",
    "abbr": "NYM",
-   "record": "46-63",
+   "record": "47-63",
    "standing": "5th in NL East",
    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/nym.png",
    "color": "002d72",
    "form": [
-    {
-     "date": "2026-07-19T17:35Z",
-     "opp": "Phillies",
-     "oppAbbr": "PHI",
-     "home": false,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816173",
-     "res": "W",
-     "score": "6-1"
-    },
     {
      "date": "2026-07-20T23:40Z",
      "opp": "Brewers",
@@ -503,6 +494,15 @@
      "url": "https://www.espn.com/mlb/game/_/gameId/401902545",
      "res": "L",
      "score": "0-1"
+    },
+    {
+     "date": "2026-07-30T23:10Z",
+     "opp": "Marlins",
+     "oppAbbr": "MIA",
+     "home": true,
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816322",
+     "res": "W",
+     "score": "4-2"
     }
    ],
    "next": [

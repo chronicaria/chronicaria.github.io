@@ -839,6 +839,16 @@
    "home": true,
    "res": "L",
    "score": "0-1"
+  },
+  {
+   "team": "mets",
+   "label": "Mets",
+   "league": "MLB",
+   "date": "2026-07-30T23:10Z",
+   "opp": "Marlins",
+   "home": true,
+   "res": "W",
+   "score": "4-2"
   }
  ]
 }

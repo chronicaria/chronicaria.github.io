@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-07-31T16:00:00Z",
-  "updated": "2026-07-31T17:06:39Z",
+  "valid_time_utc": "2026-07-31T19:00:00Z",
+  "updated": "2026-07-31T20:03:36Z",
   "hottest": [
+    {
+      "name": "Tillman",
+      "state": "OK",
+      "temp_f": 105.3
+    },
+    {
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 105.2
+    },
     {
       "name": "Greer",
       "state": "OK",
-      "temp_f": 99.1
-    },
-    {
-      "name": "Beckham",
-      "state": "OK",
-      "temp_f": 98.7
-    },
-    {
-      "name": "Garfield",
-      "state": "OK",
-      "temp_f": 97.9
+      "temp_f": 105.2
     }
   ],
   "coldest": [
     {
-      "name": "Bristol Bay",
+      "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 42.6
+      "temp_f": 48.2
     },
     {
-      "name": "Copper River",
+      "name": "Petersburg",
       "state": "AK",
-      "temp_f": 45.4
+      "temp_f": 51.1
     },
     {
-      "name": "North Slope",
+      "name": "Nome",
       "state": "AK",
-      "temp_f": 46.6
+      "temp_f": 51.2
     }
   ],
   "national": {
-    "min_f": 42.6,
-    "max_f": 99.1,
-    "mean_f": 79.8
+    "min_f": 48.2,
+    "max_f": 105.3,
+    "mean_f": 84.4
   }
 }

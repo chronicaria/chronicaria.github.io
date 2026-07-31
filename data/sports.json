@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-31T14:41:54Z",
+ "updated": "2026-07-31T19:58:50Z",
  "errors": [],
  "teams": [
   {
@@ -511,7 +511,8 @@
      "opp": "Marlins",
      "oppAbbr": "MIA",
      "home": true,
-     "url": "https://www.espn.com/mlb/game/_/gameId/401816334"
+     "url": "https://www.espn.com/mlb/game/_/gameId/401816334",
+     "odds": "NYM -125 \u00b7 O/U 8.5"
     },
     {
      "date": "2026-08-01T20:10Z",

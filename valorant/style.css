@@ -331,6 +331,12 @@ button { font: inherit; }
 .walk-band { opacity: .16; }
 .walk-band.m { fill: var(--martin); }
 .walk-band.s { fill: var(--snorlax); }
+/* The null corridor: two dashed boundary curves at full strength, never a
+   translucent fill. A grey plate behind the walk is the mark-pretending-to-be-
+   structure failure recorded in contrast.py, and an alpha faint enough to leave
+   the two lines legible drops under the 3:1 mark floor. Two curves clear it
+   trivially — --muted is a text token — and read as an envelope. */
+.walk-null { fill: none; stroke: var(--muted); stroke-width: 1.1; stroke-dasharray: 4 3; }
 .walk-tick {
   font-family: var(--mono);
   font-size: 10.5px;
@@ -374,6 +380,10 @@ button { font: inherit; }
 .swatch.tick { height: 2px; background: var(--line); }
 .swatch.block { height: 11px; background: var(--muted); }
 .swatch.block.dim { opacity: .45; }
+.swatch.dash {
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 7px);
+}
 .swatch.hatch {
   height: 11px;
   background-color: var(--line-2);
@@ -1156,6 +1166,13 @@ th .info { vertical-align: super; font-size: var(--fs-1); }
 .fig .link      { stroke: var(--line); stroke-width: 1; fill: none; opacity: .45; }
 /* a method variant, not a fourth scenario */
 .fig .rng-basic { stroke-dasharray: 3 3; }
+/* the least-squares fit its own R² summarises: solid, because it is a model of
+   these points rather than a benchmark they are held against */
+.fig .fit { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+/* the round's state probability — neither a person nor a direction, so neither
+   palette applies to it */
+.fig .wp-line { fill: none; stroke: var(--text); stroke-width: 1.5; stroke-linejoin: round; }
+.fig .wp-ev { stroke: var(--faint); stroke-width: 1.4; }
 
 /* F1 and F6 span the shell rather than sitting inside a card */
 .fig-wide { margin-top: var(--sp-5); }

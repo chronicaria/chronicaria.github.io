@@ -98,8 +98,13 @@ SURFACES = ["bg", "panel", "panel-2", "panel-3"]
 MARKS = [
     ("pos", 1.0, ["panel-2", "panel-3"]),     # round-sheet magnitude fill
     ("neg", 1.0, ["panel-2", "panel-3"]),
-    ("martin", 1.0, ["panel", "panel-3"]),    # .ci-range
-    ("snorlax", 1.0, ["panel", "panel-3"]),
+    # .ci-range, and the round sheet's win-probability event marks on --panel-2
+    ("martin", 1.0, ["panel", "panel-2", "panel-3"]),
+    ("snorlax", 1.0, ["panel", "panel-2", "panel-3"]),
+    # The walk's null corridor: two dashed curves, drawn at full strength for
+    # the reason in the paragraph above -- the alternative, a translucent plate
+    # behind the two lines, is the failure this file already made once.
+    ("muted", 1.0, ["panel"]),
 ]
 
 TEXT_FLOOR, MARK_FLOOR = 4.5, 3.0

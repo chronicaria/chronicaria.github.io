@@ -328,6 +328,32 @@
     return out;
   }
 
+  /* The null corridor: where a walk of this length ends once the credited signs
+     are shuffled within their match clusters. It arrives from the release
+     (overall.walk_band) rather than being resampled here — a draw made in the
+     browser would change under the reader on every theme toggle and every
+     resize, since all three re-run renderWalk.
+
+     ONE envelope, the union of the two players' bands. Their individual bands
+     agree to within about a tenth of a round, and four dashed curves over two
+     walks is noise rather than information. Absent key, absent corridor: the
+     walk then draws exactly as it does today. */
+  /* The envelope arrives already unioned across the two players — the extractor
+     draws one set of match signs and applies it to both, because they played the
+     same matches on the same team and their nulls are paired the way their
+     observations are. Re-unioning per player here would be the wrong null. */
+  function walkNull() {
+    var wb = D.overall.walk_band;
+    if (!wb || !wb.lo || !wb.hi) return null;
+    if (wb.lo.length !== SEQ.length || wb.hi.length !== SEQ.length) return null;
+    return {
+      lo: wb.lo,
+      hi: wb.hi,
+      p: wb.p || {},
+      lbl: (D.dict.walk_band && D.dict.walk_band.sh) || "null band"
+    };
+  }
+
   function renderWalk() {
     /* Clear by identity, not by count. `childNodes.length > 2` counts the
        indentation text nodes between the markup's <title> and <desc>, so it ate
@@ -343,6 +369,7 @@
     walkFig.setAttribute("viewBox", "0 0 " + W + " " + H);
 
     var series = { m: cumulative("m"), s: cumulative("s") };
+    var nul = walkNull();
     /* Both series start at 0, so 0 is inside [lo, hi] by construction and the
        zero rule is always drawn. The domain is deliberately NOT forced
        symmetric about zero — that would put back the dead space this removes. */
@@ -350,6 +377,12 @@
     PLAYERS.forEach(function (pid) {
       series[pid].forEach(function (v) { lo = Math.min(lo, v); hi = Math.max(hi, v); });
     });
+    /* The corridor is wider than either walk, and holding it is the point: the
+       two lines then visibly sit inside it instead of filling the frame. */
+    if (nul) {
+      lo = Math.min(lo, Math.min.apply(null, nul.lo));
+      hi = Math.max(hi, Math.max.apply(null, nul.hi));
+    }
     var pad = Math.max(0.25, (hi - lo) * 0.06);
     lo -= pad; hi += pad;
 
@@ -373,6 +406,29 @@
       var lab = svgEl("text", { class: "walk-tick", x: PAD_L - 7, y: y(t) + 3.5, "text-anchor": "end" });
       lab.textContent = (t > 0 ? "+" : "") + t.toFixed(dp);
       g.appendChild(lab);
+    }
+
+    /* The corridor, drawn before every data mark so the walks read on top of
+       it. Two dashed boundary curves in one path, never a translucent fill: a
+       grey plate behind the walk is the mark-pretending-to-be-structure failure
+       contrast.py's MARKS comment records, and any alpha faint enough to leave
+       the two lines legible falls under the 3:1 mark floor. */
+    if (nul) {
+      var edge = function (vals) {
+        return vals.map(function (v, i) {
+          return (i ? "L" : "M") + x(i).toFixed(2) + " " + y(v).toFixed(2);
+        }).join(" ");
+      };
+      g.appendChild(svgEl("path", { class: "walk-null", d: edge(nul.hi) + " " + edge(nul.lo) }));
+      /* Named on the upper curve rather than only in the legend, off-centre so
+         the label sits in the corridor's own headroom. It runs back from its
+         anchor, not forward: the envelope widens left to right, so the curve is
+         below the label over the span the label occupies and never crosses it. */
+      var ci = Math.round((SEQ.length - 1) * 0.62);
+      var cap = svgEl("text", { class: "walk-tick", "text-anchor": "end",
+        x: x(ci), y: y(nul.hi[ci]) - 7 });
+      cap.textContent = nul.lbl;
+      g.appendChild(cap);
     }
 
     /* shade the spans where nothing was measured */
@@ -446,11 +502,15 @@
     Array.prototype.slice.call(legend.querySelectorAll("[data-walk-mark]")).forEach(function (n) { n.remove(); });
     legend.appendChild(swatchSpan("rule", "match boundary", true));
     if (unscored) legend.appendChild(swatchSpan("hatch", "no scorable endpoint", true));
+    if (nul) legend.appendChild(swatchSpan("dash", nul.lbl, true));
 
     walkFig.querySelector("[data-walk-desc]").textContent =
       "Cumulative round win probability added over " + SEQ.length + " rounds, in play order. " +
       SHORT.m + " ends at " + signed(series.m[SEQ.length - 1], 2) + " and " +
-      SHORT.s + " at " + signed(series.s[SEQ.length - 1], 2) + ".";
+      SHORT.s + " at " + signed(series.s[SEQ.length - 1], 2) + "." +
+      (nul ? " A dashed corridor of sign-shuffled walks runs the length of the figure, " +
+        "ending at " + signed(nul.lo[SEQ.length - 1], 2) + " to " +
+        signed(nul.hi[SEQ.length - 1], 2) + "." : "");
   }
 
   function walkAt(i) {
@@ -470,6 +530,17 @@
       var delta = s.r.el && pr && typeof pr.rw === "number" ? signed(pr.rw, 3) : "—";
       lines.push(SHORT[pid] + " " + signed(cum, 2) + " (" + delta + ")");
     });
+    /* The p belongs to the whole walk, not to the round under the cursor, so it
+       is its own line rather than a fourth number on the player's row: how often
+       a sign-shuffled walk ends at least this far from zero. */
+    var wb = D.overall.walk_band;
+    if (wb && wb.p) {
+      PLAYERS.forEach(function (pid) {
+        if (typeof wb.p[pid] === "number") {
+          lines.push(SHORT[pid] + " end p " + fmtKey("walk_p", wb.p[pid]));
+        }
+      });
+    }
     walkReadout.innerHTML = lines.join("<br>");
   }
 
@@ -697,23 +768,45 @@
     var pad = (hi - lo) * 0.06;
     lo -= pad; hi += pad;
 
+    /* Scenarios are grouped by the axis they vary, with the axis named once
+       above its block. An attribution-rule variant stacked straight under an
+       eligibility variant reads as one more eligibility scenario, which is the
+       one thing this figure exists to deny: eligibility is not the only
+       definitional choice the release makes. A payload whose scenarios carry no
+       `axis` collapses to a single unlabelled block — the figure as it ships. */
+    var axes = [];
+    scen.forEach(function (sc) {
+      if (sc.axis && axes.indexOf(sc.axis) < 0) axes.push(sc.axis);
+    });
+    function blocksOf(rows) {
+      var order = [], by = {};
+      rows.forEach(function (row) {
+        var a = row.axis || "";
+        if (!by[a]) { by[a] = []; order.push(a); }
+        by[a].push(row);
+      });
+      return order.map(function (a) { return { axis: a, rows: by[a] }; });
+    }
+
     /* The group name gets its own line. Sharing a baseline with the first
        scenario row put the player's name on top of the scenario's label. */
     var W = 1000, padL = 212, padR = 70, rowH = 17, headH = 17, groupGap = 12;
+    var subH = axes.length ? 15 : 0;
     var extra = basic ? rowH : 0;
-    var H = groups.length * (scen.length * rowH + headH + groupGap) + extra + 24;
+    var H = groups.length * (scen.length * rowH + axes.length * subH + headH + groupGap) + extra + 24;
     var x = function (v) { return padL + ((v - lo) / (hi - lo)) * (W - padL - padR); };
 
     var fig = el("div", "fig");
-    var ttl = el("p", "fig-title", "Every estimand, under all three eligibility scenarios");
+    var ttl = el("p", "fig-title", "Every estimand, under every scenario the release publishes");
     var ib = infoButton(["contrast100", "duo100", "c_teammates", "c_no_rank"], "the difference and the duo estimand");
     if (ib) ttl.appendChild(ib);
     fig.appendChild(ttl);
     var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img" });
     var t = svgEl("title", {});
-    t.textContent = "Forest plot: four estimands across three scenarios, plus the duo estimand " +
-      "under a basic bootstrap, all on one scale, with the zero rule running unbroken " +
-      "down the figure.";
+    t.textContent = "Forest plot: " + groups.length + " estimands across " + scen.length +
+      " scenarios" + (axes.length ? " on " + axes.length + " axes" : "") +
+      (basic ? ", plus the duo estimand under a basic bootstrap" : "") +
+      ", all on one scale, with the zero rule running unbroken down the figure.";
     svg.appendChild(t);
     svg.appendChild(svgEl("line", { class: "zero-line", x1: x(0), x2: x(0), y1: 2, y2: H - 18 }));
 
@@ -727,41 +820,50 @@
       svg.appendChild(gl);
       y += headH;
 
-      /* The connector runs through the three Difference dots, behind the
-         strokes, so the sign reversal across scenarios is a visible crossing of
-         the zero rule rather than a sentence quoting three numbers. Faint by
-         design: a reading aid, not a trend claim. */
-      if (g[0] === "contrast") {
-        var pts = [];
-        scen.forEach(function (sc, i) {
-          var e = sc.e.contrast;
-          if (e) pts.push(x(e.v).toFixed(2) + "," + (y + i * rowH + 7).toFixed(2));
-        });
-        if (pts.length > 1) svg.appendChild(svgEl("polyline", { class: "link", points: pts.join(" ") }));
-      }
-
-      var rows = scen.map(function (sc) { return { lbl: sc.lbl, e: sc.e[g[0]] }; });
+      var rows = scen.map(function (sc) { return { lbl: sc.lbl, e: sc.e[g[0]], axis: sc.axis }; });
       if (g[0] === "duo" && basic) rows.push({ lbl: "Basic bootstrap · all matches", e: basic, variant: true });
 
-      rows.forEach(function (row) {
-        var e = row.e;
-        if (!e) { y += rowH; return; }
-        var cy = y + 7;
-        svg.appendChild(svgEl("line", {
-          class: row.variant ? "rng-basic" : null,
-          x1: x(e.lo), x2: x(e.hi), y1: cy, y2: cy,
-          stroke: "var(--muted)",
-          "stroke-width": row.variant ? 1.5 : (e.z ? 2.5 : 1.5),
-          opacity: row.variant ? .7 : (e.z ? 1 : .7),
-        }));
-        svg.appendChild(svgEl("circle", { cx: x(e.v), cy: cy, r: 2.6, fill: "var(--text)" }));
-        var sl = svgEl("text", { x: padL - 8, y: cy + 3.5, "text-anchor": "end" });
-        sl.textContent = row.lbl;
-        svg.appendChild(sl);
-        var vv = svgEl("text", { class: e.z ? "val" : "", x: W - padR + 5, y: cy + 3.5 });
-        vv.textContent = signed(e.v, 2) + (e.z ? "  ✓" : "");
-        svg.appendChild(vv);
-        y += rowH;
+      blocksOf(rows).forEach(function (blk) {
+        if (blk.axis) {
+          var ah = svgEl("text", { x: 8, y: y + 10, fill: "var(--faint)" });
+          ah.textContent = code("axis", blk.axis, true);
+          svg.appendChild(ah);
+          y += subH;
+        }
+
+        /* The connector runs through the Difference dots of ONE axis, behind the
+           strokes, so the sign reversal across scenarios is a visible crossing of
+           the zero rule rather than a sentence quoting three numbers. It never
+           crosses an axis boundary: two scenarios that vary different things are
+           not two points on a trend. Faint by design: a reading aid, not a claim. */
+        if (g[0] === "contrast") {
+          var pts = [];
+          blk.rows.forEach(function (row, i) {
+            if (row.e) pts.push(x(row.e.v).toFixed(2) + "," + (y + i * rowH + 7).toFixed(2));
+          });
+          if (pts.length > 1) svg.appendChild(svgEl("polyline", { class: "link", points: pts.join(" ") }));
+        }
+
+        blk.rows.forEach(function (row) {
+          var e = row.e;
+          if (!e) { y += rowH; return; }
+          var cy = y + 7;
+          svg.appendChild(svgEl("line", {
+            class: row.variant ? "rng-basic" : null,
+            x1: x(e.lo), x2: x(e.hi), y1: cy, y2: cy,
+            stroke: "var(--muted)",
+            "stroke-width": row.variant ? 1.5 : (e.z ? 2.5 : 1.5),
+            opacity: row.variant ? .7 : (e.z ? 1 : .7),
+          }));
+          svg.appendChild(svgEl("circle", { cx: x(e.v), cy: cy, r: 2.6, fill: "var(--text)" }));
+          var sl = svgEl("text", { x: padL - 8, y: cy + 3.5, "text-anchor": "end" });
+          sl.textContent = row.lbl;
+          svg.appendChild(sl);
+          var vv = svgEl("text", { class: e.z ? "val" : "", x: W - padR + 5, y: cy + 3.5 });
+          vv.textContent = signed(e.v, 2) + (e.z ? "  ✓" : "");
+          svg.appendChild(vv);
+          y += rowH;
+        });
       });
       y += groupGap;
     });
@@ -1345,6 +1447,138 @@
     var cm = caveatMark(cavIds || (meta && meta.cav));
     if (cm) span.appendChild(cm);
     return span;
+  }
+
+  /* ---------- what the scoreboard already said ---------- */
+  /* The obvious objection to every number above it is "that is just K−D with
+     more arithmetic". The release answers it by regressing per-player-match
+     RWPA on K−D and shipping the fit, so this section renders that fit rather
+     than recomputing one: overall.kd carries {r2, corr, rows, top}, each row a
+     player-match with its K−D, its RWPA, the fit's prediction and the residual.
+     No overall.kd, no section — not an empty heading.
+
+     The residual list is rendered in the order the release ships it. Ordering it
+     here would make the page's own arithmetic decide which player-matches are
+     interesting, and the release is the thing that knows. */
+  function renderKD() {
+    var host = document.querySelector("[data-kd]");
+    var kd = D.overall.kd;
+    if (!host || !kd) return;
+    host.innerHTML = "";
+
+    var xOf = function (row) { return typeof row.kd === "number" ? row.kd : row.k - row.d; };
+    /* The extractor emits the per-row prediction as `pr`; `fit` on the block is
+       the line's two coefficients, not a per-row value. */
+    var fitOf = function (row) { return typeof row.pr === "number" ? row.pr : undefined; };
+    var rows = (kd.rows || []).filter(function (row) {
+      return isFinite(xOf(row)) && typeof row.rw === "number";
+    });
+
+    var head = el("div", "section-head");
+    var h2 = el("h2", null, "What this buys over the scoreboard");
+    /* c_kda is the governing caveat and it is a warn, so it only arrives by
+       being named: the two metrics are mechanically related and their agreement
+       is not independent validation of either. */
+    var hib = infoButton(["rwpa", "kda", "c_kda"], "RWPA against the box score");
+    if (hib) h2.appendChild(hib);
+    head.appendChild(h2);
+    var bits = [];
+    if (typeof kd.r2 === "number") bits.push("R² " + fmtKey("kd_r2", kd.r2));
+    if (typeof kd.corr === "number") bits.push("r " + fmtKey("kd_corr", kd.corr));
+    if (rows.length) bits.push(rows.length + " player-matches");
+    if (bits.length) head.appendChild(el("p", "note", bits.join(" · ")));
+    host.appendChild(head);
+
+    if (rows.length) {
+      var W = 950, H = 300, padL = 48, padR = 18, padT = 16, padB = 34;
+      var xlo = 0, xhi = 0, ylo = 0, yhi = 0;
+      rows.forEach(function (row) {
+        xlo = Math.min(xlo, xOf(row)); xhi = Math.max(xhi, xOf(row));
+        ylo = Math.min(ylo, row.rw); yhi = Math.max(yhi, row.rw);
+      });
+      var xp = Math.max(1, (xhi - xlo) * 0.06), yp = Math.max(0.25, (yhi - ylo) * 0.06);
+      xlo -= xp; xhi += xp; ylo -= yp; yhi += yp;
+      var X = function (v) { return padL + ((v - xlo) / (xhi - xlo)) * (W - padL - padR); };
+      var Y = function (v) { return padT + (1 - (v - ylo) / (yhi - ylo)) * (H - padT - padB); };
+
+      var fig = el("div", "fig");
+      var ttl = el("p", "fig-title", "Per-match RWPA against kills minus deaths");
+      var tf = tierFlag("kd_r2");
+      if (tf) ttl.appendChild(tf);
+      fig.appendChild(ttl);
+      var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img" });
+      var t = svgEl("title", {});
+      t.textContent = "Scatter of " + rows.length + " player-matches: kills minus deaths across, " +
+        "RWPA up, one dot per player-match in that player's colour, with the least-squares fit.";
+      svg.appendChild(t);
+
+      svg.appendChild(svgEl("line", { class: "zero-line", x1: X(0), x2: X(0), y1: padT, y2: Y(ylo) }));
+      svg.appendChild(svgEl("line", { class: "zero-line", x1: padL, x2: W - padR, y1: Y(0), y2: Y(0) }));
+      tickLadder(xhi - xlo, [1, 2, 5, 10, 20], xlo, xhi).forEach(function (v) {
+        var lb = svgEl("text", { x: X(v), y: H - 8, "text-anchor": "middle" });
+        lb.textContent = signed(v, 0);
+        svg.appendChild(lb);
+      });
+      tickLadder(yhi - ylo, [0.5, 1, 2, 5, 10], ylo, yhi).forEach(function (v) {
+        var lb = svgEl("text", { x: padL - 8, y: Y(v) + 3.5, "text-anchor": "end" });
+        lb.textContent = signed(v, 1);
+        svg.appendChild(lb);
+      });
+
+      /* The fit line is solid, unlike the dashed reference rules elsewhere: it
+         is a model of these points, not a benchmark they are compared against.
+         It is drawn from the release's own predictions at the two extreme
+         player-matches, so no regression is refitted in the browser. */
+      var fitted = rows.filter(function (row) { return typeof fitOf(row) === "number"; })
+        .sort(function (a, b) { return xOf(a) - xOf(b); });
+      if (fitted.length > 1) {
+        var a = fitted[0], b = fitted[fitted.length - 1];
+        svg.appendChild(svgEl("line", { class: "fit",
+          x1: X(xOf(a)), y1: Y(fitOf(a)), x2: X(xOf(b)), y2: Y(fitOf(b)) }));
+      }
+
+      rows.forEach(function (row) {
+        var dot = svgEl("circle", { class: row.p === "s" ? "dot-s" : "dot-m",
+          cx: X(xOf(row)), cy: Y(row.rw), r: 3.2, opacity: .85 });
+        var dt = svgEl("title", {});
+        var mt = matchById(row.mid);
+        dt.textContent = (SHORT[row.p] || row.p) + " · " + (mt ? mt.det + " · " + mt.map : row.mid) +
+          " · K−D " + signed(xOf(row), 0) + " · " + fmtKey("rwpa", row.rw);
+        dot.appendChild(dt);
+        svg.appendChild(dot);
+      });
+      fig.appendChild(figScroll(svg, W));
+      host.appendChild(fig);
+    }
+
+    var top = kd.top || [];
+    if (top.length) {
+      host.appendChild(el("p", "fig-title",
+        "The " + top.length + " player-matches the fit misses by most"));
+      host.appendChild(miniTable(
+        ["Match", "Player", "K−D", withFlags(null, "rwpa"), "Fit", "Residual"],
+        top.map(function (row) {
+          var mt = matchById(row.mid);
+          return [
+            mt ? mt.det + " · " + mt.map : (row.mid || "—"),
+            SHORT[row.p] || row.p || "—",
+            isFinite(xOf(row)) ? signed(xOf(row), 0) : "—",
+            typeof row.rw === "number" ? signed(row.rw, 2) : "—",
+            typeof fitOf(row) === "number" ? signed(fitOf(row), 2) : "—",
+            typeof row.res === "number" ? signed(row.res, 2) : "—",
+          ];
+        })
+      ));
+    }
+  }
+
+  /* Ticks on the first ladder step that keeps five or fewer of them — the same
+     rule the walk and the range figure use, in one place. */
+  function tickLadder(span, ladder, lo, hi) {
+    var step = ladder.filter(function (v) { return v >= span / 5; })[0] || ladder[ladder.length - 1];
+    var out = [];
+    for (var v = Math.ceil(lo / step) * step; v <= hi; v += step) out.push(v);
+    return out;
   }
 
   var CTRL = { neither: "Neither of us", exactly_one: "One of us", both: "Both of us" };
@@ -1978,7 +2212,92 @@
       })));
     }
     table.appendChild(tb3);
+
+    /* ---- band 4: the round's probability trace ---- */
+    var wp = wpFig(r);
+    if (wp) {
+      var tb4 = el("tbody");
+      tb4.appendChild(band("Win probability", "attack-relative · even at 0.5 · we played " +
+        SIDE[r.sd].toLowerCase()));
+      var wtr = el("tr");
+      var wtd = el("td", "wp-cell");
+      wtd.colSpan = 3;
+      wtd.appendChild(wp);
+      wtr.appendChild(wtd);
+      tb4.appendChild(wtr);
+      table.appendChild(tb4);
+    }
     return { table: table, measured: measured };
+  }
+
+  /* ---------- the round's own probability trace ---------- */
+  /* One line for the round, attack-relative, against the round clock. It is the
+     model's state probability, NOT either player's credit: the credit is the
+     band above, per player, in its own units. What is per-player here is only
+     which marks are whose — a focal player's event is a filled dot in their hue,
+     anyone else's is a neutral tick, so the two are told apart by shape and size
+     before colour is consulted.
+
+     Absent until the release ships matches[].rs[].wp, and absent for a round
+     with no trace: the sheet is then the three bands it is today. */
+  function wpFig(r) {
+    var trace = r.wp;
+    if (!trace || !trace.length) return null;
+
+    var W = 950, H = 116, padL = 34, padR = 14, padT = 12, padB = 22;
+    var tMax = r.tt / 1000;
+    trace.forEach(function (e) { tMax = Math.max(tMax, e[0]); });
+    var x = function (t) { return padL + (tMax ? t / tMax : 0) * (W - padL - padR); };
+    /* The axis is the full probability range, always. A domain fitted to the
+       round would make a 0.48–0.52 round look like a knife fight. */
+    var y = function (p) { return padT + (1 - p) * (H - padT - padB); };
+
+    var fig = el("div", "fig");
+    var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img" });
+    var t = svgEl("title", {});
+    t.textContent = "Attack-relative round win probability for round " + r.n + ", " +
+      trace.length + " points from " + fmtSpec({ dec: 3 }, trace[0][1]) + " at the round start to " +
+      fmtSpec({ dec: 3 }, trace[trace.length - 1][1]) + " at " +
+      fmtSpec({ dec: 0 }, trace[trace.length - 1][0]) + " seconds, with a mark at each event.";
+    svg.appendChild(t);
+
+    /* the even rule, which is what the trace is read against */
+    svg.appendChild(svgEl("line", { class: "zero-line", x1: padL, x2: W - padR, y1: y(.5), y2: y(.5) }));
+    svg.appendChild(svgEl("line", { class: "axis-line", x1: padL, x2: W - padR, y1: y(0), y2: y(0) }));
+    [0, .5, 1].forEach(function (p) {
+      var lb = svgEl("text", { x: padL - 6, y: y(p) + 3.5, "text-anchor": "end" });
+      lb.textContent = fmtSpec({ dec: 1 }, p);
+      svg.appendChild(lb);
+    });
+    [0, tMax].forEach(function (tv) {
+      var lb = svgEl("text", { x: x(tv), y: H - 6, "text-anchor": tv ? "end" : "start" });
+      lb.textContent = fmtSpec({ dec: 0, suf: "s" }, tv);
+      svg.appendChild(lb);
+    });
+
+    svg.appendChild(svgEl("path", { class: "wp-line", d: trace.map(function (e, i) {
+      return (i ? "L" : "M") + x(e[0]).toFixed(2) + " " + y(e[1]).toFixed(2);
+    }).join(" ") }));
+
+    trace.forEach(function (e) {
+      if (!e[2]) return;
+      var focal = PLAYERS.indexOf(e[3]) >= 0;
+      var mark = focal
+        ? svgEl("circle", { class: e[3] === "m" ? "dot-m" : "dot-s", cx: x(e[0]), cy: y(e[1]),
+            r: 3.4, stroke: "var(--panel-2)", "stroke-width": 1.2 })
+        : svgEl("line", { class: "wp-ev", x1: x(e[0]), x2: x(e[0]),
+            y1: y(e[1]) - 3.5, y2: y(e[1]) + 3.5 });
+      var tt = svgEl("title", {});
+      /* an event with no actor — the spike detonating — names no one */
+      tt.textContent = [code("ev", e[2], true), e[3] ? code("os", e[3]) : null,
+        fmtSpec({ dec: 0, suf: "s" }, e[0]), fmtSpec({ dec: 3 }, e[1])]
+        .filter(Boolean).join(" · ");
+      mark.appendChild(tt);
+      svg.appendChild(mark);
+    });
+
+    fig.appendChild(figScroll(svg, W));
+    return fig;
   }
 
   function band(title, axis) {
@@ -2197,6 +2516,7 @@
   renderVerdict();
   renderMatchTable();
   renderCorpus();
+  renderKD();
   renderLayers();
   renderProvenance();
   route();

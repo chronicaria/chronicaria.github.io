@@ -1,7 +1,7 @@
 /* sw.js — minimal offline cache for chronicaria.github.io */
 "use strict";
 
-const VERSION = "broadsheet-v3";
+const VERSION = "broadsheet-v5";
 
 const PRECACHE = [
   "/",
@@ -41,7 +41,15 @@ self.addEventListener("fetch", (event) => {
   try { url = new URL(req.url); } catch (e) { return; }
   if (url.origin !== self.location.origin) return;
 
-  const networkFirst = url.pathname.includes("/data/") || url.pathname.includes("daily.xml");
+  /* Anything that carries the current numbers goes to the network first, so a
+     published correction is visible on the next load rather than whenever the
+     cache name next changes.  `/data/` alone missed `/valorant/data.js`, which
+     is a payload despite living beside the code that reads it. */
+  const networkFirst =
+    req.mode === "navigate" ||
+    url.pathname.includes("/data/") ||
+    url.pathname.endsWith("data.js") ||
+    url.pathname.endsWith("daily.xml");
 
   if (networkFirst) {
     event.respondWith(
@@ -53,15 +61,27 @@ self.addEventListener("fetch", (event) => {
         })
         .catch(() => caches.match(req))
     );
-  } else {
-    event.respondWith(
-      caches.match(req).then((cached) => cached || fetch(req).then((res) => {
-        if (res && res.ok) {
-          const copy = res.clone();
-          caches.open(VERSION).then((cache) => cache.put(req, copy)).catch(() => {});
-        }
-        return res;
-      }))
-    );
+    return;
   }
+
+  /* Everything else is stale-while-revalidate rather than cache-first.
+     Cache-first never re-checked, so a cached asset was pinned until VERSION
+     changed by hand -- miss that bump and the site serves the previous build
+     forever, which is exactly how a shipped update stayed invisible. Serving
+     the cached copy keeps it fast and keeps it working offline; the background
+     refresh means the next load is current without anyone remembering. */
+  event.respondWith(
+    caches.match(req).then((cached) => {
+      const fresh = fetch(req)
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(VERSION).then((cache) => cache.put(req, copy)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() => cached);
+      return cached || fresh;
+    })
+  );
 });

@@ -976,13 +976,20 @@
       var people = (C.scopes || { corpus: C.p })[active];
       var seasonScope = active !== "corpus";
 
+      /* The shared-match count is per scope and the player count is per scope:
+         a corpus-wide "the four share 0" was printed under a three-player
+         season table where two of them share 21. Both now come from the data
+         being rendered. */
+      var n = Object.keys(people).length;
+      var shared = (C.shared_by_scope || {})[active];
+      if (shared === undefined) { shared = C.shared; }
       note.textContent =
         (seasonScope
           ? "Only matches from " + active + ". "
           : "Every match we hold for each player. ")
         + "Each interval covers one player's own matches and is not comparable "
-        + "with the others — the four share " + C.shared
-        + " matches. Exposure is on every row"
+        + "with the others — all " + n + " share " + shared
+        + (shared === 1 ? " match" : " matches") + ". Exposure is on every row"
         + (seasonScope
           ? "; a player with no games this season has no row."
           : ", and the spans show the eras barely overlap.");

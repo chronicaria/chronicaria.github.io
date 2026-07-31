@@ -381,6 +381,13 @@ h2:hover .hash-link,
 .semester .code.dept-hum { color: #2f6b4f; }
 .semester .code.dept-hum.grad { color: #47795f; }
 
+.aside-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--gray);
+}
+
 /* ── published work ─────────────────────────────────────────── */
 
 .shelf {

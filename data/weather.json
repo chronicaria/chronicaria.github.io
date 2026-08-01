@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-01T18:00:00Z",
-  "updated": "2026-08-01T19:44:49Z",
+  "valid_time_utc": "2026-08-01T21:00:00Z",
+  "updated": "2026-08-01T22:28:35Z",
   "hottest": [
-    {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 106.0
-    },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 105.1
+      "temp_f": 112.0
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 111.4
     },
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 104.3
+      "temp_f": 110.1
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.8
+      "temp_f": 49.5
     },
     {
       "name": "Aleutians East",
       "state": "AK",
-      "temp_f": 50.2
+      "temp_f": 51.7
     },
     {
-      "name": "Yakutat",
+      "name": "Ketchikan Gateway",
       "state": "AK",
-      "temp_f": 50.5
+      "temp_f": 52.5
     }
   ],
   "national": {
-    "min_f": 48.8,
-    "max_f": 106.0,
-    "mean_f": 81.4
+    "min_f": 49.5,
+    "max_f": 112.0,
+    "mean_f": 83.1
   }
 }

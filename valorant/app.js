@@ -1044,6 +1044,118 @@
     host.appendChild(note);
   }
 
+
+  /* ---------- the splits: pistols, bonus, maps, guns, economy ---------- */
+  /* Raw frequencies over one small cohort, so every row prints its exposure and
+     nothing here is drawn with an interval it does not have. The block leads
+     with the pistol because that is where the largest, most repeatable effect
+     in this dataset actually is, and ends with the Odin because that is where
+     the dataset refuses to answer. */
+  function renderSplits() {
+    var host = document.querySelector("[data-splits]");
+    if (!host) return;
+    var S = D.overall.splits;
+    if (!S) return;
+
+    host.appendChild(sectionHead("Questions we asked our own games",
+      "Counts, not models. Each row carries the rounds it rests on."));
+
+    /* pistols and the round they buy */
+    var pf = el("div", "fig");
+    pf.appendChild(el("p", "fig-title", "Pistol rounds, and what happens next"));
+    var pistolRows = [
+      ["Pistol, attacking", S.pistol.a],
+      ["Pistol, defending", S.pistol.d],
+      ["Pistol, either side", S.pistol.all]
+    ].map(function (row) {
+      return [row[0], row[1].n + " rounds", row[1].w + " won", pct1(row[1].pct)];
+    });
+    pf.appendChild(miniTable(["Round", "Exposure", "Won", "Rate"], pistolRows));
+    var bf = [
+      ["Bonus round after WINNING the pistol", S.bonus.after_win],
+      ["Bonus round after LOSING the pistol", S.bonus.after_loss]
+    ].map(function (row) {
+      return [row[0], row[1].n + " rounds", row[1].w + " won", pct1(row[1].pct)];
+    });
+    pf.appendChild(miniTable(["Round", "Exposure", "Won", "Rate"], bf));
+    pf.appendChild(el("p", "note",
+      "The pistol decides the round after it almost completely: " +
+      pct1(S.bonus.after_win.pct) + " of bonus rounds are won after taking the " +
+      "pistol and " + pct1(S.bonus.after_loss.pct) + " after dropping it — " +
+      S.bonus.after_loss.w + " win in " + S.bonus.after_loss.n + " tries."));
+    host.appendChild(pf);
+
+    /* maps */
+    var mf = el("div", "fig");
+    mf.appendChild(el("p", "fig-title", "Maps"));
+    mf.appendChild(miniTable(
+      ["Map", "Matches", "Rounds", "Round win rate", withFlags(SHORT.m, "rwpa100"), withFlags(SHORT.s, "rwpa100")],
+      S.maps.map(function (row) {
+        return [row.map, row.matches, row.n, pct1(row.pct),
+          fmtKey("rwpa100", row.rw.m), fmtKey("rwpa100", row.rw.s)];
+      })));
+    mf.appendChild(el("p", "note",
+      "Two to five matches a map. These are the smallest slices on the page and " +
+      "the ones most likely to reverse on the next few games."));
+    host.appendChild(mf);
+
+    /* guns */
+    PLAYERS.forEach(function (pid) {
+      var rows = (S.guns || {})[pid] || [];
+      if (!rows.length) return;
+      var gf = el("div", "fig");
+      gf.appendChild(el("p", "fig-title", SHORT[pid] + " by primary weapon"));
+      gf.appendChild(miniTable(
+        ["Weapon", "Rounds", "Round win rate", withFlags("RWPA", "rwpa100"), "Kills", "Damage / round"],
+        rows.map(function (g) {
+          return [g.weapon, g.n, pct1(g.pct), fmtKey("rwpa100", g.rw), g.k, g.dmg.toFixed(0)];
+        })));
+      gf.appendChild(el("p", "note",
+        "Weapons under " + S.gun_floor + " rounds are not listed. A weapon is " +
+        "chosen with the round's economy, so these compare buys as much as guns."));
+      host.appendChild(gf);
+    });
+
+    /* economy */
+    var ef = el("div", "fig");
+    ef.appendChild(el("p", "fig-title", "What each of us gets for the money"));
+    ef.appendChild(miniTable(
+      ["Player", "Rounds", "Mean loadout", "Damage per 1,000 credits", "Kills per 1,000"],
+      PLAYERS.map(function (pid) {
+        var e = S.econ[pid];
+        return [SHORT[pid], e.rounds, e.spend, e.dmg_per_k, e.k_per_k];
+      })));
+    host.appendChild(ef);
+
+    /* the question the data will not answer */
+    var o = S.odin;
+    if (o) {
+      var wp = o.won_pistol, lp = o.lost_pistol;
+      var of_ = el("div", "fig");
+      of_.appendChild(el("p", "fig-title", "The Odin question, and why it has no answer"));
+      of_.appendChild(miniTable(
+        ["Bonus round after", "No Odin", "Odin"],
+        [["winning the pistol", wp[0], wp[1]], ["losing the pistol", lp[0], lp[1]]]));
+      of_.appendChild(el("p", "note",
+        "“How do I do when I buy an Odin on the bonus round?” cannot be " +
+        "answered here. " + SHORT.m + " bought it " + wp[1] + " times out of " +
+        (wp[0] + wp[1]) + " after winning the pistol and " + lp[1] + " times out of " +
+        (lp[0] + lp[1]) + " after losing it. The buy is not a choice this data " +
+        "can separate from the pistol result — it IS the pistol result. Any win " +
+        "rate attached to the rifle would be the pistol's win rate wearing its name."));
+      host.appendChild(of_);
+    }
+  }
+
+  function pct1(v) { return typeof v === "number" ? v.toFixed(1) + "%" : "—"; }
+
+  function sectionHead(title, note) {
+    var wrap = el("div", "section-head");
+    wrap.appendChild(el("h2", null, title));
+    if (note) wrap.appendChild(el("p", "note", note));
+    return wrap;
+  }
+
   /* ---------- match table ---------- */
   var matchSort = { key: "seq", dir: -1 };
   /* one shared magnitude domain for the RWPA columns — rule 7 */
@@ -2600,6 +2712,7 @@
   /* ---------- boot ---------- */
   renderHeader();
   renderLead();
+  renderSplits();
   renderVerdict();
   renderMatchTable();
   renderCorpus();

@@ -318,12 +318,27 @@
   var walkReadout = document.querySelector("[data-walk-readout]");
   var walkGeom = null;
 
-  function cumulative(pid) {
+  /* A RATE, not a running total.
+     A cumulative line climbs with exposure whether or not the player did
+     anything, and the eye reads its level — so the old chart quietly rewarded
+     playing more rounds and made two identical players at different exposures
+     look different. Dividing by rounds played removes exposure from the y-axis:
+     the line now converges instead of drifting, it ends exactly on the per-100
+     figure Cohort totals quotes, and the null corridor becomes a funnel that
+     tightens toward zero, which is the true shape of the uncertainty.
+
+     Null below the release's own rate floor rather than a wild early swing —
+     the page will not quote a per-100 rate on fewer rounds than that, so the
+     figure that leads the page must not draw one. */
+  var RATE_FLOOR = (D.overall.walk_band && D.overall.walk_band.floor) ||
+    (D.meta.gate && D.meta.gate.min_elig_rounds_for_rate) || 20;
+
+  function rateWalk(pid) {
     var run = 0, out = [];
-    SEQ.forEach(function (s) {
+    SEQ.forEach(function (s, i) {
       var pr = s.r.p[pid];
       if (s.r.el && pr && typeof pr.rw === "number") run += pr.rw;
-      out.push(run);
+      out.push(i + 1 >= RATE_FLOOR ? (100 * run) / (i + 1) : null);
     });
     return out;
   }
@@ -368,20 +383,37 @@
     var narrow = W < 640;
     walkFig.setAttribute("viewBox", "0 0 " + W + " " + H);
 
-    var series = { m: cumulative("m"), s: cumulative("s") };
+    var series = { m: rateWalk("m"), s: rateWalk("s") };
     var nul = walkNull();
-    /* Both series start at 0, so 0 is inside [lo, hi] by construction and the
-       zero rule is always drawn. The domain is deliberately NOT forced
-       symmetric about zero — that would put back the dead space this removes. */
+    /* Zero is pinned into the domain rather than arriving for free: a rate walk
+       does not start at zero the way a cumulative one did, so without this the
+       zero rule could fall outside the frame — and zero is the whole comparison. */
+    /* Scaled to the region that carries the signal, not to the whole series.
+       A running rate over its first few dozen rounds swings to several times its
+       eventual value — that is arithmetic, not information — and letting it set
+       the domain squashes the entire informative back half into a few pixels.
+       The domain therefore starts once exposure is a fifth of the way in; the
+       early strokes still draw, and clip against the plot box, which reads
+       correctly as "off the scale, and settling". */
+    var SETTLE = Math.max(RATE_FLOOR, Math.round(SEQ.length * 0.2));
     var lo = 0, hi = 0;
     PLAYERS.forEach(function (pid) {
-      series[pid].forEach(function (v) { lo = Math.min(lo, v); hi = Math.max(hi, v); });
+      series[pid].forEach(function (v, i) {
+        if (v === null || i < SETTLE) return;
+        lo = Math.min(lo, v); hi = Math.max(hi, v);
+      });
     });
     /* The corridor is wider than either walk, and holding it is the point: the
-       two lines then visibly sit inside it instead of filling the frame. */
+       two lines then visibly sit inside it instead of filling the frame. The
+       funnel's first few rounds are enormous, so the domain follows the corridor
+       from the rate floor onward, not from its widest point. */
     if (nul) {
-      lo = Math.min(lo, Math.min.apply(null, nul.lo));
-      hi = Math.max(hi, Math.max.apply(null, nul.hi));
+      var finite = function (arr) {
+        return arr.filter(function (v) { return typeof v === "number"; });
+      };
+      var nlo = finite(nul.lo.slice(SETTLE)), nhi = finite(nul.hi.slice(SETTLE));
+      if (nlo.length) lo = Math.min(lo, Math.min.apply(null, nlo));
+      if (nhi.length) hi = Math.max(hi, Math.max.apply(null, nhi));
     }
     var pad = Math.max(0.25, (hi - lo) * 0.06);
     lo -= pad; hi += pad;
@@ -390,6 +422,14 @@
     var x = function (i) { return PAD_L + (SEQ.length < 2 ? 0 : (i / (SEQ.length - 1)) * plotW); };
     var y = function (v) { return PAD_T + (1 - (v - lo) / (hi - lo)) * (H - PAD_T - PAD_B); };
     walkGeom = { x: x, y: y, series: series };
+
+    var clipId = "walk-clip";
+    var defs = svgEl("defs", {});
+    var clip = svgEl("clipPath", { id: clipId });
+    clip.appendChild(svgEl("rect", { x: PAD_L, y: PAD_T,
+      width: plotW, height: H - PAD_T - PAD_B }));
+    defs.appendChild(clip);
+    walkFig.appendChild(defs);
 
     var g = svgEl("g", {});
 
@@ -414,19 +454,27 @@
        contrast.py's MARKS comment records, and any alpha faint enough to leave
        the two lines legible falls under the 3:1 mark floor. */
     if (nul) {
+      /* Skips the nulls below the rate floor and re-opens the subpath after any
+         gap, so a suppressed span leaves a break rather than a line drawn
+         straight through the region the gate says is unreportable. */
       var edge = function (vals) {
-        return vals.map(function (v, i) {
-          return (i ? "L" : "M") + x(i).toFixed(2) + " " + y(v).toFixed(2);
-        }).join(" ");
+        var d = "", pen = false;
+        vals.forEach(function (v, i) {
+          if (typeof v !== "number") { pen = false; return; }
+          d += (pen ? " L" : (d ? " M" : "M")) + x(i).toFixed(2) + " " + y(v).toFixed(2);
+          pen = true;
+        });
+        return d;
       };
-      g.appendChild(svgEl("path", { class: "walk-null", d: edge(nul.hi) + " " + edge(nul.lo) }));
+      g.appendChild(svgEl("path", { class: "walk-null", "clip-path": "url(#" + clipId + ")",
+        d: edge(nul.hi) + " " + edge(nul.lo) }));
       /* Named on the upper curve rather than only in the legend, off-centre so
          the label sits in the corridor's own headroom. It runs back from its
          anchor, not forward: the envelope widens left to right, so the curve is
          below the label over the span the label occupies and never crosses it. */
       var ci = Math.round((SEQ.length - 1) * 0.62);
       var cap = svgEl("text", { class: "walk-tick", "text-anchor": "end",
-        x: x(ci), y: y(nul.hi[ci]) - 7 });
+        x: x(ci), y: y(nul.hi[ci] === null ? nul.hi[nul.hi.length - 1] : nul.hi[ci]) - 7 });
       cap.textContent = nul.lbl;
       g.appendChild(cap);
     }
@@ -451,8 +499,14 @@
 
     /* the two lines */
     PLAYERS.forEach(function (pid) {
-      var dd = series[pid].map(function (v, i) { return (i ? "L" : "M") + x(i).toFixed(2) + " " + y(v).toFixed(2); }).join(" ");
-      g.appendChild(svgEl("path", { class: "walk-line " + pid, d: dd }));
+      var dd = "", pen = false;
+      series[pid].forEach(function (v, i) {
+        if (typeof v !== "number") { pen = false; return; }
+        dd += (pen ? " L" : (dd ? " M" : "M")) + x(i).toFixed(2) + " " + y(v).toFixed(2);
+        pen = true;
+      });
+      if (dd) g.appendChild(svgEl("path", { class: "walk-line " + pid,
+        "clip-path": "url(#" + clipId + ")", d: dd }));
     });
 
     /* interval gutter — same scale as the walk */
@@ -465,7 +519,7 @@
          the line and never the value */
       if (Math.abs(yEnd - other) < 11) yEnd += (yEnd <= other ? -6 : 6);
       var lab = svgEl("text", { class: "walk-end " + pid, x: x(SEQ.length - 1) + 7, y: yEnd + 4 });
-      lab.textContent = signed(lastV, 2);
+      lab.textContent = fmtKey("rwpa100", lastV);
       g.appendChild(lab);
     });
 
@@ -504,13 +558,16 @@
     if (unscored) legend.appendChild(swatchSpan("hatch", "no scorable endpoint", true));
     if (nul) legend.appendChild(swatchSpan("dash", nul.lbl, true));
 
+    /* The description states the ESTIMAND, not just the shape: a reader on a
+       screen reader gets the same sentence a sighted reader gets from the axis. */
     walkFig.querySelector("[data-walk-desc]").textContent =
-      "Cumulative round win probability added over " + SEQ.length + " rounds, in play order. " +
-      SHORT.m + " ends at " + signed(series.m[SEQ.length - 1], 2) + " and " +
-      SHORT.s + " at " + signed(series.s[SEQ.length - 1], 2) + "." +
-      (nul ? " A dashed corridor of sign-shuffled walks runs the length of the figure, " +
-        "ending at " + signed(nul.lo[SEQ.length - 1], 2) + " to " +
-        signed(nul.hi[SEQ.length - 1], 2) + "." : "");
+      "Round win probability added per 100 rounds, running through " + SEQ.length +
+      " rounds in play order, suppressed below " + RATE_FLOOR + " rounds. " +
+      SHORT.m + " settles at " + fmtKey("rwpa100", series.m[SEQ.length - 1]) + " and " +
+      SHORT.s + " at " + fmtKey("rwpa100", series.s[SEQ.length - 1]) + "." +
+      (nul ? " A dashed funnel of sign-shuffled walks narrows to " +
+        fmtKey("rwpa100", nul.lo[SEQ.length - 1]) + " to " +
+        fmtKey("rwpa100", nul.hi[SEQ.length - 1]) + " by the final round, and both lines stay inside it." : "");
   }
 
   function walkAt(i) {
@@ -526,9 +583,14 @@
     ];
     PLAYERS.forEach(function (pid) {
       var pr = s.r.p[pid];
-      var cum = walkGeom.series[pid][i];
-      var delta = s.r.el && pr && typeof pr.rw === "number" ? signed(pr.rw, 3) : "—";
-      lines.push(SHORT[pid] + " " + signed(cum, 2) + " (" + delta + ")");
+      /* Two different quantities, so two different units: the running RATE the
+         line is drawn in, and this one round's contribution as a probability.
+         Both come from the payload's own formats rather than a literal here. */
+      var rate = walkGeom.series[pid][i];
+      var delta = s.r.el && pr && typeof pr.rw === "number" ? fmtKey("rw_r", pr.rw) : "—";
+      lines.push(SHORT[pid] + " " +
+        (typeof rate === "number" ? fmtKey("rwpa100", rate) : "—") +
+        " (" + delta + ")");
     });
     /* The p belongs to the whole walk, not to the round under the cursor, so it
        is its own line rather than a fourth number on the player's row: how often
@@ -691,7 +753,7 @@
     var x = function (v) { return padL + ((v + dom) / (2 * dom)) * (W - padL - padR); };
 
     var fig = el("div", "fig");
-    var ttl = el("p", "fig-title", "How " + SHORT[pid] + " got to " + signed(net, 3));
+    var ttl = el("p", "fig-title", "How " + SHORT[pid] + " got to " + fmtKey("rwpa", net));
     /* The two method cards that used to narrate this figure from 40px away are
        gone; every sentence they carried is in this panel, from the payload. */
     var ib = infoButton(["comp", "kc_r", "dd_r", "pl_r", "df_r", "rc_r"], "the credit types");
@@ -700,7 +762,7 @@
     var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img" });
     var t = svgEl("title", {});
     t.textContent = "Credit-type decomposition for " + SHORT[pid] +
-      ", five steps summing to " + signed(net, 3) + ".";
+      ", five steps summing to " + fmtKey("rwpa", net) + ".";
     svg.appendChild(t);
 
     svg.appendChild(svgEl("line", { class: "zero-line", x1: x(0), x2: x(0), y1: 4, y2: comp.length * rowH + 2 }));
@@ -719,7 +781,7 @@
       lab.textContent = COMP_LABEL[c.ct] || c.ct;
       svg.appendChild(lab);
       var val = svgEl("text", { class: "val", x: W - padR + 6, y: y + 9 });
-      val.textContent = signed(c.v, 2);
+      val.textContent = fmtKey("comp", c.v);
       svg.appendChild(val);
     });
 
@@ -730,7 +792,7 @@
     svg.appendChild(nl);
     svg.appendChild(svgEl("circle", { class: "net", cx: x(net), cy: ny + 7, r: 3.5 }));
     var nv = svgEl("text", { class: "val", x: W - padR + 6, y: ny + 11 });
-    nv.textContent = signed(net, 2);
+    nv.textContent = fmtKey("rwpa", net);
     svg.appendChild(nv);
 
     fig.appendChild(figScroll(svg, W));
@@ -860,7 +922,7 @@
           sl.textContent = row.lbl;
           svg.appendChild(sl);
           var vv = svgEl("text", { class: e.z ? "val" : "", x: W - padR + 5, y: cy + 3.5 });
-          vv.textContent = signed(e.v, 2) + (e.z ? "  ✓" : "");
+          vv.textContent = fmtKey("rwpa100", e.v) + (e.z ? "  ✓" : "");
           svg.appendChild(vv);
           y += rowH;
         });
@@ -892,9 +954,9 @@
     point.style.left = "calc(" + pct(ci.v) + "% - 1px)";
     bar.appendChild(zero); bar.appendChild(range); bar.appendChild(point);
     var scale = el("div", "ci-scale");
-    scale.appendChild(el("span", null, signed(ci.lo, 2)));
+    scale.appendChild(el("span", null, fmtKey("rwpa100", ci.lo)));
     scale.appendChild(el("span", null, ci.z ? "excludes zero" : "includes zero"));
-    scale.appendChild(el("span", null, signed(ci.hi, 2)));
+    scale.appendChild(el("span", null, fmtKey("rwpa100", ci.hi)));
     wrap.appendChild(bar); wrap.appendChild(scale);
     return wrap;
   }
@@ -916,17 +978,17 @@
       var card = el("div", "card " + pid);
       card.appendChild(el("h3", null, NAME[pid]));
 
-      var big = el("span", "big " + signCls(p.rw.v), signed(p.rw.v, 3));
+      var big = el("span", "big " + signCls(p.rw.v), fmtKey("rwpa", p.rw.v));
       card.appendChild(big);
       card.appendChild(el("span", "big-sub",
-        signed(p.rw100.v, 3) + " per 100 · " + p.rounds_elig + " eligible rounds"));
+        fmtKey("rwpa100", p.rw100.v) + " · " + p.rounds_elig + " eligible rounds"));
 
       card.appendChild(ciBar(p.rw100, lo, hi));
 
       var line = el("div", "statline");
       [
-        ["Action", signed(p.ra, 3)],
-        ["Clock", signed(p.rc, 3)],
+        ["Action", fmtKey("rwpa_act", p.ra)],
+        ["Clock", fmtKey("rwpa_clk", p.rc)],
         ["K / D / A", p.k + " / " + p.d + " / " + p.a],
         /* label from the dictionary: this is (K+A)/D, and calling it K/D was
            the defect two verifiers independently caught in the extractor */
@@ -1015,7 +1077,7 @@
       } },
     { key: "rw", lbl: "RWPA", mag: true,
       get: function (m, pid) { return m.p[pid].rw; },
-      cell: function (m, pid) { return el("span", signCls(m.p[pid].rw), signed(m.p[pid].rw, 3)); } },
+      cell: function (m, pid) { return el("span", signCls(m.p[pid].rw), fmtKey("rwpa_m", m.p[pid].rw)); } },
   ].forEach(function (g) {
     MATCH_GROUPS.push({ lbl: g.lbl, span: 2 });
     PLAYERS.forEach(function (pid) {
@@ -1039,7 +1101,7 @@
      Direction carries the sign; a negative bar is hollowed rather than recoloured. */
   function rwpaCell(v, pid, scale) {
     var wrap = el("span");
-    wrap.appendChild(el("span", signCls(v), signed(v, 3)));
+    wrap.appendChild(el("span", signCls(v), fmtKey("rw_r", v)));
     var bar = el("span", "bar");
     var i = el("i", v < 0 ? "down" : null);
     var frac = Math.min(1, Math.abs(v) / scale) * 50;
@@ -1114,10 +1176,10 @@
       rows.forEach(function (p) {
         var tr = el("tr");
         tr.appendChild(el("td", "l", p.nm));
-        tr.appendChild(el("td", signCls(p.rw.v), signed(p.rw.v, 3)));
-        tr.appendChild(el("td", signCls(p.rw100.v), signed(p.rw100.v, 3)));
+        tr.appendChild(el("td", signCls(p.rw.v), fmtKey("rwpa", p.rw.v)));
+        tr.appendChild(el("td", signCls(p.rw100.v), fmtKey("rwpa100", p.rw100.v)));
         tr.appendChild(el("td", "dim",
-          "[" + signed(p.rw100.lo, 2) + ", " + signed(p.rw100.hi, 2) + "]"
+          "[" + fmtKey("rwpa100", p.rw100.lo) + ", " + fmtKey("rwpa100", p.rw100.hi) + "]"
           + (p.rw100.lo * p.rw100.hi > 0 ? "" : " · includes zero")));
         tr.appendChild(el("td", null, String(p.n)));
         tr.appendChild(el("td", null, String(p.rn)));
@@ -1521,7 +1583,7 @@
       });
       tickLadder(yhi - ylo, [0.5, 1, 2, 5, 10], ylo, yhi).forEach(function (v) {
         var lb = svgEl("text", { x: padL - 8, y: Y(v) + 3.5, "text-anchor": "end" });
-        lb.textContent = signed(v, 1);
+        lb.textContent = fmtKey("rwpa_m", v);
         svg.appendChild(lb);
       });
 
@@ -1543,7 +1605,7 @@
         var dt = svgEl("title", {});
         var mt = matchById(row.mid);
         dt.textContent = (SHORT[row.p] || row.p) + " · " + (mt ? mt.det + " · " + mt.map : row.mid) +
-          " · K−D " + signed(xOf(row), 0) + " · " + fmtKey("rwpa", row.rw);
+          " · K−D " + signed(xOf(row), 0) + " · " + fmtKey("rwpa_m", row.rw);
         dot.appendChild(dt);
         svg.appendChild(dot);
       });
@@ -1563,9 +1625,9 @@
             mt ? mt.det + " · " + mt.map : (row.mid || "—"),
             SHORT[row.p] || row.p || "—",
             isFinite(xOf(row)) ? signed(xOf(row), 0) : "—",
-            typeof row.rw === "number" ? signed(row.rw, 2) : "—",
-            typeof fitOf(row) === "number" ? signed(fitOf(row), 2) : "—",
-            typeof row.res === "number" ? signed(row.res, 2) : "—",
+            typeof row.rw === "number" ? fmtKey("rwpa_m", row.rw) : "—",
+            typeof fitOf(row) === "number" ? fmtKey("rwpa_m", fitOf(row)) : "—",
+            typeof row.res === "number" ? fmtKey("rwpa_m", row.res) : "—",
           ];
         })
       ));
@@ -1786,17 +1848,17 @@
       var p = m.p[pid];
       var card = el("div", "card " + pid);
       card.appendChild(el("h3", null, SHORT[pid] + " · " + p.ag));
-      card.appendChild(el("span", "big " + signCls(p.rw), signed(p.rw, 3)));
+      card.appendChild(el("span", "big " + signCls(p.rw), fmtKey("rwpa_m", p.rw)));
       card.appendChild(el("span", "big-sub", p.r100_ok
-        ? signed(p.r100, 2) + " per 100 rounds"
+        ? fmtKey("rwpa100_m", p.r100) + " over " + p.rounds_elig + " rounds"
         : "rate suppressed — under " + D.meta.gate.min_elig_rounds_for_rate + " eligible rounds"));
       var line = el("div", "statline");
       [
         ["K / D / A", p.k + " / " + p.d + " / " + p.a],
         ["ADR", p.adr.toFixed(1)],
         ["ACS", p.acs.toFixed(1)],
-        ["Action", signed(p.ra, 3)],
-        ["Clock", signed(p.rc, 3)],
+        ["Action", fmtKey("rwpa_act_m", p.ra)],
+        ["Clock", fmtKey("rwpa_clk_m", p.rc)],
         ["Act tier", p.tier],
       ].forEach(function (pair) {
         var st = el("div", "stat");
@@ -1974,7 +2036,7 @@
             tr.appendChild(td);
           });
         } else {
-          var a = el("td", pid + "-cell " + signCls(pr.ra), signed(pr.ra, 3));
+          var a = el("td", pid + "-cell " + signCls(pr.ra), fmtKey("ra_r", pr.ra));
           var w = el("td", pid + "-cell");
           w.appendChild(rwpaCell(pr.rw, pid, maxAbs));
           tr.appendChild(a); tr.appendChild(w);
@@ -2021,7 +2083,10 @@
       td.appendChild(el("span", "v dim", "—"));
       return td;
     }
-    var txt = opts.fmtKey ? fmtKey(opts.fmtKey, v) : fmtSpec(opts.spec, v);
+    /* `key` names a dictionary entry and is preferred: the unit then lives in
+       the payload, which is the only place allowed to define one. */
+    var txt = opts.key ? fmtKey(opts.key, v)
+      : opts.fmtKey ? fmtKey(opts.fmtKey, v) : fmtSpec(opts.spec, v);
     td.appendChild(el("span", "v " + (opts.signed ? signCls(v) : ""), txt));
     if (opts.scale) {
       var track = el("span", "track" + (opts.signed ? " signed" : ""));
@@ -2089,7 +2154,7 @@
         });
       });
       axisMax = Math.max(axisMax, 0.05);
-      tb.appendChild(band("Probability", "signed · shared axis ±" + axisMax.toFixed(2) +
+      tb.appendChild(band("Probability", "signed · shared axis ±" + fmtSpec({ dec: 1, mult: 100, suf: " pp" }, axisMax) +
         " · green + / red −"));
 
       var sgn = function (k) {
@@ -2105,7 +2170,7 @@
             td.appendChild(dash);
             return td;
           }
-          return valueCell(pr[k], { spec: { dec: 4, sign: true }, signed: true, scale: axisMax });
+          return valueCell(pr[k], { key: k + "_r", signed: true, scale: axisMax });
         };
       };
       tb.appendChild(sheetRow(null, "Kill credit", "kc_r", PLAYERS.map(sgn("kc"))));
@@ -2126,7 +2191,7 @@
         tb.appendChild(sheetRow("aside", "Out of support — not in the total", "oos_r",
           PLAYERS.map(function (pid) {
             var o = r.p[pid].oos;
-            return valueCell(o ? o[1] : 0, { spec: { dec: 4, sign: true }, signed: true });
+            return valueCell(o ? o[1] : 0, { key: "oos_r", signed: true });
           })));
       }
     } else {
@@ -2442,7 +2507,7 @@
       var t = svgEl("title", {});
       t.textContent = "Round " + r.n + " · " + (r.w ? "won" : "lost") +
         (r.el
-          ? " · Martin " + signed(r.p.m.rw, 3) + " · SN0RLAX " + signed(r.p.s.rw, 3)
+          ? " · Martin " + fmtKey("rw_r", r.p.m.rw) + " · SN0RLAX " + fmtKey("rw_r", r.p.s.rw)
           : " · not measured (" + r.xr + ")");
       col.appendChild(t);
       g.appendChild(col);

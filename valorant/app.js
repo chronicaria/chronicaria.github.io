@@ -343,31 +343,6 @@
     return out;
   }
 
-  /* The null corridor: where a walk of this length ends once the credited signs
-     are shuffled within their match clusters. It arrives from the release
-     (overall.walk_band) rather than being resampled here — a draw made in the
-     browser would change under the reader on every theme toggle and every
-     resize, since all three re-run renderWalk.
-
-     ONE envelope, the union of the two players' bands. Their individual bands
-     agree to within about a tenth of a round, and four dashed curves over two
-     walks is noise rather than information. Absent key, absent corridor: the
-     walk then draws exactly as it does today. */
-  /* The envelope arrives already unioned across the two players — the extractor
-     draws one set of match signs and applies it to both, because they played the
-     same matches on the same team and their nulls are paired the way their
-     observations are. Re-unioning per player here would be the wrong null. */
-  function walkNull() {
-    var wb = D.overall.walk_band;
-    if (!wb || !wb.lo || !wb.hi) return null;
-    if (wb.lo.length !== SEQ.length || wb.hi.length !== SEQ.length) return null;
-    return {
-      lo: wb.lo,
-      hi: wb.hi,
-      p: wb.p || {},
-      lbl: (D.dict.walk_band && D.dict.walk_band.sh) || "null band"
-    };
-  }
 
   function renderWalk() {
     /* Clear by identity, not by count. `childNodes.length > 2` counts the
@@ -384,7 +359,6 @@
     walkFig.setAttribute("viewBox", "0 0 " + W + " " + H);
 
     var series = { m: rateWalk("m"), s: rateWalk("s") };
-    var nul = walkNull();
     /* Zero is pinned into the domain rather than arriving for free: a rate walk
        does not start at zero the way a cumulative one did, so without this the
        zero rule could fall outside the frame — and zero is the whole comparison. */
@@ -403,18 +377,6 @@
         lo = Math.min(lo, v); hi = Math.max(hi, v);
       });
     });
-    /* The corridor is wider than either walk, and holding it is the point: the
-       two lines then visibly sit inside it instead of filling the frame. The
-       funnel's first few rounds are enormous, so the domain follows the corridor
-       from the rate floor onward, not from its widest point. */
-    if (nul) {
-      var finite = function (arr) {
-        return arr.filter(function (v) { return typeof v === "number"; });
-      };
-      var nlo = finite(nul.lo.slice(SETTLE)), nhi = finite(nul.hi.slice(SETTLE));
-      if (nlo.length) lo = Math.min(lo, Math.min.apply(null, nlo));
-      if (nhi.length) hi = Math.max(hi, Math.max.apply(null, nhi));
-    }
     var pad = Math.max(0.25, (hi - lo) * 0.06);
     lo -= pad; hi += pad;
 
@@ -453,31 +415,6 @@
        grey plate behind the walk is the mark-pretending-to-be-structure failure
        contrast.py's MARKS comment records, and any alpha faint enough to leave
        the two lines legible falls under the 3:1 mark floor. */
-    if (nul) {
-      /* Skips the nulls below the rate floor and re-opens the subpath after any
-         gap, so a suppressed span leaves a break rather than a line drawn
-         straight through the region the gate says is unreportable. */
-      var edge = function (vals) {
-        var d = "", pen = false;
-        vals.forEach(function (v, i) {
-          if (typeof v !== "number") { pen = false; return; }
-          d += (pen ? " L" : (d ? " M" : "M")) + x(i).toFixed(2) + " " + y(v).toFixed(2);
-          pen = true;
-        });
-        return d;
-      };
-      g.appendChild(svgEl("path", { class: "walk-null", "clip-path": "url(#" + clipId + ")",
-        d: edge(nul.hi) + " " + edge(nul.lo) }));
-      /* Named on the upper curve rather than only in the legend, off-centre so
-         the label sits in the corridor's own headroom. It runs back from its
-         anchor, not forward: the envelope widens left to right, so the curve is
-         below the label over the span the label occupies and never crosses it. */
-      var ci = Math.round((SEQ.length - 1) * 0.62);
-      var cap = svgEl("text", { class: "walk-tick", "text-anchor": "end",
-        x: x(ci), y: y(nul.hi[ci] === null ? nul.hi[nul.hi.length - 1] : nul.hi[ci]) - 7 });
-      cap.textContent = nul.lbl;
-      g.appendChild(cap);
-    }
 
     /* shade the spans where nothing was measured */
     var runStart = null;
@@ -556,7 +493,6 @@
     Array.prototype.slice.call(legend.querySelectorAll("[data-walk-mark]")).forEach(function (n) { n.remove(); });
     legend.appendChild(swatchSpan("rule", "match boundary", true));
     if (unscored) legend.appendChild(swatchSpan("hatch", "no scorable endpoint", true));
-    if (nul) legend.appendChild(swatchSpan("dash", nul.lbl, true));
 
     /* The description states the ESTIMAND, not just the shape: a reader on a
        screen reader gets the same sentence a sighted reader gets from the axis. */
@@ -564,10 +500,7 @@
       "Round win probability added per 100 rounds, running through " + SEQ.length +
       " rounds in play order, suppressed below " + RATE_FLOOR + " rounds. " +
       SHORT.m + " settles at " + fmtKey("rwpa100", series.m[SEQ.length - 1]) + " and " +
-      SHORT.s + " at " + fmtKey("rwpa100", series.s[SEQ.length - 1]) + "." +
-      (nul ? " A dashed funnel of sign-shuffled walks narrows to " +
-        fmtKey("rwpa100", nul.lo[SEQ.length - 1]) + " to " +
-        fmtKey("rwpa100", nul.hi[SEQ.length - 1]) + " by the final round, and both lines stay inside it." : "");
+      SHORT.s + " at " + fmtKey("rwpa100", series.s[SEQ.length - 1]) + ".";
   }
 
   function walkAt(i) {
@@ -732,28 +665,30 @@
   };
 
   function renderWaterfall(pid) {
+    /* Drawn in the per-round unit the headline is in, so the steps and the
+       total a reader is comparing them against are the same kind of number.
+       The scaling is linear in a shared denominator, so the steps still sum
+       exactly to the net. */
     var comp = D.overall.p[pid].comp;
-    var net = D.overall.p[pid].rw.v;
+    var net100 = D.overall.p[pid].rw100.v;
     var lo = 0, hi = 0, run = 0;
-    comp.forEach(function (c) { run += c.v; lo = Math.min(lo, run); hi = Math.max(hi, run); });
-    /* one shared domain across both players so the two figures are comparable
-       without either being scaled to the other */
+    comp.forEach(function (c) { run += c.v100; lo = Math.min(lo, run); hi = Math.max(hi, run); });
     var dom = 0;
     PLAYERS.forEach(function (q) {
       var r2 = 0;
       D.overall.p[q].comp.forEach(function (c) {
-        r2 += c.v;
-        dom = Math.max(dom, Math.abs(r2), Math.abs(c.v));
+        r2 += c.v100;
+        dom = Math.max(dom, Math.abs(r2), Math.abs(c.v100));
       });
     });
-    dom = Math.ceil(dom / 10) * 10;
+    dom = Math.ceil(dom);
 
     var W = 460, rowH = 22, padL = 92, padR = 54;
     var H = comp.length * rowH + 30;
     var x = function (v) { return padL + ((v + dom) / (2 * dom)) * (W - padL - padR); };
 
     var fig = el("div", "fig");
-    var ttl = el("p", "fig-title", "How " + SHORT[pid] + " got to " + fmtKey("rwpa", net));
+    var ttl = el("p", "fig-title", "How " + SHORT[pid] + " got to " + fmtKey("rwpa100", net100));
     /* The two method cards that used to narrate this figure from 40px away are
        gone; every sentence they carried is in this panel, from the payload. */
     var ib = infoButton(["comp", "kc_r", "dd_r", "pl_r", "df_r", "rc_r"], "the credit types");
@@ -762,7 +697,7 @@
     var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img" });
     var t = svgEl("title", {});
     t.textContent = "Credit-type decomposition for " + SHORT[pid] +
-      ", five steps summing to " + fmtKey("rwpa", net) + ".";
+      ", five steps summing to " + fmtKey("rwpa100", net100) + ".";
     svg.appendChild(t);
 
     svg.appendChild(svgEl("line", { class: "zero-line", x1: x(0), x2: x(0), y1: 4, y2: comp.length * rowH + 2 }));
@@ -770,10 +705,10 @@
     run = 0;
     comp.forEach(function (c, i) {
       var y = 6 + i * rowH;
-      var from = run, to = run + c.v;
+      var from = run, to = run + c.v100;
       run = to;
       svg.appendChild(svgEl("rect", {
-        class: "step " + (c.v >= 0 ? "pos" : "neg"),
+        class: "step " + (c.v100 >= 0 ? "pos" : "neg"),
         x: x(Math.min(from, to)), y: y,
         width: Math.max(1, Math.abs(x(to) - x(from))), height: rowH - 8,
       }));
@@ -781,7 +716,7 @@
       lab.textContent = COMP_LABEL[c.ct] || c.ct;
       svg.appendChild(lab);
       var val = svgEl("text", { class: "val", x: W - padR + 6, y: y + 9 });
-      val.textContent = fmtKey("comp", c.v);
+      val.textContent = fmtKey("rwpa100", c.v100);
       svg.appendChild(val);
     });
 
@@ -790,9 +725,9 @@
     var nl = svgEl("text", { x: padL - 8, y: ny + 11, "text-anchor": "end" });
     nl.textContent = "Net";
     svg.appendChild(nl);
-    svg.appendChild(svgEl("circle", { class: "net", cx: x(net), cy: ny + 7, r: 3.5 }));
+    svg.appendChild(svgEl("circle", { class: "net", cx: x(net100), cy: ny + 7, r: 3.5 }));
     var nv = svgEl("text", { class: "val", x: W - padR + 6, y: ny + 11 });
-    nv.textContent = fmtKey("rwpa", net);
+    nv.textContent = fmtKey("rwpa100", net100);
     svg.appendChild(nv);
 
     fig.appendChild(figScroll(svg, W));
@@ -978,17 +913,20 @@
       var card = el("div", "card " + pid);
       card.appendChild(el("h3", null, NAME[pid]));
 
-      var big = el("span", "big " + signCls(p.rw.v), fmtKey("rwpa", p.rw.v));
+      var big = el("span", "big " + signCls(p.rw100.v), fmtKey("rwpa100", p.rw100.v));
       card.appendChild(big);
+      /* The season total is deliberately not here. It answers "how much did
+         they do", which grows with how long they played; this card answers
+         "how good were they", and one card should ask one question. */
       card.appendChild(el("span", "big-sub",
-        fmtKey("rwpa100", p.rw100.v) + " · " + p.rounds_elig + " eligible rounds"));
+        "per round · " + p.rounds_elig + " eligible rounds"));
 
       card.appendChild(ciBar(p.rw100, lo, hi));
 
       var line = el("div", "statline");
       [
-        ["Action", fmtKey("rwpa_act", p.ra)],
-        ["Clock", fmtKey("rwpa_clk", p.rc)],
+        ["Action", fmtKey("rwpa100", p.ra100)],
+        ["Clock", fmtKey("rwpa100", p.rc100)],
         ["K / D / A", p.k + " / " + p.d + " / " + p.a],
         /* label from the dictionary: this is (K+A)/D, and calling it K/D was
            the defect two verifiers independently caught in the extractor */
@@ -1848,7 +1786,8 @@
       var p = m.p[pid];
       var card = el("div", "card " + pid);
       card.appendChild(el("h3", null, SHORT[pid] + " · " + p.ag));
-      card.appendChild(el("span", "big " + signCls(p.rw), fmtKey("rwpa_m", p.rw)));
+      card.appendChild(el("span", "big " + signCls(p.r100_ok ? p.r100 : p.rw),
+        p.r100_ok ? fmtKey("rwpa100_m", p.r100) : fmtKey("rwpa_m", p.rw)));
       card.appendChild(el("span", "big-sub", p.r100_ok
         ? fmtKey("rwpa100_m", p.r100) + " over " + p.rounds_elig + " rounds"
         : "rate suppressed — under " + D.meta.gate.min_elig_rounds_for_rate + " eligible rounds"));

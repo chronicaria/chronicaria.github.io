@@ -280,7 +280,18 @@ button { font: inherit; }
 }
 .masthead h1 em { font-style: italic; }
 
-/* The standfirst is gone. It described the walk 40px above the walk. */
+/* The old standfirst is gone: it described the walk 40px above the walk. The
+   lead below is not that. It states what the study FOUND and what one unit of
+   the metric means -- the two things a reader cannot get from the figure -- and
+   every number in it comes from the payload. */
+.lead {
+  max-width: 62ch;
+  margin: 0;
+  font-size: var(--fs-3);
+  line-height: 1.5;
+  color: var(--muted);
+}
+.lead b { color: var(--text); font-weight: 600; }
 
 .section-head {
   border-bottom: 1px solid var(--line);

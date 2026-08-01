@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2f5f4476f0">
 <script defer src="/assets/hub.js"></script></head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -30,6 +30,11 @@
 
     <div class="masthead">
       <h1>Every round we played, and what each of us <em>did</em> to it.</h1>
+      <!-- The lead states the FINDING and the unit. A standfirst was removed
+           from here once for narrating the figure below it; this one does the
+           opposite job, and is built from VAL_DATA so it cannot drift from the
+           numbers it summarises. Empty until the payload fills it. -->
+      <p class="lead" data-lead></p>
     </div>
 
     <!-- signature: the cumulative walk -->
@@ -101,7 +106,7 @@
   <code>data/model_suite_release_config_2026-07-27.json</code>.</p>
 </noscript>
 
-<script src="data.js"></script>
-<script src="app.js"></script>
+<script src="data.js?v=cd5c762478"></script>
+<script src="app.js?v=4cde19b193"></script>
 </body>
 </html>

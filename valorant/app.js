@@ -281,6 +281,37 @@
     m.rs.forEach(function (r) { SEQ.push({ m: m, r: r }); });
   });
 
+  /* The lead. Two sentences a reader cannot get from any figure: what one unit
+     of this metric means, and what the study found. Both are read out of the
+     payload -- the caption from meta.gate, the numbers from overall -- so this
+     cannot drift from the tables below it. */
+  function renderLead() {
+    var host = document.querySelector("[data-lead]");
+    if (!host) return;
+    var m = D.overall.p.m, s = D.overall.p.s;
+    if (!m || !m.rw100) return;
+    var anyExcludes = PLAYERS.some(function (pid) { return D.overall.p[pid].rw100.z; });
+    var parts = [
+      "RWPA credits sum to about zero across all ten players in a round, so a " +
+      "rate here is already measured against an average player in this corpus. " +
+      "Over " + D.meta.cohort.matches + " shared matches " + SHORT.m + " is <b>" +
+      fmtKey("rwpa100", m.rw100.v) + "</b> and " + SHORT.s + " is <b>" +
+      fmtKey("rwpa100", s.rw100.v) + "</b> per round"
+    ];
+    if (typeof m.rw_game === "number" && typeof s.rw_game === "number") {
+      parts.push(" — about " + fmtKey("rw_game", m.rw_game) + " and " +
+        fmtKey("rw_game", s.rw_game) + " extra rounds won per match.");
+    } else {
+      parts.push(".");
+    }
+    parts.push(" " + (anyExcludes
+      ? D.meta.gate.standing_caption
+      : "Neither interval excludes zero: on this much play, <b>neither result " +
+        "is distinguishable from no effect at all</b>. " +
+        D.meta.gate.standing_caption));
+    host.innerHTML = parts.join("");
+  }
+
   function renderHeader() {
     var c = D.meta.cohort;
     /* One denominator in the masthead. The eligible/raw split is the entire
@@ -330,7 +361,16 @@
      Null below the release's own rate floor rather than a wild early swing —
      the page will not quote a per-100 rate on fewer rounds than that, so the
      figure that leads the page must not draw one. */
-  var RATE_FLOOR = (D.overall.walk_band && D.overall.walk_band.floor) ||
+  /* Two different floors, and the difference matters. `min_elig_rounds_for_rate`
+     is the rule for QUOTING a rate; a quoted number is read once and its noise
+     stays in its own cell. A LINE's early section is a running mean over a
+     handful of rounds — it swings to several times the eventual value and, by
+     setting the y-domain, flattens the whole informative remainder. So the walk
+     starts at `display_floor`: the round where a no-signal walk is first bounded
+     by display_floor_pp. Derived in the extractor from the same replicates as
+     the p-value, so it moves correctly as the cohort grows. */
+  var WB = D.overall.walk_band || {};
+  var RATE_FLOOR = WB.display_floor || WB.floor ||
     (D.meta.gate && D.meta.gate.min_elig_rounds_for_rate) || 20;
 
   function rateWalk(pid) {
@@ -662,6 +702,7 @@
   var COMP_LABEL = {
     kill_credit: "Kill credit", death_debit: "Death debit",
     plant: "Plant", defuse: "Defuse", alive_clock: "Clock",
+    duels: "Duels (kills − deaths)",
   };
 
   function renderWaterfall(pid) {
@@ -669,22 +710,46 @@
        total a reader is comparing them against are the same kind of number.
        The scaling is linear in a shared denominator, so the steps still sum
        exactly to the net. */
-    var comp = D.overall.p[pid].comp;
+    /* Kill credit and death debit are each ~11 pp a round and cancel to under
+       one. Drawn as separate bars they set the domain twenty times wider than
+       everything else, so plant, defuse and clock render as three invisible
+       slivers — the figure spends all its width on two numbers whose whole
+       story is that they nearly cancel. They are collapsed into one duel bar
+       carrying that net, with the two sides named on it, which is the only
+       change: the remaining steps and the total are untouched. */
+    var raw = D.overall.p[pid].comp;
+    var DUELS = { kill_credit: 1, death_debit: 1 };
+    var duelParts = raw.filter(function (c) { return DUELS[c.ct]; });
+    var comp = [];
+    if (duelParts.length) {
+      comp.push({
+        ct: "duels",
+        v100: duelParts.reduce(function (a, c) { return a + c.v100; }, 0),
+        n: duelParts.reduce(function (a, c) { return a + c.n; }, 0),
+        parts: duelParts
+      });
+    }
+    raw.forEach(function (c) { if (!DUELS[c.ct]) comp.push(c); });
     var net100 = D.overall.p[pid].rw100.v;
     var lo = 0, hi = 0, run = 0;
     comp.forEach(function (c) { run += c.v100; lo = Math.min(lo, run); hi = Math.max(hi, run); });
     var dom = 0;
     PLAYERS.forEach(function (q) {
       var r2 = 0;
-      D.overall.p[q].comp.forEach(function (c) {
-        r2 += c.v100;
-        dom = Math.max(dom, Math.abs(r2), Math.abs(c.v100));
+      var qraw = D.overall.p[q].comp;
+      var qduel = qraw.filter(function (c) { return DUELS[c.ct]; })
+        .reduce(function (a, c) { return a + c.v100; }, 0);
+      var qsteps = [qduel].concat(
+        qraw.filter(function (c) { return !DUELS[c.ct]; }).map(function (c) { return c.v100; }));
+      qsteps.forEach(function (v) {
+        r2 += v;
+        dom = Math.max(dom, Math.abs(r2), Math.abs(v));
       });
     });
     dom = Math.ceil(dom);
 
-    var W = 460, rowH = 22, padL = 92, padR = 54;
-    var H = comp.length * rowH + 30;
+    var W = 460, rowH = 26, padL = 116, padR = 54;
+    var H = comp.length * rowH + 34;
     var x = function (v) { return padL + ((v + dom) / (2 * dom)) * (W - padL - padR); };
 
     var fig = el("div", "fig");
@@ -715,6 +780,17 @@
       var lab = svgEl("text", { x: padL - 8, y: y + 9, "text-anchor": "end" });
       lab.textContent = COMP_LABEL[c.ct] || c.ct;
       svg.appendChild(lab);
+      if (c.parts) {
+        /* The collapsed sides, stated rather than dropped: the bar is a
+           rescaling, not a removal, and a reader should still see that ~11 pp
+           of credit is meeting ~11 pp of debit. */
+        var sub = svgEl("text", { class: "walk-tick", x: padL - 6, y: y + 19,
+          "text-anchor": "end" });
+        sub.textContent = c.parts.map(function (q) {
+          return fmtKey("rwpa100", q.v100);
+        }).join("  ");
+        svg.appendChild(sub);
+      }
       var val = svgEl("text", { class: "val", x: W - padR + 6, y: y + 9 });
       val.textContent = fmtKey("rwpa100", c.v100);
       svg.appendChild(val);
@@ -2517,6 +2593,7 @@
 
   /* ---------- boot ---------- */
   renderHeader();
+  renderLead();
   renderVerdict();
   renderMatchTable();
   renderCorpus();

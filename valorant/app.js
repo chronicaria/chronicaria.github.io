@@ -23,6 +23,7 @@
   "use strict";
 
   var D = window.VAL_DATA;
+  var ROOT_TITLE = document.title;
   var root = document.documentElement;
   root.classList.add("js");
 
@@ -2560,7 +2561,12 @@
     vMatch.hidden = true;
     vCohort.hidden = false;
     currentMatch = null;
-    document.title = "RWPA · MartinLutherKing & SN0RLAX";
+    /* The root view restores the title the DOCUMENT shipped with rather than
+       restating one here. The markup's <title> is what a crawler and a link
+       preview read, and a second copy in JS silently overrode it the moment the
+       page hydrated — so the indexed title and the rendered title were two
+       different strings, and only the worse one survived. */
+    document.title = ROOT_TITLE;
     renderWalk();
     renderDisposition();
   }

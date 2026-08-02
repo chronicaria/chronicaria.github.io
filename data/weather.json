@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-02T10:00:00Z",
-  "updated": "2026-08-02T11:01:09Z",
+  "valid_time_utc": "2026-08-02T13:00:00Z",
+  "updated": "2026-08-02T14:09:40Z",
   "hottest": [
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 92.4
+      "temp_f": 88.8
     },
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 92.2
+      "temp_f": 88.7
     },
     {
-      "name": "La Paz",
+      "name": "Yuma",
       "state": "AZ",
-      "temp_f": 92.2
+      "temp_f": 88.4
     }
   ],
   "coldest": [
     {
       "name": "Deschutes",
       "state": "OR",
-      "temp_f": 44.1
+      "temp_f": 40.5
     },
     {
-      "name": "Chelan",
-      "state": "WA",
-      "temp_f": 46.3
+      "name": "Klamath",
+      "state": "OR",
+      "temp_f": 43.0
     },
     {
-      "name": "Skamania",
-      "state": "WA",
-      "temp_f": 46.8
+      "name": "Crook",
+      "state": "OR",
+      "temp_f": 43.1
     }
   ],
   "national": {
-    "min_f": 44.1,
-    "max_f": 92.4,
-    "mean_f": 68.2
+    "min_f": 40.5,
+    "max_f": 88.8,
+    "mean_f": 69.7
   }
 }

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Four players, one act — RWPA across every E11A4 match any of us played</title>
+<meta name="description" content="Round win probability added for four players across the 65 competitive matches at least one of them played in act E11A4. Four separate stories that occasionally overlap: within a match the comparison holds, across the season it does not.">
+<link rel="canonical" href="https://chronicaria.github.io/valorant/quad.html">
+<meta property="og:title" content="Four players, one act — RWPA across every E11A4 match any of us played">
+<meta property="og:description" content="65 matches, four players, and a line that breaks whenever someone sat out. Season totals cover different matches and different opponents, so they are shown side by side and never ranked.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://chronicaria.github.io/valorant/quad.html">
+<meta name="twitter:card" content="summary">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("rwpa-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark")}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="quad.css">
+<script defer src="/assets/hub.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <p class="brand"><a href="./">R<em>W</em>PA</a></p>
+    <p class="header-meta">Four players · act E11A4 · 65 matches</p>
+    <button class="theme-toggle" type="button">◐ light</button>
+  </div>
+</header>
+
+<main class="shell" id="main">
+
+  <div class="masthead">
+    <h1>Four players, one act, and a line that <em>stops</em> when you weren't there.</h1>
+    <p>
+      Every competitive match in E11A4 that at least one of the four played — 65 of them.
+      The chart is a running total of round win probability added. Where somebody sat out, their
+      line simply stops and picks up again when they return: the total carries, the stroke does not.
+      A connecting slope across those gaps would draw performance in games nobody played.
+    </p>
+  </div>
+
+  <section>
+    <h2>The walk</h2>
+    <ul class="quad-legend" id="quad-legend"></ul>
+    <div id="quad-chart"></div>
+    <p class="quad-note">
+      Same model as the two-player page, not re-solved: these are the same cross-fitted,
+      out-of-fold credits, re-sliced to whoever was on the server. Click any match to open it.
+    </p>
+  </section>
+
+  <section>
+    <h2>Season totals</h2>
+    <div class="quad-cards" id="quad-cards"></div>
+    <p class="quad-note">
+      <strong>These four numbers are not a leaderboard, and the page will not sort them.</strong>
+      They cover different matches, different opponents, and exposure differing by more than
+      ten to one. Trzzcko's rate is the clearest warning: five matches and ninety-three rounds,
+      which is enough to produce a large number and nowhere near enough to mean one. Read each
+      figure against the exposure printed beneath it.
+    </p>
+    <p class="quad-note">
+      There is also a deeper reason they don't compare. Every non-cohort player in this dataset
+      is re-pseudonymised in each match, so opponents and teammates cannot be linked across
+      games. Lineup quality and player skill are therefore not separable — that limitation is
+      structural, not a matter of collecting more matches.
+    </p>
+  </section>
+
+  <section>
+    <h2>Every match</h2>
+    <table class="quad-matches" id="quad-matches">
+      <thead>
+        <tr>
+          <th class="num">#</th><th>Map</th>
+          <th class="num">Martin</th><th class="num">SN0RLAX</th>
+          <th class="num">TheMarias</th><th class="num">Trzzcko</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="quad-sheet" id="quad-sheet"></div>
+  </section>
+
+  <section>
+    <h2>What this page is</h2>
+    <p class="quad-note">
+      Four separate stories that occasionally overlap. All four have never been on the same
+      server: the largest overlap is Martin and SN0RLAX at 27 matches, and TheMarias and
+      Trzzcko have never played a single game together. Within any one match the players
+      present faced the same opponents in the same rounds, so comparing them there is fair.
+      Across the season they did not, so it isn't.
+    </p>
+  </section>
+
+</main>
+
+<script src="quad_data.js"></script>
+<script src="quad.js"></script>
+</body>
+</html>

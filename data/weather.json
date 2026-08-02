@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-02T03:00:00Z",
-  "updated": "2026-08-02T04:05:09Z",
+  "valid_time_utc": "2026-08-02T08:00:00Z",
+  "updated": "2026-08-02T08:55:54Z",
   "hottest": [
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 105.4
-    },
-    {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 105.4
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 95.2
     },
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 105.3
+      "temp_f": 95.1
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 95.0
     }
   ],
   "coldest": [
     {
-      "name": "Aleutians West",
-      "state": "AK",
-      "temp_f": 50.4
+      "name": "Chelan",
+      "state": "WA",
+      "temp_f": 47.7
     },
     {
-      "name": "Petersburg",
-      "state": "AK",
-      "temp_f": 51.6
+      "name": "Deschutes",
+      "state": "OR",
+      "temp_f": 48.3
     },
     {
-      "name": "Ketchikan Gateway",
-      "state": "AK",
-      "temp_f": 51.9
+      "name": "Skamania",
+      "state": "WA",
+      "temp_f": 48.7
     }
   ],
   "national": {
-    "min_f": 50.4,
-    "max_f": 105.4,
-    "mean_f": 74.2
+    "min_f": 47.7,
+    "max_f": 95.2,
+    "mean_f": 69.4
   }
 }

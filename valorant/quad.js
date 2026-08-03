@@ -84,8 +84,11 @@
       lines[p].forEach(function (q) { if (q.y < lmin) lmin = q.y; if (q.y > lmax) lmax = q.y; });
     });
     if (!isFinite(lmin)) { lmin = -1; lmax = 1; }
-    var mid = (lmin + lmax) / 2, half = Math.max((lmax - lmin) / 2, 1) * 3.2;
-    var lo = mid - half, hi = mid + half;
+    /* Frame the trailing means and nothing else. Single rounds reach past +/-70 per 100; letting
+       them set the scale flattens every line into one band and hides the differences the chart
+       exists to show. Dots outside are clipped and counted on the axis. */
+    var span = Math.max(lmax - lmin, 0.5), padY = span * 0.14;
+    var lo = lmin - padY, hi = lmax + padY;
     var clipped = 0;
     ids.forEach(function (p) {
       PTS[p].forEach(function (q) { var v = 100 * q.v; if (v < lo || v > hi) clipped++; });
@@ -156,12 +159,13 @@
         }
         seg = [];
       };
-      var own = {}; PTS[pid].forEach(function (q, j) { own[q.i] = j; });
-      var prevOwn = null;
+      /* Break on a gap in the GLOBAL round index, not the player's own index. Consecutive
+         own-rounds either side of an absence are adjacent to the player but separated by every
+         round they missed, and joining them draws a slope across matches they never played. */
+      var prevI = null;
       pts.forEach(function (q) {
-        var oi = own[q.i];
-        if (prevOwn !== null && oi !== prevOwn + 1) flush();
-        seg.push(q); prevOwn = oi;
+        if (prevI !== null && q.i !== prevI + 1) flush();
+        seg.push(q); prevI = q.i;
       });
       flush();
     });
@@ -179,6 +183,81 @@
       svg.appendChild(r);
       start += m.rounds.length;
     });
+
+    /* ---- hover: crosshair, a dot on each live series, and a content panel ---- */
+    var cross = sv("line", { class: "crosshair", x1: 0, x2: 0, y1: MT, y2: H - MB, opacity: 0 });
+    svg.appendChild(cross);
+    var hdots = {};
+    ids.forEach(function (pid) {
+      hdots[pid] = sv("circle", { class: "hdot", r: 4, fill: css(COLOR[pid]), opacity: 0 });
+      svg.appendChild(hdots[pid]);
+    });
+    var pill = sv("g", { class: "pill", opacity: 0 });
+    var pillBg = sv("rect", { rx: 3, height: 17, y: H - MB + 3 });
+    var pillTx = sv("text", { y: H - MB + 15, "text-anchor": "middle" });
+    pill.appendChild(pillBg); pill.appendChild(pillTx);
+    svg.appendChild(pill);
+
+    // index the mean values by global round for O(1) lookup
+    var byI = {};
+    ids.forEach(function (pid) { byI[pid] = {}; lines[pid].forEach(function (q) { byI[pid][q.i] = q.y; }); });
+
+    var panel = document.createElement("div");
+    panel.className = "chart-tip";
+    panel.hidden = true;
+    host.appendChild(panel);
+
+    function hoverOff() {
+      cross.setAttribute("opacity", 0);
+      pill.setAttribute("opacity", 0);
+      ids.forEach(function (pid) { hdots[pid].setAttribute("opacity", 0); });
+      panel.hidden = true;
+    }
+    function hoverAt(i) {
+      i = Math.max(0, Math.min(n - 1, i));
+      var t = TL[i], px = x(i);
+      cross.setAttribute("x1", px); cross.setAttribute("x2", px); cross.setAttribute("opacity", 1);
+      var rows = "";
+      ids.forEach(function (pid) {
+        var yv = byI[pid][i];
+        if (yv === undefined) { hdots[pid].setAttribute("opacity", 0); return; }
+        hdots[pid].setAttribute("cx", px);
+        hdots[pid].setAttribute("cy", y(yv));
+        hdots[pid].setAttribute("opacity", 1);
+        var rv = t.r.p[pid];
+        rows += '<div class="tip-row"><span class="sw" style="background:var(' + COLOR[pid] + ')"></span>' +
+          '<span class="nm">' + SHORT[pid] + "</span>" +
+          '<span class="mn">' + fmt(yv, 1) + "</span>" +
+          '<span class="rd">' + (rv ? fmt(100 * rv.t, 0) : "—") + "</span></div>";
+      });
+      if (!rows) { hoverOff(); return; }   /* before any window is full there is nothing to show */
+      var lbl = "Match " + (t.m.i + 1) + " · round " + (t.r.r + 1);
+      pillTx.textContent = lbl;
+      var wpx = lbl.length * 5.6 + 14;
+      pillBg.setAttribute("x", px - wpx / 2); pillBg.setAttribute("width", wpx);
+      pillTx.setAttribute("x", px);
+      pill.setAttribute("opacity", 1);
+      panel.innerHTML =
+        '<div class="tip-head">' + t.m.map + " · match " + (t.m.i + 1) + " · round " + (t.r.r + 1) + "</div>" +
+        '<div class="tip-cols"><span></span><span></span><span>mean</span><span>round</span></div>' + rows;
+      panel.hidden = false;
+      /* Clamp inside the chart rather than flipping at a fixed fraction: a fixed flip still
+         overflows whenever the panel is wider than the remaining space. */
+      panel.style.left = "0px";
+      panel.style.transform = "none";
+      var hb = host.getBoundingClientRect(), pb = panel.getBoundingClientRect();
+      var want = (i / Math.max(n - 1, 1)) * hb.width + 14;
+      panel.style.left = Math.max(0, Math.min(want, hb.width - pb.width)) + "px";
+    }
+    var surface = sv("rect", { class: "hover-surface", x: ML, y: MT,
+                               width: W - ML - MR, height: H - MT - MB });
+    surface.addEventListener("mousemove", function (e) {
+      var r = svg.getBoundingClientRect();
+      var vx = ((e.clientX - r.left) / r.width) * W;
+      hoverAt(Math.round((vx - ML) / ((W - ML - MR) / Math.max(n - 1, 1))));
+    });
+    surface.addEventListener("mouseleave", hoverOff);
+    svg.appendChild(surface);
 
     host.appendChild(svg);
     host._x = x; host._band = band;
@@ -239,8 +318,8 @@
     steps.forEach(function (c) { run += c.v100; dom = Math.max(dom, Math.abs(run), Math.abs(c.v100)); });
     dom = Math.max(1, Math.ceil(dom));
 
-    var W = 460, rowH = 30, padL = 132, padR = 62;
-    var H = steps.length * rowH + 40;
+    var W = 720, rowH = 52, padL = 190, padR = 96;
+    var H = steps.length * rowH + 62;
     var x = function (v) { return padL + ((v + dom) / (2 * dom)) * (W - padL - padR); };
 
     var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, class: "wf", role: "img",
@@ -253,26 +332,26 @@
       var yy = 8 + i * rowH, from = run, to = run + c.v100;
       run = to;
       svg.appendChild(sv("rect", { class: "step " + (c.v100 >= 0 ? "pos" : "neg"),
-        x: x(Math.min(from, to)), y: yy, width: Math.max(1, Math.abs(x(to) - x(from))), height: rowH - 12 }));
-      var lab = sv("text", { class: "wf-lab", x: padL - 8, y: yy + 10, "text-anchor": "end" });
+        x: x(Math.min(from, to)), y: yy, width: Math.max(1, Math.abs(x(to) - x(from))), height: rowH - 20 }));
+      var lab = sv("text", { class: "wf-lab", x: padL - 12, y: yy + 18, "text-anchor": "end" });
       lab.textContent = CT_LABEL[c.ct] || c.ct;
       svg.appendChild(lab);
       if (c.parts) {
-        var sub = sv("text", { class: "wf-sub", x: padL - 8, y: yy + 21, "text-anchor": "end" });
+        var sub = sv("text", { class: "wf-sub", x: padL - 12, y: yy + 33, "text-anchor": "end" });
         sub.textContent = c.parts.map(function (q) { return fmt(q.v100); }).join("   ");
         svg.appendChild(sub);
       }
-      var val = sv("text", { class: "wf-val", x: W - padR + 6, y: yy + 10 });
+      var val = sv("text", { class: "wf-val", x: W - padR + 10, y: yy + 18 });
       val.textContent = fmt(c.v100);
       svg.appendChild(val);
     });
 
-    var ny = 10 + steps.length * rowH;
+    var ny = 14 + steps.length * rowH;
     svg.appendChild(sv("line", { class: "axis", x1: padL - 4, x2: W - padR, y1: ny, y2: ny }));
-    var nl = sv("text", { class: "wf-lab", x: padL - 8, y: ny + 16, "text-anchor": "end" });
+    var nl = sv("text", { class: "wf-lab strong", x: padL - 12, y: ny + 26, "text-anchor": "end" });
     nl.textContent = "Net";
     svg.appendChild(nl);
-    var nv = sv("text", { class: "wf-val strong", x: W - padR + 6, y: ny + 16 });
+    var nv = sv("text", { class: "wf-val strong", x: W - padR + 10, y: ny + 26 });
     nv.textContent = fmt(p.r100);
     svg.appendChild(nv);
     return svg;

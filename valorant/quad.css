@@ -76,14 +76,14 @@
 .round-table .num { font-family: var(--mono); text-align: right; white-space: nowrap; }
 .round-table .absent { color: var(--faint); }
 .round-table tfoot td { border-top: 2px solid var(--line); border-bottom: none; padding-top: .5rem; }
-.rtag { font-size: var(--fs-1); color: var(--faint); font-family: var(--mono); }
+.rtag { font-size: var(--fs-1); color: var(--faint); }
 .meta { color: var(--muted); font-family: var(--mono); font-size: var(--fs-1); margin: 0 0 .8rem; }
 
 /* scatter + rolling mean */
 .quad-chart .scatter circle { opacity: .28; }
 .quad-chart .seg { stroke-width: 2; }
 .quad-window { display: flex; align-items: center; gap: .5rem; margin: 0 0 .6rem; flex-wrap: wrap; }
-.winbtn { font: inherit; font-size: var(--fs-1); font-family: var(--mono); padding: .2rem .6rem;
+.winbtn { font: inherit; font-size: var(--fs-1); padding: .25rem .7rem;
   border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--muted); cursor: pointer; }
 .winbtn.on { border-color: var(--accent); color: var(--text); background: var(--panel-2); }
 .winnote { font-family: var(--mono); font-size: var(--fs-1); color: var(--faint); margin-left: .3rem; }
@@ -108,3 +108,44 @@
 .round-table .rule-total td { border-top: 1px solid var(--line); font-weight: var(--w-strong); }
 .round-table .spacer td { border: none; height: .5rem; }
 .match-nav { display: flex; gap: 1.2rem; margin-top: 1.2rem; font-size: var(--fs-2); }
+
+/* ---- hover: crosshair, series dots, content panel, round pill ---- */
+#quad-chart { position: relative; }
+.quad-chart .hover-surface { fill: transparent; }
+.quad-chart .crosshair { stroke: var(--text); stroke-width: 1; opacity: .35; pointer-events: none; }
+.quad-chart .hdot { stroke: var(--bg); stroke-width: 1.5; pointer-events: none; }
+.quad-chart .pill rect { fill: var(--text); }
+.quad-chart .pill text { fill: var(--bg); font-size: 10px; font-family: var(--mono); }
+
+.chart-tip {
+  position: absolute; top: .4rem; pointer-events: none; z-index: 2;
+  width: max-content; max-width: 17rem; padding: .5rem .6rem;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  box-shadow: 0 1px 0 var(--line);
+}
+.chart-tip .tip-head { font-size: var(--fs-1); color: var(--muted); margin-bottom: .4rem; }
+/* four children per row: swatch, name, mean, round -- the grid must have four tracks or
+   every row wraps and the panel triples in height. */
+.chart-tip .tip-row { display: grid; grid-template-columns: .7rem minmax(4.5rem, 1fr) 3.4rem 3.4rem;
+  align-items: baseline; gap: .35rem; }
+.chart-tip .tip-cols { display: grid; grid-template-columns: .7rem minmax(4.5rem, 1fr) 3.4rem 3.4rem;
+  align-items: baseline; gap: .35rem; }
+.chart-tip .tip-cols { font-size: 10px; color: var(--faint); padding-bottom: .2rem; border-bottom: 1px solid var(--line); margin-bottom: .25rem; }
+.chart-tip .tip-cols span:nth-child(n+3),
+.chart-tip .mn, .chart-tip .rd { text-align: right; font-family: var(--mono); }
+.chart-tip .tip-row { font-size: var(--fs-1); padding: .08rem 0; white-space: nowrap; }
+.chart-tip .sw { width: .6rem; height: .6rem; border-radius: 2px; align-self: center; }
+.chart-tip .nm { color: var(--text); }
+.chart-tip .rd { color: var(--muted); }
+
+/* ---- beautification: give the cards and figures room to breathe ---- */
+.quad-cards { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1rem; }
+.quad-card { padding: 1.1rem 1.25rem 1.25rem; }
+.quad-card .big { font-size: var(--fs-5); line-height: 1.1; letter-spacing: -0.01em; }
+.quad-card .who { font-size: var(--fs-3); }
+.quad-card .who .swatch { width: .7rem; height: .7rem; }
+.wf .wf-lab { font-size: 13px; }
+.wf .wf-lab.strong { fill: var(--text); font-weight: var(--w-strong); }
+.wf .wf-sub { font-size: 11px; }
+.wf .wf-val { font-size: 13px; }
+.wf .step { rx: 2; }

@@ -196,15 +196,6 @@ button { font: inherit; }
   color: var(--faint);
 }
 
-.eyebrow {
-  font-size: var(--fs-1);
-  font-weight: 600;
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin: 0 0 var(--sp-3);
-}
-
 /* ---- Chrome ---------------------------------------------------------------- */
 .site-header {
   border-bottom: 1px solid var(--line);
@@ -292,20 +283,7 @@ button { font: inherit; }
   color: var(--muted);
 }
 .lead b { color: var(--text); font-weight: 600; }
-
-.section-head {
-  border-bottom: 1px solid var(--line);
-  padding-bottom: var(--sp-2);
-  margin: var(--sp-7) 0 var(--sp-4);
-}
 .section-head .note { margin-top: var(--sp-1); }
-.section-head h2 {
-  font-family: var(--display);
-  font-size: var(--fs-5);
-  font-weight: var(--w-display);
-  margin: 0;
-  letter-spacing: -.015em;
-}
 .section-head .note { margin: 0; }
 
 .note {
@@ -330,16 +308,8 @@ button { font: inherit; }
   margin-top: var(--sp-5);
   position: relative;
 }
-
-.walk-figure { width: 100%; height: auto; display: block; overflow: visible; }
-
-.walk-axis { stroke: var(--line); stroke-width: 1; }
-.walk-grid { stroke: var(--grid); stroke-width: 1; }
-.walk-sep { stroke: var(--line-2); stroke-width: 1; }
-.walk-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
 .walk-line.m { stroke: var(--martin); }
 .walk-line.s { stroke: var(--snorlax); }
-.walk-band { opacity: .16; }
 .walk-band.m { fill: var(--martin); }
 .walk-band.s { fill: var(--snorlax); }
 /* The null corridor: two dashed boundary curves at full strength, never a
@@ -348,34 +318,9 @@ button { font: inherit; }
    the two lines legible drops under the 3:1 mark floor. Two curves clear it
    trivially — --muted is a text token — and read as an envelope. */
 .walk-null { fill: none; stroke: var(--muted); stroke-width: 1.1; stroke-dasharray: 4 3; }
-.walk-tick {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  fill: var(--faint);
-}
-.walk-end {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 600;
-}
 .walk-end.m { fill: var(--martin); }
 .walk-end.s { fill: var(--snorlax); }
-.walk-hit { fill: transparent; cursor: pointer; }
-.walk-cursor { stroke: var(--accent); stroke-width: 1; opacity: 0; }
 .walk.is-live .walk-cursor { opacity: 1; }
-
-.walk-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-4);
-  align-items: center;
-  margin-top: var(--sp-3);
-  padding-top: var(--sp-3);
-  border-top: 1px solid var(--line-2);
-  font-family: var(--mono);
-  font-size: var(--fs-2);
-  color: var(--muted);
-}
 .swatch {
   display: inline-block;
   width: 22px;
@@ -406,26 +351,7 @@ button { font: inherit; }
   background-color: var(--line-2);
   background-image: repeating-linear-gradient(45deg, var(--line) 0 2px, transparent 2px 5px);
 }
-
-/* readout that follows the pointer along the walk */
-.walk-readout {
-  position: absolute;
-  top: var(--sp-3);
-  right: var(--sp-4);
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  padding: var(--sp-2) var(--sp-3);
-  font-family: var(--mono);
-  font-size: var(--fs-2);
-  color: var(--muted);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .18s ease;
-  max-width: 260px;
-}
 .walk.is-live .walk-readout { opacity: 1; }
-.walk-readout b { color: var(--text); font-weight: 600; display: block; }
 
 /* ---- Verdict --------------------------------------------------------------- */
 /* exactly two columns: this page always compares exactly two people, so
@@ -468,42 +394,12 @@ button { font: inherit; }
   line-height: 1.1;
   display: block;
 }
-.big-sub {
-  font-family: var(--mono);
-  font-size: var(--fs-2);
-  color: var(--faint);
-  display: block;
-  margin-top: var(--sp-1);
-}
-
-.statline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-1) var(--sp-4);
-  margin-top: var(--sp-3);
-  padding-top: var(--sp-3);
-  border-top: 1px solid var(--line-2);
-}
 .stat { display: flex; flex-direction: column; gap: 1px; }
-.stat-k {
-  font-family: var(--mono);
-  font-size: var(--fs-1);
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-.stat-v { font-size: var(--fs-3); font-weight: 500; }
 
 /* interval bar: the honest bit. A rule from ci-low to ci-high with the point
    estimate marked, drawn over a zero line. If the bar straddles zero, it looks
    like it straddles zero. */
 .ci { margin-top: var(--sp-3); }
-.ci-bar {
-  position: relative;
-  height: 26px;
-  border-left: 1px solid var(--line-2);
-  border-right: 1px solid var(--line-2);
-}
 /* the zero rule is the whole point of this component, so it is the one line
    here drawn in text ink rather than hairline grey */
 .ci-zero {
@@ -513,50 +409,8 @@ button { font: inherit; }
   width: 1px;
   background: var(--muted);
 }
-.ci-zero::after {
-  content: "0";
-  position: absolute;
-  top: -3px;
-  left: 3px;
-  font-family: var(--mono);
-  font-size: var(--fs-1);
-  color: var(--faint);
-}
-/* The interval is the argument; the point estimate is the anecdote. This used
-   to be the other way round — .38 opacity on the range against a solid point. */
-.ci-range {
-  position: absolute;
-  top: 12px;
-  height: 2px;
-  background: currentColor;
-}
-.ci-point {
-  position: absolute;
-  top: 7px;
-  width: 2px;
-  height: 12px;
-  background: var(--text);
-}
 .card.m .ci { color: var(--martin); }
 .card.s .ci { color: var(--snorlax); }
-.ci-scale {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--mono);
-  font-size: var(--fs-1);
-  color: var(--faint);
-  margin-top: 2px;
-}
-
-.verdict-note {
-  grid-column: 1 / -1;
-  border: 1px solid var(--line);
-  background: var(--panel-2);
-  border-radius: var(--r);
-  padding: var(--sp-4);
-}
-.verdict-note p { margin: 0; color: var(--muted); font-size: var(--fs-3); }
-.verdict-note p + p { margin-top: var(--sp-2); }
 
 /* ---- Tables ---------------------------------------------------------------- */
 /* No vertical rules, no zebra. Row hover only. */
@@ -606,8 +460,6 @@ thead tr.grouprow th {
   padding-bottom: var(--sp-1);
   text-align: center;
 }
-thead tr.grouprow th.g-m { color: var(--martin); border-bottom: 2px solid var(--martin); }
-thead tr.grouprow th.g-s { color: var(--snorlax); border-bottom: 2px solid var(--snorlax); }
 
 tbody td {
   padding: var(--sp-2) var(--sp-3);
@@ -639,7 +491,6 @@ tbody tr.excluded td.l { font-style: italic; }
 .pos { color: var(--pos); }
 .neg { color: var(--neg); }
 .zero { color: var(--faint); }
-.dim { color: var(--faint); }
 
 /* Magnitude as a 2px rule along the bottom of the cell, in the SIGN colour.
    The first attempt filled the cell background in the player's hue, which broke
@@ -657,20 +508,6 @@ td.mag::after {
   background: var(--mag-c, var(--muted));
   border-radius: 1px;
 }
-
-/* ---- Chips ----------------------------------------------------------------- */
-.chip {
-  display: inline-block;
-  font-size: var(--fs-1);
-  font-weight: 600;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  padding: 2px 6px;
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  color: var(--muted);
-  white-space: nowrap;
-}
 /* Scope toggle. A chip here is a control, not a label, so it needs a hit
    target and a pressed state; `.on` is mirrored by aria-pressed so the state
    is not carried by colour alone. */
@@ -680,22 +517,15 @@ button.chip {
   font-family: inherit;
   padding: 4px 9px;
 }
-button.chip:hover { color: var(--fg); }
 button.chip.on {
   color: var(--fg);
   border-color: currentColor;
   background: color-mix(in srgb, currentColor 8%, transparent);
 }
-button.chip:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
 .chip.w { color: var(--win); border-color: color-mix(in srgb, var(--win) 45%, transparent); }
 .chip.l { color: var(--loss); border-color: color-mix(in srgb, var(--loss) 45%, transparent); }
 .chip.atk, .chip.def { color: var(--muted); }
-.chip.tier {
-  color: var(--faint);
-  text-transform: none;
-  letter-spacing: .02em;
-}
 
 /* tier badge: exploratory numbers are demoted on sight, not in a footnote */
 .tier-flag {
@@ -731,36 +561,6 @@ button.chip:focus-visible { outline: 2px solid currentColor; outline-offset: 2px
 }
 .back:hover { color: var(--accent); }
 
-.match-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--sp-3) var(--sp-5);
-  border-bottom: 1px solid var(--line);
-  padding-bottom: var(--sp-4);
-}
-.match-head h1 {
-  font-family: var(--display);
-  font-size: var(--fs-6);
-  font-weight: 600;
-  margin: 0;
-  letter-spacing: -.015em;
-}
-.match-score {
-  font-family: var(--mono);
-  font-size: var(--fs-6);
-  font-weight: 600;
-  letter-spacing: -.02em;
-}
-.match-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-1) var(--sp-4);
-  font-family: var(--mono);
-  font-size: var(--fs-2);
-  color: var(--faint);
-}
-
 .match-nav {
   display: flex;
   gap: var(--sp-2);
@@ -781,16 +581,6 @@ button.chip:focus-visible { outline: 2px solid currentColor; outline-offset: 2px
 .match-nav button:hover { color: var(--text); border-color: var(--accent); }
 .match-nav button[disabled] { opacity: .4; cursor: default; }
 .match-nav button[disabled]:hover { color: var(--muted); border-color: var(--line); }
-
-/* per-round mirrored bars — the walk motif at match scale */
-.strip {
-  border: 1px solid var(--line);
-  background: var(--panel);
-  border-radius: var(--r);
-  padding: var(--sp-4);
-  margin-top: var(--sp-4);
-}
-.strip-figure { width: 100%; height: auto; display: block; }
 .strip-bar.m { fill: var(--martin); }
 .strip-bar.s { fill: var(--snorlax); }
 /* a bar that lost the team probability is hollowed, not recoloured — same
@@ -798,15 +588,10 @@ button.chip:focus-visible { outline: 2px solid currentColor; outline-offset: 2px
 .strip-bar.out { fill-opacity: .22; stroke-width: 1.25; }
 .strip-bar.m.out { stroke: var(--martin); }
 .strip-bar.s.out { stroke: var(--snorlax); }
-.strip-axis { stroke: var(--line); stroke-width: 1; }
 /* a scored four-versus-five: a 2px tick under the column baseline and nothing
    else. The round happened and was priced, so the bar is drawn at full
    strength — this mark is provenance, never a discount. */
 .strip-degraded { fill: var(--line); }
-.strip-tick { font-family: var(--mono); font-size: 9.5px; fill: var(--faint); }
-.strip-col { cursor: pointer; }
-.strip-col:hover .strip-hit { fill: var(--panel-3); }
-.strip-hit { fill: transparent; }
 
 /* ---- Beyond the headline --------------------------------------------------- */
 /* Deliberately quieter than the headline blocks: no card border, smaller type,
@@ -850,13 +635,6 @@ button.chip:focus-visible { outline: 2px solid currentColor; outline-offset: 2px
 /* the six ARI facts as one visual list rather than a sentence with <code>
    embedded twice */
 .chips { margin: var(--sp-3) 0 0; }
-.gate-chip {
-  display: inline-block;
-  margin: 0 6px 6px 0;
-  font-family: var(--mono);
-  font-size: var(--fs-1);
-  color: var(--muted);
-}
 
 .foot {
   margin-top: var(--sp-7);
@@ -1049,13 +827,6 @@ button.chip:focus-visible { outline: 2px solid currentColor; outline-offset: 2px
   font-size: var(--fs-2);
   color: var(--faint);
 }
-
-.sheet-meta {
-  font-family: var(--body);
-  font-size: var(--fs-3);
-  color: var(--muted);
-  margin: 0 0 var(--sp-3);
-}
 /* The sheet lives below the ledger rather than inside it — see toggleRound. */
 .sheet-host:empty { display: none; }
 .sheet-host {
@@ -1068,15 +839,6 @@ button.chip:focus-visible { outline: 2px solid currentColor; outline-offset: 2px
 
 tbody tr.is-open td { background: var(--panel-3); }
 tbody tr.is-open td:first-child { box-shadow: inset 2px 0 0 var(--accent); }
-
-/* the visual half of an affordance the row already carried in aria-expanded */
-.chev {
-  display: inline-block;
-  width: 9px;
-  margin-right: 3px;
-  color: var(--faint);
-  transition: transform .15s ease;
-}
 tbody tr.is-open .chev { transform: rotate(90deg); color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
 
@@ -1093,8 +855,6 @@ tbody tr.is-open .chev { transform: rotate(90deg); color: var(--accent); }
   cursor: pointer;
   line-height: 1;
 }
-.info:hover { color: var(--accent); }
-.info[aria-expanded="true"] { color: var(--text); }
 .def {
   font-family: var(--body);
   font-size: var(--fs-2);
@@ -1132,15 +892,6 @@ th .info { vertical-align: super; font-size: var(--fs-1); }
 
 /* ---- Small figures --------------------------------------------------------- */
 .fig { margin-top: var(--sp-4); }
-.fig-title {
-  font-family: var(--mono);
-  font-size: var(--fs-1);
-  font-weight: 600;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin: 0 0 var(--sp-2);
-}
 .fig svg { display: block; width: 100%; height: auto; }
 /* A fixed-viewBox figure scrolls below its natural width rather than scaling
    its 10.5px labels into decoration. Wraps only the svg, so a `?` panel on the
@@ -1153,7 +904,6 @@ th .info { vertical-align: super; font-size: var(--fs-1); }
    and on the grid children keeps the scrolling inside the figure. */
 .fig-scroll { overflow-x: auto; min-width: 0; }
 .fig { min-width: 0; }
-.verdict > * { min-width: 0; }
 .fig .axis-line { stroke: var(--line); stroke-width: 1; }
 .fig .zero-line { stroke: var(--muted); stroke-width: 1; }
 .fig text { font-family: var(--mono); font-size: 10.5px; fill: var(--faint); }
@@ -1184,13 +934,6 @@ th .info { vertical-align: super; font-size: var(--fs-1); }
    palette applies to it */
 .fig .wp-line { fill: none; stroke: var(--text); stroke-width: 1.5; stroke-linejoin: round; }
 .fig .wp-ev { stroke: var(--faint); stroke-width: 1.4; }
-
-/* F1 and F6 span the shell rather than sitting inside a card */
-.fig-wide { margin-top: var(--sp-5); }
-.fig-wide .walk-legend { margin-top: var(--sp-2); padding-top: var(--sp-2); }
-
-.statline.bare { border-top: none; padding-top: 0; margin-top: 0; }
-th.sortable { cursor: pointer; }
 /* The match table's caption is gone: the active header prints ▼/▲ and every
    <th> is role=button with cursor:pointer, so the caption was narrating an
    affordance already on screen. */

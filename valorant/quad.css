@@ -58,3 +58,23 @@
 
 .pos { color: var(--pos); }
 .neg { color: var(--neg); }
+
+/* round-axis chart additions */
+.quad-chart .matchsep { stroke: var(--line); stroke-width: 1; opacity: .22; }
+
+/* match subpage */
+.crumb { margin: 0 0 .75rem; font-size: var(--fs-2); }
+.roster { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-wrap: wrap; gap: 1rem; font-size: var(--fs-2); }
+.roster li { display: flex; align-items: center; gap: .45rem; }
+.roster .swatch { width: .8rem; height: .8rem; border-radius: 3px; flex: none; }
+.table-wrap { overflow-x: auto; }
+.round-table { width: 100%; border-collapse: collapse; font-size: var(--fs-2); }
+.round-table th { text-align: left; color: var(--muted); font-weight: var(--w-body); padding: .35rem .5rem; border-bottom: 1px solid var(--line); }
+.round-table th.num { text-align: right; }
+.round-table th .swatch { display: inline-block; width: .7rem; height: .7rem; border-radius: 2px; margin-right: .35rem; }
+.round-table td { padding: .3rem .5rem; border-bottom: 1px solid var(--line); }
+.round-table .num { font-family: var(--mono); text-align: right; white-space: nowrap; }
+.round-table .absent { color: var(--faint); }
+.round-table tfoot td { border-top: 2px solid var(--line); border-bottom: none; padding-top: .5rem; }
+.rtag { font-size: var(--fs-1); color: var(--faint); font-family: var(--mono); }
+.meta { color: var(--muted); font-family: var(--mono); font-size: var(--fs-1); margin: 0 0 .8rem; }

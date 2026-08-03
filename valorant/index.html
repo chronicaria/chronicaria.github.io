@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RWPA — what two Valorant players actually added, per round</title>
-<meta name="description" content="A round-win-probability metric for two players over 22 shared competitive matches and 473 rounds, cross-fitted so no match is scored by a model that saw it. Both come out a point or so above an average player per round, and neither result is distinguishable from zero — a negative result, shown with the intervals that make it one.">
+<title>RWPA — four players, every round of an act</title>
+<meta name="description" content="Round win probability added for four Valorant players across the 1,368 rounds of the 65 competitive matches at least one of them played in act E11A4. Cross-fitted on a 5,137-match corpus, shown as a rate so playing more games does not look like playing better, and with each line broken over the rounds a player did not play.">
 <link rel="canonical" href="https://chronicaria.github.io/valorant/">
-<meta property="og:title" content="RWPA — what two Valorant players actually added, per round">
-<meta property="og:description" content="22 shared matches, 473 rounds, every round scored by a model that never saw it. Two players, both around a point of win probability per round, and neither distinguishable from zero.">
+<meta property="og:title" content="RWPA — four players, every round of an act">
+<meta property="og:description" content="65 matches, 1,368 rounds, four players who have never all been on the same server. A per-100-round rate, lines that stop when you weren't there, and no leaderboard.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://chronicaria.github.io/valorant/">
 <meta name="twitter:card" content="summary">
@@ -15,16 +15,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css?v=2f5f4476f0">
-<script defer src="/assets/hub.js"></script></head>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="quad.css">
+<script defer src="/assets/hub.js"></script>
+</head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header">
   <div class="header-inner">
     <p class="brand"><a href="#/">R<em>W</em>PA</a></p>
-    <p class="header-meta" data-header-meta>Round win probability added · shared competitive cohort</p>
-    <p class="header-meta"><a href="quad.html">Four-player view →</a></p>
+    <p class="header-meta">Round win probability added · four players · act E11A4</p>
     <button class="theme-toggle" type="button">◐ light</button>
   </div>
 </header>
@@ -35,88 +36,84 @@
   <section id="view-cohort">
 
     <div class="masthead">
-      <h1>Every round we played, and what each of us <em>did</em> to it.</h1>
-      <!-- The lead states the FINDING and the unit. A standfirst was removed
-           from here once for narrating the figure below it; this one does the
-           opposite job, and is built from VAL_DATA so it cannot drift from the
-           numbers it summarises. Empty until the payload fills it. -->
-      <p class="lead" data-lead></p>
-    </div>
-
-    <!-- signature: the cumulative walk -->
-    <div class="walk" data-walk>
-      <div class="walk-readout" data-walk-readout></div>
-      <svg class="walk-figure" data-walk-figure
-           role="img" aria-labelledby="walk-title walk-desc">
-        <title id="walk-title">Cumulative round win probability added across the cohort</title>
-        <desc id="walk-desc" data-walk-desc>A line per player, accumulating each round's credited probability in match order.</desc>
-      </svg>
-      <p class="walk-legend" data-walk-legend>
-        <span><i class="swatch m"></i>MartinLutherKing</span>
-        <span><i class="swatch s"></i>SN0RLAX</span>
+      <h1>Four players, every round of an act, and a line that <em>stops</em> when you weren't there.</h1>
+      <p>
+        Every competitive match in E11A4 that at least one of the four played — 65 matches,
+        1,368 rounds. The walk below is round win probability added <em>per 100 rounds</em>,
+        so playing more games does not by itself look like playing better. Where somebody sat
+        out, their line stops and resumes when they return: the running total carries, the
+        stroke does not, because a connecting slope would draw performance in rounds nobody played.
       </p>
     </div>
 
-    <!-- F1: every round played, once, to scale -->
-    <div class="fig fig-wide" data-disposition></div>
+    <section>
+      <h2>The walk</h2>
+      <ul class="quad-legend" id="quad-legend"></ul>
+      <div id="quad-chart"></div>
+      <p class="quad-note">
+        Same model as before, not re-solved: these are the same cross-fitted, out-of-fold credits
+        from a 5,137-match corpus, re-sliced to whoever was on the server. A line only begins once
+        that player passes 20 rounds of exposure — below that a rate is noise, and the release
+        suppresses it rather than drawing it. Expect a line to swing hard just after it starts
+        and settle as exposure grows: that early movement is the denominator filling in, not
+        form. Click any match to open its rounds.
+      </p>
+    </section>
 
-    <!-- the honest comparison -->
-    <div class="section-head">
-      <h2>Cohort totals</h2>
-    </div>
-    <div class="verdict" data-verdict></div>
+    <section>
+      <h2>Season rates</h2>
+      <div class="quad-cards" id="quad-cards"></div>
+      <p class="quad-note">
+        <strong>These are not a leaderboard, and the page will not sort them.</strong>
+        They cover different matches, different opponents, and exposure differing by more than
+        ten to one. Trzzcko's rate is the clearest warning: five matches and ninety-three rounds
+        is enough to produce a large number and nowhere near enough to mean one.
+      </p>
+      <p class="quad-note">
+        There is a deeper reason they don't compare. Every non-cohort player in this dataset is
+        re-pseudonymised in each match, so opponents and teammates cannot be linked across games.
+        Lineup quality and player skill are therefore not separable — a structural limit, not
+        something more matches would fix.
+      </p>
+    </section>
 
-    <!-- match table -->
-    <div class="section-head">
-      <h2>Matches</h2>
-    </div>
-    <div class="table-wrap">
-      <table data-match-table></table>
-    </div>
+    <section>
+      <h2>Every match</h2>
+      <table class="quad-matches" id="quad-matches">
+        <thead>
+          <tr>
+            <th class="num">#</th><th>Map</th><th class="num">Rds</th>
+            <th class="num">Martin</th><th class="num">SN0RLAX</th>
+            <th class="num">TheMarias</th><th class="num">Trzzcko</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="quad-note">
+        Match totals are sums, not rates — within one match everybody present played the same
+        number of rounds, so a sum is the honest unit there.
+      </p>
+    </section>
 
-    <!-- a different population: each player over their own matches -->
-    <div class="section-head">
-      <h2>Every player, over their own matches</h2>
-      <p class="note" data-corpus-note></p>
-      <div class="chips" data-corpus-scopes></div>
-    </div>
-    <div class="table-wrap">
-      <table data-corpus-table></table>
-    </div>
-
-    <!-- what the box score already told you; empty until the payload carries it -->
-    <div data-kd></div>
-
-    <!-- the questions two players actually ask about their own games;
-         empty until the payload carries overall.splits -->
-    <div data-splits></div>
-
-    <!-- everything that is not the headline -->
-    <div class="section-head">
-      <h2>Diagnostics and exploratory layers</h2>
-      <p class="note" data-layer-sum>Separate models with separate denominators. They do not add up.</p>
-    </div>
-    <div data-layers></div>
-
-    <div class="foot" data-provenance></div>
+    <section>
+      <h2>What this page is</h2>
+      <p class="quad-note">
+        Four separate stories that occasionally overlap. All four have never been on the same
+        server: the largest overlap is Martin and SN0RLAX at 27 matches, and TheMarias and
+        Trzzcko have never played a single game together. Within any one match the players
+        present faced the same opponents in the same rounds, so comparing them there is fair.
+        Across the season they did not, so it isn't.
+      </p>
+    </section>
 
   </section>
 
   <!-- ====================== MATCH VIEW ====================== -->
-  <section id="view-match" hidden>
-    <button class="back" type="button" data-back>&larr; All matches</button>
-    <div data-match-body></div>
-  </section>
+  <section id="view-match" hidden></section>
 
 </main>
 
-<noscript>
-  <p class="note" style="max-width:60ch;margin:24px auto">This dashboard renders its tables and figures
-  from a local data file with JavaScript. Enable it, or read the CSVs in the release directory named in
-  <code>data/model_suite_release_config_2026-07-27.json</code>.</p>
-</noscript>
-
-<script src="data.js?v=c5a5d71ab8"></script>
-<script src="app.js?v=e2a3702098"></script>
+<script src="quad_data.js"></script>
+<script src="quad.js"></script>
 </body>
 </html>

@@ -149,3 +149,8 @@
 .wf .wf-sub { font-size: 11px; }
 .wf .wf-val { font-size: 13px; }
 .wf .step { rx: 2; }
+
+/* end-of-line labels */
+.quad-chart .endlead { stroke-width: 1; opacity: .5; }
+.quad-chart .endlab { font-size: 12px; font-weight: var(--w-strong); }
+.quad-chart .endval { font-size: 11px; font-family: var(--mono); fill: var(--muted); }

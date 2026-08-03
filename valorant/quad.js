@@ -37,9 +37,13 @@
     return n;
   }
 
-  /* global round timeline */
+  /* The chart's timeline is only matches where at least TWO of the four played.
+     This page's whole claim is that a comparison holds inside a shared match and nowhere else,
+     so a solo queue contributes nothing a reader could compare and only stretches the axis.
+     It also starts the chart where the first shared match is, which is Martin's first match. */
+  var SHARED = D.matches.filter(function (m) { return m.who.length >= 2; });
   var TL = [];
-  D.matches.forEach(function (m) { m.rounds.forEach(function (r) { TL.push({ m: m, r: r }); }); });
+  SHARED.forEach(function (m) { m.rounds.forEach(function (r) { TL.push({ m: m, r: r }); }); });
 
   /* per player: the rounds they played, as {i, v} against the global index */
   var PTS = {};
@@ -68,7 +72,7 @@
     if (!host) return;
     host.textContent = "";
 
-    var W = 940, H = 400, ML = 54, MR = 14, MT = 16, MB = 42;
+    var W = 940, H = 400, ML = 54, MR = 132, MT = 16, MB = 42;
     var n = TL.length;
 
     var lines = {};
@@ -117,9 +121,9 @@
     svg.appendChild(sv("line", { class: "axis", x1: ML, x2: W - MR, y1: H - MB, y2: H - MB }));
 
     var acc = 0;
-    D.matches.forEach(function (m, mi) {
+    SHARED.forEach(function (m, mi) {
       acc += m.rounds.length;
-      if (mi < D.matches.length - 1 && acc < n)
+      if (mi < SHARED.length - 1 && acc < n)
         svg.appendChild(sv("line", { class: "matchsep", x1: x(acc), x2: x(acc), y1: MT, y2: H - MB }));
     });
 
@@ -171,7 +175,7 @@
     });
 
     var start = 0;
-    D.matches.forEach(function (m) {
+    SHARED.forEach(function (m) {
       var w = Math.max(x(start + m.rounds.length) - x(start), 2);
       var r = sv("rect", { class: "hit", x: x(start), y: MT, width: w, height: H - MT - MB,
         tabindex: "0", role: "button",
@@ -182,6 +186,41 @@
       });
       svg.appendChild(r);
       start += m.rounds.length;
+    });
+
+    /* ---- end labels: who the line is, and where it finished ---- */
+    /* Placed at each series' last point so a reader never has to trace a colour back to a
+       legend. Collisions are nudged apart vertically rather than overlapped. */
+    var ends = [];
+    ids.forEach(function (pid) {
+      var pts = lines[pid];
+      if (!pts.length) return;
+      var last = pts[pts.length - 1];
+      ends.push({ pid: pid, x: x(last.i), y: y(last.y), v: last.y });
+    });
+    ends.sort(function (a, b) { return a.y - b.y; });
+    /* Each label is two lines (name, then value), so the minimum separation is the height of
+       both plus a gap -- 15px let the value of one sit on the name of the next. */
+    var LABEL_H = 27;
+    for (var e2 = 1; e2 < ends.length; e2++) {
+      if (ends[e2].y - ends[e2 - 1].y < LABEL_H) ends[e2].y = ends[e2 - 1].y + LABEL_H;
+    }
+    // if nudging pushed the stack past the plot, shift the whole stack back up
+    var overflow = ends.length ? (ends[ends.length - 1].y + 12) - (H - MB) : 0;
+    if (overflow > 0) ends.forEach(function (e) { e.y -= overflow; });
+    ends.forEach(function (e) {
+      var col = css(COLOR[e.pid]);
+      svg.appendChild(sv("circle", { cx: e.x, cy: y(e.v), r: 3, fill: col }));
+      svg.appendChild(sv("line", { class: "endlead", x1: e.x + 4, x2: W - MR + 6,
+                                   y1: y(e.v), y2: e.y, stroke: col }));
+      var t1 = sv("text", { class: "endlab", x: W - MR + 10, y: e.y - 1, fill: col });
+      t1.textContent = SHORT[e.pid];
+      svg.appendChild(t1);
+      var t2 = sv("text", { class: "endval", x: W - MR + 10, y: e.y + 11 });
+      /* Say "latest": this is where the trailing mean ended, not the season rate on the cards
+         above, and the two differ by design. Martin finishes at +0.6 here against +1.2 there. */
+      t2.textContent = fmt(e.v, 1) + " latest";
+      svg.appendChild(t2);
     });
 
     /* ---- hover: crosshair, a dot on each live series, and a content panel ---- */
@@ -287,11 +326,19 @@
     var ul = document.getElementById("quad-legend");
     if (!ul) return;
     ul.textContent = "";
+    var shared = D.matches.filter(function (m) { return m.who.length >= 2; });
     D.players.forEach(function (p) {
+      var rs = 0, ms = 0;
+      shared.forEach(function (m) {
+        var had = false;
+        m.rounds.forEach(function (r) { if (r.p[p.id]) { rs++; had = true; } });
+        if (had) ms++;
+      });
       var li = document.createElement("li");
       li.innerHTML = '<span class="swatch" style="background:var(' + COLOR[p.id] + ')"></span>' +
         '<span class="who">' + SHORT[p.id] + "</span>" +
-        '<span class="exposure">' + p.matches + " matches · " + p.rounds + " rounds</span>";
+        '<span class="exposure">' + ms + " shared · " + rs + " rounds" +
+        (rs < (D.min_rounds_for_rate || 20) ? " · too few to plot" : "") + "</span>";
       ul.appendChild(li);
     });
   }

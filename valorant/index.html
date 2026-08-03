@@ -39,11 +39,12 @@
       <h1>Four players, every round of an act, and a line that <em>stops</em> when you weren't there.</h1>
       <p>
         Every competitive match in E11A4 that at least one of the four played — 65 matches,
-        1,368 rounds. Every dot below is one round's win probability added; the line through
-        them is a <em>trailing mean</em>, not a lifetime average, so a player who has been at
-        this a long time can still move. Where somebody sat out, their line stops and resumes
-        when they return, because a connecting slope would draw performance in rounds nobody
-        played.
+        1,368 rounds. The chart below narrows to the <em>29 matches where at least two of them
+        were on the same server</em>, which is the only place their lines mean anything against
+        each other, and which happens to begin at Martin's first match of the act. Every dot is
+        one round's win probability added; the line through them is a trailing mean, not a
+        lifetime average, so a player who has been at this a long time can still move. Where
+        somebody sat out, their line stops and resumes when they return.
       </p>
     </div>
 
@@ -55,7 +56,9 @@
       <p class="quad-note">
         Same model as before, not re-solved: these are the same cross-fitted, out-of-fold credits
         from a 5,137-match corpus, re-sliced to whoever was on the server. A line only begins once
-        the window is actually full, so a short series simply has less line.
+        the window is actually full, so a short series simply has less line — TheMarias has only
+        36 rounds inside shared matches and so does not appear at a 50-round window at all, which
+        is the honest picture of four shared matches rather than an omission.
       </p>
       <p class="quad-note">
         <strong>The wiggles are not form.</strong> A single round's RWPA has a standard deviation
@@ -63,7 +66,9 @@
         season signal. Even a 100-round window carries a standard error near ±2.1 per 100, and
         the whole spread between the highest and lowest season rate here is 0.72 per 100. The
         line answers roughly where a player has been sitting lately; it will not tell you who is
-        hot. Click any match to open its rounds.
+        hot. The figure at the end of each line is where that trailing mean finished, which is a
+        different number from the season rate on the cards below — Martin ends at +0.6 here and
+        averages +1.2 across the act. Click any match to open its rounds.
       </p>
     </section>
 
@@ -104,8 +109,11 @@
         <tbody></tbody>
       </table>
       <p class="quad-note">
-        Match totals are sums, not rates — within one match everybody present played the same
-        number of rounds, so a sum is the honest unit there.
+        All 65 matches are listed, including the 36 where only one of the four queued. Those
+        count toward that player's own record and toward the season rates above; they are left
+        out of the chart because there is nobody to compare them against. Match totals are sums,
+        not rates — within one match everybody present played the same number of rounds, so a
+        sum is the honest unit there.
       </p>
     </section>
 

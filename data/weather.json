@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-03T03:00:00Z",
-  "updated": "2026-08-03T04:07:39Z",
+  "valid_time_utc": "2026-08-03T09:00:00Z",
+  "updated": "2026-08-03T10:14:21Z",
   "hottest": [
-    {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 104.6
-    },
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 104.6
+      "temp_f": 93.6
     },
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 104.4
+      "temp_f": 92.7
+    },
+    {
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 92.2
     }
   ],
   "coldest": [
     {
-      "name": "Yakutat",
-      "state": "AK",
-      "temp_f": 50.1
+      "name": "Glacier",
+      "state": "MT",
+      "temp_f": 43.0
     },
     {
-      "name": "North Slope",
-      "state": "AK",
-      "temp_f": 50.2
+      "name": "Deschutes",
+      "state": "OR",
+      "temp_f": 43.1
     },
     {
-      "name": "Skagway",
-      "state": "AK",
-      "temp_f": 51.4
+      "name": "Deer Lodge",
+      "state": "MT",
+      "temp_f": 44.6
     }
   ],
   "national": {
-    "min_f": 50.1,
-    "max_f": 104.6,
-    "mean_f": 73.6
+    "min_f": 43.0,
+    "max_f": 93.6,
+    "mean_f": 67.8
   }
 }

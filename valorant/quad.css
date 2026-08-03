@@ -154,3 +154,4 @@
 .quad-chart .endlead { stroke-width: 1; opacity: .5; }
 .quad-chart .endlab { font-size: 12px; font-weight: var(--w-strong); }
 .quad-chart .endval { font-size: 11px; font-family: var(--mono); fill: var(--muted); }
+.winlead { font-size: var(--fs-1); color: var(--faint); margin-right: .1rem; }

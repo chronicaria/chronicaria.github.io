@@ -27,7 +27,12 @@
   var CT_LABEL = { kill_credit: "Kill credit", death_debit: "Death debit", plant: "Plant",
                    defuse: "Defuse", alive_clock: "Clock", duels: "Duels (kills − deaths)" };
   var ids = D.players.map(function (p) { return p.id; });
-  var WINDOW = 50;
+  var HALFLIFE = 50;   // rounds; weight halves every HALFLIFE rounds back
+  /* Effective sample size of an exponential weighting with half-life h is (1+L)/(1-L) for
+     L = 2^(-1/h), which is about 2.9h -- so a half-life of 50 rounds carries the precision of
+     roughly 144 rounds, against 50 for a flat window of the same span. Numbers below are
+     sd/sqrt(ESS) at the measured per-round sd of 0.211, in per-100 units. */
+  var SE_AT = { 25: 2.48, 50: 1.75, 100: 1.24 };
 
   function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
   function fmt(x, d) { return (x >= 0 ? "+" : "") + Number(x).toFixed(d === undefined ? 2 : d); }
@@ -45,25 +50,44 @@
   var TL = [];
   SHARED.forEach(function (m) { m.rounds.forEach(function (r) { TL.push({ m: m, r: r }); }); });
 
-  /* per player: the rounds they played, as {i, v} against the global index */
-  var PTS = {};
+  /* Index of every shared round, so a full-history walk knows which of its steps are drawable. */
+  var TL_AT = {};
+  TL.forEach(function (t, i) { TL_AT[t.m.i + ":" + t.r.r] = i; });
+
+  /* FULL[pid] is every round that player played across ALL 65 matches, in play order -- including
+     the solo queues the chart does not draw. The decayed mean is fed by all of it: a round still
+     tells you something about a player's form even when nobody was there to be compared with.
+     `i` is the position in the shared timeline, or null when the round is not drawn. */
+  var FULL = {};
   ids.forEach(function (pid) {
-    PTS[pid] = [];
-    TL.forEach(function (t, i) {
-      var e = t.r.p[pid];
-      if (e) PTS[pid].push({ i: i, v: e.t });
+    FULL[pid] = [];
+    D.matches.forEach(function (m) {
+      m.rounds.forEach(function (r) {
+        var e = r.p[pid];
+        if (e) FULL[pid].push({ i: TL_AT[m.i + ":" + r.r], v: e.t });
+      });
     });
   });
 
-  /* trailing mean over the player's OWN last k rounds, positioned at the global index of the
-     round that closes the window. Only emitted once the window is full. */
-  function rolling(pid, k) {
-    var p = PTS[pid], out = [], sum = 0;
-    for (var j = 0; j < p.length; j++) {
-      sum += p[j].v;
-      if (j >= k) sum -= p[j - k].v;
-      if (j >= k - 1) out.push({ i: p[j].i, y: 100 * sum / k });
-    }
+  /* per player: the drawable rounds, as {i, v} against the shared-timeline index */
+  var PTS = {};
+  ids.forEach(function (pid) {
+    PTS[pid] = FULL[pid].filter(function (q) { return q.i !== undefined; });
+  });
+
+  /* Exponentially decayed mean over the player's ENTIRE history to that point, half-life h.
+     Bias-corrected: both numerator and denominator decay, so this is a true weighted mean from
+     the very first round rather than something that has to warm up from zero.
+     Nothing is drawn until the release's own exposure floor is met -- a decayed mean over four
+     rounds is still a mean over four rounds. */
+  function decayed(pid, h) {
+    var lam = Math.pow(2, -1 / h), num = 0, den = 0, out = [];
+    var floor = D.min_rounds_for_rate || 20;
+    FULL[pid].forEach(function (q, j) {
+      num = num * lam + q.v;
+      den = den * lam + 1;
+      if (q.i !== undefined && j + 1 >= floor) out.push({ i: q.i, y: 100 * num / den });
+    });
     return out;
   }
 
@@ -76,7 +100,7 @@
     var n = TL.length;
 
     var lines = {};
-    ids.forEach(function (p) { lines[p] = rolling(p, WINDOW); });
+    ids.forEach(function (p) { lines[p] = decayed(p, HALFLIFE); });
 
     /* Scale to the LINES, not the scatter. Single-round RWPA ranges past +/-70 per 100 while
        every trailing mean sits inside a few points of zero, so scaling to the dots squeezes the
@@ -103,7 +127,8 @@
 
     var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, class: "quad-chart", role: "img",
       "aria-label": "Each round's win probability added for four players across " + n +
-        " rounds, with a " + WINDOW + "-round trailing mean per player." });
+        " rounds, with an exponentially decayed mean per player at a " + HALFLIFE +
+        "-round half-life." });
     var defs = sv("defs", {});
     var cp = sv("clipPath", { id: "plotclip" });
     cp.appendChild(sv("rect", { x: ML, y: MT, width: W - ML - MR, height: H - MT - MB }));
@@ -133,8 +158,8 @@
       svg.appendChild(t);
     });
     var xl = sv("text", { class: "tick", x: (ML + W - MR) / 2, y: H - 6, "text-anchor": "middle" });
-    xl.textContent = "round, in play order across the act · dots are single rounds, lines are a " +
-      WINDOW + "-round trailing mean" +
+    xl.textContent = "round, in play order across shared matches · dots are single rounds, lines " +
+      "are a decayed mean, half-life " + HALFLIFE + " rounds" +
       (clipped ? " · " + clipped + " rounds fall outside this frame" : "");
     svg.appendChild(xl);
 
@@ -278,7 +303,7 @@
       pill.setAttribute("opacity", 1);
       panel.innerHTML =
         '<div class="tip-head">' + t.m.map + " · match " + (t.m.i + 1) + " · round " + (t.r.r + 1) + "</div>" +
-        '<div class="tip-cols"><span></span><span></span><span>mean</span><span>round</span></div>' + rows;
+        '<div class="tip-cols"><span></span><span></span><span>decayed</span><span>round</span></div>' + rows;
       panel.hidden = false;
       /* Clamp inside the chart rather than flipping at a fixed fraction: a fixed flip still
          overflows whenever the panel is wider than the remaining space. */
@@ -306,19 +331,23 @@
     var host = document.getElementById("quad-window");
     if (!host) return;
     host.textContent = "";
+    var lead = document.createElement("span");
+    lead.className = "winlead";
+    lead.textContent = "half-life";
+    host.appendChild(lead);
     [25, 50, 100].forEach(function (k) {
       var b = document.createElement("button");
       b.type = "button";
-      b.className = "winbtn" + (k === WINDOW ? " on" : "");
+      b.className = "winbtn" + (k === HALFLIFE ? " on" : "");
       b.textContent = k + " rounds";
-      b.setAttribute("aria-pressed", String(k === WINDOW));
-      b.addEventListener("click", function () { WINDOW = k; drawWindowControl(); drawChart(); });
+      b.setAttribute("aria-pressed", String(k === HALFLIFE));
+      b.addEventListener("click", function () { HALFLIFE = k; drawWindowControl(); drawChart(); });
       host.appendChild(b);
     });
-    var se = { 25: 4.21, 50: 2.98, 100: 2.11 }[WINDOW];
     var note = document.createElement("span");
     note.className = "winnote";
-    note.textContent = "±" + se.toFixed(1) + " per 100 at this window";
+    note.textContent = "±" + (SE_AT[HALFLIFE] || 0).toFixed(2) + " per 100 · " +
+                       Math.round(2.885 * HALFLIFE) + " effective rounds";
     host.appendChild(note);
   }
 

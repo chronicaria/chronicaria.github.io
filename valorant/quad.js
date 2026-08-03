@@ -27,10 +27,10 @@
   var CT_LABEL = { kill_credit: "Kill credit", death_debit: "Death debit", plant: "Plant",
                    defuse: "Defuse", alive_clock: "Clock", duels: "Duels (kills − deaths)" };
   var ids = D.players.map(function (p) { return p.id; });
-  var HALFLIFE = 50;   // rounds; weight halves every HALFLIFE rounds back
+  var HALFLIFE = 25;   // rounds; weight halves every HALFLIFE rounds back
   /* Effective sample size of an exponential weighting with half-life h is (1+L)/(1-L) for
      L = 2^(-1/h), which is about 2.9h -- so a half-life of 50 rounds carries the precision of
-     roughly 144 rounds, against 50 for a flat window of the same span. Numbers below are
+     roughly 2.9x its span, against 1x for a flat window. Numbers below are
      sd/sqrt(ESS) at the measured per-round sd of 0.211, in per-100 units. */
   var SE_AT = { 25: 2.48, 50: 1.75, 100: 1.24 };
 
@@ -42,13 +42,28 @@
     return n;
   }
 
-  /* The chart's timeline is only matches where at least TWO of the four played.
-     This page's whole claim is that a comparison holds inside a shared match and nowhere else,
-     so a solo queue contributes nothing a reader could compare and only stretches the axis.
-     It also starts the chart where the first shared match is, which is Martin's first match. */
-  var SHARED = D.matches.filter(function (m) { return m.who.length >= 2; });
+  /* Every round of every match, solo queues included. */
+  var SHARED = D.matches;
   var TL = [];
   SHARED.forEach(function (m) { m.rounds.forEach(function (r) { TL.push({ m: m, r: r }); }); });
+
+  /* Scope is an X-AXIS CUT ONLY. The decayed mean below always walks a player's entire history,
+     so switching scope never changes a number -- it changes where the drawing starts. Cutting
+     the data instead would silently restate every value, which is the trap this avoids. */
+  var FIRST = {};
+  TL.forEach(function (t, i) {
+    for (var k in t.r.p) if (FIRST[k] === undefined) FIRST[k] = i;
+  });
+  var SCOPES = [
+    { id: "all", label: "All rounds", from: function () { return 0; } },
+    { id: "martin", label: "From Martin's first", from: function () { return FIRST.martin || 0; } },
+    { id: "trzzcko", label: "From Trzzcko's first", from: function () { return FIRST.trzzcko || 0; } },
+  ];
+  var SCOPE = "all";
+  function scopeStart() {
+    var s0 = SCOPES.filter(function (s) { return s.id === SCOPE; })[0];
+    return s0 ? s0.from() : 0;
+  }
 
   /* Index of every shared round, so a full-history walk knows which of its steps are drawable. */
   var TL_AT = {};
@@ -98,6 +113,8 @@
 
     var W = 940, H = 400, ML = 54, MR = 132, MT = 16, MB = 42;
     var n = TL.length;
+    var i0 = scopeStart();                 // first round drawn; values are unaffected
+    var span = Math.max(n - 1 - i0, 1);
 
     var lines = {};
     ids.forEach(function (p) { lines[p] = decayed(p, HALFLIFE); });
@@ -109,20 +126,28 @@
        count of clipped rounds is printed so nothing is silently dropped. */
     var lmin = Infinity, lmax = -Infinity;
     ids.forEach(function (p) {
-      lines[p].forEach(function (q) { if (q.y < lmin) lmin = q.y; if (q.y > lmax) lmax = q.y; });
+      lines[p].forEach(function (q) {
+        if (q.i < i0) return;
+        if (q.y < lmin) lmin = q.y; if (q.y > lmax) lmax = q.y;
+      });
     });
     if (!isFinite(lmin)) { lmin = -1; lmax = 1; }
     /* Frame the trailing means and nothing else. Single rounds reach past +/-70 per 100; letting
        them set the scale flattens every line into one band and hides the differences the chart
        exists to show. Dots outside are clipped and counted on the axis. */
-    var span = Math.max(lmax - lmin, 0.5), padY = span * 0.14;
+    /* NB: not `span` -- that name is the x-axis round range above, and `var` gives them one
+       binding. Overwriting it put every tick past the first at x = 28132 in a 940-wide box. */
+    var ySpan = Math.max(lmax - lmin, 0.5), padY = ySpan * 0.14;
     var lo = lmin - padY, hi = lmax + padY;
     var clipped = 0;
     ids.forEach(function (p) {
-      PTS[p].forEach(function (q) { var v = 100 * q.v; if (v < lo || v > hi) clipped++; });
+      PTS[p].forEach(function (q) {
+        if (q.i < i0) return;
+        var v = 100 * q.v; if (v < lo || v > hi) clipped++;
+      });
     });
 
-    var x = function (i) { return ML + (n <= 1 ? 0 : i * (W - ML - MR) / (n - 1)); };
+    var x = function (i) { return ML + (i - i0) * (W - ML - MR) / span; };
     var y = function (v) { return MT + (hi - v) * (H - MT - MB) / (hi - lo || 1); };
 
     var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, class: "quad-chart", role: "img",
@@ -148,17 +173,17 @@
     var acc = 0;
     SHARED.forEach(function (m, mi) {
       acc += m.rounds.length;
-      if (mi < SHARED.length - 1 && acc < n)
+      if (mi < SHARED.length - 1 && acc < n && acc > i0)
         svg.appendChild(sv("line", { class: "matchsep", x1: x(acc), x2: x(acc), y1: MT, y2: H - MB }));
     });
 
-    [0, Math.floor((n - 1) / 3), Math.floor(2 * (n - 1) / 3), n - 1].forEach(function (i) {
+    [i0, i0 + Math.floor(span / 3), i0 + Math.floor(2 * span / 3), n - 1].forEach(function (i) {
       var t = sv("text", { class: "tick", x: x(i), y: H - MB + 16, "text-anchor": "middle" });
       t.textContent = String(i + 1);
       svg.appendChild(t);
     });
     var xl = sv("text", { class: "tick", x: (ML + W - MR) / 2, y: H - 6, "text-anchor": "middle" });
-    xl.textContent = "round, in play order across shared matches · dots are single rounds, lines " +
+    xl.textContent = "round, in play order across the act · dots are single rounds, lines " +
       "are a decayed mean, half-life " + HALFLIFE + " rounds" +
       (clipped ? " · " + clipped + " rounds fall outside this frame" : "");
     svg.appendChild(xl);
@@ -171,6 +196,7 @@
       var col = css(COLOR[pid]);
       var g = sv("g", { class: "scatter", "clip-path": "url(#plotclip)" });
       PTS[pid].forEach(function (q) {
+        if (q.i < i0) return;
         g.appendChild(sv("circle", { cx: x(q.i), cy: y(100 * q.v), r: 1.5, fill: col }));
       });
       svg.appendChild(g);
@@ -193,6 +219,7 @@
          round they missed, and joining them draws a slope across matches they never played. */
       var prevI = null;
       pts.forEach(function (q) {
+        if (q.i < i0) return;                       // scope cut: drawn range only
         if (prevI !== null && q.i !== prevI + 1) flush();
         seg.push(q); prevI = q.i;
       });
@@ -201,6 +228,7 @@
 
     var start = 0;
     SHARED.forEach(function (m) {
+      if (start + m.rounds.length <= i0) { start += m.rounds.length; return; }
       var w = Math.max(x(start + m.rounds.length) - x(start), 2);
       var r = sv("rect", { class: "hit", x: x(start), y: MT, width: w, height: H - MT - MB,
         tabindex: "0", role: "button",
@@ -278,7 +306,7 @@
       panel.hidden = true;
     }
     function hoverAt(i) {
-      i = Math.max(0, Math.min(n - 1, i));
+      i = Math.max(i0, Math.min(n - 1, i));
       var t = TL[i], px = x(i);
       cross.setAttribute("x1", px); cross.setAttribute("x2", px); cross.setAttribute("opacity", 1);
       var rows = "";
@@ -310,7 +338,7 @@
       panel.style.left = "0px";
       panel.style.transform = "none";
       var hb = host.getBoundingClientRect(), pb = panel.getBoundingClientRect();
-      var want = (i / Math.max(n - 1, 1)) * hb.width + 14;
+      var want = ((i - i0) / span) * hb.width + 14;
       panel.style.left = Math.max(0, Math.min(want, hb.width - pb.width)) + "px";
     }
     var surface = sv("rect", { class: "hover-surface", x: ML, y: MT,
@@ -318,13 +346,38 @@
     surface.addEventListener("mousemove", function (e) {
       var r = svg.getBoundingClientRect();
       var vx = ((e.clientX - r.left) / r.width) * W;
-      hoverAt(Math.round((vx - ML) / ((W - ML - MR) / Math.max(n - 1, 1))));
+      hoverAt(i0 + Math.round((vx - ML) / ((W - ML - MR) / span)));
     });
     surface.addEventListener("mouseleave", hoverOff);
     svg.appendChild(surface);
 
     host.appendChild(svg);
     host._x = x; host._band = band;
+  }
+
+  function drawScopeControl() {
+    var host = document.getElementById("quad-scope");
+    if (!host) return;
+    host.textContent = "";
+    var lead = document.createElement("span");
+    lead.className = "winlead";
+    lead.textContent = "show";
+    host.appendChild(lead);
+    SCOPES.forEach(function (sc) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "winbtn" + (sc.id === SCOPE ? " on" : "");
+      b.textContent = sc.label;
+      b.setAttribute("aria-pressed", String(sc.id === SCOPE));
+      b.addEventListener("click", function () { SCOPE = sc.id; drawScopeControl(); drawChart(); });
+      host.appendChild(b);
+    });
+    var n0 = scopeStart();
+    var note = document.createElement("span");
+    note.className = "winnote";
+    note.textContent = "round " + (n0 + 1) + "–" + TL.length + " of " + TL.length +
+                       " · axis only, values unchanged";
+    host.appendChild(note);
   }
 
   function drawWindowControl() {
@@ -355,19 +408,11 @@
     var ul = document.getElementById("quad-legend");
     if (!ul) return;
     ul.textContent = "";
-    var shared = D.matches.filter(function (m) { return m.who.length >= 2; });
     D.players.forEach(function (p) {
-      var rs = 0, ms = 0;
-      shared.forEach(function (m) {
-        var had = false;
-        m.rounds.forEach(function (r) { if (r.p[p.id]) { rs++; had = true; } });
-        if (had) ms++;
-      });
       var li = document.createElement("li");
       li.innerHTML = '<span class="swatch" style="background:var(' + COLOR[p.id] + ')"></span>' +
         '<span class="who">' + SHORT[p.id] + "</span>" +
-        '<span class="exposure">' + ms + " shared · " + rs + " rounds" +
-        (rs < (D.min_rounds_for_rate || 20) ? " · too few to plot" : "") + "</span>";
+        '<span class="exposure">' + p.matches + " matches · " + p.rounds + " rounds</span>";
       ul.appendChild(li);
     });
   }
@@ -595,7 +640,7 @@
   }
 
   function boot() {
-    drawLegend(); drawCards(); drawWindowControl(); drawChart(); drawMatchList();
+    drawLegend(); drawCards(); drawScopeControl(); drawWindowControl(); drawChart(); drawMatchList();
     addEventListener("hashchange", route);
     route();
     var t = document.querySelector(".theme-toggle");

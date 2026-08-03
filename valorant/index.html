@@ -39,19 +39,21 @@
       <h1>Four players, every round of an act, and a line that <em>stops</em> when you weren't there.</h1>
       <p>
         Every competitive match in E11A4 that at least one of the four played — 65 matches,
-        1,368 rounds. The chart below narrows to the <em>29 matches where at least two of them
-        were on the same server</em>, which is the only place their lines mean anything against
-        each other, and which happens to begin at Martin's first match of the act. Every dot is
+        1,368 rounds, all of them here. Every dot is
         one round's win probability added. The line through them is a <em>decayed mean</em>: every
-        round a player has ever played counts, but its weight halves every 50 rounds, so recent
+        round a player has ever played counts, but its weight halves every 25 rounds, so recent
         form leads without older play being thrown away. Where somebody sat out, their line stops
-        and resumes when they return.
+        and resumes when they return. The scope buttons crop the x-axis — SN0RLAX plays alone for
+        the first 704 rounds, so starting at Martin's or Trzzcko's first match is often the more
+        readable view. Cropping never changes a value: every mean is computed over that player's
+        whole history either way.
       </p>
     </div>
 
     <section>
       <h2>The walk</h2>
       <ul class="quad-legend" id="quad-legend"></ul>
+      <div class="quad-window" id="quad-scope"></div>
       <div class="quad-window" id="quad-window"></div>
       <div id="quad-chart"></div>
       <p class="quad-note">
@@ -59,15 +61,15 @@
         from a 5,137-match corpus, re-sliced to whoever was on the server. The decay is fed by
         every round a player has played this act, including the solo queues the chart does not
         draw — a round still says something about form even when nobody was there to be compared
-        against. At a 50-round half-life the most recent 50 rounds carry half the weight, the most
-        recent 100 carry three quarters.
+        against. At a 25-round half-life the most recent 25 rounds carry half the weight, the most
+        recent 50 carry three quarters.
       </p>
       <p class="quad-note">
         <strong>Read the level, not the wiggles.</strong> A single round's RWPA has a standard
         deviation of 0.211 against a mean of +0.010 — round-level noise runs about twenty times
-        the season signal. Decay helps: a 50-round half-life carries the precision of about 144
-        rounds, where a flat 50-round window carries 50, so the standard error is ±1.75 per 100
-        rather than ±2.98. It is still larger than the 0.72 spread between the highest and lowest
+        the season signal. Decay helps: a 25-round half-life carries the precision of about 72
+        rounds, where a flat 25-round window carries 25, so the standard error is ±2.48 per 100
+        rather than ±4.21. It is still larger than the 0.72 spread between the highest and lowest
         season rate, so no crossing of two lines here settles anything. The figure at the end of
         each line is where its decayed mean finished, which is a different number from the season
         rate on the cards below — Martin ends at +0.2 here and averages +1.2 across the act, one
@@ -112,9 +114,7 @@
         <tbody></tbody>
       </table>
       <p class="quad-note">
-        All 65 matches are listed, including the 36 where only one of the four queued. Those
-        count toward that player's own record and toward the season rates above; they are left
-        out of the chart because there is nobody to compare them against. Match totals are sums,
+        All 65 matches, including the 36 where only one of the four queued. Match totals are sums,
         not rates — within one match everybody present played the same number of rounds, so a
         sum is the honest unit there.
       </p>

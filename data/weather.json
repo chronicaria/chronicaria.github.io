@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-03T09:00:00Z",
-  "updated": "2026-08-03T10:14:21Z",
+  "valid_time_utc": "2026-08-03T14:00:00Z",
+  "updated": "2026-08-03T15:26:22Z",
   "hottest": [
-    {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 93.6
-    },
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 92.7
+      "temp_f": 90.8
     },
     {
-      "name": "Yuma",
+      "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 92.2
+      "temp_f": 90.7
+    },
+    {
+      "name": "Pinal",
+      "state": "AZ",
+      "temp_f": 89.7
     }
   ],
   "coldest": [
     {
-      "name": "Glacier",
-      "state": "MT",
-      "temp_f": 43.0
-    },
-    {
       "name": "Deschutes",
       "state": "OR",
-      "temp_f": 43.1
+      "temp_f": 39.0
     },
     {
-      "name": "Deer Lodge",
-      "state": "MT",
-      "temp_f": 44.6
+      "name": "Crook",
+      "state": "OR",
+      "temp_f": 42.1
+    },
+    {
+      "name": "Klamath",
+      "state": "OR",
+      "temp_f": 43.1
     }
   ],
   "national": {
-    "min_f": 43.0,
-    "max_f": 93.6,
-    "mean_f": 67.8
+    "min_f": 39.0,
+    "max_f": 90.8,
+    "mean_f": 72.4
   }
 }

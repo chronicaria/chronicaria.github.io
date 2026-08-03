@@ -39,30 +39,44 @@
       <h1>Four players, every round of an act, and a line that <em>stops</em> when you weren't there.</h1>
       <p>
         Every competitive match in E11A4 that at least one of the four played — 65 matches,
-        1,368 rounds. The walk below is round win probability added <em>per 100 rounds</em>,
-        so playing more games does not by itself look like playing better. Where somebody sat
-        out, their line stops and resumes when they return: the running total carries, the
-        stroke does not, because a connecting slope would draw performance in rounds nobody played.
+        1,368 rounds. Every dot below is one round's win probability added; the line through
+        them is a <em>trailing mean</em>, not a lifetime average, so a player who has been at
+        this a long time can still move. Where somebody sat out, their line stops and resumes
+        when they return, because a connecting slope would draw performance in rounds nobody
+        played.
       </p>
     </div>
 
     <section>
       <h2>The walk</h2>
       <ul class="quad-legend" id="quad-legend"></ul>
+      <div class="quad-window" id="quad-window"></div>
       <div id="quad-chart"></div>
       <p class="quad-note">
         Same model as before, not re-solved: these are the same cross-fitted, out-of-fold credits
         from a 5,137-match corpus, re-sliced to whoever was on the server. A line only begins once
-        that player passes 20 rounds of exposure — below that a rate is noise, and the release
-        suppresses it rather than drawing it. Expect a line to swing hard just after it starts
-        and settle as exposure grows: that early movement is the denominator filling in, not
-        form. Click any match to open its rounds.
+        the window is actually full, so a short series simply has less line.
+      </p>
+      <p class="quad-note">
+        <strong>The wiggles are not form.</strong> A single round's RWPA has a standard deviation
+        of 0.211 against a mean of +0.010 — the round-level noise is about twenty times the
+        season signal. Even a 100-round window carries a standard error near ±2.1 per 100, and
+        the whole spread between the highest and lowest season rate here is 0.72 per 100. The
+        line answers roughly where a player has been sitting lately; it will not tell you who is
+        hot. Click any match to open its rounds.
       </p>
     </section>
 
     <section>
-      <h2>Season rates</h2>
+      <h2>Season rates, and where they came from</h2>
       <div class="quad-cards" id="quad-cards"></div>
+      <p class="quad-note">
+        Each card carries its own decomposition. The net is small because it is the residue of
+        two much larger flows: kill credit and death debit each run an order of magnitude above
+        everything else and very nearly cancel, which is why they are drawn as one duel bar with
+        both sides printed rather than as two bars that would set the scale twenty times too
+        wide. Plant, defuse and clock are what is left. The steps sum to the net exactly.
+      </p>
       <p class="quad-note">
         <strong>These are not a leaderboard, and the page will not sort them.</strong>
         They cover different matches, different opponents, and exposure differing by more than

@@ -78,3 +78,33 @@
 .round-table tfoot td { border-top: 2px solid var(--line); border-bottom: none; padding-top: .5rem; }
 .rtag { font-size: var(--fs-1); color: var(--faint); font-family: var(--mono); }
 .meta { color: var(--muted); font-family: var(--mono); font-size: var(--fs-1); margin: 0 0 .8rem; }
+
+/* scatter + rolling mean */
+.quad-chart .scatter circle { opacity: .28; }
+.quad-chart .seg { stroke-width: 2; }
+.quad-window { display: flex; align-items: center; gap: .5rem; margin: 0 0 .6rem; flex-wrap: wrap; }
+.winbtn { font: inherit; font-size: var(--fs-1); font-family: var(--mono); padding: .2rem .6rem;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--muted); cursor: pointer; }
+.winbtn.on { border-color: var(--accent); color: var(--text); background: var(--panel-2); }
+.winnote { font-family: var(--mono); font-size: var(--fs-1); color: var(--faint); margin-left: .3rem; }
+
+/* waterfall */
+.wf { width: 100%; height: auto; display: block; margin-top: .6rem; }
+.wf .step.pos { fill: var(--pos); }
+.wf .step.neg { fill: var(--neg); }
+.wf .zero { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 3; }
+.wf .axis { stroke: var(--line); stroke-width: 1; }
+.wf .wf-lab { fill: var(--muted); font-size: 11px; font-family: var(--body); }
+.wf .wf-sub { fill: var(--faint); font-size: 9.5px; font-family: var(--mono); }
+.wf .wf-val { fill: var(--text); font-size: 11px; font-family: var(--mono); }
+.wf .wf-val.strong { font-weight: var(--w-strong); }
+
+/* round sheet */
+.sheet-host { margin-top: 1rem; }
+.sheet-host h3 { margin: 0 0 .1rem; }
+.round-table tbody tr[aria-selected="true"] { background: var(--panel-2); outline: 1px solid var(--accent); }
+#match-rounds tbody tr { cursor: pointer; }
+#match-rounds tbody tr:hover { background: var(--panel-2); }
+.round-table .rule-total td { border-top: 1px solid var(--line); font-weight: var(--w-strong); }
+.round-table .spacer td { border: none; height: .5rem; }
+.match-nav { display: flex; gap: 1.2rem; margin-top: 1.2rem; font-size: var(--fs-2); }

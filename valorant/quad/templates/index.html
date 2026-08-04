@@ -1,0 +1,35 @@
+<section class="masthead">
+  <h1 class="finding">$finding</h1>
+  <p class="lede">$standfirst</p>
+</section>
+
+<section id="standings" aria-labelledby="standings-h">
+  <h2 id="standings-h">$rail_heading</h2>
+  <p class="lab">$rail_meta</p>
+$standings
+  <p class="note">$scale_note</p>
+  <p class="note">$ladder_note</p>
+</section>
+
+<section id="exposure" aria-labelledby="exposure-h">
+  <h2 id="exposure-h">$exposure_heading</h2>
+$exposure
+  <p class="note">$exposure_line</p>
+</section>
+
+<section id="tracker" aria-labelledby="tracker-h">
+  <h2 id="tracker-h">The season, match by match</h2>
+  <p class="note">$tracker_note</p>
+  <div class="figure" data-tracker>
+    <p class="fallback">$tracker_fallback</p>
+  </div>
+</section>
+
+<section id="matches" aria-labelledby="matches-h">
+  <h2 id="matches-h">$matches_heading</h2>
+  <p class="note">$matches_note</p>
+$match_filters
+  <div class="scroll" tabindex="0" role="region" aria-label="Every match of the act, newest first" data-index>
+$match_table
+  </div>
+</section>

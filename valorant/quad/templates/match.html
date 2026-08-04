@@ -1,0 +1,45 @@
+<section class="masthead match-head">
+  <p class="crumb"><a href="${root}index.html">All matches</a></p>
+  <h1>$title</h1>
+  <p class="lede">$subtitle</p>
+  <dl class="facts">
+$facts
+  </dl>
+$match_rail
+</section>
+
+<section id="figure" aria-labelledby="figure-h">
+  <h2 id="figure-h">$figure_heading</h2>
+  <p class="lede standfirst">$figure_standfirst</p>
+  <div class="figure" data-match-figure>
+    <p class="fallback">$figure_fallback</p>
+  </div>
+  <p class="note">$figure_caption</p>
+</section>
+
+<section id="players" aria-labelledby="players-h">
+  <h2 id="players-h">$players_heading</h2>
+  <p class="note">$players_note</p>
+  <div class="scroll" tabindex="0" role="region" aria-label="Every player in this match">
+$players_table
+  </div>
+</section>
+
+<section id="top-plays" aria-labelledby="top-plays-h">
+  <h2 id="top-plays-h">$top_heading</h2>
+  <p class="note">$top_note</p>
+  <ol class="plays">
+$top_plays
+  </ol>
+</section>
+
+<section id="rounds" aria-labelledby="rounds-h">
+  <h2 id="rounds-h">$rounds_heading</h2>
+  <p class="note">$rounds_note</p>
+  <p class="cav">$abilities_cav</p>
+  <nav class="round-strip round-index" aria-label="Rounds" data-round-index data-round-tabs>
+$round_index
+  </nav>
+$round_panels
+$round_script
+</section>

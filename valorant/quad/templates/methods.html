@@ -1,0 +1,109 @@
+<section class="masthead">
+  <h1>What the number is, and what it is not</h1>
+  <p class="lede">$impact_line</p>
+</section>
+
+<section id="headline" aria-labelledby="headline-h">
+  <h2 id="headline-h">$impact_heading</h2>
+  <p>$impact_arithmetic</p>
+  <p>$impact_why</p>
+  <p>$impact_invariance</p>
+  <p>$impact_read</p>
+  <p>$rate_line</p>
+</section>
+
+<section id="metric" aria-labelledby="metric-h">
+  <h2 id="metric-h">Two steps, and what they produce</h2>
+  <p>$definition</p>
+  <p>
+    Every round produces a ledger: kill credit, death debit, plant, defuse, and a share of the clock
+    drift, all of them in round win probability points. MWPA does two things to that ledger and
+    nothing else.
+  </p>
+  <p>
+    <strong>Centring.</strong> A player's credit in a round has the mean credit of everyone else
+    credited in that round subtracted from it. The number of players credited is whatever the round
+    had, so a four-against-five round centres on four others rather than on an assumed nine. After
+    centring, the credits in a round sum to zero exactly, which is the property that makes a lobby's
+    surplus impossible to bank.
+  </p>
+  <p>
+    <strong>Leverage.</strong> The centred credit is then multiplied by the round's marginal match
+    value: how much one round of win probability is worth to the match, evaluated at the score
+    entering the round. A round at twelve apiece is worth several times a round at twelve to three,
+    and the multiplication says so. $leverage_line
+  </p>
+  <p>
+    The product is in match win probability points. $unit_line That total is the numerator the
+    headline above divides.
+  </p>
+</section>
+
+<section id="interval" aria-labelledby="interval-h">
+  <h2 id="interval-h">How to read an interval</h2>
+  <p>$interval_line</p>
+  <p>
+    An interval that covers zero means this exposure does not separate the number from no effect at
+    all. It does not mean the player had no effect, and it does not mean the point estimate is wrong.
+    It means the sample cannot tell the two apart. Every card and every breakdown cell on this site
+    prints its interval next to its number for that reason.
+  </p>
+  <p>$thin_line</p>
+  <p>$single_match_line</p>
+</section>
+
+<section id="not-measured" aria-labelledby="not-measured-h">
+  <h2 id="not-measured-h">What is not measured</h2>
+  <p class="cav">$abilities_cav</p>
+  <p class="cav">$causal_cav</p>
+</section>
+
+<section id="conventions" aria-labelledby="conventions-h">
+  <h2 id="conventions-h">Reading conventions</h2>
+  <dl class="facts">
+    <dt>Sign</dt>
+    <dd>
+      Carried three ways: the + or − the number itself is printed with, a colour, and the side of
+      the zero line the bar sits on. Red and green are the one pair the common dichromacies cannot
+      separate, so neither colour is ever asked to carry the sign alone. There were direction
+      arrows here as a fourth channel and they are gone: they repeated the printed sign, and every
+      signed field on this site is written to a format that prints one.
+    </dd>
+    <dt>Em dash</dt>
+    <dd>
+      Nothing unmeasured renders as a zero. A cell with no number carries an em dash and, on hover,
+      the reason it is absent. A breakdown cell with no rounds is not in the payload at all and does
+      not appear as a row.
+    </dd>
+    <dt>Middot</dt>
+    <dd>
+      A measured zero. In a round ledger a player who did not plant has a plant credit of exactly
+      zero, which is a fact about the round rather than a missing value, and reads as a middot so it
+      cannot be confused with either an em dash or a small number.
+    </dd>
+    <dt>Bars</dt>
+    <dd>$bar_line</dd>
+    <dt>Opponents</dt>
+    <dd>$pseudonym_cav</dd>
+  </dl>
+</section>
+
+<section id="scope" aria-labelledby="scope-h">
+  <h2 id="scope-h">Scope</h2>
+  <dl class="facts">
+$scope_facts
+  </dl>
+</section>
+
+<section id="caveats" aria-labelledby="caveats-h">
+  <h2 id="caveats-h">$caveats_heading</h2>
+  <dl class="cavs">
+$cavs
+  </dl>
+</section>
+
+<section id="glossary" aria-labelledby="glossary-h">
+  <h2 id="glossary-h">$glossary_heading</h2>
+  <p class="note">$glossary_note</p>
+$glossary
+</section>

@@ -1,0 +1,1146 @@
+{
+  "puuid": "ab8bf38e-c2c4-5408-9a96-90ee3eb01af9",
+  "name": "MartinLutherKing#racis",
+  "short": "martin",
+  "headline": {
+    "impact": 0.00106,
+    "impact_lo": -0.038071,
+    "impact_hi": 0.041117,
+    "rate": 0.0052,
+    "lo": -0.185,
+    "hi": 0.1998,
+    "covers_zero": true,
+    "total": 0.040285,
+    "rounds": 782,
+    "matches": 38
+  },
+  "components": {
+    "kill_credit": {
+      "rate": 1.7329,
+      "lo": 1.4575,
+      "hi": 2.0291,
+      "total": 13.551154,
+      "share": 0.4689
+    },
+    "death_debit": {
+      "rate": -1.7663,
+      "lo": -2.0103,
+      "hi": -1.5415,
+      "total": -13.812567,
+      "share": 0.4779
+    },
+    "plant": {
+      "rate": 0.07,
+      "lo": 0.0452,
+      "hi": 0.1058,
+      "total": 0.547221,
+      "share": 0.0189
+    },
+    "defuse": {
+      "rate": 0.0311,
+      "lo": 0.0105,
+      "hi": 0.0823,
+      "total": 0.242896,
+      "share": 0.0084
+    },
+    "alive_clock": {
+      "rate": 0.0166,
+      "lo": -0.0437,
+      "hi": 0.0739,
+      "total": 0.12954,
+      "share": 0.0045
+    },
+    "lobby_adjustment": {
+      "rate": -0.079,
+      "lo": -0.0995,
+      "hi": -0.0584,
+      "total": -0.617958,
+      "share": 0.0214
+    }
+  },
+  "rank_track": [
+    {
+      "i": 0,
+      "match_id": "f754014d-b140-4ad0-a06f-b72ba21924cd",
+      "started_at": "2026-07-14T02:30:18.499Z",
+      "tier": null,
+      "ordinal": null,
+      "state": "placement"
+    },
+    {
+      "i": 1,
+      "match_id": "372ff707-51ed-4d36-995c-61a99f7cbd36",
+      "started_at": "2026-07-14T03:26:29.835Z",
+      "tier": null,
+      "ordinal": null,
+      "state": "placement"
+    },
+    {
+      "i": 2,
+      "match_id": "b3bde437-3f2d-4594-aa18-52f5805255f2",
+      "started_at": "2026-07-15T02:57:51.204Z",
+      "tier": null,
+      "ordinal": null,
+      "state": "placement"
+    },
+    {
+      "i": 3,
+      "match_id": "3651a080-755e-4b1e-b655-b5700b93330d",
+      "started_at": "2026-07-15T03:58:01.957Z",
+      "tier": null,
+      "ordinal": null,
+      "state": "placement"
+    },
+    {
+      "i": 4,
+      "match_id": "a52cdbde-dc3f-41bc-9bfa-631dad590e1f",
+      "started_at": "2026-07-16T01:28:22.752Z",
+      "tier": null,
+      "ordinal": null,
+      "state": "placement"
+    },
+    {
+      "i": 5,
+      "match_id": "9d5dbece-c6b9-465a-be2f-8364258b0a96",
+      "started_at": "2026-07-17T00:47:50.392Z",
+      "tier": "Bronze 1",
+      "ordinal": 4,
+      "state": "ranked"
+    },
+    {
+      "i": 6,
+      "match_id": "1f7c6fc0-72f7-49de-b48d-912f0a50334d",
+      "started_at": "2026-07-17T01:28:15.306Z",
+      "tier": "Bronze 1",
+      "ordinal": 4,
+      "state": "ranked"
+    },
+    {
+      "i": 7,
+      "match_id": "9e1cc912-d211-4846-a1a7-cb6558ee6a6b",
+      "started_at": "2026-07-17T02:18:27.74Z",
+      "tier": "Bronze 1",
+      "ordinal": 4,
+      "state": "ranked"
+    },
+    {
+      "i": 8,
+      "match_id": "56120845-480e-4319-adf1-e5ef4b443a44",
+      "started_at": "2026-07-18T03:46:53.503Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 9,
+      "match_id": "5b677e60-cadc-4a4f-b29d-63be28bf8b4f",
+      "started_at": "2026-07-18T04:33:23.082Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 10,
+      "match_id": "37d16c75-7558-461e-892f-a75d8a5a3e4b",
+      "started_at": "2026-07-19T01:34:30.598Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 11,
+      "match_id": "971788eb-a09e-401c-8b20-05f004ed28e6",
+      "started_at": "2026-07-19T02:16:27.169Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 12,
+      "match_id": "b33d766e-a20e-4be9-8918-a2a0622c6497",
+      "started_at": "2026-07-20T01:14:46.1Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 13,
+      "match_id": "2420649d-8924-4fc3-beb7-fc2f2995e371",
+      "started_at": "2026-07-20T01:56:35.546Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 14,
+      "match_id": "0ef799a7-44f3-46fa-933a-9c0b0f9f2900",
+      "started_at": "2026-07-23T23:18:15.915Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 15,
+      "match_id": "0bac0105-db0b-4245-bb63-b89eda6a9a81",
+      "started_at": "2026-07-26T00:58:35.515Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 16,
+      "match_id": "0ba79163-f83a-4d47-a414-e2f3f7c4d8aa",
+      "started_at": "2026-07-27T01:16:48.73Z",
+      "tier": "Bronze 2",
+      "ordinal": 5,
+      "state": "ranked"
+    },
+    {
+      "i": 17,
+      "match_id": "05904c53-4b2c-4394-b778-74601cd0a2a6",
+      "started_at": "2026-07-29T01:41:19.841Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 18,
+      "match_id": "37f54304-2d0e-43f6-b43d-b8f3566eca8e",
+      "started_at": "2026-07-29T02:12:09.946Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 19,
+      "match_id": "15afd60e-08e6-4d53-8037-d87f456bd965",
+      "started_at": "2026-07-31T01:23:08.073Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 20,
+      "match_id": "67d51e09-a777-42f8-a714-aba7eaab33dd",
+      "started_at": "2026-07-31T02:05:12.686Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 21,
+      "match_id": "315a461e-be80-45a9-b892-119741c41df2",
+      "started_at": "2026-08-01T03:20:45.589Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 22,
+      "match_id": "ffa04f26-d404-43ea-bcec-5ae0ece8c9bb",
+      "started_at": "2026-08-02T02:47:35.579Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 23,
+      "match_id": "00e93fa0-c8d5-48ba-a68d-ae49f84f1a7d",
+      "started_at": "2026-08-02T03:22:56.667Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 24,
+      "match_id": "b72fdeaf-6274-4011-8b0b-8b5e78f9ecc8",
+      "started_at": "2026-08-02T04:12:23.082Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 25,
+      "match_id": "692fa768-428e-4a16-a77e-b8cf15e2abdd",
+      "started_at": "2026-08-02T04:52:19.92Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 26,
+      "match_id": "44a24b52-ec13-480d-b62a-88de06efd2b3",
+      "started_at": "2026-08-02T05:35:22.56Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 27,
+      "match_id": "9383a67c-b4db-433a-b071-065679747c66",
+      "started_at": "2026-08-02T06:01:36.309Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 28,
+      "match_id": "568a1734-e44a-4ce6-b6f5-6db80b287911",
+      "started_at": "2026-08-02T06:48:27.484Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 29,
+      "match_id": "69cbd757-0bbf-4f1a-b298-73beb8a76220",
+      "started_at": "2026-08-03T03:28:19.51Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 30,
+      "match_id": "9e66ff28-66b5-4a42-a5c9-10a905d8c606",
+      "started_at": "2026-08-03T04:06:15.517Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 31,
+      "match_id": "152aca54-9c1f-4a76-8650-b1b523600a8f",
+      "started_at": "2026-08-03T04:49:41.226Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 32,
+      "match_id": "85e4f36f-fb3e-4458-a06a-bfcc499b96d0",
+      "started_at": "2026-08-04T02:34:07.734Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 33,
+      "match_id": "f0c1e90d-fd6f-47c9-bdf5-c28ef00460c0",
+      "started_at": "2026-08-04T03:12:11.495Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 34,
+      "match_id": "bb411bc0-dce1-4fd8-8c4b-ac853200412a",
+      "started_at": "2026-08-04T03:42:37.244Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 35,
+      "match_id": "26aa958f-ccaf-44b4-ab8f-5e3080067c60",
+      "started_at": "2026-08-04T04:21:56.527Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 36,
+      "match_id": "518f78b8-3153-45da-aaf2-b53dba290d35",
+      "started_at": "2026-08-04T05:00:02.62Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    },
+    {
+      "i": 37,
+      "match_id": "15d66ad6-dca9-4872-a0ac-356b021873b1",
+      "started_at": "2026-08-04T05:18:27.007Z",
+      "tier": "Silver 1",
+      "ordinal": 7,
+      "state": "ranked"
+    }
+  ],
+  "ladder": {
+    "first": "Bronze 1",
+    "last": "Silver 1",
+    "low": "Bronze 1",
+    "high": "Silver 1",
+    "placement": 5,
+    "ranked": 33,
+    "steps_up": 5,
+    "steps_down": 2
+  },
+  "matches": [
+    {
+      "match_id": "f754014d-b140-4ad0-a06f-b72ba21924cd",
+      "started_at": "2026-07-14T02:30:18.499Z",
+      "map": "Ascent",
+      "agent": "Sova",
+      "tier": null,
+      "mwpa": 0.156109,
+      "rounds": 30,
+      "won": false,
+      "attack_mwpa": 0.115088,
+      "defense_mwpa": 0.041021
+    },
+    {
+      "match_id": "372ff707-51ed-4d36-995c-61a99f7cbd36",
+      "started_at": "2026-07-14T03:26:29.835Z",
+      "map": "Lotus",
+      "agent": "Sova",
+      "tier": null,
+      "mwpa": -0.074772,
+      "rounds": 26,
+      "won": false,
+      "attack_mwpa": 0.02059,
+      "defense_mwpa": -0.095362
+    },
+    {
+      "match_id": "b3bde437-3f2d-4594-aa18-52f5805255f2",
+      "started_at": "2026-07-15T02:57:51.204Z",
+      "map": "Haven",
+      "agent": "Sova",
+      "tier": null,
+      "mwpa": -0.286511,
+      "rounds": 26,
+      "won": false,
+      "attack_mwpa": -0.261726,
+      "defense_mwpa": -0.024785
+    },
+    {
+      "match_id": "3651a080-755e-4b1e-b655-b5700b93330d",
+      "started_at": "2026-07-15T03:58:01.957Z",
+      "map": "Breeze",
+      "agent": "Sova",
+      "tier": null,
+      "mwpa": 0.144411,
+      "rounds": 18,
+      "won": true,
+      "attack_mwpa": 0.054727,
+      "defense_mwpa": 0.089684
+    },
+    {
+      "match_id": "a52cdbde-dc3f-41bc-9bfa-631dad590e1f",
+      "started_at": "2026-07-16T01:28:22.752Z",
+      "map": "Haven",
+      "agent": "Sova",
+      "tier": null,
+      "mwpa": 0.098695,
+      "rounds": 21,
+      "won": false,
+      "attack_mwpa": 0.044938,
+      "defense_mwpa": 0.053757
+    },
+    {
+      "match_id": "9d5dbece-c6b9-465a-be2f-8364258b0a96",
+      "started_at": "2026-07-17T00:47:50.392Z",
+      "map": "Split",
+      "agent": "Sova",
+      "tier": "Bronze 1",
+      "mwpa": -0.098769,
+      "rounds": 19,
+      "won": true,
+      "attack_mwpa": 0.057905,
+      "defense_mwpa": -0.156674
+    },
+    {
+      "match_id": "1f7c6fc0-72f7-49de-b48d-912f0a50334d",
+      "started_at": "2026-07-17T01:28:15.306Z",
+      "map": "Split",
+      "agent": "Sova",
+      "tier": "Bronze 1",
+      "mwpa": 0.235071,
+      "rounds": 28,
+      "won": true,
+      "attack_mwpa": 0.343466,
+      "defense_mwpa": -0.108396
+    },
+    {
+      "match_id": "9e1cc912-d211-4846-a1a7-cb6558ee6a6b",
+      "started_at": "2026-07-17T02:18:27.74Z",
+      "map": "Lotus",
+      "agent": "Sova",
+      "tier": "Bronze 1",
+      "mwpa": -0.03676,
+      "rounds": 18,
+      "won": true,
+      "attack_mwpa": -0.000168,
+      "defense_mwpa": -0.036593
+    },
+    {
+      "match_id": "56120845-480e-4319-adf1-e5ef4b443a44",
+      "started_at": "2026-07-18T03:46:53.503Z",
+      "map": "Lotus",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": 0.050405,
+      "rounds": 20,
+      "won": true,
+      "attack_mwpa": 0.075363,
+      "defense_mwpa": -0.024958
+    },
+    {
+      "match_id": "5b677e60-cadc-4a4f-b29d-63be28bf8b4f",
+      "started_at": "2026-07-18T04:33:23.082Z",
+      "map": "Split",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": 0.16113,
+      "rounds": 23,
+      "won": true,
+      "attack_mwpa": 0.092978,
+      "defense_mwpa": 0.068152
+    },
+    {
+      "match_id": "37d16c75-7558-461e-892f-a75d8a5a3e4b",
+      "started_at": "2026-07-19T01:34:30.598Z",
+      "map": "Sunset",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": 0.127054,
+      "rounds": 22,
+      "won": false,
+      "attack_mwpa": 0.250048,
+      "defense_mwpa": -0.122994
+    },
+    {
+      "match_id": "971788eb-a09e-401c-8b20-05f004ed28e6",
+      "started_at": "2026-07-19T02:16:27.169Z",
+      "map": "Sunset",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": -0.095428,
+      "rounds": 23,
+      "won": true,
+      "attack_mwpa": -0.10365,
+      "defense_mwpa": 0.008222
+    },
+    {
+      "match_id": "b33d766e-a20e-4be9-8918-a2a0622c6497",
+      "started_at": "2026-07-20T01:14:46.1Z",
+      "map": "Split",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": 0.096397,
+      "rounds": 24,
+      "won": false,
+      "attack_mwpa": 0.120007,
+      "defense_mwpa": -0.02361
+    },
+    {
+      "match_id": "2420649d-8924-4fc3-beb7-fc2f2995e371",
+      "started_at": "2026-07-20T01:56:35.546Z",
+      "map": "Breeze",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": 0.080184,
+      "rounds": 18,
+      "won": true,
+      "attack_mwpa": 0.028425,
+      "defense_mwpa": 0.051758
+    },
+    {
+      "match_id": "0ef799a7-44f3-46fa-933a-9c0b0f9f2900",
+      "started_at": "2026-07-23T23:18:15.915Z",
+      "map": "Summit",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": -0.067929,
+      "rounds": 21,
+      "won": true,
+      "attack_mwpa": -0.241814,
+      "defense_mwpa": 0.173886
+    },
+    {
+      "match_id": "0bac0105-db0b-4245-bb63-b89eda6a9a81",
+      "started_at": "2026-07-26T00:58:35.515Z",
+      "map": "Haven",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": -0.146093,
+      "rounds": 18,
+      "won": false,
+      "attack_mwpa": -0.03909,
+      "defense_mwpa": -0.107002
+    },
+    {
+      "match_id": "0ba79163-f83a-4d47-a414-e2f3f7c4d8aa",
+      "started_at": "2026-07-27T01:16:48.73Z",
+      "map": "Ascent",
+      "agent": "Sova",
+      "tier": "Bronze 2",
+      "mwpa": 0.125342,
+      "rounds": 21,
+      "won": true,
+      "attack_mwpa": 0.027905,
+      "defense_mwpa": 0.097437
+    },
+    {
+      "match_id": "05904c53-4b2c-4394-b778-74601cd0a2a6",
+      "started_at": "2026-07-29T01:41:19.841Z",
+      "map": "Summit",
+      "agent": "Sova",
+      "tier": "Bronze 3",
+      "mwpa": -0.070329,
+      "rounds": 16,
+      "won": false,
+      "attack_mwpa": -0.068586,
+      "defense_mwpa": -0.001744
+    },
+    {
+      "match_id": "37f54304-2d0e-43f6-b43d-b8f3566eca8e",
+      "started_at": "2026-07-29T02:12:09.946Z",
+      "map": "Split",
+      "agent": "Sova",
+      "tier": "Bronze 3",
+      "mwpa": -0.009519,
+      "rounds": 18,
+      "won": true,
+      "attack_mwpa": 0.02372,
+      "defense_mwpa": -0.033238
+    },
+    {
+      "match_id": "15afd60e-08e6-4d53-8037-d87f456bd965",
+      "started_at": "2026-07-31T01:23:08.073Z",
+      "map": "Lotus",
+      "agent": "Sova",
+      "tier": "Bronze 3",
+      "mwpa": -0.003794,
+      "rounds": 21,
+      "won": true,
+      "attack_mwpa": 0.074593,
+      "defense_mwpa": -0.078386
+    },
+    {
+      "match_id": "67d51e09-a777-42f8-a714-aba7eaab33dd",
+      "started_at": "2026-07-31T02:05:12.686Z",
+      "map": "Summit",
+      "agent": "Jett",
+      "tier": "Bronze 3",
+      "mwpa": 0.127014,
+      "rounds": 23,
+      "won": true,
+      "attack_mwpa": 0.090367,
+      "defense_mwpa": 0.036647
+    },
+    {
+      "match_id": "315a461e-be80-45a9-b892-119741c41df2",
+      "started_at": "2026-08-01T03:20:45.589Z",
+      "map": "Sunset",
+      "agent": "Jett",
+      "tier": "Bronze 3",
+      "mwpa": 0.272116,
+      "rounds": 19,
+      "won": true,
+      "attack_mwpa": 0.203038,
+      "defense_mwpa": 0.069078
+    },
+    {
+      "match_id": "ffa04f26-d404-43ea-bcec-5ae0ece8c9bb",
+      "started_at": "2026-08-02T02:47:35.579Z",
+      "map": "Sunset",
+      "agent": "Jett",
+      "tier": "Silver 1",
+      "mwpa": -0.183028,
+      "rounds": 18,
+      "won": false,
+      "attack_mwpa": -0.137458,
+      "defense_mwpa": -0.04557
+    },
+    {
+      "match_id": "00e93fa0-c8d5-48ba-a68d-ae49f84f1a7d",
+      "started_at": "2026-08-02T03:22:56.667Z",
+      "map": "Ascent",
+      "agent": "Sova",
+      "tier": "Silver 1",
+      "mwpa": 0.177256,
+      "rounds": 24,
+      "won": false,
+      "attack_mwpa": 0.040785,
+      "defense_mwpa": 0.136471
+    },
+    {
+      "match_id": "b72fdeaf-6274-4011-8b0b-8b5e78f9ecc8",
+      "started_at": "2026-08-02T04:12:23.082Z",
+      "map": "Summit",
+      "agent": "Jett",
+      "tier": "Silver 1",
+      "mwpa": -0.093194,
+      "rounds": 19,
+      "won": false,
+      "attack_mwpa": -0.011444,
+      "defense_mwpa": -0.08175
+    },
+    {
+      "match_id": "692fa768-428e-4a16-a77e-b8cf15e2abdd",
+      "started_at": "2026-08-02T04:52:19.92Z",
+      "map": "Split",
+      "agent": "Sova",
+      "tier": "Silver 1",
+      "mwpa": -0.045232,
+      "rounds": 20,
+      "won": false,
+      "attack_mwpa": 0.099408,
+      "defense_mwpa": -0.14464
+    },
+    {
+      "match_id": "44a24b52-ec13-480d-b62a-88de06efd2b3",
+      "started_at": "2026-08-02T05:35:22.56Z",
+      "map": "Split",
+      "agent": "Sova",
+      "tier": "Bronze 3",
+      "mwpa": -0.000826,
+      "rounds": 15,
+      "won": true,
+      "attack_mwpa": -4.4e-05,
+      "defense_mwpa": -0.000782
+    },
+    {
+      "match_id": "9383a67c-b4db-433a-b071-065679747c66",
+      "started_at": "2026-08-02T06:01:36.309Z",
+      "map": "Haven",
+      "agent": "Sova",
+      "tier": "Silver 1",
+      "mwpa": 0.049487,
+      "rounds": 24,
+      "won": true,
+      "attack_mwpa": -0.009291,
+      "defense_mwpa": 0.058778
+    },
+    {
+      "match_id": "568a1734-e44a-4ce6-b6f5-6db80b287911",
+      "started_at": "2026-08-02T06:48:27.484Z",
+      "map": "Lotus",
+      "agent": "Jett",
+      "tier": "Silver 1",
+      "mwpa": -0.042343,
+      "rounds": 15,
+      "won": false,
+      "attack_mwpa": -0.001893,
+      "defense_mwpa": -0.040451
+    },
+    {
+      "match_id": "69cbd757-0bbf-4f1a-b298-73beb8a76220",
+      "started_at": "2026-08-03T03:28:19.51Z",
+      "map": "Summit",
+      "agent": "Sova",
+      "tier": "Silver 1",
+      "mwpa": -0.171408,
+      "rounds": 20,
+      "won": false,
+      "attack_mwpa": -0.160868,
+      "defense_mwpa": -0.01054
+    },
+    {
+      "match_id": "9e66ff28-66b5-4a42-a5c9-10a905d8c606",
+      "started_at": "2026-08-03T04:06:15.517Z",
+      "map": "Lotus",
+      "agent": "Jett",
+      "tier": "Silver 1",
+      "mwpa": -0.10484,
+      "rounds": 24,
+      "won": false,
+      "attack_mwpa": -0.033461,
+      "defense_mwpa": -0.071379
+    },
+    {
+      "match_id": "152aca54-9c1f-4a76-8650-b1b523600a8f",
+      "started_at": "2026-08-03T04:49:41.226Z",
+      "map": "Breeze",
+      "agent": "Sova",
+      "tier": "Silver 1",
+      "mwpa": -0.020946,
+      "rounds": 26,
+      "won": true,
+      "attack_mwpa": -0.127024,
+      "defense_mwpa": 0.106078
+    },
+    {
+      "match_id": "85e4f36f-fb3e-4458-a06a-bfcc499b96d0",
+      "started_at": "2026-08-04T02:34:07.734Z",
+      "map": "Sunset",
+      "agent": "Jett",
+      "tier": "Silver 1",
+      "mwpa": -0.074596,
+      "rounds": 21,
+      "won": false,
+      "attack_mwpa": -0.037049,
+      "defense_mwpa": -0.037547
+    },
+    {
+      "match_id": "f0c1e90d-fd6f-47c9-bdf5-c28ef00460c0",
+      "started_at": "2026-08-04T03:12:11.495Z",
+      "map": "Haven",
+      "agent": "Jett",
+      "tier": "Silver 1",
+      "mwpa": -0.139337,
+      "rounds": 18,
+      "won": false,
+      "attack_mwpa": 0.003914,
+      "defense_mwpa": -0.143251
+    },
+    {
+      "match_id": "bb411bc0-dce1-4fd8-8c4b-ac853200412a",
+      "started_at": "2026-08-04T03:42:37.244Z",
+      "map": "Breeze",
+      "agent": "Sova",
+      "tier": "Silver 1",
+      "mwpa": 0.013432,
+      "rounds": 22,
+      "won": false,
+      "attack_mwpa": 0.083365,
+      "defense_mwpa": -0.069933
+    },
+    {
+      "match_id": "26aa958f-ccaf-44b4-ab8f-5e3080067c60",
+      "started_at": "2026-08-04T04:21:56.527Z",
+      "map": "Summit",
+      "agent": "Raze",
+      "tier": "Bronze 3",
+      "mwpa": -0.06457,
+      "rounds": 19,
+      "won": true,
+      "attack_mwpa": 0.011413,
+      "defense_mwpa": -0.075983
+    },
+    {
+      "match_id": "518f78b8-3153-45da-aaf2-b53dba290d35",
+      "started_at": "2026-08-04T05:00:02.62Z",
+      "map": "Haven",
+      "agent": "Sova",
+      "tier": "Silver 1",
+      "mwpa": 0.059149,
+      "rounds": 9,
+      "won": true,
+      "attack_mwpa": 0.0,
+      "defense_mwpa": 0.059149
+    },
+    {
+      "match_id": "15d66ad6-dca9-4872-a0ac-356b021873b1",
+      "started_at": "2026-08-04T05:18:27.007Z",
+      "map": "Sunset",
+      "agent": "Sova",
+      "tier": "Silver 1",
+      "mwpa": -0.102741,
+      "rounds": 15,
+      "won": false,
+      "attack_mwpa": 0.001054,
+      "defense_mwpa": -0.103795
+    }
+  ],
+  "breakdowns": {
+    "agent": [
+      {
+        "key": "Sova",
+        "rounds": 606,
+        "matches": 29,
+        "rate": 0.0566,
+        "lo": -0.1606,
+        "hi": 0.2533,
+        "total": 0.343064,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Jett",
+        "rounds": 157,
+        "matches": 8,
+        "rate": -0.1517,
+        "lo": -0.5781,
+        "hi": 0.618,
+        "total": -0.238209,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Raze",
+        "rounds": 19,
+        "matches": 1,
+        "rate": -0.3398,
+        "lo": -0.3398,
+        "hi": -0.3398,
+        "total": -0.06457,
+        "covers_zero": false,
+        "thin": true
+      }
+    ],
+    "map": [
+      {
+        "key": "Split",
+        "rounds": 147,
+        "matches": 7,
+        "rate": 0.2301,
+        "lo": -0.1744,
+        "hi": 0.6253,
+        "total": 0.338253,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Lotus",
+        "rounds": 124,
+        "matches": 6,
+        "rate": -0.1711,
+        "lo": -0.3371,
+        "hi": 0.0891,
+        "total": -0.212105,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Summit",
+        "rounds": 118,
+        "matches": 6,
+        "rate": -0.2885,
+        "lo": -0.5785,
+        "hi": 0.3596,
+        "total": -0.340417,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Sunset",
+        "rounds": 118,
+        "matches": 6,
+        "rate": -0.048,
+        "lo": -0.6606,
+        "hi": 0.8943,
+        "total": -0.056624,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Haven",
+        "rounds": 116,
+        "matches": 6,
+        "rate": -0.3143,
+        "lo": -0.9334,
+        "hi": 0.3293,
+        "total": -0.36461,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Breeze",
+        "rounds": 84,
+        "matches": 4,
+        "rate": 0.2584,
+        "lo": -0.0806,
+        "hi": 0.8023,
+        "total": 0.21708,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Ascent",
+        "rounds": 75,
+        "matches": 3,
+        "rate": 0.6116,
+        "lo": 0.5204,
+        "hi": 0.7386,
+        "total": 0.458708,
+        "covers_zero": false,
+        "thin": false
+      }
+    ],
+    "side": [
+      {
+        "key": "attack",
+        "rounds": 375,
+        "matches": 37,
+        "rate": 0.1679,
+        "lo": -0.2063,
+        "hi": 0.5409,
+        "total": 0.629531,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "defense",
+        "rounds": 407,
+        "matches": 38,
+        "rate": -0.1448,
+        "lo": -0.3799,
+        "hi": 0.1102,
+        "total": -0.589246,
+        "covers_zero": true,
+        "thin": false
+      }
+    ],
+    "buy_class": [
+      {
+        "key": "eco",
+        "rounds": 93,
+        "matches": 38,
+        "rate": 0.0171,
+        "lo": -0.5177,
+        "hi": 0.7137,
+        "total": 0.015872,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "light",
+        "rounds": 52,
+        "matches": 31,
+        "rate": 0.1284,
+        "lo": -0.4678,
+        "hi": 0.9992,
+        "total": 0.066763,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "half",
+        "rounds": 319,
+        "matches": 38,
+        "rate": 0.2569,
+        "lo": -0.0735,
+        "hi": 0.6747,
+        "total": 0.819383,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "full",
+        "rounds": 318,
+        "matches": 37,
+        "rate": -0.271,
+        "lo": -0.7792,
+        "hi": 0.1998,
+        "total": -0.861733,
+        "covers_zero": true,
+        "thin": false
+      }
+    ],
+    "weapon": [
+      {
+        "key": "Phantom",
+        "rounds": 268,
+        "matches": 35,
+        "rate": -0.0667,
+        "lo": -0.5311,
+        "hi": 0.3123,
+        "total": -0.17873,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Odin",
+        "rounds": 209,
+        "matches": 36,
+        "rate": 0.1284,
+        "lo": -0.3268,
+        "hi": 0.6154,
+        "total": 0.268356,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Classic",
+        "rounds": 97,
+        "matches": 38,
+        "rate": 0.1491,
+        "lo": -0.4184,
+        "hi": 0.9309,
+        "total": 0.144598,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Guardian",
+        "rounds": 78,
+        "matches": 23,
+        "rate": -0.024,
+        "lo": -0.6499,
+        "hi": 0.7153,
+        "total": -0.018741,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Ghost",
+        "rounds": 62,
+        "matches": 32,
+        "rate": 0.1495,
+        "lo": -0.4518,
+        "hi": 1.03,
+        "total": 0.092709,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Vandal",
+        "rounds": 40,
+        "matches": 18,
+        "rate": -0.765,
+        "lo": -1.7208,
+        "hi": -0.0605,
+        "total": -0.306008,
+        "covers_zero": false,
+        "thin": false
+      },
+      {
+        "key": "Spectre",
+        "rounds": 19,
+        "matches": 11,
+        "rate": 0.6162,
+        "lo": -0.7758,
+        "hi": 2.3384,
+        "total": 0.117084,
+        "covers_zero": true,
+        "thin": true
+      },
+      {
+        "key": "Other",
+        "rounds": 9,
+        "matches": 8,
+        "rate": -0.8776,
+        "lo": -2.0077,
+        "hi": 0.2925,
+        "total": -0.078982,
+        "covers_zero": true,
+        "thin": true
+      }
+    ]
+  },
+  "synergy": [
+    {
+      "partner_short": "snorlax",
+      "partner_name": "SN0RLAX#143",
+      "shared_matches": 36,
+      "shared_rounds": 732,
+      "rate": 0.0073,
+      "lo": -0.1934,
+      "hi": 0.2129,
+      "covers_zero": true,
+      "thin": false
+    },
+    {
+      "partner_short": "themarias",
+      "partner_name": "TheMarias#Bunny",
+      "shared_matches": 2,
+      "shared_rounds": 36,
+      "rate": 0.6239,
+      "lo": 0.4455,
+      "hi": 0.8023,
+      "covers_zero": false,
+      "thin": false
+    },
+    {
+      "partner_short": "trzzcko",
+      "partner_name": "Trzzcko#SFang",
+      "shared_matches": 14,
+      "shared_rounds": 267,
+      "rate": -0.2764,
+      "lo": -0.4607,
+      "hi": -0.0884,
+      "covers_zero": false,
+      "thin": false
+    }
+  ]
+}

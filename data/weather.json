@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-04T16:00:00Z",
-  "updated": "2026-08-04T17:13:44Z",
+  "valid_time_utc": "2026-08-04T19:00:00Z",
+  "updated": "2026-08-04T20:10:17Z",
   "hottest": [
-    {
-      "name": "Tillman",
-      "state": "OK",
-      "temp_f": 95.6
-    },
     {
       "name": "Major",
       "state": "OK",
-      "temp_f": 95.0
+      "temp_f": 104.2
     },
     {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 94.8
+      "name": "Alfalfa",
+      "state": "OK",
+      "temp_f": 104.1
+    },
+    {
+      "name": "Woods",
+      "state": "OK",
+      "temp_f": 103.4
     }
   ],
   "coldest": [
     {
-      "name": "Yakutat",
+      "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 45.2
+      "temp_f": 47.9
     },
     {
-      "name": "Copper River",
+      "name": "Yakutat",
       "state": "AK",
-      "temp_f": 45.4
+      "temp_f": 47.9
     },
     {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 46.5
+      "temp_f": 48.3
     }
   ],
   "national": {
-    "min_f": 45.2,
-    "max_f": 95.6,
-    "mean_f": 77.9
+    "min_f": 47.9,
+    "max_f": 104.2,
+    "mean_f": 82.3
   }
 }

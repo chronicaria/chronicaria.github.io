@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-04T14:00:00Z",
-  "updated": "2026-08-04T15:02:58Z",
+  "valid_time_utc": "2026-08-04T16:00:00Z",
+  "updated": "2026-08-04T17:13:44Z",
   "hottest": [
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 87.7
+      "name": "Tillman",
+      "state": "OK",
+      "temp_f": 95.6
+    },
+    {
+      "name": "Major",
+      "state": "OK",
+      "temp_f": 95.0
     },
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 87.6
-    },
-    {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 87.4
+      "temp_f": 94.8
     }
   ],
   "coldest": [
     {
+      "name": "Yakutat",
+      "state": "AK",
+      "temp_f": 45.2
+    },
+    {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 42.3
+      "temp_f": 45.4
     },
     {
-      "name": "Beaverhead",
-      "state": "MT",
-      "temp_f": 42.5
-    },
-    {
-      "name": "Deer Lodge",
-      "state": "MT",
-      "temp_f": 42.9
+      "name": "Skagway",
+      "state": "AK",
+      "temp_f": 46.5
     }
   ],
   "national": {
-    "min_f": 42.3,
-    "max_f": 87.7,
-    "mean_f": 71.9
+    "min_f": 45.2,
+    "max_f": 95.6,
+    "mean_f": 77.9
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-04T08:00:00Z",
-  "updated": "2026-08-04T09:22:06Z",
+  "valid_time_utc": "2026-08-04T10:00:00Z",
+  "updated": "2026-08-04T11:40:48Z",
   "hottest": [
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 92.6
-    },
-    {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 91.5
+      "temp_f": 89.6
     },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 91.2
+      "temp_f": 89.2
+    },
+    {
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 88.9
     }
   ],
   "coldest": [
     {
-      "name": "Glacier",
+      "name": "Park",
       "state": "MT",
-      "temp_f": 41.6
-    },
-    {
-      "name": "Meagher",
-      "state": "MT",
-      "temp_f": 42.3
+      "temp_f": 40.0
     },
     {
       "name": "Park",
-      "state": "MT",
-      "temp_f": 42.3
+      "state": "WY",
+      "temp_f": 40.3
+    },
+    {
+      "name": "Teton",
+      "state": "WY",
+      "temp_f": 40.7
     }
   ],
   "national": {
-    "min_f": 41.6,
-    "max_f": 92.6,
-    "mean_f": 67.0
+    "min_f": 40.0,
+    "max_f": 89.6,
+    "mean_f": 65.5
   }
 }

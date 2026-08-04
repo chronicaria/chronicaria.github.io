@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-04T10:00:00Z",
-  "updated": "2026-08-04T11:40:48Z",
+  "valid_time_utc": "2026-08-04T14:00:00Z",
+  "updated": "2026-08-04T15:02:58Z",
   "hottest": [
-    {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 89.6
-    },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 89.2
+      "temp_f": 87.7
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 87.6
     },
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 88.9
+      "temp_f": 87.4
     }
   ],
   "coldest": [
     {
-      "name": "Park",
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 42.3
+    },
+    {
+      "name": "Beaverhead",
       "state": "MT",
-      "temp_f": 40.0
+      "temp_f": 42.5
     },
     {
-      "name": "Park",
-      "state": "WY",
-      "temp_f": 40.3
-    },
-    {
-      "name": "Teton",
-      "state": "WY",
-      "temp_f": 40.7
+      "name": "Deer Lodge",
+      "state": "MT",
+      "temp_f": 42.9
     }
   ],
   "national": {
-    "min_f": 40.0,
-    "max_f": 89.6,
-    "mean_f": 65.5
+    "min_f": 42.3,
+    "max_f": 87.7,
+    "mean_f": 71.9
   }
 }

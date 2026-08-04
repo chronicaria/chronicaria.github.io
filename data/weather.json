@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-04T19:00:00Z",
-  "updated": "2026-08-04T20:10:17Z",
+  "valid_time_utc": "2026-08-04T21:00:00Z",
+  "updated": "2026-08-04T22:37:31Z",
   "hottest": [
-    {
-      "name": "Major",
-      "state": "OK",
-      "temp_f": 104.2
-    },
     {
       "name": "Alfalfa",
       "state": "OK",
-      "temp_f": 104.1
+      "temp_f": 105.9
     },
     {
-      "name": "Woods",
+      "name": "Major",
       "state": "OK",
-      "temp_f": 103.4
+      "temp_f": 105.7
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 104.9
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 47.9
+      "temp_f": 49.0
     },
     {
       "name": "Yakutat",
       "state": "AK",
-      "temp_f": 47.9
+      "temp_f": 49.1
     },
     {
-      "name": "Skagway",
+      "name": "Dillingham",
       "state": "AK",
-      "temp_f": 48.3
+      "temp_f": 49.4
     }
   ],
   "national": {
-    "min_f": 47.9,
-    "max_f": 104.2,
-    "mean_f": 82.3
+    "min_f": 49.0,
+    "max_f": 105.9,
+    "mean_f": 83.1
   }
 }

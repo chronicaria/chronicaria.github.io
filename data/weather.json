@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-05T10:00:00Z",
-  "updated": "2026-08-05T11:38:13Z",
+  "valid_time_utc": "2026-08-05T14:00:00Z",
+  "updated": "2026-08-05T14:56:24Z",
   "hottest": [
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 88.6
+      "temp_f": 87.3
     },
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 88.0
+      "temp_f": 87.0
     },
     {
-      "name": "Pinal",
+      "name": "Yuma",
       "state": "AZ",
-      "temp_f": 87.2
+      "temp_f": 86.8
     }
   ],
   "coldest": [
     {
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 41.7
+    },
+    {
       "name": "Teton",
       "state": "WY",
-      "temp_f": 42.5
+      "temp_f": 45.0
     },
     {
-      "name": "Sublette",
-      "state": "WY",
-      "temp_f": 43.7
-    },
-    {
-      "name": "Jackson",
-      "state": "CO",
-      "temp_f": 44.4
+      "name": "Yakutat",
+      "state": "AK",
+      "temp_f": 45.9
     }
   ],
   "national": {
-    "min_f": 42.5,
-    "max_f": 88.6,
-    "mean_f": 66.2
+    "min_f": 41.7,
+    "max_f": 87.3,
+    "mean_f": 72.5
   }
 }

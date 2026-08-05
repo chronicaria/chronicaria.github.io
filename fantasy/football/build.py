@@ -29,7 +29,8 @@ import markdown
 
 VAULT = Path("/Users/andrewpark/Desktop/Rome/Sports/NFL/Fantasy Football")
 OUT = Path(__file__).resolve().parent
-AS_OF = "July 25, 2026"
+AS_OF = "August 2, 2026"
+SOURCE_AS_OF = "2026-08-02"
 
 SECTION_DIR = {
     "Start Here": "start-here", "Draft": "draft", "Season": "season",
@@ -70,7 +71,7 @@ TEAM_NAMES = {
     "PIT": "Pittsburgh Steelers", "SEA": "Seattle Seahawks", "SF": "San Francisco 49ers",
     "TB": "Tampa Bay Buccaneers", "TEN": "Tennessee Titans", "WAS": "Washington Commanders",
 }
-PICKS = [1, 24, 25, 48, 49, 72, 73, 96, 97, 120, 121, 144, 145, 168, 169, 192]
+PICKS = [1, 20, 21, 40, 41, 60, 61, 80, 81, 100, 101, 120, 121, 140, 141, 160]
 
 
 VAULT_ROOT = Path("/Users/andrewpark/Desktop/Rome")
@@ -217,7 +218,8 @@ def fnum(v, spec="{:.0f}"):
 def build_board_rows(players, ctx):
     """Recompute the board the same way Data/build_board.py does, so the interactive
     table and the markdown note can never disagree."""
-    BASE_RANK = {"RB": 29, "WR": 31, "TE": 12, "QB": 12, "K": 3, "DST": 3}
+    # Must mirror Data/build_board.py: confirmed 10-team, one-FLEX baselines.
+    BASE_RANK = {"RB": 24, "WR": 26, "TE": 10, "QB": 10, "K": 2, "DST": 2}
     rows = []
     for p in players:
         try:
@@ -306,8 +308,9 @@ document.documentElement.setAttribute('data-theme',t);}}catch(e){{}}}})();</scri
 {body}
 </main>
 <footer class="foot"><div class="rule"></div>
-Rendered from the Rome vault on {AS_OF}. Projections and ADP are dated inputs, not
-forecasts — every perishable page carries its own expiry. Built by
+Rendered from the Rome vault on {AS_OF} (source state {SOURCE_AS_OF}). Projections and
+ADP are dated inputs, not forecasts — every perishable page carries its own expiry.
+The draft is in late August; its exact date and time are not yet known. Built by
 <code>build.py</code>; nothing on this site is hand-typed HTML.</footer>
 <script src="{up}assets/site.js"></script>
 </body>
@@ -349,9 +352,10 @@ def note_page(n, notes, index):
     if n.meta.get("expires"):
         try:
             if date.fromisoformat(n.meta["expires"]) < date(2026, 8, 31):
-                stale = ('<p class="staleflag">Perishable — this page is built on '
-                         'July inputs and must be regenerated within 48 hours of the '
-                         'draft.</p>')
+                stale = ('<p class="staleflag">Perishable — validate this page against '
+                         f'current inputs after the {SOURCE_AS_OF} source state and '
+                         'regenerate within 48 hours of the draft once its exact date '
+                         'is known.</p>')
         except ValueError:
             pass
     crumbs = (f'<div class="crumbs"><a href="../index.html">Encyclopedia</a> · '
@@ -416,7 +420,8 @@ def factcard(row):
     return (f'<div class="factcard"><dl>{"".join(b for b in bits if b)}</dl>{note}'
             f'<p class="cardnote">Age, games played, injury-report weeks, usage and '
             f'contract terms are <b>observed</b>. Availability and Adj VOR are '
-            f'<b>models</b>. Projections and ADP are dated 2026-07-23 and 2026-07-25.</p>'
+            f'<b>models</b>. The site source state is {SOURCE_AS_OF}; projection and '
+            f'ADP files carry their own dated provenance.</p>'
             f'</div>')
 
 
@@ -511,11 +516,14 @@ def home(notes, rows, index):
         for d in SECTION_ORDER if d in counts)
     body = f"""
 <div class="masthead">
-  <p class="mh-date">Full PPR · 12 teams · ESPN · the 1.01 is locked</p>
+  <p class="mh-date">Full PPR · 10 teams · ESPN · no keepers · snake 1.01 locked</p>
   <h1 class="mh-title">The Fantasy Football Encyclopedia</h1>
-  <p class="mh-sub">2026 season · built for someone who does not watch football</p>
+  <p class="mh-sub">2026 season · late-August draft (exact date and time unknown)</p>
   <div class="mh-rule"></div>
   <p class="mh-note">{esc(moc.lede) if moc else ""}</p>
+  <p class="mh-note">Weeks 1–14 regular season · six-team playoffs in weeks 15–17 ·
+  nominal prizes total $900 while ten $75 player-pool contributions total $750;
+  the funding gap is recorded, not silently reconciled.</p>
 </div>
 
 <div class="quickgrid">
@@ -524,7 +532,7 @@ def home(notes, rows, index):
   <a class="quick" href="{index['your league, in one page'].href}"><b>Your league</b>
     <span>The page to reread on draft day</span></a>
   <a class="quick" href="{index['drafting from the 1.01'].href}"><b>From the 1.01</b>
-    <span>A written script for picks 1, 24, 25</span></a>
+    <span>A written script for picks 1, 20, 21</span></a>
   <a class="quick" href="{index['player archetypes'].href}"><b>Archetypes</b>
     <span>The twelve labels everything resolves to</span></a>
 </div>
@@ -538,7 +546,7 @@ That is enough to draft.</p>
 <div class="tablewrap"><table>
 <thead><tr><th>Rk</th><th>Player</th><th>Pos</th><th>Proj</th><th>VOR</th><th>Avail</th></tr></thead>
 <tbody>{top}</tbody></table></div>
-<p class="legend">Rendered from <code>players.csv</code> on {AS_OF}.
+<p class="legend">Rendered from <code>players.csv</code> in the {SOURCE_AS_OF} site source state.
 <a href="draft-room.html">Open the full board →</a></p>
 
 <h2 class="homeh">Sections</h2>
@@ -580,10 +588,12 @@ def main():
     si = [{"t": n.title, "u": n.href, "s": SECTION_LABEL[n.dirname], "d": n.lede[:120]}
           for n in notes]
     # Players with their own page are already in the index above; adding the board row
-    # too would show the same name twice pointing at the same place.
+    # too would show the same name twice pointing at the same place. Every remaining
+    # canonical row must stay searchable through the Draft Room, including late board
+    # players without a dossier page.
     si += [{"t": r["player"], "u": "draft-room.html",
             "s": f'{r["pos"]} · board #{r["rank"]}', "d": r["note"][:120]}
-           for r in rows[:200] if not r["haspage"]]
+           for r in rows if not r["haspage"]]
     write("assets/search-index.json", json.dumps(si, ensure_ascii=False))
 
     for f in ("players.csv", "player_context.csv"):

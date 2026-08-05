@@ -195,6 +195,10 @@ tbody tr:hover{background:var(--panel)}
 }
 @media (max-width:600px){
   body{font-size:15.5px}
+  .topnav{height:auto;min-height:56px;flex-wrap:wrap;padding:10px 14px;gap:8px}
+  .brand{flex:1 1 100%;white-space:normal}
+  .navsearch{flex:1 1 100%;min-width:0}
+  .searchresults{right:0;max-width:none}
   .page{padding:22px 14px 50px}
   .factcard dl{gap:4px 18px}
 }

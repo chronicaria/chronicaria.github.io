@@ -1,244 +1,238 @@
 player,team,pos,bye,adp,adp_source,proj_points,games,archetype,risk,note
-Bijan Robinson,ATL,RB,11,1.7,ffcalc-ppr-12tm-2026-07-25,366.9,17,three-down bell cow,low,three-down bell cow; 280 carries + 84 catches projected
-Jahmyr Gibbs,DET,RB,6,1.8,ffcalc-ppr-12tm-2026-07-25,367.4,17,three-down bell cow,med,three-down bell cow; 279 carries + 72 catches projected
-Puka Nacua,LAR,WR,11,2.7,ffcalc-ppr-12tm-2026-07-25,339.3,17,alpha X,low,alpha X; 116 catches for 1561 yards projected
-Ja'Marr Chase,CIN,WR,6,4.0,ffcalc-ppr-12tm-2026-07-25,330.5,17,alpha X,low,alpha X; 116 catches for 1474 yards projected
-Christian McCaffrey,SF,RB,8,4.9,ffcalc-ppr-12tm-2026-07-25,345.9,17,three-down bell cow,low,three-down bell cow; 279 carries + 82 catches projected
-Jaxon Smith-Njigba,SEA,WR,11,6.0,ffcalc-ppr-12tm-2026-07-25,308.1,17,alpha X,low,alpha X; 105 catches for 1521 yards projected
-Amon-Ra St. Brown,DET,WR,6,7.3,ffcalc-ppr-12tm-2026-07-25,318.1,17,alpha X,low,alpha X; 119 catches for 1377 yards projected
-Jonathan Taylor,IND,RB,13,7.5,ffcalc-ppr-12tm-2026-07-25,286.5,17,three-down bell cow,low,three-down bell cow; 299 carries + 36 catches projected
-De'Von Achane,MIA,RB,6,9.6,ffcalc-ppr-12tm-2026-07-25,267.2,17,early-down committee back,low,early-down committee back; 228 carries + 56 catches projected
-CeeDee Lamb,DAL,WR,14,10.9,ffcalc-ppr-12tm-2026-07-25,252.7,17,alpha X,low,alpha X; 87 catches for 1177 yards projected
-Justin Jefferson,MIN,WR,6,11.0,ffcalc-ppr-12tm-2026-07-25,265.8,17,alpha X,low,alpha X; 95 catches for 1288 yards projected
-Ashton Jeanty,LV,RB,13,11.8,ffcalc-ppr-12tm-2026-07-25,264.3,17,three-down bell cow,low,three-down bell cow; 271 carries + 56 catches projected
-Drake London,ATL,WR,11,12.5,ffcalc-ppr-12tm-2026-07-25,272.2,17,alpha X,low,alpha X; 99 catches for 1312 yards projected
-James Cook,BUF,RB,7,13.3,ffcalc-ppr-12tm-2026-07-25,275.2,17,three-down bell cow,low,three-down bell cow; 275 carries + 32 catches projected
-A.J. Brown,NE,WR,11,13.9,ffcalc-ppr-12tm-2026-07-25,243.5,17,alpha X,low,alpha X; 86 catches for 1155 yards projected
-Derrick Henry,BAL,RB,13,16.1,ffcalc-ppr-12tm-2026-07-25,259.6,17,goal-line back,low,goal-line back; 321 carries + 16 catches projected
-Chase Brown,CIN,RB,6,16.4,ffcalc-ppr-12tm-2026-07-25,262.1,17,three-down bell cow,low,three-down bell cow; 242 carries + 57 catches projected
-Omarion Hampton,LAC,RB,7,17.6,ffcalc-ppr-12tm-2026-07-25,267.5,17,three-down bell cow,low,three-down bell cow; 257 carries + 52 catches projected
-George Pickens,DAL,WR,14,19.1,ffcalc-ppr-12tm-2026-07-25,226.2,17,field-stretching Z,med,field-stretching Z; 74 catches for 1102 yards projected
-Saquon Barkley,PHI,RB,10,19.3,ffcalc-ppr-12tm-2026-07-25,262.3,17,three-down bell cow,low,three-down bell cow; 281 carries + 42 catches projected
-Chris Olave,NO,WR,8,22.1,ffcalc-ppr-12tm-2026-07-25,247.0,17,alpha X,low,alpha X; 94 catches for 1110 yards projected
-Kenneth Walker,KC,RB,5,22.2,ffcalc-ppr-12tm-2026-07-25,257.9,17,three-down bell cow,low,three-down bell cow; 262 carries + 42 catches projected
-Jeremiyah Love,ARI,RB,14,22.4,ffcalc-ppr-12tm-2026-07-25,259.9,17,three-down bell cow,med,three-down bell cow; 246 carries + 56 catches projected
-Nico Collins,HOU,WR,8,23.6,ffcalc-ppr-12tm-2026-07-25,239.6,17,field-stretching Z,low,field-stretching Z; 79 catches for 1186 yards projected
-Zay Flowers,BAL,WR,13,26.5,ffcalc-ppr-12tm-2026-07-25,232.6,17,field-stretching Z,low,field-stretching Z; 79 catches for 1117 yards projected
-Rashee Rice,KC,WR,5,26.9,ffcalc-ppr-12tm-2026-07-25,249.7,17,alpha X,low,alpha X; 96 catches for 1117 yards projected
-Josh Jacobs,GB,RB,11,27.8,ffcalc-ppr-12tm-2026-07-25,244.2,17,three-down bell cow,low,three-down bell cow; 282 carries + 35 catches projected
-DeVonta Smith,PHI,WR,10,28.0,ffcalc-ppr-12tm-2026-07-25,231.2,17,big slot,low,big slot; 83 catches for 1122 yards projected
-Tee Higgins,CIN,WR,6,28.0,ffcalc-ppr-12tm-2026-07-25,203.6,17,big slot,med,big slot; 65 catches for 906 yards projected
-Josh Allen,BUF,QB,7,28.1,ffcalc-ppr-12tm-2026-07-25,366.2,17,rushing QB,low,rushing QB; 567 rushing yards projected
-Garrett Wilson,NYJ,WR,13,28.3,ffcalc-ppr-12tm-2026-07-25,245.5,17,alpha X,med,alpha X; 100 catches for 1155 yards projected
-Trey McBride,ARI,TE,14,28.9,ffcalc-ppr-12tm-2026-07-25,250.9,17,move TE,low,move TE; 104 catches for 1049 yards projected
-Breece Hall,NYJ,RB,13,29.7,ffcalc-ppr-12tm-2026-07-25,245.5,17,three-down bell cow,low,three-down bell cow; 258 carries + 47 catches projected
-Kyren Williams,LAR,RB,11,33.1,ffcalc-ppr-12tm-2026-07-25,247.6,17,three-down bell cow,high,three-down bell cow; 249 carries + 34 catches projected
-Tetairoa McMillan,CAR,WR,5,33.2,ffcalc-ppr-12tm-2026-07-25,222.1,17,big slot,low,big slot; 78 catches for 1081 yards projected
-Javonte Williams,DAL,RB,14,34.8,ffcalc-ppr-12tm-2026-07-25,236.3,17,three-down bell cow,low,three-down bell cow; 251 carries + 33 catches projected
-Brock Bowers,LV,TE,13,35.8,ffcalc-ppr-12tm-2026-07-25,253.8,17,move TE,low,move TE; 103 catches for 1088 yards projected
-Terry McLaurin,WAS,WR,7,36.6,ffcalc-ppr-12tm-2026-07-25,194.7,17,field-stretching Z,high,field-stretching Z; 65 catches for 937 yards projected
-Ladd McConkey,LAC,WR,7,36.7,ffcalc-ppr-12tm-2026-07-25,207.6,17,big slot,low,big slot; 76 catches for 956 yards projected
-Cam Skattebo,NYG,RB,8,37.6,ffcalc-ppr-12tm-2026-07-25,247.4,17,three-down bell cow,med,three-down bell cow; 262 carries + 46 catches projected
-Travis Etienne,NO,RB,8,39.7,ffcalc-ppr-12tm-2026-07-25,226.9,17,three-down bell cow,med,three-down bell cow; 246 carries + 44 catches projected
-Jaylen Waddle,DEN,WR,10,40.8,ffcalc-ppr-12tm-2026-07-25,206.7,17,big slot,low,big slot; 72 catches for 987 yards projected
-Davante Adams,LAR,WR,11,41.2,ffcalc-ppr-12tm-2026-07-25,221.1,17,big slot,low,big slot; 70 catches for 911 yards projected
-Emeka Egbuka,TB,WR,10,45.1,ffcalc-ppr-12tm-2026-07-25,224.6,17,big slot,med,big slot; 78 catches for 1046 yards projected
-Malik Nabers,NYG,WR,8,45.2,ffcalc-ppr-12tm-2026-07-25,217.4,17,big slot,low,big slot; 77 catches for 1044 yards projected
-Colston Loveland,CHI,TE,10,45.8,ffcalc-ppr-12tm-2026-07-25,193.8,17,move TE,low,move TE; 73 catches for 848 yards projected
-Bucky Irving,TB,RB,10,46.5,ffcalc-ppr-12tm-2026-07-25,229.0,17,three-down bell cow,med,three-down bell cow; 261 carries + 39 catches projected
-D'Andre Swift,CHI,RB,10,46.9,ffcalc-ppr-12tm-2026-07-25,223.5,17,three-down bell cow,high,three-down bell cow; 233 carries + 39 catches projected
-Luther Burden III,CHI,WR,10,47.0,ffcalc-ppr-12tm-2026-07-25,201.9,17,big slot,low,big slot; 70 catches for 926 yards projected
-Joe Burrow,CIN,QB,6,47.2,ffcalc-ppr-12tm-2026-07-25,301.3,17,pocket QB,low,pocket QB; 182 rushing yards projected
-Jameson Williams,DET,WR,6,49.0,ffcalc-ppr-12tm-2026-07-25,221.0,17,field-stretching Z,med,field-stretching Z; 66 catches for 1088 yards projected
-Quinshon Judkins,CLE,RB,11,49.0,ffcalc-ppr-12tm-2026-07-25,208.3,17,three-down bell cow,low,three-down bell cow; 275 carries + 30 catches projected
-Mike Evans,SF,WR,8,50.1,ffcalc-ppr-12tm-2026-07-25,206.5,17,big slot,low,big slot; 69 catches for 955 yards projected
-Tyler Warren,IND,TE,13,53.8,ffcalc-ppr-12tm-2026-07-25,191.6,17,move TE,low,move TE; 78 catches for 836 yards projected
-Rome Odunze,CHI,WR,10,54.8,ffcalc-ppr-12tm-2026-07-25,201.5,17,field-stretching Z,low,field-stretching Z; 65 catches for 945 yards projected
-Lamar Jackson,BAL,QB,13,55.3,ffcalc-ppr-12tm-2026-07-25,318.8,17,rushing QB,low,rushing QB; 646 rushing yards projected
-David Montgomery,HOU,RB,8,55.6,ffcalc-ppr-12tm-2026-07-25,199.9,17,early-down committee back,high,early-down committee back; 217 carries + 34 catches projected
-DK Metcalf,PIT,WR,9,57.4,ffcalc-ppr-12tm-2026-07-25,197.4,17,field-stretching Z,low,field-stretching Z; 67 catches for 944 yards projected
-TreVeyon Henderson,NE,RB,11,57.7,ffcalc-ppr-12tm-2026-07-25,197.3,17,early-down committee back,high,early-down committee back; 182 carries + 36 catches projected
-Dak Prescott,DAL,QB,14,59.6,ffcalc-ppr-12tm-2026-07-25,295.3,17,pocket QB,med,pocket QB; 161 rushing yards projected
-Christian Watson,GB,WR,11,60.0,ffcalc-ppr-12tm-2026-07-25,205.2,17,field-stretching Z,low,field-stretching Z; 65 catches for 982 yards projected
-Bhayshul Tuten,JAC,RB,7,60.7,ffcalc-ppr-12tm-2026-07-25,226.3,17,three-down bell cow,med,three-down bell cow; 257 carries + 38 catches projected
-Drake Maye,NE,QB,11,62.3,ffcalc-ppr-12tm-2026-07-25,324.9,17,rushing QB,low,rushing QB; 433 rushing yards projected
-Carnell Tate,TEN,WR,9,62.3,ffcalc-ppr-12tm-2026-07-25,181.7,17,big slot,med,big slot; 65 catches for 867 yards projected
-Alec Pierce,IND,WR,13,62.4,ffcalc-ppr-12tm-2026-07-25,197.7,17,field-stretching Z,low,field-stretching Z; 66 catches for 1017 yards projected
-Jaylen Warren,PIT,RB,9,64.3,ffcalc-ppr-12tm-2026-07-25,201.3,17,early-down committee back,high,early-down committee back; 190 carries + 41 catches projected
-Marvin Harrison Jr.,ARI,WR,14,66.1,ffcalc-ppr-12tm-2026-07-25,193.3,17,field-stretching Z,low,field-stretching Z; 64 catches for 933 yards projected
-D.J. Moore,BUF,WR,7,66.8,ffcalc-ppr-12tm-2026-07-25,207.0,17,big slot,med,big slot; 71 catches for 955 yards projected
-Harold Fannin Jr.,CLE,TE,11,68.4,ffcalc-ppr-12tm-2026-07-25,187.1,17,move TE,low,move TE; 77 catches for 801 yards projected
-Tony Pollard,TEN,RB,9,70.5,ffcalc-ppr-12tm-2026-07-25,197.2,17,three-down bell cow,med,three-down bell cow; 242 carries + 32 catches projected
-Michael Pittman Jr.,PIT,WR,9,70.5,ffcalc-ppr-12tm-2026-07-25,193.7,17,big slot,low,big slot; 76 catches for 877 yards projected
-Rhamondre Stevenson,NE,RB,11,71.3,ffcalc-ppr-12tm-2026-07-25,181.7,17,early-down committee back,high,early-down committee back; 163 carries + 38 catches projected
-Jadarian Price,SEA,RB,11,72.1,ffcalc-ppr-12tm-2026-07-25,185.3,17,early-down committee back,high,early-down committee back; 195 carries + 31 catches projected
-Courtland Sutton,DEN,WR,10,72.4,ffcalc-ppr-12tm-2026-07-25,189.8,17,big slot,low,big slot; 63 catches for 848 yards projected
-Sam LaPorta,DET,TE,6,72.8,ffcalc-ppr-12tm-2026-07-25,163.5,17,move TE,low,move TE; 60 catches for 735 yards projected
-Tucker Kraft,GB,TE,11,73.3,ffcalc-ppr-12tm-2026-07-25,159.4,17,move TE,low,move TE; 57 catches for 724 yards projected
-Parker Washington,JAC,WR,7,73.8,ffcalc-ppr-12tm-2026-07-25,158.6,17,big slot,high,big slot; 58 catches for 766 yards projected
-Chris Godwin,TB,WR,10,79.0,ffcalc-ppr-12tm-2026-07-25,175.9,17,big slot,low,big slot; 68 catches for 779 yards projected
-Rico Dowdle,PIT,RB,9,79.1,ffcalc-ppr-12tm-2026-07-25,166.4,17,early-down committee back,high,early-down committee back; 186 carries + 30 catches projected
-Chuba Hubbard,CAR,RB,5,79.9,ffcalc-ppr-12tm-2026-07-25,188.5,17,early-down committee back,med,early-down committee back; 217 carries + 34 catches projected
-Justin Herbert,LAC,QB,7,80.8,ffcalc-ppr-12tm-2026-07-25,290.8,17,rushing QB,med,rushing QB; 427 rushing yards projected
-Jordyn Tyson,NO,WR,8,82.7,ffcalc-ppr-12tm-2026-07-25,163.3,17,big slot,med,big slot; 61 catches for 783 yards projected
-Michael Wilson,ARI,WR,14,83.2,ffcalc-ppr-12tm-2026-07-25,172.2,17,big slot,low,big slot; 66 catches for 822 yards projected
-Brian Thomas Jr.,JAC,WR,7,83.2,ffcalc-ppr-12tm-2026-07-25,167.4,17,field-stretching Z,low,field-stretching Z; 56 catches for 814 yards projected
-Kyle Pitts,ATL,TE,11,85.2,ffcalc-ppr-12tm-2026-07-25,185.6,17,move TE,low,move TE; 76 catches for 856 yards projected
-Jayden Daniels,WAS,QB,7,85.4,ffcalc-ppr-12tm-2026-07-25,309.0,17,rushing QB,low,rushing QB; 642 rushing yards projected
-Trevor Lawrence,JAC,QB,7,86.0,ffcalc-ppr-12tm-2026-07-25,290.0,17,pocket QB,med,pocket QB; 301 rushing yards projected
-Jayden Reed,GB,WR,11,86.4,ffcalc-ppr-12tm-2026-07-25,184.3,17,big slot,med,big slot; 66 catches for 815 yards projected
-Josh Downs,IND,WR,13,87.5,ffcalc-ppr-12tm-2026-07-25,168.7,17,big slot,low,big slot; 71 catches for 737 yards projected
-Patrick Mahomes,KC,QB,5,88.1,ffcalc-ppr-12tm-2026-07-25,288.7,17,pocket QB,med,pocket QB; 315 rushing yards projected
-Wan'Dale Robinson,TEN,WR,9,91.0,ffcalc-ppr-12tm-2026-07-25,180.6,17,big slot,med,big slot; 77 catches for 796 yards projected
-RJ Harvey,DEN,RB,10,91.6,ffcalc-ppr-12tm-2026-07-25,165.9,17,early-down committee back,high,early-down committee back; 121 carries + 44 catches projected
-Jordan Addison,MIN,WR,6,92.9,ffcalc-ppr-12tm-2026-07-25,163.8,17,big slot,low,big slot; 55 catches for 769 yards projected
-Travis Kelce,KC,TE,5,93.3,ffcalc-ppr-12tm-2026-07-25,180.1,17,move TE,low,move TE; 73 catches for 771 yards projected
-Jalen Hurts,PHI,QB,10,93.7,ffcalc-ppr-12tm-2026-07-25,313.8,17,rushing QB,med,rushing QB; 456 rushing yards projected
-J.K. Dobbins,DEN,RB,10,93.9,ffcalc-ppr-12tm-2026-07-25,173.2,17,early-down committee back,high,early-down committee back; 206 carries + 16 catches projected
-Seattle Seahawks,SEA,DST,11,94.5,ffcalc-ppr-12tm-2026-07-25,111.6,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Jakobi Meyers,JAC,WR,7,95.0,ffcalc-ppr-12tm-2026-07-25,177.1,17,big slot,med,big slot; 67 catches for 782 yards projected
-Jared Goff,DET,QB,6,95.2,ffcalc-ppr-12tm-2026-07-25,291.4,17,pocket QB,low,pocket QB; 50 rushing yards projected
-Aaron Jones,MIN,RB,6,95.5,ffcalc-ppr-12tm-2026-07-25,148.0,17,early-down committee back,high,early-down committee back; 143 carries + 37 catches projected
-Quentin Johnston,LAC,WR,7,98.8,ffcalc-ppr-12tm-2026-07-25,156.7,17,field-stretching Z,low,field-stretching Z; 50 catches for 707 yards projected
-Brock Purdy,SF,QB,8,99.1,ffcalc-ppr-12tm-2026-07-25,287.0,17,pocket QB,low,pocket QB; 286 rushing yards projected
-Kenneth Gainwell,TB,RB,10,99.1,ffcalc-ppr-12tm-2026-07-25,138.4,17,passing-down back,high,passing-down back; 100 carries + 37 catches projected
-Xavier Worthy,KC,WR,5,100.0,ffcalc-ppr-12tm-2026-07-25,168.1,17,big slot,low,big slot; 57 catches for 735 yards projected
-Ricky Pearsall,SF,WR,8,101.0,ffcalc-ppr-12tm-2026-07-25,152.7,17,big slot,low,big slot; 54 catches for 747 yards projected
-Denver Broncos,DEN,DST,10,101.4,ffcalc-ppr-12tm-2026-07-25,117.8,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Rachaad White,WAS,RB,7,103.0,ffcalc-ppr-12tm-2026-07-25,175.9,17,early-down committee back,high,early-down committee back; 141 carries + 44 catches projected
-Khalil Shakir,BUF,WR,7,103.3,ffcalc-ppr-12tm-2026-07-25,172.6,17,big slot,med,big slot; 72 catches for 766 yards projected
-Kyle Monangai,CHI,RB,10,103.6,ffcalc-ppr-12tm-2026-07-25,137.7,17,early-down committee back,high,early-down committee back; 176 carries + 20 catches projected
-Matthew Stafford,LAR,QB,11,103.8,ffcalc-ppr-12tm-2026-07-25,285.9,17,pocket QB,low,pocket QB; 22 rushing yards projected
-Romeo Doubs,NE,WR,11,103.8,ffcalc-ppr-12tm-2026-07-25,163.9,17,big slot,low,big slot; 58 catches for 759 yards projected
-Makai Lemon,PHI,WR,10,104.1,ffcalc-ppr-12tm-2026-07-25,120.8,17,big slot,med,big slot; 47 catches for 558 yards projected
-Los Angeles Rams,LAR,DST,11,106.0,ffcalc-ppr-12tm-2026-07-25,80.5,17,,med,team defense; scoring adjusted for this league's yards-allowed brackets
-George Kittle,SF,TE,8,106.5,ffcalc-ppr-12tm-2026-07-25,138.5,17,move TE,med,move TE; 53 catches for 615 yards projected
-Caleb Williams,CHI,QB,10,106.8,ffcalc-ppr-12tm-2026-07-25,300.0,17,rushing QB,med,rushing QB; 412 rushing yards projected
-Houston Texans,HOU,DST,8,109.3,ffcalc-ppr-12tm-2026-07-25,128.3,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Matthew Golden,GB,WR,11,113.6,ffcalc-ppr-12tm-2026-07-25,154.2,17,big slot,low,big slot; 54 catches for 702 yards projected
-New England Patriots,NE,DST,11,115.2,ffcalc-ppr-12tm-2026-07-25,87.4,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Jalen Coker,CAR,WR,5,117.8,ffcalc-ppr-12tm-2026-07-25,112.1,17,big slot,med,big slot; 42 catches for 521 yards projected
-Bo Nix,DEN,QB,10,117.9,ffcalc-ppr-12tm-2026-07-25,298.2,17,rushing QB,med,rushing QB; 362 rushing yards projected
-Jake Ferguson,DAL,TE,14,118.0,ffcalc-ppr-12tm-2026-07-25,159.5,17,move TE,low,move TE; 71 catches for 585 yards projected
-KC Concepcion,CLE,WR,11,119.9,ffcalc-ppr-12tm-2026-07-25,153.6,17,big slot,low,big slot; 58 catches for 752 yards projected
-Blake Corum,LAR,RB,11,120.1,ffcalc-ppr-12tm-2026-07-25,132.4,17,goal-line back,high,goal-line back; 159 carries + 13 catches projected
-Jaxson Dart,NYG,QB,8,121.3,ffcalc-ppr-12tm-2026-07-25,297.2,17,rushing QB,med,rushing QB; 564 rushing yards projected
-Jayden Higgins,HOU,WR,8,121.9,ffcalc-ppr-12tm-2026-07-25,123.1,17,big slot,low,big slot; 47 catches for 581 yards projected
-Jordan Mason,MIN,RB,6,123.9,ffcalc-ppr-12tm-2026-07-25,131.3,17,early-down committee back,high,early-down committee back; 189 carries + 12 catches projected
-Jacory Croskey-Merritt,WAS,RB,7,124.2,ffcalc-ppr-12tm-2026-07-25,136.5,17,goal-line back,high,goal-line back; 172 carries + 11 catches projected
-Jonathon Brooks,CAR,RB,5,126.7,ffcalc-ppr-12tm-2026-07-25,114.5,17,early-down committee back,high,early-down committee back; 109 carries + 27 catches projected
-Dallas Goedert,PHI,TE,10,126.8,ffcalc-ppr-12tm-2026-07-25,156.5,17,move TE,low,move TE; 58 catches for 625 yards projected
-Tyjae Spears,TEN,RB,9,127.0,ffcalc-ppr-12tm-2026-07-25,115.9,17,handcuff,high,handcuff; 86 carries + 38 catches projected
-Brandon Aubrey,DAL,K,14,128.3,ffcalc-ppr-12tm-2026-07-25,173.7,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Baker Mayfield,TB,QB,10,129.1,ffcalc-ppr-12tm-2026-07-25,264.6,17,rushing QB,low,rushing QB; 366 rushing yards projected
-Philadelphia Eagles,PHI,DST,10,129.4,ffcalc-ppr-12tm-2026-07-25,100.2,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Mark Andrews,BAL,TE,13,129.8,ffcalc-ppr-12tm-2026-07-25,167.5,17,move TE,low,move TE; 61 catches for 645 yards projected
-Rashid Shaheed,SEA,WR,11,131.0,ffcalc-ppr-12tm-2026-07-25,143.4,17,big slot,low,big slot; 49 catches for 659 yards projected
-Jordan Love,GB,QB,11,131.5,ffcalc-ppr-12tm-2026-07-25,262.7,17,pocket QB,low,pocket QB; 185 rushing yards projected
-Jauan Jennings,MIN,WR,6,132.3,ffcalc-ppr-12tm-2026-07-25,101.6,17,big slot,med,big slot; 37 catches for 466 yards projected
-Jacksonville Jaguars,JAC,DST,7,132.7,ffcalc-ppr-12tm-2026-07-25,58.0,17,,med,team defense; scoring adjusted for this league's yards-allowed brackets
-Omar Cooper Jr.,NYJ,WR,13,132.9,ffcalc-ppr-12tm-2026-07-25,107.6,17,big slot,med,big slot; 37 catches for 466 yards projected
-Denzel Boston,CLE,WR,11,132.9,ffcalc-ppr-12tm-2026-07-25,104.6,17,big slot,med,big slot; 40 catches for 526 yards projected
-Tre Tucker,LV,WR,13,134.5,ffcalc-ppr-12tm-2026-07-25,135.5,17,big slot,med,big slot; 52 catches for 655 yards projected
-Isaiah Likely,NYG,TE,8,136.8,ffcalc-ppr-12tm-2026-07-25,145.6,17,move TE,low,move TE; 56 catches for 656 yards projected
-Woody Marks,HOU,RB,8,137.0,ffcalc-ppr-12tm-2026-07-25,119.1,17,early-down committee back,high,early-down committee back; 135 carries + 27 catches projected
-Dalton Kincaid,BUF,TE,7,137.3,ffcalc-ppr-12tm-2026-07-25,146.5,17,move TE,low,move TE; 52 catches for 645 yards projected
-Jalen Nailor,LV,WR,13,138.3,ffcalc-ppr-12tm-2026-07-25,113.7,17,big slot,low,big slot; 44 catches for 577 yards projected
-Detroit Lions,DET,DST,6,139.4,ffcalc-ppr-12tm-2026-07-25,65.6,17,,med,team defense; scoring adjusted for this league's yards-allowed brackets
-Cameron Dicker,LAC,K,7,140.0,ffcalc-ppr-12tm-2026-07-25,170.7,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Jaydon Blue,DAL,RB,14,140.3,ffcalc-ppr-12tm-2026-07-25,36.6,17,handcuff,high,handcuff; 47 carries + 8 catches projected
-Cincinnati Bengals,CIN,DST,6,140.6,ffcalc-ppr-12tm-2026-07-25,45.9,17,,med,team defense; scoring adjusted for this league's yards-allowed brackets
-Tyler Shough,NO,QB,8,,,291.7,17,rushing QB,low,rushing QB; 377 rushing yards projected
-Kyler Murray,MIN,QB,6,,,282.3,17,rushing QB,low,rushing QB; 494 rushing yards projected
-Malik Willis,MIA,QB,6,,,267.7,17,rushing QB,low,rushing QB; 657 rushing yards projected
-Sam Darnold,SEA,QB,11,,,261.7,17,pocket QB,low,pocket QB; 125 rushing yards projected
-Daniel Jones,IND,QB,13,,,253.3,17,pocket QB,low,pocket QB; 278 rushing yards projected
-C.J. Stroud,HOU,QB,8,,,242.2,17,pocket QB,low,pocket QB; 218 rushing yards projected
-Bryce Young,CAR,QB,5,,,239.1,17,pocket QB,low,pocket QB; 229 rushing yards projected
+Bijan Robinson,ATL,RB,11,2.0,ffcalc-ppr-10tm-2026-08-02,366.9,17,three-down bell cow,med,three-down bell cow; 280 carries + 84 catches projected; status 2026-08-02: current participation unresolved during extension talks; Brian Robinson is complementary/short-yardage competition [source: https://www.atlantafalcons.com/news/falcons-2026-training-camp-preview-running-backs]
+Jahmyr Gibbs,DET,RB,6,1.6,ffcalc-ppr-10tm-2026-08-02,367.4,17,three-down bell cow,med,three-down bell cow; 279 carries + 72 catches projected; status 2026-08-02: present but not practicing in hold-in; team describes a back issue; no PUP/IR [source: https://www.nfl.com/news/what-we-learned-back-together-weekend-sunday-2026-training-camp]
+Puka Nacua,LAR,WR,11,2.7,ffcalc-ppr-10tm-2026-08-02,339.3,17,alpha X,low,alpha X; 116 catches for 1561 yards projected
+Ja'Marr Chase,CIN,WR,6,4.1,ffcalc-ppr-10tm-2026-08-02,330.5,17,alpha X,med,alpha X; 116 catches for 1474 yards projected; status 2026-08-02: attendance verified; full participation not independently verified [source: https://www.bengals.com/news/five-observations-day-4-bengals-training-camp-august-1-2026]
+Christian McCaffrey,SF,RB,8,5.0,ffcalc-ppr-10tm-2026-08-02,345.9,17,reduced-workload gate,med,three-down bell cow; 279 carries + 82 catches projected; status 2026-08-02: team plans a reduced 2026 workload with younger backs receiving opportunity [source: https://new.cbssports.com/nfl/news/kyle-shanahan-christian-mccaffreys-workload-in-2026-49ers-no-2-rb-role/]
+Jaxon Smith-Njigba,SEA,WR,11,6.2,ffcalc-ppr-10tm-2026-08-02,308.1,17,alpha X,low,alpha X; 105 catches for 1521 yards projected
+Amon-Ra St. Brown,DET,WR,6,7.5,ffcalc-ppr-10tm-2026-08-02,318.1,17,alpha X,low,alpha X; 119 catches for 1377 yards projected
+Jonathan Taylor,IND,RB,13,7.3,ffcalc-ppr-10tm-2026-08-02,286.5,17,three-down bell cow,low,three-down bell cow; 299 carries + 36 catches projected
+De'Von Achane,MIA,RB,6,9.6,ffcalc-ppr-10tm-2026-08-02,267.2,17,early-down committee back,low,early-down committee back; 228 carries + 56 catches projected
+CeeDee Lamb,DAL,WR,14,11.6,ffcalc-ppr-10tm-2026-08-02,252.7,17,alpha X,low,alpha X; 87 catches for 1177 yards projected
+Justin Jefferson,MIN,WR,6,13.3,ffcalc-ppr-10tm-2026-08-02,265.8,17,alpha X,low,alpha X; 95 catches for 1288 yards projected
+Ashton Jeanty,LV,RB,13,13.2,ffcalc-ppr-10tm-2026-08-02,264.3,17,three-down bell cow,low,three-down bell cow; 271 carries + 56 catches projected
+Drake London,ATL,WR,11,10.7,ffcalc-ppr-10tm-2026-08-02,272.2,17,alpha X,low,alpha X; 99 catches for 1312 yards projected
+James Cook,BUF,RB,7,14.5,ffcalc-ppr-10tm-2026-08-02,275.2,17,three-down bell cow,low,three-down bell cow; 275 carries + 32 catches projected
+A.J. Brown,NE,WR,11,17.0,ffcalc-ppr-10tm-2026-08-02,243.5,17,primary NE WR,low,alpha X; 86 catches for 1155 yards projected; status 2026-08-02: active primary WR with improving Maye connection [source: https://www.patriots.com/news/day-6-blogservations-drake-maye-lights-up-training-camp]
+Derrick Henry,BAL,RB,13,15.6,ffcalc-ppr-10tm-2026-08-02,259.6,17,goal-line back,low,goal-line back; 321 carries + 16 catches projected
+Chase Brown,CIN,RB,6,13.7,ffcalc-ppr-10tm-2026-08-02,262.1,17,three-down bell cow,low,three-down bell cow; 242 carries + 57 catches projected
+Omarion Hampton,LAC,RB,7,19.4,ffcalc-ppr-10tm-2026-08-02,267.5,17,three-down bell cow,low,three-down bell cow; 257 carries + 52 catches projected
+George Pickens,DAL,WR,14,21.2,ffcalc-ppr-10tm-2026-08-02,226.2,17,field-stretching Z,med,field-stretching Z; 74 catches for 1102 yards projected
+Saquon Barkley,PHI,RB,10,18.2,ffcalc-ppr-10tm-2026-08-02,262.3,17,three-down bell cow,low,three-down bell cow; 281 carries + 42 catches projected; status 2026-08-02: A.J. Brown is with NE; PHI target allocation is unresolved under a new offense [source: https://www.philadelphiaeagles.com/news/eagles-trade-aj-brown-to-the-patriots]
+Chris Olave,NO,WR,8,21.7,ffcalc-ppr-10tm-2026-08-02,247.0,17,alpha WR,low,alpha X; 94 catches for 1110 yards projected; status 2026-08-02: active alpha WR in the Shough-led offense [source: https://www.neworleanssaints.com/news/what-to-watch-for-at-new-orleans-saints-training-camp-2026]
+Kenneth Walker,KC,RB,5,26.0,ffcalc-ppr-10tm-2026-08-02,257.9,17,unverified workload gate,med,three-down bell cow; 262 carries + 42 catches projected; status 2026-08-02: participated in mandatory-minicamp 11-on-11; current workload remains unverified [source: https://www.chiefs.com/news/chiefs-wrap-up-mandatory-minicamp-at-the-team-facility]
+Jeremiyah Love,ARI,RB,14,24.2,ffcalc-ppr-10tm-2026-08-02,259.9,17,three-down bell cow,med,three-down bell cow; 246 carries + 56 catches projected
+Nico Collins,HOU,WR,8,23.7,ffcalc-ppr-10tm-2026-08-02,239.6,17,field-stretching Z,low,field-stretching Z; 79 catches for 1186 yards projected
+Zay Flowers,BAL,WR,13,27.4,ffcalc-ppr-10tm-2026-08-02,232.6,17,field-stretching Z,low,field-stretching Z; 79 catches for 1117 yards projected
+Rashee Rice,KC,WR,5,17.4,ffcalc-ppr-10tm-2026-08-02,249.7,17,alpha X,high,alpha X; 96 catches for 1117 yards projected; status 2026-08-02: cleared to participate in training camp after knee recovery [source: https://www.nfl.com/news/chiefs-qb-patrick-mahomes-knee-fully-cleared-to-participate-in-training-camp]
+Josh Jacobs,GB,RB,11,24.6,ffcalc-ppr-10tm-2026-08-02,244.2,17,three-down bell cow,low,three-down bell cow; 282 carries + 35 catches projected
+DeVonta Smith,PHI,WR,10,28.9,ffcalc-ppr-10tm-2026-08-02,231.2,17,big slot,low,big slot; 83 catches for 1122 yards projected; status 2026-08-02: A.J. Brown is with NE; PHI target allocation is unresolved under a new offense [source: https://www.philadelphiaeagles.com/news/eagles-trade-aj-brown-to-the-patriots]
+Tee Higgins,CIN,WR,6,38.2,ffcalc-ppr-10tm-2026-08-02,203.6,17,big slot,med,big slot; 65 catches for 906 yards projected
+Josh Allen,BUF,QB,7,26.7,ffcalc-ppr-10tm-2026-08-02,366.2,17,rushing QB,low,rushing QB; 567 rushing yards projected
+Garrett Wilson,NYJ,WR,13,27.8,ffcalc-ppr-10tm-2026-08-02,245.5,17,undisputed WR1,med,alpha X; 100 catches for 1155 yards projected; status 2026-08-02: officially identified undisputed WR1 [source: https://www.newyorkjets.com/news/what-have-we-learned-from-jets-otas-06-05-2026]
+Trey McBride,ARI,TE,14,34.2,ffcalc-ppr-10tm-2026-08-02,250.9,17,move TE,low,move TE; 104 catches for 1049 yards projected
+Breece Hall,NYJ,RB,13,27.8,ffcalc-ppr-10tm-2026-08-02,245.5,17,RB1; not proven every-down,low,three-down bell cow; 258 carries + 47 catches projected; status 2026-08-02: officially identified RB1 ahead of Allen and Davis [source: https://www.newyorkjets.com/news/what-have-we-learned-from-jets-otas-06-05-2026]
+Kyren Williams,LAR,RB,11,32.4,ffcalc-ppr-10tm-2026-08-02,247.6,17,three-down bell cow,high,three-down bell cow; 249 carries + 34 catches projected
+Tetairoa McMillan,CAR,WR,5,33.6,ffcalc-ppr-10tm-2026-08-02,222.1,17,big slot,low,big slot; 78 catches for 1081 yards projected
+Javonte Williams,DAL,RB,14,34.7,ffcalc-ppr-10tm-2026-08-02,233.3,17,three-down bell cow,med,three-down bell cow; 251 carries + 33 catches projected; status 2026-08-02: Javonte Williams is definitive RB1; RB2 contingency among Malik Davis Jaydon Blue and Phil Mafah unresolved; role context: Williams lead; RB2 unresolved [source: https://www.dallascowboys.com/news/cowboys-depth-chart-updated-look-at-offensive-starters-for-2026]
+Brock Bowers,LV,TE,13,38.9,ffcalc-ppr-10tm-2026-08-02,253.8,17,move TE,low,move TE; 103 catches for 1088 yards projected
+Terry McLaurin,WAS,WR,7,42.1,ffcalc-ppr-10tm-2026-08-02,194.7,17,field-stretching Z,high,field-stretching Z; 65 catches for 937 yards projected
+Ladd McConkey,LAC,WR,7,42.3,ffcalc-ppr-10tm-2026-08-02,207.6,17,big slot,low,big slot; 76 catches for 956 yards projected
+Cam Skattebo,NYG,RB,8,33.3,ffcalc-ppr-10tm-2026-08-02,247.4,17,three-down bell cow,med,three-down bell cow; 262 carries + 46 catches projected
+Travis Etienne,NO,RB,8,36.6,ffcalc-ppr-10tm-2026-08-02,226.9,17,lead committee,med,three-down bell cow; 246 carries + 44 catches projected; status 2026-08-02: lead-committee hypothesis; Kamara remains a receiving and committee competitor [source: https://www.neworleanssaints.com/news/what-to-watch-for-at-new-orleans-saints-training-camp-2026]
+Jaylen Waddle,DEN,WR,10,47.8,ffcalc-ppr-10tm-2026-08-02,206.7,17,environment addition; target split unresolved,med,big slot; 72 catches for 987 yards projected; status 2026-08-02: intentional passing-game addition alongside Sutton and Engram; target split unresolved [source: https://www.denverbroncos.com/news/broncos-camp-preview-how-will-the-addition-of-wr-jaylen-waddle-elevate-denver-s-passing-game]
+Davante Adams,LAR,WR,11,41.5,ffcalc-ppr-10tm-2026-08-02,221.1,17,big slot,low,big slot; 70 catches for 911 yards projected
+Emeka Egbuka,TB,WR,10,36.7,ffcalc-ppr-10tm-2026-08-02,224.6,17,flexible Z receiver,med,big slot; 78 catches for 1046 yards projected; status 2026-08-02: flexible Z receiver carving out a role in camp [source: https://www.buccaneers.com/news/training-camp-takeaways-practice-day-3]
+Malik Nabers,NYG,WR,8,41.2,ffcalc-ppr-10tm-2026-08-02,224.7,17,big slot,med,big slot; 77 catches for 1044 yards projected; status 2026-08-02: avoided PUP while recovering from ACL tear and second scar-tissue clean-up [source: https://www.nfl.com/news/giants-wr-malik-nabers-avoids-pup-list-training-camp]
+Colston Loveland,CHI,TE,10,58.8,ffcalc-ppr-10tm-2026-08-02,193.8,17,TE competition qualified,med,move TE; 73 catches for 848 yards projected; status 2026-08-02: active TE with Kmet and Roush target competition [source: https://www.chicagobears.com/news/bears-2026-training-camp-position-preview-tight-end]
+Bucky Irving,TB,RB,10,42.4,ffcalc-ppr-10tm-2026-08-02,229.0,17,lead committee; Gainwell receiving,med,three-down bell cow; 261 carries + 39 catches projected; status 2026-08-02: lead back with meaningful Gainwell receiving and change-of-pace competition [source: https://www.buccaneers.com/news/buccaneers-offensive-preview-training-camp-2026]
+D'Andre Swift,CHI,RB,10,45.4,ffcalc-ppr-10tm-2026-08-02,223.5,17,lead two-back committee,high,three-down bell cow; 233 carries + 39 catches projected; status 2026-08-02: lead back in a two-back structure [source: https://www.chicagobears.com/news/bears-2026-training-camp-position-preview-running-back]
+Luther Burden III,CHI,WR,10,52.3,ffcalc-ppr-10tm-2026-08-02,201.9,17,big slot,low,big slot; 70 catches for 926 yards projected
+Joe Burrow,CIN,QB,6,54.9,ffcalc-ppr-10tm-2026-08-02,301.3,17,pocket QB,med,pocket QB; 182 rushing yards projected; status 2026-08-02: present in current camp reporting with no high-impact restriction found [source: https://www.bengals.com/news/five-observations-day-4-bengals-training-camp-august-1-2026]
+Jameson Williams,DET,WR,6,47.5,ffcalc-ppr-10tm-2026-08-02,221.0,17,field-stretching Z,med,field-stretching Z; 66 catches for 1088 yards projected
+Quinshon Judkins,CLE,RB,11,48.7,ffcalc-ppr-10tm-2026-08-02,208.3,17,conditional lead/early-down committee,med,three-down bell cow; 275 carries + 30 catches projected; status 2026-08-02: practicing after ankle dislocation and fibula-fracture surgery; lead role needs padded validation [source: https://www.clevelandbrowns.com/news/quinshon-judkins-feels-confident-in-return-from-injury-entering-year-2]
+Mike Evans,SF,WR,8,58.5,ffcalc-ppr-10tm-2026-08-02,206.5,17,big slot,low,big slot; 69 catches for 955 yards projected
+Tyler Warren,IND,TE,13,64.8,ffcalc-ppr-10tm-2026-08-02,191.6,17,move TE,low,move TE; 78 catches for 836 yards projected
+Rome Odunze,CHI,WR,10,53.2,ffcalc-ppr-10tm-2026-08-02,201.5,17,field-stretching Z,low,field-stretching Z; 65 catches for 945 yards projected
+Lamar Jackson,BAL,QB,13,53.9,ffcalc-ppr-10tm-2026-08-02,318.8,17,rushing QB,low,rushing QB; 646 rushing yards projected
+David Montgomery,HOU,RB,8,60.6,ffcalc-ppr-10tm-2026-08-02,199.9,17,early-down committee back,high,early-down committee back; 217 carries + 34 catches projected; status 2026-08-02: current HOU assignment is unverified by adjudicating official roster or transaction evidence [source: https://www.nfl.com/transactions/league/signings/2026/7]
+DK Metcalf,PIT,WR,9,64.7,ffcalc-ppr-10tm-2026-08-02,197.4,17,field-stretching Z,low,field-stretching Z; 67 catches for 944 yards projected
+TreVeyon Henderson,NE,RB,11,56.4,ffcalc-ppr-10tm-2026-08-02,197.3,17,early-down committee back,high,early-down committee back; 182 carries + 36 catches projected
+Dak Prescott,DAL,QB,14,64.9,ffcalc-ppr-10tm-2026-08-02,295.3,17,pocket QB,med,pocket QB; 161 rushing yards projected
+Christian Watson,GB,WR,11,66.3,ffcalc-ppr-10tm-2026-08-02,205.2,17,field-stretching Z,low,field-stretching Z; 65 catches for 982 yards projected
+Bhayshul Tuten,JAC,RB,7,55.7,ffcalc-ppr-10tm-2026-08-02,226.3,17,lead early-down committee,med,three-down bell cow; 257 carries + 38 catches projected; status 2026-08-02: projected lead early-down back in a three-way committee [source: https://www.nfl.com/news/afc-south-training-camp-2026-preview-texans-colts-jaguars-titans]
+Drake Maye,NE,QB,11,51.6,ffcalc-ppr-10tm-2026-08-02,324.9,17,rushing QB,low,rushing QB; 433 rushing yards projected; status 2026-08-02: locked QB1 with promising multi-level passing context [source: https://www.patriots.com/news/drake-maye-discusses-his-goals-for-patriots-training-camp-heading-into-third-season]
+Carnell Tate,TEN,WR,9,73.3,ffcalc-ppr-10tm-2026-08-02,181.7,17,big slot,med,big slot; 65 catches for 867 yards projected
+Alec Pierce,IND,WR,13,63.1,ffcalc-ppr-10tm-2026-08-02,197.7,17,field-stretching Z,high,field-stretching Z; 66 catches for 1017 yards projected; status 2026-08-02: active/PUP and not practicing [source: https://www.colts.com/news/cj-allen-alec-pierce-pup-list-injury-updates-status-2026-training-camp]
+Jaylen Warren,PIT,RB,9,65.5,ffcalc-ppr-10tm-2026-08-02,201.3,17,early-down committee back,high,early-down committee back; 190 carries + 41 catches projected
+Marvin Harrison Jr.,ARI,WR,14,65.8,ffcalc-ppr-10tm-2026-08-02,193.3,17,field-stretching Z,med,field-stretching Z; 64 catches for 933 yards projected; status 2026-08-02: foot issue monitor with no current designation or timetable [source: https://www.azcardinals.com/news/marvin-harrison-jr-finds-greater-appreciation-after-injury-filled-season]
+D.J. Moore,BUF,WR,7,60.4,ffcalc-ppr-10tm-2026-08-02,207.0,17,early chemistry; no settled hierarchy,med,big slot; 71 catches for 955 yards projected; status 2026-08-02: early Allen chemistry in intermediate downfield and red-zone work [source: https://www.buffalobills.com/news/what-we-learned-about-the-bills-on-day-3-of-training-camp-2026]
+Harold Fannin Jr.,CLE,TE,11,76.8,ffcalc-ppr-10tm-2026-08-02,187.1,17,move TE,low,move TE; 77 catches for 801 yards projected
+Tony Pollard,TEN,RB,9,63.2,ffcalc-ppr-10tm-2026-08-02,197.2,17,three-down bell cow,med,three-down bell cow; 242 carries + 32 catches projected
+Michael Pittman Jr.,PIT,WR,9,71.4,ffcalc-ppr-10tm-2026-08-02,193.7,17,big slot,low,big slot; 76 catches for 877 yards projected
+Rhamondre Stevenson,NE,RB,11,71.8,ffcalc-ppr-10tm-2026-08-02,181.7,17,early-down committee back,high,early-down committee back; 163 carries + 38 catches projected; status 2026-08-02: planned limited-practice workload; no injury diagnosis established [source: https://www.patriots.com/news/transcript-head-coach-mike-vrabel-press-conference-8-1-x6174]
+Jadarian Price,SEA,RB,11,65.8,ffcalc-ppr-10tm-2026-08-02,185.3,17,open backfield competition,high,early-down committee back; 195 carries + 31 catches projected; status 2026-08-02: open-camp competitor with Holani and Wilson; Charbonnet return timing unresolved [source: https://www.seahawks.com/news/training-camp-storylines-does-rookie-jadarian-price-win-the-starting-job]
+Courtland Sutton,DEN,WR,10,65.0,ffcalc-ppr-10tm-2026-08-02,189.8,17,big slot,low,big slot; 63 catches for 848 yards projected
+Sam LaPorta,DET,TE,6,83.7,ffcalc-ppr-10tm-2026-08-02,163.5,17,move TE,low,move TE; 60 catches for 735 yards projected
+Tucker Kraft,GB,TE,11,110.1,ffcalc-ppr-10tm-2026-08-02,159.4,17,move TE,high,move TE; 57 catches for 724 yards projected; status 2026-08-02: ACL-return participation and list status not yet verified [source: https://www.packers.com/news/tucker-kraft-s-goal-is-to-start-week-1-on-no-pitch-count-june-11-2026]
+Parker Washington,JAC,WR,7,77.1,ffcalc-ppr-10tm-2026-08-02,158.6,17,big slot,high,big slot; 58 catches for 766 yards projected
+Chris Godwin,TB,WR,10,86.0,ffcalc-ppr-10tm-2026-08-02,175.9,17,big slot,low,big slot; 68 catches for 779 yards projected
+Rico Dowdle,PIT,RB,9,75.1,ffcalc-ppr-10tm-2026-08-02,166.4,17,early-down committee back,high,early-down committee back; 186 carries + 30 catches projected
+Chuba Hubbard,CAR,RB,5,77.8,ffcalc-ppr-10tm-2026-08-02,188.5,17,lead back; not bell cow,med,early-down committee back; 217 carries + 34 catches projected; status 2026-08-02: healthy clear rushing leader with Brooks return risk remaining [source: https://www.panthers.com/news/panthers-pre-training-camp-2026-positional-preview-offense]
+Justin Herbert,LAC,QB,7,103.0,ffcalc-ppr-10tm-2026-08-02,290.8,17,rushing QB,med,rushing QB; 427 rushing yards projected
+Jordyn Tyson,NO,WR,8,82.8,ffcalc-ppr-10tm-2026-08-02,163.3,17,big slot,med,big slot; 61 catches for 783 yards projected
+Michael Wilson,ARI,WR,14,88.0,ffcalc-ppr-10tm-2026-08-02,172.2,17,big slot,low,big slot; 66 catches for 822 yards projected
+Brian Thomas Jr.,JAC,WR,7,83.1,ffcalc-ppr-10tm-2026-08-02,167.4,17,field-stretching Z,low,field-stretching Z; 56 catches for 814 yards projected
+Kyle Pitts,ATL,TE,11,80.9,ffcalc-ppr-10tm-2026-08-02,185.6,17,move TE,low,move TE; 76 catches for 856 yards projected
+Jayden Daniels,WAS,QB,7,71.8,ffcalc-ppr-10tm-2026-08-02,309.0,17,rushing QB,low,rushing QB; 642 rushing yards projected; status 2026-08-02: fully healthy entering the David Blough offense and established QB1 [source: https://www.commanders.com/news/commanders-2026-training-camp-preview-running-back]
+Trevor Lawrence,JAC,QB,7,88.9,ffcalc-ppr-10tm-2026-08-02,290.0,17,pocket QB,med,pocket QB; 301 rushing yards projected
+Jayden Reed,GB,WR,11,91.0,ffcalc-ppr-10tm-2026-08-02,184.3,17,big slot,med,big slot; 66 catches for 815 yards projected
+Josh Downs,IND,WR,13,91.7,ffcalc-ppr-10tm-2026-08-02,168.7,17,big slot,low,big slot; 71 catches for 737 yards projected
+Patrick Mahomes,KC,QB,5,99.8,ffcalc-ppr-10tm-2026-08-02,288.7,17,pocket QB,med,pocket QB; 315 rushing yards projected
+Wan'Dale Robinson,TEN,WR,9,78.4,ffcalc-ppr-10tm-2026-08-02,180.6,17,big slot,med,big slot; 77 catches for 796 yards projected
+RJ Harvey,DEN,RB,10,88.2,ffcalc-ppr-10tm-2026-08-02,165.9,17,early-down committee back,high,early-down committee back; 121 carries + 44 catches projected
+Jordan Addison,MIN,WR,6,98.2,ffcalc-ppr-10tm-2026-08-02,163.8,17,big slot,low,big slot; 55 catches for 769 yards projected
+Travis Kelce,KC,TE,5,95.5,ffcalc-ppr-10tm-2026-08-02,174.1,17,move TE,low,move TE; 73 catches for 771 yards projected
+Jalen Hurts,PHI,QB,10,76.1,ffcalc-ppr-10tm-2026-08-02,313.8,17,rushing QB,med,rushing QB; 456 rushing yards projected; status 2026-08-02: A.J. Brown is with NE; PHI target allocation is unresolved under a new offense [source: https://www.philadelphiaeagles.com/news/eagles-trade-aj-brown-to-the-patriots]
+J.K. Dobbins,DEN,RB,10,90.7,ffcalc-ppr-10tm-2026-08-02,173.2,17,entering-camp RB leader,high,early-down committee back; 206 carries + 16 catches projected; status 2026-08-02: entering-camp RB-room leader; complementary share remains unresolved [source: https://www.denverbroncos.com/news/broncos-camp-preview-j-k-dobbins-leads-denver-s-rb-room-as-broncos-prioritize-a-consistent-rushing-attack]
+Seattle Seahawks,SEA,DST,11,97.1,ffcalc-ppr-10tm-2026-08-02,111.6,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Jakobi Meyers,JAC,WR,7,80.7,ffcalc-ppr-10tm-2026-08-02,177.1,17,big slot,med,big slot; 67 catches for 782 yards projected
+Jared Goff,DET,QB,6,103.5,ffcalc-ppr-10tm-2026-08-02,291.4,17,pocket QB,low,pocket QB; 50 rushing yards projected
+Aaron Jones,MIN,RB,6,94.3,ffcalc-ppr-10tm-2026-08-02,148.0,17,1a committee back,high,early-down committee back; 143 carries + 37 catches projected; status 2026-08-02: active 1a back in a 1a/1b committee with Mason [source: https://www.vikings.com/news/jordan-mason-running-back-nfl-2026-fantasy-football]; status 2026-08-02: Aaron Jones and Jordan Mason remain a 1a/1b committee; role context: Jones/Mason 1a/1b committee [source: https://www.vikings.com/news/jordan-mason-running-back-nfl-2026-fantasy-football]
+Quentin Johnston,LAC,WR,7,97.2,ffcalc-ppr-10tm-2026-08-02,156.7,17,field-stretching Z,low,field-stretching Z; 50 catches for 707 yards projected
+Brock Purdy,SF,QB,8,80.8,ffcalc-ppr-10tm-2026-08-02,287.0,17,pocket QB,low,pocket QB; 286 rushing yards projected
+Kenneth Gainwell,TB,RB,10,,,138.4,17,receiving/change-of-pace back,high,passing-down back; 100 carries + 37 catches projected; status 2026-08-02: active receiving and change-of-pace competitor behind Irving [source: https://www.buccaneers.com/news/buccaneers-offensive-preview-training-camp-2026]
+Xavier Worthy,KC,WR,5,104.8,ffcalc-ppr-10tm-2026-08-02,168.1,17,big slot,low,big slot; 57 catches for 735 yards projected
+Denver Broncos,DEN,DST,10,96.9,ffcalc-ppr-10tm-2026-08-02,117.8,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Rachaad White,WAS,RB,7,100.5,ffcalc-ppr-10tm-2026-08-02,175.9,17,early-down committee back,high,early-down committee back; 141 carries + 44 catches projected; status 2026-08-02: multi-back design with White receiving utility JCM lead-back possibility and Allen short-yardage competition; role context: multi-back conditional roles [source: https://www.commanders.com/news/commanders-players-to-watch-2026-training-camp]
+Khalil Shakir,BUF,WR,7,102.9,ffcalc-ppr-10tm-2026-08-02,172.6,17,big slot,med,big slot; 72 catches for 766 yards projected
+Kyle Monangai,CHI,RB,10,98.2,ffcalc-ppr-10tm-2026-08-02,137.7,17,meaningful tandem complement,high,early-down committee back; 176 carries + 20 catches projected; status 2026-08-02: active meaningful complement in the Swift two-back structure [source: https://www.chicagobears.com/news/bears-2026-training-camp-position-preview-running-back]
+Matthew Stafford,LAR,QB,11,88.5,ffcalc-ppr-10tm-2026-08-02,285.9,17,pocket QB,low,pocket QB; 22 rushing yards projected
+Romeo Doubs,NE,WR,11,107.1,ffcalc-ppr-10tm-2026-08-02,163.9,17,big slot,low,big slot; 58 catches for 759 yards projected
+Makai Lemon,PHI,WR,10,101.6,ffcalc-ppr-10tm-2026-08-02,147.7,17,big slot,med,big slot; 47 catches for 558 yards projected; status 2026-08-02: A.J. Brown is with NE; PHI target allocation is unresolved under a new offense [source: https://www.philadelphiaeagles.com/news/eagles-trade-aj-brown-to-the-patriots]
+Los Angeles Rams,LAR,DST,11,130.2,ffcalc-ppr-10tm-2026-08-02,80.5,17,,med,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+George Kittle,SF,TE,8,109.5,ffcalc-ppr-10tm-2026-08-02,138.5,17,move TE,high,move TE; 53 catches for 615 yards projected; status 2026-08-02: active/PUP with Achilles recovery; Week 1 unresolved [source: https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-saturday-july-25]
+Caleb Williams,CHI,QB,10,102.6,ffcalc-ppr-10tm-2026-08-02,300.0,17,rushing QB,med,rushing QB; 412 rushing yards projected
+Houston Texans,HOU,DST,8,106.6,ffcalc-ppr-10tm-2026-08-02,128.3,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Matthew Golden,GB,WR,11,119.3,ffcalc-ppr-10tm-2026-08-02,154.2,17,big slot,low,big slot; 54 catches for 702 yards projected
+New England Patriots,NE,DST,11,139.0,ffcalc-ppr-10tm-2026-08-02,87.4,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Jalen Coker,CAR,WR,5,127.2,ffcalc-ppr-10tm-2026-08-02,112.1,17,big slot,med,big slot; 42 catches for 521 yards projected
+Bo Nix,DEN,QB,10,121.2,ffcalc-ppr-10tm-2026-08-02,298.2,17,rushing QB,med,rushing QB; 362 rushing yards projected
+Jake Ferguson,DAL,TE,14,131.4,ffcalc-ppr-10tm-2026-08-02,159.5,17,move TE,low,move TE; 71 catches for 585 yards projected
+KC Concepcion,CLE,WR,11,126.3,ffcalc-ppr-10tm-2026-08-02,153.6,17,big slot,low,big slot; 58 catches for 752 yards projected
+Blake Corum,LAR,RB,11,117.9,ffcalc-ppr-10tm-2026-08-02,132.4,17,goal-line back,high,goal-line back; 159 carries + 13 catches projected
+Jaxson Dart,NYG,QB,8,106.4,ffcalc-ppr-10tm-2026-08-02,297.2,17,rushing QB,med,rushing QB; 564 rushing yards projected
+Jayden Higgins,HOU,WR,8,134.1,ffcalc-ppr-10tm-2026-08-02,123.1,17,big slot,low,big slot; 47 catches for 581 yards projected
+Jordan Mason,MIN,RB,6,121.4,ffcalc-ppr-10tm-2026-08-02,131.3,17,1b committee back,high,early-down committee back; 189 carries + 12 catches projected; status 2026-08-02: active 1b back in a 1a/1b committee with Jones [source: https://www.vikings.com/news/jordan-mason-running-back-nfl-2026-fantasy-football]; status 2026-08-02: Aaron Jones and Jordan Mason remain a 1a/1b committee; role context: Jones/Mason 1a/1b committee [source: https://www.vikings.com/news/jordan-mason-running-back-nfl-2026-fantasy-football]
+Jacory Croskey-Merritt,WAS,RB,7,115.5,ffcalc-ppr-10tm-2026-08-02,136.5,17,goal-line back,high,goal-line back; 172 carries + 11 catches projected; status 2026-08-02: multi-back design with White receiving utility JCM lead-back possibility and Allen short-yardage competition; role context: multi-back conditional roles [source: https://www.commanders.com/news/commanders-players-to-watch-2026-training-camp]
+Jonathon Brooks,CAR,RB,5,120.8,ffcalc-ppr-10tm-2026-08-02,130.5,17,early-down committee back,high,early-down committee back; 109 carries + 27 catches projected
+Dallas Goedert,PHI,TE,10,116.3,ffcalc-ppr-10tm-2026-08-02,156.5,17,move TE,low,move TE; 58 catches for 625 yards projected; status 2026-08-02: A.J. Brown is with NE; PHI target allocation is unresolved under a new offense [source: https://www.philadelphiaeagles.com/news/eagles-trade-aj-brown-to-the-patriots]
+Tyjae Spears,TEN,RB,9,121.8,ffcalc-ppr-10tm-2026-08-02,115.9,17,handcuff,high,handcuff; 86 carries + 38 catches projected
+Brandon Aubrey,DAL,K,14,129.7,ffcalc-ppr-10tm-2026-08-02,173.7,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Baker Mayfield,TB,QB,10,129.2,ffcalc-ppr-10tm-2026-08-02,264.6,17,passer; not rushing QB,low,rushing QB; 366 rushing yards projected; status 2026-08-02: active system leader and passer; no rushing-QB inference supported [source: https://www.buccaneers.com/news/buccaneers-offensive-preview-training-camp-2026]
+Philadelphia Eagles,PHI,DST,10,140.3,ffcalc-ppr-10tm-2026-08-02,100.2,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Mark Andrews,BAL,TE,13,137.9,ffcalc-ppr-10tm-2026-08-02,161.5,17,move TE,low,move TE; 61 catches for 645 yards projected
+Rashid Shaheed,SEA,WR,11,121.9,ffcalc-ppr-10tm-2026-08-02,143.4,17,big slot,med,big slot; 49 catches for 659 yards projected; status 2026-08-02: larger-role watch with no route or target confirmation [source: https://www.seahawks.com/news/10-storylines-to-watch-in-2026-seahawks-training-camp]
+Jordan Love,GB,QB,11,142.2,ffcalc-ppr-10tm-2026-08-02,262.7,17,pocket QB,low,pocket QB; 185 rushing yards projected
+Jauan Jennings,MIN,WR,6,139.1,ffcalc-ppr-10tm-2026-08-02,101.6,17,big slot,med,big slot; 37 catches for 466 yards projected
+Jacksonville Jaguars,JAC,DST,7,132.2,ffcalc-ppr-10tm-2026-08-02,58.0,17,,med,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Omar Cooper Jr.,NYJ,WR,13,154.1,ffcalc-ppr-10tm-2026-08-02,107.6,17,big slot,med,big slot; 37 catches for 466 yards projected
+Denzel Boston,CLE,WR,11,151.3,ffcalc-ppr-10tm-2026-08-02,104.6,17,big slot,med,big slot; 40 catches for 526 yards projected
+Tre Tucker,LV,WR,13,135.2,ffcalc-ppr-10tm-2026-08-02,135.5,17,big slot,med,big slot; 52 catches for 655 yards projected
+Isaiah Likely,NYG,TE,8,141.1,ffcalc-ppr-10tm-2026-08-02,145.6,17,move TE,low,move TE; 56 catches for 656 yards projected
+Woody Marks,HOU,RB,8,139.2,ffcalc-ppr-10tm-2026-08-02,119.1,17,early-down committee back,high,early-down committee back; 135 carries + 27 catches projected
+Dalton Kincaid,BUF,TE,7,146.7,ffcalc-ppr-10tm-2026-08-02,146.5,17,move TE,low,move TE; 52 catches for 645 yards projected
+Jalen Nailor,LV,WR,13,158.5,ffcalc-ppr-10tm-2026-08-02,113.7,17,big slot,low,big slot; 44 catches for 577 yards projected
+Detroit Lions,DET,DST,6,130.8,ffcalc-ppr-10tm-2026-08-02,65.6,17,,med,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Cameron Dicker,LAC,K,7,148.4,ffcalc-ppr-10tm-2026-08-02,170.7,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Jaydon Blue,DAL,RB,14,129.2,ffcalc-ppr-10tm-2026-08-02,46.5,17,handcuff,high,handcuff; 47 carries + 8 catches projected; status 2026-08-02: Javonte Williams is definitive RB1; RB2 contingency among Malik Davis Jaydon Blue and Phil Mafah unresolved; role context: Williams lead; RB2 unresolved [source: https://www.dallascowboys.com/news/cowboys-depth-chart-updated-look-at-offensive-starters-for-2026]
+Cincinnati Bengals,CIN,DST,6,179.2,ffcalc-ppr-10tm-2026-08-02,45.9,17,,med,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Tyler Shough,NO,QB,8,138.4,ffcalc-ppr-10tm-2026-08-02,291.7,17,named QB1,low,rushing QB; 377 rushing yards projected; status 2026-08-02: named and unquestioned offensive leader [source: https://www.neworleanssaints.com/news/what-to-watch-for-at-new-orleans-saints-training-camp-2026]
+Malik Willis,MIA,QB,6,161.4,ffcalc-ppr-10tm-2026-08-02,267.7,17,presumptive starter,low,rushing QB; 657 rushing yards projected; status 2026-08-02: presumptive starter with volatile receiver-room context [source: https://www.cbsnews.com/miami/news/dolphins-quarterback-malik-willis-prepares-for-first-training-camp-as-a-starter/]
+Sam Darnold,SEA,QB,11,144.5,ffcalc-ppr-10tm-2026-08-02,261.7,17,official QB1,low,pocket QB; 125 rushing yards projected; status 2026-08-02: official depth-chart QB1 [source: https://www.seahawks.com/team/depth-chart]
+Daniel Jones,IND,QB,13,160.5,ffcalc-ppr-10tm-2026-08-02,253.3,17,pocket QB,low,pocket QB; 278 rushing yards projected
+C.J. Stroud,HOU,QB,8,157.3,ffcalc-ppr-10tm-2026-08-02,242.2,17,pocket QB,low,pocket QB; 218 rushing yards projected
+Bryce Young,CAR,QB,5,170.4,ffcalc-ppr-10tm-2026-08-02,239.1,17,pocket QB,low,pocket QB; 229 rushing yards projected
 Aaron Rodgers,PIT,QB,9,,,230.0,17,pocket QB,low,pocket QB; 80 rushing yards projected
-Cam Ward,TEN,QB,9,,,227.2,17,pocket QB,low,pocket QB; 207 rushing yards projected
-Jacoby Brissett,ARI,QB,14,,,225.6,17,pocket QB,low,pocket QB; 178 rushing yards projected
+Cam Ward,TEN,QB,9,174.5,ffcalc-ppr-10tm-2026-08-02,227.2,17,pocket QB,low,pocket QB; 207 rushing yards projected
 Geno Smith,NYJ,QB,13,,,222.5,17,pocket QB,low,pocket QB; 157 rushing yards projected
-Fernando Mendoza,LV,QB,13,,,186.9,17,pocket QB,low,pocket QB; 217 rushing yards projected
-Ka'imi Fairbairn,HOU,K,8,,,161.9,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Jason Myers,SEA,K,11,,,159.2,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Wil Lutz,DEN,K,10,,,153.8,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Chase McLaughlin,TB,K,10,,,152.4,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Eddy Pineiro,SF,K,8,,,150.6,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Dalton Schultz,HOU,TE,8,,,149.6,17,move TE,low,move TE; 67 catches for 646 yards projected
-Harrison Butker,KC,K,5,,,149.6,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Hunter Henry,NE,TE,11,,,147.4,17,move TE,low,move TE; 55 catches for 624 yards projected
-Will Reichard,MIN,K,6,,,145.8,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Juwan Johnson,NO,TE,8,,,145.6,17,move TE,low,move TE; 60 catches for 676 yards projected
-Cam Little,JAC,K,7,,,145.0,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Tua Tagovailoa,ATL,QB,11,,,144.0,17,pocket QB,low,pocket QB; 42 rushing yards projected
-Tyler Loop,BAL,K,13,,,143.1,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Cairo Santos,CHI,K,10,,,143.0,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Trey Smack,GB,K,11,,,142.0,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Tyler Bass,BUF,K,7,,,141.5,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Jake Bates,DET,K,6,,,141.3,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Blake Grupe,IND,K,13,,,141.0,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Andres Borregales,NE,K,11,,,140.3,17,,low,"kicker; stream by the offense's implied team total, not by name"
+Ka'imi Fairbairn,HOU,K,8,143.7,ffcalc-ppr-10tm-2026-08-02,161.9,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Jason Myers,SEA,K,11,141.8,ffcalc-ppr-10tm-2026-08-02,159.2,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Wil Lutz,DEN,K,10,176.1,ffcalc-ppr-10tm-2026-08-02,153.8,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Chase McLaughlin,TB,K,10,157.4,ffcalc-ppr-10tm-2026-08-02,152.4,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Eddy Pineiro,SF,K,8,156.8,ffcalc-ppr-10tm-2026-08-02,150.6,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Dalton Schultz,HOU,TE,8,173.8,ffcalc-ppr-10tm-2026-08-02,149.6,17,move TE,low,move TE; 67 catches for 646 yards projected
+Harrison Butker,KC,K,5,167.0,ffcalc-ppr-10tm-2026-08-02,149.6,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Hunter Henry,NE,TE,11,154.5,ffcalc-ppr-10tm-2026-08-02,147.4,17,move TE,low,move TE; 55 catches for 624 yards projected
+Will Reichard,MIN,K,6,163.7,ffcalc-ppr-10tm-2026-08-02,145.8,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Juwan Johnson,NO,TE,8,160.3,ffcalc-ppr-10tm-2026-08-02,145.6,17,move TE,low,move TE; 60 catches for 676 yards projected
+Cam Little,JAC,K,7,159.6,ffcalc-ppr-10tm-2026-08-02,145.0,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Tyler Loop,BAL,K,13,160.4,ffcalc-ppr-10tm-2026-08-02,143.1,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Cairo Santos,CHI,K,10,151.9,ffcalc-ppr-10tm-2026-08-02,143.0,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Trey Smack,GB,K,11,,,142.0,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Tyler Bass,BUF,K,7,166.8,ffcalc-ppr-10tm-2026-08-02,141.5,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Jake Bates,DET,K,6,147.7,ffcalc-ppr-10tm-2026-08-02,141.3,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Blake Grupe,IND,K,13,,,141.0,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Andres Borregales,NE,K,11,166.5,ffcalc-ppr-10tm-2026-08-02,140.3,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
 Pat Freiermuth,PIT,TE,9,,,139.6,17,move TE,low,move TE; 53 catches for 566 yards projected
-Greg Dulcich,MIA,TE,6,,,138.6,17,move TE,low,move TE; 54 catches for 606 yards projected
-Evan McPherson,CIN,K,6,,,138.3,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Chris Boswell,PIT,K,9,,,138.0,17,,low,"kicker; stream by the offense's implied team total, not by name"
-Jake Elliott,PHI,K,10,,,135.5,17,,low,"kicker; stream by the offense's implied team total, not by name"
-T.J. Hockenson,MIN,TE,6,,,133.8,17,move TE,low,move TE; 59 catches for 568 yards projected
-Jerry Jeudy,CLE,WR,11,,,133.5,17,big slot,low,big slot; 51 catches for 645 yards projected
-Deshaun Watson,CLE,QB,11,,,132.7,17,pocket QB,low,pocket QB; 189 rushing yards projected
-Brenton Strange,JAC,TE,7,,,132.1,17,move TE,low,move TE; 51 catches for 571 yards projected
-Chigoziem Okonkwo,WAS,TE,7,,,129.9,17,move TE,low,move TE; 57 catches for 549 yards projected
-Tyrone Tracy Jr.,NYG,RB,8,,,128.5,17,early-down committee back,high,early-down committee back; 114 carries + 32 catches projected
+Greg Dulcich,MIA,TE,6,169.8,ffcalc-ppr-10tm-2026-08-02,138.6,17,move TE,low,move TE; 54 catches for 606 yards projected
+Evan McPherson,CIN,K,6,170.0,ffcalc-ppr-10tm-2026-08-02,138.3,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Chris Boswell,PIT,K,9,156.6,ffcalc-ppr-10tm-2026-08-02,138.0,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+Jake Elliott,PHI,K,10,,,135.5,17,,low,"kicker; stream by the offense's implied team total, not by name; source projection scored with 3.82-points-per-FG distance-mix model"
+T.J. Hockenson,MIN,TE,6,155.8,ffcalc-ppr-10tm-2026-08-02,133.8,17,move TE,low,move TE; 59 catches for 568 yards projected
+Jerry Jeudy,CLE,WR,11,138.5,ffcalc-ppr-10tm-2026-08-02,133.5,17,big slot,low,big slot; 51 catches for 645 yards projected
+Brenton Strange,JAC,TE,7,150.2,ffcalc-ppr-10tm-2026-08-02,132.1,17,move TE,low,move TE; 51 catches for 571 yards projected
+Chigoziem Okonkwo,WAS,TE,7,164.4,ffcalc-ppr-10tm-2026-08-02,129.9,17,move TE,low,move TE; 57 catches for 549 yards projected
+Tyrone Tracy Jr.,NYG,RB,8,156.8,ffcalc-ppr-10tm-2026-08-02,128.5,17,early-down committee back,high,early-down committee back; 114 carries + 32 catches projected
 AJ Barner,SEA,TE,11,,,128.4,17,move TE,low,move TE; 54 catches for 504 yards projected
-Rashod Bateman,BAL,WR,13,,,125.2,17,big slot,low,big slot; 44 catches for 572 yards projected
-Alvin Kamara,NO,RB,8,,,124.3,17,early-down committee back,high,early-down committee back; 113 carries + 34 catches projected
+Rashod Bateman,BAL,WR,13,149.2,ffcalc-ppr-10tm-2026-08-02,125.2,17,big slot,low,big slot; 44 catches for 572 yards projected
+Alvin Kamara,NO,RB,8,140.6,ffcalc-ppr-10tm-2026-08-02,124.3,17,early-down committee back,high,early-down committee back; 113 carries + 34 catches projected
 Cade Otton,TB,TE,10,,,123.5,17,move TE,low,move TE; 53 catches for 525 yards projected
 Evan Engram,DEN,TE,10,,,123.4,17,move TE,low,move TE; 57 catches for 484 yards projected
-Jalen McMillan,TB,WR,10,,,118.5,17,field-stretching Z,low,field-stretching Z; 39 catches for 555 yards projected
-Oronde Gadsden,LAC,TE,7,,,117.7,17,blocking TE,low,blocking TE; 42 catches for 517 yards projected
-Dylan Sampson,CLE,RB,11,,,114.1,17,handcuff,high,handcuff; 61 carries + 40 catches projected
-Calvin Ridley,TEN,WR,9,,,113.8,17,field-stretching Z,low,field-stretching Z; 39 catches for 568 yards projected
+Jalen McMillan,TB,WR,10,138.7,ffcalc-ppr-10tm-2026-08-02,118.5,17,field-stretching Z,low,field-stretching Z; 39 catches for 555 yards projected
+Oronde Gadsden,LAC,TE,7,169.5,ffcalc-ppr-10tm-2026-08-02,117.7,17,receiving/move TE,med,blocking TE; 42 catches for 517 yards projected; status 2026-08-02: receiving/move TE profile with breakout signal [source: https://www.chargers.com/news/training-camp-preview-oronde-gadsden-fantasy]
+Dylan Sampson,CLE,RB,11,159.5,ffcalc-ppr-10tm-2026-08-02,114.1,17,handcuff,high,handcuff; 61 carries + 40 catches projected
+Calvin Ridley,TEN,WR,9,137.3,ffcalc-ppr-10tm-2026-08-02,113.8,17,field-stretching Z,low,field-stretching Z; 39 catches for 568 yards projected
 Mike Gesicki,CIN,TE,6,,,112.0,17,blocking TE,low,blocking TE; 43 catches for 450 yards projected
-Zach Charbonnet,SEA,RB,11,,,110.2,17,early-down committee back,high,early-down committee back; 128 carries + 19 catches projected
+Zach Charbonnet,SEA,RB,11,141.5,ffcalc-ppr-10tm-2026-08-02,110.2,17,early-down committee back,high,early-down committee back; 128 carries + 19 catches projected; status 2026-08-02: PUP after ACL surgery; return timing unknown [source: https://www.seahawks.com/news/seahawks-rb-zach-charbonnet-placed-on-pup-list]
 Mason Taylor,NYJ,TE,13,,,110.1,17,move TE,low,move TE; 50 catches for 481 yards projected
 Gunnar Helm,TEN,TE,9,,,108.5,17,move TE,low,move TE; 45 catches for 455 yards projected
-Adonai Mitchell,NYJ,WR,13,,,108.2,17,big slot,low,big slot; 36 catches for 482 yards projected
+Adonai Mitchell,NYJ,WR,13,154.4,ffcalc-ppr-10tm-2026-08-02,108.2,17,big slot,low,big slot; 36 catches for 482 yards projected
 Terrance Ferguson,LAR,TE,11,,,105.0,17,blocking TE,low,blocking TE; 37 catches for 440 yards projected
 Michael Mayer,LV,TE,13,,,103.0,17,blocking TE,low,blocking TE; 43 catches for 420 yards projected
-Minnesota Vikings,MIN,DST,6,,,102.7,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
+Minnesota Vikings,MIN,DST,6,129.0,ffcalc-ppr-10tm-2026-08-02,102.7,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
 Ty Johnson,BUF,RB,7,,,101.2,17,handcuff,high,handcuff; 52 carries + 29 catches projected
-Isiah Pacheco,DET,RB,6,,,100.8,17,early-down committee back,high,early-down committee back; 122 carries + 20 catches projected
-Cooper Kupp,SEA,WR,11,,,98.5,17,big slot,low,big slot; 36 catches for 445 yards projected
-Chris Rodriguez Jr.,JAC,RB,7,,,97.2,17,early-down committee back,high,early-down committee back; 129 carries + 10 catches projected
-Los Angeles Chargers,LAC,DST,7,,,94.4,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Buffalo Bills,BUF,DST,7,,,93.2,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Justice Hill,BAL,RB,13,,,92.2,17,handcuff,high,handcuff; 51 carries + 28 catches projected
-Tyler Allgeier,ARI,RB,14,,,87.5,17,handcuff,high,handcuff; 98 carries + 18 catches projected
-Pittsburgh Steelers,PIT,DST,9,,,86.6,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Travis Hunter,JAC,WR,7,,,85.1,17,big slot,low,big slot; 34 catches for 391 yards projected
-Brian Robinson Jr.,ATL,RB,11,,,85.0,17,handcuff,high,handcuff; 107 carries + 9 catches projected
-Green Bay Packers,GB,DST,11,,,79.3,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Samaje Perine,CIN,RB,6,,,74.2,17,handcuff,high,handcuff; 72 carries + 16 catches projected
-Braelon Allen,NYJ,RB,13,,,73.2,17,handcuff,high,handcuff; 91 carries + 10 catches projected
-Baltimore Ravens,BAL,DST,13,,,71.2,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Keaton Mitchell,LAC,RB,7,,,71.1,17,handcuff,high,handcuff; 39 carries + 19 catches projected
-Cleveland Browns,CLE,DST,11,,,71.0,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Ray Davis,BUF,RB,7,,,67.5,17,handcuff,high,handcuff; 62 carries + 12 catches projected
+Isiah Pacheco,DET,RB,6,145.8,ffcalc-ppr-10tm-2026-08-02,100.8,17,early-down committee back,high,early-down committee back; 122 carries + 20 catches projected
+Cooper Kupp,SEA,WR,11,159.5,ffcalc-ppr-10tm-2026-08-02,98.5,17,big slot,low,big slot; 36 catches for 445 yards projected
+Chris Rodriguez Jr.,JAC,RB,7,155.1,ffcalc-ppr-10tm-2026-08-02,97.2,17,early-down committee back,high,early-down committee back; 129 carries + 10 catches projected
+Los Angeles Chargers,LAC,DST,7,148.4,ffcalc-ppr-10tm-2026-08-02,94.4,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Buffalo Bills,BUF,DST,7,163.1,ffcalc-ppr-10tm-2026-08-02,93.2,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Justice Hill,BAL,RB,13,165.2,ffcalc-ppr-10tm-2026-08-02,92.2,17,handcuff,high,handcuff; 51 carries + 28 catches projected
+Tyler Allgeier,ARI,RB,14,161.6,ffcalc-ppr-10tm-2026-08-02,87.5,17,handcuff,high,handcuff; 98 carries + 18 catches projected
+Pittsburgh Steelers,PIT,DST,9,155.0,ffcalc-ppr-10tm-2026-08-02,86.6,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Travis Hunter,JAC,WR,7,162.9,ffcalc-ppr-10tm-2026-08-02,85.1,17,big slot,low,big slot; 34 catches for 391 yards projected
+Brian Robinson Jr.,ATL,RB,11,156.2,ffcalc-ppr-10tm-2026-08-02,85.0,17,short-yardage complement,high,handcuff; 107 carries + 9 catches projected; status 2026-08-02: complementary physical and short-yardage back behind Bijan [source: https://www.atlantafalcons.com/news/falcons-2026-training-camp-preview-running-backs]
+Green Bay Packers,GB,DST,11,151.2,ffcalc-ppr-10tm-2026-08-02,79.3,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Samaje Perine,CIN,RB,6,164.9,ffcalc-ppr-10tm-2026-08-02,74.2,17,handcuff,high,handcuff; 72 carries + 16 catches projected
+Braelon Allen,NYJ,RB,13,170.8,ffcalc-ppr-10tm-2026-08-02,73.2,17,handcuff,high,handcuff; 91 carries + 10 catches projected
+Baltimore Ravens,BAL,DST,13,163.0,ffcalc-ppr-10tm-2026-08-02,71.2,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Keaton Mitchell,LAC,RB,7,162.3,ffcalc-ppr-10tm-2026-08-02,71.1,17,handcuff,high,handcuff; 39 carries + 19 catches projected
+Cleveland Browns,CLE,DST,11,179.3,ffcalc-ppr-10tm-2026-08-02,71.0,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Ray Davis,BUF,RB,7,163.2,ffcalc-ppr-10tm-2026-08-02,67.5,17,handcuff,high,handcuff; 62 carries + 12 catches projected
 Keon Coleman,BUF,WR,7,,,63.7,17,field-stretching Z,low,field-stretching Z; 21 catches for 307 yards projected
-Tank Bigsby,PHI,RB,10,,,63.6,17,handcuff,high,handcuff; 87 carries + 5 catches projected
-New Orleans Saints,NO,DST,8,,,63.2,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
+Tank Bigsby,PHI,RB,10,163.4,ffcalc-ppr-10tm-2026-08-02,63.6,17,handcuff,high,handcuff; 87 carries + 5 catches projected; status 2026-08-02: A.J. Brown is with NE; PHI target allocation is unresolved under a new offense [source: https://www.philadelphiaeagles.com/news/eagles-trade-aj-brown-to-the-patriots]
+New Orleans Saints,NO,DST,8,167.6,ffcalc-ppr-10tm-2026-08-02,63.2,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
 Emari Demercado,KC,RB,5,,,62.0,17,handcuff,high,handcuff; 51 carries + 19 catches projected
 MarShawn Lloyd,GB,RB,11,,,60.5,17,handcuff,high,handcuff; 73 carries + 10 catches projected
 Sean Tucker,TB,RB,10,,,60.4,17,handcuff,high,handcuff; 70 carries + 9 catches projected
-Tampa Bay Buccaneers,TB,DST,10,,,58.9,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Kimani Vidal,LAC,RB,7,,,58.9,17,handcuff,high,handcuff; 66 carries + 11 catches projected
-Mike Washington Jr.,LV,RB,13,,,57.6,17,handcuff,high,handcuff; 85 carries + 7 catches projected
+Tampa Bay Buccaneers,TB,DST,10,,,58.9,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Kimani Vidal,LAC,RB,7,165.0,ffcalc-ppr-10tm-2026-08-02,58.9,17,handcuff,high,handcuff; 66 carries + 11 catches projected
+Mike Washington Jr.,LV,RB,13,141.0,ffcalc-ppr-10tm-2026-08-02,57.6,17,handcuff,high,handcuff; 85 carries + 7 catches projected
 George Holani,SEA,RB,11,,,54.1,17,handcuff,high,handcuff; 58 carries + 11 catches projected
 Jaylen Wright,MIA,RB,6,,,53.7,17,handcuff,high,handcuff; 61 carries + 9 catches projected
-Chicago Bears,CHI,DST,10,,,53.6,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
-Jordan James,SF,RB,8,,,43.6,17,handcuff,high,handcuff; 59 carries + 7 catches projected
-Indianapolis Colts,IND,DST,13,,,42.7,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets
+Chicago Bears,CHI,DST,10,160.1,ffcalc-ppr-10tm-2026-08-02,53.6,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
+Jordan James,SF,RB,8,158.5,ffcalc-ppr-10tm-2026-08-02,43.6,17,handcuff,high,handcuff; 59 carries + 7 catches projected
+Indianapolis Colts,IND,DST,13,,,42.7,17,,low,team defense; scoring adjusted for this league's yards-allowed brackets; existing D/ST model retained unchanged; FFToday D/ST is audit-only
 DJ Giddens,IND,RB,13,,,41.5,17,handcuff,high,handcuff; 43 carries + 11 catches projected
 Kaleb Johnson,PIT,RB,9,,,14.4,17,handcuff,high,handcuff; 29 carries + 2 catches projected
 Trey Benson,ARI,RB,14,,,10.0,17,handcuff,high,handcuff; 23 carries + 0 catches projected

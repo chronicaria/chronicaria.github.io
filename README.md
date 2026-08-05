@@ -19,7 +19,7 @@ fantasy/              The Fantasy Encyclopedias — sport picker over two corpor
   index.html          Hand-written toggle shell; not generated, edit directly
   basketball/         2026-27 Fantasy Basketball Encyclopedia — 646 pages
   football/           2026 Fantasy Football Encyclopedia — 118 pages
-valorant/             RWPA dashboard — 21 matches, 454 rounds
+valorant/             Valorant MWPA — impact per match, 78 matches, 1,617 rounds
 concerto/             Piano concerto pairwise ranker
 nyc-weather/          Hourly forecasts with ensemble uncertainty bands
 winter-trip/          Italy, winter 2026-27 — itinerary and logistics

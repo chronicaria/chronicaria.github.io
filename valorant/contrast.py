@@ -1,15 +1,12 @@
-"""Contrast and colour-vision checks for the two dashboard palettes.
+"""Contrast and colour-vision checks for the MWPA site's palette.
 
-There are two sites in this directory and this file guards BOTH of them:
+This guarded two sites until the RWPA dashboard that shared this directory was
+retired and the MWPA site moved up into its place. The `SIB_*` tables below are
+that dashboard's palette, kept unread for one reason: they are the measurements
+the surviving comments quote when they say why a token sits where it does, and
+deleting them would leave those numbers unsourced. Nothing runs them.
 
-    style.css   the RWPA dashboard  -- tokens --bg/--panel/--text/...
-    quad/quad-site.css  the four-player MWPA site -- tokens --ground/--field/--ink/...
-
-They are separate palettes on separate surfaces and neither one's numbers say
-anything about the other, so each carries its own token lists and each is
-reported separately. Both must pass for this file to exit 0.
-
-The rule stated in style.css: every token that carries TEXT clears 4.5:1
+The rule, first stated in the retired style.css and unchanged since: every token that carries TEXT clears 4.5:1
 against the WORST surface it can land on, and that surface is --panel-3 in
 both themes (the table row-hover plate). Marks clear 3:1 against whatever
 they composite onto -- including at partial opacity, which is why blend()
@@ -544,7 +541,7 @@ def image_report(families=None, quiet=False):
 
 STYLESHEETS = [
     # (path, theme selector -> which literal table this file guards)
-    (HERE / "quad" / "quad-site.css", {":root": DARK, ':root[data-theme="light"]': LIGHT},
+    (HERE / "quad-site.css", {":root": DARK, ':root[data-theme="light"]': LIGHT},
      {"ground": "--ground", "field": "--field", "well": "--well", "ink": "--ink",
       "quiet": "--quiet", "rule": "--rule", "rule-strong": "--rule-strong",
       "martin": "--martin", "snorlax": "--snorlax", "themarias": "--themarias",
@@ -605,15 +602,11 @@ def dichromacy(name, pal):
 
 if __name__ == "__main__":
     results = [
-        report("style.css DARK", SIB_DARK, SIB_TEXT_TOKENS, SIB_SURFACES, SIB_MARKS),
-        report("style.css LIGHT", SIB_LIGHT, SIB_TEXT_TOKENS, SIB_SURFACES, SIB_MARKS),
         report("quad-site.css DARK", DARK),
         report("quad-site.css LIGHT", LIGHT),
         check_stylesheets(),
         image_report(),
     ]
-    dichromacy("style.css DARK", SIB_DARK)
-    dichromacy("style.css LIGHT", SIB_LIGHT)
     dichromacy("quad-site.css DARK", DARK)
     dichromacy("quad-site.css LIGHT", LIGHT)
     ok = all(results)

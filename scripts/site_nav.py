@@ -24,7 +24,7 @@ INTERESTS = [
 
 PROJECTS = [
     ("/fantasy/", "Fantasy Encyclopedias"),
-    ("/valorant/", "Valorant RWPA"),
+    ("/valorant/", "Valorant MWPA"),
     ("/quant-internships/", "Quant Internships"),
     ("/concerto/", "Concerto Ranker"),
     ("/nyc-weather/", "Weather Dashboard"),
@@ -54,6 +54,12 @@ SITEMAP_EXTRA = [
     "/daily/sports.html", "/daily/ai.html", "/daily/markets.html",
     "/daily/elections.html", "/daily/math.html", "/daily/archive.html",
 ]
+
+# In the nav, out of the sitemap. Every page under /valorant/ ships
+# `<meta name="robots" content="noindex, nofollow">` on purpose, and a sitemap is a request TO
+# index — listing a page in one while forbidding it in the other is a contradiction a crawler
+# reports back as an error. The nav entry stays: people navigate there, crawlers do not.
+SITEMAP_SKIP = {"/valorant/"}
 
 
 def drop(title, items, active):
@@ -128,7 +134,7 @@ def write_hub():
 
 def write_sitemap():
     hrefs = ["/"] + ["/daily/"] + SITEMAP_EXTRA + [h for h, _ in INTERESTS] + [h for h, _ in PROJECTS]
-    seen, ordered = set(), []
+    seen, ordered = set(SITEMAP_SKIP), []
     for h in hrefs:
         if h not in seen:
             seen.add(h)

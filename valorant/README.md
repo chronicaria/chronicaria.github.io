@@ -1,141 +1,59 @@
-# RWPA — MartinLutherKing & SN0RLAX
+# MWPA — four players, one act
 
-A static dashboard over round win probability added (RWPA) for one shared competitive Valorant
-cohort: 21 matches, 454 rounds, every one of them scored.
+A static site over **impact per match**: how much of a match win a player's credited actions are
+worth, per match played. Four focal players, one act (e11a4), 78 matches, 1,617 rounds, every one
+of them scored.
 
-Open `index.html`. That is the whole install — no framework, no build step, no server, no network
-beyond a Google Fonts stylesheet. The data ships as `window.VAL_DATA` in `data.js` rather than
-something to `fetch`, so it works opened straight off disk.
+Open `index.html`. That is the whole install — no framework, no build step, no server, no network,
+and no web font. Each page inlines its own data as `window.QUAD` and loads the corpus-wide half
+from `quad-shared.js`, so the site works opened straight off disk.
 
-## What it shows
+This directory used to hold two sites: an RWPA dashboard at the top and this one under `quad/`.
+The dashboard was retired on 2026-08-05 and this moved up into its place. `contrast.py` still
+carries that dashboard's palette tables, unread, because surviving comments quote their numbers.
 
-**Cohort.** A cumulative walk of RWPA over every round in play order, scaled to the data's own
-range so the variation reads. Then a round-disposition bar, per-player totals with their 95%
-intervals, a credit-type waterfall showing that each total is the residue of about forty units of
-churn either way, and a forest plot of every estimand under all three eligibility scenarios — which
-is where the intervals live, in the per-100 units everything else on the page is quoted in. The
-single most important fact about this dataset is visible there: every interval includes zero —
-the pair taken together comes closest, at +2.10 per 100 with an interval of [−0.29, +4.70], and
-still does not clear it.
+## The metric
 
-**Every player, over their own matches.** A second population, kept deliberately apart from the
-cohort above. It carries two scopes: the current act, and every match the corpus holds for that
-player. These four share no match at all, so the intervals come from four separate bootstraps and
-are *not* comparable with one another — exposure is printed on every row, and the corpus scope also
-shows each player's date span, because the eras barely overlap. A player with no games in a scope
-gets no row rather than a zero: Trzzcko last played this cohort's game in 2025 and so is absent
-from the current act entirely.
+`impact = MWPA / matches played`, shown as a percentage. `+1.6%` reads as *worth about one and a
+half extra wins per hundred matches*. It is the per-100-rounds rate rescaled by the player's own
+rounds per match — a positive constant — so the BCa endpoints carry across unchanged and so does
+`covers_zero`. The per-100-rounds rate survives on `methods.html` as the estimator's own unit.
 
-**Match.** Per-player summary, a per-round bar panel for each player against their own zero line,
-and a round ledger.
+**The result is a null.** All four intervals cover zero, and the widest is many times the entire
+spread of the order they are ranked in. The rank is a sort order; the interval is the finding.
 
-**Round.** Selecting a round opens a sheet comparing the two players across probability, combat,
-economy and events — one row set, shared by both, so line *n* on the left is line *n* on the right.
-
-## Reading rules the page enforces
-
-These come from the research release, not from taste. They are stated at the top of `style.css`
-and `app.js` so a later edit cannot quietly break them.
-
-- **The two players are never ranked.** `meta.gate.rank_players` is `false`. No arrow, no
-  highlight, no leader column, no difference column, no sort that orders one above the other. Their
-  intervals overlap, the paired difference is +0.239 per 100 rounds with an interval of
-  [−2.68, +4.37], and its sign reverses across eligibility scenarios. They are also teammates in
-  every match, so a versus frame is structurally wrong.
-- **No cell's rendering is ever a function of the other player's value.** Magnitude bars scale to a
-  cached corpus 95th percentile, never to `max(martin, snorlax)`.
-- **Nothing that was not measured is rendered as `0.00`.** That applies twice over now. A round
-  with no well-defined ending shows an em dash and a reason. So does a player in a round they were
-  not in: a 4v5 round is fully scored for everyone who played it, and the absent player has no
-  ledger rows at all, so their cells are em dashes rather than zeros. A zero would say they were
-  present and did nothing.
-- **A per-100 rate is suppressed below the exposure floor** of 20 eligible rounds.
-- **Green is up, red is down, and a zero is neither.** Sign colour means the direction a
-  probability moved; it never touches a name, a neutral count, or a win/loss chip. Sign is carried
-  three times over — a `+`/`−` glyph, direction from a zero rule, and colour — because red/green is
-  the one pair the common dichromacies cannot separate. `contrast.py` prints the evidence.
-- **Nothing hardcodes a count.** Every number comes out of `VAL_DATA`.
-
-## A note on the round table
-
-The header is deliberately not sticky. `.table-wrap` sets `overflow-x: auto`, which makes it the
-containing block for sticky positioning — so `top: 54px` did not hold the header below the site
-header, it pushed the header *down* onto the first row and hid round 1 of every match. The bug
-survived several rounds of measurement because the offset lands on the `<th>` cells while
-`getBoundingClientRect()` on the `<tr>` still reports the unmoved row box: the rows never
-overlapped, the cells did. `document.elementFromPoint` over row 1 returned the header cell, which
-is what finally showed it. These tables run to 30 rows; a sticky header was never worth a bug that
-deletes a row.
-
-## Checking the palette
+## Build
 
 ```bash
-python3 contrast.py
+python3.12 payload_site.py     # payload/site.json + payload/player/*.json  (needs numpy/pandas)
+python3.12 payload_match.py    # payload/match/<match_id>.json, one per match
+python3 build.py               # 84 pages: index, methods, 78 match, 4 player
+python3 contrast.py            # the colour and artwork gate; must print PASS
 ```
 
-Every token carrying text clears 4.5:1 against the row-hover surface in both themes; information
-marks clear 3:1 including at partial opacity. The script also simulates both dichromacies and
-fails loudly if the sign pair stops separating.
+`build.py` reads only `payload/` and is deterministic: rebuilding without new data changes no byte
+of any file. The assertions in `main()` are the contract — if one fires, the code that fired it is
+wrong, and relaxing it to make a build pass is never the fix.
 
-## Where the numbers come from
+`--rescale` re-pins the magnitude-bar axes in `payload/scale.json`. They are pinned rather than
+recomputed so that adding a match does not move every bar on every page; only `impact` widens on
+its own, and only outward, because a clipped interval on the figure that exists to say the
+intervals are wide is the one bar this site cannot draw.
 
-The payload is generated, not hand-written. It is built by `valorant_impact.dashboard_data` in the
-research lab (kept separately, outside this repo) from the immutable release
-`model_suite_release_2026-07-31_v8`, manifest SHA-256
-`c4de59b3ee41e2c88d83e75b4dc380bfdc6c458722c3949d8277e7a0a8cc6792`:
+## Adding matches
 
-```bash
-python3 -m valorant_impact.dashboard_data --output dashboard/data.js
-```
+The corpus, the model and the box scores live in the lab rather than here — `CONTRACT.md` carries
+the paths, and `meta.cav.two_scoring_provenances` carries why matches collected after the model
+release are priced by a refit rather than by a cross-fitted fold.
 
-That build is fail-closed: a missing column, an unexpected row drop or a failed reconciliation
-target raises rather than emitting a partial payload, and 92 tests assert the reconciliation
-targets against the real release, and the payload rebuilds byte-identically.
+Surrendered **rounds** are awarded rather than played and stay outside every number. The rounds
+played before a concession stay in: they ran under a real race to 13, against a score nobody yet
+knew would be conceded.
 
-### Short-handed rounds count
+## What is not here
 
-A round where somebody was inactive used to be discarded entirely. It is now scored: the active
-roster already omits the absent player, so the alive counts describe a genuine 4v5 and the
-win-probability model conditions on exactly those counts. All 37 such rounds in this cohort are
-kept and marked `4v5` in the ledger; only the absent player is left uncredited. That took the
-cohort from 417 of 454 rounds to 454 of 454.
-
-It moved the numbers, and not cosmetically: the two players' point ordering reverses. Which is
-precisely why the page does not rank them.
-
-`data.js` also carries its own metadata, which is why nothing in `app.js` hardcodes what a metric
-means: `dict` (119 entries with label, definition, unit, source file and column, format, and a
-headline/diagnostic/exploratory/rejected tier), `meta.cav` (28 interpretation caveats), `meta.code`
-(enum legends — `"d"` means *defense* in one field and *disadvantage* in another, which is exactly
-the kind of thing a lookup copied into JS gets wrong silently), and `meta.gate` (the release's own
-rules). A wrong number is a bug in the extractor, never in the view.
-
-## Refreshing with newer matches
-
-Collection needs a HenrikDev API key, which is not in this repo:
-
-```bash
-export HENRIK_API_KEY='...'
-python3 -m valorant_impact.collect --all --page-size 10 --rate-floor 12 --output data/updates/refresh.json
-```
-
-`collect` pages the v4 matchlist, which serves a recent window and stops on a short page — that
-short page means "no more results for this query", not "no more matches". Henrik's own archive
-index reaches considerably further back, and every id it lists can still be re-fetched at full
-round-and-kill detail:
-
-```bash
-python3 -m valorant_impact.backfill --dry-run
-python3 -m valorant_impact.backfill --output data/updates/backfill.json
-```
-
-That recovered 79 matches the matchlist never returned, taking the corpus from 120 to 198. It
-identifies cohort members by PUUID rather than Riot ID, because handles change — TheMarias played
-as `mahoraga#AWDGR` until after 2024, and name matching would have pseudonymized them as a stranger
-in their own archive. None of this repairs the underlying coverage gap: Henrik holds roughly 8% of
-these players' careers, and what it never ingested is not retrievable from any endpoint.
-
-Then merge, rebuild the SQLite box scores, run the model suite into a fresh release directory, and
-regenerate `data.js`. The suite re-derives the cross-fitted ledger and the bootstrap intervals, so
-the numbers on the page move with it — pass `--reuse <previous run>` to adopt the models that did
-not change instead of refitting all twelve to reach the thirteenth.
+No opponent is named. Every player other than the four is a match-scoped pseudonym, so one person
+appearing in two matches carries two unrelated names and nothing links them. No career total
+appears anywhere and nothing is pooled across acts. Every page ships
+`<meta name="robots" content="noindex, nofollow">`, and `/valorant/` is deliberately absent from
+`sitemap.xml` — which is not the same as being private, and `methods.html` says so.

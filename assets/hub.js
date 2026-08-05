@@ -13,7 +13,7 @@
 
   var SECTIONS = [
     { href: "/fantasy/", label: "Fantasy Encyclopedias" },
-    { href: "/valorant/", label: "Valorant RWPA" },
+    { href: "/valorant/", label: "Valorant MWPA" },
     { href: "/quant-internships/", label: "Quant Internships" },
     { href: "/concerto/", label: "Concerto Ranker" },
     { href: "/nyc-weather/", label: "Weather Dashboard" },

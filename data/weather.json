@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-05T16:00:00Z",
-  "updated": "2026-08-05T17:03:54Z",
+  "valid_time_utc": "2026-08-05T19:00:00Z",
+  "updated": "2026-08-05T20:09:36Z",
   "hottest": [
+    {
+      "name": "Kingfisher",
+      "state": "OK",
+      "temp_f": 102.8
+    },
     {
       "name": "Tillman",
       "state": "OK",
-      "temp_f": 95.2
+      "temp_f": 102.3
     },
     {
-      "name": "Jackson",
+      "name": "Major",
       "state": "OK",
-      "temp_f": 94.5
-    },
-    {
-      "name": "Wilbarger",
-      "state": "TX",
-      "temp_f": 94.4
+      "temp_f": 102.1
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
+      "name": "Kusilvak",
       "state": "AK",
-      "temp_f": 44.8
-    },
-    {
-      "name": "Yakutat",
-      "state": "AK",
-      "temp_f": 46.8
+      "temp_f": 48.6
     },
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 47.0
+      "temp_f": 48.6
+    },
+    {
+      "name": "Yakutat",
+      "state": "AK",
+      "temp_f": 49.0
     }
   ],
   "national": {
-    "min_f": 44.8,
-    "max_f": 95.2,
-    "mean_f": 78.6
+    "min_f": 48.6,
+    "max_f": 102.8,
+    "mean_f": 83.3
   }
 }

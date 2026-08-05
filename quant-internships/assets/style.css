@@ -12,10 +12,14 @@
    ANTI-DRIFT RULES
    1. No shadows. Structure is 1px borders, full stop.
    2. Radii are 0 or 2px. Nothing is a pill except a filter chip.
-   3. Every number, tier mark, date and table header is --mono
+   3. Every number, grade mark, date and column label is --mono
       with tabular-nums.
-   4. The table has no vertical rules and no zebra. Row hover only.
+   4. Cards have no zebra and no fill beyond --paper-raised.
+      Row hover only. The grade letter is ink in a hairline box,
+      never a filled badge.
    5. No inline <style>. No framework. One stylesheet, one IIFE.
+   6. The fit rail is --mono and petrol: it must read as machine
+      annotation, not as prose.
    ───────────────────────────────────────────────────────────── */
 
 :root {
@@ -171,19 +175,26 @@ a:hover { color: var(--petrol-bright); }
 
 /* ── controls ───────────────────────────────────────────────── */
 .controls {
-  padding: 16px 32px;
+  padding: 13px 32px 11px;
   border-bottom: 1px solid var(--rule);
   display: flex;
-  flex-wrap: wrap;
-  gap: 22px;
-  align-items: center;
+  flex-direction: column;
+  gap: 9px;
   position: sticky;
   top: 0;
   background: var(--paper);
   z-index: 20;
 }
 
-.filter-group { display: flex; align-items: center; gap: 8px; }
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+}
+.filter-row.second { gap: 16px; }
+
+.filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .filter-group > .label { margin-right: 2px; }
 
 .chip {
@@ -218,7 +229,76 @@ a:hover { color: var(--petrol-bright); }
 }
 .search::placeholder { color: var(--gray-soft); }
 
-.controls .spacer { flex: 1 1 auto; }
+.filter-row .spacer { flex: 1 1 auto; }
+
+/* Grade chips carry their own ink so the scale is legible before you press one. */
+.chip.g[data-grade="S"] { color: var(--oxblood); border-color: color-mix(in srgb, var(--oxblood) 40%, transparent); }
+.chip.g[data-grade="A"] { color: var(--gilt); border-color: color-mix(in srgb, var(--gilt) 40%, transparent); }
+.chip.g[data-grade="B"] { color: var(--petrol); border-color: color-mix(in srgb, var(--petrol) 40%, transparent); }
+.chip.g[data-grade="F"] { color: var(--oxblood); border-style: dashed; }
+.chip.g[aria-pressed="true"] { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+
+/* ── Andrew mode ────────────────────────────────────────────── */
+/* The one control that changes the meaning of the page rather than the
+   contents of it, so it is the one control that is not a chip. */
+.andrew-toggle {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  color: var(--gray);
+  padding: 6px 12px 6px 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color .25s ease, border-color .25s ease, background-color .25s ease;
+}
+.andrew-toggle .dot {
+  width: 6px; height: 6px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.andrew-toggle[aria-pressed="true"] {
+  color: var(--paper);
+  background: var(--petrol);
+  border-color: var(--petrol);
+}
+.andrew-toggle[aria-pressed="true"] .dot { background: currentColor; }
+.andrew-toggle:hover { border-color: var(--petrol); }
+
+.sortbtn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: var(--gray-soft);
+  padding: 4px 1px;
+  cursor: pointer;
+  transition: color .25s ease, border-color .25s ease;
+}
+.sortbtn:hover { color: var(--petrol); }
+.sortbtn[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+
+.summary {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gray-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.summary .sep { width: 1px; height: 11px; background: var(--rule-strong); display: inline-block; }
+.summary .rt, .summary .grade { margin-right: 3px; }
 
 .reset {
   font-family: var(--mono);
@@ -234,76 +314,354 @@ a:hover { color: var(--petrol-bright); }
 }
 .reset:hover { color: var(--oxblood); border-bottom-color: var(--oxblood); }
 
-/* ── table ──────────────────────────────────────────────────── */
-/* No overflow here on desktop: any scroll container would become the
-   containing block for the sticky <th> and stop it sticking to the viewport.
-   Horizontal scrolling is re-enabled at the narrow breakpoint, where the
-   controls bar is static and the header does not need to stick anyway. */
-.table-wrap { padding: 0 32px 64px; }
+/* ── board ──────────────────────────────────────────────────── */
+/* One column of firm cards. Not a grid: the cards have wildly different
+   heights (Jane Street posts three roles, a boutique posts one) and a
+   masonry-ish grid would put the S-grade firms next to each other
+   horizontally, which reads as a ranking across the row rather than down
+   the page. Down the page is the ranking. */
+.board { padding: 20px 32px 8px; }
 
-/* Fixed layout: without it the nowrap Location and Pay columns claim whatever
-   width they like and push Track off the right edge of the page. */
-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.card {
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--rule-strong);
+  background: var(--paper-raised);
+  margin-bottom: 14px;
+  transition: border-color .25s ease;
+}
+.card:hover { border-left-color: var(--petrol); }
+.card.has-applied { opacity: .62; }
 
-thead th:nth-child(1), tbody td:nth-child(1) { width: 14%; }   /* firm       */
-thead th:nth-child(2), tbody td:nth-child(2) { width: 21%; }   /* role       */
-thead th:nth-child(3), tbody td:nth-child(3) { width: 5.5%; }  /* type       */
-thead th:nth-child(4), tbody td:nth-child(4) { width: 4.5%; }  /* tier       */
-thead th:nth-child(5), tbody td:nth-child(5) { width: 13%; }   /* location   */
-thead th:nth-child(6), tbody td:nth-child(6) { width: 16%; }   /* pay        */
-thead th:nth-child(7), tbody td:nth-child(7) { width: 11%; }   /* multi      */
-thead th:nth-child(8), tbody td:nth-child(8) { width: 9.5%; }  /* link       */
-thead th:nth-child(9), tbody td:nth-child(9) { width: 6%; }    /* track      */
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px 16px 11px;
+  border-bottom: 1px solid var(--rule);
+}
 
-thead th {
+.card-id { flex: 1 1 auto; min-width: 0; }
+.card-id h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -.005em;
+}
+.firm-note {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--gray);
+}
+
+.card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  text-align: right;
+  flex: 0 0 auto;
+  max-width: 30ch;
+}
+.card-meta .cat {
   font-family: var(--mono);
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .12em;
+  letter-spacing: .11em;
   text-transform: uppercase;
+  color: var(--gray-soft);
+}
+.card-meta .policy {
+  font-family: var(--mono);
+  font-size: 11px;
   color: var(--gray);
-  text-align: left;
-  padding: 14px 12px 8px;
-  border-bottom: 1px solid var(--rule-strong);
-  white-space: nowrap;
-  position: sticky;
-  /* offset is measured in app.js, because the controls bar wraps at narrow
-     widths and a hard-coded value hides the first row behind it */
-  top: var(--controls-h, 57px);
-  background: var(--paper);
-}
-thead th.sortable { cursor: pointer; transition: color .25s ease; }
-thead th.sortable:hover { color: var(--petrol); }
-thead th .arrow { opacity: 0; margin-left: 3px; }
-thead th[aria-sort] .arrow { opacity: 1; color: var(--petrol); }
-
-tbody td {
-  padding: 13px 12px;
-  border-bottom: 1px solid var(--rule);
-  vertical-align: top;
-  font-size: 14.5px;
-}
-tbody tr { transition: background-color .25s ease; }
-tbody tr:hover { background: var(--band); }
-tbody tr.is-applied { opacity: .48; }
-
-.firm { font-weight: 600; }
-.firm .sub {
-  display: block;
-  font-weight: 400;
-  font-size: 11.5px;
   line-height: 1.35;
-  color: var(--gray);
-  margin-top: 2px;
+}
+.card-meta .policy.one-only { color: var(--oxblood); font-weight: 600; }
+.card-meta .cooldown {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--gilt);
+  line-height: 1.35;
 }
 
-.role-title { line-height: 1.35; }
-.role-title .elig {
-  display: block;
+/* ── grade mark ─────────────────────────────────────────────── */
+/* A letter in a hairline box. No fill, no gradient — the ink carries it. */
+.grade {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  border: 1px solid currentColor;
+  padding: 5px 8px;
+  flex: 0 0 auto;
+  color: var(--gray);
+}
+.grade[data-g="S"] { color: var(--oxblood); }
+.grade[data-g="A"] { color: var(--gilt); }
+.grade[data-g="B"] { color: var(--petrol); }
+.grade[data-g="C"] { color: var(--gray); }
+.grade[data-g="D"] { color: var(--gray-soft); }
+.grade[data-g="F"] { color: var(--oxblood); border-style: dashed; }
+.grade.sm { font-size: 10px; padding: 2px 4px; }
+
+/* ── the one-application call ───────────────────────────────── */
+.pick {
+  margin: 0;
+  padding: 8px 16px;
+  background: var(--band);
+  border-bottom: 1px solid var(--rule);
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+.pick .label { margin-right: 7px; color: var(--oxblood); }
+
+/* ── roles inside a card ────────────────────────────────────── */
+.roles { list-style: none; margin: 0; padding: 0; }
+
+.role {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 11ch 21ch auto;
+  gap: 0 14px;
+  align-items: start;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--rule);
+  transition: background-color .25s ease;
+}
+body.andrew-on .role {
+  grid-template-columns: 34px minmax(0, 1fr) 11ch 21ch 4ch auto;
+}
+.role:last-child { border-bottom: none; }
+.role:hover { background: var(--band); }
+.role.is-applied { opacity: .5; }
+.role.is-closed { opacity: .55; }
+
+.role > .rt { padding-top: 2px; }
+
+.role-main { min-width: 0; }
+.role-title {
+  font-size: 14.5px;
+  line-height: 1.35;
+  font-weight: 500;
+}
+.role-title .deadline {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  border: 1px solid currentColor;
+  padding: 1px 5px;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+.role-main .elig {
   font-size: 11.5px;
   color: var(--gray);
   margin-top: 3px;
   font-style: italic;
+  line-height: 1.4;
+}
+.role-main .rnote {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+/* The fit rationale. Petrol so it reads as machine annotation, not prose. */
+.role-main .why {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--petrol);
+  margin-top: 5px;
+  letter-spacing: .01em;
+}
+.role-main .why .cost { color: var(--oxblood); }
+
+.role-loc { font-family: var(--mono); font-size: 11.5px; color: var(--gray); line-height: 1.4; }
+.role-loc .nyc { color: var(--ink); font-weight: 600; }
+
+.role-comp { font-family: var(--mono); font-size: 12px; line-height: 1.4; }
+.role-comp .src { display: block; font-size: 9.5px; color: var(--gray-soft); letter-spacing: .04em; margin-top: 2px; }
+.role-comp .unknown { color: var(--gray-soft); }
+
+.fit { text-align: right; }
+.fit-n {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--petrol);
+  line-height: 1;
+}
+
+.role-act {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+
+.oa {
+  margin: 0;
+  padding: 8px 16px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-sunk);
+  font-size: 12px;
+  color: var(--gray);
+  line-height: 1.45;
+}
+.oa .label { margin-right: 7px; }
+
+/* ── interview intel disclosure ─────────────────────────────── */
+.intel { border-top: 1px solid var(--rule); background: var(--paper-sunk); }
+
+.intel > summary {
+  padding: 9px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  transition: color .25s ease;
+}
+.intel > summary::-webkit-details-marker { display: none; }
+/* The disclosure arrow is a typographic triangle, not an icon font or an SVG. */
+.intel > summary::before {
+  content: "▸";
+  font-size: 10px;
+  color: var(--gray-soft);
+  transition: transform .2s ease;
+  display: inline-block;
+}
+.intel[open] > summary::before { transform: rotate(90deg); }
+.intel > summary:hover { color: var(--petrol); }
+.intel > summary:hover .label { color: var(--petrol); }
+.intel > summary .label { color: var(--gray); }
+
+.intel .nrounds,
+.intel .conf {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gray-soft);
+}
+.intel .conf { margin-left: auto; }
+.intel .conf[data-c="high"] { color: var(--moss); }
+.intel .conf[data-c="medium"] { color: var(--gilt); }
+.intel .conf[data-c="low"] { color: var(--oxblood); }
+
+.intel-body {
+  padding: 2px 16px 14px 32px;
+  border-top: 1px solid var(--rule);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.intel-body > *:first-child { margin-top: 12px; }
+
+.intel-sum { margin: 0 0 12px; color: var(--ink); max-width: 74ch; }
+
+/* Rounds are numbered by the counter, not by a list marker, so the stage
+   name can sit on the same baseline as its index. */
+.rounds { list-style: none; margin: 0 0 14px; padding: 0; counter-reset: rnd; }
+.rounds li {
+  counter-increment: rnd;
+  position: relative;
+  padding: 0 0 10px 30px;
+  border-left: 1px solid var(--rule);
+  margin-left: 7px;
+}
+.rounds li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.rounds li::before {
+  content: counter(rnd);
+  position: absolute;
+  left: -7px; top: 0;
+  width: 14px; height: 14px;
+  background: var(--paper-sunk);
+  border: 1px solid var(--rule-strong);
+  color: var(--gray);
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 13px;
+  text-align: center;
+}
+.rounds .stage { font-weight: 600; margin-right: 9px; }
+.rounds .fmt {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--petrol);
+}
+.rounds p { margin: 2px 0 0; color: var(--gray); max-width: 74ch; }
+
+.ib { margin: 0 0 12px; }
+.ib > .label { display: block; margin-bottom: 3px; }
+.ib p { margin: 0; color: var(--gray); max-width: 74ch; }
+.ib ul { margin: 0; padding-left: 17px; color: var(--gray); }
+.ib li { margin-bottom: 2px; }
+.ib .qs li { color: var(--ink); }
+
+.imeta {
+  margin: 0 0 10px;
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gray);
+}
+.imeta b {
+  font-weight: 600;
+  color: var(--gray-soft);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: 9.5px;
+  margin-right: 6px;
+}
+
+.intel .caveat {
+  margin: 0 0 10px;
+  padding-left: 11px;
+  border-left: 2px solid var(--gilt);
+  color: var(--gray);
+  font-size: 12.5px;
+  max-width: 74ch;
+}
+
+.ib.unver > .label { color: var(--oxblood); }
+.ib.unver ul { color: var(--gray-soft); }
+.ib.unver li { text-decoration: line-through; text-decoration-color: var(--rule-strong); }
+
+/* The unflattering read. Deliberately not styled as a warning — it is
+   information, and half of it is positive. */
+.ib.rep p {
+  border-left: 2px solid var(--rule-strong);
+  padding-left: 11px;
+  color: var(--gray);
+}
+
+.ftype {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gray-soft);
+}
+.ftype .label { margin-right: 8px; }
+
+.intel .srcs { margin: 0 0 8px; font-size: 11.5px; }
+.intel .srcs .label { margin-right: 8px; }
+.intel .srcs a { border-bottom: 1px solid var(--rule); }
+
+.intel .disclaimer {
+  margin: 0;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--gray-soft);
+  max-width: 74ch;
 }
 
 /* role-type mark: a typographic dot, never a pill */
@@ -318,33 +676,6 @@ tbody tr.is-applied { opacity: .48; }
 .rt[data-t="QR"] { color: var(--qr); }
 .rt[data-t="QD"] { color: var(--qd); }
 .rt::before { content: "● "; font-size: 9px; vertical-align: 1px; }
-
-.tier {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-.tier[data-tier="1"] { color: var(--oxblood); }
-.tier[data-tier="2"] { color: var(--gilt); }
-.tier[data-tier="3"] { color: var(--gray); }
-
-.loc { font-family: var(--mono); font-size: 12px; color: var(--gray); }
-.loc .nyc { color: var(--ink); font-weight: 600; }
-
-.comp { font-family: var(--mono); font-size: 12.5px; }
-.comp .src { display: block; font-size: 10px; color: var(--gray-soft); letter-spacing: .04em; margin-top: 2px; }
-.comp.unknown { color: var(--gray-soft); }
-
-.multi {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--gray);
-  max-width: 22ch;
-  white-space: normal;
-}
-.multi.one-only { color: var(--oxblood); font-weight: 600; }
 
 /* ── apply button ───────────────────────────────────────────── */
 .apply {
@@ -375,7 +706,8 @@ tbody tr.is-applied { opacity: .48; }
   color: var(--gilt);
 }
 .apply.soon:hover { background: var(--gilt); color: var(--paper); }
-tbody tr.is-soon .firm { color: var(--gilt); }
+.apply.closed { border-style: dotted; border-color: var(--rule-strong); color: var(--gray-soft); }
+.role.is-soon > .rt { color: var(--gilt); }
 
 .done {
   font-family: var(--mono);
@@ -439,13 +771,28 @@ tbody tr.is-soon .firm { color: var(--gilt); }
 }
 
 /* ── responsive ─────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  /* Pay and location stop being their own columns and fold under the title,
+     which keeps the apply button on the same line as the role at every width. */
+  .role, body.andrew-on .role {
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+  }
+  .role-loc, .role-comp {
+    grid-column: 2 / 3;
+    margin-top: 4px;
+  }
+  .fit { grid-row: 1; grid-column: 3; text-align: right; padding-bottom: 4px; }
+  .role-act { grid-column: 3; }
+}
+
 @media (max-width: 900px) {
-  .site-header, .controls, .table-wrap, .notes, .site-footer { padding-left: 18px; padding-right: 18px; }
+  .site-header, .controls, .board, .notes, .site-footer { padding-left: 18px; padding-right: 18px; }
   .controls { position: static; }
-  thead th { position: static; }
-  .table-wrap { overflow-x: auto; }
   .masthead h1 { font-size: 27px; }
-  tbody td { font-size: 13.5px; padding: 11px 8px; }
+  .card-head { flex-wrap: wrap; }
+  .card-meta { align-items: flex-start; text-align: left; max-width: none; }
+  .role { padding: 10px 12px; }
+  .role-title { font-size: 13.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -456,8 +803,8 @@ tbody tr.is-soon .firm { color: var(--gilt); }
 @media print {
   .controls, .theme-toggle, .done, .skip-link { display: none !important; }
   body { background: #fff; color: #000; font-size: 10pt; }
-  .table-wrap { padding: 0; overflow: visible; }
-  tbody tr { page-break-inside: avoid; }
+  .board { padding: 0; }
+  .card { page-break-inside: avoid; background: none; border-color: #999; }
   .apply { border: none; padding: 0; color: #000; }
   .apply::after { content: " (" attr(href) ")"; font-size: 7pt; word-break: break-all; }
 }

@@ -368,10 +368,11 @@
     host.textContent = "";
     host.classList.add("fig", "fig-tracker");
 
-    /* THE Y AXIS IS scale.impact, the payload's fixed headline axis — the same
-       0.2331 build.py lays the front-page rail on, so the rail's x and this
-       figure's y are one ruler and either can be laid over the other. House
-       rule 3: read, never recomputed.
+    /* THE Y AXIS IS scale.impact, the payload's fixed headline axis: the
+       maximum of the twelve headline numbers, four players by three endpoints,
+       so no season line and no interval endpoint can leave the box. It is the
+       one axis this figure and the component rail on a player page share.
+       House rule 3: read, never recomputed.
 
        Fitting the box to the marks instead was the alternative and one datum
        kills it. A single match at -70.7% would set the domain, the four lines
@@ -1617,7 +1618,14 @@
     function value(tr, key) {
       if (key === "player") return tr.getAttribute("data-player") || "";
       if (key === "date") return tr.getAttribute("data-date") || "";
-      return Number(tr.getAttribute("data-" + key));
+      /* A MISSING ATTRIBUTE IS NOT A ZERO. The cross-tab has an empty cell
+         wherever a player did not play a match, and `Number(null)` is 0 —
+         which would file thirty matches TheMarias was never in among the ones
+         where she was measured at nothing. Absent returns NaN and sortBy files
+         it last in both directions, so the empty cells leave the sort rather
+         than joining it at the null. */
+      var raw = tr.getAttribute("data-" + key);
+      return raw === null ? NaN : Number(raw);
     }
     /* Membership, not equality, and padded on both sides so `mar` cannot match
        `martin` and `snorlax` cannot match a short that ends in it. */
@@ -1648,6 +1656,8 @@
       });
       rows.sort(function (a, b) {
         var x = value(a, key), y = value(b, key);
+        var xg = x !== x, yg = y !== y;   /* NaN: this player was not in this match */
+        if (xg || yg) return xg && yg ? 0 : xg ? 1 : -1;
         return (x < y ? -1 : x > y ? 1 : 0) * dir;
       });
       rows.forEach(function (tr) { body.appendChild(tr); });

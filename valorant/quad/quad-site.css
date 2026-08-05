@@ -159,6 +159,22 @@
   --weapon-art-w: 42px;
   --weapon-slot-w: 44px;
 
+  /* THE CARD'S OWN ART SIZES, and they are the only place on this site where a
+     picture is not 18px tall. Everywhere else the art rides inside a table row
+     and the row's line box is the constraint. The card is not a row: it is the
+     one object here built to be looked at, so the art ships at the size the
+     files ACTUALLY ARE — meta.assets.agent.intrinsic_px is 40, and weapon art
+     is 96 wide at 17 to 73 tall, contain-fitted into a slot 96 wide so the
+     widest of them renders at 1:1 with no resampling at all. Contrast is a
+     property of the pixels and not of the size, so ../contrast.py's numbers for
+     both families carry across unchanged; the weapon plate comes with them,
+     because that is what fixed 1.53 in the light theme. */
+  --icon-card: 40px;
+  --icon-card-slot: 42px;
+  --weapon-card-w: 96px;
+  --weapon-card-h: 36px;
+  --weapon-card-slot-w: 98px;
+
   /* Rail geometry. Every rail on every page shares it, so the null rule lands
      at the same physical x on the front page, the player page and inside a
      table cell. That is the cost of the design and it is deliberate. */
@@ -390,10 +406,12 @@ p { margin: var(--sp-3) 0 0; max-width: 66ch; font-size: var(--fs-prose); line-h
    rounds (we cannot say a person helped) and 50.0% match win probability (we
    cannot say who wins). Both come from meta.gate; neither is written here.
 
-   Three mark types and only three:
+   Two mark types are left in HTML, and the third is not gone from the site:
        .rail-iv   a capped dimension line in a hue   = an ESTIMATE
-       .rail-bar  a solid bar from the null          = an EXACT MAGNITUDE
        a line in ink                                 = an EXACT PATH
+       (a solid bar from the null = an EXACT MAGNITUDE, and it now lives only
+        in SVG, on the season tracker: every table on this site prints the
+        number instead.)
 
    The null is a child of the TRACK COLUMN, not of the whole grid, which is
    what stops it striking through the label and the number at narrow widths
@@ -480,22 +498,20 @@ p { margin: var(--sp-3) 0 0; max-width: 66ch; font-size: var(--fs-prose); line-h
 .rail-track-inner[data-clipped~="lo"] { border-left: 1px dotted var(--quiet); }
 .rail-track-inner[data-clipped~="hi"] { border-right: 1px dotted var(--quiet); }
 
-/* AN EXACT MAGNITUDE: a solid bar hanging off the null. No end caps — giving
-   an exact quantity error-bar caps is a lie about what it is. */
-.rail-bar { position: absolute; top: 6px; height: 8px; background: currentColor; }
-.rail-bar.pos { background: var(--up); }
-.rail-bar.neg { background: var(--down); }
-.rail-bar.plain { background: var(--quiet); }
-.rail-bar.hue { background: var(--hue, var(--quiet)); }
+/* THE SOLID BAR FROM THE NULL — an exact magnitude — no longer exists in HTML,
+   and neither do the rules that drew it. Its two rails were the front page's
+   standings and a player page's four grains, and both are deleted; the mark
+   type survives on the season tracker, drawn in SVG by quad-app.js against the
+   same null. What this file still carries is the ESTIMATE and the EXACT PATH:
+   two of the three, because the third has nothing left to draw. */
 
-/* The FOR SCALE pair: the whole ranking drawn directly above one player's
-   interval, on the same axis, against the same null. */
+/* The summary row of a rail, ruled off from the rows it summarises. One caller
+   is left — the headline row under a player's five components. */
 .rail-row.is-scale .rail-label, .rail-row.is-scale .rail-track,
 .rail-row.is-scale .rail-nums { border-top: 1px solid var(--rule-strong); }
 .rail-row.is-scale + .rail-row .rail-label,
 .rail-row.is-scale + .rail-row .rail-track,
 .rail-row.is-scale + .rail-row .rail-nums { border-top: none; }
-.rail-span { position: absolute; top: 7px; height: 6px; border: 1px solid var(--quiet); border-left-width: 2px; border-right-width: 2px; background: none; }
 
 /* The axis above a rail, on the rail's own grid so the ticks line up with the
    track and the null label sits exactly on the null. */
@@ -512,17 +528,13 @@ p { margin: var(--sp-3) 0 0; max-width: 66ch; font-size: var(--fs-prose); line-h
 }
 .rail-axis-ticks span.is-null { color: var(--ink); font-weight: 600; }
 
-/* The exposure rail: rounds played against the rounds an interval this wide
-   needs. The threshold is meta.gate.exposure_threshold_rounds and the ink
-   at it is the same device as the null — a value you are read against. */
-.rail.is-exposure .rail-track-layer { background: var(--rule-strong); width: 2px; margin-left: -1px; }
-.exposure-bar { position: absolute; left: 0; top: 6px; height: 8px; background: var(--hue, var(--quiet)); }
-.exposure-over { position: absolute; top: 6px; height: 8px; background: var(--ink); }
-
-/* ---- Interval and magnitude, inside tables -------------------------------- */
-/* The same three mark types, at cell scale. Build.py positions the span and
-   the point inline as percentages of one axis fixed for the whole site and
-   already containing the null, so no cell's geometry is a function of another
+/* ---- The interval, at cell scale and on a card ---------------------------- */
+/* THE ESTIMATE, and after this round it is the only mark a table draws. The
+   magnitude bar that used to sit beside every signed number is gone: the
+   number is the number, and a bar restating it at a coarser precision was
+   a second rendering of one fact. build.py positions the span and the point
+   inline as percentages of one axis fixed for the whole site and already
+   containing the null, so no cell's geometry is a function of another
    cell's value. */
 .ival { position: relative; display: block; height: 16px; min-width: 88px; color: var(--hue, var(--quiet)); }
 .ival::before { content: ""; position: absolute; left: 0; right: 0; top: 7.5px; height: 1px; background: var(--rule); }
@@ -537,21 +549,6 @@ p { margin: var(--sp-3) 0 0; max-width: 66ch; font-size: var(--fs-prose); line-h
 .ival[data-clipped~="hi"] { border-right: 1px dotted var(--quiet); }
 .ival.none::before { background: repeating-linear-gradient(90deg, var(--rule) 0 3px, transparent 3px 6px); }
 
-.mag { display: flex; align-items: center; width: 104px; height: 12px; margin: 0 auto; }
-.mag[data-clipped~="lo"] { border-left: 1px dotted var(--quiet); }
-.mag[data-clipped~="hi"] { border-right: 1px dotted var(--quiet); }
-.mag-half { flex: 1 1 0; height: 8px; display: flex; }
-.mag-neg { justify-content: flex-end; }
-.mag-zero { width: 0; align-self: stretch; flex: none; }
-.fill { display: block; height: 100%; background: currentColor; }
-/* Neutral by default. A signed colour field repeated ninety-nine times on a
-   near-black page is the fintech-terminal default, and on a site whose
-   finding is a null it must not be the loudest thing on the front page. The
-   sign colour is on the NUMBER beside it, where the + or - is too. */
-.fill.pos, .fill.neg { background: var(--quiet); }
-tr[data-focal] .fill.pos { background: var(--up); }
-tr[data-focal] .fill.neg { background: var(--down); }
-.mag.none, .bar .none { color: var(--quiet); }
 
 /* ---- Tables --------------------------------------------------------------- */
 /* Wrapped in a focusable scroll region: a table that scrolls sideways and
@@ -797,22 +794,28 @@ tbody .team-head th {
 .division.is-placement { color: var(--quiet); border-bottom: 1px dotted var(--quiet); cursor: help; }
 
 .focal { color: var(--hue, var(--ink)); font-weight: 600; }
-/* THE ONE CELL ON THIS SITE THAT HOLDS A LIST. Three inline spans in one td
-   have no whitespace between them, so the front page's Focal players column
-   rendered as `MartinLutherKing -2.09%SN0RLAX +6.92%Trzzcko -7.52%`. A wrapping
-   flex row spaces them once and COMPOSES with the separator glyph in the
-   markup: the glyph becomes a flex item of its own and takes the gap on both
-   sides, where a margin on .focal would have padded one side of it and not the
-   other. The column gap is --sp-3 and not --sp-2 because it has to beat the
-   space INSIDE a chip: `MartinLutherKing -2.09%` is one word space, 6.6px at
-   13px mono, so an 8px gap between chips would have grouped the list wrong.
-   Measured before shipping it: the flex box lands on the same left edge and the
-   same bottom border as the five table-cells beside it, so the column and the
-   row rule are unchanged. */
-table.idx tbody td:has(> .focal) {
-  display: flex; flex-wrap: wrap; align-items: baseline;
-  gap: var(--sp-1) var(--sp-3);
-}
+/* THE CELL THAT HELD A LIST IS GONE, and with it the flex rule that spaced
+   three hued chips inside one <td>. The front page's Focal players column is
+   four COLUMNS now — one per player, empty where they did not play — so there
+   is no list in a cell left to space, and the whitespace bug that rule fixed
+   (`MartinLutherKing -2.09%SN0RLAX +6.92%`) cannot recur in a cell holding one
+   number. */
+
+/* THE CROSS-TAB. Four player columns, and the person is carried by the HEADING
+   rather than by the cells: a cell is coloured by the SIGN of the number in it,
+   which is the one thing this site never lets a hue mean. So the hue lives once
+   per column, in the header, next to the name that encodes it — and the empty
+   cells below a header get their meaning from the column they are in, which is
+   the only thing an empty cell can be read against.
+
+   The empty cell is genuinely empty: no glyph, no rule, no wash. A wash would
+   be a value drawn for a match that was not played. */
+table.idx-cross thead th .sort { color: var(--hue, inherit); }
+/* The match cell is one unbreakable label — map, separator, date. Wrapped over
+   three lines at 375px it doubled the height of every row while the table was
+   already inside a horizontal scroller, which is the thing that is supposed to
+   absorb a table too wide for the screen. Let it be as wide as it is. */
+table.idx-cross tbody td:nth-child(2) { white-space: nowrap; }
 .anon { color: var(--quiet); }
 .team { font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .06em; }
 /* The total row took none of the table's cell vocabulary — no padding, no data
@@ -1259,6 +1262,118 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 .big .unit { display: block; font-size: var(--fs-label); letter-spacing: .13em; text-transform: uppercase; margin-top: var(--sp-1); }
 .ival-text { font-size: var(--fs-label); color: var(--quiet); margin-top: var(--sp-1); font-family: var(--mono); }
 .breakdown-block { margin-top: var(--sp-5); }
+
+/* ============================================================================
+   THE CARD.
+
+   One structural claim, and every rule below serves it: THERE ARE TWO KINDS OF
+   NUMBER ON THIS PAGE AND THEY ARE NOT THE SAME KIND OF THING. On the left an
+   estimate — impact per match, with its span on the payload's fixed axis and
+   the null running through it. On the right counts — kills, deaths, assists,
+   rounds. A kill happened; an impact per match is a guess with a width.
+
+   The device that says so is ONE HAIRLINE, the site's own --rule, with a word
+   at the top of each side. That is the whole ornament. There is no shadow, no
+   radius above 2px, no gradient and no second colour: the card is made of the
+   same four tokens every table on this site is made of, and what makes it a
+   card is the arrangement, not a treatment.
+
+   THE RIGHT-HAND SIDE HAS NO AXIS ON IT. Not a bar, not a span, not a rule at
+   zero. An axis is the vocabulary of the left, and putting a kill count on one
+   would be the exact category error the divider exists to prevent.
+   ========================================================================= */
+.card {
+  margin-top: var(--sp-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  background: var(--field);
+}
+/* The hue is a 3px stripe along the top edge and it is the only decoration on
+   the object. Hue is a person: this says whose card it is, in the one channel
+   the site reserves for that, and it carries no measurement — the name is
+   directly under it, so nothing here is encoded by colour alone. */
+.card::before {
+  content: ""; display: block; height: 3px;
+  background: var(--hue, var(--rule-strong));
+}
+.card-face { display: grid; grid-template-columns: 1fr 1fr; }
+.card-reg-est, .card-reg-cnt { padding: var(--sp-4); min-width: 0; }
+.card-reg-cnt { border-left: 1px solid var(--rule); }
+
+/* The two words that name the registers. Same label style as every heading on
+   the site, so they read as structure rather than as a badge. */
+.card-reg {
+  font-family: var(--mono); font-size: var(--fs-label); font-weight: 600;
+  letter-spacing: .13em; text-transform: uppercase; color: var(--quiet);
+  margin: 0 0 var(--sp-3);
+}
+/* --quiet, not --rule-strong. This is TEXT — "9 more" is a fact about how many
+   agents are not on the card — and --rule-strong is guarded at the 3:1 MARK
+   floor, where it measures 3.42 dark and 4.28 light against --field. Both are
+   under 4.5. --quiet is the token that carries secondary text on this site and
+   is guarded as text: 7.20 and 6.55. */
+.card-more { color: var(--quiet); letter-spacing: .06em; }
+.card-ival { margin-top: var(--sp-4); max-width: 340px; }
+/* THE NULL RULE, on the card. Inside a table the painted rule belongs to the
+   `z` column and runs the full height of it; here there is no column, so the
+   .ival's own zero element is what draws it — full strength --ink, heavier
+   than the span crossing it, exactly as it is everywhere else. Without this the
+   card would have shown an interval with nothing to be an interval AROUND. */
+.card-ival .ival { height: 22px; }
+.card-ival .ival-zero {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 2px; margin-left: -1px; background: var(--ink);
+}
+.card-ival .ival-span { top: 8px; }
+.card-ival .ival-point { top: 5px; }
+.card-axis {
+  display: flex; justify-content: space-between; margin: var(--sp-1) 0 0;
+  font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .08em;
+  color: var(--quiet);
+}
+.card-axis .is-null { color: var(--ink); font-weight: 600; }
+.card .ival-text { margin-top: var(--sp-3); }
+.card .note { margin-top: var(--sp-2); max-width: 46ch; }
+
+/* THE SCOREBOARD LINE. 15 / 15 / 5 is how this game writes a match on its own
+   scoreboard, so the act is written the same way and the per-match qualifier is
+   said once underneath instead of three times beside. Three stat rows would
+   have been the obvious answer and this is faster to read, because it is the
+   form the reader already owns. */
+.kda { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; margin: 0; font-family: var(--mono); }
+.kda-part { display: flex; flex-direction: column; }
+.kda-n { font-size: var(--fs-display); font-weight: 600; letter-spacing: -.01em; line-height: 1.1; }
+.kda-k { font-size: var(--fs-label); letter-spacing: .13em; text-transform: uppercase; color: var(--quiet); margin-top: var(--sp-1); }
+.kda-slash { font-size: var(--fs-head); color: var(--rule-strong); align-self: flex-start; padding: 0 var(--sp-2); line-height: 1.5; }
+.card-per { margin: var(--sp-3) 0 0; font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .06em; color: var(--quiet); }
+
+/* The identity strip: agents and guns, with the art at its own intrinsic size.
+   It is under both registers because it belongs to neither — it is not an
+   estimate and it is not the box score, it is who this person plays as. */
+.card-strip {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--rule);
+}
+.card-strip-block { padding: var(--sp-4); min-width: 0; align-content: start; }
+.card-strip-block + .card-strip-block { border-left: 1px solid var(--rule); }
+.card-art { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+.card-art li { display: flex; flex-direction: column; gap: var(--sp-1); }
+.card-art-n { font-family: var(--mono); font-size: var(--fs-data); color: var(--quiet); }
+.card-art-n .unit { text-transform: uppercase; letter-spacing: .1em; }
+.agent.is-card, .weapon.is-card { line-height: 1.2; font-family: var(--mono); font-size: var(--fs-data); }
+.agent-chip.is-card { width: var(--icon-card-slot); height: var(--icon-card-slot); }
+.agent-chip.is-card img { width: var(--icon-card); height: var(--icon-card); }
+.weapon-chip.is-card { width: var(--weapon-card-slot-w); height: calc(var(--weapon-card-h) + 2px); }
+.weapon-chip.is-card img { max-width: var(--weapon-card-w); max-height: var(--weapon-card-h); }
+
+/* One column below the point where two 34px numbers stop fitting side by side.
+   The hairline becomes horizontal and keeps doing the same job. */
+@media (max-width: 760px) {
+  .card-face, .card-strip { grid-template-columns: 1fr; }
+  .card-reg-cnt, .card-strip-block + .card-strip-block {
+    border-left: none; border-top: 1px solid var(--rule);
+  }
+}
 
 /* ---- Footer --------------------------------------------------------------- */
 .site-foot {

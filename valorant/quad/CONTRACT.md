@@ -89,7 +89,17 @@ non-focal player across matches**, and never build a page for one.
       // is `ordinal` and is the only number allowed to be a y value for a division.
       "tier_order": [ {"id":3,"name":"Iron 1"}, /* … */ {"id":25,"name":"Immortal 2"} ],
       "tier_axis_min_span": 3,       // divisions; a flat path must not fill its own panel
-      "tier_placement_matches": 5    // measured on the act, not assumed
+      "tier_placement_matches": 5,   // measured on the act, not assumed
+      // THE CARD'S TWO LISTS. The name of the gun that does not count and the length of a list
+      // are both decisions, so neither is typed in the view. `free_pistol` is excluded from
+      // `card.weapons` because every player starts every pistol round holding it — its count
+      // measures the act's round structure, not the player. `cav.classic_is_the_free_pistol`.
+      "free_pistol": "Classic",
+      "card_top_n": 3,
+      // The two credit types the component rail draws as ONE signed row. The view reads the
+      // names from here so the sentence under the rail never chooses them.
+      "duel_parts": ["kill_credit", "death_debit"],
+      "duel_key": "duel_credit"
     },
     // The ladder measured against the rating, so the view quotes a number rather than
     // retyping one. See cav.tier_is_not_mwpa for what it means.
@@ -161,8 +171,26 @@ still holds. Ranking is ON by decision; every card must still render its interva
   "puuid":"", "name":"", "short":"",
   "headline": {"impact":0,"impact_lo":0,"impact_hi":0,
                "rate":0,"lo":0,"hi":0,"covers_zero":true,"total":0,"rounds":0,"matches":0},
-  "components": { "kill_credit": {"rate":0,"lo":0,"hi":0,"total":0,"share":0.41}, "death_debit": {},
+  // THE CARD. The only block on this site that is COUNTS rather than estimates: nothing in it
+  // carries an interval and no null rule is drawn through it. `agents` is ordered by MATCHES
+  // (an agent is a per-match choice), ties broken on rounds then name; `weapons` by ROUNDS (a
+  // gun is a per-round choice), with `gate.free_pistol` removed and its own count kept so the
+  // caveat can quote it. Both lists are cut to `gate.card_top_n` and NEITHER IS PADDED: a
+  // player with two agents emits two. `agents_played` is the full count behind the top three.
+  "card": { "matches": 38, "rounds": 782, "rounds_per_match": 20.58,
+            "kills_per_match": 14.82, "deaths_per_match": 14.89, "assists_per_match": 4.95,
+            "agents": [ {"name":"Sova","matches":29,"rounds":606} ], "agents_played": 3,
+            "weapons": [ {"name":"Phantom","rounds":268,"share":0.3912} ],
+            "weapon_rounds": 685, "weapon_excluded": {"name":"Classic","rounds":97} },
+  // FIVE ROWS, and the first is the duel. `duel_credit` is `kill_credit + death_debit` summed
+  // per round-player and RESAMPLED AS ITS OWN COLUMN — the two are strongly negatively
+  // correlated within a round, so its interval is not the two intervals added.
+  // `cav.the_duel_is_one_row`. `share` is over these five, so the five shares sum to one.
+  "components": { "duel_credit": {"rate":0,"lo":0,"hi":0,"total":0,"share":0.41},
                   "plant": {}, "defuse": {}, "alive_clock": {}, "lobby_adjustment": {} },
+  // The two halves of that row, kept because combining them is a DISPLAY decision and a reader
+  // may not be asked to take a ledger on trust. No `share`: the shares belong to what is drawn.
+  "duel_parts": { "kill_credit": {"rate":0,"lo":0,"hi":0,"total":0}, "death_debit": {} },
   "rank_track": [ {"i":0,"match_id":"","started_at":"",
                    "tier": null, "ordinal": null, "state": "placement"},
                   {"i":5,"match_id":"","started_at":"",
@@ -213,10 +241,14 @@ Rules that are not optional:
   into `Other` rather than emitting a tail of one-round rows.
 - `synergy` carries all six ordered pairs the player is part of (three per player). Only
   martin×snorlax has real exposure; the rest will be near-empty and that is the finding.
-- `components` carries a **sixth** key, `lobby_adjustment`. The five credit types decompose the raw
+- `components` carries `lobby_adjustment`. The five credit types decompose the raw
   ledger, which is what the ledger has; the headline is the ledger *after* leave-one-out lobby
-  centering, and that centering belongs to no credit type. Without the sixth row the five would not
+  centering, and that centering belongs to no credit type. Without that row the rest would not
   sum to the headline. `cav.components_include_the_lobby_adjustment` carries the reason.
+- **`card` is the one block with no interval on it, and the view must not give it one.** A kill
+  happened; an impact per match is an estimate. The two registers sit in the same object at the
+  top of a player page and are drawn apart — the headline keeps its span and its null verdict,
+  the counts get neither. `cav.the_card_is_counts_not_estimates`.
 - **`tier` is `null` for a match played before the platform issued a rank, and never anything
   else.** Not `0`, which is a number it does not have. Not an em dash, which on this site means
   *not measured* — this is measured, and the measurement is that no division existed yet. Not the
@@ -291,17 +323,38 @@ Rules:
 1. Nothing unmeasured renders as `0.00`. An em dash and a reason.
 2. Green is up, red is down, zero is neither. Sign is carried three ways — glyph, position, colour —
    because red/green is the one pair the common dichromacies cannot separate.
-3. No cell's rendering is a function of another player's value. Magnitude bars scale to a fixed
-   corpus percentile carried in the payload, never to `max(row)`.
-4. Nothing hardcodes a count. Every number comes from the payload.
-5. Every page opens off disk. No `fetch`, no CDN, no web font that blocks render.
-6. **An image identifies; it never measures.** Three families ship, and each has exactly one home:
+3. No cell's rendering is a function of another player's value. Every mark scales to a fixed
+   axis carried in the payload, never to `max(row)`.
+4. **No table draws a magnitude bar.** The number is the number: a bar beside a signed number
+   restated a fact the cell already printed, at a coarser precision than the cell has. What a
+   table may still draw is an **interval**, which is not a magnitude — its width is a quantity
+   that appears nowhere else in the row. The solid-bar-from-the-null mark survives on the season
+   tracker, in SVG.
+5. **No `Rounds` column and no `Rounds` stat row, anywhere.** The count stays only where it is
+   load-bearing prose: inside the covers-zero sentence, which is the sentence that tells a reader
+   why an interval is as wide as it is and is the reason the Exposure section could be deleted;
+   in the `Exposure` cell's `title`, where it is said against the threshold; in the card's
+   `rounds_per_match`, which is what a match *means*; and in the footer, which prints the act's
+   size on all 80 pages.
+6. Nothing hardcodes a count. Every number comes from the payload.
+7. Every page opens off disk. No `fetch`, no CDN, no web font that blocks render.
+8. **An image identifies; it never measures.** Three families ship, and these are their homes:
 
    | Family | Files | Home | Rendered |
    |---|---|---|---|
    | `assets/agent/` | 29 at 40×40 | Agent column, match page's ten-player table | 18 px in a 1 px `--rule-strong` box |
+   | `assets/agent/` | " | **player card, most-played agents** | **40 px — the file's own `intrinsic_px`** |
    | `assets/rank/` | 11 at 48×48 | trajectory y axis; match masthead's lobby range | 18 px in the same box |
    | `assets/weapon/` | 19 at 96×17…73 | `by weapon` breakdown rows | contain-fitted into 42×18 on an `--art-plate` |
+   | `assets/weapon/` | " | **player card, most-used guns** | **contain-fitted into 96×36 on the same plate** |
+
+   The card is the one place art is not 18 px, and the reason is structural rather than
+   aesthetic: everywhere else the picture rides inside a table row and the row's line box is the
+   constraint. A card is not a row. Contrast is a property of the composited pixels and not of
+   the size, so `../contrast.py`'s measurements for both families carry across unchanged — and
+   the weapon plate comes with them, because the plate is what fixed 1.53 in the light theme.
+   Both slots still emit the word, so the identity control still takes every picture away
+   without losing a fact.
 
    **Every picture sits beside a word that is always rendered, and the word is what encodes.**
    `alt=""` and `aria-hidden` are correct for all three for that reason: the word is in the same

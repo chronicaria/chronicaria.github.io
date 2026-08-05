@@ -52,11 +52,11 @@ RELEASE = "model_suite_release_2026-08-02_v15"
 BOOTSTRAP = 100_000
 SEED = 20260726
 CONFIDENCE = 0.95
-# Pinned, and it moves when the corpus does: this is the act's own mean over the 1,542 rounds of
-# the 74-match corpus, where the 68-match corpus read 0.16427272872711246. The guard below is the
+# Pinned, and it moves when the corpus does: this is the act's own mean over the 1,617 rounds of
+# the 78-match corpus, where the 68-match corpus read 0.16427272872711246. The guard below is the
 # point of the literal — a ledger whose mean leverage is not this one is not the ledger this
 # payload was written for, and the run stops rather than emitting numbers off the wrong corpus.
-MEAN_LEVERAGE = 0.16178885296288456
+MEAN_LEVERAGE = 0.16050251734197435
 
 RATE_FLOOR_ROUNDS = 0
 THIN_ROUNDS = 20
@@ -110,6 +110,27 @@ FOCAL = (
 )
 
 CREDIT_TYPES = ("kill_credit", "death_debit", "plant", "defuse", "alive_clock")
+# THE TWO THAT NEARLY CANCEL, AND THE ROW THEY BECOME.  Kill credit runs +1.845 per match against
+# a death debit of -1.828 on the same player: two rows an order of magnitude longer than the other
+# four, pointing opposite ways, that between them force a component axis so wide that plant,
+# defuse and the clock are invisible on it.  They are also the same event seen twice -- a duel
+# resolves, somebody is paid and somebody is debited -- so the sum is a quantity and not a
+# convenience.  It is bootstrapped as its own column rather than added out of two intervals,
+# because the two are strongly negatively correlated and their interval widths do not add.
+DUEL_PARTS = ("kill_credit", "death_debit")
+DUEL_CREDIT = "duel_credit"
+# The five rows the rail draws, in the order it draws them.
+COMPONENT_ORDER = (DUEL_CREDIT,) + tuple(
+    credit for credit in CREDIT_TYPES if credit not in DUEL_PARTS) + ("lobby_adjustment",)
+
+# THE FREE PISTOL.  Everybody starts a pistol round holding it, so a Classic count measures how
+# many pistol rounds the act contained rather than anything about the player.  It is excluded from
+# the card's most-used guns and the exclusion is published in `meta.gate` so the view reads the
+# name rather than typing it.
+FREE_PISTOL = "Classic"
+# How many agents and guns the card names.  A player with fewer shows fewer; nothing is padded.
+CARD_TOP_N = 3
+
 SIDES = ("attack", "defense")
 BUY_ORDER = tuple(name for name, _, _ in BUY_BANDS)
 
@@ -160,6 +181,13 @@ def load_match_context(database: Path, match_ids: Sequence[str]) -> Dict[str, An
         surrendered = pd.read_sql_query(
             "select count(*) as n from rounds where result = 'Surrendered' and match_id in (%s)"
             % placeholders, connection, params=list(match_ids))
+        # THE BOX SCORE, for the trading card and for nothing else.  Kills, deaths and assists
+        # are not in the ledger -- the ledger holds credit, which is a different thing from a
+        # kill -- so they come from the platform's own per-match record.  One row per
+        # (match, player); the card averages over the act matches the player actually appears in.
+        box = pd.read_sql_query(
+            "select match_id, puuid, agent, kills, deaths, assists from player_matches "
+            "where match_id in (%s)" % placeholders, connection, params=list(match_ids))
     finally:
         connection.close()
 
@@ -185,6 +213,7 @@ def load_match_context(database: Path, match_ids: Sequence[str]) -> Dict[str, An
         "act": seasons[0],
         "matches": matches.set_index("match_id"),
         "teams": teams.set_index(["match_id", "team_id"]),
+        "box": box,
         "surrendered_rounds": surrendered_rounds,
     }
 
@@ -569,8 +598,41 @@ def weapon_keys(part: pd.DataFrame, minimum: int) -> pd.Series:
     return weapon.where(~weapon.isin(small), "Other")
 
 
+def _derived_credits(part: pd.DataFrame) -> pd.DataFrame:
+    """The frame with the two columns the ledger does not carry: the centering, and the duel.
+
+    ``mwpa_lobby_adjustment`` is what the raw credit types miss; ``mwpa_duel_credit`` is the kill
+    credit and the death debit summed per round-player, so that the row the rail draws is a
+    resampled quantity rather than two intervals added together.
+    """
+    part = part.copy()
+    raw_total = sum(part["mwpa_" + credit] for credit in CREDIT_TYPES)
+    part["mwpa_lobby_adjustment"] = part["mwpa"] - raw_total
+    drift = float((part["mwpa_lobby_adjustment"] + raw_total - part["mwpa"]).abs().max())
+    if drift > 1e-9:
+        raise ValueError("credit types do not reconstruct the raw ledger: %.3e" % drift)
+    part["mwpa_" + DUEL_CREDIT] = sum(part["mwpa_" + credit] for credit in DUEL_PARTS)
+    return part
+
+
+def duel_parts(bootstrapper: Bootstrapper, part: pd.DataFrame) -> Dict[str, Dict[str, Any]]:
+    """The two halves of the duel row, kept because combining them is a display decision.
+
+    The rail draws one signed row; the sentence under it says which two numbers went into it, and
+    the breakdown of a ledger is not something a reader should have to take on trust.  Neither
+    carries a ``share``: the shares on ``components`` sum to one over the rows that are drawn.
+    """
+    part = _derived_credits(part)
+    block = {}
+    for credit in DUEL_PARTS:
+        stat = bootstrapper.rate(part, "mwpa_" + credit)
+        block[credit] = {"rate": stat["rate"], "lo": stat["lo"], "hi": stat["hi"],
+                         "total": stat["total"]}
+    return block
+
+
 def components(bootstrapper: Bootstrapper, part: pd.DataFrame) -> Dict[str, Dict[str, Any]]:
-    """The five credit types, plus the lobby adjustment that makes them add up.
+    """The five parts of the headline: the duel, the two objective plays, the clock, the centering.
 
     The five decompose the *raw* ledger, so on their own they miss the headline by the centering --
     for the four focal players that gap runs from +0.006 to -0.082 per 100, which reads as an
@@ -584,16 +646,14 @@ def components(bootstrapper: Bootstrapper, part: pd.DataFrame) -> Dict[str, Dict
 
         mwpa - sum(mwpa_<credit>) == (rwpa_centered - rwpa) * leverage
                                   == -lobby_mean_others * leverage
-    """
-    part = part.copy()
-    raw_total = sum(part["mwpa_" + credit] for credit in CREDIT_TYPES)
-    part["mwpa_lobby_adjustment"] = part["mwpa"] - raw_total
-    drift = float((part["mwpa_lobby_adjustment"]
-                   + raw_total - part["mwpa"]).abs().max())
-    if drift > 1e-9:
-        raise ValueError("credit types do not reconstruct the raw ledger: %.3e" % drift)
 
-    names = list(CREDIT_TYPES) + ["lobby_adjustment"]
+    Kill credit and death debit arrive as one row, ``duel_credit``.  See ``DUEL_PARTS``: they are
+    the two ends of one event and, drawn apart, their two enormous opposite spans set an axis on
+    which the other three rows have no visible length.  The two are still emitted, under
+    ``duel_parts``, so nothing is lost.
+    """
+    part = _derived_credits(part)
+    names = list(COMPONENT_ORDER)
     totals = {credit: float(part["mwpa_" + credit].sum()) for credit in names}
     absolute = sum(abs(value) for value in totals.values())
     block = {}
@@ -605,6 +665,68 @@ def components(bootstrapper: Bootstrapper, part: pd.DataFrame) -> Dict[str, Dict
             "share": _round(abs(totals[credit]) / absolute, 4) if absolute > 0 else None,
         }
     return block
+
+
+def card(part: pd.DataFrame, box: pd.DataFrame, puuid: str) -> Dict[str, Any]:
+    """The facts a player recognises themselves by, measured rather than remembered.
+
+    Everything on this site above this function is an estimate with an interval around it.  These
+    are counts.  A kill happened or it did not, and a mean of thirty-eight of them needs no
+    bootstrap -- so the card prints them plainly and the null rule never appears on it.  That is
+    the division of labour the card exists to make: the headline is the claim, and these are the
+    facts the claim is about.
+
+    Three measurements and two lists:
+
+    * per-match kills, deaths and assists, from the platform's own box score, averaged over the
+      act matches this player is in.  Not per round: a match is what the headline divides by, and
+      a card whose denominators disagreed with the headline's would be two cards.
+    * rounds per match, which is what "a match" means on this site -- it is the constant the
+      per-100-rounds rate is rescaled by, so it belongs beside the numbers it explains.
+    * top agents by MATCHES, because an agent is a per-match choice and a round count would rank
+      the agent whose matches ran long.  Ties break on rounds, then on name, so the list is
+      deterministic across runs.
+    * most-used guns by ROUNDS, because a gun is a per-round choice.  ``FREE_PISTOL`` is excluded:
+      everybody starts a pistol round holding it, so its count measures the act's round structure
+      rather than the player.  The excluded count is carried so the caveat can quote it.
+
+    Neither list is padded.  A player with two agents shows two.
+    """
+    mine = box.loc[(box["puuid"] == puuid)
+                   & (box["match_id"].isin(part["match_id"].unique()))]
+    matches = int(part["match_id"].nunique())
+    if len(mine) != matches:
+        raise ValueError("%s: %d box-score rows against %d act matches"
+                         % (puuid, len(mine), matches))
+
+    rounds_by_agent = part["agent"].value_counts()
+    agents = []
+    for name, played in mine["agent"].value_counts().items():
+        agents.append({"name": str(name), "matches": int(played),
+                       "rounds": int(rounds_by_agent.get(name, 0))})
+    agents.sort(key=lambda row: (-row["matches"], -row["rounds"], row["name"]))
+
+    weapons_all = part["weapon"].fillna("Unknown").value_counts()
+    kept = weapons_all.drop(labels=[FREE_PISTOL], errors="ignore")
+    weapon_rounds = int(kept.sum())
+    weapons = [{"name": str(name), "rounds": int(rounds),
+                "share": _round(rounds / float(weapon_rounds), 4) if weapon_rounds else None}
+               for name, rounds in kept.head(CARD_TOP_N).items()]
+
+    return {
+        "matches": matches,
+        "rounds": int(len(part)),
+        "rounds_per_match": _round(len(part) / float(matches), 2),
+        "kills_per_match": _round(float(mine["kills"].mean()), 2),
+        "deaths_per_match": _round(float(mine["deaths"].mean()), 2),
+        "assists_per_match": _round(float(mine["assists"].mean()), 2),
+        "agents": agents[:CARD_TOP_N],
+        "agents_played": len(agents),
+        "weapons": weapons,
+        "weapon_rounds": weapon_rounds,
+        "weapon_excluded": {"name": FREE_PISTOL,
+                            "rounds": int(weapons_all.get(FREE_PISTOL, 0))},
+    }
 
 
 def synergy(
@@ -746,9 +868,10 @@ def build_dict(facts: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
             "", "bool", "diagnostic"),
         "share": _entry(
             "Share of ledger",
-            "The credit type's share of the player's total absolute raw credit across the five "
-            "types. It describes what the player's ledger is made of, not how much of the headline "
-            "the type explains.",
+            "The component's share of the player's total absolute credit across the components "
+            "the rail draws — the duel as one row, then plant, defuse, the alive clock and the "
+            "lobby adjustment. It describes what the ledger is made of, not how much of the "
+            "headline the component explains.",
             "share of the absolute ledger", ".1%", "diagnostic"),
         # This entry used to close by arguing that a running total is here BECAUSE it is not an
         # average.  It is now the numerator of one -- the tracker divides it by `i` + 1 -- and an
@@ -757,9 +880,14 @@ def build_dict(facts: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
         "cumulative": _entry(
             "Running total",
             "MWPA summed over every match up to and including this one, in match order. The "
+            # NO WORKED EXAMPLE HERE ANY MORE. It used to close on "trzzcko's +0.510 over 8
+            # is the +6.4% the front-page rail prints", which was two stale things at once:
+            # the standings rail it quoted has been deleted, and the literals were the
+            # 68-match corpus. A definition that hardcodes a count goes wrong every time the
+            # act grows, and the thing it pointed at is now the label at the end of the line.
             "tracker divides it by `i` + 1, the matches played to that point, which is what "
-            "makes each line end on that player's `impact` — trzzcko's +0.510 over 8 is the "
-            "+6.4% the front-page rail prints.",
+            "makes each line end on that player's `impact`, the number written at the end "
+            "of the line.",
             "matches added", "+.3f", "headline"),
         "exposure": _entry(
             "Exposure",
@@ -779,31 +907,45 @@ def build_dict(facts: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
             "from it."
             % (format(0.0, RATE_FORMAT), format(0.5, PROBABILITY_FORMAT)),
             "", "text", "headline"),
-        # All four are `+.2%`, the format `mwpa` carries, because all four ARE mwpa at four
-        # grains -- `grain_act` is literally the season total the headline divides. They were
-        # `+.4f`, and methods.html already contradicted them out loud: it names the shared grain
-        # ruler as 70.66% (it reads the axis through `mwpa`'s format) while the rail under it
-        # drew that same ruler as 0.7066. One ruler cannot have two numbers.
-        "grain_action": _entry(
-            "One action",
-            "The largest single credited action of the act for this player: one kill, plant or "
-            "defuse, measured as the vertical move it made on the match win probability curve.",
-            POINTS, "+.2%", "diagnostic"),
-        "grain_round": _entry(
-            "The round it ended",
-            "The player's whole ledger for the round that action belongs to, after centering and "
-            "after leverage.",
-            POINTS, "+.2%", "diagnostic"),
-        "grain_match": _entry(
-            "The worst match",
-            "The player's largest negative match total in the act. It is here so the four grains "
-            "are not all the same sign.",
-            POINTS, "+.2%", "diagnostic"),
-        "grain_act": _entry(
-            "The whole act",
-            "The player's season total across every match. On a common ruler this is the bar the "
-            "other three are read against, and on this site it is not the longest one.",
-            POINTS, "+.2%", "diagnostic"),
+        # THE CARD'S OWN FIELDS, and they are the only counts on this site.  Everything else
+        # here is an estimate carrying an interval; a kill happened or it did not.  One decimal,
+        # because the second one on a mean of eight to sixty-six matches is noise, and because
+        # these sit in a block with `rounds_per_match`, which is the constant the headline is
+        # rescaled by and is quoted to one decimal everywhere else on the site.
+        "kills_per_match": _entry(
+            "Kills",
+            "Kills per match played, from the platform's own box score, averaged over the act "
+            "matches this player appears in. It is a count and not an estimate: there is no "
+            "interval on it and the null rule does not apply to it.",
+            "per match", ".1f", "box score"),
+        "deaths_per_match": _entry(
+            "Deaths",
+            "Deaths per match played, on the same denominator as kills.",
+            "per match", ".1f", "box score"),
+        "assists_per_match": _entry(
+            "Assists",
+            "Assists per match played, on the same denominator as kills. An assist splits 0.20 "
+            "of a kill's credit in the ledger; here it is only counted.",
+            "per match", ".1f", "box score"),
+        "rounds_per_match": _entry(
+            "Rounds",
+            "The rounds this player was credited in, divided by their matches. This is what a "
+            "match means for them, and it is the positive constant that turns the estimator's "
+            "per-100-rounds rate into the impact per match at the top of the card.",
+            "per match", ".1f", "box score"),
+        "card_agents": _entry(
+            "Most-played agents",
+            "The agents this player picked most, counted in MATCHES, because an agent is chosen "
+            "once per match. A player with fewer than `gate.card_top_n` agents shows only what "
+            "they have; nothing is padded.",
+            "", "text", "box score"),
+        "card_weapons": _entry(
+            "Most-used guns",
+            "The round-start primaries this player held most, counted in ROUNDS, because a gun "
+            "is chosen once per round. `gate.free_pistol` is excluded: everybody starts a pistol "
+            "round holding it, so its count measures how many pistol rounds the act contained "
+            "rather than anything about the player.",
+            "", "text", "box score"),
         "leverage": _entry(
             "Round leverage",
             "The swing L = P(match win | this round won) - P(match win | this round lost), at the "
@@ -941,6 +1083,19 @@ def build_dict(facts: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
             "Defense MWPA",
             "The player's MWPA in this match summed over the rounds their team defended.",
             POINTS, "+.2%", "exploratory"),
+        # THE ROW THE RAIL DRAWS, and the two the rail no longer draws apart.  It is bootstrapped
+        # as its own column: the kill credit and the death debit are strongly negatively
+        # correlated within a round, so an interval for their sum is not the two intervals added.
+        "duel_credit": _entry(
+            "Duel credit",
+            "Kill credit and death debit as one signed row: what the player's duels were worth "
+            "net, after paying for the ones they lost. The two are the two ends of one event, "
+            "and they are also an order of magnitude longer than every other component and "
+            "pointed opposite ways — drawn apart they set an axis on which plant, defuse and "
+            "the clock have no visible length. Resampled as a single column, never added out "
+            "of two intervals: within a round the two are strongly negatively correlated, so "
+            "their widths do not add.",
+            POINTS, "+.2%", "diagnostic"),
         "kill_credit": _entry(
             "Kill credit",
             "Probability gained at kills the player made. An unassisted kill pays the killer in "
@@ -971,7 +1126,7 @@ def build_dict(facts: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
         "lobby_adjustment": _entry(
             "Lobby adjustment",
             "The centering itself, booked as its own row: the mean credit of everyone else in the "
-            "round, which no single credit type owns. With it the six components sum to the "
+            "round, which no single credit type owns. With it the components sum to the "
             "headline exactly.",
             POINTS, "+.2%", "diagnostic"),
         "agent": _entry(
@@ -1147,9 +1302,11 @@ def build_cav(facts: Dict[str, Any]) -> List[Dict[str, str]]:
         {
             "id": "rank_by_decision",
             "text": (
-                "The four are ranked on impact per match because that decision was taken for this "
-                "site, not because the data separates them. %s Read the rank as a sort order and "
-                "the interval as the result."
+                "The four are ordered on impact per match because that decision was taken for "
+                "this site, not because the data separates them. %s No page prints a rank "
+                "number any more: what survives is the order the four are listed in, on the "
+                "season tracker's legend and in the columns of the match cross-tab. Read that "
+                "order as a sort, and the interval on each card as the result."
                 % facts["covers_zero_text"]
             ),
         },
@@ -1260,21 +1417,48 @@ def build_cav(facts: Dict[str, Any]) -> List[Dict[str, str]]:
             ),
         },
         {
-            "id": "one_ruler_four_grains",
+            "id": "the_duel_is_one_row",
             "text": (
-                "The four grain bars share one axis with each other and with the season total, so "
-                "a single action, the round it ended, the worst match and the whole act are drawn "
-                "at their real relative sizes. Nothing is normalised; where the smallest grain is "
-                "drawn near the size of the largest, that is the finding."
+                "Kill credit and death debit are drawn as one signed row, the duel credit, and "
+                "the two are still printed underneath it in words. The reason is legibility and "
+                "it is arithmetic: the two are an order of magnitude longer than every other "
+                "component and pointed opposite ways, so drawn apart they set an axis on which "
+                "plant, defuse and the alive clock are a pixel each. They are also the two ends "
+                "of one event — a duel resolves, somebody is paid, somebody is debited — so "
+                "their sum is a quantity rather than a convenience. Its interval is resampled "
+                "on the summed column and is not the two intervals added: within a round the "
+                "two are strongly negatively correlated, so their widths do not add."
+            ),
+        },
+        {
+            "id": "classic_is_the_free_pistol",
+            "text": (
+                "The most-used guns on a player card exclude the %s. Every player starts every "
+                "pistol round holding it, whatever they meant to buy, so a Classic count "
+                "measures how many pistol rounds the act contained and not what this player "
+                "chooses to hold. Nothing else is excluded, and the guns are counted in rounds "
+                "rather than matches because a gun is a per-round choice."
+                % FREE_PISTOL
+            ),
+        },
+        {
+            "id": "the_card_is_counts_not_estimates",
+            "text": (
+                "The block at the top of a player page carries two registers and they are drawn "
+                "apart. The impact per match is an estimate and it keeps its interval and its "
+                "verdict against the null. The kills, deaths, assists, rounds, agents and guns "
+                "beside it are counts: they happened, they carry no interval, and no null rule "
+                "is drawn through them. A card that put a confidence band on a kill count would "
+                "be claiming uncertainty about something nobody is uncertain about."
             ),
         },
         {
             "id": "components_include_the_lobby_adjustment",
             "text": (
                 "The five credit types decompose the raw ledger before the lobby centering, so a "
-                "sixth row carries that centering and the six sum to the headline exactly. Across "
-                "the four the raw five sum to %+.4f against a headline sum of %+.4f, and the "
-                "lobby adjustment is the %+.4f between them."
+                "further row carries that centering and the rows sum to the headline exactly. "
+                "Across the four the raw five sum to %+.4f against a headline sum of %+.4f, and "
+                "the lobby adjustment is the %+.4f between them."
                 % (
                     facts["component_sum"],
                     facts["headline_sum"],
@@ -1387,7 +1571,13 @@ def build_cav(facts: Dict[str, Any]) -> List[Dict[str, str]]:
                 "silhouettes ship in the `by weapon` breakdown, where every row is a distinct "
                 "weapon; a division badge ships only beside the division word and never in a "
                 "cell carrying a player hue, because Riot's gold sits within OKLab ΔE 3.5 of one "
-                "player's own hue; map art is refused."
+                "player's own hue; map art is refused. The player card is the one place the art "
+                "is not eighteen pixels tall — everywhere else it rides inside a table row and "
+                "the row's line box is the constraint, and a card is not a row, so the agents "
+                "and the guns on it are drawn at the size the files actually are. Nothing else "
+                "about them changes: the word is beside every picture, the weapon plate comes "
+                "with the weapon art, and the header control still takes all of it away without "
+                "losing a fact."
                 % (format(facts["weapon_ledger_cells"], ","), facts["weapon_top_name"],
                    format(facts["weapon_top_share"], ".1f"))
             ),
@@ -1544,6 +1734,14 @@ def build_site(
                 "tier_order": ladder["order"],
                 "tier_axis_min_span": TIER_AXIS_MIN_SPAN,
                 "tier_placement_matches": ladder["placement"]["matches"],
+                # The card's two lists.  The name of the gun that does not count and the length
+                # of a list are both decisions, so neither is typed in the view.
+                "free_pistol": FREE_PISTOL,
+                "card_top_n": CARD_TOP_N,
+                # The two credit types the component rail draws as one signed row, and the key
+                # that row arrives under, named here so the view never chooses either.
+                "duel_parts": list(DUEL_PARTS),
+                "duel_key": DUEL_CREDIT,
             },
             # The ladder measured against the rating, as numbers rather than only as prose,
             # because the front page draws the sentence that quotes them and a view may not
@@ -1613,7 +1811,9 @@ def build_player(
         "name": name,
         "short": short,
         "headline": headline(bootstrapper, part),
+        "card": card(part, context["box"], puuid),
         "components": components(bootstrapper, part),
+        "duel_parts": duel_parts(bootstrapper, part),
         "rank_track": track,
         "ladder": ladder["summaries"][short],
         "matches": matches,

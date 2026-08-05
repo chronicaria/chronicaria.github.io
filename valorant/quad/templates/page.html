@@ -8,7 +8,8 @@
 <meta name="description" content="$description">
 <link rel="stylesheet" href="${root}quad-site.css">
 <script>try{var r=document.documentElement;r.dataset.theme=localStorage.getItem("rwpa-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");r.dataset.icons=localStorage.getItem("rwpa-icons")||"on"}catch(e){}</script>
-<script>window.QUAD=$data;</script>
+<script src="${root}quad-shared.js"></script>
+<script>window.QUAD=Object.assign({},window.QUAD_SHARED,$data);</script>
 <script defer src="${root}quad-app.js"></script>
 </head>
 <body data-page="$page">

@@ -178,8 +178,6 @@
   /* Rail geometry. Every rail on every page shares it, so the null rule lands
      at the same physical x on the front page, the player page and inside a
      table cell. That is the cost of the design and it is deliberate. */
-  --rail-label: 200px;
-  --rail-nums: 168px;
 }
 
 :root[data-theme="light"] {
@@ -259,7 +257,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: var(--sp-5) 0; }
 .skip:focus { left: var(--sp-3); top: var(--sp-3); }
 
 .num, .n, .unit, .big, .ival-text, th, .lab, .chip,
-.crumb, .scope, .round-meta, time, .mono { font-family: var(--mono); }
+.crumb, .scope, time { font-family: var(--mono); }
 .unit { font-size: var(--fs-label); color: var(--quiet); white-space: nowrap; }
 /* There is no .glyph rule any more. It set the size and the baseline of the
    ▲/▼, and nothing else ever went through that span: a measured zero is a
@@ -268,7 +266,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: var(--sp-5) 0; }
 
 /* THE ONE LABEL STYLE. It replaces the eight rules that used to spell this
    across four tracking values, two sizes, two weights and two colours. */
-.lab, h4, thead th, .team-head th, .cavs dt, .facts dt, .fig-data > summary {
+.lab, h4, thead th, .team-head th, .facts dt, .fig-data > summary {
   font-family: var(--mono);
   font-size: var(--fs-label);
   font-weight: 600;
@@ -361,7 +359,7 @@ main section > h2 {
 h3 { font-family: var(--mono); font-size: var(--fs-head); font-weight: 600; letter-spacing: -.01em; margin: 0 0 var(--sp-2); }
 h4 { margin: 0 0 var(--sp-2); }
 
-.lede, p, .note, .cav, .cavs dd, .facts > dd {
+.lede, p, .note, .cav {
   font-family: var(--serif);
 }
 .lede { max-width: 62ch; margin: 0; font-size: var(--fs-prose); line-height: 1.5; color: var(--quiet); }
@@ -382,11 +380,6 @@ p { margin: var(--sp-3) 0 0; max-width: 66ch; font-size: var(--fs-prose); line-h
   border-left: 1px solid var(--rule);
   color: var(--quiet); font-size: var(--fs-body); line-height: 1.6; max-width: 72ch;
 }
-.cavs { margin: var(--sp-4) 0 0; }
-.cavs > div { border-top: 1px solid var(--rule); padding: var(--sp-3) 0; }
-.cavs > div:first-child { border-top: none; }
-.cavs dt { margin-bottom: var(--sp-1); }
-.cavs dd { margin: 0; color: var(--quiet); font-size: var(--fs-body); line-height: 1.6; max-width: 72ch; }
 
 /* Season total, matches and rounds. A definition list, not a stat row. */
 .facts { margin: var(--sp-4) 0 0; }
@@ -397,145 +390,13 @@ p { margin: var(--sp-3) 0 0; max-width: 66ch; font-size: var(--fs-prose); line-h
 .facts > div:first-child { border-top: none; }
 .facts dt { flex: none; min-width: 13ch; }
 .facts dd { margin: 0; font-family: var(--mono); font-size: var(--fs-data); }
-/* The methods glossary uses the same list with bare dt/dd pairs and prose. */
-.facts > dt { padding-top: var(--sp-3); border-top: 1px solid var(--rule); }
-.facts > dt:first-child { padding-top: 0; border-top: none; }
-.facts > dd {
-  margin: var(--sp-1) 0 var(--sp-3); max-width: 72ch;
-  color: var(--quiet); font-size: var(--fs-body); line-height: 1.6;
-}
 
-/* ============================================================================
-   THE RAIL, and the null rule that runs through it.
-
-   One continuous line of full-strength --ink at the value that means NO CLAIM,
-   heavier than any datum and heavier than the data, unbroken as a SINGLE DOM
-   element from the axis through every row of a block. It has exactly two
-   instances and they are the same idea in two units: 0.0000 MWPA per 100
-   rounds (we cannot say a person helped) and 50.0% match win probability (we
-   cannot say who wins). Both come from meta.gate; neither is written here.
-
-   Two mark types are left in HTML, and the third is not gone from the site:
-       .rail-iv   a capped dimension line in a hue   = an ESTIMATE
-       a line in ink                                 = an EXACT PATH
-       (a solid bar from the null = an EXACT MAGNITUDE, and it now lives only
-        in SVG, on the season tracker: every table on this site prints the
-        number instead.)
-
-   The null is a child of the TRACK COLUMN, not of the whole grid, which is
-   what stops it striking through the label and the number at narrow widths
-   and is why the rail keeps three columns at every viewport instead of
-   reflowing into a stack the rule cannot cross.
-   ========================================================================= */
-.rail {
-  display: grid;
-  grid-template-columns: var(--rail-label) minmax(0, 1fr) var(--rail-nums);
-  align-items: stretch;
-  position: relative;
-  margin-top: var(--sp-4);
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-}
-/* ONE element, positioned into the track column by arithmetic rather than by
-   grid placement, so it can span the whole block without taking a cell off
-   every row. It is drawn LAST, above the estimates it judges. On the curve it
-   is drawn UNDER the line instead — see .wpfig .even — because a rule this
-   heavy would erase the data wherever the match sat near even. */
-.rail-track-layer {
-  position: absolute; top: 0; bottom: 0; z-index: 4; pointer-events: none;
-  width: 3px; margin-left: -1.5px; background: var(--ink);
-  left: calc(var(--rail-label)
-             + (100% - var(--rail-label) - var(--rail-nums)) * var(--null-f, .5));
-}
-
-.rail-row { display: contents; }
-.rail-label, .rail-track, .rail-nums {
-  padding: var(--sp-3) 0;
-  border-top: 1px solid var(--rule);
-  min-width: 0;
-}
-.rail-row:first-of-type .rail-label,
-.rail-row:first-of-type .rail-track,
-.rail-row:first-of-type .rail-nums { border-top: none; }
-
-.rail-label { grid-column: 1; padding-right: var(--sp-3); }
-.rail-track { grid-column: 2; position: relative; z-index: 1; }
-.rail-nums {
-  grid-column: 3; padding-left: var(--sp-3); text-align: right;
-  font-family: var(--mono); font-size: var(--fs-data);
-}
-
-/* Rank is a sort order, not a podium: a small mono ordinal, never a medal,
-   a badge or a size. */
-.rail-rank { color: var(--quiet); font-size: var(--fs-label); letter-spacing: .08em; }
-.rail-who {
-  display: block; font-family: var(--mono); font-size: var(--fs-data);
-  font-weight: 600; color: var(--hue, var(--ink)); overflow-wrap: anywhere;
-}
-.rail-who a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
-.rail-sub { display: block; font-family: var(--mono); font-size: var(--fs-label); color: var(--quiet); margin-top: 2px; }
-.rail-nums .rail-iv-text { display: block; font-size: var(--fs-label); color: var(--quiet); margin-top: 2px; }
-
-/* The track. Its geometry is set inline by build.py as percentages of one
-   fixed axis carried in the payload, so no row's rendering is a function of
-   another row's value. */
-.rail-track { display: block; }
-.rail-track > span { display: block; }
-.rail-track-inner { display: block; position: relative; height: 20px; }
-.rail-track-inner::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 9.5px;
-  height: 1px; background: var(--rule);
-}
-
-/* AN ESTIMATE: a capped dimension line in the player's hue. The caps are the
-   bounds; the point estimate is a small notch, smaller than the caps, because
-   visual weight has to match confidence rather than invert it. */
-.rail-iv { position: absolute; top: 4px; height: 12px; color: var(--hue, var(--quiet)); }
-.rail-iv::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 5.5px; height: 1px;
-  background: currentColor;
-}
-.rail-iv .cap { position: absolute; top: 0; width: 1px; height: 12px; background: currentColor; }
-.rail-iv .cap.lo { left: 0; }
-.rail-iv .cap.hi { right: 0; }
-.rail-point {
-  position: absolute; top: 3px; height: 14px; width: 3px; margin-left: -1.5px;
-  background: var(--hue, var(--quiet)); outline: 1.5px solid var(--ground);
-}
-/* The end that ran past the fixed axis, and only that end, so a bar that
-   stopped at the axis still cannot be read as one that stopped on its own. */
-.rail-track-inner[data-clipped~="lo"] { border-left: 1px dotted var(--quiet); }
-.rail-track-inner[data-clipped~="hi"] { border-right: 1px dotted var(--quiet); }
-
-/* THE SOLID BAR FROM THE NULL — an exact magnitude — no longer exists in HTML,
-   and neither do the rules that drew it. Its two rails were the front page's
-   standings and a player page's four grains, and both are deleted; the mark
-   type survives on the season tracker, drawn in SVG by quad-app.js against the
-   same null. What this file still carries is the ESTIMATE and the EXACT PATH:
-   two of the three, because the third has nothing left to draw. */
-
-/* The summary row of a rail, ruled off from the rows it summarises. One caller
-   is left — the headline row under a player's five components. */
-.rail-row.is-scale .rail-label, .rail-row.is-scale .rail-track,
-.rail-row.is-scale .rail-nums { border-top: 1px solid var(--rule-strong); }
-.rail-row.is-scale + .rail-row .rail-label,
-.rail-row.is-scale + .rail-row .rail-track,
-.rail-row.is-scale + .rail-row .rail-nums { border-top: none; }
-
-/* The axis above a rail, on the rail's own grid so the ticks line up with the
-   track and the null label sits exactly on the null. */
-.rail-axis {
-  display: grid;
-  grid-template-columns: var(--rail-label) minmax(0, 1fr) var(--rail-nums);
-  align-items: end; margin-top: var(--sp-4);
-}
-.rail-axis-unit { grid-column: 1; align-self: end; padding-right: var(--sp-3); line-height: 1.4; }
-.rail-axis-ticks { grid-column: 2; position: relative; height: 20px; }
-.rail-axis-ticks span {
-  position: absolute; bottom: 0;
-  font-family: var(--mono); font-size: var(--fs-label); color: var(--quiet); white-space: nowrap;
-}
-.rail-axis-ticks span.is-null { color: var(--ink); font-weight: 600; }
+/* THE RAIL IS GONE. It drew a player's five ledger components as five capped dimension
+   lines on one axis, and the five are a WALK: they start at the null and end at the
+   headline, which a waterfall shows and a rail cannot. `.wf-*` below is what replaced it,
+   and the null rule survives there — in --ink, at full strength, third instance. What is
+   left in HTML is the ESTIMATE at cell scale (`.ival`, on a player's card) and the painted
+   rule at zero inside a table (`td.z`, on the round ledger). */
 
 /* ---- The interval, at cell scale and on a card ---------------------------- */
 /* THE ESTIMATE, and after this round it is the only mark a table draws. The
@@ -820,11 +681,13 @@ tbody .team-head th {
    The empty cell is genuinely empty: no glyph, no rule, no wash. A wash would
    be a value drawn for a match that was not played. */
 table.idx-cross thead th .sort { color: var(--hue, inherit); }
-/* The match cell is one unbreakable label — map, separator, date. Wrapped over
-   three lines at 375px it doubled the height of every row while the table was
-   already inside a horizontal scroller, which is the thing that is supposed to
-   absorb a table too wide for the screen. Let it be as wide as it is. */
-table.idx-cross tbody td:nth-child(2) { white-space: nowrap; }
+/* WHERE AND WHEN ARE TWO COLUMNS. They used to be one unbreakable label — `Haven · 2026-08-06`
+   — which made a scan for a date a scan through a map name. Neither may wrap: the table is
+   already inside a horizontal scroller, which is the thing that absorbs a table too wide for
+   the screen. The date is secondary to the map, which is the cell that names the match. */
+table.idx-cross tbody td:nth-child(2),
+table.idx-cross tbody td:nth-child(3) { white-space: nowrap; }
+.idx-when { color: var(--quiet); }
 .anon { color: var(--quiet); }
 .team { font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .06em; }
 /* The total row took none of the table's cell vocabulary — no padding, no data
@@ -1049,10 +912,156 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 .tracker .band { fill: var(--ink); fill-opacity: .07; }
 .tracker .cross-v { stroke: var(--chart-crosshair); stroke-width: 1; stroke-dasharray: 3 3; }
 
+/* THE READOUT, AS A TABLE. Four players at three quantities each was eleven middots on one
+   wrapping line; a reader comparing two of them was comparing two substrings of a paragraph.
+   The table is not in a `.scroll` and takes none of the site's table chrome — it is a readout
+   that happens to have columns, so it sits on the figure's own surface with no border and no
+   header wash, and only the alignment is borrowed. It holds its height at four rows so the
+   figure does not jump as the pointer crosses a match nobody played. */
+.tracker-read { min-height: 10.2em; }
+.tracker-rest { margin: 0; max-width: 70ch; font-family: var(--serif); font-size: var(--fs-body); }
+.tracker-tbl { width: auto; min-width: min(100%, 460px); background: none; }
+.tracker-tbl caption {
+  caption-side: top; padding: 0 0 var(--sp-2); font-family: var(--mono);
+  font-size: var(--fs-data); color: var(--ink); font-weight: 600;
+}
+.tracker-tbl th, .tracker-tbl td {
+  padding: 3px var(--sp-3) 3px 0; border-bottom: 1px solid var(--rule);
+  font-family: var(--mono); font-size: var(--fs-data); background: none;
+  white-space: nowrap;
+}
+.tracker-tbl thead th {
+  padding-top: 0; background: none; border-bottom: 1px solid var(--rule);
+  font-size: var(--fs-label); font-weight: 600; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--quiet);
+}
+.tracker-tbl .n { text-align: right; }
+.tracker-tbl .l { text-align: left; }
+.tracker-tbl tbody th { font-weight: 600; color: var(--hue, var(--ink)); }
+.tracker-tbl tbody tr:last-child th, .tracker-tbl tbody tr:last-child td { border-bottom: none; }
+.tracker-tbl tbody tr:hover th, .tracker-tbl tbody tr:hover td { background: none; }
+
 .fig-tracker[data-only="martin"] .series:not(.p-martin),
 .fig-tracker[data-only="snorlax"] .series:not(.p-snorlax),
 .fig-tracker[data-only="themarias"] .series:not(.p-themarias),
 .fig-tracker[data-only="trzzcko"] .series:not(.p-trzzcko) { opacity: .22; }
+
+/* APPEND to quad-site.css, after the tracker block and before "---- The match
+   figure ----". Every new class is od- prefixed. No new colour literal: the
+   panels ink a cell by OPACITY on the player's own --hue. */
+
+/* ---- Offense against defense ----------------------------------------------
+   ONE POINT PER PLAYER-MATCH ON A SQUARE, SYMMETRIC PLANE, then that same plane
+   binned four a side, once per player. Both halves are the same unit, so the box
+   is square: that is what makes the x = -y guide a true 45 degrees and each
+   quadrant a true quarter.
+
+   THE PANELS ENCODE DENSITY IN OPACITY AND THE VALUE IN A DIGIT. A tone cannot
+   be read to a number, so every cell prints its own count and an empty cell
+   prints the middot every measured zero on this site gets. The ceiling on that
+   opacity is set in quad-app.js and it is a contrast floor, not a taste: --ink
+   over the darkest of the four hues measures 6.99:1 at it, and falls under 4.5
+   above it. */
+.od-plot > svg { display: block; width: 100%; max-width: 680px; height: auto; margin: 0 auto; }
+.od-plot > svg:focus-visible,
+.od-panels > svg:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+/* The pointer appears only while a mark is live, which is exactly when a click
+   opens that match. */
+.od-scatter.is-live { cursor: pointer; }
+
+/* Structure, not a datum: the locus of a match worth nothing is a property of
+   the plane, so it is --rule, a hairline, and under every mark. */
+.od-fig .od-guide { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 5 4; }
+.od-fig .od-guide-lab { fill: var(--quiet); font-size: 10.5px; }
+.od-fig .od-quad { fill: var(--quiet); font-size: 10.5px; letter-spacing: .06em; }
+/* A CASING, the same device `.track-case` uses on the trajectory: these four words sit in the
+   corners of a plot whose corners hold real marks, and a datum crossing a letter costs the
+   reader both. `paint-order: stroke` puts the panel colour under the type without moving it,
+   so nothing is hidden — a mark under a label is still drawn, with a hairline of air round the
+   glyph it would otherwise share a pixel with. */
+.od-fig .od-quad text, .od-fig .od-guide-lab {
+  paint-order: stroke; stroke: var(--field); stroke-width: 3px; stroke-linejoin: round;
+}
+/* The hairline is the panel colour and it is what keeps 151 marks separable
+   where they overplot. Shape carries the series as well as hue — rule 3. */
+.od-fig .od-series .od-dot {
+  fill: var(--hue, var(--quiet)); stroke: var(--field); stroke-width: .8;
+}
+.od-fig .od-focus { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+
+.od-fig[data-only="martin"] .od-series:not(.p-martin),
+.od-fig[data-only="snorlax"] .od-series:not(.p-snorlax),
+.od-fig[data-only="themarias"] .od-series:not(.p-themarias),
+.od-fig[data-only="trzzcko"] .od-series:not(.p-trzzcko) { opacity: .22; }
+
+.od-panels { margin-top: var(--sp-2); }
+.od-fig .od-frame { fill: none; stroke: var(--rule); stroke-width: 1; }
+.od-fig .od-net { stroke: var(--rule); stroke-width: 1; }
+/* The null inside a 184px panel: the same ink as .axis-zero for the same
+   reason, at a weight that fits a box a third of the width. */
+.od-fig .od-null { stroke: var(--ink); stroke-width: 1.6; }
+.od-fig .od-cell { fill: var(--hue, var(--quiet)); }
+.od-fig .od-count { fill: var(--ink); font-size: 10.5px; }
+.od-fig .od-panel-name { fill: var(--hue, var(--ink)); font-size: 12px; font-weight: 600; }
+.od-fig .od-panel-n { fill: var(--quiet); font-size: 10.5px; }
+.od-fig .od-cursor { fill: none; stroke: var(--ink); stroke-width: 2; }
+
+.od-ramp {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-2) var(--sp-3); margin: var(--sp-4) 0 var(--sp-2);
+}
+.od-ramp-lab {
+  font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .13em;
+  text-transform: uppercase; color: var(--quiet);
+}
+.od-step {
+  display: flex; align-items: center; gap: var(--sp-1);
+  font-family: var(--mono); font-size: var(--fs-label); color: var(--quiet);
+}
+/* THE RAMP IS DRAWN IN --ink AND NOT IN A HUE. What it encodes is density, and
+   density is not a person. The hairline stays at full strength at every step, so
+   the swatch at zero is an empty box rather than a missing one — which is what
+   an empty cell in a panel is too. */
+.od-sw { width: 20px; height: 12px; display: block; border: 1px solid var(--rule); }
+.od-sw i { display: block; height: 100%; background: var(--ink); }
+
+.od-read {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--sp-1) var(--sp-4); min-height: 5.4em;
+}
+/* Four rows and a caption when a cell is under the pointer; the rest state is one
+   sentence. The floor holds the taller of the two so the panels do not jump. */
+.od-read-grid { min-height: 12.2em; }
+.od-rest { margin: 0; max-width: 70ch; font-family: var(--serif); font-size: var(--fs-body); }
+.od-q { white-space: nowrap; }
+.od-k { color: var(--quiet); }
+/* Weight only. The sign colour belongs to .pos/.neg/.zero, which are declared
+   above this and would lose to a colour set here. */
+.od-v { font-weight: 600; }
+.od-cap { max-width: 78ch; }
+
+/* Four players at two quantities is a comparison down a column, not a sentence
+   with middots in it — the same argument .tracker-tbl is built on. */
+.od-tbl { width: auto; min-width: min(100%, 420px); background: none; }
+.od-tbl caption {
+  caption-side: top; padding: 0 0 var(--sp-2); font-family: var(--mono);
+  font-size: var(--fs-data); color: var(--ink); font-weight: 600;
+}
+.od-tbl th, .od-tbl td {
+  padding: 3px var(--sp-3) 3px 0; border-bottom: 1px solid var(--rule);
+  font-family: var(--mono); font-size: var(--fs-data); background: none;
+  white-space: nowrap;
+}
+.od-tbl thead th {
+  padding-top: 0; background: none; border-bottom: 1px solid var(--rule);
+  font-size: var(--fs-label); font-weight: 600; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--quiet);
+}
+.od-tbl .n { text-align: right; }
+.od-tbl .l { text-align: left; }
+.od-tbl tbody th { font-weight: 600; color: var(--hue, var(--ink)); }
+.od-tbl tbody tr:last-child th, .od-tbl tbody tr:last-child td { border-bottom: none; }
+.od-tbl tbody tr:hover th, .od-tbl tbody tr:hover td { background: none; }
 
 /* ---- The match figure ----------------------------------------------------- */
 /* ONE CONTINUOUS WIN PROBABILITY CURVE. Every vertical is one credited action
@@ -1060,7 +1069,7 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
    dP/dq is the round's leverage, measured to 3.6e-11 in the payload. The
    chart and the metric are the same object, which is why nothing here may
    round a corner off it. */
-.fig-match .wp-head { margin: 0 0 var(--sp-3); }
+.fig-match .wp-head { margin: 0 0 var(--sp-4); }
 .wp-head-top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; }
 .wp-head-top .lab { display: inline; }
 .wp-when { font-family: var(--mono); font-size: var(--fs-label); color: var(--quiet); letter-spacing: .06em; white-space: nowrap; }
@@ -1068,16 +1077,25 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 .wp-team {
   display: grid; grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: baseline; gap: 0 var(--sp-3);
-  padding: var(--sp-1) 0; border-top: 1px solid var(--rule);
+  padding: var(--sp-2) 0; border-top: 1px solid var(--rule);
 }
 .wp-team:first-child { border-top: none; }
-.wp-name { font-family: var(--mono); font-size: var(--fs-data); font-weight: 600; letter-spacing: .04em; overflow-wrap: anywhere; }
-.wp-score { font-family: var(--mono); font-size: var(--fs-data); color: var(--quiet); }
-.wp-pct { font-family: var(--mono); font-size: var(--fs-head); font-weight: 600; letter-spacing: -.01em; min-width: 6.5ch; text-align: right; }
+/* The two live percentages are the figure's headline and were set two steps below the
+   section head that names them. --fs-display for both, because the pair is only readable as
+   a comparison if it is one size; the trailing side still drops to --quiet at --w-body,
+   which is where the sign lives. */
+.wp-name { font-family: var(--mono); font-size: var(--fs-body); font-weight: 600; letter-spacing: .04em; overflow-wrap: anywhere; }
+.wp-score { font-family: var(--mono); font-size: var(--fs-head); color: var(--quiet); }
+.wp-pct { font-family: var(--mono); font-size: var(--fs-display); font-weight: 600; letter-spacing: -.01em; min-width: 6.5ch; text-align: right; }
 .wp-pct.ahead { color: var(--ink); }
 .wp-pct.behind, .wp-pct.level { color: var(--quiet); font-weight: 400; }
 
-.wp-plot { position: relative; }
+.wp-plot { position: relative; margin-top: var(--sp-3); }
+/* 860, up from the shared 720. Every radius, stroke width and font size in this figure is
+   authored in viewBox units, and at 720 they all rendered at 0.75 — an 11px initial arrived
+   as 8px. At 860 nothing is drawn smaller than it was designed; the container already
+   scrolls and is labelled as doing so. The tracker keeps the shared floor. */
+.wp-plot .fig-scroll > svg { min-width: 860px; }
 .wpfig { display: block; }
 .wpfig .tick { fill: var(--quiet); }
 .wpfig .gridline { stroke: var(--rule-strong); stroke-width: 1; stroke-dasharray: 4 4; }
@@ -1093,7 +1111,11 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
    in the middle of the plot. The rule keeps every line above it unchanged. */
 /* Boundaries are 7px ticks at the axis, not 24 to 32 full-height rules. Those
    turned the plot into a barcode over its own data. */
+/* 4px at every boundary, 9px where the axis prints a number. All 25 at 7px was a picket
+   fence competing with its own data; the labelled tick is the one the eye lands on, and in
+   time mode that tick is a minute. */
 .wpfig .bound { stroke: var(--rule-strong); stroke-width: 1; }
+.wpfig .bound.wpx-major { stroke: var(--quiet); }
 .wpfig .switch { stroke: var(--chart-segment-line); stroke-width: 1.5; }
 .wpfig .switch-lab { fill: var(--quiet); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
 .wpfig .ot-bracket { stroke: var(--rule-strong); stroke-width: 1; fill: none; }
@@ -1124,15 +1146,21 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 .wpfig .wp-term { stroke-dasharray: 1.5 2.5; stroke-width: 1.4; stroke-linecap: round; }
 .wpfig .wp-close { stroke-dasharray: none; stroke-width: 1.4; stroke-linecap: butt; }
 
-/* An action's marker. Radius is |dp| against a fixed axis from the payload.
-   Three levels, because 256 discs at 1.16px minimum separation is a carpet
-   and not a set of marks: a filled hue disc for one of the four, a hollow
-   neutral ring for anyone else past the payload's marker gate, and a 2px tick
-   for everything else — because the vertical in the line is already the mark. */
-.wpfig .ev { fill: var(--hue, var(--quiet)); stroke: var(--field); stroke-width: .8; }
-.wpfig .ev.no-actor, .wpfig .ev.other { fill: none; stroke: var(--quiet); stroke-width: 1.4; }
-.wpfig .ev.over { stroke: var(--chart-line-primary); stroke-width: 1.3; }
-.wpfig .ev-tick { stroke: var(--quiet); stroke-width: 2; }
+/* AN ACTION'S MARKER. Radius is |dp| against a fixed axis from the payload. TWO levels, not
+   three: a filled hue mark for one of the four, a hollow neutral ring for anyone else past the
+   payload's gate, and nothing at all for the rest — the vertical in the line is already their
+   mark, and 145 two-pixel ticks a match at three units apart was a carpet drawn over the
+   finding.
+
+   THE STROKE IS A HALO, NOT AN OUTLINE. `paint-order: stroke` puts the field colour UNDER the
+   fill, so the mark keeps its full radius and gains a 1.2-unit gap against whatever it grazes
+   — the same trick `.fig .track-case` uses to break a gridline. */
+.wpfig .ev {
+  fill: var(--hue, var(--quiet)); stroke: var(--field); stroke-width: 2.4;
+  paint-order: stroke;
+}
+.wpfig .ev.no-actor, .wpfig .ev.other { fill: none; stroke: var(--quiet); stroke-width: 1.8; }
+.wpfig .ev.over { stroke: var(--chart-line-primary); }
 /* The per-player initial inside the disc: the figure's only per-player
    secondary channel, and the palette measures 10.2 at deutan, which is legal
    only because a channel like this exists. A channel nobody can read is not a
@@ -1140,7 +1168,9 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
    from an S. At 9px it is 6.3px, which is why the marker radii went up with it:
    a disc has to reach r 4.4 to case a glyph that tall, and the figure now draws
    the hue-carrying markers past that. */
-.wpfig .ev-init { fill: var(--field); font-size: 9px; font-weight: 700; letter-spacing: 0; }
+/* 9px gave a 6.3px cap inside a 9px mark and the owner could not read it; 11px in a mark
+   that is now at least 13 across can be read at arm's length, which is the whole point. */
+.wpfig .ev-init { fill: var(--field); font-size: 11px; font-weight: 700; letter-spacing: 0; }
 
 /* THE RISER. At the selected action the vertical move is drawn as an
    engineering dimension line — serifs at both ends, the value in a box on a
@@ -1234,11 +1264,9 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 .round-timeline tr[data-kind="terminal"] td { color: var(--quiet); }
 
 .round-outcome { font-size: var(--fs-data); font-weight: 600; margin-left: var(--sp-2); }
-.round-meta { font-size: var(--fs-data); color: var(--quiet); margin-top: var(--sp-2); }
-.buys { list-style: none; margin: var(--sp-2) 0 var(--sp-3); padding: 0; font-family: var(--mono); font-size: var(--fs-data); color: var(--quiet); }
 
 /* ---- Lateral navigation between match pages -------------------------------
-   Sixty-eight match pages and, until this round, zero links between any two of
+   Every match page and, until this round, zero links between any two of
    them: a reader working through an eight-match evening returned to a
    hundred-row index each time and re-found their place. Two links and a
    position. No thumbnail curve — at 68x20 in --quiet a win probability curve
@@ -1263,7 +1291,10 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 .play:first-child { border-top: none; }
 .play-what { margin: 0; font-family: var(--mono); font-size: var(--fs-data); }
 .play-num { margin: var(--sp-1) 0 0; font-family: var(--mono); font-size: var(--fs-head); }
-.play-ctx { color: var(--quiet); font-size: var(--fs-body); margin: var(--sp-1) 0 0; max-width: 70ch; }
+/* The paragraph of context under each swing is gone; what is left is the score
+   entering the round, which is the one thing the number above it is read against. */
+.play-at { color: var(--quiet); font-family: var(--mono); font-size: var(--fs-label);
+  letter-spacing: .08em; text-transform: uppercase; }
 
 /* ---- Player page ---------------------------------------------------------- */
 .headline { margin-top: var(--sp-4); }
@@ -1384,6 +1415,257 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
   }
 }
 
+/* ---- The ledger waterfall -------------------------------------------------
+   FIVE MOVES AND ONE ESTIMATE, in one figure, which is the only place rule 2's
+   two vocabularies are allowed to meet. A floating bar is a move and takes sign
+   colour; the total is a person's estimate, takes their hue, and wears the
+   interval that says the sum is not known. Nothing here is hue AND sign, and
+   the difference between the two registers is the whole reading.
+
+   Every value is set in the figure, so nothing is hover-only; the titles are
+   the same facts as a sentence. Geometry is build.py's, this file is colour,
+   type and weight — the same division the trajectory above it runs on. */
+/* The null, in the ledger's unit, and the same weight it has in every other
+   instance: drawn OVER the bars it judges, because a rule this heavy under a
+   solid bar is a rule the reader never sees cross anything. */
+.fig-wf .wf-null { stroke: var(--ink); stroke-width: 3; }
+/* Information, not decoration: the connector carries the arithmetic and the
+   separator carries the summary row, so both clear the 3:1 mark floor. */
+.fig-wf .wf-link, .fig-wf .wf-sep { stroke: var(--rule-strong); stroke-width: 1; }
+.fig-wf .wf-bar.pos { fill: var(--up); }
+.fig-wf .wf-bar.neg { fill: var(--down); }
+.fig-wf .wf-bar.zero, .fig-wf .wf-bar.none { fill: var(--quiet); }
+.fig-wf .wf-total { fill: var(--hue, var(--quiet)); }
+/* AN ESTIMATE: the capped dimension line `.rail-iv` was, at the same cap height,
+   under the bar rather than through it. Two claims about one number stay two
+   marks; a line drawn through a solid bar of its own colour fuses them. */
+.fig-wf .wf-iv, .fig-wf .wf-cap { stroke: var(--hue, var(--quiet)); stroke-width: 1; }
+.fig-wf .wf-label { fill: var(--ink); font-size: 12.5px; letter-spacing: .06em; }
+.fig-wf .wf-sub, .fig-wf .wf-note { fill: var(--quiet); font-size: 10.5px; letter-spacing: .06em; }
+/* A number takes sign colour here as it does in every table on this site: the
+   hue on this figure belongs to the bar, never to the digits. */
+.fig-wf .wf-val { fill: var(--quiet); font-size: 12.5px; letter-spacing: .06em; }
+.fig-wf .wf-val.pos { fill: var(--up); }
+.fig-wf .wf-val.neg { fill: var(--down); }
+.fig-wf .wf-hit { fill: transparent; }
+
+/* ============================================================================
+   THE TWO STRIPS OF RESULTS ON THE CARD.
+
+   Two paragraphs came off the card and a strip of figures went under each
+   register in the space they left. The two strips are deliberately THE SAME
+   SHAPE, because what tells them apart is the only thing this object is about:
+   every figure on the left prints a sign and was estimated, every figure on the
+   right was counted and cannot print one. Still no axis, no span and no rule at
+   zero anywhere on the right-hand side.
+   ========================================================================= */
+.pc-strip {
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--rule);
+}
+.pc-strip .lab { margin: 0 0 var(--sp-2); }
+.pc-tally {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5);
+}
+.pc-tally > li { display: flex; flex-direction: column; }
+/* --fs-head and not --fs-display. These are the SECOND figure in their register
+   and a strip that matched the big number would be a second headline: same
+   face, same weight, same negative tracking, one step down. */
+.pc-n {
+  font-family: var(--mono); font-size: var(--fs-head); font-weight: var(--w-strong);
+  letter-spacing: -.01em; line-height: 1.2;
+}
+.pc-k {
+  font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .13em;
+  text-transform: uppercase; color: var(--quiet); margin-top: var(--sp-1);
+}
+/* MORE AIR IN THE ONE OBJECT THE FOUR OF THEM ACTUALLY LOOK AT. --sp-4 was the
+   padding of a card with four figures on its face; there are nine now. */
+.card-reg-est, .card-reg-cnt, .card-strip-block { padding: var(--sp-5); }
+/* And the span took the width the register gained: the mark is the argument on
+   this side, and it was drawn to the measure of a card half that is now wider. */
+.card-ival { max-width: 420px; }
+
+/* ============================================================================
+   THE SIX TABLES A PLAYER PAGE IS MADE OF: five breakdowns and the synergy.
+
+   Scoped to .bt and to nothing else. The match pages share every bare element
+   selector above this, and a sixty-row round ledger wants the opposite of what
+   a three-row breakdown wants.
+
+   THE z COLUMN CAME OFF BOTH OF THEM. A drawn interval at cell scale restated,
+   at lower precision and on a fixed axis the page never names, the two numbers
+   already printed beside it. The uncertainty stayed — it is a column of numbers
+   and it was always the numbers doing the work.
+
+   Which leaves six tables of pure figure, so the hierarchy has to be type.
+   Three registers, keyed off the header class that already travels down its own
+   column: the finding, the width of the finding, and the exposure that explains
+   the width. A reader scanning one column down the page is scanning .bt-find.
+   ========================================================================= */
+.bt-block { margin-top: var(--sp-6); }
+.bt-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--sp-3); margin: 0 0 var(--sp-3);
+}
+.bt-head h3 { margin: 0; }
+/* The row count. It was a sentence under every one of these five headings
+   telling the reader how many rows were about to follow. */
+.bt-count {
+  margin: 0; font-family: var(--mono); font-size: var(--fs-label);
+  font-weight: var(--w-strong); letter-spacing: .13em; text-transform: uppercase;
+  color: var(--quiet); white-space: nowrap;
+}
+
+/* WHOSE TABLE THIS IS, in the one channel this site reserves for a person, and
+   it carries no measurement: the page is that person's page and their name is
+   at the top of it. The same 2px edge the card wears, so the card and the six
+   tables under it read as one object. `p-<short>` was already on these tables —
+   it fed the hue to the interval bars that just came off, and this is what it
+   feeds now. */
+.bt thead th {
+  border-top: 2px solid var(--hue, var(--rule-strong));
+  border-bottom: 1px solid var(--rule-strong);
+  padding: var(--sp-3) var(--sp-3) var(--sp-2);
+}
+/* 6px of vertical padding is right for a sixty-row ledger and wrong for a
+   three-row breakdown, and that is the whole of what "these do not pop" was. */
+.bt tbody td { padding: var(--sp-3); font-size: var(--fs-body); }
+
+/* The column that names the row: full ink, the one weight the rest of the table
+   is not, and a hairline down its right edge so the names read as a spine
+   rather than as the first of six numbers. */
+.bt th.bt-key, .bt td.bt-key { border-right: 1px solid var(--rule); }
+.bt tbody td.bt-key { color: var(--ink); font-weight: var(--w-strong); }
+/* THE FINDING, and it is the largest figure in the table. Nothing sets a colour
+   here on purpose: .pos and .neg colour their own spans and outrank inherited
+   colour, so the third sign channel survives the promotion. */
+.bt tbody td.bt-find { font-size: var(--fs-prose); font-weight: var(--w-strong); }
+/* Its width, one step down and in full ink. The bar went; the estimate did not,
+   and a quiet interval under a loud point estimate would be this site arguing
+   against itself. */
+.bt tbody td.bt-ival { font-size: var(--fs-data); }
+/* The exposure and the match count: the answer to "why is that interval so
+   wide", which is not itself a finding. */
+.bt tbody td.bt-aside { font-size: var(--fs-data); color: var(--quiet); }
+
+/* ---- The round panel ------------------------------------------------------
+   A round is two objects and they answer two questions. .round-timeline is
+   WHAT HAPPENED, in order. .round-ledger is WHAT EACH OF TEN PEOPLE WAS WORTH.
+   The aria-labels have always said so; the layout now does too.
+
+   The ledger was fourteen columns and 1,618px inside a horizontal scroller,
+   with five columns of small signed percentages the reader was expected to add
+   in their head against a sixth. It is eight columns and 1,142px, which fits
+   the 1,144px measure with nothing to scroll. The five parts did not go into a
+   tooltip — they are printed under the bar that draws them, in the same order,
+   at the same precision they always had. */
+.rl-meta {
+  font-family: var(--mono); font-size: var(--fs-data); color: var(--quiet);
+  /* A LABEL STRIP TAKES NO PROSE MEASURE, the same exemption .lab has: it is a
+     <p>, so the 66ch cap broke four labelled numbers over two lines. */
+  max-width: none;
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--sp-2) var(--sp-5);
+  margin: var(--sp-3) 0 var(--sp-4);
+}
+.rl-fact { white-space: nowrap; }
+.rl-key {
+  font-family: var(--mono); font-size: var(--fs-label); font-weight: 600;
+  letter-spacing: .13em; text-transform: uppercase; color: var(--quiet);
+  margin-right: var(--sp-2);
+}
+.rl-key[title] { cursor: help; }
+.rl-meta .rl-val { color: var(--ink); }
+
+/* ---- The ledger row -------------------------------------------------------
+   Roomier on purpose: two lines in the name cell, a bar and its six numbers in
+   the track cell. 6px of padding was sized for a one-line row. */
+.round-ledger tbody td { padding: var(--sp-3); vertical-align: top; }
+.round-ledger thead th, .round-ledger tr.group-head th { white-space: normal; }
+.round-ledger .rl-who { display: block; }
+/* The duel roles wrap now. The rule that stopped them was written for a
+   fourteen-column table where one 73px row made the sheet look ragged; this
+   cell is two lines tall on every row it appears in. */
+.round-ledger .duels { display: block; margin-top: 3px; white-space: normal; }
+.round-ledger .tag + .tag { margin-left: 0; }
+.round-ledger .tag { display: inline-block; margin-right: var(--sp-2); }
+
+/* THE TRACK. It is a `z` column, so the null at zero is the same unbroken
+   painted vertical every signed column on this site gets, and the header's bold
+   0 sits exactly on it. The cell keeps zero horizontal padding — that is what
+   makes the bar's own 50% land on the painted rule — so the numbers under the
+   bar carry their own inset instead. */
+.round-ledger th.z, .round-ledger td.z { width: 40%; min-width: 316px; }
+.round-ledger td.z { text-align: left; padding: var(--sp-3) 0; }
+.round-ledger .rl-parts { display: block; padding: var(--sp-2) var(--sp-3) 0; }
+
+/* THE STACK. Positives right of the null, negatives left, in a fixed order.
+   Nothing here identifies a segment by colour: --up/--down are the direction a
+   probability moved and the four hues are people, so the only channels left are
+   position in the stack and height. The two half-height segments are the two
+   the payload itself calls bookkeeping — the alive clock, split equally across
+   the survivors, and the centring term against the rest of the round. Full
+   height is what the player did. Both take currentColor from the sign class the
+   renderer put on them, which is the same --up/--down pair contrast.py already
+   guards on the field, the well and both team washes. */
+.rl-bar { position: relative; display: block; height: 20px; }
+.rl-seg { position: absolute; top: 5px; height: 10px; background: currentColor; }
+.rl-seg.is-book { top: 7px; height: 6px; }
+/* THE NET, and it is a third mark because a two-armed stack does not show its
+   own total: MWPA is the difference between the arms, not the end of either.
+   Taller than the segment band at both ends, so it never vanishes into an arm
+   of its own sign colour. Same geometry and the same job as .ival-point. */
+.rl-net { position: absolute; top: 0; height: 20px; width: 3px; margin-left: -1.5px; background: currentColor; }
+/* A stack that ran past the pinned axis, flagged at the end it ran off — the
+   same dotted edge .ival uses, for the same reason. */
+.rl-bar[data-clipped~="lo"] { border-left: 1px dotted var(--quiet); }
+.rl-bar[data-clipped~="hi"] { border-right: 1px dotted var(--quiet); }
+
+/* The six numbers, in the order the bar stacks them. This is the key: there is
+   no legend, because a legend for six segments that no colour may name is a
+   second thing to learn, and the numbers have to be printed anyway. */
+.rl-part { display: inline-block; margin-right: var(--sp-4); white-space: nowrap; }
+.rl-part .rl-key { margin-right: var(--sp-1); }
+.rl-part .num { font-size: var(--fs-label); }
+
+/* ---- The round timeline ---------------------------------------------------
+   Unchanged in shape: five columns, the round's own curve read down, and the
+   footer that accounts for the clock nodes too small for `dp` to print.
+
+   Two things are new. The victim rides in the actor's cell, so a kill row says
+   the whole event instead of half of it. And ONLY AN ACTION IS SOMETHING
+   SOMEBODY DID — that was carried by --quiet on the other three kinds and by
+   nothing else, so an action row now also carries a 2px inset rule at its left
+   edge, the same device `tr.is-cursor` uses, one token quieter. It is an inset
+   rule and not a shadow: nothing here casts. */
+.round-timeline thead th { white-space: normal; }
+.round-timeline tbody tr[data-kind="action"] td:first-child { box-shadow: inset 2px 0 0 var(--rule-strong); }
+/* The spaces are in the text, not in the padding, so the cell extracts as
+   `MLK → Anonymous#3da6d8`. */
+.rl-vs { color: var(--quiet); }
+
+/* The match figure's player key draws BOTH channels the plot uses — the hued
+   vertical and the marker with its initial in it. The 26x14 box the rule
+   swatches use cannot hold a mark at plot size, so this one is 34x20 and the
+   mark inside it is the same radius the plot draws. */
+.legend-key .swatch.wpx-key { width: 34px; height: 20px; }
+.legend-key .swatch.wpx-key .wp-act { stroke-width: 4.5; }
+
+/* THE CONTROL BAR. What the line means on the left, what x measures on the
+   right, one strip. The toggle is a .chip pair and nothing more: the site
+   already spells "either on or off" that way, and a second spelling is how two
+   controls stop agreeing. It changes an axis, never a value. */
+.wpx-bar {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--sp-3) var(--sp-4); flex-wrap: wrap; margin: 0 0 var(--sp-3);
+}
+.wpx-bar .fig-legend { margin: 0; flex: 1 1 22em; }
+.wpx-modes { display: flex; gap: var(--sp-1); flex: none; }
+.wpx-mode { white-space: nowrap; }
+
 /* ---- Footer --------------------------------------------------------------- */
 .site-foot {
   max-width: var(--maxw); margin: 0 auto;
@@ -1401,22 +1683,15 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
    the columns narrow and the interval text moves under the name, and the
    front page's finding is never a drag gesture. */
 @media (max-width: 900px) {
-  :root { --rail-label: 150px; --rail-nums: 128px; --fs-display: 27px; --fs-head: 17px; }
+  :root { --fs-display: 27px; --fs-head: 17px; }
 }
 @media (max-width: 640px) {
   :root {
-    --rail-label: 104px; --rail-nums: 84px;
     --fs-display: 23px; --fs-prose: 15.5px; --fs-data: 12px; --fs-label: 10px;
   }
   .page { padding-left: var(--sp-3); padding-right: var(--sp-3); }
   .site-head, .site-foot { padding-left: var(--sp-3); padding-right: var(--sp-3); }
   .fig, .figure { padding: var(--sp-3); }
-  .rail-label, .rail-track, .rail-nums { padding-top: var(--sp-2); padding-bottom: var(--sp-2); }
-  /* Five ticks need about 200px and the track is 163px here, so the quarter
-     ticks go and the two ends and the null stay. Losing them costs nothing:
-     the axis is linear and its range is printed in the note above it, while
-     the collision was overprinting the null's own label. */
-  .rail-axis-ticks span.is-quarter { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1427,7 +1702,7 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
   .site-head, .theme-toggle, .crumb, .round-strip, .round-tabs, .fig-legend,
   .wp-tip, .idx-filter { display: none; }
   body { background: #fff; color: #000; }
-  .fig, .figure, .scroll, .table-wrap, .rail { break-inside: avoid; }
+  .fig, .figure, .scroll, .table-wrap { break-inside: avoid; }
   .fig-data[open] > summary { list-style: none; }
 }
 

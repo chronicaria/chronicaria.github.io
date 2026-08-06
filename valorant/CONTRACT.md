@@ -10,7 +10,7 @@ change that emits it. The view hardcodes no definition, no format and no rule �
 |---|---|
 | `valorant/payload/site.json` | front page, tracker, match index |
 | `valorant/payload/player/<short>.json` | one per focal player (4) |
-| `valorant/payload/match/<match_id>.json` | one per match (78) |
+| `valorant/payload/match/<match_id>.json` | one per match |
 | `valorant/build.py` | reads payload, emits static HTML with the JSON inlined |
 
 Working data (already generated, read-only inputs):
@@ -18,9 +18,9 @@ Working data (already generated, read-only inputs):
 ```
 $LAB  = ~/Desktop/Rome/Sports/Esports/Valorant/valorant-impact-lab
 $WORK = $LAB/data/quad_work_2026-08-04
-  $WORK/ids.txt                              78 match ids, one per line
-  $WORK/rwpa_crossfit_ledger.csv             118,148 rows, the act slice of the v15 ledger
-  $WORK/rwpa_crossfit_rounds.csv             1,617 rounds
+  $WORK/ids.txt                              one match id per line
+  $WORK/rwpa_crossfit_ledger.csv             the act slice of the v15 ledger, one row per round-player
+  $WORK/rwpa_crossfit_rounds.csv             one row per round
   $WORK/rwpa_crossfit_event_values.csv       13,621 events, action-by-action probabilities
   $WORK/out/mwpa_round_players.csv           THE core artifact: one row per (match, round, player)
   $WORK/out/mwpa_player_summary.csv          648 players, MWPA rate with BCa interval
@@ -63,10 +63,10 @@ non-focal player across matches**, and never build a page for one.
   constant rescale of the bootstrapped rate — rounds per match runs 19.5 to 21.2 across the four —
   and BCa is transformation-respecting, so the endpoints carry across exactly and `covers_zero` is
   unchanged. No second bootstrap. `+6.4%` reads as six extra wins per hundred matches.
-- `rate`, per 100 rounds, is the estimator's own unit. It survives on **methods**, and on the
+- `rate`, per 100 rounds, is the estimator's own unit. It survives on the
   **breakdown and synergy tables**, whose cells cannot be divided by a match count — see the rule
   under `player/<short>.json`. It appears nowhere else: no headline, no tracker, no index, no
-  component rail. `rwpa` and `rwpa_centered` stay in the working data and stay out of every view.
+  component waterfall. `rwpa` and `rwpa_centered` stay in the working data and out of every view.
 - `leverage` is the raw swing `L` in [0, 0.5]. `li` is `L / mean_leverage` — the display index only,
   never multiplied into anything. `mean_leverage = 0.16427272872711246`.
 - An interval is 95% BCa, clustered on match, 100,000 resamples, seed 20260726.
@@ -103,8 +103,8 @@ non-focal player across matches**, and never build a page for one.
       // measures the act's round structure, not the player. `cav.classic_is_the_free_pistol`.
       "free_pistol": "Classic",
       "card_top_n": 3,
-      // The two credit types the component rail draws as ONE signed row. The view reads the
-      // names from here so the sentence under the rail never chooses them.
+      // The two credit types the component waterfall draws as ONE signed row. The view reads
+      // the names from here, for the sum assertion `build_player` refuses to ship without.
       "duel_parts": ["kill_credit", "death_debit"],
       "duel_key": "duel_credit"
     },
@@ -227,14 +227,15 @@ Rules that are not optional:
 - **A component is the exception, and the view converts it.** A component's rounds *are* the
   headline's rounds — trzzcko's kill credit is `+3.092` over the same 163 rounds that give the
   `+1.8968` rate — so `total / matches` sums to `impact` to 1e-9 on all four players and the BCa
-  endpoints take the same positive constant `impact_lo` takes. The component rail is drawn per
+  endpoints take the same positive constant `impact_lo` takes. The component waterfall is per
   match. The payload still carries `rate`; the conversion is the view's and is reversible.
 - `meta.dict` carries the format for every field and nothing else may decide one. Every field whose
   unit is **match win probability points** is a percentage: `mwpa` and the six component keys —
   `kill_credit`, `death_debit`, `plant`, `defuse`, `alive_clock`, `lobby_adjustment` — the four
   grains `grain_action`, `grain_round`, `grain_match`, `grain_act`, and the two side splits
-  `attack_mwpa` and `defense_mwpa` are `+.2%`; `dp` is `+.1%` because it is a hover readout on a
-  curve carrying twelve thousand of them. `impact` is `+.1%`. `rate` and `total` keep `+.3f` —
+  `attack_mwpa` and `defense_mwpa` are `+.2%`. `dp` and `impact` are `+.2%` too, overridden in
+  build.py's `DECIMALS` on 2026-08-06: the payload writes both at `+.1%`, and one decimal cannot
+  resolve two of these four players from each other. `rate` and `total` keep `+.3f` —
   they are the only two in other units, per 100 rounds and matches added. The six that were `+.4f`
   were the same quantity as `mwpa` written as a raw decimal, and methods.html contradicted them
   out loud: it named the shared grain ruler as 70.66% while the rail under it drew 0.7066.
@@ -335,14 +336,14 @@ Rules:
 4. **No table draws a magnitude bar.** The number is the number: a bar beside a signed number
    restated a fact the cell already printed, at a coarser precision than the cell has. What a
    table may still draw is an **interval**, which is not a magnitude — its width is a quantity
-   that appears nowhere else in the row. The solid-bar-from-the-null mark survives on the season
-   tracker, in SVG.
+   that appears nowhere else in the row, and the round ledger's stacked bar, which draws a shape
+   no cell holds. The solid-bar-from-the-null mark survives in the component waterfall, in SVG.
 5. **No `Rounds` column and no `Rounds` stat row, anywhere.** The count stays only where it is
    load-bearing prose: inside the covers-zero sentence, which is the sentence that tells a reader
    why an interval is as wide as it is and is the reason the Exposure section could be deleted;
    in the `Exposure` cell's `title`, where it is said against the threshold; in the card's
    `rounds_per_match`, which is what a match *means*; and in the footer, which prints the act's
-   size on all 80 pages.
+   size on every page. The count of pages is not stated here: `main()` asserts it.
 6. Nothing hardcodes a count. Every number comes from the payload.
 7. Every page opens off disk. No `fetch`, no CDN, no web font that blocks render.
 8. **An image identifies; it never measures.** Three families ship, and these are their homes:

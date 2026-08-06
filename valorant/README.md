@@ -1,7 +1,7 @@
 # MWPA — four players, one act
 
 A static site over **impact per match**: how much of a match win a player's credited actions are
-worth, per match played. Four focal players, one act (e11a4), 78 matches, 1,617 rounds, every one
+worth, per match played. Four focal players, one act (e11a4), 83 matches, 1,713 rounds, every one
 of them scored.
 
 Open `index.html`. That is the whole install — no framework, no build step, no server, no network,
@@ -17,7 +17,8 @@ carries that dashboard's palette tables, unread, because surviving comments quot
 `impact = MWPA / matches played`, shown as a percentage. `+1.6%` reads as *worth about one and a
 half extra wins per hundred matches*. It is the per-100-rounds rate rescaled by the player's own
 rounds per match — a positive constant — so the BCa endpoints carry across unchanged and so does
-`covers_zero`. The per-100-rounds rate survives on `methods.html` as the estimator's own unit.
+`covers_zero`. The per-100-rounds rate survives on the breakdown tables of a player page as the
+estimator's own unit.
 
 **The result is a null.** All four intervals cover zero, and the widest is many times the entire
 spread of the order they are ranked in. The rank is a sort order; the interval is the finding.
@@ -27,7 +28,7 @@ spread of the order they are ranked in. The rank is a sort order; the interval i
 ```bash
 python3.12 payload_site.py     # payload/site.json + payload/player/*.json  (needs numpy/pandas)
 python3.12 payload_match.py    # payload/match/<match_id>.json, one per match
-python3 build.py               # 84 pages: index, methods, 78 match, 4 player
+python3 build.py               # index, one page per match, one per player
 python3 contrast.py            # the colour and artwork gate; must print PASS
 ```
 
@@ -35,7 +36,7 @@ python3 contrast.py            # the colour and artwork gate; must print PASS
 of any file. The assertions in `main()` are the contract — if one fires, the code that fired it is
 wrong, and relaxing it to make a build pass is never the fix.
 
-`--rescale` re-pins the magnitude-bar axes in `payload/scale.json`. They are pinned rather than
+`--rescale` re-pins the fixed mark axes in `payload/scale.json`. They are pinned rather than
 recomputed so that adding a match does not move every bar on every page; only `impact` widens on
 its own, and only outward, because a clipped interval on the figure that exists to say the
 intervals are wide is the one bar this site cannot draw.
@@ -56,4 +57,7 @@ No opponent is named. Every player other than the four is a match-scoped pseudon
 appearing in two matches carries two unrelated names and nothing links them. No career total
 appears anywhere and nothing is pooled across acts. Every page ships
 `<meta name="robots" content="noindex, nofollow">`, and `/valorant/` is deliberately absent from
-`sitemap.xml` — which is not the same as being private, and `methods.html` says so.
+`sitemap.xml` — which is not the same as being private, and the footer of every page says so.
+
+There is no methods page. It was deleted on 2026-08-06: the site is public and the model behind
+these numbers is not. The one sentence each page needed from it is printed on that page.

@@ -5,38 +5,44 @@ Run:  python3 build.py        (from anywhere; paths are self-relative)
 
 Reads valorant/payload/ and writes, beside this file:
 
-    index.html            four ranked cards, the tracker container, the match index
+    index.html            the season tracker, the offense/defense figure, the match index
     m/<match_id>.html     one per match, with that match's payload inlined
     p/<short>.html        one per focal player
-    methods.html          the metric, the interval, the caveats, the field list
     robots.txt
+
+THERE IS NO METHODS PAGE. It was deleted on 2026-08-06 because this site is public and the
+model behind these numbers is not, and `main()` unlinks the stale file. Every caveat a page
+depends on is now printed on that page, from `meta.cav` through `CAV_ON_PAGE`, in the
+payload's own words — a paraphrase written here would be this file inventing a caveat.
 
 Every page inlines its own JSON as `window.QUAD` in a script tag, so every page opens
 off file:// with no fetch. On the front page `window.QUAD` is site.json, with its own
-keys at the root; a player page adds that player's block beside them. A match page
-carries only its own match payload, under `match`, with the meta block the figure needs
-to format a number beside it. No page carries a second match.
+keys at the root plus `od`, both halves of every player-match; a player page adds that
+player's block beside them. A match page carries only its own match payload, under `match`.
+No page carries a second match.
 
-Nothing here hardcodes a definition, a threshold or a count. Labels, formats,
-definitions, the thin-cell floor and the caveat texts all come from `meta.dict`,
-`meta.gate` and `meta.cav`. The two things this file does decide are which fields go in
-which column and the percentile the magnitude bars fill against, and both are stated on
-the methods page.
+Nothing here hardcodes a definition, a threshold or a count. Labels, formats, definitions,
+the thin-cell floor and the caveat texts all come from `meta.dict`, `meta.gate` and
+`meta.cav`. Four things this file does decide, and they are stated where they are made:
+which fields go in which column, the percentile a fixed mark axis fills against
+(`BAR_PERCENTILE`), the display precision of the two fields written at one decimal in the
+payload and two everywhere on this site (`DECIMALS`), and how a person's name is written
+(`SHORT_NAME`).
 
 The presentation layer is split: this file emits semantic HTML and the data-driven
-inline widths, `quad-site.css` styles it, and `quad-app.js` fills `[data-tracker]` and
-`[data-match-figure]`. Both of those live beside this file and belong to another build.
-The class vocabulary they can rely on:
+inline widths, `quad-site.css` styles it, and `quad-app.js` fills `[data-tracker]`,
+`[data-offdef]` and `[data-match-figure]`. Both of those live beside this file and belong
+to another build. The class vocabulary they can rely on:
 
-    .cards .card                front-page player cards
-    .mag .mag-half .mag-zero .fill      magnitude bar, zero line in the middle
-    .ival .ival-span .ival-point .ival-zero      interval bar on the same fixed axis
-    .pos .neg .zero .none       sign classes, on numbers and on fills
+    .ival .ival-span .ival-point .ival-zero      interval bar on a fixed axis
+    .pos .neg .zero .under .none                 sign classes, on numbers and on marks
     .num                        any figure; monospace, right aligned
-    .tbl .scroll                data table, and its horizontal scroll container
-    .facts .cavs                definition lists
-    .round-strip .round-index .round-tab .round-panel   round index; panels are visible without JS
-    .marker .tag .fallback .note .cav .standfirst       inline markers and prose
+    .tbl .bt .scroll            data table, the player page's own table, and the scroller
+    .fig .fig-wf .fig-track     a figure this file draws in SVG
+    .rl-*                       the round ledger and its stacked bar
+    .facts                      definition list
+    .round-strip .round-index .round-tab .round-panel   round index; panels visible without JS
+    .marker .tag .fallback .note .cav            inline markers and prose
 
 The match figure is one continuous win probability curve inside `[data-match-figure]`,
 and it is also the round selector: it announces a selection by dispatching `quad:round`
@@ -72,7 +78,7 @@ ARROWS = {"prev": "←", "next": "→"}
 GLYPH = {"pos": "", "neg": "", "zero": MIDDOT, "none": EM}
 
 # Magnitude bars fill against this percentile of the whole act's own distribution of the
-# quantity being drawn, never against the largest row on screen. Stated on the methods page.
+# quantity being drawn, never against the largest row on screen.
 BAR_PERCENTILE = 90
 # The gate a single action has to clear before it gets a marker of its own on the
 # win probability curve, and the axis that marker is sized against. See bar_scales.
@@ -80,10 +86,9 @@ MARKER_PERCENTILE = 99
 
 # Fields the payload's own dict does not carry, because they only exist at round grain.
 # `rwpa`, `rwpa_centered` and `team` came out with the columns that printed them. The payload
-# still carries all three and the methods glossary note is derived from this map, so a label
-# left here would have told the reader about columns no page has.
+# still carries all three, so a label left here would name a column no page has.
 FALLBACK_LABEL = {
-    "duel": "Duel", "li": "Leverage index",
+    "duel": "Duel", "li": "Leverage index", "centering": "Centering",
     "loadout": "Loadout", "credits": "Credits", "kills": "Kills", "deaths": "Deaths",
     "assists": "Assists", "damage": "Damage", "round_number": "Round",
     "lobby_adjustment": "Lobby adjustment",
@@ -101,19 +106,23 @@ KINDS = ["round_start", "clock", "action", "terminal"]
 
 BREAKDOWN_ORDER = ["agent", "map", "side", "buy_class", "weapon"]
 # The two payload caveats that used to print under `by side` and `by buy class` are off the
-# player page. Both are on methods, in full, with every other caveat; what a breakdown needs
-# beside it is the one number that explains its own width, and that number is in meta.gate.
-# Only the caveats a page still prints. Four came out of this map with the paragraphs they
-# fed — act scope, the ranking decision, the component sum, the ordered synergy — because a
-# caveat repeated above every figure is a caveat nobody finishes. Every one of them is on
-# methods, in full, and the pages that dropped them kept the one sentence that was load-bearing.
+# player page and are printed nowhere now: what a breakdown needs beside it is the one number
+# that explains its own width, and that number is in meta.gate. A caveat repeated above every
+# figure is a caveat nobody finishes.
+#
+# WHICH CAVEATS A PAGE PRINTS, and after the methods page was deleted this map is the only
+# thing standing between the payload's twenty-nine and none of them reaching a reader. Each of
+# these travels with the figure it is about, in the payload's own words rather than a paraphrase
+# — the abilities one because the round timeline prints a revive that no ledger credits, the
+# curve one because the step at a round boundary is a real move nobody made, the noindex one
+# because it is the disclosure, and the assets one because it is Riot's attribution.
 CAV_ON_PAGE = {
     "opponents": "pseudonymous_opponents",
     "abilities": "no_abilities",
-    "thin": "thin_cells_shown",
-    "single_match": "single_match_interval",
-    "causal": "descriptive_not_causal",
     "curve": "wp_curve_boundary_seam",
+    "noindex": "noindex_is_not_access_control",
+    "causal": "descriptive_not_causal",
+    "assets": "riot_assets",
 }
 
 META = {}
@@ -124,6 +133,25 @@ SCALE = {}
 ASSETS = {}
 ART = {}
 RESULT = {}
+NAME = {}
+
+# HOW A PERSON IS WRITTEN, and there are two kinds of person here. A focal player is somebody
+# the reader knows, so the Riot tag says nothing and comes off; one of the four is sixteen
+# characters wide in a column four numbers wide and gets an initialism. An OPPONENT is a
+# pseudonym whose tag IS the identity — six `Anonymous` rows in one match are told apart by
+# nothing else — so those names pass through whole. The map is built in main() from the
+# payload's own player list, which is why this file names no opponent and no rule about one.
+SHORT_NAME = {"MartinLutherKing": "MLK"}
+
+
+def display_name(name):
+    return NAME.get(name, name)
+
+
+# Two decimals on every quantity in match win probability points. `mwpa` already carried them,
+# so a match printed +2.09% while the season it belongs to printed +6.4%: the same unit at two
+# precisions, one of which cannot resolve two of these four players from each other.
+DECIMALS = {"impact": "+.2%", "dp": "+.2%"}
 
 
 def result_word(match_id, won):
@@ -154,6 +182,28 @@ def css_px(*tokens):
     the lobby table draws it in HTML and they are one pair.
     """
     sheet = (HERE / "quad-site.css").read_text(encoding="utf-8")
+    # AND THE SHEET IS CHECKED FOR THE ONE DEFECT NOTHING ELSE CATCHES. CSS comments do not
+    # nest: a `/*` inside a comment body is ignored and the FIRST `*/` closes it, so a stray
+    # authoring note containing one silently eats every rule between it and the next `*/`. That
+    # is exactly how the waterfall's null rule stopped rendering on all four player pages while
+    # every gate on this project still passed — contrast.py reads colour tokens and never parses
+    # a rule, and a browser reports nothing. This file already opens the stylesheet to read a
+    # length out of it, so it is the cheapest place to refuse one.
+    at = 0
+    while True:
+        opened = sheet.find("/*", at)
+        if opened < 0:
+            break
+        closed = sheet.find("*/", opened + 2)
+        if closed < 0:
+            raise AssertionError("quad-site.css has an unterminated comment at line %d"
+                                 % (sheet.count("\n", 0, opened) + 1))
+        if "/*" in sheet[opened + 2:closed]:
+            raise AssertionError(
+                "quad-site.css nests a comment at line %d: CSS comments do not nest, so every "
+                "rule from there to the next */ is dead"
+                % (sheet.count("\n", 0, opened) + 1))
+        at = closed + 2
     out = {}
     for token in tokens:
         found = re.search(re.escape(token) + r":\s*(\d+)px", sheet)
@@ -267,7 +317,7 @@ def bar_scales(site, players, matches):
         for cell in player["synergy"]:
             if cell["rate"] is not None:
                 rate.extend([abs(cell["rate"]), abs(cell["lo"]), abs(cell["hi"])])
-        # The component rail is drawn per match now, so its axis is in per-match units too. The
+        # The component waterfall is drawn per match, so its axis is in per-match units too. The
         # p90 of these seventy-two rate endpoints is 2.056, so a rail axis derived from the rates
         # would be 2.056 wide against rows printing +38.6%.
         for cell in player["components"].values():
@@ -454,13 +504,19 @@ def node_type_label(token):
     return text[:1].upper() + text[1:]
 
 
-def as_date(iso):
+def as_datetime(iso):
     for pattern in ("%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ"):
         try:
-            return datetime.strptime(iso, pattern).strftime("%Y-%m-%d")
+            return datetime.strptime(iso, pattern)
         except ValueError:
             continue
     raise ValueError("unparseable timestamp: %s" % iso)
+
+
+def as_long_date(iso):
+    """`August 6`. Every match in this act is 2026, so the year is a column of one value."""
+    when = as_datetime(iso)
+    return "%s %d" % (when.strftime("%B"), when.day)
 
 
 # ------------------------------------------------------------------ sign and magnitude
@@ -490,14 +546,37 @@ def smallest_printable(key):
     return 10.0 ** (-(decimals + (2 if m.group(2) == "%" else 0)))
 
 
+def signed_text(key, value):
+    """The three states of a signed number, as `(text, class)`, before a medium sets them.
+
+    HTML gets a span and SVG gets a `<text>`, and neither of them may decide this on its own:
+    the em dash, the middot and the under-precision reading are one rule, and a second copy of
+    it in the figure code is how the figure starts writing `+0.00%` for a number the table
+    refuses to. `signed()` is this plus a span; the waterfall is this plus a `<text>`.
+    """
+    if "+" not in spec_for(key):
+        raise AssertionError(
+            "signed(%s) on format %s, which prints no sign: the sign character is the "
+            "non-colour channel and this field has none" % (key, spec_for(key)))
+    kind = sign_of(value)
+    if kind == "none":
+        return EM, "none"
+    if kind == "zero":
+        return MIDDOT, "zero"
+    step = smallest_printable(key)
+    if step is not None and abs(value) < step:
+        return "<%s" % magnitude(key, step), "under"
+    return num(key, value), kind
+
+
 def signed(key, value, absent_reason="not measured"):
     """A number carrying its sign three ways: the printed sign, a colour class, and — where
     a bar is drawn beside it — which side of the null that bar hangs off.
 
     HOUSE RULE 2, AND WHERE ITS THREE CHANNELS NOW ARE. The direction arrows are gone; the
     `+` or `-` the format itself prints is the channel that does not depend on colour, so
-    this refuses any key whose format has no sign flag rather than trusting that every one
-    of them has one. Colour is never alone and cannot become alone by a payload edit.
+    `signed_text` refuses any key whose format has no sign flag rather than trusting that
+    every one of them has one. Colour is never alone and cannot become alone by a payload edit.
 
     Three states, and they are three different facts. An absent value is an em
     dash with its reason. An exact zero is a middot: measured, and neither
@@ -507,33 +586,18 @@ def signed(key, value, absent_reason="not measured"):
     cannot support, and printing an em dash would claim the value is missing
     when it is not. `meta.cav.measured_zero_at_display_precision` is the reason.
     """
-    if "+" not in spec_for(key):
-        raise AssertionError(
-            "signed(%s) on format %s, which prints no sign: the sign character is the "
-            "non-colour channel and this field has none" % (key, spec_for(key)))
-    kind = sign_of(value)
+    text, kind = signed_text(key, value)
     if kind == "none":
-        return '<span class="num none" title="%s">%s</span>' % (esc(absent_reason), EM)
+        return '<span class="num none" title="%s">%s</span>' % (esc(absent_reason), esc(text))
     if kind == "zero":
-        return '<span class="num zero" title="an exact zero, measured">%s</span>' % MIDDOT
-    step = smallest_printable(key)
-    if step is not None and abs(value) < step:
+        return '<span class="num zero" title="an exact zero, measured">%s</span>' % esc(text)
+    if kind == "under":
         return ('<span class="num under" title="measured, and smaller than the smallest number '
-                'this field is written to">&lt;%s</span>') % esc(magnitude(key, step))
+                'this field is written to">%s</span>') % esc(text)
     # No empty element where the arrow used to be: an empty `.glyph` span still carries the
     # stylesheet's own margin and would print a gap between the sign and the number.
     glyph = ('<span class="glyph" aria-hidden="true">%s</span>' % GLYPH[kind]) if GLYPH[kind] else ""
-    return '<span class="num %s">%s%s</span>' % (kind, glyph, esc(num(key, value)))
-
-
-def ledger_cell(key, value, absent_reason="not credited in this round"):
-    """Round-ledger figure. An exact zero is a measured zero and reads as a middot."""
-    if value is None:
-        return '<span class="num none" title="%s">%s</span>' % (esc(absent_reason), EM)
-    if value == 0:
-        return '<span class="num zero" title="no %s in this round">%s</span>' % (
-            esc(label_for(key).lower()), MIDDOT)
-    return signed(key, value)
+    return '<span class="num %s">%s%s</span>' % (kind, glyph, esc(text))
 
 
 # NO MAGNITUDE BAR REACHES A TABLE ANY MORE, so `mag_bar` and `spoken` — the accessible name
@@ -602,21 +666,6 @@ def null_verdict(covers):
     return "%s the null" % ("covers" if covers else "excludes")
 
 
-def covers_zero_sentence(row, rounds_key="rounds"):
-    """The wording the interval drives, per the payload's own flag."""
-    rounds = row.get(rounds_key)
-    if row.get("covers_zero") is None:
-        return "There is no interval here, because there are no rounds to resample."
-    if row["covers_zero"]:
-        return ("The interval covers zero: %s rounds do not separate this from no effect at "
-                "all." % count(rounds))
-    if row.get("matches") == 1:
-        return ("The interval excludes zero, and it should not be read that way: every one "
-                "of these %s rounds comes from a single match, so the match-clustered "
-                "bootstrap has one cluster and nothing to vary." % count(rounds))
-    return "The interval excludes zero on %s rounds." % count(rounds)
-
-
 # ---------------------------------------------------------------------------- the rail
 #
 # THE NULL RULE. One continuous line of full-strength ink at the value that means
@@ -645,75 +694,6 @@ def clip_flag(lo, hi, scale):
     if hi is not None and hi > scale:
         ends.append("hi")
     return ' data-clipped="%s"' % " ".join(ends) if ends else ""
-
-
-def rail_estimate(point, lo, hi, scale):
-    """An ESTIMATE: a capped dimension line, with the point estimate a notch."""
-    if lo is None or hi is None:
-        return '<span class="rail-track-inner"></span>'
-    left, right = axis_x(lo, scale), axis_x(hi, scale)
-    clipped = clip_flag(lo, hi, scale)
-    return (
-        '<span class="rail-track-inner"%s>'
-        '<span class="rail-iv" style="left:%.2f%%;width:%.2f%%">'
-        '<span class="cap lo"></span><span class="cap hi"></span></span>'
-        '<span class="rail-point" style="left:%.2f%%"></span></span>'
-    ) % (clipped, left, max(right - left, 0.4), axis_x(point, scale))
-
-
-# `rail_magnitude` and `rail_width` are gone too. Both drew a solid bar from the null on a
-# rail, and their two callers were the standings rail on the front page and the four-grain
-# rail on a player page, neither of which exists. The mark type itself survives on the season
-# tracker, where quad-app.js draws it in SVG: one match's own MWPA, hanging off the same null.
-
-
-def rail_axis(scale, unit_label, key):
-    """The rail's own axis, on the rail's own grid, with the null named on it.
-
-    `key` is the field whose format writes the ticks. Three rails run on three quantities and
-    the axis has to be written in the unit of the one it is under. It has NO default: the
-    default was `rate`, and it was what put +.3f ticks under a grain rail whose rows are
-    written +.4f and under a standings rail whose rows are written +.1%. A caller that forgets
-    the unit now fails to build instead of printing the old headline's format."""
-    steps = [-scale, -scale / 2.0, GATE["null_rate"], scale / 2.0, scale]
-    # The two quarter ticks are marked so the narrow layout can drop them. At
-    # 375px the track is 163px wide and five mono labels need about 200px, so
-    # all five ran into each other and the null's own name was overprinted by
-    # the numbers on either side of it. The ends and the null survive, which
-    # is the whole axis: a range and the value it is read against.
-    quarters = (steps[1], steps[3])
-    ticks = "".join(
-        '<span%s style="left:%.2f%%;transform:translateX(%s)">%s</span>' % (
-            ' class="is-null"' if value == GATE["null_rate"]
-            else ' class="is-quarter"' if value in quarters else "",
-            axis_x(value, scale),
-            "0" if value == steps[0] else "-100%" if value == steps[-1] else "-50%",
-            # BOTH ENDS SIGNED. The right half printed through `magnitude`, so an axis running
-            # "-23.3% ... THE NULL ... 23.3%" sat one line under a standfirst that writes the
-            # same two numbers as "-23.3% to +23.3%", and under rows whose whole format rule is
-            # that the sign always prints. The tracker's own y axis already writes "+10.0%".
-            esc(label_for("null").upper()) if value == GATE["null_rate"]
-            else esc(num(key, value)))
-        for value in steps)
-    return ('<div class="rail-axis"><span class="rail-axis-unit lab">%s</span>'
-            '<span class="rail-axis-ticks" aria-hidden="true">%s</span></div>'
-            ) % (esc(unit_label), ticks)
-
-
-def rail_row(label_html, track_html, nums_html, cls=""):
-    return ('    <div class="rail-row%s">\n'
-            '      <div class="rail-label">%s</div>\n'
-            '      <div class="rail-track">%s</div>\n'
-            '      <div class="rail-nums">%s</div>\n'
-            '    </div>' % (" " + cls if cls else "", label_html, track_html, nums_html))
-
-
-def rail(rows, cls="", null_f=None):
-    """One rail, and one null rule through every row of it."""
-    style = ' style="--null-f:%.5f"' % null_f if null_f is not None else ""
-    return ('  <div class="rail%s"%s>\n'
-            '    <div class="rail-track-layer" aria-hidden="true"></div>\n%s\n  </div>'
-            ) % (" " + cls if cls else "", style, "\n".join(rows))
 
 
 # The marker column is gone. It carried two flags — "thin" and "one match" —
@@ -906,8 +886,7 @@ def facts(pairs):
 def nav_html(site, root, active):
     links = [("index.html", "Overview", "index")]
     for entry in site["players"]:
-        links.append(("p/%s.html" % entry["short"], entry["name"], entry["short"]))
-    links.append(("methods.html", "Methods", "methods"))
+        links.append(("p/%s.html" % entry["short"], display_name(entry["name"]), entry["short"]))
     out = []
     for href, label, key in links:
         current = ' aria-current="page"' if key == active else ""
@@ -915,15 +894,21 @@ def nav_html(site, root, active):
     return "\n".join(out)
 
 
-def footer_html(root):
+def footer_html():
+    # THE DISCLOSURE, IN THE PAYLOAD'S OWN WORDS. It used to be a link to the methods page,
+    # and when that page went the clause became a paraphrase written here — which is the one
+    # thing this file is not allowed to do with a caveat. Three of them ship on every page now:
+    # what "not indexed" does and does not mean, that the credits are descriptive and not
+    # causal, and whose artwork this is.
     return (
         '  <p class="scope">Act %s. %s matches, %s rounds, %s round-players, %s distinct '
         'players. Release %s, built %s.</p>\n'
-        '  <p class="disclosure">Not indexed, which is not the same as not public: '
-        '<a href="%smethods.html#caveats">the caveats say what that means</a>.</p>'
+        '  <p class="disclosure">%s</p>\n'
+        '  <p class="disclosure">%s %s</p>'
     ) % (esc(META["act"]), count(META["matches"]), count(META["rounds"]),
          count(META["round_players"]), count(META["players"]), esc(META["release"]),
-         esc(META["generated_at"]), root)
+         esc(META["generated_at"]), prose(cav("noindex")),
+         prose(cav("causal")), prose(cav("assets")))
 
 
 def icons_toggle_html(has_icons):
@@ -966,7 +951,7 @@ def render_page(out_path, site, title, description, page, root, active, body, da
     own = dict((k, v) for k, v in data.items() if k not in SHARED_KEYS)
     html = shell.substitute(
         title=esc(title), description=esc(description), page=esc(page), root=root,
-        nav=nav_html(site, root, active), body=body, footer=footer_html(root),
+        nav=nav_html(site, root, active), body=body, footer=footer_html(),
         icons_toggle=icons_toggle_html(has_icons), data=inline_json(own))
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(html, encoding="utf-8")
@@ -1008,69 +993,21 @@ def finding_line(site):
         count(META["matches"]), spell(len(players)), label_for("impact").lower(), EM, tail)
 
 
-def finding_headline(site):
-    """The finding in a dozen words, and it is the payload's own flags that write it.
+def mwpa_line():
+    """WHAT THE SITE MEASURES, in two sentences, and it is the only prose on the front page.
 
-    It counts MATCHES now rather than rounds: the headline quantity is per match played, so
-    the exposure the reader should have in mind is the one the metric is divided by."""
-    players = site["players"]
-    covering = [p for p in players if p["covers_zero"]]
-    if len(covering) == len(players):
-        return ("%s people, %s matches, and the measurement cannot tell them apart."
-                % (spell(len(players)).capitalize(), count(META["matches"])))
-    return ("%s people, %s matches, and %s of the %s beat the null."
-            % (spell(len(players)).capitalize(), count(META["matches"]),
-               spell(len(players) - len(covering)), spell(len(players))))
-
-
-def finding_standfirst(site):
-    """One sentence, and it is the whole argument: there is an order and it is smaller
-    than the uncertainty on a single one of its own rows."""
-    players = site["players"]
-    covering = [p for p in players if p["covers_zero"]]
-    spread = max(p["impact"] for p in players) - min(p["impact"] for p in players)
-    widest = max(players, key=lambda p: p["impact_hi"] - p["impact_lo"])
-    lead = ("Every interval covers the null" if len(covering) == len(players)
-            else "%s of the %s intervals cover the null"
-                 % (spell(len(covering)).capitalize(), spell(len(players))))
-    return ("%s, and the widest is %s times the whole spread of the order."
-            % (lead, format((widest["impact_hi"] - widest["impact_lo"]) / spread, ".1f")))
-
-
-def null_standfirst(site):
-    """THE HEADLINE FINDING, IN THE MASTHEAD, because the rail that used to carry it is gone.
-
-    Deleting the standings took the null rule's home off the front page with it. The rule was
-    never the argument, though — it was a picture of the argument — and the argument is two
-    facts: not one of these intervals excludes zero, and the order they are printed in is
-    smaller than the uncertainty on any single row of it. Both are read off the payload's own
-    flags, so a corpus in which somebody finally beat the null rewrites this sentence rather
-    than outliving it. The exposure that used to be its own section is the clause at the end:
-    the reader's next question is how much data this is, and it is one number.
+    The three paragraphs that used to open this page — the finding, the width of the widest
+    interval, and the order's own instability — are gone at the owner's instruction: the
+    figure under this line already ends every one of the four series on its headline number,
+    and the cross-tab below carries every number the figure is built from. What no picture on
+    the page could supply is the unit, so that is what survives.
     """
-    players = site["players"]
-    covering = [p for p in players if p["covers_zero"]]
-    threshold = GATE["exposure_threshold_rounds"]
-    clear = [p for p in players if p["rounds"] >= threshold]
-    if clear:
-        exposure = ("Only %s %s the %s rounds an interval this wide needs to exclude it."
-                    % (and_list(p["name"].split("#")[0] for p in clear),
-                       "have" if len(clear) > 1 else "has", count(threshold)))
-    else:
-        exposure = ("Not one of them has the %s rounds an interval this wide needs to exclude "
-                    "it." % count(threshold))
-    # THE SENTENCE ABOVE THIS ONE ALREADY SAYS HOW MANY INTERVALS COVER THE NULL, so this one
-    # does not say it again: two paragraphs opening on the same clause was the standings rail's
-    # caption and its own caveat, printed one under the other with the rail between them gone.
-    # What is left here is the half the rail never carried — that an order this narrow is not
-    # stable — and the exposure that used to be a section of its own.
-    order = ("Any of the %s could be first: the order would reshuffle under almost any "
-             "modelling choice, and this site makes no claim that it would not."
-             % spell(len(players)))
-    if not covering:
-        order = ("The order below would reshuffle under almost any modelling choice, and this "
-                 "site makes no claim that it would not.")
-    return "%s %s" % (order, exposure)
+    return ("%s is match win probability added: every kill, death, plant, defuse and second "
+            "alive is priced by how much it moved this team's chance of winning the MATCH, "
+            "not the round, each is measured against what everyone else in that round was "
+            "worth, and a player's are summed. %s divides that by the matches they played, so "
+            "%s is six extra wins in a hundred."
+            % (label_for("mwpa"), label_for("impact"), num("impact", 0.06)))
 
 
 def match_result(entry):
@@ -1087,7 +1024,7 @@ def match_result(entry):
     return kind, "%s %s%s%s" % (letter, count(home), NDASH, count(away))
 
 
-def merged_index_table(site, root, name_of, tracker_by_match):
+def merged_index_table(site, root, tracker_by_match):
     """A CROSS-TAB. One row per match, one column per player, newest first.
 
     The focal players used to be one text cell of hued chips, which is a list and not a column:
@@ -1112,9 +1049,14 @@ def merged_index_table(site, root, name_of, tracker_by_match):
         return ('<button class="sort" type="button" data-sort="%s">%s'
                 '<span class="sort-mark"></span></button>' % (esc(key), esc(label)), cls)
 
+    # THE DATE IS ITS OWN COLUMN. It used to ride inside the match link as `Haven · 2026-08-06`,
+    # which made a scan for "when" a scan through a map name, and put an ISO string on a page
+    # whose every match is the same year. Three structural columns now: what happened, where,
+    # and when. The link stays on the map, because that cell is the one that names the match.
     headers = [sort_head("margin", label_for("won"), "l"),
-               sort_head("date", label_for("match_id"), "l")]
-    headers += [sort_head(entry["short"], entry["name"].split("#")[0], "num p-%s"
+               sort_head("map", label_for("map"), "l"),
+               sort_head("date", label_for("started_at"), "l")]
+    headers += [sort_head(entry["short"], display_name(entry["name"]), "num p-%s"
                           % entry["short"]) for entry in players]
     rows = []
     for entry in sorted(site["matches"], key=lambda e: e["started_at"], reverse=True):
@@ -1123,11 +1065,12 @@ def merged_index_table(site, root, name_of, tracker_by_match):
         cells = [
             '<span class="%s">%s</span>' % (kind, esc(score_text)),
             '<a href="%sm/%s.html">%s</a>' % (
-                root, esc(entry["match_id"]),
-                esc("%s %s %s" % (entry["map"], MIDDOT, as_date(entry["started_at"])))),
+                root, esc(entry["match_id"]), esc(entry["map"])),
+            '<span class="idx-when">%s</span>' % esc(as_long_date(entry["started_at"])),
         ]
         attrs = [' data-player="%s"' % esc(" ".join(shorts)),
                  ' data-date="%s"' % esc(entry["started_at"]),
+                 ' data-map="%s"' % esc(entry["map"]),
                  ' data-margin="%d"' % (entry["score"][0] - entry["score"][1]),
                  ' data-href="%sm/%s.html"' % (root, esc(entry["match_id"]))]
         for player in players:
@@ -1149,7 +1092,26 @@ def merged_index_table(site, root, name_of, tracker_by_match):
     return table(headers, rows, cls="tbl idx idx-cross")
 
 
-def build_index(site, out_dir, name_of):
+def offense_defense_payload(site, players):
+    """Both halves of every player-match, for the front page's second figure.
+
+    `attack_mwpa` and `defense_mwpa` sum to `mwpa` and live in the PLAYER payloads, which the
+    front page does not otherwise carry. They are lifted here rather than added to site.json
+    because the two halves are a view of the per-match number the tracker already plots, not a
+    new quantity: nothing in the payload contract changes, and no other page gains a byte.
+    """
+    out = {}
+    for entry in site["players"]:
+        short = entry["short"]
+        out[short] = [
+            {"a": row["attack_mwpa"], "d": row["defense_mwpa"], "m": row["mwpa"],
+             "map": row["map"], "date": as_long_date(row["started_at"]),
+             "won": row["won"], "id": row["match_id"]}
+            for row in players[short]["matches"]]
+    return out
+
+
+def build_index(site, players, out_dir):
     n_players = len(site["players"])
     tracker_by_match = {}
     for short, entries in site["tracker"].items():
@@ -1167,33 +1129,31 @@ def build_index(site, out_dir, name_of):
         esc(count(n_rows)),
         "\n".join('    <button class="chip p-%s" type="button" data-idx-filter="%s" '
                   'aria-pressed="false">%s</button>'
-                  % (esc(p["short"]), esc(p["short"]), esc(p["name"].split("#")[0]))
+                  % (esc(p["short"]), esc(p["short"]), esc(display_name(p["name"])))
                   for p in site["players"]))
 
     body = body_from(
         "index.html",
-        finding=esc(finding_headline(site)),
-        standfirst=esc(finding_standfirst(site)),
-        null_note=esc(null_standfirst(site)),
+        tracker_heading=esc("The season, match by match"),
+        mwpa_line=esc(mwpa_line()),
         # The one place a fact could go missing without the script, said plainly: the figure is
         # the only thing on this page that draws a player's headline, and the cross-tab under it
         # carries every number the figure is built from.
         tracker_fallback=esc(
             "Drawn by quad-app.js. Without it, every per-match number it plots is in the "
             "cross-tab below, and each player's own headline is on their page."),
+        offdef_heading=esc("Offense against defense, every match"),
+        offdef_fallback=esc(
+            "Drawn by quad-app.js. Without it, both halves of every match are in the %s and "
+            "%s columns of each player's own match table." % (label_for("attack_mwpa"),
+                                                              label_for("defense_mwpa"))),
         matches_heading=esc("All %s matches, newest first" % count(n_rows)),
-        # THE NOTE NAMES EVERY HEADING THAT SORTS, and after the cross-tab that is all of them
-        # bar none: two structural columns and one per player. The labels are read out of
-        # meta.dict and out of the payload's own player list, so a column that gains or loses a
-        # sort rewrites this sentence rather than outliving it. The empty cell gets its one
-        # line here, because it is the only thing on this table a reader could misread.
         matches_note=esc(
-            "Sort on %s or on any player's column, filter to one player in place, and step the "
-            "rows with j and k. A player's cell is empty for a match they did not play: empty "
-            "is not zero, and those rows leave a sort rather than joining it at the null."
-            % and_list(label_for(key) for key in ("won", "match_id"))),
+            "Sort on any heading, filter to one player in place, step the rows with j and k. "
+            "An empty cell is a match that player was not in — empty is not zero, and those "
+            "rows leave a sort rather than joining it at the null."),
         match_filters=filters,
-        match_table=merged_index_table(site, "", name_of, tracker_by_match),
+        match_table=merged_index_table(site, "", tracker_by_match),
     )
     return render_page(
         out_dir / "index.html", site,
@@ -1203,23 +1163,30 @@ def build_index(site, out_dir, name_of):
         title="%s %s %s players, act %s" % (label_for("impact"), EM,
                                             spell(n_players), META["act"]),
         description=finding_line(site), page="index", root="", active="index",
-        body=body, data=page_data("index", site))
+        body=body, data=page_data("index", site, od=offense_defense_payload(site, players)))
 
 
 # -------------------------------------------------------------------------- match page
 
-def team_band(team_id, is_focal):
+def team_band(team_id, is_focal, extra=None):
     """The Team column, as a band. One row per side instead of the same word ten times.
 
     The wash on the `<tbody>` is where the eye finds the break; this row is where the fact is,
     because a wash is colour and colour is never the only carrier. It says the two things the
     column said: which team, and whether it is the side the four played on.
+
+    `extra` is the round ledger's: a team's buy is a team fact, so it is stated once here rather
+    than as a Buy class column repeated five times a side under a `.buys` list that said it a
+    third time.
     """
+    head = "%s %s %s" % (team_id, MIDDOT,
+                         "the side the four played on" if is_focal else "opponents")
+    if extra:
+        head = "%s %s %s" % (head, MIDDOT, extra)
     return {"tbody": {
         "attrs": ' class="team-group%s" data-team="%s"'
                  % (" is-focal" if is_focal else "", esc(team_id)),
-        "head": esc("%s %s %s" % (team_id, MIDDOT,
-                                  "the side the four played on" if is_focal else "opponents")),
+        "head": esc(head),
     }}
 
 
@@ -1242,9 +1209,9 @@ def match_players_table(match, root, focal_team):
             rows.append(team_band(band, band == focal_team))
         if row["is_focal"]:
             who = '<a class="focal" href="%sp/%s.html">%s</a>' % (
-                root, esc(row["short"]), esc(row["name"]))
+                root, esc(row["short"]), esc(display_name(row["name"])))
         else:
-            who = '<span class="anon">%s</span>' % esc(row["name"])
+            who = '<span class="anon">%s</span>' % esc(display_name(row["name"]))
         rows.append({
             "attrs": ' data-team="%s"%s' % (esc(row["team"]),
                                             ' data-focal="1"' if row["is_focal"] else ""),
@@ -1307,7 +1274,7 @@ def match_rail_html(site, match_id, root):
         entry = order[index]
         text = "%s %s%s%s %s %s" % (entry["map"], count(entry["score"][0]), NDASH,
                                     count(entry["score"][1]), MIDDOT,
-                                    as_date(entry["started_at"]))
+                                    as_long_date(entry["started_at"]))
         label = ("%s %s" % (ARROWS[cls], text)) if arrow_first else ("%s %s" % (text, ARROWS[cls]))
         return '<a class="step %s" href="%sm/%s.html">%s</a>' % (
             cls, root, esc(entry["match_id"]), esc(label))
@@ -1318,121 +1285,278 @@ def match_rail_html(site, match_id, root):
         esc("%s of %s" % (count(at + 1), count(len(order)))), step(at + 1, "next", False))
 
 
-def collapse_mirrors(plays):
-    """One trigger pull is one event, not two rows.
+TOP_SWINGS = 3
 
-    A kill credit and the death debit it caused are the same instant of the same
-    round at the same two probabilities, signed opposite. Ranking by |mwpa|
-    surfaces both, so on most match pages two of the three biggest swings were
-    one thing. The pair collapses to the row with the credit, which frees the
-    slot for the next distinct event.
+
+def focal_swings(match, short_by_puuid):
+    """The largest single moves one of the four was on either end of, biggest first.
+
+    ONE EVENT IS ONE ROW, and restricting to the four is what makes that true by construction.
+    The payload's own `top_plays` ranks ledger rows across all ten seats, so a kill and the
+    death it caused arrived as two rows of the same instant at the same two probabilities —
+    which is why a `collapse_mirrors` pass existed — and the six pseudonymous opponents took
+    most of the list on a page about these four. The four are all on one side, so no event can
+    pay one of them and debit another, and the mirror cannot occur.
+
+    `dp` is the FOCAL SIDE's own move and all four play for the focal side, so the actor's
+    credit and the victim's debit are both exactly `dp` with no sign flip. The payload records
+    an action's `dp` against its ledger credit times leverage at 2.0e-16 over 10,113 nodes,
+    so this is the ledger's number and not a second reading of it.
     """
-    kept, seen = [], []
-    for play in plays:
-        mirror = None
-        for other in kept:
-            if (other["round_number"] == play["round_number"]
-                    and abs(other["p_before"] - play["p_before"]) < 1e-12
-                    and abs(other["p_after"] - play["p_after"]) < 1e-12
-                    and other["mwpa"] * play["mwpa"] < 0):
-                mirror = other
-                break
-        if mirror is None:
-            kept.append(dict(play))
-        else:
-            mirror.setdefault("also", []).append(play)
-        seen.append(play)
-    return kept
+    score = dict((rnd["round_number"], (rnd["own"], rnd["other"])) for rnd in match["rounds"])
+    plays = []
+    for node in match["wp_series"]:
+        if node["kind"] != "action" or not node.get("dp"):
+            continue
+        for puuid, key in ((node.get("actor"), None), (node.get("victim"), "death_debit")):
+            if puuid not in short_by_puuid:
+                continue
+            if key is None:
+                # ONLY THE CREDIT TYPES. A revive moves the line and the ledger pays nobody
+                # for it — there is no revive component — so ranking one here credited a
+                # focal player with a swing the round panel below shows them not receiving.
+                if node["type"] not in ("kill", "plant", "defuse"):
+                    continue
+                key = "kill_credit" if node["type"] == "kill" else node["type"]
+            own, other = score.get(node["r"], (None, None))
+            plays.append({"r": node["r"], "puuid": puuid, "key": key, "mwpa": node["dp"],
+                          "own": own, "other": other})
+    plays.sort(key=lambda play: -abs(play["mwpa"]))
+    return plays[:TOP_SWINGS]
 
 
-def top_plays_html(match):
+def top_plays_html(plays, name_by_puuid, short_by_puuid):
+    """Four facts a row: which round, who, what, and what it was worth.
+
+    The paragraph of context under each of these is gone. It restated the round win
+    probability either side of the event, the score and the round's leverage index — three
+    quantities in two units to explain one number that is printed directly above them, on a
+    page whose every other figure is already in match win probability.
+    """
     out = []
-    for rank, play in enumerate(collapse_mirrors(match["top_plays"]), start=1):
+    for play in plays:
+        where = ""
+        if play["own"] is not None:
+            where = '<span class="play-at">%s</span>' % esc(
+                "at %s%s%s" % (count(play["own"]), NDASH, count(play["other"])))
         out.append(
             '    <li class="play" data-type="%s">\n'
-            '      <p class="play-what"><a href="#r%s">Round %s</a> %s %s %s %s</p>\n'
+            '      <p class="play-what"><a href="#r%s">Round %s</a> %s '
+            '<span class="focal p-%s">%s</span> %s %s</p>\n'
             '      <p class="play-num">%s <span class="unit">%s</span></p>\n'
-            '      <p class="play-ctx">Round win probability %s to %s from the focal side, '
-            'at %s%s%s, where the %s was %s.%s</p>\n'
-            '    </li>' % (
-                esc(play["type"]), esc(play["round_number"]), esc(count(play["round_number"])),
-                MIDDOT, esc(play["name"]), MIDDOT, esc(label_for(play["type"]).lower()),
-                signed("mwpa", play["mwpa"]), esc(DICT["mwpa"]["unit"]),
-                esc(num("p_before", play["p_before"])), esc(num("p_after", play["p_after"])),
-                esc(count(play["round_own"])), NDASH, esc(count(play["round_other"])),
-                esc(label_for("leverage").lower()), esc(num("leverage", play["leverage"])),
-                esc(" The same trigger pull is also the %s, %s to %s — one event, one row."
-                    % (" and ".join(label_for(m["type"]).lower() for m in play["also"]),
-                       ", ".join(m["name"] for m in play["also"]),
-                       num("mwpa", play["also"][0]["mwpa"])))
-                if play.get("also") else ""))
+            '      %s\n    </li>' % (
+                esc(play["key"]), esc(play["r"]), esc(count(play["r"])), MIDDOT,
+                esc(short_by_puuid[play["puuid"]]), esc(name_by_puuid[play["puuid"]]),
+                MIDDOT, esc(label_for(play["key"]).lower()),
+                signed("mwpa", play["mwpa"]), esc(DICT["mwpa"]["unit"]), where))
     return "\n".join(out)
 
 
+# THE LEDGER'S OWN ARITHMETIC, AND IT DOES NOT CLOSE ON ITS OWN. The five credits sum to the
+# player's RAW round credit at match scale — `rwpa * leverage`, to 3e-16 across all 17,038
+# round-players — and MWPA is that credit CENTRED on the mean credit of everyone else in the
+# round, which `meta.dict.mwpa` says in its own definition. The gap between them reaches 2.6
+# points, so five parts printed beside a total they do not make is a table that invites the
+# reader to check the addition and lose. The centring term is named and drawn as the sixth part,
+# and then the column adds up.
+LEDGER_PARTS = ["kill_credit", "death_debit", "plant", "defuse", "alive_clock"]
+# WHAT THE PLAYER DID versus WHAT THE CONSTRUCTION DID, and it is the payload's own distinction:
+# the alive clock is "bookkeeping for who was present while the state aged, not a measure of
+# survival skill", and the centring term is arithmetic against the other nine. Those two are
+# drawn at half height in the stack. It is the only non-colour channel a segment can have here,
+# because hue is a person and sign colour is the direction a probability moved.
+LEDGER_BOOKKEEPING = ("alive_clock", "centering")
+
+
+def ledger_parts(row):
+    """One player's round as six signed parts, in a fixed order, summing to MWPA exactly.
+
+    The key and the format key come apart on the last one: `centering` has a label and no
+    dictionary entry, because it is arithmetic on two fields the payload does carry rather than
+    a field of its own. It borrows MWPA's own format rather than declaring a second one that
+    could drift from it, which is why `spec_for("centering")` is never asked for.
+    """
+    parts = [(key, key, label_for(key), row[key]) for key in LEDGER_PARTS]
+    parts.append(("centering", "mwpa", label_for("centering"),
+                  row["mwpa"] - sum(row[key] for key in LEDGER_PARTS)))
+    return parts
+
+
+def ledger_part_cell(fmt_key, label, value):
+    """One part, at the precision of the field whose unit it is in. Three states: an absent
+    value is an em dash, an exact zero is a middot named after the PART's own label, and
+    anything else is `signed()`. The zero takes the label rather than the format key because
+    the centring term borrows MWPA's format and the key cannot name it."""
+    if value is None:
+        return '<span class="num none" title="not credited in this round">%s</span>' % EM
+    if value == 0:
+        return '<span class="num zero" title="no %s in this round">%s</span>' % (
+            esc(label.lower()), MIDDOT)
+    return signed(fmt_key, value)
+
+
+def bar_sign(fmt_key, value):
+    """The colour class a mark on this axis may take, and it is `signed()`'s rule, not a
+    second one. A value measured but smaller than its own format can write prints with no sign
+    character and no direction colour, because a direction is a claim that number cannot
+    support; a mark drawn for it may not claim one either. At that magnitude it is under a pixel
+    of this axis anyway, so what the reader sees is the quiet net mark sitting on the null."""
+    step = smallest_printable(fmt_key)
+    if value and step is not None and abs(value) < step:
+        return "under"
+    return sign_of(value)
+
+
+def ledger_bar(parts, total, scale):
+    """The six parts as one signed stack off the null, with the net marked on the same axis.
+
+    WHY A BAR IS BACK INSIDE A TABLE, when `mag_bar` came out of every table for being a second
+    rendering of a number the cell already printed: this one draws a quantity no cell holds. A
+    long credit arm almost cancelled by a long debit arm, with the net a hair off the null, is
+    the whole shape of a round — and in five columns of two-decimal percentages it is invisible.
+
+    Positives stack right of the null and negatives left, both in the order the numbers under
+    the bar are printed in, and that order is the only thing naming a segment: hue is a person
+    here and sign colour is a direction, so neither is free to say which part this is. Same-sign
+    neighbours therefore merge, which is honest — a merged run is that arm's total, and the run
+    under the bar splits it.
+
+    THE NET IS A THIRD MARK, because a two-armed stack does not show its own total: MWPA is the
+    difference between the arms, not the end of either. It is the site's interval point in the
+    site's own geometry, sized past the segment band at both ends so it never disappears into an
+    arm of its own colour. `scale` is `meta.scale.round_mwpa`, the pinned p90 of round MWPA, so a
+    segment of a given length means the same number on every match page; 15.8% of the
+    17,038 bars clip at one end, which is what a p90 axis means, and clipping is flagged at the
+    end it ran off.
+
+    No minimum segment width. A part too small to draw is smaller than a pixel of this axis and
+    its number is printed under the bar, which is where the fact belongs; a floor would push the
+    arms past the values they stand for.
+    """
+    span = 2.0 * scale
+    pos_at, neg_at, segs, clipped = 0.0, 0.0, [], []
+    for key, fmt_key, label, value in parts:
+        if not value:
+            continue
+        width = abs(value) / span * 100.0
+        if value > 0:
+            left = 50.0 + pos_at
+            pos_at += width
+        else:
+            neg_at += width
+            left = 50.0 - neg_at
+        right = left + width
+        for end, off in (("lo", left < 0.0), ("hi", right > 100.0)):
+            if off and end not in clipped:
+                clipped.append(end)
+        draw_left, draw_right = min(max(left, 0.0), 100.0), min(max(right, 0.0), 100.0)
+        if draw_right <= draw_left:
+            continue
+        segs.append(
+            # THE TITLE IS THE PRINTED NUMBER, not a second rendering of it. Composing it out of
+            # `magnitude` and a hand-written minus wrote `-0.00%` for a value the row under the
+            # bar prints as `<0.01%` — a sign and a magnitude the format cannot support, on the
+            # one site whose whole rule is that it never claims one.
+            '<span class="rl-seg %s%s" style="left:%.3f%%;width:%.3f%%" title="%s"></span>'
+            % (bar_sign(fmt_key, value), " is-book" if key in LEDGER_BOOKKEEPING else "",
+               draw_left, draw_right - draw_left,
+               esc("%s %s" % (label, signed_text(fmt_key, value)[0]))))
+    for end, off in (("lo", total < -scale), ("hi", total > scale)):
+        if off and end not in clipped:
+            clipped.append(end)
+    # `aria-hidden`, and it is the correct alternative text rather than laziness: every number in
+    # this bar is printed as text under it, so a described bar makes a screen reader read the
+    # round's ledger twice. Same argument as the portrait beside a name.
+    return ('<span class="rl-bar" aria-hidden="true"%s>%s'
+            '<span class="rl-net %s" style="left:%.3f%%"></span></span>'
+            % (' data-clipped="%s"' % " ".join(clipped) if clipped else "",
+               "".join(segs), bar_sign("mwpa", total), axis_x(total, scale)))
+
+
 def round_ledger_table(rnd, roster, buy_by_team, focal_team):
+    """What each of ten people was worth in this round, and what that figure is made of.
+
+    FOURTEEN COLUMNS BECAME EIGHT, and the six that went were not measurements.
+
+      Buy class was the TEAM's band repeated five times a side, and it now sits once, on that
+      team's own band row, beside the side and the loadout that the `.buys` list used to state a
+      second time above the table. One statement of a team fact, in the row that names the team.
+
+      Kill credit, death debit, plant, defuse and the alive clock were five columns of small
+      signed percentages that the reader had to add in their head against a sixth. They are one
+      column now: the stack draws them and the numbers are printed under it in the same order,
+      so nothing moved into a tooltip and nothing was rounded away.
+
+      The duel roles moved under the name, where they belong — they are a property of the person
+      in this round, and they were the widest column in the table.
+
+    `roster` is still ordered by MATCH MWPA rather than this round's, which is deliberate: the
+    same person is on the same line in all twenty-five panels, so a reader stepping through
+    rounds is reading a fixed grid rather than re-finding everybody each time.
+    """
     headers = [(esc(label_for("name")), ""),
-               (esc(label_for("kill_credit")), "num"), (esc(label_for("death_debit")), "num"),
-               (esc(label_for("plant")), "num"), (esc(label_for("defuse")), "num"),
-               (esc(label_for("alive_clock")), "num"), (esc(label_for("mwpa")), "num"),
-               (esc(label_for("duel")), ""), (esc(label_for("weapon")), ""),
-               (esc(label_for("buy_class")), ""), (esc(label_for("loadout")), "num"),
+               (esc(label_for("mwpa")), "num"), (null_head(), "z rl-track"),
+               (esc(label_for("weapon")), ""), (esc(label_for("loadout")), "num"),
                (esc(label_for("credits")), "num"), ("K", "num"),
                (esc(label_for("damage")), "num")]
+    groups = [("Who", 1), ("What they were worth", 2), ("The kit and the box score", 5)]
     by_puuid = dict((row["puuid"], row) for row in rnd["players"])
+    scale = SCALE["round_mwpa"]
     rows = []
     band = None
     # `roster` already arrives team-first, which is what makes the bands one pass.
     for person in roster:
         if person["team"] != band:
             band = person["team"]
-            rows.append(team_band(band, band == focal_team))
+            buy = buy_by_team.get(band)
+            rows.append(team_band(band, band == focal_team, buy and "%s %s %s %s %s %s" % (
+                buy["side"], MIDDOT, label_for("loadout").lower(),
+                num("loadout", buy["loadout"]), MIDDOT, buy["class"])))
         row = by_puuid.get(person["puuid"])
-        who = ('<span class="focal">%s</span>' % esc(person["name"]) if person["is_focal"]
-               else '<span class="anon">%s</span>' % esc(person["name"]))
+        who = '<span class="rl-who %s">%s</span>' % (
+            "focal p-%s" % esc(person["short"]) if person["is_focal"] else "anon",
+            esc(display_name(person["name"])))
         if row is None:
             absent = '<span class="num none" title="not credited in this round">%s</span>' % EM
             rows.append({
                 "attrs": ' class="absent" data-team="%s"' % esc(person["team"]),
-                "cells": [who] + [absent] * 6 + [
-                    absent, absent, absent, absent, absent, absent, absent],
+                # The track cell's em dash rides in `.rl-parts` so it takes the inset the cell
+                # itself does not have: `td.z` is padded to nothing horizontally on purpose.
+                "cells": [who, absent, '<span class="rl-parts">%s</span>' % absent]
+                         + [absent] * 5,
             })
             continue
-        # A round can carry several roles. The separator is a real space, so the
-        # cell reads as two tags when the text is extracted, not as one word.
-        duel = '<span class="duels">%s</span>' % (
+        # A round can carry several roles. The separator is a real space, so the cell reads as
+        # two tags when the text is extracted, not as one word. They wrap now: the reason they
+        # could not was a fourteen-column table where one 73px row made the sheet look ragged,
+        # and this cell is two lines tall on every row anyway.
+        duels = '<span class="duels">%s</span>' % (
             " ".join('<span class="tag" data-duel="%s">%s</span>' % (esc(t), esc(humanize(t)))
                      for t in row["duel"])
             or '<span class="tag none" title="no duel role in this round">%s</span>' % MIDDOT)
-        weapon = (esc(row["weapon"]) if row["weapon"] else
-                  '<span class="none" title="no round-start primary recorded">%s</span>' % EM)
-        buy = buy_by_team.get(row["team"])
+        parts = ledger_parts(row)
         rows.append({
             "attrs": ' data-team="%s"%s' % (esc(row["team"]),
                                             ' data-focal="1"' if person["is_focal"] else ""),
             "cells": [
-                who,
-                ledger_cell("kill_credit", row["kill_credit"]),
-                ledger_cell("death_debit", row["death_debit"]),
-                ledger_cell("plant", row["plant"]),
-                ledger_cell("defuse", row["defuse"]),
-                ledger_cell("alive_clock", row["alive_clock"]),
+                who + duels,
                 signed("mwpa", row["mwpa"]),
-                duel, weapon,
-                esc(buy["class"]) if buy else
-                '<span class="none" title="no buy recorded">%s</span>' % EM,
+                ledger_bar(parts, row["mwpa"], scale)
+                + '<span class="rl-parts">%s</span>' % "".join(
+                    '<span class="rl-part"><span class="rl-key">%s</span>%s</span>'
+                    % (esc(label), ledger_part_cell(fmt_key, label, value))
+                    for _, fmt_key, label, value in parts),
+                (esc(row["weapon"]) if row["weapon"] else
+                 '<span class="none" title="no round-start primary recorded">%s</span>' % EM),
                 '<span class="num">%s</span>' % esc(num("loadout", row["loadout"])),
                 '<span class="num">%s</span>' % esc(num("credits", row["credits"])),
                 '<span class="num">%s</span>' % esc(count(row["kills"])),
                 '<span class="num">%s</span>' % esc(count(row["damage"])),
             ],
         })
-    return table(headers, rows, cls="tbl round-ledger")
+    return table(headers, rows, cls="tbl round-ledger", groups=groups)
 
 
-# `meta.dict.t` is milliseconds, `.0f`, because that is what the payload stores. A column of
-# 19,078 and 32,127 is not a clock a reader reads, so the cell prints seconds to one decimal —
-# the same conversion, to the same decimal, that quad-app.js `secs()` prints on the figure, so a
-# node hovered on the curve and the same node in this table say the same time.
 def secs(ms):
     return "%.1fs" % (ms / 1000.0)
 
@@ -1446,19 +1570,42 @@ NOBODY = {
 }
 
 
+# Actor and victim in one cell, with the direction as a character rather than an icon or a
+# colour: it is read aloud, it scales with the type, and it costs nothing to load. Same argument
+# `ARROWS` is written under, and the reason it is not `ARROWS["next"]` is that this arrow means
+# "killed", not "forward".
+TO = "→"
+
+
+def timeline_person(puuid, name_by_puuid, short_by_puuid):
+    name = esc(display_name(name_by_puuid.get(puuid, puuid)))
+    short = short_by_puuid.get(puuid)
+    if short:
+        return '<span class="focal p-%s">%s</span>' % (esc(short), name)
+    return '<span class="anon">%s</span>' % name
+
+
 def timeline_actor(node, name_by_puuid, short_by_puuid):
+    """Who the node belongs to — and, on a kill, who it was done to.
+
+    The victim was in the payload and on no page. A column of actors alone says a kill happened
+    and makes the reader carry the other half in their head; `MLK → Anonymous#3da6d8` is the
+    round's story in the width the column already had. All 12,673 kill nodes resolve.
+    """
     puuid = node.get("actor")
     if not puuid:
         reason = NOBODY.get(node["kind"], "no player is credited for this event")
         return '<span class="none" title="%s">%s</span>' % (esc(reason), EM)
-    name = name_by_puuid.get(puuid, puuid)
-    short = short_by_puuid.get(puuid)
-    if short:
-        return '<span class="focal p-%s">%s</span>' % (esc(short), esc(name))
-    return '<span class="anon">%s</span>' % esc(name)
+    who = timeline_person(puuid, name_by_puuid, short_by_puuid)
+    if node.get("victim"):
+        # The spaces are INSIDE the span, so the cell extracts as `MLK → Anonymous#3da6d8`
+        # rather than as one word. Same defect the lobby rank range had.
+        who += '<span class="rl-vs"> %s </span>%s' % (
+            TO, timeline_person(node["victim"], name_by_puuid, short_by_puuid))
+    return who
 
 
-def round_timeline_table(rnd, nodes, name_by_puuid, short_by_puuid):
+def round_timeline_table(nodes, name_by_puuid, short_by_puuid):
     """The win probability curve for this one round, read down instead of across.
 
     The ledger beside it says what each of ten players was worth in the round; this says what
@@ -1466,9 +1613,14 @@ def round_timeline_table(rnd, nodes, name_by_puuid, short_by_puuid):
     row is the same quantity the ledger credits — the curve's slope is the round's leverage.
 
     A clock node whose move is under `dp`'s own smallest printable magnitude is not a row. It is
-    9,558 of the act's 27,108 nodes, 35%: drift the format cannot write, which would print as a
-    column of `<0.1%` and nothing else. They stay inside the footer total, and the footer says
-    how many of them there were, so the column still adds up to the line.
+    drift the format cannot write, which would print as a column of `<0.01%` and nothing else.
+    They stay inside the footer total, and the footer says how many of them there were, so the
+    column still adds up to the line.
+
+    ONLY AN ACTION IS SOMETHING SOMEBODY DID, and that is now structural rather than a shade:
+    the three unattributable kinds stay quiet, and an action row also carries a 2px inset rule at
+    its left edge. Colour was doing that work alone, which is the one thing this site does not
+    let colour do.
     """
     headers = [(esc(label_for("t")), "num"), (esc(label_for("kind")), ""),
                (esc(label_for("name")), ""), (esc(label_for("p")), "num"),
@@ -1523,27 +1675,44 @@ def round_index_html(match, focal_team):
     return "\n".join(out)
 
 
+def round_facts_html(rnd):
+    """The round's own four facts as labelled values, where a run-on sentence used to be.
+
+    "Blue wins by elimination · score entering 1-2 · round leverage 0.1682 1.04x the act mean"
+    was one line of prose carrying four numbers, printed above all 1,713 round panels. The four
+    numbers are the content; the verbs were not. `leverage` and `li` are the same quantity twice
+    — the index is the leverage over the act mean — and both stay, because the timeline's moves
+    are measured in the first and the round's importance is read off the second. Two of the keys
+    are written here rather than looked up, for the same reason "Who" and "The box score" are:
+    they name a COLUMN of this page, not a field of the payload.
+    """
+    terminal = (esc(humanize(rnd["terminal_type"])) if rnd["terminal_type"] else
+                '<span class="none" title="no terminal recorded">%s</span>' % EM)
+    pairs = [
+        ("Won by", None, "%s %s %s" % (esc(rnd["winning_team"]), MIDDOT, terminal)),
+        ("Score entering", None, "%s%s%s" % (esc(count(rnd["own"])), NDASH,
+                                             esc(count(rnd["other"])))),
+        (label_for("leverage"), definition_of("leverage"), esc(num("leverage", rnd["leverage"]))),
+        (label_for("li"), definition_of("li"), esc(num("li", rnd["li"])) + "×"),
+    ]
+    return "".join(
+        '<span class="rl-fact"><span class="rl-key"%s>%s</span>'
+        '<span class="rl-val">%s</span></span>'
+        % (' title="%s"' % esc(why) if why else "", esc(key), value)
+        for key, why, value in pairs)
+
+
 def round_panels_html(match, roster, focal_team, shape, name_by_puuid, short_by_puuid):
     panels = []
     for rnd in match["rounds"]:
         number = rnd["round_number"]
         won = rnd["winning_team"] == focal_team
         buy_by_team = dict((b["team_id"], b) for b in rnd["buy"])
-        buys = "".join(
-            '<li data-team="%s"><span class="team">%s</span> %s %s %s %s %s %s</li>' % (
-                esc(b["team_id"]), esc(b["team_id"]), esc(b["side"]), MIDDOT,
-                esc(label_for("loadout")).lower(), esc(num("loadout", b["loadout"])),
-                MIDDOT, esc(b["class"]))
-            for b in rnd["buy"])
-        terminal = (esc(humanize(rnd["terminal_type"])) if rnd["terminal_type"] else
-                    '<span class="none" title="no terminal recorded">%s</span>' % EM)
         panels.append(
             '  <section class="round-panel" id="r%s" data-round-panel="%s" '
             'data-outcome="%s" aria-labelledby="r%s-h">\n'
             '    <h3 id="r%s-h">Round %s <span class="round-outcome %s">%s</span></h3>\n'
-            '    <p class="round-meta">%s wins by %s %s score entering %s%s%s %s %s %s, %s%s '
-            'the act mean</p>\n'
-            '    <ul class="buys">%s</ul>\n'
+            '    <p class="rl-meta">%s</p>\n'
             '    <div class="scroll" tabindex="0" role="region" '
             'aria-label="Round %s, in order">%s</div>\n'
             '    <div class="scroll" tabindex="0" role="region" '
@@ -1552,11 +1721,9 @@ def round_panels_html(match, roster, focal_team, shape, name_by_puuid, short_by_
                 esc(number), esc(number), "won" if won else "lost", esc(number), esc(number),
                 esc(count(number)), "won" if won else "lost",
                 "focal side won" if won else "focal side lost",
-                esc(rnd["winning_team"]), terminal, MIDDOT,
-                esc(count(rnd["own"])), NDASH, esc(count(rnd["other"])), MIDDOT,
-                esc(label_for("leverage").lower()), esc(num("leverage", rnd["leverage"])),
-                esc(num("li", rnd["li"])), "×", buys, esc(count(number)),
-                round_timeline_table(rnd, shape["by_round"][number],
+                round_facts_html(rnd),
+                esc(count(number)),
+                round_timeline_table(shape["by_round"][number],
                                      name_by_puuid, short_by_puuid),
                 esc(count(number)),
                 round_ledger_table(rnd, roster, buy_by_team, focal_team)))
@@ -1638,25 +1805,6 @@ def curve_nodes(match):
     return {"series": series, "counts": counts, "biggest": biggest, "by_round": by_round}
 
 
-def curve_standfirst(match, shape, name_by_puuid):
-    """One clause for what the line is, then this match's own largest move.
-
-    The leverage-slope argument that used to sit here — why a vertical is readable as a number —
-    was 273 characters identical above all 68 figures. It is on methods, once. What is left is
-    the sentence only this page can write.
-    """
-    biggest = shape["biggest"]
-    lead = "The focal side's match win probability, moving inside rounds rather than at their ends."
-    if biggest is None:
-        return "%s %s" % (esc(lead), esc("Nothing in this match moved it."))
-    who = name_by_puuid.get(biggest.get("actor"))
-    largest = (
-        "Largest move: the %s in round %s%s, %s."
-        % (esc(humanize(biggest.get("type") or "action")), esc(count(biggest["r"])),
-           " by %s" % esc(who) if who else "", signed("dp", biggest["dp"])))
-    return "%s %s" % (esc(lead), largest)
-
-
 def focal_move(match):
     """The focal players' combined move in this match, and the phrase that says whose it is.
 
@@ -1669,7 +1817,7 @@ def focal_move(match):
     """
     rows = [row for row in match["players"] if row["is_focal"]]
     combined = sum(row["mwpa"] for row in rows)
-    names = and_list(row["name"].split("#")[0] for row in rows)
+    names = and_list(display_name(row["name"]) for row in rows)
     if len(rows) == 1:
         return combined, "%s was worth %s of a match win" % (names, num("mwpa", combined))
     return combined, "%s were worth %s of a match win between them" % (
@@ -1681,20 +1829,22 @@ def build_match(site_entry, match, site, out_dir):
     other_team = next(t["team_id"] for t in match["teams"] if not t["focal"])
     own = next(t["rounds_won"] for t in match["teams"] if t["focal"])
     other = next(t["rounds_won"] for t in match["teams"] if not t["focal"])
-    focal_names = [row["name"] for row in match["players"] if row["is_focal"]]
-    date = as_date(match["started_at"])
+    focal_names = [display_name(row["name"]) for row in match["players"] if row["is_focal"]]
+    date = as_long_date(match["started_at"])
     n_rounds = len(match["rounds"])
     title = "%s, %s%s%s" % (match["map"], count(own), NDASH, count(other))
     result = result_word(site_entry["match_id"], site_entry["won"])
 
     roster = sorted(match["players"], key=lambda r: (r["team"] != focal_team, -r["mwpa"]))
     shape = curve_nodes(match)
-    name_by_puuid = dict((row["puuid"], row["name"]) for row in match["players"])
+    name_by_puuid = dict((row["puuid"], display_name(row["name"]))
+                         for row in match["players"])
     short_by_puuid = dict((row["puuid"], row["short"])
                           for row in match["players"] if row["is_focal"])
     # The curve is walked once, before the panels, because each panel's timeline is that walk
     # sliced by round: two walks are two chances for the figure and the table to disagree.
     panels = round_panels_html(match, roster, focal_team, shape, name_by_puuid, short_by_puuid)
+    swings = focal_swings(match, short_by_puuid)
 
     fact_pairs = [
         (label_for("map"), esc(match["map"])),
@@ -1706,7 +1856,8 @@ def build_match(site_entry, match, site, out_dir):
             esc(count(own)), NDASH, esc(count(other)), esc(focal_team))),
         (label_for("won"), '<span class="%s">%s</span>' % (result, result)),
         (label_for("focal"), ", ".join(
-            '<a href="../p/%s.html">%s</a>' % (esc(row["short"]), esc(row["name"]))
+            '<a href="../p/%s.html">%s</a>' % (esc(row["short"]),
+                                                esc(display_name(row["name"])))
             for row in match["players"] if row["is_focal"])),
     ]
     lobby = lobby_tier_fact(match, "../")
@@ -1721,38 +1872,27 @@ def build_match(site_entry, match, site, out_dir):
         facts=facts(fact_pairs),
         match_rail=match_rail_html(site, match["match_id"], "../"),
         figure_heading=esc("%s, action by action" % label_for("wp_series")),
-        figure_standfirst=curve_standfirst(match, shape, name_by_puuid),
-        # The counts, and a link. The sentence that explained what a vertical is has gone: the
-        # standfirst above the figure now shows the largest one instead of describing all of them.
-        figure_caption=(
-            '%s <a href="../methods.html#cav-%s">%s</a>' % (
-                esc("%s nodes: %s."
-                    % (count(len(shape["series"])),
-                       ", ".join("%s %s" % (count(shape["counts"][kind]),
-                                            label_for(KIND_KEY % kind).lower())
-                                 for kind in KINDS))),
-                esc(CAV_ON_PAGE["curve"]),
-                esc("What the step at a round boundary is"))),
+        # The counts, and nothing else. The paragraph that described the line and named its
+        # largest move is gone with the methods link beside it: the figure draws both.
+        figure_caption="%s %s" % (
+            esc("%s nodes: %s."
+                % (count(len(shape["series"])),
+                   ", ".join("%s %s" % (count(shape["counts"][kind]),
+                                        label_for(KIND_KEY % kind).lower())
+                             for kind in KINDS))),
+            prose(cav("curve"))),
         figure_fallback=esc(
             "The curve is drawn by quad-app.js. Without it, every round below is still open."),
         players_heading=esc("All %s players" % spell(len(match["players"]))),
         players_note=prose(cav("opponents")),
         players_table=match_players_table(match, "../", focal_team),
-        top_heading=esc("The %s biggest swings"
-                        % spell(len(collapse_mirrors(match["top_plays"])))),
-        top_note=esc("Single ledger rows, signed and unfiltered, so a death debit ranks here "
-                     "as one."),
-        top_plays=top_plays_html(match),
+        top_heading=esc("The %s biggest swings" % spell(len(swings))),
+        top_note=esc("Single events, signed, and only the four: a death debit ranks here as "
+                     "one."),
+        top_plays=top_plays_html(swings, name_by_puuid, short_by_puuid),
         rounds_heading=esc("Round by round"),
         rounds_note=esc("Selecting a round on the figure opens it here."),
-        # The caveat itself is 297 characters and it sat above the round panels on all 68 pages.
-        # What a reader needs here is that there is no utility column and that this is why; the
-        # rest of it — four integers per player-match, null in every round record — is
-        # methodology and is on methods, in full, behind this link.
-        abilities_cav='%s <a href="../methods.html#cav-%s">%s</a>' % (
-            esc("Abilities are absent from this data at every grain, so nothing below counts "
-                "utility."),
-            esc(CAV_ON_PAGE["abilities"]), esc("What that leaves out")),
+        abilities_cav=prose(cav("abilities")),
         round_index=round_index_html(match, focal_team),
         round_panels=panels,
         round_script=ROUND_CONTROLLER)
@@ -1861,6 +2001,54 @@ def card_weapon_cell(name, root):
     return '<span class="weapon is-card">%s<span>%s</span></span>' % (chip, esc(name))
 
 
+def card_side_split(player):
+    """The headline broken into the two halves of a round, in the headline's own unit.
+
+    THE ONE CUT OF THE SEASON THAT COSTS NOTHING TO BELIEVE. `impact` is the mean of a player's
+    per-match MWPA, and the payload already carries every one of those matches split in two, so
+    these two means add back to the headline exactly: no rescale, no second denominator, and
+    nothing estimated here that is not already estimated in the number above it.
+    `breakdowns.side` says the same thing with an interval and per 100 rounds, and it stays in
+    its own table — two units on one card is the confusion the card exists to prevent.
+    """
+    rows = player["matches"]
+    return [(key, sum(row[key] for row in rows) / float(len(rows)))
+            for key in ("attack_mwpa", "defense_mwpa")]
+
+
+def card_record(player):
+    """Matches won, lost and drawn, read off the score and never off the flag.
+
+    `result_word` is this site's one reading of a result, and it has to be: the act contains a
+    15-15 match whose `won` is false, so a tally of the boolean would print a loss that did not
+    happen. The three words and their order are `match_result`'s own. A result nobody had prints
+    the middot, which on this site is a measured zero rather than a blank or a dropped slot.
+    """
+    tally = {}
+    for row in player["matches"]:
+        word = result_word(row["match_id"], row["won"])
+        tally[word] = tally.get(word, 0) + 1
+    out = []
+    for word in ("won", "lost", "drew"):
+        n = tally.get(word, 0)
+        out.append((
+            '<span class="num %s">%s</span>' % (word, esc(count(n))) if n else
+            '<span class="num zero" title="no match in this act ended this way">%s</span>' % MIDDOT,
+            word))
+    return out
+
+
+def card_tally(items):
+    """A strip of results under a register: the figure, and the word for it underneath.
+
+    ONE SHAPE ON BOTH SIDES OF THE HAIRLINE, and the difference between the two sides is the
+    card's whole argument restated in small: every figure on the left prints a sign and none of
+    them was counted, every figure on the right was counted and none of them can print one.
+    """
+    return '<ul class="pc-tally">%s</ul>' % "".join(
+        '<li><span class="pc-n">%s</span><span class="pc-k">%s</span></li>' % (value, esc(label))
+        for value, label in items)
+
 def player_card(player, root):
     """The whole card: two registers, one hairline, and the identity strip under them."""
     head = player["headline"]
@@ -1873,6 +2061,13 @@ def player_card(player, root):
     # here so the left-hand side is an instrument rather than a big number in a box — the width
     # of that span against the height of that rule IS the finding, and no sentence says it as
     # fast. The axis under it is written out, so the span has a scale and is not decoration.
+    #
+    # TWO PARAGRAPHS CAME OFF THIS OBJECT AND NEITHER TOOK A FACT WITH IT. The verdict on the
+    # interval was already printed one line above where it was written out again, and the round
+    # count that explained the width is in the Counted register's own qualifier now. What the
+    # space bought is a strip of RESULTS under each register: the headline split by side here,
+    # the record over there. Both belong to the register they sit in — the split is the same
+    # estimate cut in two, the record is three counts — so neither crosses the hairline.
     estimated = (
         '      <p class="card-reg">%s</p>\n'
         '      <p class="big">%s <span class="unit">%s</span></p>\n'
@@ -1881,7 +2076,10 @@ def player_card(player, root):
         '<span>%s</span></p>\n'
         '      </div>\n'
         '      <p class="ival-text">%s %s</p>\n'
-        '      <p class="note">%s</p>'
+        '      <div class="pc-strip">\n'
+        '        <p class="lab">%s</p>\n'
+        '        %s\n'
+        '      </div>'
     ) % (
         esc("Estimated"),
         signed("impact", head["impact"]), esc(label_for("impact").lower()),
@@ -1892,33 +2090,30 @@ def player_card(player, root):
         esc(num("impact", -scale)), esc(label_for("null").upper()), esc(num("impact", scale)),
         esc("%s interval" % confidence()),
         esc(interval_text(head["impact_lo"], head["impact_hi"], "impact")),
-        # THE VERDICT IS SAID ONCE. It was on this line and again in the sentence under it, four
-        # lines apart — "covers the null", then "The interval covers zero" — which is the
-        # repeated caveat this round is cutting everywhere else. The sentence keeps it, because
-        # the sentence is the one that also carries the round count, and the round count is why
-        # the interval is that wide.
-        esc(covers_zero_sentence(head)))
+        # The strip says its own unit, because the two figures under it are the number above
+        # them cut in two and a reader who lands on the strip first has to be able to tell.
+        esc("%s by %s" % (label_for("impact"), label_for("side").lower())),
+        card_tally([(signed(key, value), label_for(key))
+                    for key, value in card_side_split(player)]))
 
     counted = (
         '      <p class="card-reg">%s</p>\n'
         '%s\n'
         '      <p class="card-per">%s</p>\n'
-        '      <p class="note">%s</p>'
+        '      <div class="pc-strip">\n'
+        '        <p class="lab">%s</p>\n'
+        '        %s\n'
+        '      </div>'
     ) % (
         esc("Counted"),
         card_counts(card),
-        esc("per match, over %s matches of act %s"
-            % (count(card["matches"]), META["act"])),
-        # THE DENOMINATOR, SPELLED OUT. Every per-match number on this page — the headline
-        # included — divides by a match, and a match is not a fixed quantity of play. This is
-        # what one means for this person, and it is the constant the estimator's own
-        # per-100-rounds rate is rescaled by to make the estimate in the other register.
-        # NO POSITIONAL REFERENCE: the two registers sit side by side over 760px and stacked
-        # under it, so "on the left" is false on a phone. The name of the quantity is enough.
-        esc("A match is %s rounds for this player, and that is the number the %s "
-            "is divided by."
-            % (num("rounds_per_match", card["rounds_per_match"]),
-               label_for("impact").lower())))
+        # THE DENOMINATOR, AS TWO COUNTS RATHER THAN AS A SENTENCE. The paragraph that used to
+        # spell out how long a match is for this player was one division of these two numbers,
+        # and both of them are counts, so both of them belong on this side anyway.
+        esc("per match, over %s matches and %s rounds of act %s"
+            % (count(card["matches"]), count(card["rounds"]), META["act"])),
+        esc(label_for("won")),
+        card_tally(card_record(player)))
 
     strip = []
     agents = card_art_row(card, "agents", root, card_agent_cell, "matches", "matches")
@@ -1954,58 +2149,233 @@ def player_card(player, root):
     ) % (esc(short), estimated, counted, "\n".join(strip))
 
 
-def components_rail(player, short):
-    """The five parts, and the headline they sum to, on one axis and one null.
+# ------------------------------------------------------------- the ledger waterfall
+#
+# HORIZONTAL BARS, READ TOP TO BOTTOM. Vertical columns would have to carry "Lobby
+# adjustment" and "Duel credit" as rotated or wrapped column heads; horizontally they are a
+# left-hand column of words at any width, and the ledger is a reading order anyway.
+#
+# Each bar starts where the one above it ended, so the five parts add up ON THE PAGE and the
+# hairline between two bars is the arithmetic. A floating bar is a MOVE and takes sign
+# colour; the total hangs off the null in the player's own hue and carries its interval,
+# which is the one place the two vocabularies are allowed to meet. What the reader is meant
+# to see is the difference between them: five exact cuts of a ledger, and one number that is
+# not known. The figure is emitted here rather than drawn by the script, and its geometry is
+# arithmetic on one width, so there is no measurement pass and no layout dependency.
+WF_W = 960.0             # viewBox width; the same drawing width as the trajectory above it
+WF_LABEL_PX = 12.5       # the row label
+WF_SUB_PX = 10.5         # the share line and the tick row: `.axlab`'s own size, which is the
+                         # size TRACK_MONO_ADV was measured at
+WF_LABEL_PAD = 16.0      # the longest label to the plot
+WF_VAL_PAD = 16.0        # the plot to the value column
+WF_TOP = 30.0            # the first row band, under the panel title
+WF_ROW = 42.0            # one component
+WF_BAR = 16.0
+WF_CAP = 12.0            # the cap a `.rail-iv` has, because this is the same mark
+WF_GAP = 16.0            # air on both sides of the rule that cuts the total off its parts
+WF_MIN = 1.5             # a bar under this would not render; the number beside it still does
+WF_AIR = 1.04            # past the widest mark: no cap may land ON the edge of a plot, where
+                         # a line that stopped on its own reads as one that was stopped
+WF_FOOT = 12.0
 
-    A table of five intervals is five zero lines that happen to line up. On the
-    rail they are one picture, read against one rule.
 
-    IT WAS SIX ROWS AND THE SIXTH COST THE OTHER FOUR THEIR LENGTH. Kill credit ran +1.845 per
-    match against a death debit of -1.828: two spans an order of magnitude longer than anything
-    else here, pointed opposite ways, which between them set an axis on which plant, defuse and
-    the alive clock were a pixel each. They are also the two ends of ONE event — a duel
-    resolves, somebody is paid and somebody is debited — so summing them is a quantity and not a
-    convenience, and the payload resamples the summed column rather than adding two intervals
-    that are strongly negatively correlated. The two halves are still printed, in the sentence
-    above the rail, so the ledger is not something the reader has to take on trust.
+def components_waterfall(player, short):
+    """The five parts, walked from the null to the headline they sum to.
 
-    IN IMPACT PER MATCH, which is the number at the top of this page. The last row of this rail
-    is labelled as the headline and it used to print +0.313 per 100 rounds under a page whose
-    headline reads +6.4% — a summary row in a unit that appears nowhere else on the page it
-    summarises. Inside one player the rescale is a single positive constant, so this is the
-    same picture it always was with the page's own unit written under it, and the six rows now
-    sum to the big number rather than to a number the reader has to be told about. The headline
-    row takes `impact_lo` and `impact_hi` straight from the payload: no arithmetic at all on
-    the row the other six are checked against. See `component_impact`.
+    ONE PICTURE WHERE THERE WERE TWO PARAGRAPHS AND A RAIL. Five intervals on one axis were
+    five statements the reader had to add up; a walk adds them up in front of them, and the
+    connector between two bars is the addition itself.
+
+    IN IMPACT PER MATCH, the number at the top of this page. `component_impact` converts each
+    cell on the headline's own denominator, and `build_player` refuses to ship a page whose
+    five points do not sum to `impact` at display precision — which is the only reason this
+    can be drawn as a walk at all. The total takes `impact_lo` and `impact_hi` straight off the
+    payload: no arithmetic on the row the other five are checked against.
+
+    THE TWO HALVES OF THE DUEL are no longer written out beside it. `meta.gate.duel_parts`
+    still names them and the payload still carries both; what the row says here is what the
+    ledger says, which is that they are one event and are resampled as one column.
     """
-    scale = SCALE["component_impact"]
     head = player["headline"]
+    cells = list(player["components"].items())
+    n = len(cells)
+    # The walk. Every bar starts at the running total the bar above it left behind, and the
+    # last one ends on the headline.
+    points, edges, run = [], [0.0], 0.0
+    for _, cell in cells:
+        point = component_impact(cell, head)[0]
+        points.append(point)
+        run += point
+        edges.append(run)
+    # THE AXIS IS THIS PLAYER'S OWN WALK AND THIS PLAYER'S OWN INTERVAL, and that is the one
+    # deliberate departure from the pinned corpus axes. A pinned axis exists so that a mark of
+    # a given size means the same number on every page, which is the right rule for a quantity
+    # a reader compares BETWEEN people. This figure compares nothing between people: it is one
+    # ledger, and the only comparison it asks for is between the five cuts and the width of
+    # what their sum is not known to. On the pinned headline axis — which is the widest of the
+    # four intervals — the two narrow players' parts draw as slivers nobody can tell apart.
+    # Every tick prints its own value, so no length here is ever read off another page. Two
+    # marks can still stop at nothing but their own value: a walk cannot clamp, because a
+    # clamped step would break the chain the figure is made of, and an interval cannot clip,
+    # because a clipped interval on the figure whose argument is that the interval is wide is
+    # the one mark this site does not draw.
+    reach = max([abs(v) for v in edges]
+                + [abs(v) for v in (head["impact"], head["impact_lo"], head["impact_hi"])
+                   if v is not None])
+    # A ledger of exact zeros would divide by one, not by nothing.
+    scale = (reach or smallest_printable("impact")) * WF_AIR
+
+    def walked(value):
+        """A point on the walk, in words. The start of it is the null and has a name."""
+        return label_for("null").lower() if value == 0 else signed_text("impact", value)[0]
+
     rows = []
-    for key, cell in player["components"].items():
+    for i, (key, cell) in enumerate(cells):
+        text, kind = signed_text("impact", points[i])
         definition = definition_of(key)
-        point, lo, hi = component_impact(cell, head)
-        rows.append(rail_row(
-            '<span class="rail-who p-%s"%s>%s</span>'
-            '<span class="rail-sub">%s %s %s</span>' % (
-                esc(short), ' title="%s"' % esc(definition) if definition else "",
-                esc(label_for(key)), esc(num("share", cell["share"])), MIDDOT,
-                esc("of the ledger")),
-            '<span class="p-%s">%s</span>' % (
-                esc(short), rail_estimate(point, lo, hi, scale)),
-            '%s<span class="rail-iv-text">%s %s</span>' % (
-                signed("impact", point),
-                esc(interval_text(lo, hi, "impact")),
-                esc(null_verdict(lo <= 0 <= hi)))))
-    rows.append(rail_row(
-        '<span class="rail-who p-%s">%s</span>' % (esc(short), esc(label_for("impact"))),
-        '<span class="p-%s">%s</span>' % (
-            esc(short), rail_estimate(head["impact"], head["impact_lo"],
-                                      head["impact_hi"], scale)),
-        '%s<span class="rail-iv-text">%s %s</span>' % (
-            signed("impact", head["impact"]),
-            esc(interval_text(head["impact_lo"], head["impact_hi"], "impact")),
-            esc(null_verdict(head["covers_zero"]))), cls="is-scale"))
-    return rail_axis(scale, label_for("impact"), "impact") + "\n" + rail(rows)
+        rows.append({
+            "label": label_for(key), "value": text, "kind": kind,
+            "sub": "%s %s" % (num("share", cell["share"]), label_for("share").lower()),
+            "title": "%s: %s per match, %s of the ledger, taking the running total from %s to "
+                     "%s.%s" % (label_for(key), text, num("share", cell["share"]),
+                                walked(edges[i]), walked(edges[i + 1]),
+                                (" " + definition) if definition else "")})
+    total, total_kind = signed_text("impact", head["impact"])
+    interval = interval_text(head["impact_lo"], head["impact_hi"], "impact")
+    verdict = null_verdict(head["covers_zero"])
+    rows.append({
+        "label": label_for("impact"), "value": total, "kind": total_kind,
+        "sub": "%s %s" % (count(head["matches"]), label_for("matches").lower()),
+        "title": "%s: %s per match, %s interval %s, which %s."
+                 % (label_for("impact"), total, confidence(), interval, verdict)})
+
+    # Both gutters are COMPUTED from the strings that land in them, the way the trajectory's
+    # label column is: nothing here is a constant a longer label could overrun. One character
+    # is `TRACK_MONO_ADV` scaled by the size — the tracking is the same .06em, so an advance is
+    # a ratio of that one measurement and never a second literal.
+    adv = TRACK_MONO_ADV * WF_LABEL_PX / WF_SUB_PX
+    pad_l = round(max(max(len(row["label"]) for row in rows) * adv,
+                      max(len(row["sub"]) for row in rows) * TRACK_MONO_ADV) + WF_LABEL_PAD, 1)
+    val_w = round(max(len(row["value"]) for row in rows) * adv + WF_VAL_PAD, 1)
+    plot = WF_W - pad_l - val_w
+
+    def x(value):
+        return pad_l + axis_x(value, scale) / 100.0 * plot
+
+    def cy(i):
+        return WF_TOP + i * WF_ROW + WF_ROW / 2.0 + (WF_GAP if i == n else 0.0)
+
+    # The plot ends under the total's own interval, not under its bar: that dimension line is
+    # the last mark in the figure and it needs its caps clear of the axis.
+    mid = cy(n) + WF_BAR / 2.0 + 5.0
+    floor = mid + WF_CAP / 2.0 + 8.0
+    tick_y = floor + 18
+    note_y = tick_y + 20
+    height = note_y + WF_FOOT
+    marks = ['<text class="paneltitle" x="%.1f" y="14">%s</text>'
+             % (pad_l, esc("%s, in ledger order" % label_for("impact")))]
+    # The total is ruled off from the parts, as the rail's summary row was.
+    marks.append('<line class="wf-sep" x1="0" x2="%.0f" y1="%.1f" y2="%.1f"/>'
+                 % (WF_W, WF_TOP + n * WF_ROW + WF_GAP / 2.0, WF_TOP + n * WF_ROW + WF_GAP / 2.0))
+    # THE CONNECTORS ARE THE ARITHMETIC, and they are what makes a waterfall readable: each
+    # one leaves the end of a bar and arrives at the start of the next. The last lands on the
+    # total's own value rather than on the sum of the five, so the figure closes on the number
+    # the payload carries and not on one this file added up.
+    for i in range(n):
+        end = x(head["impact"] if i == n - 1 else edges[i + 1])
+        marks.append('<line class="wf-link" x1="%.1f" x2="%.1f" y1="%.1f" y2="%.1f"/>'
+                     % (end, end, cy(i) + WF_BAR / 2.0, cy(i + 1) - WF_BAR / 2.0))
+    # A bar keeps its direction even where its number is under what the format can write: the
+    # length is measured, and it is only the digits that cannot say so.
+    for i, point in enumerate(points):
+        start, end = x(edges[i]), x(edges[i + 1])
+        marks.append('<rect class="wf-bar %s" x="%.1f" y="%.1f" width="%.1f" height="%.0f"/>'
+                     % (sign_of(point), min(start, end), cy(i) - WF_BAR / 2.0,
+                        max(abs(end - start), WF_MIN), WF_BAR))
+    zero, tip = x(0.0), x(head["impact"])
+    marks.append('<rect class="wf-total" x="%.1f" y="%.1f" width="%.1f" height="%.0f"/>'
+                 % (min(zero, tip), cy(n) - WF_BAR / 2.0, max(abs(tip - zero), WF_MIN), WF_BAR))
+    if head["impact_lo"] is not None and head["impact_hi"] is not None:
+        # AN ESTIMATE, under the bar it belongs to and in the same hue: a capped dimension
+        # line, the same mark `.rail-iv` is and at the same cap height. It hangs UNDER the bar
+        # rather than through it because the two are two different claims about one number —
+        # the bar is where the ledger lands, the line is what the resampling could not rule
+        # out — and a line drawn through a solid bar of its own colour fuses them into one
+        # striped mark. Neither end can reach the edge of the plot: the axis holds them.
+        marks.append('<line class="wf-iv" x1="%.1f" x2="%.1f" y1="%.1f" y2="%.1f"/>'
+                     % (x(head["impact_lo"]), x(head["impact_hi"]), mid, mid))
+        for bound in (head["impact_lo"], head["impact_hi"]):
+            marks.append('<line class="wf-cap" x1="%.1f" x2="%.1f" y1="%.1f" y2="%.1f"/>'
+                         % (x(bound), x(bound), mid - WF_CAP / 2.0, mid + WF_CAP / 2.0))
+    # THE NULL RULE, third instance: full-strength ink at the value that means no claim,
+    # heavier than any datum, drawn over the marks it judges rather than under them.
+    marks.append('<line class="wf-null" x1="%.1f" x2="%.1f" y1="%.1f" y2="%.1f"/>'
+                 % (zero, zero, WF_TOP - 8, floor))
+
+    for i, row in enumerate(rows):
+        marks.append('<text class="wf-label" x="0" y="%.1f">%s</text>'
+                     % (cy(i) - 2, esc(row["label"])))
+        marks.append('<text class="wf-sub" x="0" y="%.1f">%s</text>'
+                     % (cy(i) + 11, esc(row["sub"])))
+        # EVERY BAR PRINTS ITS OWN NUMBER, in one right-aligned column, because a figure whose
+        # values are only in the hover is a figure half the readers never get.
+        marks.append('<text class="wf-val %s" x="%.0f" y="%.1f" text-anchor="end">%s</text>'
+                     % (row["kind"], WF_W - 2, cy(i) + 4, esc(row["value"])))
+
+    steps = [-scale, -scale / 2.0, GATE["null_rate"], scale / 2.0, scale]
+    for k, value in enumerate(steps):
+        marks.append('<text class="axlab%s" x="%.1f" y="%.0f" text-anchor="%s">%s</text>'
+                     % (" is-null" if value == GATE["null_rate"] else "", x(value), tick_y,
+                        "start" if k == 0 else "end" if k == len(steps) - 1 else "middle",
+                        esc(label_for("null").upper() if value == GATE["null_rate"]
+                            else num("impact", value))))
+    marks.append('<text class="wf-note" x="%.1f" y="%.0f">%s</text>'
+                 % (pad_l, note_y, esc("%s interval %s %s" % (confidence(), interval, verdict))))
+    # One hit area per row, across the whole row, carrying the row as a sentence — including
+    # the field's own definition, which the rail used to hang off the label. Nothing in it is
+    # a number the row does not already print.
+    for i, row in enumerate(rows):
+        top = cy(i) - WF_ROW / 2.0
+        marks.append('<rect class="wf-hit" x="0" y="%.1f" width="%.0f" height="%.1f">'
+                     '<title>%s</title></rect>'
+                     % (top, WF_W, (floor if i == n else cy(i) + WF_ROW / 2.0) - top,
+                        esc(row["title"])))
+
+    # A TITLE AND A DESC, NOT AN aria-label. `role="img"` is children-presentational: an
+    # aria-label replaces everything inside the figure with one string, so the six rows and the
+    # definition on each hit area reached a reader with a pointer and nobody else. The title is
+    # what the figure IS and the desc is what it says, row by row — the same split the two
+    # scripted figures already use, and the same facts the bars print.
+    title = "%s parts of %s in ledger order, and the total they sum to" % (
+        spell(n).capitalize(), label_for("impact").lower())
+    desc = "%s Each bar starts where the last ended. %s" % (
+        " ".join("%s." % row["title"] for row in rows),
+        "The total is %s, %s interval %s, which %s." % (total, confidence(), interval, verdict))
+    return ('<div class="fig fig-wf p-%s">\n'
+            '    <div class="fig-scroll" tabindex="0" role="region" aria-label="%s">'
+            '<svg viewBox="0 0 %d %.0f" role="img" aria-labelledby="%s-wt %s-wd">'
+            '<title id="%s-wt">%s</title><desc id="%s-wd">%s</desc>%s</svg></div>\n'
+            '  </div>') % (esc(short),
+                           esc("%s parts and the total %s scrolls sideways"
+                               % (spell(n).capitalize(), EM)),
+                           int(WF_W), height, esc(short), esc(short),
+                           esc(short), esc(title), esc(short), esc(desc), "".join(marks))
+
+
+def ladder_heading(player):
+    """The heading over the path, off the same three states the sentence under it reads.
+
+    IT WAS A CONSTANT AND IT WAS FALSE ON ONE PAGE. "The one thing that moved" sat over
+    TheMarias's ladder above a sentence saying she held one division throughout — a heading
+    contradicting the only line in its own section. Nothing on this site claims a direction the
+    data does not have, and a heading is not exempt.
+    """
+    ladder = player["ladder"]
+    if not ladder["ranked"]:
+        return "The ladder, which was never issued"
+    if not (ladder["steps_up"] + ladder["steps_down"]):
+        return "The one thing that did not move"
+    return "The one thing that moved"
 
 
 def ladder_sentence(player):
@@ -2259,7 +2629,7 @@ def track_line(player, step, plain=False):
     parts = [
         ("%s " % label_for("match_id").lower(), count(step["i"] + 1),
          " of %s" % count(len(player["matches"]))),
-        ("", "%s %s %s" % (as_date(row["started_at"]), MIDDOT, row["map"]),
+        ("", "%s %s %s" % (as_long_date(row["started_at"]), MIDDOT, row["map"]),
          " %s %s" % (MIDDOT, result_word(row["match_id"], row["won"]))),
         ("%s " % label_for("tier").lower(), division, ""),
         ("%s " % label_for("mwpa"), num("mwpa", row["mwpa"]), ""),
@@ -2289,7 +2659,7 @@ def player_matches_table(player):
         result = result_word(row["match_id"], row["won"])
         rows.append([
             '<a href="../m/%s.html">%s</a>' % (esc(row["match_id"]),
-                                               esc(as_date(row["started_at"]))),
+                                               esc(as_long_date(row["started_at"]))),
             # badge=False: forty-five of these sixty rows are the same division. See rank_cell.
             esc(row["map"]), rank_cell(steps[row["match_id"]], "../", badge=False),
             esc(row["agent"]),
@@ -2318,14 +2688,6 @@ def interval_cell(cell, matches_key="matches"):
         return ('<span class="num none" title="%s">%s one match, no interval</span>'
                 % (esc(CAV["single_match_interval"]), EM))
     return '<span class="num">%s</span>' % esc(interval_text(cell["lo"], cell["hi"]))
-
-
-def interval_mark(cell, scale, matches_key="matches"):
-    if one_cluster(cell, matches_key):
-        return interval_bar(None, None, None, scale, "one match, so there is no interval")
-    return interval_bar(cell["rate"], cell["lo"], cell["hi"], scale,
-                        "%s, interval %s" % (num("rate", cell["rate"]),
-                                             interval_text(cell["lo"], cell["hi"])))
 
 
 def exposure_cell(cell, rounds_key="rounds", matches_key="matches"):
@@ -2361,20 +2723,27 @@ def breakdown_key_cell(dimension, key, root):
 
 
 def breakdown_table(cells, dimension, short, root):
-    # The dimension's own label, not the payload's field name for the column
-    # that holds it. "Cell" is what `key` is called in the contract; "Map" is
-    # what the column says.
-    # `l` on the weapon column, and only on it. The header of a breakdown's first column is
-    # left-aligned everywhere on this site and its cells are right-aligned, which is survivable
-    # for four words and wrong for a picture: right-aligned rows of a fixed-width chip give the
-    # chips a ragged LEFT edge, which is the opposite of the only reason to have them. `l` is the
-    # table system's own modifier — the same one the Tier column uses — and a header class travels
-    # down its column, so the header and its cells agree for the first time in this table.
-    headers = [(esc(label_for(dimension)), "l" if dimension == "weapon" else ""),
-               (esc(label_for("matches")), "num"),
-               (esc(label_for("exposure")), "num"), (esc(label_for("rate")), "num"),
-               ("%s interval" % confidence(), "num"),
-               (null_head(), "z"), (esc(label_for("total")), "num")]
+    # THE z COLUMN IS GONE FROM THIS TABLE AND FROM THE SYNERGY ONE. It drew the interval a
+    # third time: the point estimate is in `rate`, both ends are in the interval column, and
+    # the bar restated the pair at a lower precision on a fixed axis this page never names.
+    # The uncertainty stays — it is two numbers wide and it was always the numbers doing the
+    # work. See `interval_cell`.
+    #
+    # The dimension's own label, not the payload's field name for the column that holds it.
+    # "Cell" is what `key` is called in the contract; "Map" is what the column says.
+    #
+    # THREE REGISTERS, CARRIED BY THE HEADER. A header's class travels down its own column, so
+    # `bt-key`, `bt-find`, `bt-ival` and `bt-aside` are the entire hierarchy of these six
+    # tables and no cell needs a class of its own: the row's name, the finding, the width of
+    # the finding, and the exposure that explains the width. `l` came off the weapon column
+    # with the bar — every column here is left-aligned by default now, and `l` also resets the
+    # weight this file wants on the column that names the row.
+    headers = [(esc(label_for(dimension)), "bt-key"),
+               (esc(label_for("matches")), "num bt-aside"),
+               (esc(label_for("exposure")), "num bt-aside"),
+               (esc(label_for("rate")), "num bt-find"),
+               ("%s interval" % confidence(), "num bt-ival"),
+               (esc(label_for("total")), "num")]
     rows = []
     for cell in cells:
         rows.append({
@@ -2386,38 +2755,42 @@ def breakdown_table(cells, dimension, short, root):
                 exposure_cell(cell),
                 signed("rate", cell["rate"]),
                 interval_cell(cell),
-                interval_mark(cell, SCALE["rate"]),
                 signed("total", cell["total"]),
             ],
         })
-    return table(headers, rows, cls="tbl breakdown p-%s" % short)
+    return table(headers, rows, cls="tbl bt breakdown p-%s" % short)
 
 
 def breakdowns_html(player, short, root):
-    # ONE SENTENCE PER BLOCK, and only where the block cannot be read without it. Two payload
-    # caveats used to print here in full; both are on methods. `by side` keeps a one-line
-    # version because its two intervals are unreadable without the number that explains them,
-    # and that number is `gate.side_split_rounds` rather than a literal in this file.
+    """Five blocks, stacked, and stacked is a decision rather than what was already here.
+
+    TABS AND TWO COLUMNS WERE BOTH CONSIDERED AND BOTH LOSE SOMETHING REAL. A tab puts four of
+    the five findings behind a click on a page whose posture is that nothing is readable only
+    by interaction, and it needs script to do it on a site that has to open off disk. Two
+    columns halve the width of a six-column table and put all five into permanent horizontal
+    scroll on a laptop. What was actually wrong with the stack was the TEXT: five identical
+    sentences counting rows the reader can see. That count is now a figure beside the heading,
+    and the two notes that survive are the two facts a table cannot state about itself.
+    """
     note_for = {
         "side": "The split needs about %s rounds at this credit variance; the act has %s."
                 % (count(GATE["side_split_rounds"]), count(META["rounds"])),
-        "weapon": "The weapon is the one held at round start; the short tails are grouped "
-                  "into Other.",
+        "weapon": "The weapon is the one held at round start; the short tails are Other.",
     }
     out = []
     for key in BREAKDOWN_ORDER:
         cells = player["breakdowns"][key]
         note = ('\n    <p class="note">%s</p>' % esc(note_for[key])) if key in note_for else ""
         out.append(
-            '  <section class="breakdown-block" id="by-%s" aria-labelledby="by-%s-h">\n'
-            '    <h3 id="by-%s-h">By %s</h3>\n'
-            '    <p class="note">%s</p>\n'
+            '  <section class="breakdown-block bt-block" id="by-%s" aria-labelledby="by-%s-h">\n'
+            '    <div class="bt-head">\n'
+            '      <h3 id="by-%s-h">By %s</h3>\n'
+            '      <p class="bt-count">%s</p>\n'
+            '    </div>\n'
             '    <div class="scroll" tabindex="0" role="region" aria-label="%s">%s</div>%s\n'
             '  </section>' % (
                 esc(key), esc(key), esc(key), esc(label_for(key).lower()),
-                esc("%s %s with rounds; a cell with none is not a row."
-                    % (spell(len(cells)).capitalize(),
-                       "cell" if len(cells) == 1 else "cells")),
+                esc("%s %s" % (count(len(cells)), "cell" if len(cells) == 1 else "cells")),
                 # R1: five breakdown scrollers per player page had no tabindex, no role and no
                 # label, so a keyboard-only reader could not reach the columns they hide.
                 esc("%s by %s, with its interval" % (label_for("mwpa"), label_for(key).lower())),
@@ -2428,21 +2801,21 @@ def breakdowns_html(player, short, root):
 def breakdown_unit_note(player):
     """Why these five tables are not in the unit at the top of the page, with the deciding number.
 
-    The division would RUN — every breakdown cell carries a match count — and it would be wrong.
-    The thinnest cell on martin's page is `Other` weapons at 1.2 rounds of a match against his
-    act's 21.2, so its match count is a count of matches the cell APPEARED in and not an
-    exposure. Per 100 rounds is the honest denominator for a slice of a match, and the column
-    header says so on every one of these tables. The thin marker keeps its one clause here
-    because it is the only legend the marker has.
+    The division would RUN — every breakdown cell carries a match count — and it would be
+    wrong: the thinnest cell on this page is a rounding of one match, so its match count counts
+    the matches the cell APPEARED in and is not an exposure. Per 100 rounds is the honest
+    denominator for a slice of a match, and the column header says so on all six tables.
+
+    IT ALSO CARRIES THE TWO CLAUSES THAT USED TO PRINT OVER EVERY BLOCK. The thin marker has no
+    other legend, and an absent cell is missing rather than blank — which is the one thing about
+    these tables the em dash rule cannot say, because there is no cell there to put a dash in.
     """
-    head = player["headline"]
-    thinnest = min((cell["rounds"] / float(cell["matches"]), key, cell["key"])
+    thinnest = min(cell["rounds"] / float(cell["matches"])
                    for key in BREAKDOWN_ORDER for cell in player["breakdowns"][key])
-    per_match, dimension, name = thinnest
-    return ("In %s, not per match: %s is %s rounds of a match against this player's %s, so a "
-            "cell's match count is not its exposure. A cell under %s rounds is marked thin."
-            % (label_for("rate"), name, format(per_match, ".1f"),
-               format(head["rounds"] / float(head["matches"]), ".1f"),
+    return ("In %s, not per match: the thinnest cell here is %s rounds of a match, so a match "
+            "count is not an exposure. Under %s rounds a cell is marked thin; with no rounds it "
+            "is not a row at all."
+            % (label_for("rate"), format(thinnest, ".1f"),
                count(GATE["rate_floor_marker_rounds"])))
 
 
@@ -2452,11 +2825,16 @@ def synergy_table(player, short):
     # columns and the second of them headed with the word. The count is not lost: `Exposure`
     # says it against the threshold the way the five breakdown tables do, and carries the raw
     # number in its title.
-    headers = [(esc(label_for("partner_name")), ""), (esc(label_for("shared_matches")), "num"),
-               (esc(label_for("rate")), "num"),
-               (esc(label_for("exposure")), "num"),
-               ("%s interval" % confidence(), "num"),
-               (null_head(), "z")]
+    #
+    # NO z COLUMN EITHER, for the reason `breakdown_table` gives, and the column order is that
+    # table's now. Six tables on one page reading four different ways were four ways of reading
+    # one thing. The hue on this table is the FOCAL player's and not the partner's: every number
+    # in it is this player's own rate over the rounds that partner also played.
+    headers = [(esc(label_for("partner_name")), "bt-key"),
+               (esc(label_for("shared_matches")), "num bt-aside"),
+               (esc(label_for("exposure")), "num bt-aside"),
+               (esc(label_for("rate")), "num bt-find"),
+               ("%s interval" % confidence(), "num bt-ival")]
     rows = []
     for cell in player["synergy"]:
         empty = cell["rate"] is None
@@ -2466,61 +2844,19 @@ def synergy_table(player, short):
                                                ' data-empty="1"' if empty else ""),
             "cells": [
                 '<a href="%s.html">%s</a>' % (esc(cell["partner_short"]),
-                                              esc(cell["partner_name"])),
+                                              esc(display_name(cell["partner_name"]))),
                 '<span class="num">%s</span>' % esc(count(cell["shared_matches"])),
-                signed("rate", cell["rate"], absent_reason=reason),
                 ('<span class="marker empty">no shared rounds</span>' if empty
                  else exposure_cell(cell, "shared_rounds", "shared_matches")),
+                signed("rate", cell["rate"], absent_reason=reason),
                 ('<span class="num none" title="%s">%s</span>' % (esc(reason), EM) if empty
                  else interval_cell(cell, "shared_matches")),
-                (interval_bar(None, None, None, SCALE["rate"], reason) if empty
-                 else interval_mark(cell, SCALE["rate"], "shared_matches")),
             ],
         })
-    return table(headers, rows, cls="tbl synergy p-%s" % short)
+    return table(headers, rows, cls="tbl bt synergy p-%s" % short)
 
 
-def components_sentence(player):
-    """Whether the components reconcile to the headline, in the headline's own unit.
-
-    AND THE ASSERTION IS THE POINT. Combining two rows into one is a display decision, and a
-    display decision that quietly broke the arithmetic would be the worst thing on this site.
-    `build_player` raises on the reconciliation; this sentence prints the result of the same
-    check, so the page says out loud what the build refuses to ship without.
-    """
-    head = player["headline"]
-    rows = player["components"]
-    total = sum(component_impact(cell, head)[0] for cell in rows.values())
-    gap = total - head["impact"]
-    # Anything under half of what `impact`'s own format can write is rounding, and the format is
-    # the field's rather than a literal: the reconciliation is checked at display precision.
-    if abs(gap) < smallest_printable("impact") / 2.0:
-        return ("The %s sum to %s per match, which is the headline exactly."
-                % (and_list(label_for(key).lower() for key in rows), num("impact", total)))
-    return ("The %s components sum to %s per match against a headline of %s, a gap of %s."
-            % (spell(len(rows)), num("impact", total), num("impact", head["impact"]),
-               num("impact", gap)))
-
-
-def duel_sentence(player):
-    """The two halves of the top row, in words, and why they are one row.
-
-    `meta.gate.duel_parts` names them: the view does not choose which two components merged, and
-    a payload that merged a different pair would rewrite this sentence rather than outlive it.
-    """
-    head = player["headline"]
-    parts = player["duel_parts"]
-    named = []
-    for key in GATE["duel_parts"]:
-        named.append("%s %s" % (label_for(key).lower(),
-                                num("impact", component_impact(parts[key], head)[0])))
-    combined = component_impact(player["components"][GATE["duel_key"]], head)[0]
-    return ("The top row is %s: %s against %s, which is one event seen from both ends and is "
-            "drawn as one so that the four rows under it keep a visible length."
-            % (num("impact", combined), named[0], named[1]))
-
-
-def build_player(site, player, entry, out_dir, matches):
+def build_player(site, player, out_dir):
     head = player["headline"]
     short = player["short"]
 
@@ -2545,22 +2881,24 @@ def build_player(site, player, entry, out_dir, matches):
                              % (short, GATE["duel_key"], " + ".join(GATE["duel_parts"])))
 
     body = body_from(
-        "player.html", root="../", title=esc(player["name"]),
+        "player.html", root="../", title=esc(display_name(player["name"])),
         card=player_card(player, "../"),
         components_heading=esc("The %s parts, and the headline they sum to"
                                % spell(len(player["components"]))),
-        components_note=esc(components_sentence(player)),
-        duel_note=esc(duel_sentence(player)),
-        components_rail=components_rail(player, short),
-        ladder_heading=esc("The one thing that moved"),
+        components_waterfall=components_waterfall(player, short),
+        ladder_heading=esc(ladder_heading(player)),
         ladder_note=esc(ladder_sentence(player)),
         ladder_figure=rank_trajectory(player, short),
-        # The full caveat is on methods. What has to survive next to the figure is the number
-        # that stops the ladder being read as a second opinion on the rating.
-        ladder_cav=esc("The ladder is a second instrument: across %s ranked lobbies it "
-                       "correlates with that match's %s at r = %s."
-                       % (count(META["ladder"]["n"]), label_for("mwpa"),
-                          format(META["ladder"]["r_mwpa"], "+.3f"))),
+        # THE NUMBER THAT STOPS THE LADDER BEING READ AS A SECOND OPINION ON THE RATING, and
+        # it says whose it is. Printed identically under four different players' paths, "across
+        # 144 ranked lobbies" read as that player's 144 on a page whose act has 83 matches; it
+        # is the whole corpus of focal player-matches with enough ranked others in the lobby.
+        ladder_cav=esc("The ladder is a second instrument, and this is the act rather than "
+                       "this player: across all %s focal player-matches with at least %s "
+                       "ranked others in the lobby, the lobby's division correlates with that "
+                       "match's %s at r = %s."
+                       % (count(META["ladder"]["n"]), count(META["ladder"]["minimum_ranked"]),
+                          label_for("mwpa"), format(META["ladder"]["r_mwpa"], "+.3f"))),
         matches_heading=esc("All %s matches" % count(len(player["matches"]))),
         matches_table=player_matches_table(player),
         breakdown_note=esc(breakdown_unit_note(player)),
@@ -2580,10 +2918,12 @@ def build_player(site, player, entry, out_dir, matches):
         out_dir / "p" / ("%s.html" % player["short"]), site,
         # The tab carried the estimator's name and no number. It now carries this player's own
         # headline, which is the one thing a link to this page is a link to.
-        title="%s %s %s %s, act %s" % (player["name"], EM, num("impact", head["impact"]),
+        title="%s %s %s %s, act %s" % (display_name(player["name"]), EM,
+                                       num("impact", head["impact"]),
                                        label_for("impact").lower(), META["act"]),
         description="%s: %s %s over %s matches of act %s, %s interval %s, which %s." % (
-            player["name"], num("impact", head["impact"]), label_for("impact").lower(),
+            display_name(player["name"]), num("impact", head["impact"]),
+            label_for("impact").lower(),
             count(head["matches"]), META["act"], confidence(),
             interval_text(head["impact_lo"], head["impact_hi"], "impact"),
             null_verdict(head["covers_zero"])),
@@ -2594,239 +2934,24 @@ def build_player(site, player, entry, out_dir, matches):
         data=page_data("player", site, player=player), has_icons=True)
 
 
-# ------------------------------------------------------------------------ methods page
-
-def glossary_html():
-    tiers = []
-    for entry in DICT.values():
-        if entry["tier"] not in tiers:
-            tiers.append(entry["tier"])
-    blocks = []
-    for tier in tiers:
-        rows = []
-        for key, entry in DICT.items():
-            if entry["tier"] != tier:
-                continue
-            rows.append([
-                '<code>%s</code>' % esc(key),
-                esc(entry["label"]),
-                prose(entry["definition"]),
-                esc(entry["unit"]) if entry["unit"] else
-                '<span class="none" title="not a measured quantity">%s</span>' % EM,
-                '<code>%s</code>' % esc(entry["format"]),
-            ])
-        blocks.append(
-            '  <section class="tier" id="tier-%s" aria-labelledby="tier-%s-h">\n'
-            '    <h3 id="tier-%s-h">%s <span class="count">%s fields</span></h3>\n'
-            '    <div class="scroll" tabindex="0" role="region" aria-label="%s">%s</div>\n'
-            '  </section>' % (
-                esc(tier), esc(tier), esc(tier), esc(tier.capitalize()), esc(count(len(rows))),
-                esc("%s fields, with their definitions" % tier.capitalize()),
-                table([("Field", ""), ("Label", ""), ("Definition", ""), ("Unit", ""),
-                       ("Format", "")], rows, cls="tbl glossary")))
-    return "\n".join(blocks)
-
-
-def impact_arithmetic_line(site):
-    """The division, done in the act's own two extremes so the denominator is visible working.
-
-    trzzcko and snorlax are 0.021 of season total apart across the whole act and 7.5 times
-    apart on matches played, so the pair IS the argument for the denominator: one of them was
-    worth about as much in eight matches as the other was in sixty.
-    """
-    players = site["players"]
-    top = max(players, key=lambda p: p["impact"])
-    busiest = max(players, key=lambda p: p["matches"])
-
-    def who(entry):
-        return entry["name"].split("#")[0]
-
-    if top is busiest:
-        return ("One division: a player's season total across the act, over the matches they "
-                "played. %s's %s over %s matches is %s."
-                % (who(top), num("total", top["total"]), count(top["matches"]),
-                   num("impact", top["impact"])))
-    return ("One division, and it happens once: a player's season total of %s across the act, "
-            "over the matches they played. %s's %s over %s matches is %s. %s's %s over %s "
-            "matches is %s. The two totals are %s apart; the two exposures are %s times apart, "
-            "and it is the second number that separates the two headlines."
-            % (label_for("mwpa"), who(top), num("total", top["total"]),
-               count(top["matches"]), num("impact", top["impact"]),
-               who(busiest), num("total", busiest["total"]), count(busiest["matches"]),
-               num("impact", busiest["impact"]),
-               magnitude("total", abs(top["total"] - busiest["total"])),
-               format(busiest["matches"] / float(top["matches"]), ".1f")))
-
-
-def impact_invariance_line(site):
-    """Why there is no second bootstrap, with the spread of the constant that makes it true."""
-    per_match = [p["rounds"] / float(p["matches"]) for p in site["players"]]
-    return ("Inside one player the rescale is a positive constant — rounds per match runs %s to "
-            "%s across the four — and BCa respects a monotone transformation, so the interval "
-            "endpoints are the same endpoints and `covers_zero` is the same flag. There is no "
-            "second bootstrap: the low end of an impact interval is the low end of the rate "
-            "interval times that constant, and nothing was resampled again to get it."
-            % (format(min(per_match), ".1f"), format(max(per_match), ".1f")))
-
-
-def impact_reading_line(site):
-    """How to read the headline, in the act's own largest one, ending on what it cannot say.
-
-    It does NOT repeat "six extra wins per hundred matches": that is the second sentence of the
-    definition at the top of this page, and the reading a reader still lacks after it is the
-    multiplication back out — the headline times the matches behind it IS the season total.
-    """
-    players = site["players"]
-    top = max(players, key=lambda p: p["impact"])
-    covering = [p for p in players if p["covers_zero"]]
-    if not covering:
-        verdict = "No interval covers the null"
-    elif len(covering) == len(players):
-        verdict = "All %s intervals cover the null" % spell(len(players))
-    else:
-        verdict = "%s of the %s intervals cover the null" % (
-            spell(len(covering)).capitalize(), spell(len(players)))
-    return ("A percentage of a match win is a count of match wins, so the headline multiplies "
-            "back out: %s across the %s matches behind it is %s of one match win, which is %s's "
-            "season total. %s, so read a sign as a direction this much play cannot confirm."
-            % (num("impact", top["impact"]), count(top["matches"]),
-               num("total", top["total"]), top["name"].split("#")[0], verdict))
-
-
-def build_methods(site, out_dir):
-    scope_pairs = [
-        ("Act", esc(META["act"])),
-        ("Release", "<code>%s</code>" % esc(META["release"])),
-        ("Built", esc(META["generated_at"])),
-        (label_for("matches"), '<span class="num">%s</span>' % esc(count(META["matches"]))),
-        # The last Rounds stat row on the site, and it goes with the rest: the footer of all 80
-        # pages already prints the act's round count in the same breath as its match count, so
-        # this row was the number twice on the one page that carries both.
-        ("Round-players", '<span class="num">%s</span>' % esc(count(META["round_players"]))),
-        ("Distinct players", '<span class="num">%s</span>' % esc(count(META["players"]))),
-        ("Bootstrap replicates", '<span class="num">%s</span>' % esc(count(META["bootstrap"]))),
-        ("Seed", '<span class="num">%s</span>' % esc(META["seed"])),
-        (label_for("confidence"), '<span class="num">%s</span>' % esc(confidence())),
-        (label_for("mean_leverage"), '<span class="num">%s</span>'
-         % esc(num("mean_leverage", META["mean_leverage"]))),
-        ("Thin-cell marker", esc("below %s rounds" % count(GATE["rate_floor_marker_rounds"]))),
-        ("Rate suppression", esc("off, the floor is %s rounds"
-                                 % count(GATE["rate_floor_rounds"]))),
-        # The front page used to carry this number in a paragraph above its own rail. The rail
-        # still draws the rule and its one line still names the threshold; the fact itself
-        # belongs in the scope list, with every other gate the build reads.
-        ("Exposure threshold", esc("%s rounds"
-                                   % count(GATE["exposure_threshold_rounds"]))),
-        # "on" alone stopped being the whole fact when the ranking key changed: the gate says
-        # players are ranked, and the reader's next question is on what. The separator that was
-        # here rendered "on · by impact per match", which is a list of two things and not a
-        # sentence.
-        ("Ranking", esc("on, by %s" % label_for("impact").lower())
-         if GATE["rank_players"] else esc("off")),
-    ]
-    cavs = "".join(
-        '    <div id="cav-%s"><dt>%s</dt><dd>%s</dd></div>\n' % (
-            esc(item["id"]), esc(humanize(item["id"])), prose(item["text"]))
-        for item in META["cav"])
-
-    body = body_from(
-        "methods.html",
-        definition=prose(DICT["mwpa"]["definition"]),
-        leverage_line=esc(
-            "The mean round in this act carries a marginal match value of %s, and the index "
-            "printed beside a round's leverage is that round divided by this mean."
-            % magnitude("mean_leverage", META["mean_leverage"])),
-        unit_line=esc(
-            "A season total is the product summed over the act, in %s." %
-            DICT["total"]["unit"]),
-        impact_heading=esc(label_for("impact")),
-        impact_line=prose(DICT["impact"]["definition"]),
-        impact_arithmetic=prose(impact_arithmetic_line(site)),
-        impact_why=esc(
-            "%s is the estimator's own denominator, and it is not one anybody plays. A match "
-            "is what these four queue for and what a win is scored in, so the headline divides "
-            "by matches. The order of the four is the same in either denominator, so the "
-            "choice changes no finding on this site — only whether the number can be read "
-            "without arithmetic." % label_for("rate")),
-        impact_invariance=prose(impact_invariance_line(site)),
-        impact_read=esc(impact_reading_line(site)),
-        rate_line=esc(
-            "%s is the same measurement in the other denominator: the season total divided by "
-            "the rounds the player was credited in, times 100. It survives here, and on the "
-            "five breakdown tables and the synergy table of a player page, where it is the "
-            "only correct unit — those cells hold a slice of a match rather than a match, so "
-            "their match count is a count of matches the cell appeared in and not an exposure "
-            "to divide by. The component rail is the one cut that does convert, because its "
-            "rounds and its matches are the headline's own, and it is drawn per match."
-            % label_for("rate")),
-        interval_line=esc(
-            "Every interval here is a %s BCa bootstrap over %s replicates at seed %s, "
-            "resampling whole matches so that the rounds of one match move together." % (
-                confidence(), count(META["bootstrap"]), META["seed"])),
-        thin_line=prose(cav("thin")),
-        single_match_line=prose(cav("single_match")),
-        abilities_cav=prose(cav("abilities")),
-        causal_cav=prose(cav("causal")),
-        pseudonym_cav=prose(cav("opponents")),
-        bar_line=esc(
-            "No table on this site draws a bar beside a number any more: the number is the "
-            "number, and a magnitude bar next to it was a second rendering of a fact already "
-            "written. What is still drawn is a MARK, and a mark fills against a fixed axis, "
-            "never against the largest row on the screen, so the same value is the same width "
-            "on every page. Three of those axes are the %sth percentile of their quantity "
-            "across the whole act: %s for a rate, %s for one component per match, and %s for "
-            "one action's move on the win probability curve. The END that ran past its axis is "
-            "the end that is flagged, so a span which stopped at the axis cannot be read as one "
-            "that stopped on its own. Two axes are not percentiles and here is why. A mark on "
-            "the win probability curve has no number printed beside it, so a mark that clamped "
-            "would simply be wrong: the gate an action must clear before it gets a mark of its "
-            "own is the %sth percentile, %s, and only the act's top hundredth of moves are "
-            "drawn as marks at all. And the headline axis — the season tracker's y, and the "
-            "interval under the number on a player's card — runs to %s, the maximum of the "
-            "twelve headline numbers: four players, three endpoints each, every one of them on "
-            "screen at once. The %sth percentile of those twelve is %s and would clip two of "
-            "the four intervals, on the one figure whose entire subject is how wide they are."
-            % (
-                count(SCALE["percentile"]), magnitude("rate", SCALE["rate"]),
-                magnitude("impact", SCALE["component_impact"]),
-                magnitude("dp", SCALE["action_dp"]),
-                count(SCALE["marker_percentile"]), magnitude("dp", SCALE["marker_gate"]),
-                magnitude("impact", SCALE["impact"]),
-                count(SCALE["percentile"]),
-                magnitude("impact", percentile(
-                    [abs(v) for row in site["players"]
-                     for v in (row["impact"], row["impact_lo"], row["impact_hi"])],
-                    BAR_PERCENTILE)))),
-        scope_facts=facts(scope_pairs),
-        caveats_heading=esc("The %s caveats that come with these numbers"
-                            % count(len(META["cav"]))),
-        cavs=cavs,
-        glossary_heading=esc("The %s fields the payload defines" % count(len(DICT))),
-        glossary_note=esc(
-            "A few round-grain columns carry no dictionary entry and are labelled by this "
-            "build rather than by the payload: %s." % ", ".join(sorted(
-                FALLBACK_LABEL[k].lower() for k in FALLBACK_LABEL if k not in DICT))),
-        glossary=glossary_html())
-
-    return render_page(
-        out_dir / "methods.html", site,
-        title="Methods %s %s, act %s" % (EM, label_for("impact").lower(), META["act"]),
-        description="What %s is, why the denominator is matches rather than rounds, how to "
-                    "read an interval that covers zero, and the %s caveats attached to these "
-                    "numbers." % (label_for("impact").lower(), count(len(META["cav"]))),
-        page="methods", root="", active="methods", body=body,
-        data={"page": "methods", "meta": META, "scale": SCALE})
-
-
 # ------------------------------------------------------------------------------- build
 
 def main():
-    global META, DICT, GATE, CAV, SCALE, ASSETS, ART, RESULT
+    global META, DICT, GATE, CAV, SCALE, ASSETS, ART, RESULT, NAME
     site, players, matches = load_payload()
     META = site["meta"]
     DICT = META["dict"]
     GATE = META["gate"]
     ASSETS = META.get("assets", {})
+    # THE TWO OVERRIDES THIS FILE MAKES ON THE PAYLOAD'S OWN DICTIONARY, both of them display
+    # precision and neither of them a definition. They are applied to META itself so that
+    # quad-shared.js carries them too: build.py and quad-app.js must never write the same
+    # quantity at two precisions.
+    for key, spec in DECIMALS.items():
+        DICT[key]["format"] = spec
+    NAME = dict((entry["name"], SHORT_NAME.get(entry["name"].split("#")[0],
+                                               entry["name"].split("#")[0]))
+                for entry in site["players"])
     ART = css_px("--icon-art", "--icon-slot", "--weapon-art-w", "--sp-2",
                  "--icon-card", "--weapon-card-w", "--weapon-card-h")
 
@@ -2898,11 +3023,10 @@ def main():
         raise AssertionError("%d action nodes against %d events in the round payloads"
                              % (node_kinds["action"], total_events))
 
-    name_of = dict((p["short"], p["name"]) for p in site["players"])
     written = []
     sizes = {}
 
-    sizes["index"] = build_index(site, HERE, name_of)
+    sizes["index"] = build_index(site, players, HERE)
     written.append(HERE / "index.html")
 
     match_bytes = 0
@@ -2914,17 +3038,22 @@ def main():
 
     player_bytes = 0
     for entry in site["players"]:
-        player_bytes += build_player(site, players[entry["short"]], entry, HERE, matches)
+        player_bytes += build_player(site, players[entry["short"]], HERE)
         written.append(HERE / "p" / ("%s.html" % entry["short"]))
     sizes["player"] = player_bytes
 
-    sizes["methods"] = build_methods(site, HERE)
-    written.append(HERE / "methods.html")
+    # THE METHODS PAGE IS GONE, at the owner's instruction: this site is public and the model
+    # behind these numbers is not. The one sentence each page needed from it — what a caveat
+    # covered — is now printed on that page in full, and the stale file is removed rather than
+    # left orphaned in the directory where a search engine or a saved link could still reach it.
+    stale = HERE / "methods.html"
+    if stale.exists():
+        stale.unlink()
 
     (HERE / "quad-shared.js").write_text(shared_js(site), encoding="utf-8")
     (HERE / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
 
-    expected = META["matches"] + len(site["players"]) + 2
+    expected = META["matches"] + len(site["players"]) + 1
     if len(written) != expected:
         raise AssertionError("wrote %d pages against %d expected" % (len(written), expected))
     missing = [str(p) for p in written if not p.exists()]
@@ -2932,14 +3061,14 @@ def main():
         raise AssertionError("pages missing after write: %s" % ", ".join(missing))
 
     total = sum(p.stat().st_size for p in written) + (HERE / "robots.txt").stat().st_size
-    print("pages       %d  (%d match, %d player, index, methods)"
+    print("pages       %d  (%d match, %d player, index)"
           % (len(written), META["matches"], len(site["players"])))
     print("match pages %d rounds, %d round-players inlined"
           % (total_rounds, total_round_players))
     print("curve       %d nodes inlined  (%s)"
           % (total_nodes, ", ".join("%s %d" % (kind, node_kinds[kind]) for kind in KINDS)))
-    print("bytes       index %d, methods %d, players %d, matches %d, total on disk %d"
-          % (sizes["index"], sizes["methods"], sizes["player"], sizes["match"], total))
+    print("bytes       index %d, players %d, matches %d, total on disk %d"
+          % (sizes["index"], sizes["player"], sizes["match"], total))
     print("bar axes    " + ", ".join("%s %.4f" % (k, v) for k, v in sorted(SCALE.items())
                                      if k != "percentile")
           + " (p%d, pinned in %s)" % (SCALE["percentile"], SCALE_PIN.name))

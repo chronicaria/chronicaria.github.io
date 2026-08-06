@@ -1,6 +1,8 @@
-/* quad-app.js — the two figures on the four-player MWPA site.
+/* quad-app.js — the three figures on the four-player MWPA site.
  *
- * Front page: the tracker, inside [data-tracker].
+ * Front page: the tracker, inside [data-tracker], and offense against defense,
+ *             inside [data-offdef] — a scatter of both halves of every
+ *             player-match, with a binned panel per player under it.
  * Match page: the win-probability curve, inside [data-match-figure].
  * Hand-built SVG, no library, no build step, no network. Every page opens off
  * disk and reads its numbers out of window.QUAD, which build.py inlines.
@@ -8,10 +10,10 @@
  * WHY THE TRACKER IS THE RUNNING IMPACT PER MATCH.
  * At a player's match i the line is cumulative MWPA / (i + 1) — the headline
  * metric computed on the matches played so far. EACH LINE THEREFORE ENDS ON
- * THAT PLAYER'S HEADLINE NUMBER. The +6.4%, +1.1%, +0.8% and -0.2% the rail
- * at the top of this page prints are literally where the four lines
- * terminate, so the chart and the ranking are one object seen twice — the
- * same relation the match figure below has with its own round ledger.
+ * THAT PLAYER'S HEADLINE NUMBER, which is the number that player's own card
+ * prints and the number in their legend key here. No figure is written into
+ * this comment: the payload is refreshed on a schedule and every one of them
+ * moves when it is.
  *
  * The running SUM this replaced could not be read across players, which is
  * the defect that started this. SN0RLAX climbed to +0.489 over 60 matches and
@@ -55,15 +57,27 @@
   var ICONS_KEY = "rwpa-icons";   // this site only: the sibling ships no imagery
   var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var LONG_MONTHS = ["January", "February", "March", "April", "May", "June", "July",
+                     "August", "September", "October", "November", "December"];
   /* The arrows are gone. Every signed format on this site carries a printed +
      or -, so the glyph was a fourth spelling of a fact the number, the colour
      and the mark's position already carry three times. Same as build.py, which
      keeps zero (a middot) and none (an em dash) because those two say something
      no digit does. */
   var GLYPH = { pos: "", neg: "" };
-  var EM = "—";
+  var EM = "—";       // NOT MEASURED
+  var MID = "·";      // an exact measured zero — build.py's own two glyphs, same meanings
   var uidN = 0;
   function uid(p) { uidN += 1; return p + "-" + uidN; }
+
+  /* HOW A PERSON IS WRITTEN, and it is build.py's rule in the other medium. A focal player is
+     somebody the reader knows, so the Riot tag comes off and one of them takes an initialism;
+     an OPPONENT is a pseudonym whose tag IS the identity — six `Anonymous` rows in one match
+     are told apart by nothing else — so those names pass through whole. The map is built from
+     whichever payload blocks this page carries, which is why nothing here names an opponent. */
+  var SHORT_NAME = { MartinLutherKing: "MLK" };
+  var NAME = {};
+  function who(name) { return name ? (NAME[name] || String(name)) : EM; }
 
   /* ---- payload -------------------------------------------------------- */
   /* build.py inlines one payload per page and may or may not wrap it, so find
@@ -84,6 +98,17 @@
   /* The fixed bar axes build.py derives once from the act's own distribution
      and inlines on every page. Read here, never recomputed — house rule 3. */
   var SCALE = (Q && Q.scale) || (SITE && SITE.scale) || {};
+
+  /* The name map, from whichever payload blocks this page carries. A row with no `short` is
+     an opponent and is not entered, so `who` returns it whole. */
+  [(SITE && SITE.players) || [], (MATCH && MATCH.players) || [], PLAYER ? [PLAYER] : []]
+    .forEach(function (list) {
+      list.forEach(function (p) {
+        if (!p || !p.short || !p.name) return;
+        var base = String(p.name).split("#")[0];
+        NAME[p.name] = SHORT_NAME[base] || base;
+      });
+    });
 
   /* ---- numbers -------------------------------------------------------- */
   /* Formats come from meta.dict. The fallback exists because the dict does not
@@ -111,24 +136,64 @@
     return sign + Math.abs(r).toFixed(dp) + (m[3] === "%" ? "%" : "");
   }
   function val(key, v, fallback) { return num(v, (spec(key) && spec(key).format) || fallback); }
+  /* WHAT A TOKEN IS CALLED, and it is build.py's `node_type_label` in the other medium. An
+     action's type is a payload enum — `kill`, `timer_expired` — and the round panel beside this
+     figure prints it through meta.dict first and a humanised fallback second. Printing the raw
+     enum here made the same node read `kill` on the curve and `Kill` in the table under it. */
+  function humanize(token) { return String(token).replace(/_/g, " "); }
+  function typeLabel(token) {
+    if (!token) return EM;
+    var e = spec(token);
+    if (e && e.label) return e.label;
+    var t = humanize(token);
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
   function sgn(v) { return v > 0 ? "pos" : v < 0 ? "neg" : "zero"; }
   /* Sign, three ways: the + or - the format spec prints, the colour class from
      sgn(), and the mark's own position against the 50% rule. GLYPH.pos and
      GLYPH.neg are empty, so this returns "" for every value; it stays because
      move() is the one place a glyph would go back in. */
   function glyph(v) { return v > 0 ? GLYPH.pos : v < 0 ? GLYPH.neg : ""; }
+  /* THE THREE STATES OF A SIGNED NUMBER, and this is build.py's `signed_text` in the other
+     medium. Absent is an em dash. An EXACT ZERO is a middot — measured, and neither direction —
+     never `+0.00%`, which claims a direction the number does not have. A value smaller than its
+     own format can write prints as less-than the smallest printable magnitude, with no sign and
+     no direction colour. Without this the figure wrote `0.00%` for the same node the round
+     panel under it wrote `·` for, six inches apart on one page. */
+  function step(key, fallback) {
+    var m = /\.(\d+)([f%])$/.exec((spec(key) && spec(key).format) || fallback || "");
+    return m ? Math.pow(10, -(Number(m[1]) + (m[2] === "%" ? 2 : 0))) : null;
+  }
   function move(key, v, fallback) {
+    if (v === null || v === undefined || v !== v) return EM;
+    if (v === 0) return MID;
+    var st = step(key, fallback);
+    if (st !== null && Math.abs(v) < st) {
+      return "<" + num(st, ((spec(key) && spec(key).format) || fallback || "").replace("+", ""));
+    }
     var g = glyph(v);
     return (g ? g + " " : "") + val(key, v, fallback);
   }
+  /* No direction colour on a value the format cannot resolve, for the same reason. */
+  function sgnOf(key, v, fallback) {
+    var st = step(key, fallback);
+    if (v && st !== null && Math.abs(v) < st) return "under";
+    return sgn(v);
+  }
 
+  /* MONTH FIRST, in both lengths, because build.py writes `August 6` on every date it
+     renders and a value that changes format the moment a key is pressed reads as a different
+     value. The short form is for an axis tick, where five characters is the whole budget. */
   function day(iso) {
     var d = new Date(iso);
-    return d.getUTCDate() + " " + MONTHS[d.getUTCMonth()];
+    return MONTHS[d.getUTCMonth()] + " " + d.getUTCDate();
+  }
+  function longDay(iso) {
+    var d = new Date(iso);
+    return LONG_MONTHS[d.getUTCMonth()] + " " + d.getUTCDate();
   }
   function fullDay(iso) {
-    var d = new Date(iso);
-    return day(iso) + " " + d.getUTCFullYear();
+    return longDay(iso) + " " + new Date(iso).getUTCFullYear();
   }
   function secs(ms) { return (ms / 1000).toFixed(1) + "s"; }
 
@@ -299,10 +364,8 @@
       out.innerHTML = [
         span(label("match_id", "match").toLowerCase() + " ", i + 1,
              " of " + player.rank_track.length),
-        /* The ISO date, not the tracker's "14 Jul": build.py renders this same
-           line into the same element on the server, and a value that changes
-           format the moment a key is pressed reads as a different value. */
-        span("", row.started_at.slice(0, 10) + " · " + row.map,
+        /* The same long date build.py renders into this element on the server. */
+        span("", longDay(row.started_at) + " · " + row.map,
              " · " + (row.won ? "won" : "lost")),
         /* Never the platform's queue name and never an em dash: the em dash on
            this site means NOT MEASURED, and this is measured. */
@@ -357,8 +420,7 @@
         /* `m` is the headline metric on the matches played so far: MWPA
            divided by matches. r.i is the player's own zero-based match
            ordinal, so the last row of every series is site.players[].impact
-           exactly — verified at +6.371%, +1.090%, +0.814%, -0.184%, which is
-           the +6.4%, +1.1%, +0.8%, -0.2% the rail above prints. */
+           exactly, which is the number the legend key beside it prints. */
         return { x: order[r.match_id], r: r, m: r.cumulative / (r.i + 1) };
       }).filter(function (d) { return d.x !== undefined; });
       if (rows.length) series.push({ p: p, rows: rows, shape: SHAPE[p.short] || "circle" });
@@ -371,7 +433,7 @@
     /* THE Y AXIS IS scale.impact, the payload's fixed headline axis: the
        maximum of the twelve headline numbers, four players by three endpoints,
        so no season line and no interval endpoint can leave the box. It is the
-       one axis this figure and the component rail on a player page share.
+       one axis this figure shares with the capped span on a player's card.
        House rule 3: read, never recomputed.
 
        Fitting the box to the marks instead was the alternative and one datum
@@ -394,17 +456,21 @@
       pad = (hi - lo) * 0.08 || 0.1;
       lo -= pad; hi += pad;
     }
-    /* 19 of 108 single-match values sit outside that axis: the raw datum is
-       four times as wide as any season mean, which is the finding and not a
-       rendering fault. Those are drawn as carets at the edge and counted in
-       the description, and every one of them keeps its exact value in the
-       readout and a row in the match index below. */
+    /* A large minority of single-match values sit outside that axis: the raw
+       datum is several times as wide as any season mean, which is the finding
+       and not a rendering fault. Those are drawn as carets at the edge, counted
+       at run time in `clamped` and named in the description, and every one of
+       them keeps its exact value in the readout and a row in the index below. */
     var clamped = 0;
     series.forEach(function (s) {
       s.rows.forEach(function (d) { if (d.r.mwpa > hi || d.r.mwpa < lo) clamped += 1; });
     });
 
-    var W = 960, H = 424, ML = 46, MR = 138, MT = 22, MB = 46;
+    /* ML holds the widest y tick. `impact` prints two decimals now, so `+10.00%` is 44.3
+       units against the 38 the old gutter left: both signed gridlines were rendering as an
+       unsigned `10.00%` with the + or - clipped off by the viewBox — the axis losing exactly
+       the non-colour sign channel house rule 2 requires it to carry. */
+    var W = 960, H = 424, ML = 60, MR = 138, MT = 22, MB = 46;
     var PW = W - ML - MR, PH = H - MT - MB;
     function X(i) { return ML + (N > 1 ? i * PW / (N - 1) : PW / 2); }
     function Y(v) { return MT + PH - (v - lo) / (hi - lo) * PH; }
@@ -435,7 +501,7 @@
       + (META.act ? " of act " + String(META.act).toUpperCase() : "") + " in the order they were played.";
     dsc.textContent = series.map(function (s) {
       var last = s.rows[s.rows.length - 1];
-      return s.p.name + ": " + val("impact", last.m, MOVE) + " "
+      return who(s.p.name) + ": " + val("impact", last.m, MOVE) + " "
         + ((spec("impact") && spec("impact").unit) || "per match")
         + " over " + s.rows.length + " matches, first on " + fullDay(s.rows[0].r.started_at)
         + ", last on " + fullDay(last.r.started_at) + ".";
@@ -513,7 +579,7 @@
     ends.forEach(function (e) {
       var ge = sv("g", { class: "series end p-" + e.s.p.short }, svg);
       sv("line", { class: "leader", x1: e.x + 5, x2: ML + PW + 14, y1: Y(e.v), y2: e.y }, ge);
-      text(ML + PW + 20, e.y - 1, e.s.p.name.split("#")[0], "end-name", ge);
+      text(ML + PW + 20, e.y - 1, who(e.s.p.name), "end-name", ge);
       text(ML + PW + 20, e.y + 13, val("impact", e.v, MOVE), "end-val " + sgn(e.v), ge);
     });
 
@@ -523,18 +589,23 @@
     var crossV = sv("line", { class: "cross-v", y1: MT, y2: MT + PH }, gCross);
     svg.setAttribute("tabindex", "0");
 
-    var readout = el("p", "fig-readout", host);
+    /* THE READOUT IS A TABLE, not a sentence with middots in it. Four players at three
+       quantities each was eleven separators on one wrapping line, and a reader comparing two
+       of them had to compare two substrings of a paragraph. One row per player, one column
+       per quantity, so the comparison is a scan down a column — the same argument the match
+       index's cross-tab is built on. It is `role="status"`, so a screen reader still gets it
+       read out on change; the caption carries which match the rows belong to. */
+    var readout = el("div", "fig-readout tracker-read", host);
     readout.setAttribute("role", "status");
     readout.setAttribute("aria-live", "polite");
 
     function rest() {
       gCross.setAttribute("visibility", "hidden");
-      /* The one sentence the noisy left edge gets. It is a property of a mean,
-         not a caveat about the data, so it is stated once and not repeated. */
-      readout.textContent = label("impact", "Impact per match") + " as a line, ending on that "
-        + "player's headline number; each match's own " + label("mwpa", "MWPA") + " as a mark. "
-        + "One match in, the line is that match. "
-        + "Point anywhere for every player in that match.";
+      readout.textContent = "";
+      el("p", "tracker-rest", readout,
+         label("impact", "Impact per match") + " as a line, ending on that player's headline "
+         + "number; each match's own " + label("mwpa", "MWPA") + " as a mark. Point anywhere "
+         + "for every player in that match.");
     }
     function say(i) {
       var m = matches[i];
@@ -544,24 +615,36 @@
       crossV.setAttribute("x1", X(i));
       crossV.setAttribute("x2", X(i));
       readout.textContent = "";
-      el("b", null, readout, m.map + " · " + day(m.started_at));
+
+      var tb = el("table", "tracker-tbl", readout);
+      el("caption", null, tb, m.map + " · " + longDay(m.started_at)
+        + (m.score ? " · " + m.score[0] + "–" + m.score[1] : ""));
+      var hr = el("tr", null, el("thead", null, tb));
+      [["Player", "l"], [label("mwpa", "MWPA"), "n"],
+       [label("impact", "Impact per match"), "n"], [label("matches", "Matches"), "n"]]
+        .forEach(function (h) {
+          el("th", h[1], hr, h[0]).setAttribute("scope", "col");
+        });
+      var body = el("tbody", null, tb);
       var any = false;
       series.forEach(function (s) {
         var hit = null;
         s.rows.forEach(function (row) { if (row.x === i) hit = row; });
         if (!hit) return;
         any = true;
-        el("span", null, readout, " · ");
-        el("span", "hue p-" + s.p.short, readout, s.p.name.split("#")[0] + " ");
-        el("span", sgn(hit.r.mwpa), readout, val("mwpa", hit.r.mwpa));
-        /* The mark's exact value is printed here whether or not it fitted on
-           the axis, so a caret at the edge never costs the reader the number.
-           The mean beside it is the line's height at this match, and the count
-           is what makes the two comparable across players. */
-        el("span", null, readout, " (" + val("impact", hit.m, MOVE) + " over "
-          + (hit.r.i + 1) + (hit.r.i ? " matches)" : " match)"));
+        var tr = el("tr", "p-" + s.p.short, body);
+        el("th", "l hue", tr, who(s.p.name)).setAttribute("scope", "row");
+        /* The mark's exact value, whether or not it fitted on the axis, so a caret at the
+           edge never costs the reader the number. Then the line's height at this match, and
+           the count that makes the two comparable across players. */
+        el("td", "n " + sgn(hit.r.mwpa), tr, val("mwpa", hit.r.mwpa));
+        el("td", "n", tr, val("impact", hit.m, MOVE));
+        el("td", "n", tr, String(hit.r.i + 1));
       });
-      if (!any) el("span", "na", readout, " · " + EM + " none of the four played this match");
+      if (!any) {
+        var tr0 = el("tr", null, body);
+        el("td", "na", tr0, EM + " none of the four played this match").colSpan = 4;
+      }
     }
     var atX = -1;
     function point(evt) {
@@ -597,7 +680,7 @@
       b.appendChild(sw);
       sv("line", { class: "cum", x1: 1, x2: 25, y1: 7, y2: 7 }, sw);
       sv("path", { class: "dot", d: markerPath(s.shape, 13, 7, 3.6) }, sw);
-      el("span", "who", b, s.p.name.split("#")[0]);
+      el("span", "who", b, who(s.p.name));
       /* The exposure and the headline number, which is where this key's line
          ends. The season total used to sit here and it was the one number on
          the figure that still ranked on volume. */
@@ -625,50 +708,483 @@
        because it used to be needed. */
   }
 
-  /* ==== the match figure ================================================ */
-  /* ONE CONTINUOUS MATCH WIN PROBABILITY CURVE, and the reason it is one line
-     rather than the two stacked panels this replaced.
-     ---------------------------------------------------------------------
-     `wp_series` conditions on how the current round ends. With the score at
-     (a, b) and the focal side holding round-win probability q:
+  /* ==== offense against defense ========================================== */
+  /* ONE POINT PER PLAYER-MATCH, its attack half against its defense half. The
+     two halves sum to that match's own MWPA — the mark the tracker above plots
+     — so this figure is that mark taken apart and not a new quantity. A point's
+     signed distance from the diagonal IS its MWPA.
 
-         P(match) = W(a, b+1) + q · L(a, b)
+     WHY THE BOX IS SQUARE AND THE AXES ARE SYMMETRIC. Both halves are the same
+     unit measured on two halves of one match, so equal units in both directions
+     is the only geometry in which x = -y is a true 45 degrees and each quadrant
+     is a true quarter. The null is the centre of both.
 
-     so the round model the ledger already produces is affinely mapped onto the
-     match by that round's own leverage. Two consequences drive every choice
-     below, and the payload's docstring records them as measured, not assumed:
+     WHY A SCATTER AND FOUR PANELS AND NOT ONE OF THEM. The scatter answers
+     WHICH MATCH and dies in the middle, where 151 player-matches overplot. The
+     panels answer WHAT A PLAYER LOOKS LIKE and cannot name a match. They are
+     binned on the axis the scatter is drawn on, which is what lets a reader
+     carry a shape from one to the other.
 
-       dP/dq == L to 3.6e-11. THE SLOPE OF THIS LINE IS THE LEVERAGE, so an
-       action node's `dp` IS that event's raw match impact in match win
-       probability points. A kill that moves the line 3.4 points moved the
-       match 3.4 points. The chart and the metric are one object seen twice.
+     WHY FOUR BINS A SIDE, and it is set by the smallest season and not the
+     largest. TheMarias played eight matches: on a 6x6 grid her panel is six
+     occupied cells holding one or two each, which draws the sample size and not
+     the player. Four a side puts the bin edges exactly on the null, so each
+     quadrant of the scatter is exactly four cells of a panel, and the fullest
+     cell of every panel holds between a fifth and a third of that season.
 
-       Each round's terminal node equals the next round's wp_before exactly
-       (0.0e+00), so nothing is stitched and no boundary is approximated.
+     WHY THE INK IS A SHARE AND THE DIGIT IS THE COUNT. Eight matches against
+     seventy-five: one ramp in raw counts paints one panel dark and one panel
+     empty, and what the reader would be seeing is the exposure. Each cell is
+     inked by its share of THAT player's matches, on one ramp all four share,
+     and the count is printed inside it so no cell is legible only as a tone. */
+  function drawOffenseDefense(host) {
+    var OD = (Q && Q.od) || (SITE && SITE.od) || null;
+    if (!OD || !SITE || !SITE.players) return;
 
-     FOUR NODE KINDS ARE FOUR DIFFERENT CLAIMS AND ARE DRAWN AS FOUR THINGS.
+    var SHARE = ".0%";    /* the dict names no share; a fallback in the sense PCT and MOVE are */
 
-       round_start  the buy, priced before anyone acts. Round-start q has an
-                    sd of 0.153 across the act, so an eco round opens with the
-                    match already leaning away — a real move, usually the
-                    largest one nobody made. Attributable to the ECONOMY and
-                    never to a player, so it is a dashed vertical at the round
-                    boundary and it never gets an event marker.
-       clock        drift between credited actions, the alive-clock component.
-                    Plain sloped line.
-       action       a kill, plant or defuse. The marker, sized by |dp|.
-       terminal     the round resolves. The gap from the last action to here is
-                    the model's calibration error at the terminal, which the
-                    ledger books to a team side rather than to a player. Drawn
-                    dashed like the economy move, and never smoothed away.
+    var series = [];
+    SITE.players.forEach(function (p) {
+      var rows = (OD[p.short] || []).filter(function (r) {
+        return r && typeof r.a === "number" && typeof r.d === "number";
+      });
+      if (rows.length) series.push({ p: p, rows: rows, shape: SHAPE[p.short] || "circle" });
+    });
+    if (!series.length) return;
 
-     WHY THE INTERPOLATION IS LINEAR AND NOT A CURVE. An action node shares its
-     `t` with the clock node before it, so the segment between them is exactly
-     vertical and a straight join is already the honest step/linear hybrid:
-     clock segments slope, actions jump. This is the one place the reference
-     component's default is wrong for this data — curveNatural would round the
-     corners off the exact jump the chart exists to show, and would overshoot
-     past 0 and 1 on a bounded axis besides. Do not "smooth" it. */
+    /* THE AXIS IS scale.match_mwpa, the payload's fixed axis for one match's own
+       MWPA — which is the unit both halves are measured in. Read, never
+       recomputed (house rule 3), and used symmetrically about the null. Four of
+       the 151 player-matches sit outside it; they are drawn as carets at the
+       edge, exactly as the tracker draws the same fact, and counted in the
+       description rather than quietly rescaling the box around them. */
+    var AX = (typeof SCALE.match_mwpa === "number" && SCALE.match_mwpa > 0) ? SCALE.match_mwpa : 0;
+    if (!AX) {
+      series.forEach(function (s) {
+        s.rows.forEach(function (r) { AX = Math.max(AX, Math.abs(r.a), Math.abs(r.d)); });
+      });
+    }
+    if (!AX) return;
+
+    var ATK = label("attack_mwpa", "Attack MWPA");
+    var DEF = label("defense_mwpa", "Defense MWPA");
+    /* "Attack MWPA" -> "attack": the side, taken off the dict label rather than
+       written out here a second time. */
+    function sideOf(lab) { return String(lab).split(" ")[0].toLowerCase(); }
+    var A_ = sideOf(ATK), D_ = sideOf(DEF);
+
+    var total = 0, off = 0;
+    series.forEach(function (s) {
+      s.rows.forEach(function (r) {
+        total += 1;
+        if (Math.abs(r.a) > AX || Math.abs(r.d) > AX) off += 1;
+      });
+    });
+    function meanOf(s, key) {
+      var sum = 0;
+      s.rows.forEach(function (r) { sum += r[key]; });
+      return sum / s.rows.length;
+    }
+
+    host.textContent = "";
+    host.classList.add("fig", "od-fig");
+    var only = "";
+
+    /* The legend is one control for both figures below it, so it is built first
+       and isolates a player in the scatter and the panels together. */
+    var legend = el("div", "fig-legend", host);
+    legend.setAttribute("role", "group");
+    legend.setAttribute("aria-label", "Series, and a button to isolate each one");
+
+    /* ---- the scatter ----------------------------------------------------- */
+    var W = 640, ML = 66, MR = 24, MT = 34, MB = 54;
+    var PW = W - ML - MR, PH = PW, H = MT + PH + MB;
+    function X(v) { return ML + (v + AX) / (2 * AX) * PW; }
+    function Y(v) { return MT + PH - (v + AX) / (2 * AX) * PH; }
+
+    var plot = el("div", "od-plot", host);
+    var svg = sv("svg", {
+      class: "od-scatter", viewBox: "0 0 " + W + " " + H,
+      preserveAspectRatio: "xMidYMid meet", role: "img", tabindex: "0"
+    }, plot);
+    var tId = uid("od"), dId = uid("od");
+    svg.setAttribute("aria-labelledby", tId + " " + dId);
+    sv("title", { id: tId }, svg).textContent =
+      "Every match of every player: its " + A_ + " half across, its " + D_ + " half up, on one "
+      + "symmetric axis with the null at the centre of both.";
+    sv("desc", { id: dId }, svg).textContent = series.map(function (s) {
+      return who(s.p.name) + ": " + s.rows.length + " matches, mean " + A_ + " "
+        + val("attack_mwpa", meanOf(s, "a")) + ", mean " + D_ + " "
+        + val("defense_mwpa", meanOf(s, "d")) + ".";
+    }).join(" ") + " The two halves sum to the match's own " + label("mwpa", "MWPA") + ", so the "
+      + "diagonal is every match worth " + val("mwpa", 0) + ". "
+      + (off ? off + " of the " + total + " player-matches fall outside the axis and are drawn "
+             + "as carets at its edge, pointing the way they went. " : "")
+      + "The same matches are in the cross-tab below, with a link to each.";
+
+    var g = sv("g", { class: "grid" }, svg);
+    ticks(-AX, AX, 8).forEach(function (t) {
+      if (!t) return;                    /* the null is drawn last, over everything */
+      sv("line", { class: "gridline", x1: ML, x2: ML + PW, y1: Y(t), y2: Y(t) }, g);
+      sv("line", { class: "gridline", y1: MT, y2: MT + PH, x1: X(t), x2: X(t) }, g);
+      text(ML - 8, Y(t) + 3.5, val("defense_mwpa", t), "tick", g, "end");
+      text(X(t), MT + PH + 18, val("attack_mwpa", t), "tick", g, "middle");
+    });
+    text(ML, MT - 14, DEF, "axis-title", g, "start");
+    text(ML + PW, MT + PH + 38, ATK, "axis-title", g, "end");
+
+    /* The locus of a match worth nothing. It is a property of the plane and not
+       a fifth series, so it is a --rule hairline under every mark, labelled in
+       the empty upper-left where no season lives. */
+    sv("line", { class: "od-guide", x1: X(-AX), y1: Y(AX), x2: X(AX), y2: Y(-AX) }, g);
+    text(ML + PW * 0.12 + 8, MT + PH * 0.12 + 16,
+         A_ + " + " + D_ + " = " + val("mwpa", 0), "od-guide-lab", g, "start");
+
+    /* What each corner means, in words, because a quadrant nobody names is a
+       quadrant the reader has to derive from two axis titles every time. */
+    var quad = sv("g", { class: "od-quad" }, svg);
+    text(ML + 10, MT + 18, D_ + " up, " + A_ + " down", null, quad, "start");
+    text(ML + PW - 10, MT + 18, "up on both sides", null, quad, "end");
+    text(ML + 10, MT + PH - 10, "down on both sides", null, quad, "start");
+    text(ML + PW - 10, MT + PH - 10, A_ + " up, " + D_ + " down", null, quad, "end");
+
+    var nulls = sv("g", {}, svg);
+    sv("line", { class: "axis-zero", x1: ML, x2: ML + PW, y1: Y(0), y2: Y(0) }, nulls);
+    sv("line", { class: "axis-zero", y1: MT, y2: MT + PH, x1: X(0), x2: X(0) }, nulls);
+
+    var marks = [];
+    series.forEach(function (s) {
+      var gp = sv("g", { class: "od-series p-" + s.p.short }, svg);
+      s.rows.forEach(function (r) {
+        var cx = Math.max(-AX, Math.min(AX, r.a)), cy = Math.max(-AX, Math.min(AX, r.d));
+        var x = X(cx), y = Y(cy), ang;
+        if (cx !== r.a || cy !== r.d) {
+          /* Off the axis: the tracker's caret, turned to point the way the value
+             went. A series marker sitting on the boundary would read as a match
+             that stopped there, which is the one thing it must not say. */
+          ang = Math.atan2(r.a - cx, r.d - cy) * 180 / Math.PI;
+          sv("path", { class: "od-dot is-off", d: caretPath(x, y, 4.4, 1),
+                       transform: "rotate(" + ang.toFixed(1) + " " + x + " " + y + ")" }, gp);
+        } else {
+          sv("path", { class: "od-dot", d: markerPath(s.shape, x, y, 3.6) }, gp);
+        }
+        marks.push({ s: s, r: r, x: x, y: y });
+      });
+    });
+    var ring = sv("circle", { class: "od-focus", r: 9, visibility: "hidden" }, svg);
+
+    var read = el("div", "fig-readout od-read", host);
+    read.setAttribute("role", "status");
+    read.setAttribute("aria-live", "polite");
+
+    function quantity(key, v) {
+      var w = el("span", "od-q", read);
+      el("span", "od-k", w, label(key, key) + " ");
+      el("span", "od-v " + sgn(v), w, val(key, v));
+    }
+
+    /* Stepping order is the attack axis, left to right. There is no time in this
+       cloud, so the only order it suggests is the one you read it in. */
+    var seq = marks.slice().sort(function (a, b) { return a.r.a - b.r.a; });
+    var cur = null;
+    function live() {
+      return only ? seq.filter(function (m) { return m.s.p.short === only; }) : seq;
+    }
+    function restScatter() {
+      /* An aria-live region that rewrites itself with the same sentence
+         re-announces it, so rest is a no-op once it is already at rest. */
+      if (!cur && read.firstChild) return;
+      cur = null;
+      ring.setAttribute("visibility", "hidden");
+      svg.setAttribute("class", "od-scatter");
+      read.textContent = "";
+      el("p", "od-rest", read,
+         "One point is one player's match. Right of the vertical null they gained on " + A_
+         + ", above the horizontal null they gained on " + D_ + ", and the diagonal is a match "
+         + "worth " + val("mwpa", 0) + ". Point at a match, or press Enter on one to open it.");
+    }
+    function show(m) {
+      cur = m;
+      ring.setAttribute("cx", m.x);
+      ring.setAttribute("cy", m.y);
+      ring.setAttribute("visibility", "visible");
+      svg.setAttribute("class", "od-scatter is-live");
+      read.textContent = "";
+      var head = el("span", "od-q", read);
+      el("b", "hue p-" + m.s.p.short, head, who(m.s.p.name));
+      el("span", "od-k", head, " " + m.r.map + " · " + m.r.date
+        + (typeof m.r.won === "boolean" ? " · " + (m.r.won ? "won" : "lost") : ""));
+      quantity("attack_mwpa", m.r.a);
+      quantity("defense_mwpa", m.r.d);
+      quantity("mwpa", typeof m.r.m === "number" ? m.r.m : m.r.a + m.r.d);
+    }
+    function step(d) {
+      var list = live(), i;
+      if (!list.length) return;
+      i = list.indexOf(cur);
+      i = i < 0 ? (d > 0 ? 0 : list.length - 1)
+                : Math.max(0, Math.min(list.length - 1, i + d));
+      show(list[i]);
+    }
+    function openMatch() {
+      if (cur && cur.r.id) location.href = (host.getAttribute("data-offdef") || "m/")
+        + cur.r.id + ".html";
+    }
+    svg.addEventListener("pointermove", function (evt) {
+      var box = svg.getBoundingClientRect(), k = box.width / W || 1;
+      var vx = (evt.clientX - box.left) / k, vy = (evt.clientY - box.top) / k;
+      var list = live(), best = null, near = 900, i, dx, dy, q;
+      for (i = 0; i < list.length; i++) {
+        dx = list[i].x - vx; dy = list[i].y - vy; q = dx * dx + dy * dy;
+        if (q < near) { near = q; best = list[i]; }
+      }
+      if (best && best !== cur) show(best);
+      else if (!best && cur) restScatter();
+    });
+    svg.addEventListener("pointerleave", restScatter);
+    svg.addEventListener("blur", restScatter);
+    svg.addEventListener("click", openMatch);
+    svg.addEventListener("keydown", function (evt) {
+      var d = evt.key === "ArrowRight" ? 1 : evt.key === "ArrowLeft" ? -1 : 0, list;
+      if (d) { evt.preventDefault(); step(d); return; }
+      if (evt.key === "Home" || evt.key === "End") {
+        evt.preventDefault();
+        list = live();
+        if (list.length) show(evt.key === "Home" ? list[0] : list[list.length - 1]);
+        return;
+      }
+      if (evt.key === "Enter") { evt.preventDefault(); openMatch(); }
+    });
+
+    /* ---- the small multiples --------------------------------------------- */
+    var BINS = 4;
+    function binOf(v) {
+      var k = Math.floor((v + AX) / (2 * AX) * BINS);
+      return k < 0 ? 0 : k > BINS - 1 ? BINS - 1 : k;   /* the outer bins are open-ended */
+    }
+    function edgeOf(k) { return -AX + k * (2 * AX / BINS); }
+    function rangeOf(k, key) {
+      if (!k) return "up to " + val(key, edgeOf(1));
+      if (k === BINS - 1) return val(key, edgeOf(k)) + " and above";
+      return val(key, edgeOf(k)) + " to " + val(key, edgeOf(k + 1));
+    }
+
+    var top = 0, small = series[0], big = series[0];
+    series.forEach(function (s) {
+      var grid = [], j, i;
+      for (j = 0; j < BINS; j++) { grid[j] = []; for (i = 0; i < BINS; i++) grid[j][i] = 0; }
+      s.rows.forEach(function (r) { grid[binOf(r.d)][binOf(r.a)] += 1; });
+      s.grid = grid;
+      for (j = 0; j < BINS; j++) {
+        for (i = 0; i < BINS; i++) top = Math.max(top, grid[j][i] / s.rows.length);
+      }
+      if (s.rows.length < small.rows.length) small = s;
+      if (s.rows.length > big.rows.length) big = s;
+    });
+    /* The ramp top, rounded UP to the next five points of share so the legend
+       reads in round numbers. Widened, never narrowed: no cell can clip it. */
+    var TOP = Math.ceil(top / 0.05) * 0.05 || 0.05;
+    /* The most ink a cell may take, and it is a contrast floor rather than a
+       taste: the count is printed inside the cell, and --ink over the darkest of
+       the four hues stops clearing 4.5:1 above this. */
+    var INK = 0.42;
+
+    var CELL = 46, PLOT = CELL * BINS, SLOT = 240, PX = 52, PY = 38;
+    var GW = SLOT * series.length, GH = PY + PLOT + 44;
+
+    var ramp = el("div", "od-ramp", host);
+    ramp.setAttribute("role", "group");
+    ramp.setAttribute("aria-label", "The ink ramp, in share of a player's own matches");
+    el("span", "od-ramp-lab", ramp, "share of that player's matches");
+    var qi, st, sw;
+    for (qi = 0; qi <= 4; qi++) {
+      st = el("span", "od-step", ramp);
+      sw = el("span", "od-sw", st);
+      el("i", null, sw).style.opacity = (INK * qi / 4).toFixed(3);
+      el("b", null, st, num(TOP * qi / 4, SHARE));
+    }
+
+    var pan = el("div", "fig-scroll od-panels", host);
+    pan.tabIndex = 0;
+    pan.setAttribute("role", "region");
+    pan.setAttribute("aria-label", "One binned panel per player — scrolls sideways");
+    var gsvg = sv("svg", {
+      class: "od-grid", viewBox: "0 0 " + GW + " " + GH,
+      preserveAspectRatio: "xMidYMid meet", role: "img", tabindex: "0"
+    }, pan);
+    var gtId = uid("od"), gdId = uid("od");
+    gsvg.setAttribute("aria-labelledby", gtId + " " + gdId);
+    sv("title", { id: gtId }, gsvg).textContent =
+      "The same plane as the scatter, in " + BINS + " by " + BINS + " bins, one panel per player, "
+      + "each inked by that cell's share of that player's own matches.";
+    sv("desc", { id: gdId }, gsvg).textContent = series.map(function (s) {
+      var best = { c: -1, i: 0, j: 0 }, j, i;
+      for (j = 0; j < BINS; j++) {
+        for (i = 0; i < BINS; i++) if (s.grid[j][i] > best.c) best = { c: s.grid[j][i], i: i, j: j };
+      }
+      return who(s.p.name) + ": " + s.rows.length + " matches, fullest cell " + best.c
+        + " of them at " + A_ + " " + rangeOf(best.i, "attack_mwpa") + ", "
+        + D_ + " " + rangeOf(best.j, "defense_mwpa") + ".";
+    }).join(" ") + " Every count is printed in its own cell.";
+
+    var cursors = [];
+    series.forEach(function (s, k) {
+      var x0 = SLOT * k + PX, y0 = PY, gp = sv("g", { class: "od-series p-" + s.p.short }, gsvg);
+      var j, i, c, cx, cy, net, nl;
+      text(x0, PY - 18, who(s.p.name), "od-panel-name", gp, "start");
+      text(x0 + PLOT, PY - 18, s.rows.length + " matches", "od-panel-n", gp, "end");
+      for (j = 0; j < BINS; j++) {
+        for (i = 0; i < BINS; i++) {
+          c = s.grid[j][i];
+          cx = x0 + i * CELL;
+          cy = y0 + (BINS - 1 - j) * CELL;
+          sv("rect", { class: "od-cell", x: cx, y: cy, width: CELL, height: CELL,
+                       "fill-opacity": (INK * (c / s.rows.length) / TOP).toFixed(3) }, gp);
+          /* Ink carries the density, the digit carries the count, and a cell
+             nothing landed in gets the middot every measured zero on this site
+             gets. Never a blank. */
+          text(cx + CELL / 2, cy + CELL / 2 + 4, c ? String(c) : MID, "od-count", gp, "middle");
+        }
+      }
+      net = sv("g", { class: "od-net" }, gp);
+      for (i = 1; i < BINS; i++) {
+        if (i === BINS / 2) continue;          /* that edge is the null, drawn in --ink below */
+        sv("line", { x1: x0 + i * CELL, x2: x0 + i * CELL, y1: y0, y2: y0 + PLOT }, net);
+        sv("line", { y1: y0 + i * CELL, y2: y0 + i * CELL, x1: x0, x2: x0 + PLOT }, net);
+      }
+      nl = sv("g", { class: "od-null" }, gp);
+      sv("line", { x1: x0 + PLOT / 2, x2: x0 + PLOT / 2, y1: y0, y2: y0 + PLOT }, nl);
+      sv("line", { y1: y0 + PLOT / 2, y2: y0 + PLOT / 2, x1: x0, x2: x0 + PLOT }, nl);
+      sv("rect", { class: "od-frame", x: x0, y: y0, width: PLOT, height: PLOT }, gp);
+      cursors.push(sv("rect", { class: "od-cursor", x: x0, y: y0, width: CELL, height: CELL,
+                                visibility: "hidden" }, gp));
+    });
+
+    /* One axis, labelled once. The four panels are the same box on the same
+       bins — that is the only reason they can be compared — so labelling all
+       four would be the same three numbers printed twelve times. */
+    var ax = sv("g", { class: "grid" }, gsvg);
+    [-AX, 0, AX].forEach(function (t, n) {
+      text(PX + n * PLOT / 2, PY + PLOT + 16, val("attack_mwpa", t), "tick", ax,
+           n === 0 ? "start" : n === 1 ? "middle" : "end");
+      text(PX - 6, PY + PLOT - n * PLOT / 2 + 3.5, val("defense_mwpa", t), "tick", ax, "end");
+    });
+    text(PX, GH - 6, A_ + " across, " + D_ + " up", "axis-title", ax, "start");
+
+    var pread = el("div", "fig-readout od-read od-read-grid", host);
+    pread.setAttribute("role", "status");
+    pread.setAttribute("aria-live", "polite");
+    var ci = -1, cj = -1;
+
+    function restPanels() {
+      if (ci < 0 && pread.firstChild) return;
+      cursors.forEach(function (c) { c.setAttribute("visibility", "hidden"); });
+      ci = -1; cj = -1;
+      pread.textContent = "";
+      el("p", "od-rest", pread,
+         "Point at a cell for the same cell in all four panels. The ink is that cell's share of "
+         + "that player's own matches, on one ramp, so a season of " + small.rows.length
+         + " and a season of " + big.rows.length + " can be compared; the number in the cell is "
+         + "the count.");
+    }
+    function sayCell(i2, j2) {
+      ci = i2; cj = j2;
+      cursors.forEach(function (c, k) {
+        c.setAttribute("x", SLOT * k + PX + i2 * CELL);
+        c.setAttribute("y", PY + (BINS - 1 - j2) * CELL);
+        c.setAttribute("visibility", "visible");
+      });
+      pread.textContent = "";
+      var tb = el("table", "od-tbl", pread);
+      el("caption", null, tb, A_ + " " + rangeOf(i2, "attack_mwpa") + " · "
+        + D_ + " " + rangeOf(j2, "defense_mwpa"));
+      var hr = el("tr", null, el("thead", null, tb));
+      [["Player", "l"], [label("matches", "Matches"), "n"], ["Share", "n"]].forEach(function (h) {
+        el("th", h[1], hr, h[0]).setAttribute("scope", "col");
+      });
+      var body = el("tbody", null, tb);
+      series.forEach(function (s) {
+        var c = s.grid[j2][i2], tr = el("tr", "p-" + s.p.short, body);
+        el("th", "l hue", tr, who(s.p.name)).setAttribute("scope", "row");
+        el("td", c ? "n" : "n zero", tr, c ? String(c) : MID);
+        el("td", c ? "n" : "n zero", tr, c ? num(c / s.rows.length, SHARE) : MID);
+      });
+    }
+    gsvg.addEventListener("pointermove", function (evt) {
+      var box = gsvg.getBoundingClientRect(), k = box.width / GW || 1;
+      var vx = (evt.clientX - box.left) / k, vy = (evt.clientY - box.top) / k;
+      var lx = vx - Math.floor(vx / SLOT) * SLOT - PX, ly = vy - PY, i2, j2;
+      if (lx < 0 || lx >= PLOT || ly < 0 || ly >= PLOT) { if (ci >= 0) restPanels(); return; }
+      i2 = Math.floor(lx / CELL);
+      j2 = BINS - 1 - Math.floor(ly / CELL);
+      if (i2 !== ci || j2 !== cj) sayCell(i2, j2);
+    });
+    gsvg.addEventListener("pointerleave", restPanels);
+    gsvg.addEventListener("blur", restPanels);
+    gsvg.addEventListener("keydown", function (evt) {
+      var dx = evt.key === "ArrowRight" ? 1 : evt.key === "ArrowLeft" ? -1 : 0;
+      var dy = evt.key === "ArrowUp" ? 1 : evt.key === "ArrowDown" ? -1 : 0;
+      if (!dx && !dy) return;
+      evt.preventDefault();
+      /* The first press opens on the cell just above and right of the null, not
+         on a corner: that is where the seasons are, and a cursor that starts in
+         an empty corner starts on a fact nobody has. */
+      if (ci < 0) { sayCell(BINS / 2, BINS / 2); return; }
+      sayCell(Math.max(0, Math.min(BINS - 1, ci + dx)),
+              Math.max(0, Math.min(BINS - 1, cj + dy)));
+    });
+
+    /* One line. The reader can see the grid, the panel headings already print each season's
+       match count, and the readout above says what the ink is; what a caption still has to
+       carry is why the grid is this coarse — the smallest season — and where the outliers
+       went. Everything else was prose restating the picture. */
+    var cap = el("p", "note od-cap", host);
+    cap.textContent = BINS + " bins a side, edges on the null, which is as fine as "
+      + who(small.p.name) + "'s " + small.rows.length
+      + " matches go before a cell is one match. The outer bins are open-ended"
+      + (off ? " and hold the " + off + " of " + total + " player-matches off the axis." : ".");
+
+    /* The legend keys isolate a player in BOTH figures at once. Each carries
+       that player's exposure and the mean of each half, which is the one-line
+       version of the panel beside it. */
+    series.forEach(function (s) {
+      var b = el("button", "legend-key p-" + s.p.short, legend), key;
+      b.type = "button";
+      b.setAttribute("aria-pressed", "false");
+      key = sv("svg", { class: "swatch", viewBox: "0 0 26 14", "aria-hidden": "true" }, null);
+      b.appendChild(key);
+      sv("path", { class: "dot", d: markerPath(s.shape, 13, 7, 4.2) }, key);
+      el("span", "who", b, who(s.p.name));
+      el("span", "exposure", b, s.rows.length + " matches · " + A_ + " "
+        + val("attack_mwpa", meanOf(s, "a")) + " · " + D_ + " "
+        + val("defense_mwpa", meanOf(s, "d")));
+      b.addEventListener("click", function () {
+        var on = only === s.p.short;
+        only = on ? "" : s.p.short;
+        host.setAttribute("data-only", only);
+        Array.prototype.forEach.call(legend.children, function (o) {
+          o.setAttribute("aria-pressed", String(!on && o === b));
+        });
+        restScatter();
+      });
+    });
+
+    restScatter();
+    restPanels();
+  }
+
+  /* THE MATCH FIGURE. One continuous match win probability curve; the vertical
+     at a credited action IS that action's match impact, so the chart and the
+     metric are one object.
+
+     TWO X AXES, one toggle. Round mode is the payload's own continuous `x`,
+     where every round is equal width. Time mode is the summed round clock. The
+     toggle moves a datum's x and nothing else.
+
+     ROUND WIN PROBABILITY IS NOT ON THIS FIGURE. Two probabilities in one
+     readout, one of them scoped to a round that ends in seconds, made the
+     reader decide which number the mark referred to. Everything here is in
+     match win probability. */
   function drawMatchFigure(host) {
     if (!MATCH) return;
     var rounds = MATCH.rounds;
@@ -724,15 +1240,21 @@
       if (chart) chart.select(n);
       showPanel(n);
       publish(n);
-      /* The anchor form the round index already uses, so a copied URL lands on
-         the same round the figure is showing. replaceState never fires
+      /* THE ANCHOR THE PAGE ACTUALLY PUBLISHES, which is `#rN` — build.py ids every panel
+         `r<number>` and the round index links to that. This wrote `#round-N`, which resolved to
+         no element on the page, so a copied URL landed nowhere and the browser had nothing to
+         scroll to. Not written on the opening call: a plain load keeps a clean URL, and the
+         fragment appears only once the reader has chosen a round. replaceState never fires
          hashchange, so the page's own controller is not re-entered. */
-      try { history.replaceState(null, "", "#round-" + n); } catch (e) {}
+      if (!opening_) {
+        try { history.replaceState(null, "", "#r" + n); } catch (e) {}
+      }
     }
 
-    /* Both spellings, because the round index links `#round-7` and an older
-       page linked `#r7`, and an inbound link that this misses would collapse
-       the panels onto a round the reader did not ask for. */
+    /* Both spellings on the way IN, because the page links `#r7` and an older copied URL may
+       say `#round-7`; an inbound link this missed would collapse the panels onto a round the
+       reader did not ask for. `opening_` is true while the first, unasked-for selection runs. */
+    var opening_ = false;
     function opening() {
       var start = /^#(?:round-|r)(\d+)$/.exec(location.hash || "");
       return start && roundBy[Number(start[1])] ? Number(start[1]) : rounds[0].round_number;
@@ -744,43 +1266,42 @@
        panels with no control left to reopen them. */
     if (!series.length) {
       tabs = wireTabs(host, rounds, function (n) { select(n, false); });
-      select(opening(), true);
+      opening_ = true; select(opening(), true); opening_ = false;
       return;
     }
 
     host.textContent = "";
     host.classList.add("fig", "fig-match");
 
-    /* ---- the header, in the ESPN layout -------------------------------- */
-    /* Both teams named with their live percentage, at one decimal, updating on
-       hover and showing the final at rest. It is HTML rather than SVG text so
-       the numbers scale with the reader's font size and take the page's
-       contrast tokens rather than a fill. */
+    /* ---- the header ---------------------------------------------------- */
+    /* Both teams named with their live percentage, updating on hover and
+       showing the final at rest. HTML, not SVG text, so the numbers scale with
+       the reader's font size and take the page's contrast tokens. */
     var head = el("div", "wp-head", host);
     var headTop = el("div", "wp-head-top", head);
     el("span", "lab", headTop, label("p", "Match win probability"));
     var headWhen = el("span", "wp-when", headTop, "");
     var teamRows = el("div", "wp-teams", head);
 
+    /* THE SCORE MOVES WITH THE PROBABILITY. It was written once, at the final, while the
+       percentage beside it tracked the pointer — so hovering round 4 of a 13-11 match printed
+       `Blue 13 · 71.2%`, a scoreline that had not happened yet against a probability from
+       before it did. Both now say the same moment. */
     function teamRow(team, cls) {
-      /* No swatch. There is nothing left for it to stand for: the two area
-         fills it keyed are gone, and one neutral wash needs no legend. */
       var row = el("div", "wp-team " + cls, teamRows);
       el("span", "wp-name", row, team ? team.team_id : EM);
-      el("span", "wp-score", row, team ? String(team.rounds_won) : EM);
+      var score = el("span", "wp-score", row, team ? String(team.rounds_won) : EM);
       var pct = el("b", "wp-pct", row, "");
-      return pct;
+      return { pct: pct, score: score, team: team };
     }
-    var focalPct = teamRow(focal, "is-focal");
-    var otherPct = teamRow(other, "is-other");
+    var focalSide = teamRow(focal, "is-focal");
+    var otherSide = teamRow(other, "is-other");
+    var focalPct = focalSide.pct, otherPct = otherSide.pct;
 
     /* ---- geometry ------------------------------------------------------ */
-    /* The reference component's defaults: margin 40 all round, 2/1 aspect.
-       The viewBox is taller than the plot box by BELOW, because the bottom
-       margin is fully spent by the tick row and the axis title sits under it at
-       BOT + 44 -- outside a 480-tall box, where `overflow: hidden` on .wpfig
-       clipped it. The plot keeps the reference geometry exactly (880 x 400 at
-       margin 40); only the room for the furniture beneath it is bought. */
+    /* The reference component's defaults: margin 40 all round, 2/1 aspect. The
+       viewBox is taller than the plot box by BELOW, because the bottom margin
+       is fully spent by the tick row and the axis title sits under it. */
     var W = 960, H = 480, M = 40, BELOW = 18;
     var PW = W - M * 2, PH = H - M * 2;
     var VH = H + BELOW;
@@ -789,16 +1310,53 @@
     var TOP = M, BOT = M + PH;
     var EVEN = (META.gate && typeof META.gate.null_probability === "number")
       ? META.gate.null_probability : 0.5;
-    /* x is the payload's own continuous x: integers are round boundaries, so
-       every round is the same width and events sit inside it by time. */
-    function X(x) { return M + (x / R) * PW; }
-    function Y(p) { return BOT - p * PH; }          // fixed 0..1 domain, never data-fitted
 
-    /* WHICH OF THE FOUR ACTUALLY ACTED HERE. One list, read once, and both the
-       coloured verticals below and the legend keys above them are keyed off it,
-       so the legend cannot name a hue the chart does not draw. Payload order,
-       which is time order, so the key list reads in the order the reader met
-       the players on the line. */
+    /* ---- THE TWO X AXES ------------------------------------------------ */
+    /* `t` is milliseconds from the START OF THE ROUND — meta.dict says so and
+       the payload agrees, every round's first node is t 0 — so a match clock
+       has to be summed. The summand is each round's horizon, its last node's
+       `t`, which is exactly the denominator the payload's own `x` divides by:
+       the two modes therefore agree on every round boundary, and the toggle
+       moves a datum's x and never its value.
+
+       ROUNDS ABUT. Nothing in the payload times the gap between a round ending
+       and the next being priced, so a buy phase would be a duration this file
+       invented. The axis is round clock, not wall clock, and it says so. */
+    function buildClock() {
+      var off = {}, dur = {}, total = 0;
+      rounds.forEach(function (r) {
+        var last = 0;
+        (nodesBy[r.round_number] || []).forEach(function (n) { if (n.t > last) last = n.t; });
+        off[r.round_number] = total;
+        dur[r.round_number] = last;
+        total += last;
+      });
+      return { off: off, dur: dur, total: total || 1 };
+    }
+    var CLOCK = buildClock();
+    var MODE = "round";
+
+    function Xn(n) {
+      if (MODE === "time") return M + ((CLOCK.off[n.r] || 0) + n.t) / CLOCK.total * PW;
+      return M + (n.x / R) * PW;
+    }
+    function Xb(i) {                                 // a round boundary, 0..R
+      if (MODE !== "time") return M + (i / R) * PW;
+      if (i >= R) return M + PW;
+      return M + (CLOCK.off[rounds[i].round_number] || 0) / CLOCK.total * PW;
+    }
+    function Y(p) { return BOT - p * PH; }           // fixed 0..1 domain, never data-fitted
+    /* m:ss. secs() stays what it is — meta.dict calls `t` time INTO the round
+       and the readout means exactly that — but a match clock past ten minutes
+       is not readable in tenths of a second. */
+    function mmss(ms) {
+      var s = Math.round(ms / 1000), r = s % 60;
+      return Math.floor(s / 60) + ":" + (r < 10 ? "0" : "") + r;
+    }
+
+    /* WHICH OF THE FOUR ACTUALLY ACTED HERE. One list, read once, and the
+       coloured verticals, the markers and the legend keys are all keyed off it,
+       so the legend cannot name a hue the chart does not draw. */
     var actShorts = [], actWho = {}, actN = {};
     series.forEach(function (n) {
       if (n.kind !== "action") return;
@@ -807,36 +1365,125 @@
       if (!actWho[p.short]) { actWho[p.short] = p; actN[p.short] = 0; actShorts.push(p.short); }
       actN[p.short] += 1;
     });
+    /* THE INITIAL HAS TO BE UNIQUE OR IT IS NOT A CHANNEL. `themarias` and
+       `trzzcko` both begin with a T, so a one-letter initial silently merged
+       two of the four wherever both played. The shortest prefix that separates
+       the players ACTUALLY on this figure is one letter on every match in the
+       act and grows only if that pair ever share one. */
+    var INIT = {};
+    (function () {
+      for (var len = 1; len <= 4; len++) {
+        var seen = {}, clash = false, i;
+        for (i = 0; i < actShorts.length; i++) {
+          var k = actShorts[i].slice(0, len).toUpperCase();
+          if (seen[k]) { clash = true; break; }
+          seen[k] = 1;
+        }
+        if (!clash) {
+          actShorts.forEach(function (s) { INIT[s] = s.slice(0, len).toUpperCase(); });
+          return;
+        }
+      }
+      actShorts.forEach(function (s) { INIT[s] = s.slice(0, 2).toUpperCase(); });
+    })();
 
-    /* ---- what each segment on the line means --------------------------- */
-    /* Static keys, not the tracker's isolate buttons: there is nothing to
-       toggle here, so nothing takes a button's affordance. Each swatch is drawn
-       by the same class as the path it stands for, so the legend cannot drift
-       away from the chart — restyle the line and the key follows. */
-    var legend = el("div", "fig-legend is-static", host);
+    /* ---- WHICH ACTIONS GET A MARK, decided once ------------------------- */
+    /* THE TICK LEVEL IS GONE, and that is the readability fix. Measured over
+       the 83 match payloads: a median match carries 174 credited actions, of
+       which 26 are one of the four and 0 clear the payload's p99 gate — so 145
+       of them, 83% of every mark on the figure, were 2px ticks at a median 3.5
+       units apart on an 880-unit plot. That is a carpet, and it was drawing a
+       fact the line already carries: an action's node and the clock node before
+       it share an x, so THE VERTICAL IN THE LINE IS ALREADY THE MARK. Nothing
+       measured was lost with them; every one of those actions is still on the
+       curve, still in the tooltip, still a row in the table.
+
+       Two levels remain, and the freed room pays for their size:
+         filled hue mark + initial   one of the four
+         hollow neutral ring         anyone else, past the payload's gate
+
+       House rule 3 is untouched: the radius is |dp| against a FIXED axis the
+       payload carries, so a mark of a given size means the same number of match
+       win probability points on all 68 pages, and anything at or past the axis
+       is clamped and ringed rather than allowed to grow. */
+    var AXIS = markerAxis(), GATE_DP = markerGate();
+    /* 2.6 / 9.0 / 4.6 before. The ratio is unchanged and so is the rule; only
+       the room is new. R_FOCAL is a floor, not a size: an 11px initial needs
+       about 13 units of mark to clear its own type, and a mark whose whole job
+       is to say who did it that is too small to say who did it has failed.
+       R_WIDE is that floor for a two-character initial. */
+    var R_MIN = 4.0, R_MAX = 11.0, R_FOCAL = 6.6, R_WIDE = 8.4;
+    function radius(dp) {
+      if (!AXIS) return 6.0;
+      return R_MIN + (R_MAX - R_MIN) * Math.sqrt(Math.min(1, Math.abs(dp) / AXIS));
+    }
+    function floorR(short) { return INIT[short] && INIT[short].length > 1 ? R_WIDE : R_FOCAL; }
+    var marks = [], marked = 0, ringed = 0;
+    series.forEach(function (n) {
+      if (n.kind !== "action") return;
+      var hue = hueOf(n.actor);
+      var p = byPuuid[n.actor];
+      if (!hue && !(GATE_DP && Math.abs(n.dp) >= GATE_DP)) return;
+      marks.push({ n: n, hue: hue, r: Math.max(radius(n.dp), hue ? floorR(p.short) : 0),
+                   init: hue ? INIT[p.short] : null,
+                   over: !!(AXIS && Math.abs(n.dp) >= AXIS) });
+      if (hue) marked += 1; else ringed += 1;
+    });
+    /* Biggest first, so the smallest lands on top. A third of adjacent marks
+       graze at these sizes and a seventh cover each other's centre; painted
+       this way the small one keeps its whole face and the large one loses an
+       arc, which is the cheaper loss. Order is paint order only — the marks
+       take no pointer events, nearest() does. */
+    marks.sort(function (a, b) { return b.r - a.r; });
+
+    /* ---- the control bar: what the line means, and what x measures ------ */
+    var bar = el("div", "wpx-bar", host);
+    var legend = el("div", "fig-legend is-static", bar);
     legend.setAttribute("role", "group");
-    legend.setAttribute("aria-label", "What each segment on the line means, and who moved it");
-    [["wp-line", label("kind_action", "Action") + " and " + label("kind_clock", "clock").toLowerCase(),
-      "a player's"],
-     ["wp-econ", label("kind_round_start", "Round start"), "the economy"],
-     ["wp-term", label("kind_terminal", "Terminal"), "the model's gap"]].forEach(function (key) {
+    legend.setAttribute("aria-label", "What each part of the line means, and who moved it");
+    /* Each swatch is drawn by the same class as the path it stands for, so the
+       legend cannot drift away from the chart. The second phrase each key used
+       to carry is gone: the dict label already names the claim, and the
+       definition is on the node's own tooltip. */
+    [["wp-line", label("kind_action", "Action") + " · " + label("kind_clock", "Clock")],
+     ["wp-econ", label("kind_round_start", "Round start")],
+     ["wp-term", label("kind_terminal", "Terminal")]].forEach(function (key) {
       var item = el("span", "legend-key is-static", legend);
       var sw = sv("svg", { class: "swatch wpfig", viewBox: "0 0 26 14", "aria-hidden": "true" }, item);
-      sv("path", { class: key[0] + (key[0] === "wp-line" ? "" : " wp-free"),
-                   d: "M1 7h24" }, sw);
+      sv("path", { class: key[0] + (key[0] === "wp-line" ? "" : " wp-free"), d: "M1 7h24" }, sw);
       el("span", "who", item, key[1]);
-      el("span", "exposure", item, key[2]);
     });
-    /* One key per focal player who acted, because the vertical at their actions
-       is drawn in their hue and a colour nobody names is decoration. The swatch
-       is a vertical stroke and not a rule, because a vertical is the only thing
-       the hue paints. Static like the three above it — nothing here toggles. */
+    /* One key per focal player who acted. The swatch now draws BOTH channels
+       the plot uses — the hued vertical and the marker with its initial in it —
+       because the marker is the thing the reader was failing to read, and a key
+       that shows only half of a mark teaches only half of it. */
     actShorts.forEach(function (s) {
       var item = el("span", "legend-key is-static p-" + s, legend);
-      var sw = sv("svg", { class: "swatch wpfig", viewBox: "0 0 26 14", "aria-hidden": "true" }, item);
-      sv("path", { class: "wp-line wp-act p-" + s, d: "M13 1v12" }, sw);
-      el("span", "who", item, String(actWho[s].name || s).split("#")[0]);
+      var sw = sv("svg", { class: "swatch wpx-key wpfig", viewBox: "0 0 34 20",
+                           "aria-hidden": "true" }, item);
+      sv("path", { class: "wp-line wp-act p-" + s, d: "M6 2v16" }, sw);
+      sv("path", { class: "ev p-" + s, d: markerPath("circle", 22, 10, floorR(s)) }, sw);
+      text(22, 13.8, INIT[s], "ev-init", sw, "middle");
+      el("span", "who", item, who(actWho[s].name || s));
       el("span", "exposure", item, actN[s] + (actN[s] === 1 ? " action" : " actions"));
+    });
+
+    /* THE TOGGLE. Two states, two buttons, the page's own .chip vocabulary and
+       aria-pressed — the same control the site uses everywhere else something
+       is either on or off. */
+    var modes = el("div", "wpx-modes", bar);
+    modes.setAttribute("role", "group");
+    modes.setAttribute("aria-label", "What the horizontal axis measures");
+    /* Two literals, and they are the view's own words on purpose: meta.dict's
+       `t` is time INTO a round, and the act has no entry for a summed match
+       clock, so borrowing that label would name the axis wrongly. */
+    var modeBtn = {};
+    [["round", "Rounds"], ["time", "Time"]].forEach(function (m) {
+      var b = el("button", "chip wpx-mode", modes, m[1]);
+      b.type = "button";
+      b.setAttribute("aria-pressed", m[0] === MODE ? "true" : "false");
+      b.addEventListener("click", function () { setMode(m[0]); });
+      modeBtn[m[0]] = b;
     });
 
     var plot = el("div", "wp-plot", host);
@@ -853,49 +1500,37 @@
     var ttl = sv("title", { id: tId }, svg);
     var dsc = sv("desc", { id: dId }, svg);
 
+    /* The paint order IS the argument, so the groups are appended once, in it,
+       and the five that depend on x are emptied and refilled by paint(). */
+    var gGrid = sv("g", { class: "grid" }, svg);        // y only, drawn once
+    var gBound = sv("g", { class: "bounds" }, svg);
+    var gArea = sv("g", { class: "area" }, svg);
+    var gNull = sv("g", { class: "null" }, svg);
+    var band = sv("rect", { class: "wp-band", x: M, y: TOP, width: 0, height: PH }, svg);
+    var gCurve = sv("g", { class: "curve" }, svg);
+    var gMarks = sv("g", { class: "marks" }, svg);
+    var gClose = sv("g", { class: "closes" }, svg);
+
     /* ---- grid: horizontal only, five rows ------------------------------ */
-    var gGrid = sv("g", { class: "grid" }, svg);
-    var rows = 5, gi;
-    for (gi = 0; gi < rows; gi++) {
-      var p = gi / (rows - 1);
-      var gy = Y(p);
-      /* The null is NOT drawn here. It is the heaviest horizontal on the
-         figure and it is drawn after the wash and before the curve — see
-         below. Drawn last, as a rule that heavy, it would erase the data it
-         is judging at exactly the moment the match was closest to even. */
-      if (p === EVEN) continue;
+    var gi;
+    for (gi = 0; gi < 5; gi++) {
+      var gp = gi / 4, gy = Y(gp);
+      /* The null is NOT drawn here. It is the heaviest horizontal on the figure
+         and it is drawn after the wash and before the curve. */
+      if (gp === EVEN) continue;
       sv("line", { class: "gridline", x1: M, x2: M + PW, y1: gy, y2: gy }, gGrid);
-      /* Inside the plot, above the line: "100.0%" at one decimal does not fit
-         in a 40px margin, and the margin is the reference component's. */
-      text(M + 3, gy - 4, num(p, PCT), "tick", gGrid, "start");
+      text(M + 3, gy - 4, num(gp, PCT), "tick", gGrid, "start");
     }
 
-    /* ---- round boundaries and the side switch -------------------------- */
-    /* 7px ticks at the axis, not 24 to 32 full-height rules. Every round is
-       drawn to equal width, so the boundaries ARE the x axis and they have to
-       be there — but at full height, at the 3:1 they need to be legible, they
-       turned the plot into a barcode drawn over its own data. */
-    var gBound = sv("g", { class: "bounds" }, svg);
-    var stepR = Math.max(1, Math.round(R / 12));
-    var k;
-    for (k = 0; k <= R; k++) {
-      sv("line", { class: "bound", x1: X(k), x2: X(k), y1: BOT, y2: BOT + 7 }, gBound);
-    }
-    rounds.forEach(function (r, i) {
-      if (i % stepR === 0 || i === R - 1) {
-        text((X(i) + X(i + 1)) / 2, BOT + 20, String(r.round_number), "tick", gBound, "middle");
-      }
-    });
-    /* Marked more strongly than a round boundary because the sides swap here,
-       which is the one boundary the reader cannot infer from the line. Every
-       switch gets a rule; the LABEL is dropped when the last one is closer than
-       its own width, because overtime swaps every round and four labels on top
-       of each other say less than one. The count below the axis is what keeps
-       the unlabelled ones from going unsaid. */
-    /* One full-height rule for the regulation side switch, because it is the
-       one boundary a reader cannot infer from the line. Overtime alternates
-       sides EVERY round, so six more verticals would say nothing a bracket
-       under the axis does not; the bracket is drawn once and counted. */
+    /* ---- THE NULL, second instance ------------------------------------- */
+    /* meta.gate.null_probability: the point at which we cannot say who wins.
+       Full-strength ink, heavier than any datum, over the wash and UNDER the
+       curve — drawn last it would erase the data it is judging at exactly the
+       moment the match was closest to even. It carries no label: every match
+       opens here, so the words sat under the line on most pages. */
+    sv("line", { class: "even", x1: M, x2: M + PW, y1: Y(EVEN), y2: Y(EVEN) }, gNull);
+
+    /* ---- the side switches, which do not depend on the axis ------------- */
     var swAt = [];
     rounds.forEach(function (r, i) {
       var next = rounds[i + 1];
@@ -904,200 +1539,176 @@
     });
     var regulation = swAt.length ? [swAt[0]] : [];
     var overtime = swAt.slice(1);
-    regulation.forEach(function (i) {
-      sv("line", { class: "switch", x1: X(i), x2: X(i), y1: TOP, y2: BOT }, gBound);
-      text(X(i), TOP - 8, "sides swap", "switch-lab", gBound, "middle");
-    });
-    if (overtime.length) {
-      var x0 = X(overtime[0]), x1 = X(R);
-      sv("path", { class: "ot-bracket",
-                   d: "M" + x0 + " " + (BOT + 26) + "v6h" + (x1 - x0) + "v-6" }, gBound);
-      text((x0 + x1) / 2, BOT + 44, "overtime · sides swap every round · "
-        + overtime.length + " more", "switch-lab", gBound, "middle");
-    }
-    text(M, BOT + 44, R + " rounds, equal width"
-      + (sideBy[rounds[0].round_number]
-         ? " · " + focal.team_id + " starts on " + sideBy[rounds[0].round_number] : "")
-      + " · " + swAt.length + (swAt.length === 1 ? " side switch" : " side switches"),
-      "axis-title", gBound, "start");
+    var opensOn = sideBy[rounds[0].round_number];
 
-    /* ---- the area, and what it is NOT ---------------------------------- */
-    /* ONE neutral wash between the curve and the null, on both sides, and it
-       carries no side meaning at all: it means distance from the null, which
-       is the thing this figure is about. The two tokens it replaced tinted
-       toward the leader, which put a green swatch labelled "Red" and a maroon
-       swatch labelled "Blue" on the 30 red-focal pages of a site whose two
-       teams are literally named Red and Blue. Position against the rule and
-       the two header percentages already say who leads, twice. */
-    var areaD = "M" + X(series[0].x) + " " + Y(EVEN);
-    series.forEach(function (n) { areaD += "L" + X(n.x) + " " + Y(n.p); });
-    areaD += "L" + X(series[series.length - 1].x) + " " + Y(EVEN) + "Z";
-    sv("path", { class: "area-wash", d: areaD }, svg);
-
-    /* ---- THE NULL, second instance ------------------------------------- */
-    /* meta.gate.null_probability: the point at which we cannot say who wins.
-       Full-strength ink, heavier than any datum on the figure, drawn over the
-       wash and UNDER the curve. */
-    var gNull = sv("g", { class: "null" }, svg);
-    sv("line", { class: "even", x1: M, x2: M + PW, y1: Y(EVEN), y2: Y(EVEN) }, gNull);
-    /* THE RULE CARRIES NO LABEL. The chip that named it was the only in-plot
-       label sitting at a value the line is guaranteed to visit — every match
-       opens at the null, so on 52 of the 68 pages the curve ran straight
-       through the words. It is the heaviest horizontal on the figure, halfway
-       up an axis whose 0, 25, 75 and 100 per cent ARE labelled, and the header
-       prints both sides' live percentage above it: the height is already said
-       three ways. Those four tick labels stay under the data, because none of
-       them is where a match starts. */
-
-    /* The selected round's band sits over the tint and under the curve: it is
-       a place marker for the ledger below, not a value. */
-    var band = sv("rect", { class: "wp-band", x: M, y: TOP, width: 0, height: PH }, svg);
-
-    /* ---- the curve ----------------------------------------------------- */
-    /* THREE paths, because the line makes three different claims and two of
-       them land on the same pixel column.
-         wp-line  solid. The part a player did: the round opens, the clock
-                  drifts, actions jump.
-         wp-term  the model's own calibration gap at the terminal.
-         wp-econ  the buy, priced before anyone acts.
-       Measured on this payload, all 1,368 terminal nodes share their `x` with
-       the round's last action — `horizon` is the last timestamp there is — so
-       the terminal gap is always vertical and always sits at the round
-       boundary, exactly where the NEXT round's economy move is drawn. The two
-       are contiguous rather than overlapping (a terminal's `p` is the value the
-       following round_start measures its own `dp` from, at 0.0e+00), so one
-       6,4-dashed path for both rendered the boundary as a single move of
-       unattributable value with no way to see where the round finished and the
-       next buy began. They are separated here: a dash for the economy, a fine
-       dot for the calibration gap, and a short rule at the resolved value where
-       one hands over to the other. */
-    var lineD = "", econD = "", termD = "", closeD = "";
-    series.forEach(function (n, i) {
-      var prev = i ? series[i - 1] : null;
-      if (n.kind === "round_start") {
-        /* Round one opens at W(0,0); dp measures back to it, so the first
-           economy move is drawn from a value the payload carries rather than
-           from an assumed 50%. */
-        var from = prev ? prev.p : n.p - n.dp;
-        econD += "M" + X(n.x) + " " + Y(from) + "L" + X(n.x) + " " + Y(n.p);
-        lineD += "M" + X(n.x) + " " + Y(n.p);
-      } else if (n.kind === "terminal") {
-        if (prev) termD += "M" + X(prev.x) + " " + Y(prev.p) + "L" + X(n.x) + " " + Y(n.p);
-        /* The round resolved here. This is the value the contract pins to the
-           next round's wp_before, so the tick is a measured boundary and not a
-           decoration — and it is what stops the two dashed claims above and
-           below it from reading as one. */
-        closeD += "M" + (X(n.x) - 4) + " " + Y(n.p) + "h8";
+    /* ---- everything that depends on which axis is showing --------------- */
+    function paintBounds() {
+      gBound.textContent = "";
+      var k;
+      /* 4px ticks, down from 7. Every round boundary is drawn in both modes —
+         in time mode their spacing IS the finding — but at 7px against a
+         labelled tick they were a picket fence competing with the data. */
+      for (k = 0; k <= R; k++) {
+        sv("line", { class: "bound", x1: Xb(k), x2: Xb(k), y1: BOT, y2: BOT + 4 }, gBound);
+      }
+      if (MODE === "time") {
+        /* The axis is a clock, so it is ticked in minutes and NOT in round
+           numbers: a four-second round is three units wide here and a number
+           under it would be a label pointing at nothing. Which round the reader
+           is on comes from the band, the crosshair and the readout, all of
+           which are correct in both modes. */
+        ticks(0, CLOCK.total / 60000, 6).forEach(function (mn) {
+          var x = M + (mn * 60000) / CLOCK.total * PW;
+          if (x < M - 1 || x > M + PW + 1) return;
+          sv("line", { class: "bound wpx-major", x1: x, x2: x, y1: BOT, y2: BOT + 9 }, gBound);
+          text(x, BOT + 22, mmss(mn * 60000), "tick", gBound, "middle");
+        });
       } else {
-        lineD += (lineD ? "L" : "M") + X(n.x) + " " + Y(n.p);
+        var stepR = Math.max(1, Math.round(R / 12));
+        rounds.forEach(function (r, j) {
+          if (j % stepR !== 0 && j !== R - 1) return;
+          text((Xb(j) + Xb(j + 1)) / 2, BOT + 22, String(r.round_number), "tick", gBound, "middle");
+        });
       }
-    });
-    sv("path", { class: "wp-free wp-term", d: termD }, svg);
-    sv("path", { class: "wp-free wp-econ", d: econD }, svg);
-    sv("path", { class: "wp-line", d: lineD }, svg);
-
-    /* ---- the same line, hued where one of the four moved it ------------- */
-    /* dP/dq == L to 3.6e-11, so the vertical AT an action is that action's
-       match impact drawn to scale. Colouring the marker alone left the reader
-       matching a disc to a jump; colouring the jump itself puts the hue on the
-       quantity. One path per player, over the neutral line, and a segment is
-       only drawn where dp is non-zero — a zero-length vertical under a round
-       linecap renders as a dot on a value nobody moved. */
-    var actD = {};
-    series.forEach(function (n) {
-      if (n.kind !== "action" || !n.dp) return;
-      var p = byPuuid[n.actor];
-      if (!p || !p.short) return;
-      actD[p.short] = (actD[p.short] || "")
-        + "M" + X(n.x) + " " + Y(n.p - n.dp) + "L" + X(n.x) + " " + Y(n.p);
-    });
-    actShorts.forEach(function (s) {
-      if (actD[s]) sv("path", { class: "wp-line wp-act p-" + s, d: actD[s] }, svg);
-    });
-
-    /* There is no entry animation. A line that draws itself in is a line whose
-       final value is not on screen when the reader arrives, and on a site
-       whose result is a null nothing may perform its own uncertainty. */
-
-    /* ---- action markers ------------------------------------------------ */
-    /* House rule 3: the radius is |dp| against a FIXED axis carried in the
-       payload, never against the biggest move in this match. A mark of a given
-       size therefore means the same number of match win probability points on
-       all 68 match pages. Anything at or past the axis is drawn at full size and
-       ringed, so a clamped mark does not read as one that stopped on its own. */
-    /* THREE LEVELS, because 256 discs at 1.16px minimum separation is a carpet
-       and not a set of marks. The vertical in the line is ALREADY the mark, so
-       a marker is only worth drawing where it says something the line does not:
-       whose action it was, or that it was one of the act's biggest.
-
-         filled hue disc + initial   one of the four
-         hollow neutral ring         anyone else, above the payload's gate
-         2px tick                    everything else
-
-       The gate is `scale.marker_gate`, the act's p99 of |dp|, carried in the
-       payload. p90 — what the magnitude bars use — clips a tenth of its own
-       distribution by construction, which is survivable for a bar with its
-       number printed beside it and a lie for a mark with no number at all. */
-    var AXIS = markerAxis(), GATE_DP = markerGate();
-    /* 2.0 to 6.0 before. At 6.0 the biggest mark on the figure was 12px across
-       in a 960-wide viewBox that renders near 700 on the page — under 9 real
-       pixels, with a 7px initial inside it. The range moves, the RULE does not:
-       the radius is still |dp| against scale.marker_gate, so the same size
-       still means the same number of points on every match page, and anything at
-       or past the axis is still clamped and ringed rather than allowed to grow.
-       R_FOCAL is a floor, not a size: an initial needs about 9px of disc to
-       clear its own type, and a mark whose whole job is to say who did it that
-       is too small to say who did it is a mark that failed. */
-    var R_MIN = 2.6, R_MAX = 9.0, R_FOCAL = 4.6;
-    function radius(dp) {
-      if (!AXIS) return 4.2;
-      return R_MIN + (R_MAX - R_MIN) * Math.sqrt(Math.min(1, Math.abs(dp) / AXIS));
+      /* One full-height rule for the regulation side switch, because it is the
+         one boundary a reader cannot infer from the line. Overtime alternates
+         sides EVERY round, so six more verticals would say nothing a bracket
+         under the axis does not; the bracket is drawn once and counted. */
+      regulation.forEach(function (j) {
+        sv("line", { class: "switch", x1: Xb(j), x2: Xb(j), y1: TOP, y2: BOT }, gBound);
+        text(Xb(j), TOP - 8, "sides swap", "switch-lab", gBound, "middle");
+      });
+      if (overtime.length) {
+        var x0 = Xb(overtime[0]), x1 = Xb(R);
+        sv("path", { class: "ot-bracket",
+                     d: "M" + x0 + " " + (BOT + 30) + "v6h" + (x1 - x0) + "v-6" }, gBound);
+        text((x0 + x1) / 2, BOT + 46, "overtime · sides swap every round · "
+          + overtime.length + " more", "switch-lab", gBound, "middle");
+      }
+      /* The axis names its own unit and nothing else. In time mode it used to also explain
+         that the buy phases are untimed and that the rounds therefore abut, which ran the line
+         past the right edge of the viewBox on every match — a caption that clipped itself. The
+         fact survives on the <desc>, where a reader who cannot see the spacing needs it. */
+      text(M, BOT + 46, (MODE === "time"
+          ? mmss(CLOCK.total) + " of round clock, rounds at their real length"
+          : R + " rounds, equal width")
+        + (opensOn ? " · " + focal.team_id + " opens on " + opensOn : "")
+        + " · " + swAt.length + (swAt.length === 1 ? " side switch" : " side switches"),
+        "axis-title", gBound, "start");
     }
-    var gMarks = sv("g", { class: "marks" }, svg);
-    var marked = 0, ringed = 0;
-    series.forEach(function (n) {
-      if (n.kind !== "action") return;
-      var hue = hueOf(n.actor), big = GATE_DP && Math.abs(n.dp) >= GATE_DP;
-      if (!hue && !big) {
-        sv("line", { class: "ev-tick", x1: X(n.x), x2: X(n.x),
-                     y1: Y(n.p) - 1, y2: Y(n.p) + 1 }, gMarks);
-        return;
-      }
-      var over = AXIS && Math.abs(n.dp) >= AXIS;
-      var r = Math.max(radius(n.dp), hue ? R_FOCAL : 0);
-      sv("path", {
-        class: "ev " + n.type + hue + (n.actor ? (hue ? "" : " other") : " no-actor")
-          + (over ? " over" : ""),
-        d: markerPath(evShape(n.type), X(n.x), Y(n.p), r)
-      }, gMarks);
-      if (hue) {
-        marked += 1;
-        /* The per-player initial inside the disc, on EVERY focal mark now that
-           R_FOCAL guarantees the room. It is the figure's only per-player
-           secondary channel, and the palette measures 10.2 at deutan — the hue
-           is legal ONLY because this channel exists, so dropping it on the
-           small marks dropped it exactly where it was needed most. */
-        var who = byPuuid[n.actor];
-        text(X(n.x), Y(n.p) + 2.5, (who.short || "?").charAt(0).toUpperCase(),
-             "ev-init", gMarks, "middle");
-      } else { ringed += 1; }
-    });
 
-    /* Last, so it is not buried: a terminal shares its x with the round's last
-       action and usually its value too — the median gap is four hundredths of a
-       point — so this rule would otherwise sit under that action's marker,
-       which is the one place it has to stay readable. */
-    sv("path", { class: "wp-free wp-close", d: closeD }, svg);
+    function paintCurve() {
+      gArea.textContent = "";
+      gCurve.textContent = "";
+      gClose.textContent = "";
+      /* ONE neutral wash between the curve and the null, on both sides. It
+         carries no side meaning: it means distance from the null, which is the
+         thing this figure is about. */
+      var areaD = "M" + Xn(series[0]) + " " + Y(EVEN);
+      series.forEach(function (n) { areaD += "L" + Xn(n) + " " + Y(n.p); });
+      areaD += "L" + Xn(series[series.length - 1]) + " " + Y(EVEN) + "Z";
+      sv("path", { class: "area-wash", d: areaD }, gArea);
+
+      /* THREE paths, because the line makes three different claims and two of
+         them land on the same pixel column.
+           wp-line  solid. The part a player did: the round opens, the clock
+                    drifts, actions jump.
+           wp-term  the model's own calibration gap at the terminal.
+           wp-econ  the buy, priced before anyone acts.
+         Every terminal shares its x with the round's last action, so the
+         terminal gap is always vertical and always at the round boundary,
+         exactly where the NEXT round's economy move is drawn. One dashed path
+         for both rendered the boundary as a single move of unattributable
+         value; they are separated here, and a short rule at the resolved value
+         marks where one hands over to the other. */
+      var lineD = "", econD = "", termD = "", closeD = "";
+      series.forEach(function (n, i) {
+        var prev = i ? series[i - 1] : null;
+        if (n.kind === "round_start") {
+          /* Round one opens at W(0,0); dp measures back to it, so the first
+             economy move is drawn from a value the payload carries rather than
+             from an assumed 50%. */
+          var from = prev ? prev.p : n.p - n.dp;
+          econD += "M" + Xn(n) + " " + Y(from) + "L" + Xn(n) + " " + Y(n.p);
+          lineD += "M" + Xn(n) + " " + Y(n.p);
+        } else if (n.kind === "terminal") {
+          if (prev) termD += "M" + Xn(prev) + " " + Y(prev.p) + "L" + Xn(n) + " " + Y(n.p);
+          closeD += "M" + (Xn(n) - 4) + " " + Y(n.p) + "h8";
+        } else {
+          lineD += (lineD ? "L" : "M") + Xn(n) + " " + Y(n.p);
+        }
+      });
+      sv("path", { class: "wp-free wp-term", d: termD }, gCurve);
+      sv("path", { class: "wp-free wp-econ", d: econD }, gCurve);
+      sv("path", { class: "wp-line", d: lineD }, gCurve);
+
+      /* THE SAME LINE, HUED WHERE ONE OF THE FOUR MOVED IT. dP/dq == L to
+         3.6e-11, so the vertical AT an action is that action's match impact
+         drawn to scale; colouring the jump itself puts the hue on the quantity
+         instead of on a disc beside it. A segment is only drawn where dp is
+         non-zero — a zero-length vertical under a round linecap renders as a
+         dot on a value nobody moved. */
+      var actD = {};
+      series.forEach(function (n) {
+        if (n.kind !== "action" || !n.dp) return;
+        var p = byPuuid[n.actor];
+        if (!p || !p.short) return;
+        actD[p.short] = (actD[p.short] || "")
+          + "M" + Xn(n) + " " + Y(n.p - n.dp) + "L" + Xn(n) + " " + Y(n.p);
+      });
+      actShorts.forEach(function (s) {
+        if (actD[s]) sv("path", { class: "wp-line wp-act p-" + s, d: actD[s] }, gCurve);
+      });
+
+      /* Last, so it is not buried: a terminal shares its x with the round's
+         last action and usually its value too, so this rule would otherwise sit
+         under that action's marker. */
+      sv("path", { class: "wp-free wp-close", d: closeD }, gClose);
+    }
+
+    function paintMarks() {
+      gMarks.textContent = "";
+      marks.forEach(function (m) {
+        var n = m.n, x = Xn(n), y = Y(n.p), shape = evShape(n.type);
+        sv("path", {
+          class: "ev " + n.type + m.hue + (n.actor ? (m.hue ? "" : " other") : " no-actor")
+            + (m.over ? " over" : ""),
+          d: markerPath(shape, x, y, m.r)
+        }, gMarks);
+        /* The initial, on EVERY focal mark now that the floor guarantees the
+           room. It is the figure's only per-player secondary channel and the
+           palette measures 10.2 at deutan — the hue is legal ONLY because this
+           channel exists. A triangle carries its mass low, so its glyph sits
+           lower in the shape; everything else is centred on the mark. */
+        if (!m.init) return;
+        text(x, y + (shape === "triangle" ? 4.4 : 3.8), m.init, "ev-init", gMarks, "middle");
+      });
+    }
+
+    function paint() { paintBounds(); paintCurve(); paintMarks(); }
+
+    function setMode(m) {
+      if (m === MODE || !modeBtn[m]) return;
+      MODE = m;
+      modeBtn.round.setAttribute("aria-pressed", MODE === "round" ? "true" : "false");
+      modeBtn.time.setAttribute("aria-pressed", MODE === "time" ? "true" : "false");
+      paint();
+      if (selected !== null) placeBand(selected);
+      /* The reader keeps the node they were on. Only its x moved, so refocusing
+         the same index is the whole update — nothing is recomputed from a
+         value. */
+      var keep = at;
+      at = -1;
+      if (keep >= 0) focusAt(keep); else blurAll();
+    }
 
     /* ---- THE RISER ------------------------------------------------------ */
     /* At the selected action the vertical move is drawn as an engineering
        dimension line: serifs at both ends, the value in a box on a leader. On
-       any other site a chart is a view of a metric and a dimension line would
-       be decoration. Here PLAN §10 measured an action's dp against its ledger
-       credit x leverage at 2.0e-16 over 10,113 nodes — the chart and the
-       metric are the same object, and this is the only mark that says so. The
-       number in the box is the number the ledger row below credits, to the
-       last digit, because it is the same number. */
+       any other site a chart is a view of a metric and a dimension line would be
+       decoration. Here an action's dp is its ledger credit times leverage to
+       2.0e-16 over 10,113 nodes — the chart and the metric are the same object,
+       and this is the only mark that says so. */
     var gRiser = sv("g", { class: "riser-g", visibility: "hidden" }, svg);
     var riserLine = sv("line", { class: "riser" }, gRiser);
     var riserTop = sv("line", { class: "riser-serif" }, gRiser);
@@ -1111,12 +1722,12 @@
         gRiser.setAttribute("visibility", "hidden");
         return;
       }
-      var x = X(n.x), y0 = Y(n.p - n.dp), y1 = Y(n.p);
+      var x = Xn(n), y0 = Y(n.p - n.dp), y1 = Y(n.p);
       var mid = (y0 + y1) / 2;
       var side = x > M + PW * 0.72 ? -1 : 1;
       var lead = x + side * 16;
-      var label = move("dp", n.dp, MOVE);
-      var w = label.length * 6.6 + 10;
+      var lab = move("dp", n.dp, MOVE);
+      var w = lab.length * 6.6 + 10;
       riserLine.setAttribute("x1", x); riserLine.setAttribute("x2", x);
       riserLine.setAttribute("y1", y0); riserLine.setAttribute("y2", y1);
       [[riserTop, y0], [riserBot, y1]].forEach(function (pair) {
@@ -1131,7 +1742,7 @@
       riserVal.setAttribute("x", (side > 0 ? lead : lead - w) + w / 2);
       riserVal.setAttribute("y", mid + 4);
       riserVal.setAttribute("text-anchor", "middle");
-      riserVal.textContent = label;
+      riserVal.textContent = lab;
       gRiser.setAttribute("visibility", "visible");
     }
 
@@ -1150,23 +1761,19 @@
     readout.setAttribute("role", "status");
     readout.setAttribute("aria-live", "polite");
     readout.setAttribute("aria-atomic", "true");
-    /* The standing "Arrow keys step the line" paragraph is folded into the
-       readout's rest state below. It was a permanent row under the figure for
-       a hint that has done its job the moment the reader points at the line,
-       and the rest state is exactly the moment it is still worth saying. */
 
-    var det = el("details", "fig-data", host);
-    var detSum = el("summary", null, det, "");
-    var detWrap = el("div", "table-wrap", det);
-    detWrap.tabIndex = 0;
-    detWrap.setAttribute("role", "region");
-    detWrap.setAttribute("aria-label", "Every node of the selected round — scrolls sideways");
+    /* THE NODE TABLE UNDER THE FIGURE IS GONE. It listed the selected round node by node —
+       which is exactly what the round panel below already does, from build.py, in the emitted
+       HTML, with the site's own three-state signed cells and without a script. Two tables of
+       one round with different columns, a different row filter and a different rendering of an
+       exact zero is how two views of one number stop agreeing. The figure selects the panel;
+       the panel is the table. */
 
     /* ---- text ---------------------------------------------------------- */
     function fmtActor(puuid) {
       var p = byPuuid[puuid];
       if (!p) return EM;
-      return p.name + (p.agent ? " (" + p.agent + ")" : "");
+      return who(p.name) + (p.agent ? " (" + p.agent + ")" : "");
     }
     function hueOf(puuid) {
       var p = byPuuid[puuid];
@@ -1181,13 +1788,15 @@
       var r = roundBy[n.r];
       return r ? r.own + "–" + r.other : EM;
     }
-    /* What a node is, in the payload's own words. meta.dict names all four
-       kinds and defines them; the view adds only what the node itself measured
-       — the event type, the terminal, and who won the round. */
+    /* What a node is, in the payload's own words. meta.dict names all four kinds and defines
+       them; the view adds only what the node itself measured — the event type, the terminal,
+       and who won the round. The terminal keeps its token lowercase, because the round panel's
+       own facts line prints `Won by Blue · timer expired`. */
     function happened(n) {
-      if (n.kind === "action") return n.type;
+      if (n.kind === "action") return typeLabel(n.type);
       if (n.kind === "terminal") {
-        return label("kind_terminal", "Terminal") + " · " + (n.terminal_type || EM)
+        return label("kind_terminal", "Terminal") + " · "
+          + (n.terminal_type ? humanize(n.terminal_type) : EM)
           + " · " + (n.won ? focal.team_id : (other ? other.team_id : EM)) + " wins the round";
       }
       return label("kind_" + n.kind, n.kind);
@@ -1206,21 +1815,28 @@
       otherPct.textContent = num(1 - p, (spec("p") && spec("p").format) || PCT);
       focalPct.className = "wp-pct " + (p > EVEN ? "ahead" : p < EVEN ? "behind" : "level");
       otherPct.className = "wp-pct " + (p < EVEN ? "ahead" : p > EVEN ? "behind" : "level");
+      /* The score entering the node's own round, or the final at rest. A team the payload
+         does not carry keeps its em dash in both states. */
+      var r = n && roundBy[n.r];
+      focalSide.score.textContent = !focalSide.team ? EM
+        : String(r ? r.own : focal.rounds_won);
+      otherSide.score.textContent = !otherSide.team ? EM
+        : String(r ? r.other : other.rounds_won);
       headWhen.textContent = n
         ? "Round " + n.r + " · " + secs(n.t)
-        : "Final · " + MATCH.map + ", " + fullDay(MATCH.started_at);
+        : "Final · " + MATCH.map + ", " + longDay(MATCH.started_at);
     }
 
-    /* The four sentences that used to be here spelled out what solid, dotted
-       and dashed mean. The legend sits immediately above the chart and says it
-       already, in the same ink as the paths themselves. */
     function restText() {
       readout.textContent = "";
       el("span", null, readout,
-        "Point at the line for the state at that moment; click, or press Enter, to open that "
-        + "round below. Arrow keys step it.");
+        "Point at the line. Click or Enter opens that round; arrows step it.");
     }
 
+    /* ROUND WIN PROBABILITY IS GONE FROM THIS SENTENCE, as it is from the
+       tooltip and the table. Two probabilities in one line left the reader
+       deciding which one the mark under their cursor referred to; the figure is
+       in match win probability and now says only that. */
     function sayNode(n) {
       readout.textContent = "";
       el("b", null, readout, "Round " + n.r);
@@ -1232,13 +1848,8 @@
       } else if (n.kind === "action") {
         el("span", "na", readout, " · " + EM + " no actor, so the ledger credits nobody");
       }
-      /* A one-line readout is a sentence, not a set of labelled cells: the
-         tooltip and the table under the figure carry meta.dict's own labels
-         for these two, and repeating them here would take the line past the
-         width it has. */
-      el("span", null, readout, " · round " + val("q", n.q, PCT)
-        + " · match " + val("p", n.p, PCT) + " · ");
-      el("span", sgn(n.dp), readout, move("dp", n.dp, MOVE));
+      el("span", null, readout, " · " + val("p", n.p, PCT) + " · ");
+      el("span", sgnOf("dp", n.dp, MOVE), readout, move("dp", n.dp, MOVE));
       el("span", null, readout, " " + (n.kind === "action"
         ? "match impact" : n.kind === "round_start" ? "from the economy"
         : n.kind === "terminal" ? "at the terminal" : "of clock drift"));
@@ -1253,24 +1864,23 @@
       var what = el("div", "wp-tip-what kind-" + n.kind, tip, happened(n));
       if (why(n)) what.title = why(n);
       if (n.kind === "action") {
-        var who = el("div", "wp-tip-who", tip);
-        if (n.actor) el("span", ("hue" + hueOf(n.actor)).trim(), who, fmtActor(n.actor));
-        else el("span", "na", who, EM + " no actor");
-        if (n.victim) el("span", null, who, " → " + fmtActor(n.victim));
+        var w = el("div", "wp-tip-who", tip);
+        if (n.actor) el("span", ("hue" + hueOf(n.actor)).trim(), w, fmtActor(n.actor));
+        else el("span", "na", w, EM + " no actor");
+        if (n.victim) el("span", null, w, " → " + fmtActor(n.victim));
       } else if (n.kind === "round_start") {
         el("div", "wp-tip-who na", tip, EM + " the economy, not a player");
       } else if (n.kind === "terminal") {
         el("div", "wp-tip-who na", tip, EM + " booked to a team side, not a player");
       }
-      var rows = el("dl", "wp-tip-rows", tip);
+      var rws = el("dl", "wp-tip-rows", tip);
       function row(k, v, cls) {
-        var d = el("div", null, rows);
+        var d = el("div", null, rws);
         el("dt", null, d, k);
         el("dd", cls || null, d, v);
       }
-      row(label("q", "Round win"), val("q", n.q, PCT));
       row(label("p", "Match win"), val("p", n.p, PCT));
-      row(label("dp", "Move"), move("dp", n.dp, MOVE), sgn(n.dp));
+      row(label("dp", "Move"), move("dp", n.dp, MOVE), sgnOf("dp", n.dp, MOVE));
       var r = roundBy[n.r];
       if (r) row(label("leverage", "Leverage"), val("leverage", r.leverage)
         + " (" + val("li", r.li, LI) + "×)");
@@ -1280,7 +1890,7 @@
       var box = plot.getBoundingClientRect();
       var svgBox = svg.getBoundingClientRect();
       var scale = svgBox.width / W || 1;
-      var left = (svgBox.left - box.left) + X(n.x) * scale;
+      var left = (svgBox.left - box.left) + Xn(n) * scale;
       var top = (svgBox.top - box.top) + Y(n.p) * scale;
       var w = tip.offsetWidth, hgt = tip.offsetHeight;
       var flip = left + 14 + w > box.width;
@@ -1297,9 +1907,9 @@
       at = i;
       var n = series[i];
       gCross.setAttribute("visibility", "visible");
-      crossX.setAttribute("x1", X(n.x));
-      crossX.setAttribute("x2", X(n.x));
-      crossDot.setAttribute("cx", X(n.x));
+      crossX.setAttribute("x1", Xn(n));
+      crossX.setAttribute("x2", Xn(n));
+      crossDot.setAttribute("cx", Xn(n));
       crossDot.setAttribute("cy", Y(n.p));
       paintHead(n);
       sayNode(n);
@@ -1316,18 +1926,19 @@
       restText();
     }
 
-    /* Snap to the nearest node: x first, because the axis is time, then the
-       closest of the handful that share that x — which is what makes the top
-       and the bottom of an action's vertical jump separately reachable. */
+    /* Snap to the nearest node: x first, because the axis is time either way,
+       then the closest of the handful that share that x — which is what makes
+       the top and the bottom of an action's vertical jump separately reachable.
+       Xn is monotone in both modes, so the search is unchanged by the toggle. */
     function nearest(px, py) {
       var lo = 0, hi = series.length - 1, mid;
       while (lo < hi) {
         mid = (lo + hi) >> 1;
-        if (X(series[mid].x) < px) lo = mid + 1; else hi = mid;
+        if (Xn(series[mid]) < px) lo = mid + 1; else hi = mid;
       }
       var best = lo, bestD = Infinity;
       for (var i = Math.max(0, lo - 8); i < Math.min(series.length, lo + 9); i++) {
-        var dx = X(series[i].x) - px, dy = Y(series[i].p) - py;
+        var dx = Xn(series[i]) - px, dy = Y(series[i].p) - py;
         var d = dx * dx + dy * dy;
         if (d < bestD) { bestD = d; best = i; }
       }
@@ -1379,55 +1990,18 @@
     }
 
     /* ---- the selected round -------------------------------------------- */
-    chart = {
-      select: function (n) {
-        var i = rounds.map(function (r) { return r.round_number; }).indexOf(n);
-        if (i < 0) return;
-        band.setAttribute("x", X(i));
-        band.setAttribute("width", PW / R);
-        buildRoundTable(roundBy[n], nodesBy[n] || []);
-      }
-    };
-
-    function buildRoundTable(r, ns) {
-      detWrap.textContent = "";
-      var acts = ns.filter(function (n) { return n.kind === "action"; });
-      var drift = ns.reduce(function (a, n) { return a + (n.kind === "clock" ? n.dp : 0); }, 0);
-      detSum.textContent = "Round " + r.round_number + ", node by node ("
-        + acts.length + " credited actions)";
-
-      var tb = el("table", null, detWrap);
-      var cap = el("caption", null, tb);   // first child: a caption is not a trailing note
-      var head = el("tr", null, el("thead", null, tb));
-      [[label("t", "Time"), "n"], [label("kind", "What"), "l"], ["Player", "l"],
-       ["Against", "l"], [label("q", "Round win"), "n"], [label("p", "Match win"), "n"],
-       [label("dp", "Move"), "n"]].forEach(function (h) {
-        el("th", h[1], head, h[0]).setAttribute("scope", "col");
-      });
-      var body = el("tbody", null, tb);
-      ns.forEach(function (n) {
-        if (n.kind === "clock") return;      // the drift is the line, and it is summed in the caption
-        var tr = el("tr", "kind-" + n.kind, body);
-        el("td", "n", tr, secs(n.t));
-        var what = el("td", "l", tr, happened(n));
-        if (why(n)) what.title = why(n);
-        /* Rule 1: no cell invents a name to fill itself. An em dash, and the
-           reason is the payload's own definition of the kind. */
-        var who = el("td", "l" + (n.actor ? (hueOf(n.actor) ? " hue" + hueOf(n.actor) : "") : " na"),
-                     tr, n.actor ? fmtActor(n.actor) : EM);
-        if (!n.actor) who.title = why(n) || "No actor is credited for this node.";
-        el("td", "l" + (n.victim ? "" : " na"), tr, n.victim ? fmtActor(n.victim) : EM);
-        el("td", "n", tr, val("q", n.q, PCT));
-        el("td", "n", tr, val("p", n.p, PCT));
-        el("td", "n " + sgn(n.dp), tr, move("dp", n.dp, MOVE));
-      });
-      /* Two values, no lesson. What leverage IS belongs on methods.html; the
-         caption's job is to account for the rows that are not in the table. */
-      cap.textContent = label("kind_clock", "Clock") + " drift " + move("dp", drift, MOVE)
-        + ", spread along the line rather than booked to an event, so it has no row. "
-        + label("leverage", "Leverage") + " " + val("leverage", r.leverage)
-        + ", " + val("li", r.li, LI) + "× the act mean.";
+    function placeBand(n) {
+      var i = rounds.map(function (r) { return r.round_number; }).indexOf(n);
+      if (i < 0) return;
+      var x0 = Xb(i), x1 = Xb(i + 1);
+      band.setAttribute("x", x0);
+      /* A floor of 2, because this band is a locator for the ledger below and
+         is documented as not being a value: in time mode a four-second round is
+         three units wide and a reader who cannot see where they are has lost
+         the control. */
+      band.setAttribute("width", Math.max(2, x1 - x0));
     }
+    chart = { select: placeBand };
 
     /* ---- descriptions -------------------------------------------------- */
     var biggest = null;
@@ -1439,31 +2013,35 @@
       + ", moving continuously inside every round.";
     /* The only description a reader who cannot see the figure gets, so it names
        every channel the figure uses — including the hue on the verticals, which
-       is otherwise carried by colour alone and would leave that reader with a
-       count of marks and no way to know whose they were. */
+       is otherwise carried by colour alone. */
     dsc.textContent = "The line starts at " + num(series[0].p - series[0].dp, PCT)
       + " and ends at " + num(finalP, PCT) + "; " + focal.team_id + " won " + focal.rounds_won
       + " rounds against " + (other ? other.rounds_won : EM) + ". "
       + series.filter(function (n) { return n.kind === "action"; }).length
-      + " credited actions sit on the line: " + marked + " by one of the four, drawn in that "
-      + "player's hue with their initial, " + ringed + " by anyone else above the act's top "
-      + "hundredth, drawn as a hollow ring, the rest as the vertical in the line."
-      + (actShorts.length ? " Hued by " + actShorts.map(function (s) {
-          return String(actWho[s].name || s).split("#")[0] + " (" + actN[s] + ")";
+      + " credited actions sit on the line as verticals, each one that action's match "
+      + "impact drawn to scale. " + marked + " are marked, drawn in that player's hue with "
+      + "their initial in the mark, and " + ringed + " by anyone else above the act's top "
+      + "hundredth as a hollow ring."
+      + (actShorts.length ? " Marked for " + actShorts.map(function (s) {
+          return who(actWho[s].name || s) + " (" + actN[s] + ")";
         }).join(", ") + "." : "")
       + (biggest ? " Largest single move: a " + biggest.type + " in round " + biggest.r
           + ", " + num(biggest.dp, MOVE) + "." : "")
-      + " Every node of the selected round is listed as a table under the figure.";
+      + " The horizontal axis is round number by default and can be switched to "
+      + mmss(CLOCK.total) + " of summed round clock."
+      + " Selecting a round opens that round, node by node, in the panel below."
+      + " The x axis can be read two ways: every round at equal width, or at its real length"
+      + " on the round clock, in which case the rounds abut, because nothing in this data"
+      + " times a buy phase.";
 
     /* ---- wire up ------------------------------------------------------- */
-    /* `host`, not an intermediate wrapper. wireTabs only appends a strip when
-       the page shipped none, and every match page ships one, so the wrapper
-       was an element that was empty on all 68 pages that exist. */
+    paint();
     tabs = wireTabs(host, rounds, function (n) { select(n, false); });
     paintHead(null);
     restText();
-    select(opening(), true);
+    opening_ = true; select(opening(), true); opening_ = false;
   }
+
 
   /* House rule 3 again, in one place: the marker axis is a fixed number the
      payload carries, so no mark's size is a function of the biggest value in
@@ -1599,7 +2177,7 @@
      The margin COLUMN is gone — the score, the margin and the result were
      three spellings of one fact — but the margin SORT is not, because an
      ordering is not a spelling. `data-margin` rides on the row and the Result
-     heading is its button, so "which of these sixty-eight were close" is still
+     heading is its button, so "which of these were close" is still
      one click, on the cell that prints the two numbers it comes from.
 
      Everything it needs is already in the DOM as data attributes, so a page
@@ -1616,8 +2194,11 @@
     var only = "", cursor = -1;
 
     function value(tr, key) {
+      /* The two text keys sort as text; everything else is a number. `map` joined them when
+         the date came out of the match cell and got a column of its own. */
       if (key === "player") return tr.getAttribute("data-player") || "";
       if (key === "date") return tr.getAttribute("data-date") || "";
+      if (key === "map") return tr.getAttribute("data-map") || "";
       /* A MISSING ATTRIBUTE IS NOT A ZERO. The cross-tab has an empty cell
          wherever a player did not play a match, and `Number(null)` is 0 —
          which would file thirty matches TheMarias was never in among the ones
@@ -1701,7 +2282,7 @@
 
     /* NEWEST FIRST is the rest state. The act is in progress, so the match a
        reader arrives looking for is the one that was played last, and it used
-       to be the row at the bottom of sixty-eight. The sort runs here rather
+       to be the row at the bottom of the table. The sort runs here rather
        than in build.py's row order so the aria-sort on the header is set too:
        a table that is ordered and does not say so is a table the reader cannot
        tell from an unordered one. */
@@ -1714,6 +2295,8 @@
     initIcons();
     var t = document.querySelector("[data-tracker]");
     if (t) drawTracker(t);
+    var o = document.querySelector("[data-offdef]");
+    if (o) drawOffenseDefense(o);
     var m = document.querySelector("[data-match-figure]");
     if (m) drawMatchFigure(m);
     var x = document.querySelector("[data-index]");

@@ -251,13 +251,13 @@ IMAGE_FLOOR = min(ratio(pal["rule"], pal[surface])
 #           at the slot; it was not dropped and the floor was not lowered.
 IMAGE_FAMILIES = [
     # (folder, what it does, which surfaces it can land on, the slot that is the mark)
-    (HERE / "quad" / "assets" / "agent",
+    (HERE / "assets" / "agent",
      "identification beside a word that is always rendered",
      ["field", "well"], "rule-strong"),
-    (HERE / "quad" / "assets" / "rank",
+    (HERE / "assets" / "rank",
      "recognition beside the division word, which is what encodes",
      ["field", "well"], "rule-strong"),
-    (HERE / "quad" / "assets" / "weapon",
+    (HERE / "assets" / "weapon",
      "one distinct silhouette per breakdown row, on a theme-invariant plate",
      ["art-plate"], "rule-strong"),
 ]
@@ -483,8 +483,15 @@ def image_report(families=None, quiet=False):
               % (IMAGE_ALPHA, IMAGE_FLOOR, MARK_FLOOR))
     for folder, job, surfaces, slot in families:
         if not folder.is_dir():
+            # A DECLARED FAMILY WITH NO FOLDER IS A FAILURE, not a line of output. This used to
+            # print "nothing to check" and carry on, which meant the gate passed loudest exactly
+            # when it had least to say: moving this site up a directory left all three folders
+            # unreachable and every check still reported PASS. build.py has always raised on the
+            # same condition from the other side. `quiet=True` is how payload_site.py calls this,
+            # so the branch that only printed was invisible to the one caller that mattered.
+            ok = False
             if not quiet:
-                print("  %-14s ABSENT — nothing on disk, nothing to check" % (folder.name + "/"))
+                print("  %-14s ABSENT — declared here but not on disk" % (folder.name + "/"))
             continue
         rows, labels = image_family(folder, surfaces)
         if not rows:

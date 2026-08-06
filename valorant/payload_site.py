@@ -52,11 +52,11 @@ RELEASE = "model_suite_release_2026-08-02_v15"
 BOOTSTRAP = 100_000
 SEED = 20260726
 CONFIDENCE = 0.95
-# Pinned, and it moves when the corpus does: this is the act's own mean over the 1,617 rounds of
-# the 78-match corpus, where the 68-match corpus read 0.16427272872711246. The guard below is the
+# Pinned, and it moves when the corpus does: this is the act's own mean over the 1,713 rounds of
+# the 83-match corpus, where the 68-match corpus read 0.16427272872711246. The guard below is the
 # point of the literal — a ledger whose mean leverage is not this one is not the ledger this
 # payload was written for, and the run stops rather than emitting numbers off the wrong corpus.
-MEAN_LEVERAGE = 0.16050251734197435
+MEAN_LEVERAGE = 0.1613029131154413
 
 RATE_FLOOR_ROUNDS = 0
 THIN_ROUNDS = 20

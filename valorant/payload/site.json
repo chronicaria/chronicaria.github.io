@@ -2,15 +2,15 @@
   "meta": {
     "act": "e11a4",
     "release": "model_suite_release_2026-08-02_v15",
-    "matches": 78,
-    "rounds": 1617,
-    "round_players": 16080,
-    "players": 648,
+    "matches": 83,
+    "rounds": 1713,
+    "round_players": 17038,
+    "players": 683,
     "bootstrap": 100000,
     "seed": 20260726,
     "confidence": 0.95,
-    "mean_leverage": 0.16050251734197435,
-    "generated_at": "2026-08-05",
+    "mean_leverage": 0.1613029131154413,
+    "generated_at": "2026-08-06",
     "gate": {
       "rank_players": true,
       "rate_floor_rounds": 0,
@@ -124,11 +124,11 @@
       "duel_key": "duel_credit"
     },
     "ladder": {
-      "n": 129,
+      "n": 144,
       "minimum_ranked": 5,
-      "r_mwpa": 0.044,
-      "r_lobby_adjustment": 0.093,
-      "r_lobby_adjustment_rate": 0.043,
+      "r_mwpa": 0.097,
+      "r_lobby_adjustment": 0.167,
+      "r_lobby_adjustment_rate": 0.127,
       "lobby_spread_median": 4.0,
       "lobby_spread_max": 8
     },
@@ -678,7 +678,7 @@
       },
       "kind_round_start": {
         "label": "Round start",
-        "definition": "The buy is known and the model prices the round before anyone has acted. It is usually the largest move nobody made: round-start round win probability has a standard deviation of 0.152 across the act, so an eco round opens with the match already leaning away. It belongs to the economy, never to a player, and carries no MWPA.",
+        "definition": "The buy is known and the model prices the round before anyone has acted. It is usually the largest move nobody made: round-start round win probability has a standard deviation of 0.153 across the act, so an eco round opens with the match already leaning away. It belongs to the economy, never to a player, and carries no MWPA.",
         "unit": "",
         "format": "text",
         "tier": "diagnostic"
@@ -1002,15 +1002,15 @@
     "cav": [
       {
         "id": "act_scope",
-        "text": "Every number here is act e11a4 alone — 78 matches, 1,617 rounds — with nothing pooled across acts."
+        "text": "Every number here is act e11a4 alone — 83 matches, 1,713 rounds — with nothing pooled across acts."
       },
       {
         "id": "two_scoring_provenances",
-        "text": "65 of these matches were priced inside the model release, each by a fold fit without it. 13 were collected after the release was cut, and cross-fitting keeps its predictions but not its models, so those are priced by a refit on the release's own core at the parameters all five folds already chose. Neither kind was in the training data of the model that scored it; what differs is that one model saw four fifths of the corpus and the other saw all of it, worth a mean 0.6% of round win probability across the act's states."
+        "text": "65 of these matches were priced inside the model release, each by a fold fit without it. 18 were collected after the release was cut, and cross-fitting keeps its predictions but not its models, so those are priced by a refit on the release's own core at the parameters all five folds already chose. Neither kind was in the training data of the model that scored it; what differs is that one model saw four fifths of the corpus and the other saw all of it, worth a mean 0.6% of round win probability across the act's states."
       },
       {
         "id": "surrendered_rounds_are_not_played_rounds",
-        "text": "7 rounds in this act ended in a surrender. A surrendered round is awarded, not played — no events, no kills — so it is outside every number here, while the rounds played before it stay in: they ran under a real race to 13, against a score nobody yet knew would be conceded. The scoreline on such a match is the played one, and the round count reconciles against it."
+        "text": "11 rounds in this act ended in a surrender. A surrendered round is awarded, not played — no events, no kills — so it is outside every number here, while the rounds played before it stay in: they ran under a real race to 13, against a score nobody yet knew would be conceded. The scoreline on such a match is the played one, and the round count reconciles against it."
       },
       {
         "id": "rank_by_decision",
@@ -1018,7 +1018,7 @@
       },
       {
         "id": "side_split_unresolvable",
-        "text": "The attack/defense split cannot resolve at this exposure: it needs roughly 14,000 rounds at this credit variance and the act has 1,617. Both cells are published with their intervals; the width there is the sample, not the player."
+        "text": "The attack/defense split cannot resolve at this exposure: it needs roughly 14,000 rounds at this credit variance and the act has 1,713. Both cells are published with their intervals; the width there is the sample, not the player."
       },
       {
         "id": "no_abilities",
@@ -1030,11 +1030,11 @@
       },
       {
         "id": "noindex_is_not_access_control",
-        "text": "A noindex tag and a robots.txt keep this out of search results, which is not access control: the pages sit in a public repository, readable by anyone with the URL, including round-level detail on 644 players who did not consent to any of it. The point was raised before the build and the decision to publish was reaffirmed."
+        "text": "A noindex tag and a robots.txt keep this out of search results, which is not access control: the pages sit in a public repository, readable by anyone with the URL, including round-level detail on 679 players who did not consent to any of it. The point was raised before the build and the decision to publish was reaffirmed."
       },
       {
         "id": "thin_cells_shown",
-        "text": "The 20-round floor marks a cell rather than suppressing it: below it a cell carries `thin` and still prints its number and interval. Per-round MWPA has a standard deviation of 0.0443 in this act, so a 20-round mean carries a pure-noise standard error of about 0.99 per 100 rounds against a spread between the four of 0.15 — read a thin cell as description, not estimate."
+        "text": "The 20-round floor marks a cell rather than suppressing it: below it a cell carries `thin` and still prints its number and interval. Per-round MWPA has a standard deviation of 0.0445 in this act, so a 20-round mean carries a pure-noise standard error of about 0.99 per 100 rounds against a spread between the four of 0.43 — read a thin cell as description, not estimate."
       },
       {
         "id": "no_zero_for_absence",
@@ -1042,7 +1042,7 @@
       },
       {
         "id": "duel_tags_incomplete",
-        "text": "Duel tags cover 8,095 of 8,150 earned rows; the missing 55, 0.7%, are 50 clutch_lost, 3 opening_death and 2 traded across 54 rounds. They have no round-player row to attach to, because the ledger scores nobody who was alive and produced no kill, death, plant, defuse or clock share — a clutch lost without firing is the modal case."
+        "text": "Duel tags cover 8,552 of 8,608 earned rows; the missing 56, 0.7%, are 51 clutch_lost, 3 opening_death and 2 traded across 55 rounds. They have no round-player row to attach to, because the ledger scores nobody who was alive and produced no kill, death, plant, defuse or clock share — a clutch lost without firing is the modal case."
       },
       {
         "id": "single_match_interval",
@@ -1070,11 +1070,11 @@
       },
       {
         "id": "components_include_the_lobby_adjustment",
-        "text": "The five credit types decompose the raw ledger before the lobby centering, so a further row carries that centering and the rows sum to the headline exactly. Across the four the raw five sum to +2.6565 against a headline sum of +0.5843, and the lobby adjustment is the -2.0722 between them."
+        "text": "The five credit types decompose the raw ledger before the lobby centering, so a further row carries that centering and the rows sum to the headline exactly. Across the four the raw five sum to +4.2199 against a headline sum of +2.2172, and the lobby adjustment is the -2.0027 between them."
       },
       {
         "id": "wp_curve_boundary_seam",
-        "text": "The curve steps at a round boundary and the step is real: the match model runs every future round at a constant win probability of 0.5, so a boundary is the score talking, and the round-start node then moves it to the model's price on the round about to be played. Across the 1,617 rounds of this act the median step is 1.5 match win probability points and the largest is 10.4; neither end of it is a player."
+        "text": "The curve steps at a round boundary and the step is real: the match model runs every future round at a constant win probability of 0.5, so a boundary is the score talking, and the round-start node then moves it to the model's price on the round about to be played. Across the 1,713 rounds of this act the median step is 1.5 match win probability points and the largest is 10.4; neither end of it is a player."
       },
       {
         "id": "leverage_widens",
@@ -1082,11 +1082,11 @@
       },
       {
         "id": "buy_bands_local",
-        "text": "The buy classes are cut from this corpus's own team-loadout distribution, not from Counter-Strike convention. Eco rounds are won 42.2% of the time in this act, against roughly one in thirty in professional Counter-Strike, which is direct evidence that the imported cut points describe a different game."
+        "text": "The buy classes are cut from this corpus's own team-loadout distribution, not from Counter-Strike convention. Eco rounds are won 42.0% of the time in this act, against roughly one in thirty in professional Counter-Strike, which is direct evidence that the imported cut points describe a different game."
       },
       {
         "id": "synergy_is_ordered",
-        "text": "Synergy is ordered: each row is the subject's own MWPA over the rounds a given partner also played, not a joint estimate, so the two directions of a pairing are different numbers. martin and snorlax are the only pairing with real shared exposure, at 790 shared rounds; themarias and trzzcko never shared a round in this act, and that cell is null, not zero."
+        "text": "Synergy is ordered: each row is the subject's own MWPA over the rounds a given partner also played, not a joint estimate, so the two directions of a pairing are different numbers. martin and snorlax are the only pairing with real shared exposure, at 886 shared rounds; themarias and trzzcko never shared a round in this act, and that cell is null, not zero."
       },
       {
         "id": "descriptive_not_causal",
@@ -1094,11 +1094,11 @@
       },
       {
         "id": "tier_placement_window",
-        "text": "A player's first 5 act matches are played before the platform has issued a rank: not a missing value and not a zero, but the measured answer that no division existed yet. Verified rather than assumed — 134 of the 648 act players who have such a match carry it as a strict prefix, with no counterexamples."
+        "text": "A player's first 5 act matches are played before the platform has issued a rank: not a missing value and not a zero, but the measured answer that no division existed yet. Verified rather than assumed — 140 of the 683 act players who have such a match carry it as a strict prefix, with no counterexamples."
       },
       {
         "id": "tier_is_not_mwpa",
-        "text": "The ladder is a second instrument and it is not measuring this: over the 129 focal player-matches with at least 5 ranked others in the lobby, the lobby's mean division correlates with that match's MWPA at r = +0.044, with the lobby adjustment at r = +0.093, and with that adjustment as a rate at r = +0.043. Lobbies are not division-homogeneous either — the median spread inside one is 4 divisions and the widest is 8."
+        "text": "The ladder is a second instrument and it is not measuring this: over the 144 focal player-matches with at least 5 ranked others in the lobby, the lobby's mean division correlates with that match's MWPA at r = +0.097, with the lobby adjustment at r = +0.167, and with that adjustment as a rate at r = +0.127. Lobbies are not division-homogeneous either — the median spread inside one is 4 divisions and the widest is 8."
       },
       {
         "id": "imagery_is_not_a_mark",
@@ -1106,7 +1106,7 @@
       },
       {
         "id": "where_imagery_is_allowed",
-        "text": "The round ledger stays words: across 16,073 named cells Vandal alone is 34.2%, so an icon column there repeats and is texture rather than navigation. The silhouettes ship in the `by weapon` breakdown, where every row is a distinct weapon; a division badge ships only beside the division word and never in a cell carrying a player hue, because Riot's gold sits within OKLab ΔE 3.5 of one player's own hue; map art is refused. The player card is the one place the art is not eighteen pixels tall — everywhere else it rides inside a table row and the row's line box is the constraint, and a card is not a row, so the agents and the guns on it are drawn at the size the files actually are. Nothing else about them changes: the word is beside every picture, the weapon plate comes with the weapon art, and the header control still takes all of it away without losing a fact."
+        "text": "The round ledger stays words: across 17,030 named cells Vandal alone is 34.2%, so an icon column there repeats and is texture rather than navigation. The silhouettes ship in the `by weapon` breakdown, where every row is a distinct weapon; a division badge ships only beside the division word and never in a cell carrying a player hue, because Riot's gold sits within OKLab ΔE 3.5 of one player's own hue; map art is refused. The player card is the one place the art is not eighteen pixels tall — everywhere else it rides inside a table row and the row's line box is the constraint, and a card is not a row, so the agents and the guns on it are drawn at the size the files actually are. Nothing else about them changes: the word is beside every picture, the weapon plate comes with the weapon art, and the header control still takes all of it away without losing a fact."
       },
       {
         "id": "riot_assets",
@@ -1114,7 +1114,7 @@
       },
       {
         "id": "unrated_is_not_a_division",
-        "text": "19.2% of this act's player-matches carry no division, and no badge ships for that state: Riot's enum puts `Unrated` at id 0 on the ladder that has Iron 2 at 4, which would draw the absence of a rank as a rung below the lowest one, and `Unrated` is also the name of a queue while all 78 of these matches are Competitive. It is the word `placement` everywhere it appears — not an em dash, which on this site means NOT MEASURED — and on the ladder it gets an empty slot in a dashed hairline."
+        "text": "18.8% of this act's player-matches carry no division, and no badge ships for that state: Riot's enum puts `Unrated` at id 0 on the ladder that has Iron 2 at 4, which would draw the absence of a rank as a rung below the lowest one, and `Unrated` is also the name of a queue while all 83 of these matches are Competitive. It is the word `placement` everywhere it appears — not an em dash, which on this site means NOT MEASURED — and on the ladder it gets an empty slot in a dashed hairline."
       }
     ]
   },
@@ -1124,24 +1124,24 @@
       "name": "Trzzcko#SFang",
       "short": "trzzcko",
       "rank": 1,
-      "impact": 0.016442,
-      "impact_lo": -0.042052,
-      "impact_hi": 0.111781,
-      "rate": 0.0876,
-      "lo": -0.2241,
-      "hi": 0.5957,
+      "impact": 0.068884,
+      "impact_lo": -0.00232,
+      "impact_hi": 0.167547,
+      "rate": 0.3652,
+      "lo": -0.0123,
+      "hi": 0.8882,
       "covers_zero": true,
-      "total": 0.279516,
-      "rounds": 319,
-      "matches": 17,
+      "total": 1.51545,
+      "rounds": 415,
+      "matches": 22,
       "ladder": {
         "first": "Bronze 2",
-        "last": "Bronze 2",
+        "last": "Bronze 3",
         "low": "Bronze 2",
-        "high": "Bronze 2",
+        "high": "Bronze 3",
         "placement": 5,
-        "ranked": 12,
-        "steps_up": 0,
+        "ranked": 17,
+        "steps_up": 1,
         "steps_down": 0
       }
     },
@@ -1150,23 +1150,23 @@
       "name": "SN0RLAX#143",
       "short": "snorlax",
       "rank": 2,
-      "impact": 0.012505,
-      "impact_lo": -0.03293,
-      "impact_hi": 0.054159,
-      "rate": 0.0605,
-      "lo": -0.1593,
-      "hi": 0.262,
+      "impact": 0.017803,
+      "impact_lo": -0.026478,
+      "impact_hi": 0.062708,
+      "rate": 0.0865,
+      "lo": -0.1287,
+      "hi": 0.3048,
       "covers_zero": true,
-      "total": 0.875364,
-      "rounds": 1447,
-      "matches": 70,
+      "total": 1.335244,
+      "rounds": 1543,
+      "matches": 75,
       "ladder": {
         "first": "Bronze 2",
         "last": "Bronze 3",
         "low": "Bronze 1",
         "high": "Silver 1",
         "placement": 5,
-        "ranked": 65,
+        "ranked": 70,
         "steps_up": 4,
         "steps_down": 3
       }
@@ -1177,11 +1177,11 @@
       "short": "themarias",
       "rank": 3,
       "impact": -0.001839,
-      "impact_lo": -0.161479,
-      "impact_hi": 0.123084,
+      "impact_lo": -0.163585,
+      "impact_hi": 0.122733,
       "rate": -0.0094,
-      "lo": -0.8281,
-      "hi": 0.6312,
+      "lo": -0.8389,
+      "hi": 0.6294,
       "covers_zero": true,
       "total": -0.01471,
       "rounds": 156,
@@ -1202,23 +1202,23 @@
       "name": "MartinLutherKing#racis",
       "short": "martin",
       "rank": 4,
-      "impact": -0.013557,
-      "impact_lo": -0.056669,
-      "impact_hi": 0.027146,
-      "rate": -0.0662,
-      "lo": -0.2766,
-      "hi": 0.1325,
+      "impact": -0.013451,
+      "impact_lo": -0.052477,
+      "impact_hi": 0.023034,
+      "rate": -0.0661,
+      "lo": -0.2579,
+      "hi": 0.1132,
       "covers_zero": true,
-      "total": -0.555839,
-      "rounds": 840,
-      "matches": 41,
+      "total": -0.618761,
+      "rounds": 936,
+      "matches": 46,
       "ladder": {
         "first": "Bronze 1",
         "last": "Silver 1",
         "low": "Bronze 1",
         "high": "Silver 1",
         "placement": 5,
-        "ranked": 36,
+        "ranked": 41,
         "steps_up": 5,
         "steps_down": 2
       }
@@ -1634,6 +1634,56 @@
         "mwpa": -0.058408,
         "cumulative": -0.555839,
         "rounds": 17,
+        "won": true
+      },
+      {
+        "i": 41,
+        "match_id": "eb21915a-0486-4e26-baaa-d7b83409fdab",
+        "started_at": "2026-08-06T01:22:07.022Z",
+        "map": "Split",
+        "mwpa": 0.039703,
+        "cumulative": -0.516136,
+        "rounds": 17,
+        "won": true
+      },
+      {
+        "i": 42,
+        "match_id": "9f2e40fc-95fc-4a95-bd0e-88c4b5f86a83",
+        "started_at": "2026-08-06T01:51:08.768Z",
+        "map": "Breeze",
+        "mwpa": -0.08469,
+        "cumulative": -0.600826,
+        "rounds": 24,
+        "won": false
+      },
+      {
+        "i": 43,
+        "match_id": "3ea060bc-7496-4add-b697-62ff08f86f38",
+        "started_at": "2026-08-06T02:28:23.898Z",
+        "map": "Summit",
+        "mwpa": -0.011553,
+        "cumulative": -0.612379,
+        "rounds": 12,
+        "won": false
+      },
+      {
+        "i": 44,
+        "match_id": "1124e663-6fbf-4286-a99b-711f61f6310c",
+        "started_at": "2026-08-06T02:53:44.604Z",
+        "map": "Sunset",
+        "mwpa": -0.074876,
+        "cumulative": -0.687255,
+        "rounds": 28,
+        "won": true
+      },
+      {
+        "i": 45,
+        "match_id": "8de8fde5-1c42-4900-b67a-5aca5f72e020",
+        "started_at": "2026-08-06T03:44:57.658Z",
+        "map": "Split",
+        "mwpa": 0.068494,
+        "cumulative": -0.618761,
+        "rounds": 15,
         "won": true
       }
     ],
@@ -2337,6 +2387,56 @@
         "cumulative": 0.875364,
         "rounds": 17,
         "won": true
+      },
+      {
+        "i": 70,
+        "match_id": "eb21915a-0486-4e26-baaa-d7b83409fdab",
+        "started_at": "2026-08-06T01:22:07.022Z",
+        "map": "Split",
+        "mwpa": 0.069562,
+        "cumulative": 0.944926,
+        "rounds": 17,
+        "won": true
+      },
+      {
+        "i": 71,
+        "match_id": "9f2e40fc-95fc-4a95-bd0e-88c4b5f86a83",
+        "started_at": "2026-08-06T01:51:08.768Z",
+        "map": "Breeze",
+        "mwpa": -0.147345,
+        "cumulative": 0.797581,
+        "rounds": 24,
+        "won": false
+      },
+      {
+        "i": 72,
+        "match_id": "3ea060bc-7496-4add-b697-62ff08f86f38",
+        "started_at": "2026-08-06T02:28:23.898Z",
+        "map": "Summit",
+        "mwpa": -0.131426,
+        "cumulative": 0.666154,
+        "rounds": 12,
+        "won": false
+      },
+      {
+        "i": 73,
+        "match_id": "1124e663-6fbf-4286-a99b-711f61f6310c",
+        "started_at": "2026-08-06T02:53:44.604Z",
+        "map": "Sunset",
+        "mwpa": 0.710268,
+        "cumulative": 1.376422,
+        "rounds": 28,
+        "won": true
+      },
+      {
+        "i": 74,
+        "match_id": "8de8fde5-1c42-4900-b67a-5aca5f72e020",
+        "started_at": "2026-08-06T03:44:57.658Z",
+        "map": "Split",
+        "mwpa": -0.041178,
+        "cumulative": 1.335244,
+        "rounds": 15,
+        "won": true
       }
     ],
     "themarias": [
@@ -2590,6 +2690,56 @@
         "mwpa": -0.028481,
         "cumulative": 0.279516,
         "rounds": 17,
+        "won": true
+      },
+      {
+        "i": 17,
+        "match_id": "eb21915a-0486-4e26-baaa-d7b83409fdab",
+        "started_at": "2026-08-06T01:22:07.022Z",
+        "map": "Split",
+        "mwpa": 0.25884,
+        "cumulative": 0.538356,
+        "rounds": 17,
+        "won": true
+      },
+      {
+        "i": 18,
+        "match_id": "9f2e40fc-95fc-4a95-bd0e-88c4b5f86a83",
+        "started_at": "2026-08-06T01:51:08.768Z",
+        "map": "Breeze",
+        "mwpa": 0.374092,
+        "cumulative": 0.912447,
+        "rounds": 24,
+        "won": false
+      },
+      {
+        "i": 19,
+        "match_id": "3ea060bc-7496-4add-b697-62ff08f86f38",
+        "started_at": "2026-08-06T02:28:23.898Z",
+        "map": "Summit",
+        "mwpa": -0.053128,
+        "cumulative": 0.859319,
+        "rounds": 12,
+        "won": false
+      },
+      {
+        "i": 20,
+        "match_id": "1124e663-6fbf-4286-a99b-711f61f6310c",
+        "started_at": "2026-08-06T02:53:44.604Z",
+        "map": "Sunset",
+        "mwpa": 0.64358,
+        "cumulative": 1.502899,
+        "rounds": 28,
+        "won": true
+      },
+      {
+        "i": 21,
+        "match_id": "8de8fde5-1c42-4900-b67a-5aca5f72e020",
+        "started_at": "2026-08-06T03:44:57.658Z",
+        "map": "Split",
+        "mwpa": 0.012551,
+        "cumulative": 1.51545,
+        "rounds": 15,
         "won": true
       }
     ]
@@ -3741,6 +3891,86 @@
       ],
       "won": true,
       "focal": [
+        "snorlax",
+        "trzzcko"
+      ]
+    },
+    {
+      "match_id": "eb21915a-0486-4e26-baaa-d7b83409fdab",
+      "started_at": "2026-08-06T01:22:07.022Z",
+      "map": "Split",
+      "rounds": 17,
+      "score": [
+        13,
+        4
+      ],
+      "won": true,
+      "focal": [
+        "martin",
+        "snorlax",
+        "trzzcko"
+      ]
+    },
+    {
+      "match_id": "9f2e40fc-95fc-4a95-bd0e-88c4b5f86a83",
+      "started_at": "2026-08-06T01:51:08.768Z",
+      "map": "Breeze",
+      "rounds": 24,
+      "score": [
+        11,
+        13
+      ],
+      "won": false,
+      "focal": [
+        "martin",
+        "snorlax",
+        "trzzcko"
+      ]
+    },
+    {
+      "match_id": "3ea060bc-7496-4add-b697-62ff08f86f38",
+      "started_at": "2026-08-06T02:28:23.898Z",
+      "map": "Summit",
+      "rounds": 12,
+      "score": [
+        1,
+        11
+      ],
+      "won": false,
+      "focal": [
+        "martin",
+        "snorlax",
+        "trzzcko"
+      ]
+    },
+    {
+      "match_id": "1124e663-6fbf-4286-a99b-711f61f6310c",
+      "started_at": "2026-08-06T02:53:44.604Z",
+      "map": "Sunset",
+      "rounds": 28,
+      "score": [
+        15,
+        13
+      ],
+      "won": true,
+      "focal": [
+        "martin",
+        "snorlax",
+        "trzzcko"
+      ]
+    },
+    {
+      "match_id": "8de8fde5-1c42-4900-b67a-5aca5f72e020",
+      "started_at": "2026-08-06T03:44:57.658Z",
+      "map": "Split",
+      "rounds": 15,
+      "score": [
+        11,
+        4
+      ],
+      "won": true,
+      "focal": [
+        "martin",
         "snorlax",
         "trzzcko"
       ]

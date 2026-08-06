@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-06T10:00:00Z",
-  "updated": "2026-08-06T11:41:49Z",
+  "valid_time_utc": "2026-08-06T14:00:00Z",
+  "updated": "2026-08-06T14:54:54Z",
   "hottest": [
     {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 87.5
+      "name": "Chambers",
+      "state": "TX",
+      "temp_f": 87.0
     },
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 86.5
+      "name": "Cameron",
+      "state": "LA",
+      "temp_f": 86.7
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 86.2
+      "name": "Vermilion",
+      "state": "LA",
+      "temp_f": 86.7
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 45.2
-    },
-    {
-      "name": "Lake",
-      "state": "CO",
-      "temp_f": 45.5
+      "temp_f": 42.5
     },
     {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 45.7
+      "temp_f": 46.0
+    },
+    {
+      "name": "Yakutat",
+      "state": "AK",
+      "temp_f": 46.1
     }
   ],
   "national": {
-    "min_f": 45.2,
-    "max_f": 87.5,
-    "mean_f": 68.2
+    "min_f": 42.5,
+    "max_f": 87.0,
+    "mean_f": 73.7
   }
 }

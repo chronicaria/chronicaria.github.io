@@ -392,3 +392,7 @@ footer a:hover { text-decoration: underline; }
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* ===== county map (baked SVG plate, repainted server-side every 3 h) ===== */
+.county-map img { display: block; width: 100%; height: auto; border-radius: 8px; background: #fff; }
+.county-note { font-size: 13px; margin: 10px 0 0; }

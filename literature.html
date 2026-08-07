@@ -9,6 +9,9 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23faf9f4'/%3E%3Crect x='5' y='5' width='90' height='90' fill='none' stroke='%23003153' stroke-width='4'/%3E%3Ctext x='50' y='68' font-family='Didot,Georgia,serif' font-size='46' font-weight='700' fill='%23003153' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="assets/icon-180.png">
   <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
   <script defer src="assets/site.js"></script>
   <script defer src="assets/ui.js"></script>
@@ -25,10 +28,8 @@
       <div class="nav-drop">
         <button type="button" class="nav-drop-btn active">Interests</button>
         <div class="nav-drop-menu">
-          <a href="/sports.html">Sports</a>
           <a href="/music.html">Music</a>
           <a class="active" href="/literature.html">Literature</a>
-          <a href="/weather.html">Temperature</a>
         </div>
       </div>
       <div class="nav-drop">
@@ -37,10 +38,8 @@
           <a href="/fantasy/">Fantasy Encyclopedias</a>
           <a href="/valorant/">Valorant MWPA</a>
           <a href="/quant-internships/">Quant Internships</a>
-          <a href="/concerto/">Concerto Ranker</a>
           <a href="/nyc-weather/">Weather Dashboard</a>
           <a href="/winter-trip/">Italy, winter 2026–27</a>
-          <a href="/equipotential/">Live Paper</a>
         </div>
       </div>
     </nav>
@@ -61,8 +60,7 @@
     </section>
 
     <div class="placeholder-panel" data-books-error hidden>
-      <p>Couldn't load the reading data. If you're opening this file directly, serve the site over
-        HTTP instead (e.g. <code>python3 -m http.server</code>).</p>
+      <p>The shelf came up empty — the reading log didn't load. Try a refresh.</p>
     </div>
 
     <section class="card">

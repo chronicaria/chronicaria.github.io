@@ -15,19 +15,16 @@
     { href: "/fantasy/", label: "Fantasy Encyclopedias" },
     { href: "/valorant/", label: "Valorant MWPA" },
     { href: "/quant-internships/", label: "Quant Internships" },
-    { href: "/concerto/", label: "Concerto Ranker" },
     { href: "/nyc-weather/", label: "Weather Dashboard" },
     { href: "/winter-trip/", label: "Italy, winter 2026–27" },
-    { href: "/equipotential/", label: "Live Paper" },
   ];
 
   var ELSEWHERE = [
     { href: "/", label: "Home" },
     { href: "/daily/", label: "Newspaper" },
-    { href: "/sports.html", label: "Sports" },
+    { href: "/daily/sports.html", label: "Sports" },
     { href: "/music.html", label: "Music" },
     { href: "/literature.html", label: "Literature" },
-    { href: "/weather.html", label: "Temperature" },
   ];
 
   // Longest matching prefix wins, so a nested project doesn't answer to its parent.

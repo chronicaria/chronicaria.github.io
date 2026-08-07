@@ -16,32 +16,25 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOMAIN = "https://chronicaria.github.io"
 
 INTERESTS = [
-    ("/sports.html", "Sports"),
     ("/music.html", "Music"),
     ("/literature.html", "Literature"),
-    ("/weather.html", "Temperature"),
 ]
 
 PROJECTS = [
     ("/fantasy/", "Fantasy Encyclopedias"),
     ("/valorant/", "Valorant MWPA"),
     ("/quant-internships/", "Quant Internships"),
-    ("/concerto/", "Concerto Ranker"),
     ("/nyc-weather/", "Weather Dashboard"),
     ("/winter-trip/", "Italy, winter 2026–27"),
-    ("/equipotential/", "Live Paper"),
 ]
 
 # Top-level pages, and the href each should mark as the current page.
 PAGES = {
     "index.html": "/",
-    "sports.html": "/sports.html",
     "music.html": "/music.html",
     "literature.html": "/literature.html",
-    "weather.html": "/weather.html",
     "daily/index.html": "/daily/",
     "daily/ai.html": "/daily/",
-    "daily/archive.html": "/daily/",
     "daily/elections.html": "/daily/",
     "daily/markets.html": "/daily/",
     "daily/math.html": "/daily/",
@@ -52,7 +45,7 @@ PAGES = {
 # Extra sitemap entries that aren't in the nav.
 SITEMAP_EXTRA = [
     "/daily/sports.html", "/daily/ai.html", "/daily/markets.html",
-    "/daily/elections.html", "/daily/math.html", "/daily/archive.html",
+    "/daily/elections.html", "/daily/math.html",
 ]
 
 # In the nav, out of the sitemap. Every page under /valorant/ ships

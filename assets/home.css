@@ -195,6 +195,16 @@ a { color: inherit; }
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
   z-index: 5;
 }
+.nav-drop-menu::before {
+  /* invisible bridge over the 0.55rem gap to the button, so crossing it
+     doesn't drop .nav-drop:hover and close the menu mid-travel */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -0.55rem;
+  height: 0.55rem;
+}
 .nav-drop:hover .nav-drop-menu,
 .nav-drop:focus-within .nav-drop-menu,
 .nav-drop.open .nav-drop-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
@@ -479,6 +489,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
     box-shadow: none;
     padding-top: 0.3rem;
   }
+  .nav-drop-menu::before { content: none; }  /* static menu needs no hover bridge */
   .nav-drop.open .nav-drop-menu { display: block; transform: none; }
   .nav-drop-menu a { padding: 0.55rem 0; color: var(--gray); }
 
@@ -494,4 +505,18 @@ html.js .reveal.in { opacity: 1; transform: none; }
   .chart .mean { stroke-dasharray: none; stroke-dashoffset: 0; }
   .chart .future { clip-path: none; }
   html.js .reveal { opacity: 1; transform: none; }
+}
+
+/* ── print ──────────────────────────────────────────────────── */
+
+@media print {
+  :root, html[data-theme="dark"] {
+    --paper: #fff; --ink: #000; --prussian: #000; --royal: #000; --navy: #000; --gray: #444;
+    --rule: #bbb; --rule-strong: #888; --band: #eee;
+    --panel: #fff; --panel-2: #fff; --line: #bbb; --text: #000; --muted: #444;
+  }
+  html.js .reveal { opacity: 1; transform: none; }
+  .topstrip, .primary-nav, .nav-burger, .theme-toggle, .btn-row { display: none !important; }
+  body { font-size: 12px; }
+  a { color: #000; text-decoration: none; }
 }

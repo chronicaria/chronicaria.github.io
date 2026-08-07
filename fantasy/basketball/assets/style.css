@@ -1,28 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap');
+
 /* ============================================================================
-   The Fantasy Basketball Encyclopedia — antique-serif wiki
+   The Fantasy Basketball Encyclopedia — broadsheet wiki
    Same architecture as site.css in andrewjparkus.github.io (tokens, data-theme,
-   sticky nav) in an old-encyclopedia register: paper, ink, hairlines, small caps.
+   sticky nav), and now the same palette too: Prussian ink on cream paper,
+   unified with the main site and the football wiki.
    ========================================================================== */
 
 :root{
-  /* paper (default) */
-  --bg:#f5efe3; --panel:#fbf7ee; --panel-2:#efe7d6; --card:#faf5ea;
-  --ink:#241f16; --muted:#6d6350; --faint:#988c74;
-  --line:#d8cdb4; --line-soft:#e6ddc9; --rule:#3a3122;
-  --accent:#7d2a20; --accent-2:#8a5a20; --link:#7d2a20; --link-visited:#5f3126;
+  /* morning edition (default) */
+  --bg:#faf9f4; --panel:#ffffff; --panel-2:#f1efe8; --card:#ffffff;
+  --ink:#10171e; --muted:#5b6672; --faint:#67727f;
+  --line:rgba(16,23,30,.16); --line-soft:rgba(16,23,30,.09); --rule:rgba(16,23,30,.55);
+  --accent:#003153; --accent-2:#00539b; --link:#003153; --link-visited:#012169;
   --redlink:#a5522f;
   --pos:#33632f; --neg:#8c2f2f;
-  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
-  --display:"EB Garamond",Georgia,serif;
+  --serif:"Newsreader",Georgia,serif;
+  --display:"Bodoni Moda","Bodoni 72",Didot,serif;
   --maxw:960px;
   color-scheme: light;
 }
 :root[data-theme=lamp]{
-  /* lamplight — dark sepia, not black */
-  --bg:#171310; --panel:#1f1a14; --panel-2:#262017; --card:#211c15;
-  --ink:#e8dfc9; --muted:#a2957c; --faint:#7a6f5c;
-  --line:#3b3324; --line-soft:#2e2820; --rule:#c9bda0;
-  --accent:#d08a52; --accent-2:#c9a45c; --link:#d08a52; --link-visited:#b98a6e;
+  /* evening edition — the main site's dark values */
+  --bg:#0d141d; --panel:#101a26; --panel-2:#16202c; --card:#101a26;
+  --ink:#e7e4da; --muted:#939eab; --faint:#7b8693;
+  --line:rgba(231,228,218,.16); --line-soft:rgba(231,228,218,.09); --rule:rgba(231,228,218,.55);
+  --accent:#8db6dd; --accent-2:#a8c8e8; --link:#8db6dd; --link-visited:#6ea6de;
   --redlink:#c96f4e;
   --pos:#7fae6f; --neg:#c96f5e;
   color-scheme: dark;
@@ -39,17 +42,16 @@ a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 
 /* ---- top navigation ------------------------------------------------------- */
 .topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:14px;
-  padding:0 20px;height:56px;background:var(--panel);border-bottom:1px solid var(--line);
-  box-shadow:0 1px 0 color-mix(in srgb,var(--rule) 8%,transparent)}
+  padding:0 20px;height:56px;background:var(--panel);border-bottom:1px solid var(--line)}
 .brand{font-family:var(--display);font-size:19px;letter-spacing:.2px;color:var(--ink);
   border-bottom:none;white-space:nowrap}
 .brand b{color:var(--accent);font-weight:600}
 .navsearch{position:relative;flex:0 1 300px;min-width:150px}
 .navsearch input{width:100%;padding:7px 12px;font-family:var(--serif);font-size:14px;
-  background:var(--bg);border:1px solid var(--line);border-radius:2px;color:var(--ink);outline:none}
+  background:var(--bg);border:1px solid var(--line);border-radius:0;color:var(--ink);outline:none}
 .navsearch input:focus{border-color:var(--accent)}
 .searchresults{position:absolute;top:40px;left:0;right:-120px;max-width:70vw;background:var(--panel);
-  border:1px solid var(--line);border-radius:2px;box-shadow:0 10px 28px rgba(20,12,4,.18);
+  border:1px solid var(--line);border-radius:0;
   max-height:380px;overflow-y:auto;z-index:70}
 .searchresults .opt{display:flex;justify-content:space-between;gap:12px;align-items:baseline;
   padding:8px 13px;cursor:pointer;border-bottom:1px solid var(--line-soft)}
@@ -64,12 +66,12 @@ a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .navflat:hover,.navdrop>summary:hover{color:var(--ink)}
 .navdrop{position:relative}
 .navdrop .navmenu{position:absolute;right:0;top:36px;background:var(--panel);border:1px solid var(--line);
-  border-radius:2px;box-shadow:0 10px 28px rgba(20,12,4,.18);padding:6px;min-width:230px;
+  border-radius:0;padding:6px;min-width:230px;
   max-height:70vh;overflow-y:auto;z-index:70}
 .navdrop .navmenu a{display:block;padding:6px 11px;font-size:14px;color:var(--ink);
-  border-bottom:none;border-radius:2px}
+  border-bottom:none;border-radius:0}
 .navdrop .navmenu a:hover{background:var(--panel-2);color:var(--accent)}
-.themebtn{background:none;border:1px solid var(--line);border-radius:2px;color:var(--muted);
+.themebtn{background:none;border:1px solid var(--line);border-radius:0;color:var(--muted);
   font-size:14px;padding:5px 10px;cursor:pointer}
 .themebtn:hover{color:var(--ink);border-color:var(--accent)}
 
@@ -99,8 +101,8 @@ a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .lede{font-size:17px;font-style:italic;color:var(--muted);margin:0;max-width:760px;line-height:1.55}
 
 /* ---- fact card (player pages) --------------------------------------------- */
-.factcard{background:var(--card);border:1px solid var(--line);border-radius:2px;
-  padding:14px 18px;margin:0 0 22px;box-shadow:0 1px 0 var(--line-soft)}
+.factcard{background:var(--card);border:1px solid var(--line);border-radius:0;
+  padding:14px 18px;margin:0 0 22px}
 .factcard dl{display:flex;flex-wrap:wrap;gap:4px 30px;margin:0}
 .factcard .fact{display:flex;flex-direction:column;min-width:96px}
 .factcard dt{font-size:10.5px;color:var(--faint);font-variant:small-caps;letter-spacing:1.4px}
@@ -126,8 +128,8 @@ a:hover{color:var(--accent);border-bottom-color:var(--accent)}
   background:var(--panel);font-style:italic;color:var(--muted)}
 .prose hr{border:none;border-top:3px double var(--line);margin:30px auto;max-width:220px}
 .prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84em;
-  background:var(--panel-2);padding:1px 5px;border-radius:2px}
-.prose pre{background:var(--panel-2);border:1px solid var(--line);border-radius:2px;
+  background:var(--panel-2);padding:1px 5px;border-radius:0}
+.prose pre{background:var(--panel-2);border:1px solid var(--line);border-radius:0;
   padding:12px 16px;overflow-x:auto;font-size:13px;line-height:1.5}
 .prose pre code{background:none;padding:0}
 .prose strong{font-weight:600}
@@ -150,7 +152,7 @@ tbody tr:hover{background:var(--panel)}
 .sortable th.asc::after{content:" ▲";font-size:9px}
 .sortable th.desc::after{content:" ▼";font-size:9px}
 .tablefilter{width:100%;max-width:380px;padding:9px 13px;font-family:var(--serif);font-size:14.5px;
-  background:var(--panel);border:1px solid var(--line);border-radius:2px;color:var(--ink);margin:6px 0 2px}
+  background:var(--panel);border:1px solid var(--line);border-radius:0;color:var(--ink);margin:6px 0 2px}
 .tablefilter:focus{border-color:var(--accent);outline:none}
 
 /* ---- team pages ----------------------------------------------------------- */
@@ -159,7 +161,7 @@ tbody tr:hover{background:var(--panel)}
   font-weight:600;font-size:14px;color:var(--muted);margin:0 0 10px}
 .rostergrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
 .rostercard{display:flex;gap:9px;align-items:baseline;background:var(--card);
-  border:1px solid var(--line-soft);border-radius:2px;padding:7px 11px;border-bottom:1px solid var(--line-soft)}
+  border:1px solid var(--line-soft);border-radius:0;padding:7px 11px;border-bottom:1px solid var(--line-soft)}
 .rostercard:hover{border-color:var(--accent);background:var(--panel)}
 .rc-rank{font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums;min-width:30px}
 .rc-name{font-size:14.5px;color:var(--ink)}

@@ -44,8 +44,8 @@
     });
   }
 
-  /* keyboard page switching: 1–6, in nav order */
-  const PAGES = ["index.html", "daily/index.html", "sports.html", "music.html", "literature.html"];
+  /* keyboard page switching: 1–4, in nav order */
+  const PAGES = ["/", "/daily/", "/music.html", "/literature.html"]; /* root-absolute: site.js also runs on 404.html, which is served at any path */
   document.addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
@@ -64,10 +64,10 @@
     h2.appendChild(a);
   });
 
-  /* game-day dot on the Sports nav link */
-  const sportsLink = document.querySelector('.primary-nav a[href="sports.html"]');
+  /* game-day dot on the Newspaper nav link — the sports desk lives there now */
+  const sportsLink = document.querySelector('.primary-nav a[href="/daily/"]');
   if (sportsLink) {
-    fetch("data/sports.json", { cache: "no-store" })
+    fetch("/data/sports.json", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
         const today = new Date().toDateString();

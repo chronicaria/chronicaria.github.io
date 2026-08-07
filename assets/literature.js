@@ -32,7 +32,7 @@
             </svg>
             <div class="nr-prog-text">
               <b>${pct}% through</b>
-              <span>Chapter ${cur.chapter} of ${cur.chapters}</span>
+              <span>Chapter ${cur.chapter} of ${cur.chapters}${cur.page ? ` · page ${cur.page.toLocaleString()} of ${cur.pages.toLocaleString()}` : ""}</span>
             </div>
           </div>
         </div>

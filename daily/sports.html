@@ -9,26 +9,28 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23faf9f4'/%3E%3Crect x='5' y='5' width='90' height='90' fill='none' stroke='%23003153' stroke-width='4'/%3E%3Ctext x='50' y='68' font-family='Didot,Georgia,serif' font-size='44' font-weight='700' fill='%23003153' text-anchor='middle'%3EGT%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="../assets/icon-180.png">
   <link rel="manifest" href="../manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/styles.css">
   <link rel="stylesheet" href="../assets/daily.css">
   <script defer src="../assets/daily.js"></script>
   <script defer src="../assets/ui.js"></script>
+  <script defer src="../assets/sports.js"></script>
 </head>
 <body data-section="daily" data-paper="sports">
 
   <header class="site-header">
     <div class="brand"><a href="../index.html">Andrew <span>Park</span></a></div>
-    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
+    <button class="nav-burger" type="button" aria-label="Toggle menu" aria-expanded="false" data-nav-burger>☰ Menu</button>
     <nav class="primary-nav">
       <a href="/">Home</a>
       <a class="active" href="/daily/">Newspaper</a>
       <div class="nav-drop">
         <button type="button" class="nav-drop-btn">Interests</button>
         <div class="nav-drop-menu">
-          <a href="/sports.html">Sports</a>
           <a href="/music.html">Music</a>
           <a href="/literature.html">Literature</a>
-          <a href="/weather.html">Temperature</a>
         </div>
       </div>
       <div class="nav-drop">
@@ -37,10 +39,8 @@
           <a href="/fantasy/">Fantasy Encyclopedias</a>
           <a href="/valorant/">Valorant MWPA</a>
           <a href="/quant-internships/">Quant Internships</a>
-          <a href="/concerto/">Concerto Ranker</a>
           <a href="/nyc-weather/">Weather Dashboard</a>
           <a href="/winter-trip/">Italy, winter 2026–27</a>
-          <a href="/equipotential/">Live Paper</a>
         </div>
       </div>
     </nav>
@@ -48,15 +48,17 @@
 
   <main class="page-shell">
 
-    <header class="gt-masthead">
+    <header class="gt-masthead compact">
+      <div class="gt-masthead-top">
+        <div class="gt-ear" data-gt-weather></div>
+        <div>
+          <h1 class="gt-title"><a href="index.html">The Gothic Times</a></h1>
+          <p class="gt-tagline">The Sports Desk</p>
+        </div>
+        <div class="gt-ear right" data-gt-edition></div>
+      </div>
       <div class="gt-dateline">
         <span data-gt-date>—</span>
-        <span class="sep">·</span>
-        <span>The Sports Desk</span>
-        <span class="sep">·</span>
-        <span data-gt-weather></span>
-        <span class="sep">·</span>
-        <span data-gt-edition></span>
       </div>
     </header>
 
@@ -65,7 +67,8 @@
       <a class="active" href="sports.html">Sports</a>
       <a href="ai.html">AI &amp; Models</a>
       <a href="markets.html">Markets</a>
-      <a href="elections.html">Elections</a>      <a href="math.html">Math</a>
+      <a href="elections.html">Elections</a>
+      <a href="math.html">Math</a>
     </nav>
 
     <div class="gt-notice" data-gt-notice hidden></div>
@@ -73,7 +76,7 @@
     <section class="card">
       <div class="section-title-row">
         <h2>Scoreboard</h2>
-        <a class="more small-copy" href="../sports.html">Season trackers →</a>
+        <a class="more small-copy" href="#trackers">Season trackers ↓</a>
       </div>
       <div class="score-list" data-gt-scoreboard></div>
       <p class="small-copy muted" style="margin:.5rem 0 0;">Finals from the last 36 hours and today's slate, via the season trackers' six-hour ESPN feed.</p>
@@ -92,6 +95,43 @@
     <p class="small-copy muted">Headlines from ESPN's team wires, The Athletic, NYT Sports, and the SB Nation beat
       blogs — Duke Basketball Report, Mavs Moneyball, Cartilage Free Captain. Coverage follows the
       rooting order: tier one gets the column inches.</p>
+
+    <div class="gt-foldrule" id="trackers" role="separator">Season Trackers</div>
+
+    <div class="placeholder-panel" data-sports-error hidden>
+      <p>The press may have jammed — the season trackers didn't load. Try a refresh.</p>
+    </div>
+
+    <p class="small-copy muted" style="margin:.1rem 0 .65rem;" data-month-record></p>
+
+    <section class="card" data-today-card hidden>
+      <h2>Today</h2>
+      <div class="score-list" data-today></div>
+      <p class="small-copy muted" style="margin:.5rem 0 0;">In-progress games update live from ESPN's
+        scoreboard while this page is open.</p>
+    </section>
+
+    <div class="tier-head">
+      <h2>The big three</h2>
+      <span class="tag neutral" data-updated>updated —</span>
+    </div>
+    <div class="tier-grid" data-tier="1"></div>
+
+    <div class="tier-head">
+      <h2>The rest of the portfolio</h2>
+    </div>
+    <div class="tier-grid tier-compact" data-tier="2"></div>
+    <div class="tier-grid tier-compact" data-tier="3"></div>
+
+    <section class="card">
+      <h2>Upcoming games</h2>
+      <div class="sched-cols" data-upcoming-cols></div>
+      <p class="small-copy muted" style="margin:.7rem 0 0;">Off-season schedules appear as leagues
+        publish them.</p>
+    </section>
+
+    <p class="small-copy muted">Tracker data via ESPN's public API, refreshed every six hours. Form
+      strips show the last ten games, oldest to newest. Times are in your local timezone.</p>
 
     <footer class="site-footer">
       <span>© <span data-year>2026</span> Andrew Park · <span class="monogram">GT</span> · The Gothic Times</span>

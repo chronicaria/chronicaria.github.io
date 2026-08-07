@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap');
+/* Fonts (Bodoni Moda + Newsreader) load via preconnect + <link> in each page's
+   <head> — an @import here would serialize behind the stylesheet download. */
 
 /* ─────────────────────────────────────────────────────────────
    The Gothic Times — newspaper components, broadsheet edition.
@@ -11,8 +12,8 @@
 /* ── daily-owned supplementary tokens ───────────────────────── */
 /* Ledger ink: gains are "in the black" (Prussian), losses "in the
    red" (madder). Party colors are engraved, not neon.
-   --panel-3 is a legacy hook: archive.html's inline styles and the
-   old styles.css referenced it — kept alive here. */
+   --panel-3 is a legacy hook from the old styles.css — kept alive
+   here for the map fills below. */
 :root {
   --dem: #2c5d9e;
   --rep: #9e3a41;
@@ -995,4 +996,134 @@ html[data-theme="dark"] .gt-lean::after { background: rgba(127, 168, 217, 0.32);
   .gt-lab, .gt-scenario, .gt-district, .drill-row, .seat-row,
   .gt-brief-item a, .gt-lead h2.headline a, .gt-entry h3 a, .gt-wire a,
   .gt-section-block .more, .puzzle-answer summary { transition: none !important; }
+}
+
+/* ── season trackers (folded in from the old standalone sports
+   page). The card components — .tier-grid, .team-card, .form-strip,
+   .rank-bar, .recent-results — live in styles.css, which daily
+   pages already load; below are the rules that were page-local on
+   sports.html plus the compact treatment for tier 2–3 cards. ── */
+.tier-grid.tier-compact {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+.tier-grid.tier-compact .team-card { gap: 0.45rem; padding: 0.6rem 0.75rem 0.7rem; }
+.tier-grid.tier-compact .team-head img { width: 26px; height: 26px; }
+.tier-grid.tier-compact .team-id h3 { font-size: 0.92rem; }
+.tier-grid.tier-compact .team-record { font-size: 0.84rem; }
+.tier-grid.tier-compact .team-lines { padding-top: 0.45rem; }
+.tier-grid.tier-compact .team-line { font-size: 0.8rem; }
+
+/* three-column upcoming schedules */
+.sched-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem 1.8rem;
+}
+.sched-col h3 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin: 0 0 0.3rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule-strong);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sched-col .sched-league {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--gray);
+  white-space: nowrap;
+}
+.sched-col ul { margin: 0; padding: 0; list-style: none; }
+.sched-col li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  padding: 0.38rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+.sched-col li:last-child { border-bottom: 0; }
+.sched-date {
+  flex: 0 0 5rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+.sched-opp { flex: 1 1 auto; min-width: 0; }
+.sched-time {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.sched-empty { padding: 0.5rem 0; font-size: 0.82rem; }
+@media (max-width: 700px) {
+  .sched-cols { grid-template-columns: 1fr; gap: 1.3rem; }
+}
+
+/* ── math desk: broadsheet preprint page ────────────────────── */
+.gt-math-lead { padding: 0.3rem 0 0.9rem; margin-bottom: 1.1rem; border-bottom: 1px solid var(--rule-strong); }
+.gt-math-lead .kicker { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.55rem; }
+.gt-math-lead .cat,
+.gt-math-rubric .cat {
+  color: var(--gray);
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.gt-math-lead h3 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0.005em;
+  text-wrap: balance;
+}
+.gt-math-lead p.deck {
+  margin: 0 0 0.55rem;
+  color: var(--gray);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  max-width: 56rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.gt-math-lead .meta { margin: 0; text-transform: uppercase; }
+.gt-math-lead .meta a { color: var(--gray); font-weight: 600; transition: color 0.25s ease; }
+.gt-math-lead .meta a:hover { color: var(--royal); }
+
+.gt-math-rubric { margin-bottom: 1.5rem; border-top: 3px solid var(--ink); padding-top: 0.55rem; }
+.gt-math-rubric .section-title-row { margin-bottom: 0; }
+.gt-math-rubric .rubric-note { margin: 0 0 0.15rem; color: var(--gray); font-size: 0.78rem; font-style: italic; }
+.gt-math-cols { column-gap: 2.2rem; }
+.gt-math-cols .gt-entry { break-inside: avoid; }
+.gt-math-cols .gt-entry p.blurb {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (min-width: 761px) {
+  .gt-math-cols { columns: 2; column-rule: 1px solid var(--rule); }
 }

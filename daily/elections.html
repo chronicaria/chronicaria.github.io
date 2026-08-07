@@ -9,6 +9,9 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23faf9f4'/%3E%3Crect x='5' y='5' width='90' height='90' fill='none' stroke='%23003153' stroke-width='4'/%3E%3Ctext x='50' y='68' font-family='Didot,Georgia,serif' font-size='44' font-weight='700' fill='%23003153' text-anchor='middle'%3EGT%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="../assets/icon-180.png">
   <link rel="manifest" href="../manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/styles.css">
   <link rel="stylesheet" href="../assets/daily.css">
   <script defer src="../assets/daily.js"></script>
@@ -18,17 +21,15 @@
 
   <header class="site-header">
     <div class="brand"><a href="../index.html">Andrew <span>Park</span></a></div>
-    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
+    <button class="nav-burger" type="button" aria-label="Toggle menu" aria-expanded="false" data-nav-burger>☰ Menu</button>
     <nav class="primary-nav">
       <a href="/">Home</a>
       <a class="active" href="/daily/">Newspaper</a>
       <div class="nav-drop">
         <button type="button" class="nav-drop-btn">Interests</button>
         <div class="nav-drop-menu">
-          <a href="/sports.html">Sports</a>
           <a href="/music.html">Music</a>
           <a href="/literature.html">Literature</a>
-          <a href="/weather.html">Temperature</a>
         </div>
       </div>
       <div class="nav-drop">
@@ -37,10 +38,8 @@
           <a href="/fantasy/">Fantasy Encyclopedias</a>
           <a href="/valorant/">Valorant MWPA</a>
           <a href="/quant-internships/">Quant Internships</a>
-          <a href="/concerto/">Concerto Ranker</a>
           <a href="/nyc-weather/">Weather Dashboard</a>
           <a href="/winter-trip/">Italy, winter 2026–27</a>
-          <a href="/equipotential/">Live Paper</a>
         </div>
       </div>
     </nav>
@@ -48,15 +47,17 @@
 
   <main class="page-shell">
 
-    <header class="gt-masthead">
+    <header class="gt-masthead compact">
+      <div class="gt-masthead-top">
+        <div class="gt-ear" data-gt-weather></div>
+        <div>
+          <h1 class="gt-title"><a href="index.html">The Gothic Times</a></h1>
+          <p class="gt-tagline">The Elections Desk · 2026 Midterms</p>
+        </div>
+        <div class="gt-ear right" data-gt-edition></div>
+      </div>
       <div class="gt-dateline">
         <span data-gt-date>—</span>
-        <span class="sep">·</span>
-        <span>The Elections Desk · 2026 Midterms</span>
-        <span class="sep">·</span>
-        <span data-gt-weather></span>
-        <span class="sep">·</span>
-        <span data-gt-edition></span>
       </div>
     </header>
 

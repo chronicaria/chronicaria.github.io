@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap');
+/* Fonts (Bodoni Moda + Newsreader) load via preconnect + <link> in each page's
+   <head> — an @import here would serialize behind the stylesheet download. */
 
 /* ─────────────────────────────────────────────────────────────
    styles.css — the broadsheet design system for section pages.
@@ -180,6 +181,16 @@ a:hover {
   box-shadow: 0 0 0 4px var(--paper);   /* the paper mat */
   padding: .35rem 0;
 }
+.nav-drop-menu::before {
+  /* invisible bridge over the .55rem gap to the button, so crossing it
+     doesn't drop .nav-drop:hover and close the menu mid-travel */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -.55rem;
+  height: .55rem;
+}
 .nav-drop:hover .nav-drop-menu,
 .nav-drop:focus-within .nav-drop-menu,
 .nav-drop.open .nav-drop-menu { display: block; }
@@ -220,6 +231,7 @@ a:hover {
   }
   .nav-drop:hover .nav-drop-menu { display: none; }   /* hover is meaningless on touch */
   .nav-drop.open .nav-drop-menu { display: block !important; }
+  .nav-drop-menu::before { content: none; }           /* static menu needs no hover bridge */
   .nav-drop-menu a { color: var(--gray); }
 }
 
@@ -852,34 +864,45 @@ h2:hover .hash-link, .hash-link:focus { opacity: 1; }
 .practice-card .pc-work { font-size: .88rem; color: var(--ink); }
 .practice-card .pc-detail { font-size: .78rem; font-style: italic; color: var(--gray); }
 
-/* ---------- music: repertoire cards ---------- */
+/* ---------- music: aligned repertoire tables ---------- */
 .rep-group { margin-top: 1.2rem; }
 .rep-group:first-child { margin-top: .1rem; }
 .rep-group > .eyebrow { display: flex; align-items: baseline; gap: .5rem; margin-bottom: .55rem; }
 .rep-group > .eyebrow .count { color: var(--gray); font-family: var(--mono); font-weight: 400; letter-spacing: .08em; }
-.rep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .6rem; }
-.rep-card {
-  display: flex; flex-direction: column; gap: .12rem;
-  padding: .55rem .7rem .6rem;
-  border: 1px solid var(--rule);
-  background: var(--panel);
-  transition: border-color .25s ease;
+.rep-table { width: 100%; border-collapse: collapse; }
+.rep-table th {
+  padding: 0 .7rem .3rem 0;
+  font-size: .62rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gray); text-align: left;
+  border-bottom: 3px double var(--ink);
 }
-.rep-card:hover { border-color: var(--rule-strong); }
-.rep-card .rc-composer { font-size: .86rem; font-weight: 700; color: var(--prussian); }
-.rep-card .rc-work { font-size: .84rem; color: var(--ink); line-height: 1.3; }
-.rep-card .rc-detail { font-size: .76rem; font-style: italic; color: var(--gray); }
-.rep-card .rc-foot {
-  margin-top: .25rem; display: flex; justify-content: space-between; gap: .5rem; align-items: baseline;
-  border-top: 1px solid var(--rule); padding-top: .35rem;
-  font-family: var(--mono); font-size: .64rem; color: var(--gray);
-  font-variant-numeric: tabular-nums; letter-spacing: .08em;
+.rep-table td {
+  padding: .34rem .7rem .34rem 0; vertical-align: baseline;
+  border-bottom: 0; text-align: left; white-space: normal; /* undo the agate-ledger defaults */
 }
-.rep-card .rc-year {
-  padding: .02rem .35rem;
-  border: 1px solid currentColor;
-  color: var(--prussian);
-  font-weight: 400;
+.rep-table th:last-child, .rep-table td:last-child { padding-right: 0; }
+.rep-table tbody + tbody tr:first-child td { border-top: 1px solid var(--rule); }
+.rep-table .rep-comp {
+  font-variant: small-caps; letter-spacing: .06em;
+  font-weight: 600; color: var(--prussian); white-space: nowrap;
+}
+.rep-table .rep-work { width: 100%; font-size: .88rem; color: var(--ink); line-height: 1.35; }
+.rep-table .rep-detail { font-style: italic; color: var(--gray); font-size: .8rem; }
+.rep-table td.rep-num, .rep-table th.rep-num {
+  text-align: right; font-family: var(--mono); font-size: .72rem;
+  font-variant-numeric: tabular-nums; color: var(--gray); white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .rep-table th, .rep-table td { padding-right: .45rem; }
+  .rep-table .rep-comp { white-space: normal; }
+}
+
+/* ---------- music: the repertoire diagonal ---------- */
+.music-diag { display: block; width: 100%; height: auto; }
+.music-diag text { font-family: var(--mono); font-size: 10px; fill: var(--gray); letter-spacing: .05em; }
+.music-diag-note {
+  margin: .5rem 0 0; font-family: var(--mono); font-size: .68rem;
+  color: var(--gray); letter-spacing: .04em; font-variant-numeric: tabular-nums;
 }
 
 /* ---------- music: wishlist ---------- */

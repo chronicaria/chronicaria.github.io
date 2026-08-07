@@ -1,38 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap');
+
 /* ============================================================================
-   The Fantasy Football Encyclopedia — antique-serif wiki
+   The Fantasy Football Encyclopedia — broadsheet wiki
    Same architecture as the fantasy basketball wiki and andrewjparkus.github.io:
    design tokens, [data-theme] on <html>, sticky nav, hairlines over shadows,
-   tabular numerals, tables as the hero component. Register shifted from that
-   build's oxblood to pine + brass so the two encyclopedias are never confusable.
+   tabular numerals, tables as the hero component. Palette unified with the
+   main site (and the basketball wiki): Prussian ink on cream paper.
 
    Anti-drift rules:
    - every colour is a token; no literal hex below the :root blocks
-   - structure is 1px borders, never shadows; radii stay in 0-3px
+   - structure is 1px borders, never shadows; radii are 0
    - numbers are always tabular; labels are always small-caps + tracked
    ========================================================================== */
 
 :root{
-  /* paper (default) */
-  --bg:#f5efe3; --panel:#fbf7ee; --panel-2:#efe7d6; --card:#faf5ea;
-  --ink:#241f16; --muted:#6d6350; --faint:#988c74;
-  --line:#d8cdb4; --line-soft:#e6ddc9; --rule:#3a3122;
-  --accent:#245c3f; --accent-2:#8a6a20; --link:#245c3f; --link-visited:#3d5348;
+  /* morning edition (default) */
+  --bg:#faf9f4; --panel:#ffffff; --panel-2:#f1efe8; --card:#ffffff;
+  --ink:#10171e; --muted:#5b6672; --faint:#67727f;
+  --line:rgba(16,23,30,.16); --line-soft:rgba(16,23,30,.09); --rule:rgba(16,23,30,.55);
+  --accent:#003153; --accent-2:#00539b; --link:#003153; --link-visited:#012169;
   --redlink:#a5522f;
-  --chalk:#ffffff; --turf:#e8e0cc;
+  --chalk:#ffffff; --turf:#e9e6dc;
   --pos:#33632f; --neg:#8c2f2f;
-  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
-  --display:"EB Garamond",Georgia,serif;
+  --serif:"Newsreader",Georgia,serif;
+  --display:"Bodoni Moda","Bodoni 72",Didot,serif;
   --maxw:960px;
   color-scheme: light;
 }
 :root[data-theme=lamp]{
-  /* lamplight — dark sepia, not black */
-  --bg:#171310; --panel:#1f1a14; --panel-2:#262017; --card:#211c15;
-  --ink:#e8dfc9; --muted:#a2957c; --faint:#7a6f5c;
-  --line:#3b3324; --line-soft:#2e2820; --rule:#c9bda0;
-  --accent:#7fb894; --accent-2:#c9a45c; --link:#7fb894; --link-visited:#8fa89a;
+  /* evening edition — the main site's dark values */
+  --bg:#0d141d; --panel:#101a26; --panel-2:#16202c; --card:#101a26;
+  --ink:#e7e4da; --muted:#939eab; --faint:#7b8693;
+  --line:rgba(231,228,218,.16); --line-soft:rgba(231,228,218,.09); --rule:rgba(231,228,218,.55);
+  --accent:#8db6dd; --accent-2:#a8c8e8; --link:#8db6dd; --link-visited:#6ea6de;
   --redlink:#c96f4e;
-  --chalk:#2a251d; --turf:#221d16;
+  --chalk:#16202c; --turf:#101a26;
   --pos:#7fae6f; --neg:#c96f5e;
   color-scheme: dark;
 }
@@ -48,18 +50,17 @@ a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 
 /* ---- top navigation ------------------------------------------------------- */
 .topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:14px;
-  padding:0 20px;height:56px;background:var(--panel);border-bottom:1px solid var(--line);
-  box-shadow:0 1px 0 color-mix(in srgb,var(--rule) 8%,transparent)}
+  padding:0 20px;height:56px;background:var(--panel);border-bottom:1px solid var(--line)}
 .brand{font-family:var(--display);font-size:19px;letter-spacing:.2px;color:var(--ink);
   border-bottom:none;white-space:nowrap}
 .brand b{color:var(--accent);font-weight:600}
 @media (prefers-reduced-motion:no-preference){a,.themebtn,.posfilter,.quick,.seccard{transition:color .25s ease,border-color .25s ease,background .25s ease}}
 .navsearch{position:relative;flex:0 1 300px;min-width:150px}
 .navsearch input{width:100%;padding:7px 12px;font-family:var(--serif);font-size:14px;
-  background:var(--bg);border:1px solid var(--line);border-radius:2px;color:var(--ink);outline:none}
+  background:var(--bg);border:1px solid var(--line);border-radius:0;color:var(--ink);outline:none}
 .navsearch input:focus{border-color:var(--accent)}
 .searchresults{position:absolute;top:40px;left:0;right:-120px;max-width:70vw;background:var(--panel);
-  border:1px solid var(--line);border-radius:2px;box-shadow:0 10px 28px rgba(20,12,4,.18);
+  border:1px solid var(--line);border-radius:0;
   max-height:380px;overflow-y:auto;z-index:70}
 .searchresults .opt{display:flex;justify-content:space-between;gap:12px;align-items:baseline;
   padding:8px 13px;cursor:pointer;border-bottom:1px solid var(--line-soft)}
@@ -74,12 +75,12 @@ a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .navflat:hover,.navdrop>summary:hover{color:var(--ink)}
 .navdrop{position:relative}
 .navdrop .navmenu{position:absolute;right:0;top:36px;background:var(--panel);border:1px solid var(--line);
-  border-radius:2px;box-shadow:0 10px 28px rgba(20,12,4,.18);padding:6px;min-width:230px;
+  border-radius:0;padding:6px;min-width:230px;
   max-height:70vh;overflow-y:auto;z-index:70}
 .navdrop .navmenu a{display:block;padding:6px 11px;font-size:14px;color:var(--ink);
-  border-bottom:none;border-radius:2px}
+  border-bottom:none;border-radius:0}
 .navdrop .navmenu a:hover{background:var(--panel-2);color:var(--accent)}
-.themebtn{background:none;border:1px solid var(--line);border-radius:2px;color:var(--muted);
+.themebtn{background:none;border:1px solid var(--line);border-radius:0;color:var(--muted);
   font-size:14px;padding:5px 10px;cursor:pointer}
 .themebtn:hover{color:var(--ink);border-color:var(--accent)}
 
@@ -109,8 +110,8 @@ a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .lede{font-size:17px;font-style:italic;color:var(--muted);margin:0;max-width:760px;line-height:1.55}
 
 /* ---- fact card (player pages) --------------------------------------------- */
-.factcard{background:var(--card);border:1px solid var(--line);border-radius:2px;
-  padding:14px 18px;margin:0 0 22px;box-shadow:0 1px 0 var(--line-soft)}
+.factcard{background:var(--card);border:1px solid var(--line);border-radius:0;
+  padding:14px 18px;margin:0 0 22px}
 .factcard dl{display:flex;flex-wrap:wrap;gap:4px 30px;margin:0}
 .factcard .fact{display:flex;flex-direction:column;min-width:96px}
 .factcard dt{font-size:10.5px;color:var(--faint);font-variant:small-caps;letter-spacing:1.4px}
@@ -136,8 +137,8 @@ a:hover{color:var(--accent);border-bottom-color:var(--accent)}
   background:var(--panel);font-style:italic;color:var(--muted)}
 .prose hr{border:none;border-top:3px double var(--line);margin:30px auto;max-width:220px}
 .prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84em;
-  background:var(--panel-2);padding:1px 5px;border-radius:2px}
-.prose pre{background:var(--panel-2);border:1px solid var(--line);border-radius:2px;
+  background:var(--panel-2);padding:1px 5px;border-radius:0}
+.prose pre{background:var(--panel-2);border:1px solid var(--line);border-radius:0;
   padding:12px 16px;overflow-x:auto;font-size:13px;line-height:1.5}
 .prose pre code{background:none;padding:0}
 .prose strong{font-weight:600}
@@ -160,7 +161,7 @@ tbody tr:hover{background:var(--panel)}
 .sortable th.asc::after{content:" ▲";font-size:9px}
 .sortable th.desc::after{content:" ▼";font-size:9px}
 .tablefilter{width:100%;max-width:380px;padding:9px 13px;font-family:var(--serif);font-size:14.5px;
-  background:var(--panel);border:1px solid var(--line);border-radius:2px;color:var(--ink);margin:6px 0 2px}
+  background:var(--panel);border:1px solid var(--line);border-radius:0;color:var(--ink);margin:6px 0 2px}
 .tablefilter:focus{border-color:var(--accent);outline:none}
 
 /* ---- team pages ----------------------------------------------------------- */
@@ -169,7 +170,7 @@ tbody tr:hover{background:var(--panel)}
   font-weight:600;font-size:14px;color:var(--muted);margin:0 0 10px}
 .rostergrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
 .rostercard{display:flex;gap:9px;align-items:baseline;background:var(--card);
-  border:1px solid var(--line-soft);border-radius:2px;padding:7px 11px;border-bottom:1px solid var(--line-soft)}
+  border:1px solid var(--line-soft);border-radius:0;padding:7px 11px;border-bottom:1px solid var(--line-soft)}
 .rostercard:hover{border-color:var(--accent);background:var(--panel)}
 .rc-rank{font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums;min-width:30px}
 .rc-name{font-size:14.5px;color:var(--ink)}
@@ -214,7 +215,7 @@ tbody tr:hover{background:var(--panel)}
 
 /* ---- Obsidian callouts ---------------------------------------------------- */
 .callout{margin:18px 0;padding:12px 18px;border:1px solid var(--line);
-  border-left:3px solid var(--accent-2);background:var(--panel);border-radius:2px}
+  border-left:3px solid var(--accent-2);background:var(--panel);border-radius:0}
 .callout .co-title,.callout>summary{font-variant:small-caps;letter-spacing:1.2px;
   font-weight:600;font-size:13px;color:var(--accent-2);margin:0 0 6px;cursor:default}
 .callout>summary{cursor:pointer;list-style:none}
@@ -233,7 +234,7 @@ tbody tr:hover{background:var(--panel)}
 .quickgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
   gap:10px;margin:26px 0 36px}
 .quick{display:flex;flex-direction:column;gap:3px;padding:14px 16px;background:var(--card);
-  border:1px solid var(--line);border-radius:2px}
+  border:1px solid var(--line);border-radius:0}
 .quick:hover{border-color:var(--accent);background:var(--panel)}
 .quick b{font-family:var(--display);font-size:19px;font-weight:500;color:var(--ink)}
 .quick:hover b{color:var(--accent)}
@@ -250,7 +251,7 @@ tbody tr:hover{background:var(--panel)}
 .readorder .si-lede{font-size:12.5px;color:var(--muted);line-height:1.45}
 .seccards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
 .seccard{display:flex;flex-direction:column;padding:11px 14px;background:var(--card);
-  border:1px solid var(--line-soft);border-radius:2px}
+  border:1px solid var(--line-soft);border-radius:0}
 .seccard:hover{border-color:var(--accent)}
 .seccard b{font-family:var(--display);font-weight:500;font-size:17px}
 .seccard span{font-size:11.5px;color:var(--faint);font-variant:small-caps;letter-spacing:1px}
@@ -267,13 +268,13 @@ tbody tr:hover{background:var(--panel)}
 .posfilters{display:flex;gap:4px;flex-wrap:wrap}
 .posfilter{font-family:var(--serif);font-size:12px;font-variant:small-caps;
   letter-spacing:1.1px;padding:6px 12px;background:none;color:var(--muted);
-  border:1px solid var(--line);border-radius:2px;cursor:pointer}
+  border:1px solid var(--line);border-radius:0;cursor:pointer}
 .posfilter:hover{color:var(--ink);border-color:var(--accent)}
 .posfilter.on{color:var(--bg);background:var(--accent);border-color:var(--accent)}
 .picknote{margin:4px 0 12px;font-size:12.5px;color:var(--muted);
   font-variant:small-caps;letter-spacing:.8px}
 .pick{display:inline-block;margin-right:5px;padding:1px 6px;font-variant-numeric:tabular-nums;
-  font-variant:normal;border:1px solid var(--line);border-radius:2px;font-size:12px}
+  font-variant:normal;border:1px solid var(--line);border-radius:0;font-size:12px}
 .legend{font-size:12.5px;color:var(--muted);line-height:1.6;margin:10px 0 4px}
 .legend b{color:var(--ink);font-weight:600}
 
@@ -286,7 +287,7 @@ table.board .num{text-align:right;font-variant-numeric:tabular-nums;white-space:
 table.board .posrk{margin-left:6px;font-size:11px;color:var(--faint);
   font-variant-numeric:tabular-nums}
 .pos{display:inline-block;min-width:30px;text-align:center;padding:1px 5px;font-size:10.5px;
-  font-variant:small-caps;letter-spacing:.8px;border:1px solid var(--line);border-radius:2px;
+  font-variant:small-caps;letter-spacing:.8px;border:1px solid var(--line);border-radius:0;
   color:var(--muted)}
 .p-RB{border-color:var(--accent);color:var(--accent)}
 .p-WR{border-color:var(--accent-2);color:var(--accent-2)}
@@ -294,7 +295,7 @@ table.board .posrk{margin-left:6px;font-size:11px;color:var(--faint);
 .p-TE{border-color:var(--link-visited);color:var(--link-visited)}
 .availcell{min-width:96px}
 .availbar{display:inline-block;width:44px;height:5px;background:var(--panel-2);
-  border:1px solid var(--line-soft);border-radius:1px;overflow:hidden;vertical-align:middle}
+  border:1px solid var(--line-soft);border-radius:0;overflow:hidden;vertical-align:middle}
 .availbar i{display:block;height:100%;background:var(--muted)}
 .availbar.hi i{background:var(--pos)}
 .availbar.lo i{background:var(--neg)}

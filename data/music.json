@@ -7,20 +7,6 @@
       "detail": "Mvt. III — Finale: Alla breve",
       "composed": 1909,
       "phase": "tempo work"
-    },
-    {
-      "composer": "Poulenc",
-      "work": "Nocturne No. 7 in E-flat major, FP 56",
-      "detail": "from the Huit Nocturnes",
-      "composed": 1935,
-      "phase": "polishing"
-    },
-    {
-      "composer": "Chaminade",
-      "work": "Thème varié in A major, Op. 89",
-      "detail": "",
-      "composed": 1898,
-      "phase": "learning notes"
     }
   ],
   "instruments": [
@@ -59,6 +45,8 @@
     { "category": "Concerto", "composer": "Rachmaninoff", "work": "Rhapsody on a Theme of Paganini, Op. 43", "detail": "", "composed": 1934 },
     { "category": "Concerto", "composer": "Brahms", "work": "Piano Concerto No. 2 in B-flat major, Op. 83", "detail": "", "composed": 1881 },
     { "category": "Concerto", "composer": "Tchaikovsky", "work": "Piano Concerto No. 1 in B-flat minor, Op. 23", "detail": "", "composed": 1875 },
+    { "category": "Solo", "composer": "Poulenc", "work": "Nocturne No. 7 in E-flat major, FP 56", "detail": "from the Huit Nocturnes", "composed": 1935 },
+    { "category": "Solo", "composer": "Chaminade", "work": "Thème varié in A major, Op. 89", "detail": "", "composed": 1898 },
     { "category": "Solo", "composer": "Kapustin", "work": "Toccatina, Op. 36", "detail": "", "composed": 1983 },
     { "category": "Solo", "composer": "Ravel", "work": "Miroirs", "detail": "", "composed": 1905 },
     { "category": "Solo", "composer": "Schumann", "work": "Spanish Romance", "detail": "", "composed": null }

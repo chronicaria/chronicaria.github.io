@@ -1,7 +1,10 @@
 (async () => {
   let data;
   try {
-    data = await loadData("sports");
+    /* root-absolute: this script runs from /daily/sports.html */
+    const res = await fetch("/data/sports.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to load /data/sports.json");
+    data = await res.json();
   } catch (err) {
     const errEl = document.querySelector("[data-sports-error]");
     if (errEl) errEl.hidden = false;
@@ -13,8 +16,10 @@
   /* how many teams the standing rank is out of (division / table size) */
   const STANDING_OF = { "duke-mbb": 18, "duke-fb": 17, mavs: 5 };
 
-  /* the page only covers tier-1 teams — everything below renders from this list */
-  const tier1 = data.teams.filter((t) => t.tier === 1);
+  /* tier 1 renders large, tiers 2–3 compact; the ticker and live
+     scores cover the whole portfolio */
+  const teams = data.teams;
+  const tier1 = teams.filter((t) => t.tier === 1);
 
   const fmtDate = (iso) =>
     new Date(iso).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
@@ -64,7 +69,7 @@
 
   /* today ticker */
   const todayItems = [];
-  for (const t of tier1) {
+  for (const t of teams) {
     const last = t.form[t.form.length - 1];
     if (last && isToday(last.date)) {
       todayItems.push(
@@ -113,7 +118,7 @@
     return `<span class="rank-bar" title="${rank} of ${of}"><i style="left:${pct.toFixed(1)}%"></i></span>`;
   };
 
-  const card = (t) => {
+  const card = (t, compact) => {
     const last = t.form[t.form.length - 1];
     const next = t.next[0];
     const standing = t.standing.replace("English Premier League", "the Premier League");
@@ -135,7 +140,7 @@
       <div class="team-form">
         ${t.form.length ? formStrip(t.form) : `<span class="small-copy muted">No recent games</span>`}
       </div>
-      ${t.form.length ? recentList(t.form) : ""}
+      ${!compact && t.form.length ? recentList(t.form) : ""}
       <div class="team-lines">
         ${last ? `<div class="team-line"><span>Last</span><strong class="${last.res === "W" ? "delta-up" : last.res === "L" ? "delta-down" : ""}">${RESULT_WORD[last.res]} ${last.score}</strong><span class="muted">${vsAt(last)} ${last.opp} · ${fmtDate(last.date)}</span></div>` : ""}
         ${next
@@ -145,8 +150,14 @@
     </article>`;
   };
 
-  const grid = el('[data-tier="1"]');
-  if (grid) grid.innerHTML = tier1.map(card).join("");
+  for (const tier of [1, 2, 3]) {
+    const grid = el(`[data-tier="${tier}"]`);
+    if (grid)
+      grid.innerHTML = teams
+        .filter((t) => t.tier === tier)
+        .map((t) => card(t, tier > 1))
+        .join("");
+  }
 
   /* upcoming schedules — one column per team */
   const colsEl = el("[data-upcoming-cols]");
@@ -176,7 +187,7 @@
   }
 
   /* live scores — on game days, poll ESPN's scoreboard from the browser */
-  const liveTeams = tier1.filter((t) => t.next.some((g) => isToday(g.date)));
+  const liveTeams = teams.filter((t) => t.next.some((g) => isToday(g.date)));
   if (liveTeams.length) {
     const poll = async () => {
       if (document.visibilityState !== "visible") return;

@@ -8,22 +8,25 @@ repositories. Plain HTML/CSS/JS at the top level, no build step, served from the
 
 ```
 index.html            Home — résumé and coursework
-daily/                The Gothic Times — the live morning paper (front page + 5 desks)
-sports.html           Team trackers
+daily/                The Gothic Times — the live morning paper (front page + 5 desks;
+                      the morgue/archive page is gone, each edition overwrites the last)
 music.html            Classical repertoire
 literature.html       Reading log
-weather.html          County temperature map
+sports.html           Redirect stub → /daily/sports.html (trackers live at the sports desk)
+weather.html          Redirect stub → /nyc-weather/ (county map folded into the dashboard)
 404.html              Themed not-found
 
-fantasy/              The Fantasy Encyclopedias — sport picker over two corpora
+fantasy/              The Fantasy Encyclopedias — sport picker over two corpora,
+                      repainted in the site's Prussian design
   index.html          Hand-written toggle shell; not generated, edit directly
   basketball/         2026-27 Fantasy Basketball Encyclopedia — 646 pages
   football/           2026 Fantasy Football Encyclopedia — 118 pages
 valorant/             Valorant MWPA — impact per match, 78 matches, 1,617 rounds
-concerto/             Piano concerto pairwise ranker
-nyc-weather/          Hourly forecasts with ensemble uncertainty bands
+nyc-weather/          Hourly forecasts with ensemble bands + the county temperature map
 winter-trip/          Italy, winter 2026-27 — itinerary and logistics
 quant-internships/    Summer 2027 quant internship board — 59 roles, 38 firms
+concerto/             Piano concerto pairwise ranker — archived: kept at its URL, noindexed, out of all nav
+equipotential/        Live paper — archived: kept at its URL, noindexed, out of all nav
 
 assets/home.css       Landing page — the broadsheet design system
 assets/styles.css     Every other top-level page
@@ -51,7 +54,7 @@ The band links home, names the section you are in, and carries a menu of everyth
 The top-level pages don't load it — they already have the real navigation, which now
 carries a Projects dropdown alongside Interests.
 
-All navigation is root-absolute (`/sports.html`, `/fantasy/`), so the same nav block
+All navigation is root-absolute (`/music.html`, `/fantasy/`), so the same nav block
 works at any depth. That means **the site must be served from a domain root**, not a
 subpath. Locally:
 

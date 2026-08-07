@@ -1,11 +1,12 @@
 {
-  "updated": "2026-06",
+  "updated": "2026-08",
   "current": {
     "title": "The Count of Monte Cristo",
     "author": "Alexandre Dumas",
     "published": "1844–46",
-    "pages": 1276,
-    "chapter": 49,
+    "pages": 1055,
+    "page": 500,
+    "chapter": 53,
     "chapters": 117,
     "note": "The revenge epic, taken at full unabridged length."
   },

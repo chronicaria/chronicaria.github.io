@@ -11,17 +11,23 @@
   /* ---------- shared chrome (burger / theme / year) ---------- */
   const burger = document.querySelector("[data-nav-burger]");
   const nav = document.querySelector(".primary-nav");
-  if (burger && nav) burger.addEventListener("click", () => nav.classList.toggle("open"));
+  if (burger && nav) burger.addEventListener("click", () => burger.setAttribute("aria-expanded", nav.classList.toggle("open")));
+  const closeDrop = (d) => {
+    d.classList.remove("open");
+    d.querySelector(".nav-drop-btn").setAttribute("aria-expanded", "false");
+  };
   document.querySelectorAll(".nav-drop > .nav-drop-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const drop = btn.parentElement;
-      document.querySelectorAll(".nav-drop.open").forEach((d) => d !== drop && d.classList.remove("open"));
-      drop.classList.toggle("open");
+      document.querySelectorAll(".nav-drop.open").forEach((d) => d !== drop && closeDrop(d));
+      const open = drop.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open);
+      if (!open) btn.blur(); /* else :focus-within keeps the closed menu visible */
     });
   });
   document.addEventListener("click", () => {
-    document.querySelectorAll(".nav-drop.open").forEach((d) => d.classList.remove("open"));
+    document.querySelectorAll(".nav-drop.open").forEach(closeDrop);
   });
   document.querySelectorAll("[data-year]").forEach((n) => (n.textContent = new Date().getFullYear()));
   const toggle = document.querySelector("[data-theme-toggle]");
@@ -137,7 +143,7 @@
       const note = $("[data-gt-notice]");
       if (note) {
         note.hidden = false;
-        note.textContent = "Couldn't load the edition. If you're opening this file directly, serve the site over HTTP instead (e.g. python3 -m http.server).";
+        note.textContent = "The press may have jammed — this morning's edition didn't load. Try a refresh.";
       }
       return;
     }
@@ -406,12 +412,14 @@
       }
     }
 
-    /* section blocks */
+    /* section blocks — skip stories already printed in the brief */
+    const briefed = new Set((data.briefs || []).map((b) => b.url));
+    const dedup = (items) => items.filter((it) => !briefed.has(it.url));
     const blocks = [
-      ["sports", S.sports.items, { team: true }],
-      ["ai", S.ai.items, {}],
-      ["elections", S.elections.items, {}],
-      ["markets", S.markets.items, {}],
+      ["sports", dedup(S.sports.items), { team: true }],
+      ["ai", dedup(S.ai.items), {}],
+      ["elections", dedup(S.elections.items), {}],
+      ["markets", dedup(S.markets.items), {}],
     ];
     for (const [sec, items, opts] of blocks) {
       const box = $(`[data-gt-block-${sec}]`);
@@ -426,8 +434,7 @@
     const wireBox = $("[data-gt-frontwire]");
     if (wireBox) {
       const leftovers = [
-        ...S.sports.items.slice(4), ...S.ai.items.slice(4),
-        ...S.elections.items.slice(4), ...S.markets.items.slice(4),
+        ...blocks.flatMap(([, items]) => items.slice(4)),
         ...(S.ai.papers || []).slice(0, 2),
       ].sort((a, b) => b.score - a.score).slice(0, 7);
       if (leftovers.length) {
@@ -472,7 +479,7 @@
       det.appendChild(el("p", "blurb", data.puzzle.a));
       puzzleBox.appendChild(det);
     }
-    /* back page: poem, reading room, archive */
+    /* back page: poem, reading room */
     if (poems && poems.length) {
       const p = poems[(data.edition - 1 + poems.length * 100) % poems.length];
       const box = $("[data-gt-poem]");
@@ -490,16 +497,6 @@
       h3.appendChild(link(r.url, r.title));
       reading.append(h3, el("p", "who", r.source || r.who || ""));
       if (r.note) reading.appendChild(el("p", "note", r.note));
-    }
-    const arch = $("[data-gt-archive]");
-    if (arch && index.length > 1) {
-      index.slice(0, -1).slice(-7).reverse().forEach((d) => {
-        const li = el("li");
-        li.appendChild(link(`?date=${d}`, longDate(d)));
-        arch.appendChild(li);
-      });
-    } else if (arch) {
-      arch.appendChild(el("li", "muted", "This is the first edition. History starts tomorrow."));
     }
   }
 
@@ -661,22 +658,73 @@
     }
   }
 
+  /* math desk: rubric labels + standfirsts, keyed by pipeline bucket */
+  const MATH_DESKS = {
+    pde: { label: "Partial differential equations", cat: "math.AP",
+      note: "Analysis of PDEs — the home category for my surface-PDE and shallow-water work." },
+    astro: { label: "Astrophysics & exoplanets", cat: "astro-ph.EP",
+      note: "Earth & planetary astrophysics — exoplanetary models and exometeorology, where the shallow-water equations end up pointing." },
+    string: { label: "String theory", cat: "hep-th",
+      note: "High-energy theory — the deep end, kept on the desk as a standing curiosity." },
+  };
+
+  /* just enough TeX to set arXiv titles in running prose */
+  const TEX_SYM = { infty: "∞", subset: "⊂", supset: "⊃", times: "×", le: "≤", ge: "≥", leq: "≤", geq: "≥", neq: "≠", to: "→", pm: "±", cdot: "·", partial: "∂", ell: "ℓ", hbar: "ℏ", alpha: "α", beta: "β", gamma: "γ", Gamma: "Γ", delta: "δ", Delta: "Δ", epsilon: "ε", varepsilon: "ε", zeta: "ζ", eta: "η", theta: "θ", kappa: "κ", lambda: "λ", Lambda: "Λ", mu: "μ", nu: "ν", xi: "ξ", pi: "π", rho: "ρ", sigma: "σ", Sigma: "Σ", tau: "τ", phi: "φ", Phi: "Φ", chi: "χ", psi: "ψ", Psi: "Ψ", omega: "ω", Omega: "Ω" };
+  const deTeX = (s) => (s || "")
+    .replace(/\\(?:math(?:rm|bb|cal|frak|sf|it)|operatorname|text(?:rm|bf|it)?|bm|cal|rm)\b\s*/g, "")
+    .replace(/\\([A-Za-z]+)/g, (_, w) => TEX_SYM[w] || w)
+    .replace(/[${}]/g, "")
+    .replace(/_(\d)/g, (_, d) => "₀₁₂₃₄₅₆₇₈₉"[d])
+    .replace(/\^(\d)/g, (_, d) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[d])
+    .replace(/--/g, "–");
+
   function renderMath(sec) {
-    const items = (sec && sec.items) || [];
-    const groups = [
-      ["pde", "[data-gt-math-pde]"],
-      ["astro", "[data-gt-math-astro]"],
-      ["string", "[data-gt-math-string]"],
-    ];
-    for (const [bucket, sel] of groups) {
-      const box = $(sel);
-      if (!box) continue;
-      const list = items.filter((i) => i.bucket === bucket);
-      if (!list.length) {
-        box.appendChild(el("p", "small-copy muted", "Quiet on the preprint server today — check back tomorrow."));
-        continue;
-      }
-      list.forEach((it, i) => box.appendChild(entry(it, { blurb: i < 4 })));
+    const box = $("[data-gt-math-desk]");
+    if (!box) return;
+    const items = ((sec && sec.items) || [])
+      .map((it) => ({ ...it, title: deTeX(it.title), blurb: deTeX(it.blurb) }));
+    if (!items.length) {
+      box.appendChild(el("p", "small-copy muted", "Quiet on the preprint server today — check back tomorrow."));
+      return;
+    }
+
+    /* lead preprint: today's top-scored paper, set large above the rubrics */
+    const lead = items.reduce((a, b) => ((b.score || 0) > (a.score || 0) ? b : a));
+    const desk = MATH_DESKS[lead.bucket] || {};
+    const feat = el("article", "gt-math-lead gt-entry");
+    feat.id = `s-${lead.id}`;
+    const kick = el("div", "kicker");
+    kick.appendChild(el("span", "tag", "Lead preprint"));
+    kick.appendChild(el("span", "cat", `arXiv · ${desk.cat || lead.bucket}`));
+    feat.appendChild(kick);
+    const h3 = el("h3");
+    h3.appendChild(link(lead.url, lead.title));
+    const perma = el("a", "permalink", "#");
+    perma.href = `#s-${lead.id}`;
+    perma.title = "Link to this story";
+    h3.appendChild(perma);
+    feat.appendChild(h3);
+    if (lead.blurb) feat.appendChild(el("p", "deck", lead.blurb));
+    const meta = el("p", "meta");
+    meta.append(document.createTextNode(`${lead.source} · ${relTime(lead.published)} · `),
+      link(lead.url, "Read the PDF ↗"));
+    feat.appendChild(meta);
+    box.appendChild(feat);
+
+    /* the rest under small-caps subject rubrics, two newspaper columns */
+    for (const [bucket, d] of Object.entries(MATH_DESKS)) {
+      const list = items.filter((it) => it.bucket === bucket && it !== lead);
+      if (!list.length) continue;
+      const rubric = el("section", "gt-math-rubric");
+      const row = el("div", "section-title-row");
+      row.appendChild(el("h2", null, d.label));
+      row.appendChild(el("span", "cat", `${d.cat} · ${list.length} paper${list.length > 1 ? "s" : ""}`));
+      rubric.appendChild(row);
+      rubric.appendChild(el("p", "rubric-note", d.note));
+      const cols = el("div", "gt-math-cols");
+      list.forEach((it) => cols.appendChild(entry(it)));
+      rubric.appendChild(cols);
+      box.appendChild(rubric);
     }
   }
 

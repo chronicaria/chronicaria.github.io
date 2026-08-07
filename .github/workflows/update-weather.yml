@@ -1,7 +1,8 @@
 name: Update county temperature map
 
 # Repaints assets/weather/county-temp.svg and data/weather.json from the latest
-# NOAA RTMA hour.
+# NOAA RTMA hour, and rebuilds data/weather-hourly.json (per-county temps for
+# the last 24 hours).
 #
 # Unlike the other two updaters this one is NOT stdlib — tools/county-temp-map
 # pulls geopandas, rasterio, exactextract and cairosvg, and cairosvg needs
@@ -47,8 +48,11 @@ jobs:
       - name: Repaint the map
         run: python3 scripts/update_weather.py
 
+      - name: Rebuild the hourly county series
+        run: python3 scripts/update_weather_hourly.py
+
       - name: Publish
         run: |
           scripts/publish.sh \
             "Repaint the county temperature map [skip ci]" \
-            assets/weather/county-temp.svg data/weather.json
+            assets/weather/county-temp.svg data/weather.json data/weather-hourly.json

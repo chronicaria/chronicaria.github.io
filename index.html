@@ -46,10 +46,8 @@
       <div class="nav-drop">
         <button type="button" class="nav-drop-btn">Interests</button>
         <div class="nav-drop-menu">
-          <a href="/sports.html">Sports</a>
           <a href="/music.html">Music</a>
           <a href="/literature.html">Literature</a>
-          <a href="/weather.html">Temperature</a>
         </div>
       </div>
       <div class="nav-drop">
@@ -58,10 +56,8 @@
           <a href="/fantasy/">Fantasy Encyclopedias</a>
           <a href="/valorant/">Valorant MWPA</a>
           <a href="/quant-internships/">Quant Internships</a>
-          <a href="/concerto/">Concerto Ranker</a>
           <a href="/nyc-weather/">Weather Dashboard</a>
           <a href="/winter-trip/">Italy, winter 2026–27</a>
-          <a href="/equipotential/">Live Paper</a>
         </div>
       </div>
     </nav>
@@ -96,19 +92,15 @@
               Daily RAPM, a public multi-league basketball valuation model at
               <a href="https://andrewjparkus.github.io/model.html" target="_blank" rel="noopener">andrewjparkus.github.io</a></p>
             <ul>
-              <li>Showed that a weighted blend of the <strong>Las Vegas closing line</strong> and my player
-                ratings predicts NBA game margins better than the closing line alone. Weights were fit on
-                earlier seasons only and scored on each held-out season across <strong>12,034 games and 12
-                seasons</strong>; the fit put roughly <strong>30% of its weight on my number</strong> every
-                time.</li>
-              <li>Built the 2026-27 season projection end to end and published it before the league released
-                its schedule: a minutes and games played model, an automated depth chart and rotation
-                builder, per-player wins contributed, and a Monte Carlo simulation producing standings,
-                playoff and title odds, with all 30 team win totals frozen in public version control.</li>
-              <li>Directed the underlying daily valuation system, which rebuilds every rating from scratch on
-                <em>every</em> game day: a regularized regression over <strong>49M+ play-by-play
-                possessions</strong> placing <strong>10,681</strong> NBA, NCAA Division I and G League
-                players on one scale, benchmarked publicly against EPM, BPM, RAPTOR and DARKO.</li>
+              <li>Blending my ratings with the <strong>Las Vegas closing line</strong> beats the line alone
+                on NBA margins across <strong>12,034 held-out games</strong> — with ~<strong>30% weight on
+                my number</strong>.</li>
+              <li>Published the 2026-27 season projection before the schedule dropped: minutes model,
+                automated depth charts, Monte Carlo playoff odds, all 30 win totals frozen in public version
+                control.</li>
+              <li>Directed the daily valuation system: a regularized regression over <strong>49M+
+                possessions</strong> placing <strong>10,681</strong> NBA, NCAA and G League players on one
+                scale, benchmarked against EPM, BPM, RAPTOR and DARKO.</li>
             </ul>
             <div class="chips"><span class="chip">Ridge regression</span><span class="chip">LSQR</span><span class="chip">Monte Carlo</span><span class="chip">Python</span></div>
           </article>
@@ -121,18 +113,15 @@
             <p class="org"><a href="https://math.duke.edu/" target="_blank" rel="noopener">Duke Mathematics</a> ·
               senior thesis under <a href="https://scholars.duke.edu/person/beale" target="_blank" rel="noopener">Prof. J. Thomas Beale</a></p>
             <ul>
-              <li>Model atmospheric flow on brown dwarfs, which spin fast enough to be visibly flattened. The
-                literature solves these atmospheres on a sphere; I solve the deformed figure instead and
-                measure what that assumption costs, finding a rotational signal <strong>thousands of times
-                stronger</strong> than the spherical case predicts.</li>
-              <li>Implemented Professor Beale's method for solving partial differential equations on curved
-                surfaces (<a href="https://doi.org/10.1137/19M1272135" target="_blank" rel="noopener">SIAM J.
-                Sci. Comput.</a>, 2020) as a <strong>4,500-line Julia library</strong>, then made it tractable
-                at scale with sparse, matrix-free numerical linear algebra. The surface never has to be
-                meshed.</li>
-              <li>Verified it against exact solutions on <strong>10 distorted planetary shapes</strong>,
-                confirming its predicted <strong>second-order spatial accuracy</strong> on every one; results
-                are being written up as a 40-page manuscript.</li>
+              <li>Model atmospheric flow on brown dwarfs, solving the true flattened figure instead of the
+                usual sphere — a rotational signal <strong>thousands of times stronger</strong> than the
+                spherical case predicts.</li>
+              <li>Implemented Prof. Beale's surface-PDE method
+                (<a href="https://doi.org/10.1137/19M1272135" target="_blank" rel="noopener">SIAM J. Sci.
+                Comput.</a>, 2020) as a <strong>4,500-line Julia library</strong>, scaled with sparse,
+                matrix-free linear algebra — no surface meshing.</li>
+              <li>Verified <strong>second-order accuracy</strong> against exact solutions on <strong>10
+                distorted planetary shapes</strong>; writing up a 40-page manuscript.</li>
             </ul>
             <div class="chips"><span class="chip">Julia</span><span class="chip">GMRES</span><span class="chip">Numerical PDEs</span></div>
           </article>
@@ -157,21 +146,17 @@
 
           <article class="entry">
             <div class="entry-head">
-              <h3>Election Forecasting Engine &amp; Prediction-Market Portfolio</h3>
+              <h3>Election Forecasting &amp; Prediction Markets</h3>
               <span class="when">Sep 2021 – present</span>
             </div>
             <ul>
-              <li>Built a U.S. election forecasting engine at county and precinct level on returns dating to
-                <strong>1912</strong>. Rather than scoring a county on a single partisan axis, I fit an
-                <strong>ideology vector</strong> for each and used the correlations between them to push
-                national, state and local swings into races with no polling of their own. Directed seven
-                contributors.</li>
-              <li>Ran the portfolio on <a href="https://polymarket.com/" target="_blank" rel="noopener">Polymarket</a>
-                and <a href="https://kalshi.com/" target="_blank" rel="noopener">Kalshi</a> across four cycles
-                (2022, 2024, 2025 local races, 2026 ongoing): took positions wherever the model's probability
-                diverged from market price enough to be positive expected value, sized by <strong>fractional
-                Kelly</strong>, then <strong>hedged across presidential, gubernatorial, Senate and House</strong>
-                contracts so a national or state polling miss could not run through the whole book.</li>
+              <li>County- and precinct-level U.S. forecasting engine on returns back to <strong>1912</strong>:
+                per-county <strong>ideology vectors</strong> push national and state swings into races with
+                no polling. Directed seven contributors.</li>
+              <li>Ran the book on <a href="https://polymarket.com/" target="_blank" rel="noopener">Polymarket</a>
+                and <a href="https://kalshi.com/" target="_blank" rel="noopener">Kalshi</a> across four cycles,
+                sized by <strong>fractional Kelly</strong> and <strong>hedged across presidential, Senate and
+                House</strong> contracts.</li>
             </ul>
             <div class="chips"><span class="chip">Python</span><span class="chip">SQL</span><span class="chip">Fractional Kelly</span></div>
           </article>
@@ -182,11 +167,9 @@
               <span class="when">2026</span>
             </div>
             <ul>
-              <li>CME weather contracts settle on a handful of major-city stations, so a grower or utility a
-                hundred miles out hedges with weather that is not its own. Building a pricing engine that
-                closes that gap: it fits <strong>75 years of daily temperature</strong> (1951 to 2026) for
-                <strong>all 3,107 U.S. counties</strong>, a separate seasonal and trend regression per county,
-                as the base layer for county-level degree day option pricing.</li>
+              <li>Pricing county-level degree-day options: seasonal and trend fits of <strong>75 years of
+                daily temperature</strong> for <strong>all 3,107 U.S. counties</strong>, closing the basis
+                gap CME's big-city stations leave open.</li>
             </ul>
             <div class="chips"><span class="chip">Python</span><span class="chip">Time series</span><span class="chip">Regression</span></div>
           </article>
@@ -197,13 +180,11 @@
               <span class="when">Jan 2025 – present</span>
             </div>
             <ul>
-              <li>Re-launched the club to <strong>100+ members</strong>, secured a collegiate
-                <a href="https://kalshi.com/" target="_blank" rel="noopener">Kalshi</a> partnership, trained the
-                competitive tournament team for
-                <a href="https://pokeripa.com/" target="_blank" rel="noopener">Intercollegiate Poker Association</a>
-                events, and was interviewed by
-                <a href="https://www.wsj.com/business/media/prediction-markets-campus-e57cd19f" target="_blank" rel="noopener"><em>The Wall Street Journal</em></a>
-                on college poker and prediction markets.</li>
+              <li>Re-launched the club to <strong>100+ members</strong>: collegiate
+                <a href="https://kalshi.com/" target="_blank" rel="noopener">Kalshi</a> partnership, tournament
+                team for <a href="https://pokeripa.com/" target="_blank" rel="noopener">IPA</a> events, and a
+                <a href="https://www.wsj.com/business/media/prediction-markets-campus-e57cd19f" target="_blank" rel="noopener"><em>Wall Street Journal</em></a>
+                interview on college poker and prediction markets.</li>
             </ul>
           </article>
 
@@ -323,9 +304,9 @@
         <div class="semester">
           <h3>Fall 2026 <span class="tag">— enrolled</span></h3>
           <ul>
-            <li><a href="https://math.duke.edu/courses/numerical-linear-algebra-optimization-and-monte-carlo-simulation" target="_blank" rel="noopener">Numerical Linear Algebra</a><span class="tag grad">GRAD</span><span class="code dept-math grad">MATH 561</span></li>
             <li><a href="https://math.duke.edu/courses/measure-and-integration" target="_blank" rel="noopener">Measure &amp; Integration</a><span class="tag grad">GRAD</span><span class="code dept-math grad">MATH 631</span></li>
             <li><a href="https://cs.duke.edu/courses/discrete-mathematics-and-proofs" target="_blank" rel="noopener">Discrete Mathematics &amp; Proofs</a><span class="code dept-cs">COMPSCI 232</span></li>
+            <li><a href="https://undergraduate.bulletins.duke.edu/courses/0172924/tab-aoYks" target="_blank" rel="noopener">Energy and Environment</a><span class="code dept-hum">ECS 231</span></li>
             <li><a href="https://polisci.duke.edu/courses/introduction-american-political-thought" target="_blank" rel="noopener">Introduction to American Political Thought</a><span class="code dept-hum">POLSCI 265S</span></li>
             <li><a href="https://music.duke.edu/courses/classical-piano-0" target="_blank" rel="noopener">Classical Piano</a><span class="code dept-hum">MUSIC 203-1</span></li>
           </ul>

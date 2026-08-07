@@ -59,8 +59,6 @@
     { n: "Newspaper: Markets", u: "daily/markets.html", k: "daily" },
     { n: "Newspaper: Elections", u: "daily/elections.html", k: "daily" },
     { n: "Newspaper: Math", u: "daily/math.html", k: "daily" },
-    { n: "Newspaper: Archive", u: "daily/archive.html", k: "daily" },
-    { n: "Sports trackers", u: "sports.html", k: "page" },
     { n: "Music", u: "music.html", k: "page" },
     { n: "Literature", u: "literature.html", k: "page" }
   ];

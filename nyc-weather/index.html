@@ -65,11 +65,21 @@
           <div id="chart-humidity" class="chart"></div>
         </section>
 
+        <section class="card">
+          <h2>The national picture <span class="key" id="county-stamp"></span></h2>
+          <div class="county-map">
+            <img src="/assets/weather/county-temp.svg" alt="Map of US counties coloured by current 2 m temperature" loading="lazy" />
+          </div>
+          <p class="county-note muted">Every US county coloured by its NOAA RTMA 2 m air temperature
+            (legend on the map). Repainted every 3 hours — a national backdrop to the local forecast above.</p>
+        </section>
+
         <footer>
           <p>
             Forecast &amp; bands: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>
             (GEFS + ECMWF ENS + ICON-EPS ensemble), CC-BY 4.0.
             Alerts: <a href="https://www.weather.gov" target="_blank" rel="noopener">US NWS</a>.
+            County map: NOAA RTMA · Census TIGER/Line.
             Charts: uPlot. · Personal, non-commercial project.
           </p>
         </footer>
@@ -90,5 +100,18 @@
   <script src="js/snapshot.js"></script>
   <script src="js/chart.js"></script>
   <script src="js/app.js"></script>
+  <script>
+    // updated-at stamp for the baked county map (repainted by a GitHub Action)
+    fetch("/data/weather.json")
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (w) {
+        var fmt = function (iso) {
+          return new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+        };
+        document.getElementById("county-stamp").textContent =
+          "valid " + fmt(w.valid_time_utc) + " · updated " + fmt(w.updated);
+      })
+      .catch(function () {});
+  </script>
 </body>
 </html>

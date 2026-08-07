@@ -16,6 +16,7 @@ Election odds come entirely from Polymarket's Gamma API.
 import concurrent.futures as cf
 import difflib
 import hashlib
+import html
 import json
 import math
 import re
@@ -24,12 +25,11 @@ import time
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 OUT_DIR = Path(__file__).resolve().parent.parent / "data" / "daily"
-LAUNCH = date(2026, 6, 12)  # edition No. 1
 UA = {"User-Agent": "chronicaria.github.io gothic-times (personal news page)"}
 NOW = datetime.now(timezone.utc)
 
@@ -54,10 +54,7 @@ def strip_html(text, limit=240):
         return ""
     text = re.sub(r"(?s)<!\[CDATA\[(.*?)\]\]>", r"\1", text)
     text = TAG_RE.sub(" ", text)
-    text = (text.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
-                .replace("&quot;", '"').replace("&#039;", "'").replace("&#8217;", "'")
-                .replace("&#8216;", "'").replace("&#8220;", '"').replace("&#8221;", '"')
-                .replace("&nbsp;", " ").replace("&#160;", " "))
+    text = html.unescape(text).replace("\xa0", " ")
     text = WS_RE.sub(" ", text).strip()
     if len(text) > limit:
         text = text[: limit - 1].rsplit(" ", 1)[0] + "…"
@@ -98,9 +95,9 @@ def parse_feed(xml_text):
             if name == "title":
                 title = strip_html(text, 300)
             elif name == "link":
-                url = child.get("href") or text or url
-                if child.get("rel") == "alternate":  # prefer alternate links in Atom
-                    url = child.get("href")
+                rel = child.get("rel") or "alternate"  # RSS 2.0 links carry no rel
+                if rel == "alternate":  # skip Atom pdf/related links
+                    url = child.get("href") or text or url
             elif name in ("description", "summary", "content", "encoded") and not summary:
                 summary = strip_html(text)
             elif name in ("pubDate", "published", "updated", "date") and not published:
@@ -341,7 +338,6 @@ TICKERS = [
     {"sym": "^GSPC",   "label": "S&P 500",        "kind": "index"},
     {"sym": "GOOGL",   "label": "Alphabet",       "kind": "stock"},
     {"sym": "NVDA",    "label": "Nvidia",         "kind": "stock"},
-    {"sym": "SPCX",    "label": "SpaceX",         "kind": "stock"},
     {"sym": "BTC-USD", "label": "Bitcoin",        "kind": "index"},
     {"sym": "FSKAX",   "label": "FSKAX",          "kind": "fund"},
     {"sym": "FTIHX",   "label": "FTIHX",          "kind": "fund"},
@@ -955,7 +951,10 @@ def main():
     today = NOW.astimezone(timezone(timedelta(hours=-4))).date()  # ET-ish; cron runs at 6 AM ET
     yesterday = load_yesterday(today.isoformat())
     movers = compute_movers(state_map, yesterday)
-    edition_no = (today - LAUNCH).days + 1
+    # No. = editions actually printed (cron skips some mornings), not days since launch
+    printed = [p.stem for p in OUT_DIR.glob("*.json")
+               if re.fullmatch(r"\d{4}-\d{2}-\d{2}", p.stem) and p.stem != today.isoformat()]
+    edition_no = len(printed) + 1
 
     # rotating back-page puzzle
     puzzle = None

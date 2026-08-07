@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-07T18:00:00Z",
-  "updated": "2026-08-07T19:30:50Z",
+  "valid_time_utc": "2026-08-07T21:00:00Z",
+  "updated": "2026-08-07T22:07:39Z",
   "hottest": [
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 101.3
+      "temp_f": 106.9
     },
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 100.1
+      "temp_f": 105.7
     },
     {
-      "name": "Seminole",
-      "state": "OK",
-      "temp_f": 100.0
+      "name": "Maricopa",
+      "state": "AZ",
+      "temp_f": 105.4
     }
   ],
   "coldest": [
     {
-      "name": "Skagway",
-      "state": "AK",
-      "temp_f": 47.2
-    },
-    {
       "name": "Nome",
       "state": "AK",
-      "temp_f": 47.7
+      "temp_f": 48.6
+    },
+    {
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 49.2
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 48.2
+      "temp_f": 50.2
     }
   ],
   "national": {
-    "min_f": 47.2,
-    "max_f": 101.3,
-    "mean_f": 84.2
+    "min_f": 48.6,
+    "max_f": 106.9,
+    "mean_f": 85.9
   }
 }

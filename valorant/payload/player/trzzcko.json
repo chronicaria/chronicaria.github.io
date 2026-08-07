@@ -3,34 +3,34 @@
   "name": "Trzzcko#SFang",
   "short": "trzzcko",
   "headline": {
-    "impact": 0.068884,
-    "impact_lo": -0.00232,
-    "impact_hi": 0.167547,
-    "rate": 0.3652,
-    "lo": -0.0123,
-    "hi": 0.8882,
+    "impact": 0.046335,
+    "impact_lo": -0.019323,
+    "impact_hi": 0.136382,
+    "rate": 0.2439,
+    "lo": -0.1017,
+    "hi": 0.7178,
     "covers_zero": true,
-    "total": 1.51545,
-    "rounds": 415,
-    "matches": 22
+    "total": 1.20471,
+    "rounds": 494,
+    "matches": 26
   },
   "card": {
-    "matches": 22,
-    "rounds": 415,
-    "rounds_per_match": 18.86,
-    "kills_per_match": 16.45,
-    "deaths_per_match": 13.59,
-    "assists_per_match": 6.27,
+    "matches": 26,
+    "rounds": 494,
+    "rounds_per_match": 19.0,
+    "kills_per_match": 16.15,
+    "deaths_per_match": 14.12,
+    "assists_per_match": 6.15,
     "agents": [
       {
         "name": "Omen",
-        "matches": 12,
-        "rounds": 227
+        "matches": 13,
+        "rounds": 249
       },
       {
         "name": "Phoenix",
-        "matches": 6,
-        "rounds": 121
+        "matches": 9,
+        "rounds": 178
       },
       {
         "name": "Viper",
@@ -42,75 +42,75 @@
     "weapons": [
       {
         "name": "Vandal",
-        "rounds": 150,
-        "share": 0.3827
+        "rounds": 168,
+        "share": 0.3629
       },
       {
         "name": "Phantom",
-        "rounds": 80,
-        "share": 0.2041
+        "rounds": 104,
+        "share": 0.2246
       },
       {
         "name": "Stinger",
-        "rounds": 61,
-        "share": 0.1556
+        "rounds": 72,
+        "share": 0.1555
       }
     ],
-    "weapon_rounds": 392,
+    "weapon_rounds": 463,
     "weapon_excluded": {
       "name": "Classic",
-      "rounds": 23
+      "rounds": 31
     }
   },
   "components": {
     "duel_credit": {
-      "rate": 0.3642,
-      "lo": 0.0462,
-      "hi": 0.8118,
-      "total": 1.511585,
-      "share": 0.6409
+      "rate": 0.2508,
+      "lo": -0.0437,
+      "hi": 0.6549,
+      "total": 1.239164,
+      "share": 0.5833
     },
     "plant": {
-      "rate": 0.0204,
-      "lo": 0.0078,
-      "hi": 0.0404,
+      "rate": 0.0171,
+      "lo": 0.0066,
+      "hi": 0.0348,
       "total": 0.084488,
-      "share": 0.0358
+      "share": 0.0398
     },
     "defuse": {
-      "rate": 0.0821,
-      "lo": 0.0201,
-      "hi": 0.2134,
+      "rate": 0.069,
+      "lo": 0.0172,
+      "hi": 0.183,
       "total": 0.340837,
-      "share": 0.1445
+      "share": 0.1604
     },
     "alive_clock": {
-      "rate": -0.081,
-      "lo": -0.1632,
-      "hi": -0.0244,
-      "total": -0.336114,
-      "share": 0.1425
+      "rate": -0.0616,
+      "lo": -0.1351,
+      "hi": -0.0124,
+      "total": -0.304401,
+      "share": 0.1433
     },
     "lobby_adjustment": {
-      "rate": -0.0206,
-      "lo": -0.0598,
-      "hi": 0.036,
-      "total": -0.085345,
-      "share": 0.0362
+      "rate": -0.0315,
+      "lo": -0.0664,
+      "hi": 0.0191,
+      "total": -0.155378,
+      "share": 0.0731
     }
   },
   "duel_parts": {
     "kill_credit": {
-      "rate": 1.8443,
-      "lo": 1.4398,
-      "hi": 2.3651,
-      "total": 7.653998
+      "rate": 1.8105,
+      "lo": 1.4462,
+      "hi": 2.2741,
+      "total": 8.94373
     },
     "death_debit": {
-      "rate": -1.4801,
-      "lo": -1.7802,
-      "hi": -1.1999,
-      "total": -6.142414
+      "rate": -1.5596,
+      "lo": -1.8467,
+      "hi": -1.2863,
+      "total": -7.704566
     }
   },
   "rank_track": [
@@ -289,6 +289,38 @@
       "tier": "Bronze 3",
       "ordinal": 6,
       "state": "ranked"
+    },
+    {
+      "i": 22,
+      "match_id": "20614210-1154-4a41-b76f-7057afabf05e",
+      "started_at": "2026-08-07T02:41:24.873Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 23,
+      "match_id": "380a89eb-05f0-4f78-bd35-0d3384930b68",
+      "started_at": "2026-08-07T03:21:02.322Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 24,
+      "match_id": "35086e71-967e-4996-9c63-fbd790be472c",
+      "started_at": "2026-08-07T03:53:04.68Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
+    },
+    {
+      "i": 25,
+      "match_id": "9405a4e0-9bc6-4de4-a6fc-eb437f9c39f9",
+      "started_at": "2026-08-07T04:28:31.656Z",
+      "tier": "Bronze 3",
+      "ordinal": 6,
+      "state": "ranked"
     }
   ],
   "ladder": {
@@ -297,7 +329,7 @@
     "low": "Bronze 2",
     "high": "Bronze 3",
     "placement": 5,
-    "ranked": 17,
+    "ranked": 21,
     "steps_up": 1,
     "steps_down": 0
   },
@@ -565,29 +597,77 @@
       "won": true,
       "attack_mwpa": 0.000235,
       "defense_mwpa": 0.012316
+    },
+    {
+      "match_id": "20614210-1154-4a41-b76f-7057afabf05e",
+      "started_at": "2026-08-07T02:41:24.873Z",
+      "map": "Lotus",
+      "agent": "Omen",
+      "tier": "Bronze 3",
+      "mwpa": -0.276256,
+      "rounds": 22,
+      "won": false,
+      "attack_mwpa": -0.067433,
+      "defense_mwpa": -0.208823
+    },
+    {
+      "match_id": "380a89eb-05f0-4f78-bd35-0d3384930b68",
+      "started_at": "2026-08-07T03:21:02.322Z",
+      "map": "Split",
+      "agent": "Phoenix",
+      "tier": "Bronze 3",
+      "mwpa": 0.008265,
+      "rounds": 15,
+      "won": true,
+      "attack_mwpa": 0.005029,
+      "defense_mwpa": 0.003235
+    },
+    {
+      "match_id": "35086e71-967e-4996-9c63-fbd790be472c",
+      "started_at": "2026-08-07T03:53:04.68Z",
+      "map": "Breeze",
+      "agent": "Phoenix",
+      "tier": "Bronze 3",
+      "mwpa": -0.034951,
+      "rounds": 20,
+      "won": true,
+      "attack_mwpa": 0.011625,
+      "defense_mwpa": -0.046576
+    },
+    {
+      "match_id": "9405a4e0-9bc6-4de4-a6fc-eb437f9c39f9",
+      "started_at": "2026-08-07T04:28:31.656Z",
+      "map": "Ascent",
+      "agent": "Phoenix",
+      "tier": "Bronze 3",
+      "mwpa": -0.007798,
+      "rounds": 22,
+      "won": false,
+      "attack_mwpa": 0.083637,
+      "defense_mwpa": -0.091435
     }
   ],
   "breakdowns": {
     "agent": [
       {
         "key": "Omen",
-        "rounds": 227,
-        "matches": 12,
-        "rate": 0.2691,
-        "lo": -0.1495,
-        "hi": 0.9077,
-        "total": 0.610873,
+        "rounds": 249,
+        "matches": 13,
+        "rate": 0.1344,
+        "lo": -0.329,
+        "hi": 0.7454,
+        "total": 0.334617,
         "covers_zero": true,
         "thin": false
       },
       {
         "key": "Phoenix",
-        "rounds": 121,
-        "matches": 6,
-        "rate": 0.5928,
-        "lo": -0.2583,
-        "hi": 2.0109,
-        "total": 0.717332,
+        "rounds": 178,
+        "matches": 9,
+        "rate": 0.3836,
+        "lo": -0.1645,
+        "hi": 1.5278,
+        "total": 0.682847,
         "covers_zero": true,
         "thin": false
       },
@@ -639,12 +719,23 @@
     "map": [
       {
         "key": "Breeze",
-        "rounds": 89,
-        "matches": 4,
-        "rate": 0.2733,
-        "lo": -0.2411,
+        "rounds": 109,
+        "matches": 5,
+        "rate": 0.1911,
+        "lo": -0.2228,
         "hi": 1.5587,
-        "total": 0.243247,
+        "total": 0.208295,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Split",
+        "rounds": 100,
+        "matches": 6,
+        "rate": 0.4708,
+        "lo": -0.1323,
+        "hi": 1.4533,
+        "total": 0.470773,
         "covers_zero": true,
         "thin": false
       },
@@ -653,20 +744,9 @@
         "rounds": 87,
         "matches": 5,
         "rate": 0.1298,
-        "lo": -0.4805,
+        "lo": -0.4741,
         "hi": 1.1788,
         "total": 0.112935,
-        "covers_zero": true,
-        "thin": false
-      },
-      {
-        "key": "Split",
-        "rounds": 85,
-        "matches": 5,
-        "rate": 0.5441,
-        "lo": -0.2045,
-        "hi": 1.6448,
-        "total": 0.462508,
         "covers_zero": true,
         "thin": false
       },
@@ -682,6 +762,17 @@
         "thin": false
       },
       {
+        "key": "Lotus",
+        "rounds": 61,
+        "matches": 3,
+        "rate": -0.4369,
+        "lo": -1.2557,
+        "hi": 0.1555,
+        "total": -0.266531,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
         "key": "Haven",
         "rounds": 51,
         "matches": 3,
@@ -693,37 +784,37 @@
         "thin": false
       },
       {
-        "key": "Lotus",
-        "rounds": 39,
-        "matches": 2,
-        "rate": 0.0249,
-        "lo": -0.1839,
-        "hi": 0.1555,
-        "total": 0.009724,
-        "covers_zero": true,
+        "key": "Ascent",
+        "rounds": 22,
+        "matches": 1,
+        "rate": -0.0354,
+        "lo": -0.0354,
+        "hi": -0.0354,
+        "total": -0.007798,
+        "covers_zero": false,
         "thin": false
       }
     ],
     "side": [
       {
         "key": "attack",
-        "rounds": 180,
-        "matches": 20,
-        "rate": 0.3905,
-        "lo": -0.0296,
-        "hi": 0.8435,
-        "total": 0.702887,
+        "rounds": 224,
+        "matches": 24,
+        "rate": 0.3285,
+        "lo": -0.0198,
+        "hi": 0.7238,
+        "total": 0.735746,
         "covers_zero": true,
         "thin": false
       },
       {
         "key": "defense",
-        "rounds": 235,
-        "matches": 22,
-        "rate": 0.3458,
-        "lo": -0.1399,
-        "hi": 1.148,
-        "total": 0.812563,
+        "rounds": 270,
+        "matches": 26,
+        "rate": 0.1737,
+        "lo": -0.2871,
+        "hi": 0.9054,
+        "total": 0.468964,
         "covers_zero": true,
         "thin": false
       }
@@ -731,124 +822,135 @@
     "buy_class": [
       {
         "key": "eco",
-        "rounds": 51,
-        "matches": 22,
-        "rate": 0.0144,
-        "lo": -0.727,
-        "hi": 0.9963,
-        "total": 0.007339,
+        "rounds": 61,
+        "matches": 26,
+        "rate": -0.184,
+        "lo": -0.8315,
+        "hi": 0.6977,
+        "total": -0.112219,
         "covers_zero": true,
         "thin": false
       },
       {
         "key": "light",
-        "rounds": 29,
-        "matches": 17,
-        "rate": 0.0637,
-        "lo": -0.8252,
-        "hi": 0.7876,
-        "total": 0.01846,
+        "rounds": 36,
+        "matches": 21,
+        "rate": 0.1407,
+        "lo": -0.626,
+        "hi": 0.7497,
+        "total": 0.050644,
         "covers_zero": true,
         "thin": false
       },
       {
         "key": "half",
-        "rounds": 174,
-        "matches": 22,
-        "rate": 0.1474,
-        "lo": -0.254,
-        "hi": 0.7707,
-        "total": 0.25645,
+        "rounds": 200,
+        "matches": 26,
+        "rate": 0.138,
+        "lo": -0.2662,
+        "hi": 0.7081,
+        "total": 0.275965,
         "covers_zero": true,
         "thin": false
       },
       {
         "key": "full",
-        "rounds": 161,
-        "matches": 20,
-        "rate": 0.766,
-        "lo": 0.1611,
-        "hi": 1.6275,
-        "total": 1.233201,
-        "covers_zero": false,
+        "rounds": 197,
+        "matches": 24,
+        "rate": 0.5027,
+        "lo": -0.0752,
+        "hi": 1.2884,
+        "total": 0.99032,
+        "covers_zero": true,
         "thin": false
       }
     ],
     "weapon": [
       {
         "key": "Vandal",
-        "rounds": 150,
-        "matches": 22,
-        "rate": 0.3193,
-        "lo": -0.215,
-        "hi": 0.9633,
-        "total": 0.478909,
+        "rounds": 168,
+        "matches": 26,
+        "rate": 0.1389,
+        "lo": -0.3905,
+        "hi": 0.7677,
+        "total": 0.233418,
         "covers_zero": true,
         "thin": false
       },
       {
         "key": "Phantom",
-        "rounds": 80,
-        "matches": 19,
-        "rate": 1.2517,
-        "lo": -0.14,
-        "hi": 3.1805,
-        "total": 1.001387,
-        "covers_zero": true,
+        "rounds": 104,
+        "matches": 23,
+        "rate": 1.1145,
+        "lo": 0.0812,
+        "hi": 2.7559,
+        "total": 1.159069,
+        "covers_zero": false,
         "thin": false
       },
       {
         "key": "Stinger",
-        "rounds": 61,
-        "matches": 20,
-        "rate": 0.3329,
-        "lo": -0.2814,
-        "hi": 1.4759,
-        "total": 0.203062,
+        "rounds": 72,
+        "matches": 24,
+        "rate": 0.2245,
+        "lo": -0.3508,
+        "hi": 1.1794,
+        "total": 0.161605,
         "covers_zero": true,
         "thin": false
       },
       {
         "key": "Marshal",
-        "rounds": 36,
-        "matches": 17,
-        "rate": -0.5066,
-        "lo": -1.3702,
-        "hi": 0.6466,
-        "total": -0.18238,
-        "covers_zero": true,
-        "thin": false
-      },
-      {
-        "key": "Ghost",
-        "rounds": 28,
-        "matches": 16,
-        "rate": 0.6306,
-        "lo": -0.4688,
-        "hi": 1.9318,
-        "total": 0.17656,
+        "rounds": 42,
+        "matches": 20,
+        "rate": -0.4458,
+        "lo": -1.2843,
+        "hi": 0.5302,
+        "total": -0.187219,
         "covers_zero": true,
         "thin": false
       },
       {
         "key": "Classic",
-        "rounds": 23,
-        "matches": 14,
-        "rate": -0.1865,
-        "lo": -1.2072,
-        "hi": 1.1645,
-        "total": -0.042888,
+        "rounds": 31,
+        "matches": 17,
+        "rate": -0.2625,
+        "lo": -1.0396,
+        "hi": 0.7988,
+        "total": -0.081383,
         "covers_zero": true,
         "thin": false
       },
       {
+        "key": "Ghost",
+        "rounds": 30,
+        "matches": 17,
+        "rate": 0.4127,
+        "lo": -0.6842,
+        "hi": 1.7114,
+        "total": 0.123815,
+        "covers_zero": true,
+        "thin": false
+      },
+      {
+        "key": "Guardian",
+        "rounds": 10,
+        "matches": 5,
+        "rate": -1.0648,
+        "lo": -1.9874,
+        "hi": 0.2772,
+        "total": -0.10648,
+        "covers_zero": true,
+        "thin": true
+      },
+      {
         "key": "Other",
         "rounds": 37,
-        "matches": 16,
-        "rate": -0.3222,
-        "lo": -0.8904,
-        "hi": 0.1061,
-        "total": -0.119199,
+        "matches": 18,
+        "rate": -0.2652,
+        "lo": -0.9048,
+        "hi": 0.2463,
+        "total": -0.098116,
         "covers_zero": true,
         "thin": false
       }
@@ -858,22 +960,22 @@
     {
       "partner_short": "martin",
       "partner_name": "MartinLutherKing#racis",
-      "shared_matches": 21,
-      "shared_rounds": 398,
-      "rate": 0.3879,
-      "lo": -0.0056,
-      "hi": 0.9287,
+      "shared_matches": 25,
+      "shared_rounds": 477,
+      "rate": 0.2585,
+      "lo": -0.1004,
+      "hi": 0.7439,
       "covers_zero": true,
       "thin": false
     },
     {
       "partner_short": "snorlax",
       "partner_name": "SN0RLAX#143",
-      "shared_matches": 20,
-      "shared_rounds": 376,
-      "rate": 0.2229,
-      "lo": -0.1278,
-      "hi": 0.8113,
+      "shared_matches": 24,
+      "shared_rounds": 455,
+      "rate": 0.1159,
+      "lo": -0.2047,
+      "hi": 0.6221,
       "covers_zero": true,
       "thin": false
     },

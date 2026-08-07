@@ -47,7 +47,7 @@ from valorant_impact.mwpa import buy_class  # noqa: E402
 # set is no longer a /private/tmp session scratchdir, and on what the leverage literal guards.
 WORK = LAB / "data" / "quad_work_2026-08-04"
 DATABASE = LAB / "data" / "valorant_matches_v16.sqlite3"
-MEAN_LEVERAGE = 0.1613029131154413
+MEAN_LEVERAGE = 0.16096621272299916
 TOP_PLAYS = 3
 
 FOCAL = {

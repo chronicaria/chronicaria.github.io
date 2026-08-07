@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-07T15:00:00Z",
-  "updated": "2026-08-07T16:25:43Z",
+  "valid_time_utc": "2026-08-07T18:00:00Z",
+  "updated": "2026-08-07T19:30:50Z",
   "hottest": [
-    {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 92.2
-    },
-    {
-      "name": "Tillman",
-      "state": "OK",
-      "temp_f": 92.1
-    },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 91.9
+      "temp_f": 101.3
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 100.1
+    },
+    {
+      "name": "Seminole",
+      "state": "OK",
+      "temp_f": 100.0
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 43.4
-    },
-    {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 45.6
+      "temp_f": 47.2
     },
     {
-      "name": "Matanuska-Susitna",
+      "name": "Nome",
       "state": "AK",
-      "temp_f": 46.5
+      "temp_f": 47.7
+    },
+    {
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 48.2
     }
   ],
   "national": {
-    "min_f": 43.4,
-    "max_f": 92.2,
-    "mean_f": 77.5
+    "min_f": 47.2,
+    "max_f": 101.3,
+    "mean_f": 84.2
   }
 }

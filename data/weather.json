@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-06T14:00:00Z",
-  "updated": "2026-08-06T14:54:54Z",
+  "valid_time_utc": "2026-08-06T23:00:00Z",
+  "updated": "2026-08-07T00:25:33Z",
   "hottest": [
     {
-      "name": "Chambers",
+      "name": "La Salle",
       "state": "TX",
-      "temp_f": 87.0
+      "temp_f": 103.4
     },
     {
-      "name": "Cameron",
-      "state": "LA",
-      "temp_f": 86.7
+      "name": "Kings",
+      "state": "CA",
+      "temp_f": 103.2
     },
     {
-      "name": "Vermilion",
-      "state": "LA",
-      "temp_f": 86.7
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 103.0
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
+      "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 42.5
+      "temp_f": 50.0
     },
     {
-      "name": "Skagway",
+      "name": "Kusilvak",
       "state": "AK",
-      "temp_f": 46.0
+      "temp_f": 50.2
     },
     {
-      "name": "Yakutat",
+      "name": "Nome",
       "state": "AK",
-      "temp_f": 46.1
+      "temp_f": 50.6
     }
   ],
   "national": {
-    "min_f": 42.5,
-    "max_f": 87.0,
-    "mean_f": 73.7
+    "min_f": 50.0,
+    "max_f": 103.4,
+    "mean_f": 83.9
   }
 }

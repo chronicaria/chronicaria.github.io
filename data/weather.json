@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-08T09:00:00Z",
-  "updated": "2026-08-08T10:04:11Z",
+  "valid_time_utc": "2026-08-08T12:00:00Z",
+  "updated": "2026-08-08T13:27:41Z",
   "hottest": [
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 92.6
-    },
-    {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 90.9
+      "temp_f": 89.9
     },
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 90.8
+      "temp_f": 87.3
+    },
+    {
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 87.3
     }
   ],
   "coldest": [
     {
-      "name": "Skagway",
+      "name": "San Juan",
+      "state": "CO",
+      "temp_f": 43.0
+    },
+    {
+      "name": "Copper River",
       "state": "AK",
-      "temp_f": 45.3
+      "temp_f": 45.0
     },
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 45.9
-    },
-    {
-      "name": "Rolette",
-      "state": "ND",
-      "temp_f": 46.4
+      "temp_f": 45.1
     }
   ],
   "national": {
-    "min_f": 45.3,
-    "max_f": 92.6,
-    "mean_f": 69.1
+    "min_f": 43.0,
+    "max_f": 89.9,
+    "mean_f": 68.5
   }
 }

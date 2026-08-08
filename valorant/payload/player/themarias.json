@@ -4,11 +4,11 @@
   "short": "themarias",
   "headline": {
     "impact": -0.001839,
-    "impact_lo": -0.162006,
-    "impact_hi": 0.123221,
+    "impact_lo": -0.162377,
+    "impact_hi": 0.122928,
     "rate": -0.0094,
-    "lo": -0.8308,
-    "hi": 0.6319,
+    "lo": -0.8327,
+    "hi": 0.6304,
     "covers_zero": true,
     "total": -0.01471,
     "rounds": 156,
@@ -65,22 +65,22 @@
   "components": {
     "duel_credit": {
       "rate": 0.0826,
-      "lo": -0.5549,
-      "hi": 0.6045,
+      "lo": -0.5612,
+      "hi": 0.597,
       "total": 0.128863,
       "share": 0.2321
     },
     "plant": {
       "rate": 0.005,
       "lo": 0.0008,
-      "hi": 0.0188,
+      "hi": 0.0186,
       "total": 0.007819,
       "share": 0.0141
     },
     "defuse": {
       "rate": 0.0856,
-      "lo": 0.0126,
-      "hi": 0.2754,
+      "lo": 0.0124,
+      "hi": 0.2763,
       "total": 0.13353,
       "share": 0.2405
     },
@@ -93,8 +93,8 @@
     },
     "lobby_adjustment": {
       "rate": -0.0818,
-      "lo": -0.1896,
-      "hi": 0.0074,
+      "lo": -0.1899,
+      "hi": 0.0068,
       "total": -0.127663,
       "share": 0.23
     }
@@ -102,14 +102,14 @@
   "duel_parts": {
     "kill_credit": {
       "rate": 1.6245,
-      "lo": 1.075,
-      "hi": 1.9483,
+      "lo": 1.0633,
+      "hi": 1.9474,
       "total": 2.534154
     },
     "death_debit": {
       "rate": -1.5419,
-      "lo": -2.1273,
-      "hi": -1.1553,
+      "lo": -2.1346,
+      "hi": -1.1587,
       "total": -2.405291
     }
   },
@@ -397,8 +397,8 @@
         "rounds": 68,
         "matches": 8,
         "rate": -0.2364,
-        "lo": -1.4904,
-        "hi": 0.7954,
+        "lo": -1.4877,
+        "hi": 0.803,
         "total": -0.16077,
         "covers_zero": true,
         "thin": false
@@ -408,8 +408,8 @@
         "rounds": 88,
         "matches": 8,
         "rate": 0.166,
-        "lo": -1.1146,
-        "hi": 0.9308,
+        "lo": -1.1345,
+        "hi": 0.9306,
         "total": 0.14606,
         "covers_zero": true,
         "thin": false
@@ -421,8 +421,8 @@
         "rounds": 21,
         "matches": 8,
         "rate": -0.6357,
-        "lo": -2.4656,
-        "hi": 0.4327,
+        "lo": -2.466,
+        "hi": 0.4339,
         "total": -0.133501,
         "covers_zero": true,
         "thin": false
@@ -432,8 +432,8 @@
         "rounds": 12,
         "matches": 7,
         "rate": 1.7909,
-        "lo": -0.9761,
-        "hi": 6.3933,
+        "lo": -1.0286,
+        "hi": 6.3459,
         "total": 0.214905,
         "covers_zero": true,
         "thin": true
@@ -443,7 +443,7 @@
         "rounds": 41,
         "matches": 8,
         "rate": 0.1161,
-        "lo": -0.8324,
+        "lo": -0.8385,
         "hi": 1.0532,
         "total": 0.047617,
         "covers_zero": true,
@@ -454,8 +454,8 @@
         "rounds": 82,
         "matches": 8,
         "rate": -0.1753,
-        "lo": -1.2228,
-        "hi": 0.7103,
+        "lo": -1.2324,
+        "hi": 0.7186,
         "total": -0.14373,
         "covers_zero": true,
         "thin": false
@@ -468,7 +468,7 @@
         "matches": 8,
         "rate": -0.3245,
         "lo": -2.2094,
-        "hi": 1.4255,
+        "hi": 1.4373,
         "total": -0.146016,
         "covers_zero": true,
         "thin": false
@@ -478,7 +478,7 @@
         "rounds": 25,
         "matches": 7,
         "rate": -0.4841,
-        "lo": -1.6283,
+        "lo": -1.6224,
         "hi": 1.4945,
         "total": -0.121035,
         "covers_zero": true,
@@ -489,8 +489,8 @@
         "rounds": 18,
         "matches": 7,
         "rate": -0.1568,
-        "lo": -3.3824,
-        "hi": 2.9183,
+        "lo": -3.4499,
+        "hi": 2.8771,
         "total": -0.028216,
         "covers_zero": true,
         "thin": true
@@ -500,7 +500,7 @@
         "rounds": 14,
         "matches": 5,
         "rate": 0.4008,
-        "lo": -0.351,
+        "lo": -0.3407,
         "hi": 1.982,
         "total": 0.056112,
         "covers_zero": true,
@@ -511,8 +511,8 @@
         "rounds": 12,
         "matches": 7,
         "rate": 0.8651,
-        "lo": -1.0051,
-        "hi": 2.6376,
+        "lo": -1.0266,
+        "hi": 2.6219,
         "total": 0.103813,
         "covers_zero": true,
         "thin": true
@@ -533,8 +533,8 @@
         "rounds": 30,
         "matches": 8,
         "rate": 0.4067,
-        "lo": -0.4777,
-        "hi": 1.4374,
+        "lo": -0.4859,
+        "hi": 1.4243,
         "total": 0.122012,
         "covers_zero": true,
         "thin": false

@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-08T19:03:56Z",
+ "updated": "2026-08-09T02:33:12Z",
  "errors": [],
  "teams": [
   {
@@ -107,7 +107,24 @@
      "score": "67-70"
     }
    ],
-   "next": []
+   "next": [
+    {
+     "date": "2026-12-01T05:00Z",
+     "opp": "Florida",
+     "oppAbbr": "FLA",
+     "home": false,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906775",
+     "tbd": true
+    },
+    {
+     "date": "2026-12-08T05:00Z",
+     "opp": "Georgia",
+     "oppAbbr": "UGA",
+     "home": false,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906786",
+     "tbd": true
+    }
+   ]
   },
   {
    "key": "duke-fb",

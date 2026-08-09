@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-09T15:00:00Z",
-  "updated": "2026-08-09T15:59:22Z",
+  "valid_time_utc": "2026-08-09T18:00:00Z",
+  "updated": "2026-08-09T19:12:32Z",
   "hottest": [
     {
       "name": "Woods",
       "state": "OK",
-      "temp_f": 93.8
-    },
-    {
-      "name": "Woodward",
-      "state": "OK",
-      "temp_f": 93.4
+      "temp_f": 104.9
     },
     {
       "name": "Alfalfa",
       "state": "OK",
-      "temp_f": 93.0
+      "temp_f": 104.6
+    },
+    {
+      "name": "Saline",
+      "state": "KS",
+      "temp_f": 104.4
     }
   ],
   "coldest": [
     {
-      "name": "Denali",
-      "state": "AK",
-      "temp_f": 43.6
-    },
-    {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 45.0
-    },
-    {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 45.7
+      "temp_f": 48.3
+    },
+    {
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 48.7
+    },
+    {
+      "name": "Bristol Bay",
+      "state": "AK",
+      "temp_f": 49.5
     }
   ],
   "national": {
-    "min_f": 43.6,
-    "max_f": 93.8,
-    "mean_f": 78.6
+    "min_f": 48.3,
+    "max_f": 104.9,
+    "mean_f": 85.6
   }
 }

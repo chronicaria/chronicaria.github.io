@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-10T15:00:00Z",
-  "updated": "2026-08-10T16:24:21Z",
+  "valid_time_utc": "2026-08-10T18:00:00Z",
+  "updated": "2026-08-10T19:32:20Z",
   "hottest": [
     {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 91.0
+      "name": "Grant",
+      "state": "KS",
+      "temp_f": 102.9
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 90.9
+      "name": "Stanton",
+      "state": "KS",
+      "temp_f": 102.1
     },
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 90.8
+      "name": "Morton",
+      "state": "KS",
+      "temp_f": 101.7
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
+      "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 45.1
+      "temp_f": 48.6
     },
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 45.5
+      "temp_f": 49.2
     },
     {
-      "name": "Denali",
+      "name": "Aleutians East",
       "state": "AK",
-      "temp_f": 45.6
+      "temp_f": 51.8
     }
   ],
   "national": {
-    "min_f": 45.1,
-    "max_f": 91.0,
-    "mean_f": 78.9
+    "min_f": 48.6,
+    "max_f": 102.9,
+    "mean_f": 85.4
   }
 }

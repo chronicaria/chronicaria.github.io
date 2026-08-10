@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-10T04:00:00Z",
-  "updated": "2026-08-10T05:06:41Z",
+  "valid_time_utc": "2026-08-10T07:00:00Z",
+  "updated": "2026-08-10T08:14:39Z",
   "hottest": [
-    {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 98.4
-    },
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 98.1
+      "temp_f": 92.5
     },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 97.9
+      "temp_f": 92.2
+    },
+    {
+      "name": "Clark",
+      "state": "NV",
+      "temp_f": 90.2
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.8
+      "temp_f": 48.2
+    },
+    {
+      "name": "San Juan",
+      "state": "CO",
+      "temp_f": 49.3
     },
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 52.2
-    },
-    {
-      "name": "Yakutat",
-      "state": "AK",
-      "temp_f": 52.4
+      "temp_f": 49.3
     }
   ],
   "national": {
-    "min_f": 48.8,
-    "max_f": 98.4,
-    "mean_f": 74.9
+    "min_f": 48.2,
+    "max_f": 92.5,
+    "mean_f": 72.1
   }
 }

@@ -134,6 +134,8 @@ ASSETS = {}
 ART = {}
 RESULT = {}
 NAME = {}
+# Where each player stands on each row of the ledger, filled once in main(). See `rank_word`.
+COMPONENT_RANK = {}
 
 # HOW A PERSON IS WRITTEN, and there are two kinds of person here. A focal player is somebody
 # the reader knows, so the Riot tag says nothing and comes off; one of the four is sixteen
@@ -2049,6 +2051,81 @@ def card_tally(items):
         '<li><span class="pc-n">%s</span><span class="pc-k">%s</span></li>' % (value, esc(label))
         for value, label in items)
 
+def card_best(player, dimension):
+    """The strongest cell of one breakdown, with its exposure, or None if none qualifies.
+
+    A CARD SAYS THE HEADLINE OF A TABLE, so this picks by rate and refuses a cell the table
+    itself marks thin: `Other` weapons over 1.2 rounds of a match would otherwise top three of
+    these four cards on a sample the breakdown prints a dotted underline against. If every cell
+    in a dimension is thin the best of them still shows, carrying that marker, because the
+    alternative is a card that silently has no row for a dimension the reader can see below.
+    """
+    cells = player["breakdowns"].get(dimension) or []
+    solid = [c for c in cells if not c["thin"] and c["rate"] is not None]
+    pool = solid or [c for c in cells if c["rate"] is not None]
+    if not pool:
+        return None
+    return max(pool, key=lambda c: c["rate"])
+
+
+def card_bests(player):
+    """Best map, agent and gun, in the estimator's own unit.
+
+    NOT IN THE HEADLINE'S UNIT, and the strip says so once. A breakdown cell holds a slice of a
+    match rather than a match, so its match count is a count of matches it appeared in and not
+    an exposure to divide by — the same argument that keeps the five tables below in per-100
+    rounds. Three rows here, one dimension each, and the tables carry the rest.
+    """
+    out = []
+    for dimension in ("map", "agent", "weapon"):
+        cell = card_best(player, dimension)
+        if cell is None:
+            continue
+        out.append((label_for(dimension), cell["key"], cell["rate"], cell["thin"]))
+    return out
+
+
+def card_spark(player, short):
+    """Every match this player played, in order, as one small signed path off the null.
+
+    The season tracker on the front page draws the running MEAN and this draws the RAW datum,
+    which is the thing that mean is a mean of — the card is the one object built to be shown
+    to somebody, and what it was missing was any sense of the spread behind the big number.
+    No axis and no ticks: it is a shape, the null under it is the only value it claims, and
+    every one of these matches is printed exactly in the table further down the page.
+    """
+    rows = player["matches"]
+    if len(rows) < 2:
+        return ""
+    w, h, pad = 320.0, 44.0, 3.0
+    reach = max(abs(row["mwpa"]) for row in rows) or 1.0
+    step = w / float(len(rows) - 1)
+
+    def y(value):
+        return h / 2.0 - value / reach * (h / 2.0 - pad)
+
+    line = " ".join(("M%.1f %.1f" if not i else "L%.1f %.1f")
+                    % (i * step, y(row["mwpa"])) for i, row in enumerate(rows))
+    marks = ['<path class="pc-spark-line" d="%s"/>' % line,
+             '<line class="pc-spark-null" x1="0" x2="%.0f" y1="%.1f" y2="%.1f"/>'
+             % (w, h / 2.0, h / 2.0)]
+    last = rows[-1]
+    marks.append('<circle class="pc-spark-end" cx="%.1f" cy="%.1f" r="2.4"/>'
+                 % (w, y(last["mwpa"])))
+    return ('  <div class="pc-spark p-%s">\n'
+            '    <p class="lab">%s</p>\n'
+            '    <svg viewBox="-1 0 %.0f %.0f" role="img" aria-label="%s">%s</svg>\n'
+            '  </div>') % (
+        esc(short),
+        esc("%s, every match in order" % label_for("mwpa")),
+        w + 2, h,
+        esc("%s over %s matches, oldest first, from %s to %s. Every value is in the match "
+            "table on this page." % (label_for("mwpa"), count(len(rows)),
+                                     num("mwpa", min(r["mwpa"] for r in rows)),
+                                     num("mwpa", max(r["mwpa"] for r in rows)))),
+        "".join(marks))
+
+
 def player_card(player, root):
     """The whole card: two registers, one hairline, and the identity strip under them."""
     head = player["headline"]
@@ -2068,33 +2145,40 @@ def player_card(player, root):
     # space bought is a strip of RESULTS under each register: the headline split by side here,
     # the record over there. Both belong to the register they sit in — the split is the same
     # estimate cut in two, the record is three counts — so neither crosses the hairline.
+    # THE INTERVAL IS OFF THE CARD. It was the span, its axis and a line of text — three
+    # renderings of one width on the object built to be shown to somebody — and the width is
+    # still stated exactly where it is load-bearing: under the waterfall, which is the figure
+    # whose whole subject is what the number is made of, and in every breakdown table on this
+    # page. What the space bought is three more cuts of the same estimate and the shape of the
+    # season behind it.
+    bests = card_bests(player)
     estimated = (
         '      <p class="card-reg">%s</p>\n'
         '      <p class="big">%s <span class="unit">%s</span></p>\n'
-        '      <div class="card-ival">%s\n'
-        '        <p class="card-axis"><span>%s</span><span class="is-null">%s</span>'
-        '<span>%s</span></p>\n'
-        '      </div>\n'
-        '      <p class="ival-text">%s %s</p>\n'
         '      <div class="pc-strip">\n'
         '        <p class="lab">%s</p>\n'
         '        %s\n'
-        '      </div>'
+        '      </div>%s'
     ) % (
         esc("Estimated"),
         signed("impact", head["impact"]), esc(label_for("impact").lower()),
-        interval_bar(head["impact"], head["impact_lo"], head["impact_hi"], scale,
-                     "%s, %s interval %s"
-                     % (num("impact", head["impact"]), confidence(),
-                        interval_text(head["impact_lo"], head["impact_hi"], "impact"))),
-        esc(num("impact", -scale)), esc(label_for("null").upper()), esc(num("impact", scale)),
-        esc("%s interval" % confidence()),
-        esc(interval_text(head["impact_lo"], head["impact_hi"], "impact")),
         # The strip says its own unit, because the two figures under it are the number above
         # them cut in two and a reader who lands on the strip first has to be able to tell.
         esc("%s by %s" % (label_for("impact"), label_for("side").lower())),
         card_tally([(signed(key, value), label_for(key))
-                    for key, value in card_side_split(player)]))
+                    for key, value in card_side_split(player)]),
+        ('\n      <div class="pc-strip">\n'
+         '        <p class="lab">%s</p>\n'
+         '        <ul class="pc-best">%s</ul>\n'
+         '      </div>' % (
+             # The unit is named here and nowhere else on the card, because it is the one
+             # figure on this object that is not per match.
+             esc("Strongest, in %s" % label_for("rate")),
+             "".join('<li><span class="pc-best-d">%s</span>'
+                     '<span class="pc-best-k%s">%s</span>%s</li>'
+                     % (esc(dimension), " thin" if thin else "", esc(key),
+                        signed("rate", rate))
+                     for dimension, key, rate, thin in bests))) if bests else "")
 
     counted = (
         '      <p class="card-reg">%s</p>\n'
@@ -2115,6 +2199,7 @@ def player_card(player, root):
         esc(label_for("won")),
         card_tally(card_record(player)))
 
+    spark = card_spark(player, short)
     strip = []
     agents = card_art_row(card, "agents", root, card_agent_cell, "matches", "matches")
     if agents:
@@ -2127,16 +2212,12 @@ def player_card(player, root):
                      % (esc(label_for("card_agents")), more, agents))
     weapons = card_art_row(card, "weapons", root, card_weapon_cell, "rounds", "rounds")
     if weapons:
+        # The excluded-pistol clause is off the card. It explained an absence nobody asked
+        # about, on the object that is meant to be read at a glance; the `by weapon` table on
+        # this page is where a reader who wants the weapon rule goes.
         strip.append('    <div class="card-strip-block">\n'
-                     '      <p class="card-reg">%s</p>\n%s\n'
-                     '      <p class="note">%s</p>\n    </div>'
-                     % (esc(label_for("card_weapons")), weapons,
-                        # The caveat travels with the thing it is about, in one clause, and the
-                        # excluded name and its count both come off the payload.
-                        esc("The %s is left out: everyone starts a pistol round holding it, so "
-                            "its %s rounds measure the act and not the player."
-                            % (card["weapon_excluded"]["name"],
-                               count(card["weapon_excluded"]["rounds"])))))
+                     '      <p class="card-reg">%s</p>\n%s\n    </div>'
+                     % (esc(label_for("card_weapons")), weapons))
 
     return (
         '  <div class="card p-%s">\n'
@@ -2144,9 +2225,12 @@ def player_card(player, root):
         '      <div class="card-reg-est">\n%s\n      </div>\n'
         '      <div class="card-reg-cnt">\n%s\n      </div>\n'
         '    </div>\n'
+        '%s'
         '    <div class="card-strip">\n%s\n    </div>\n'
         '  </div>'
-    ) % (esc(short), estimated, counted, "\n".join(strip))
+    ) % (esc(short), estimated, counted,
+         (spark + "\n") if spark else "",
+         "\n".join(strip))
 
 
 # ------------------------------------------------------------- the ledger waterfall
@@ -2177,6 +2261,50 @@ WF_MIN = 1.5             # a bar under this would not render; the number beside 
 WF_AIR = 1.04            # past the widest mark: no cap may land ON the edge of a plot, where
                          # a line that stopped on its own reads as one that was stopped
 WF_FOOT = 12.0
+
+
+ORDINALS = ["", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"]
+
+
+def component_ranks(players):
+    """Where each player stands on each row of the ledger, among the focal players.
+
+    THE ONE COMPARISON THE WATERFALL COULD NOT MAKE. A player's page shows what their own
+    number is made of and nothing about whether +1.52% of plant is a lot — and the answer is
+    four rows away on somebody else's page. This is the whole population: four people, so a
+    rank here is not a claim about anybody else in the lobby, and it is a SORT ORDER on a
+    quantity whose intervals overlap, which is why it prints as a small ordinal beside the
+    figure and never as a medal or a size.
+
+    Ties share the better ordinal, the way a leaderboard does, and the next rank skips.
+    """
+    out = {}
+    keys = set()
+    for player in players.values():
+        keys.update(player["components"].keys())
+    for key in keys:
+        scored = []
+        for short, player in players.items():
+            cell = player["components"].get(key)
+            if cell is None:
+                continue
+            scored.append((component_impact(cell, player["headline"])[0], short))
+        scored.sort(key=lambda pair: -pair[0])
+        rank = 0
+        for i, (value, short) in enumerate(scored):
+            if not i or value != scored[i - 1][0]:
+                rank = i + 1
+            out[(short, key)] = (rank, len(scored))
+    return out
+
+
+def rank_word(short, key):
+    """The ordinal, or nothing if this row is not ranked. Never invents a total it lacks."""
+    entry = COMPONENT_RANK.get((short, key))
+    if not entry:
+        return ""
+    rank, total = entry
+    return "%s of %s" % (ORDINALS[rank] if rank < len(ORDINALS) else count(rank), count(total))
 
 
 def components_waterfall(player, short):
@@ -2235,6 +2363,7 @@ def components_waterfall(player, short):
         definition = definition_of(key)
         rows.append({
             "label": label_for(key), "value": text, "kind": kind,
+            "rank": rank_word(short, key),
             "sub": "%s %s" % (num("share", cell["share"]), label_for("share").lower()),
             "title": "%s: %s per match, %s of the ledger, taking the running total from %s to "
                      "%s.%s" % (label_for(key), text, num("share", cell["share"]),
@@ -2245,6 +2374,9 @@ def components_waterfall(player, short):
     verdict = null_verdict(head["covers_zero"])
     rows.append({
         "label": label_for("impact"), "value": total, "kind": total_kind,
+        # The summary row is not ranked: the four headlines are on the front page, ordered,
+        # under a figure that says how wide their intervals are.
+        "rank": "",
         "sub": "%s %s" % (count(head["matches"]), label_for("matches").lower()),
         "title": "%s: %s per match, %s interval %s, which %s."
                  % (label_for("impact"), total, confidence(), interval, verdict)})
@@ -2256,7 +2388,11 @@ def components_waterfall(player, short):
     adv = TRACK_MONO_ADV * WF_LABEL_PX / WF_SUB_PX
     pad_l = round(max(max(len(row["label"]) for row in rows) * adv,
                       max(len(row["sub"]) for row in rows) * TRACK_MONO_ADV) + WF_LABEL_PAD, 1)
-    val_w = round(max(len(row["value"]) for row in rows) * adv + WF_VAL_PAD, 1)
+    # The value column now holds two strings on a component row — the figure and where it
+    # stands among the four — so the gutter is measured against both, stacked. The ordinal is
+    # set at the sub size, so it costs the column only what the wider of the two needs.
+    rank_w = max([len(row["rank"]) * TRACK_MONO_ADV for row in rows] or [0.0])
+    val_w = round(max(max(len(row["value"]) for row in rows) * adv, rank_w) + WF_VAL_PAD, 1)
     plot = WF_W - pad_l - val_w
 
     def x(value):
@@ -2319,8 +2455,15 @@ def components_waterfall(player, short):
                      % (cy(i) + 11, esc(row["sub"])))
         # EVERY BAR PRINTS ITS OWN NUMBER, in one right-aligned column, because a figure whose
         # values are only in the hover is a figure half the readers never get.
+        # THE FIGURE, AND WHERE IT STANDS. The ordinal sits under the number in the same
+        # column, at the sub size and in --quiet: it is a sort order on four overlapping
+        # intervals, so it may not carry the weight the measurement carries.
         marks.append('<text class="wf-val %s" x="%.0f" y="%.1f" text-anchor="end">%s</text>'
-                     % (row["kind"], WF_W - 2, cy(i) + 4, esc(row["value"])))
+                     % (row["kind"], WF_W - 2,
+                        cy(i) + (0.5 if row["rank"] else 4.0), esc(row["value"])))
+        if row["rank"]:
+            marks.append('<text class="wf-rank" x="%.0f" y="%.1f" text-anchor="end">%s</text>'
+                         % (WF_W - 2, cy(i) + 12.0, esc(row["rank"])))
 
     steps = [-scale, -scale / 2.0, GATE["null_rate"], scale / 2.0, scale]
     for k, value in enumerate(steps):
@@ -2956,6 +3099,7 @@ def main():
                  "--icon-card", "--weapon-card-w", "--weapon-card-h")
 
     CAV = dict((item["id"], item["text"]) for item in META["cav"])
+    COMPONENT_RANK.update(component_ranks(players))
     SCALE, drift, widened = pinned_scales(
         site, players, matches, rescale="--rescale" in sys.argv)
     # One reading of the score, shared by every surface that prints a result word.

@@ -899,12 +899,14 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 }
 .tracker .p-themarias .cum { stroke-dasharray: 5 3; }
 .tracker .p-trzzcko .cum { stroke-dasharray: 1.5 3; }
-.tracker .series .dot { fill: var(--hue, var(--quiet)); stroke: var(--field); stroke-width: 1; }
 .tracker .leader { stroke: var(--hue, var(--quiet)); stroke-width: 1; stroke-dasharray: 2 2; }
 .tracker .end-name { fill: var(--hue, var(--ink)); font-size: 11px; font-weight: 600; }
 .tracker .end-val { font-size: 11px; fill: var(--quiet); }
 .tracker .end-val.pos { fill: var(--up); }
 .tracker .end-val.neg { fill: var(--down); }
+/* A player with no match yet at the pointer's position has no running mean; the label says
+   NOT MEASURED rather than borrowing a number from that player's future. */
+.tracker .end-val.none { fill: var(--quiet); }
 /* One nearest-index crosshair band across the plot height, replacing the 99
    individual 12px hit circles — 87 of which had a neighbour inside 24px and
    every one of which was tabindex="-1". Every match is still addressable, in
@@ -956,15 +958,10 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
    is square: that is what makes the x = -y guide a true 45 degrees and each
    quadrant a true quarter.
 
-   THE PANELS ENCODE DENSITY IN OPACITY AND THE VALUE IN A DIGIT. A tone cannot
-   be read to a number, so every cell prints its own count and an empty cell
-   prints the middot every measured zero on this site gets. The ceiling on that
-   opacity is set in quad-app.js and it is a contrast floor, not a taste: --ink
-   over the darkest of the four hues measures 6.99:1 at it, and falls under 4.5
-   above it. */
+   THE DENSITY IS A FIELD, NOT A GRID. It is drawn under the marks on the same
+   plane, so the shape of a season and the match that made it are one figure. */
 .od-plot > svg { display: block; width: 100%; max-width: 680px; height: auto; margin: 0 auto; }
-.od-plot > svg:focus-visible,
-.od-panels > svg:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.od-plot > svg:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 /* The pointer appears only while a mark is live, which is exactly when a click
    opens that match. */
 .od-scatter.is-live { cursor: pointer; }
@@ -994,51 +991,34 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 .od-fig[data-only="themarias"] .od-series:not(.p-themarias),
 .od-fig[data-only="trzzcko"] .od-series:not(.p-trzzcko) { opacity: .22; }
 
-.od-panels { margin-top: var(--sp-2); }
-.od-fig .od-frame { fill: none; stroke: var(--rule); stroke-width: 1; }
-.od-fig .od-net { stroke: var(--rule); stroke-width: 1; }
-/* The null inside a 184px panel: the same ink as .axis-zero for the same
-   reason, at a weight that fits a box a third of the width. */
-.od-fig .od-null { stroke: var(--ink); stroke-width: 1.6; }
-.od-fig .od-cell { fill: var(--hue, var(--quiet)); }
-.od-fig .od-count { fill: var(--ink); font-size: 10.5px; }
-.od-fig .od-panel-name { fill: var(--hue, var(--ink)); font-size: 12px; font-weight: 600; }
-.od-fig .od-panel-n { fill: var(--quiet); font-size: 10.5px; }
-.od-fig .od-cursor { fill: none; stroke: var(--ink); stroke-width: 2; }
+/* ---- the density blob ------------------------------------------------------
+   THE FOUR BINNED PANELS ARE GONE and this is what does their job, on the plane
+   the marks are already on. Each match is a radial gradient in that player's
+   hue, transparent at its edge, and overlapping splats accumulate — so the ink
+   IS the density and the fade IS the probability falling to nothing. No cell,
+   no contour level, no threshold.
 
-.od-ramp {
-  display: flex; flex-wrap: wrap; align-items: center;
-  gap: var(--sp-2) var(--sp-3); margin: var(--sp-4) 0 var(--sp-2);
-}
-.od-ramp-lab {
-  font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .13em;
-  text-transform: uppercase; color: var(--quiet);
-}
-.od-step {
-  display: flex; align-items: center; gap: var(--sp-1);
-  font-family: var(--mono); font-size: var(--fs-label); color: var(--quiet);
-}
-/* THE RAMP IS DRAWN IN --ink AND NOT IN A HUE. What it encodes is density, and
-   density is not a person. The hairline stays at full strength at every step, so
-   the swatch at zero is an empty box rather than a missing one — which is what
-   an empty cell in a panel is too. */
-.od-sw { width: 20px; height: 12px; display: block; border: 1px solid var(--rule); }
-.od-sw i { display: block; height: 100%; background: var(--ink); }
+   THE HUE COMES FROM THE CLASS ON THE GRADIENT, not from a literal, so all four
+   fields move with the theme and contrast.py has nothing new to guard: the
+   stops set opacity only. The ceiling is 0.36 at the centre of one splat, which
+   is under the tone the panels topped out at, because these overlap and a
+   season can stack a dozen of them in the same place.
+
+   IT IS UNDER EVERYTHING. The blob layer is drawn before the marks and before
+   the two null rules, so no field ever paints over a datum, a gridline or the
+   value that means no claim. */
+.od-fig .od-blob circle { pointer-events: none; }
+.od-fig .od-kernel stop { stop-color: var(--hue, var(--quiet)); }
 
 .od-read {
   display: flex; flex-wrap: wrap; align-items: baseline;
   gap: var(--sp-1) var(--sp-4); min-height: 5.4em;
 }
-/* Four rows and a caption when a cell is under the pointer; the rest state is one
-   sentence. The floor holds the taller of the two so the panels do not jump. */
-.od-read-grid { min-height: 12.2em; }
-.od-rest { margin: 0; max-width: 70ch; font-family: var(--serif); font-size: var(--fs-body); }
 .od-q { white-space: nowrap; }
 .od-k { color: var(--quiet); }
 /* Weight only. The sign colour belongs to .pos/.neg/.zero, which are declared
    above this and would lose to a colour set here. */
 .od-v { font-weight: 600; }
-.od-cap { max-width: 78ch; }
 
 /* Four players at two quantities is a comparison down a column, not a sentence
    with middots in it — the same argument .tracker-tbl is built on. */
@@ -1353,27 +1333,37 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
    under 4.5. --quiet is the token that carries secondary text on this site and
    is guarded as text: 7.20 and 6.55. */
 .card-more { color: var(--quiet); letter-spacing: .06em; }
-.card-ival { margin-top: var(--sp-4); max-width: 340px; }
-/* THE NULL RULE, on the card. Inside a table the painted rule belongs to the
-   `z` column and runs the full height of it; here there is no column, so the
-   .ival's own zero element is what draws it — full strength --ink, heavier
-   than the span crossing it, exactly as it is everywhere else. Without this the
-   card would have shown an interval with nothing to be an interval AROUND. */
-.card-ival .ival { height: 22px; }
-.card-ival .ival-zero {
-  position: absolute; left: 50%; top: 0; bottom: 0;
-  width: 2px; margin-left: -1px; background: var(--ink);
+/* THE INTERVAL IS OFF THE CARD, and so are the span, the axis under it and the sentence
+   beside it — three renderings of one width on the one object built to be glanced at. The
+   width is still exact under the waterfall and in every breakdown table on the page. */
+
+/* THE THREE STRONGEST CUTS, one per dimension, and the one figure on this card that is not
+   per match — which is why the label above them names its unit. The dimension is the quiet
+   column and the cell's own name is the loud one: the reader is scanning for `Haven`, not for
+   the word `Map`. A thin cell keeps the dotted underline the table below gives it. */
+.pc-best { list-style: none; margin: 0; padding: 0; }
+.pc-best li {
+  display: grid; grid-template-columns: 5.5em 1fr auto;
+  align-items: baseline; gap: var(--sp-2);
+  padding: 3px 0; border-top: 1px solid var(--rule);
+  font-family: var(--mono); font-size: var(--fs-data);
 }
-.card-ival .ival-span { top: 8px; }
-.card-ival .ival-point { top: 5px; }
-.card-axis {
-  display: flex; justify-content: space-between; margin: var(--sp-1) 0 0;
-  font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .08em;
-  color: var(--quiet);
-}
-.card-axis .is-null { color: var(--ink); font-weight: 600; }
-.card .ival-text { margin-top: var(--sp-3); }
-.card .note { margin-top: var(--sp-2); max-width: 46ch; }
+.pc-best li:first-child { border-top: none; }
+.pc-best-d { color: var(--quiet); font-size: var(--fs-label); letter-spacing: .1em; text-transform: uppercase; }
+.pc-best-k { color: var(--ink); font-weight: var(--w-strong); overflow-wrap: anywhere; }
+.pc-best-k.thin { text-decoration: underline dotted var(--quiet); text-underline-offset: 3px; }
+
+/* THE SEASON, IN ONE LINE, and it is the raw datum rather than the running mean the front
+   page draws. The card had no sense of the spread behind its big number; this is that spread,
+   with no axis and no ticks because the only value it claims is the null under it. Every one
+   of these matches is printed exactly in the table below. */
+.pc-spark { padding: var(--sp-4) var(--sp-5); border-top: 1px solid var(--rule); }
+.pc-spark .lab { margin: 0 0 var(--sp-2); }
+.pc-spark svg { display: block; width: 100%; max-width: 420px; height: auto; }
+.pc-spark-line { fill: none; stroke: var(--hue, var(--quiet)); stroke-width: 1.4; stroke-linejoin: round; }
+/* The null, at the weight it has everywhere else on this site relative to its figure. */
+.pc-spark-null { stroke: var(--ink); stroke-width: 1.2; }
+.pc-spark-end { fill: var(--hue, var(--quiet)); stroke: var(--field); stroke-width: 1; }
 
 /* THE SCOREBOARD LINE. 15 / 15 / 5 is how this game writes a match on its own
    scoreboard, so the act is written the same way and the per-match qualifier is
@@ -1429,6 +1419,10 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
    instance: drawn OVER the bars it judges, because a rule this heavy under a
    solid bar is a rule the reader never sees cross anything. */
 .fig-wf .wf-null { stroke: var(--ink); stroke-width: 3; }
+/* WHERE THIS ROW STANDS AMONG THE FOUR. A sort order on four overlapping intervals, so it
+   is set at the sub size in --quiet under the figure it ranks — never at the measurement's
+   own weight, and never as a badge. */
+.fig-wf .wf-rank { fill: var(--quiet); font-size: 10.5px; letter-spacing: .06em; }
 /* Information, not decoration: the connector carries the arithmetic and the
    separator carries the summary row, so both clear the 3:1 mark floor. */
 .fig-wf .wf-link, .fig-wf .wf-sep { stroke: var(--rule-strong); stroke-width: 1; }
@@ -1484,10 +1478,6 @@ tbody tr.is-cursor td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
 /* MORE AIR IN THE ONE OBJECT THE FOUR OF THEM ACTUALLY LOOK AT. --sp-4 was the
    padding of a card with four figures on its face; there are nine now. */
 .card-reg-est, .card-reg-cnt, .card-strip-block { padding: var(--sp-5); }
-/* And the span took the width the register gained: the mark is the argument on
-   this side, and it was drawn to the measure of a card half that is now wider. */
-.card-ival { max-width: 420px; }
-
 /* ============================================================================
    THE SIX TABLES A PLAYER PAGE IS MADE OF: five breakdowns and the synergy.
 

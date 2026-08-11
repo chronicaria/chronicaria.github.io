@@ -456,16 +456,6 @@
       pad = (hi - lo) * 0.08 || 0.1;
       lo -= pad; hi += pad;
     }
-    /* A large minority of single-match values sit outside that axis: the raw
-       datum is several times as wide as any season mean, which is the finding
-       and not a rendering fault. Those are drawn as carets at the edge, counted
-       at run time in `clamped` and named in the description, and every one of
-       them keeps its exact value in the readout and a row in the index below. */
-    var clamped = 0;
-    series.forEach(function (s) {
-      s.rows.forEach(function (d) { if (d.r.mwpa > hi || d.r.mwpa < lo) clamped += 1; });
-    });
-
     /* ML holds the widest y tick. `impact` prints two decimals now, so `+10.00%` is 44.3
        units against the 38 the old gutter left: both signed gridlines were rendering as an
        unsigned `10.00%` with the + or - clipped off by the viewBox — the axis losing exactly
@@ -505,10 +495,9 @@
         + ((spec("impact") && spec("impact").unit) || "per match")
         + " over " + s.rows.length + " matches, first on " + fullDay(s.rows[0].r.started_at)
         + ", last on " + fullDay(last.r.started_at) + ".";
-    }).join(" ") + " Each line ends on that player's headline number. Each match's own "
-      + label("mwpa", "MWPA") + " is a mark on the same axis"
-      + (clamped ? ", and " + clamped + " of those fall outside it and are drawn as carets at its edge" : "")
-      + ". The same matches are listed under the figure with a link to each.";
+    }).join(" ") + " Each line ends on that player's headline number, and pointing at a match "
+      + "moves the four figures on the right to their value at that match. Every match's own "
+      + label("mwpa", "MWPA") + " is in the table under the figure and in the index below it.";
 
     /* grid, zero rule, axes */
     var g = sv("g", { class: "grid" }, svg);
@@ -548,21 +537,12 @@
       });
       sv("path", { class: "cum", d: d }, gp);
 
-      /* The dots are the data and they stay. What went is the 99 individual
-         12px hit circles that used to sit on top of them: 87 of 99 had a
-         neighbour inside 24px, every one was tabindex="-1", and the whole set
-         was a mouse-only affordance pretending to be a control. One nearest-
-         index crosshair band replaces them — the same layer the match figure
-         already has — and every match stays addressable as a real link in the
-         list under the figure and in the index below it. */
-      var dots = sv("g", { class: "dots" }, gp);
-      s.rows.forEach(function (row) {
-        var v = row.r.mwpa, dd;
-        if (v > hi) dd = caretPath(X(row.x), MT + 3, 4.2, 1);
-        else if (v < lo) dd = caretPath(X(row.x), MT + PH - 3, 4.2, -1);
-        else dd = markerPath(s.shape, X(row.x), Y(v), 3.2);
-        sv("path", { class: "dot", d: dd }, dots);
-      });
+      /* THE PER-MATCH MARKS ARE OFF THIS FIGURE. One hundred and eighty-six of them, four
+         series deep, drew a raw datum four times as wide as any season mean over the four
+         lines that are the finding — and the reader's question here is what a season did, not
+         what one match did. Every one of those values is still exact in the hover table below,
+         in the offense/defense figure under it, and as a row in the index. The lines are the
+         figure now; `SHAPE` survives because the legend key and that scatter still use it. */
 
       var last = s.rows[s.rows.length - 1];
       ends.push({ s: s, x: X(last.x), y: Y(last.m), v: last.m });
@@ -576,12 +556,45 @@
     }
     var spill = ends.length ? ends[ends.length - 1].y - (H - 16) : 0;
     if (spill > 0) ends.forEach(function (e) { e.y -= Math.min(spill, ends[0].y - MT); });
+    /* THE END LABEL IS A READOUT, NOT A CAPTION. It printed where the line finished, which
+       is the one value the reader can already see by looking at where the line finished. Under
+       the pointer it prints the line's height AT that match instead — the running impact per
+       match on the matches played so far — so the four numbers on the right and the four lines
+       on the left are the same object at the same moment. The leader follows the value; the
+       label's own y does not, because four labels re-solving their collisions on every
+       pointermove is motion carrying no finding. At rest they are the headline again. */
     ends.forEach(function (e) {
       var ge = sv("g", { class: "series end p-" + e.s.p.short }, svg);
-      sv("line", { class: "leader", x1: e.x + 5, x2: ML + PW + 14, y1: Y(e.v), y2: e.y }, ge);
+      e.leader = sv("line", { class: "leader", x1: e.x + 5, x2: ML + PW + 14,
+                              y1: Y(e.v), y2: e.y }, ge);
       text(ML + PW + 20, e.y - 1, who(e.s.p.name), "end-name", ge);
-      text(ML + PW + 20, e.y + 13, val("impact", e.v, MOVE), "end-val " + sgn(e.v), ge);
+      e.label = text(ML + PW + 20, e.y + 13, val("impact", e.v, MOVE),
+                     "end-val " + sgn(e.v), ge);
     });
+
+    /* `at` is a match index, or null for the rest state. A player who had not played by then
+       has no running mean yet: the label goes to an em dash rather than to their final number,
+       which would be a value from that player's future. */
+    function paintEnds(at) {
+      ends.forEach(function (e) {
+        var hit = null;
+        if (at !== null) {
+          e.s.rows.forEach(function (row) { if (row.x <= at) hit = row; });
+        } else {
+          hit = e.s.rows[e.s.rows.length - 1];
+        }
+        if (!hit) {
+          e.label.textContent = EM;
+          e.label.setAttribute("class", "end-val none");
+          e.leader.setAttribute("visibility", "hidden");
+          return;
+        }
+        e.label.textContent = val("impact", hit.m, MOVE);
+        e.label.setAttribute("class", "end-val " + sgn(hit.m));
+        e.leader.setAttribute("visibility", "visible");
+        e.leader.setAttribute("y1", Y(hit.m));
+      });
+    }
 
     /* ---- one crosshair, every live series ------------------------------ */
     var gCross = sv("g", { class: "cross", visibility: "hidden" }, svg);
@@ -601,16 +614,18 @@
 
     function rest() {
       gCross.setAttribute("visibility", "hidden");
+      paintEnds(null);
       readout.textContent = "";
       el("p", "tracker-rest", readout,
          label("impact", "Impact per match") + " as a line, ending on that player's headline "
-         + "number; each match's own " + label("mwpa", "MWPA") + " as a mark. Point anywhere "
-         + "for every player in that match.");
+         + "number. Point anywhere for every player in that match, and the figures on the "
+         + "right move to that match.");
     }
     function say(i) {
       var m = matches[i];
       if (!m) return;
       gCross.setAttribute("visibility", "visible");
+      paintEnds(i);
       band.setAttribute("x", X(i) - Math.max(PW / N, 6) / 2);
       crossV.setAttribute("x1", X(i));
       crossV.setAttribute("x2", X(i));
@@ -719,24 +734,19 @@
      is the only geometry in which x = -y is a true 45 degrees and each quadrant
      is a true quarter. The null is the centre of both.
 
-     WHY A SCATTER AND FOUR PANELS AND NOT ONE OF THEM. The scatter answers
-     WHICH MATCH and dies in the middle, where 151 player-matches overplot. The
-     panels answer WHAT A PLAYER LOOKS LIKE and cannot name a match. They are
-     binned on the axis the scatter is drawn on, which is what lets a reader
-     carry a shape from one to the other.
+     TWO LAYERS ON ONE PLANE, and they answer two questions. The marks answer WHICH MATCH
+     and die in the middle, where the seasons overplot. The blob under them answers WHAT A
+     PLAYER LOOKS LIKE — a soft field, densest where their matches pile up, fading to nothing
+     where they have none. This replaced four binned small multiples: those answered the second
+     question on a plane the reader had to carry the first question's shape across from memory,
+     and a 4x4 grid was as fine as the smallest season could be cut before every cell was one
+     match. A field has no cells to be too coarse.
 
-     WHY FOUR BINS A SIDE, and it is set by the smallest season and not the
-     largest. TheMarias played eight matches: on a 6x6 grid her panel is six
-     occupied cells holding one or two each, which draws the sample size and not
-     the player. Four a side puts the bin edges exactly on the null, so each
-     quadrant of the scatter is exactly four cells of a panel, and the fullest
-     cell of every panel holds between a fifth and a third of that season.
-
-     WHY THE INK IS A SHARE AND THE DIGIT IS THE COUNT. Eight matches against
-     seventy-five: one ramp in raw counts paints one panel dark and one panel
-     empty, and what the reader would be seeing is the exposure. Each cell is
-     inked by its share of THAT player's matches, on one ramp all four share,
-     and the count is printed inside it so no cell is legible only as a tone. */
+     THE BLOB IS A SUM OF SPLATS, so the alpha is continuous and no contour level is a
+     threshold anybody has to defend, and its bandwidth is pooled across all four for the
+     reason the panels shared one ramp: a per-player bandwidth would draw the smoothing rather
+     than the player. Four translucent fields over one plane are four fields over one plane, so
+     the legend isolates, and isolating is how this figure is read. */
   function drawOffenseDefense(host) {
     var OD = (Q && Q.od) || (SITE && SITE.od) || null;
     if (!OD || !SITE || !SITE.players) return;
@@ -852,6 +862,68 @@
     sv("line", { class: "axis-zero", x1: ML, x2: ML + PW, y1: Y(0), y2: Y(0) }, nulls);
     sv("line", { class: "axis-zero", y1: MT, y2: MT + PH, x1: X(0), x2: X(0) }, nulls);
 
+    /* ---- the density, as a blob per player ------------------------------ */
+    /* WHAT THE FOUR PANELS USED TO DO, done in place. A binned panel answered "what does this
+       player look like" but could not be laid over the scatter, so the reader carried a shape
+       between two figures by memory. This is the same question answered on the same plane: one
+       soft field per player, densest where their matches pile up and fading to nothing where
+       they have none, so a hill and a trough are visible without a grid to read them off.
+
+       IT IS A SUM OF SPLATS, NOT A CONTOUR. Each match is one radial gradient from the
+       player's hue at the centre to fully transparent at the bandwidth, and overlapping splats
+       accumulate — which IS a kernel density estimate, drawn rather than computed. No contour
+       levels means no threshold anybody has to defend, and the alpha is continuous, so the
+       fade is the probability rather than a step in it.
+
+       ONE BANDWIDTH FOR ALL FOUR, from the pooled spread, for the reason the panels shared one
+       ramp: a per-player bandwidth would make a tight season and a loose one draw the same
+       sized blob and the reader would be seeing the smoothing, not the player. Silverman on
+       the pooled sample, floored so eight matches still read as a shape. */
+    var pooled = [], bw;
+    series.forEach(function (s) {
+      s.rows.forEach(function (r) { pooled.push(r.a); pooled.push(r.d); });
+    });
+    (function () {
+      var n = pooled.length, mean = 0, i;
+      for (i = 0; i < n; i++) mean += pooled[i];
+      mean /= n;
+      var varsum = 0;
+      for (i = 0; i < n; i++) varsum += (pooled[i] - mean) * (pooled[i] - mean);
+      var sd = Math.sqrt(varsum / Math.max(1, n - 1));
+      /* Silverman's rule on the pooled halves, in data units, then into view units. Floored at
+         6% of the axis so the smallest season is a blob and not four dots with haloes. */
+      bw = Math.max(1.06 * sd * Math.pow(n, -0.2), AX * 0.06);
+    }());
+    var bwPx = bw / (2 * AX) * PW * 1.9;   /* the splat reaches ~2 bandwidths before it dies */
+
+    var defs = sv("defs", {}, svg);
+    /* UNDER THE FURNITURE, and this is placement rather than paint order by accident: the
+       group is created here but moved above the quadrant labels, the two null rules and every
+       mark, so a translucent field never tints the words, never softens the value that means
+       no claim, and never sits on top of a datum. */
+    var gBlob = sv("g", { class: "od-blobs" }, svg);
+    svg.insertBefore(gBlob, quad);
+    series.forEach(function (s) {
+      var id = uid("odk");
+      var grad = sv("radialGradient", { id: id, class: "od-kernel p-" + s.p.short }, defs);
+      /* The stops take the hue from the class on the gradient itself, so nothing here names a
+         colour and the whole ramp moves with the theme. Three stops rather than two: a linear
+         fade reads as a disc with an edge, and this reads as a field. */
+      sv("stop", { offset: "0%", "stop-opacity": 0.36 }, grad);
+      sv("stop", { offset: "45%", "stop-opacity": 0.13 }, grad);
+      sv("stop", { offset: "100%", "stop-opacity": 0 }, grad);
+      var gp = sv("g", { class: "od-blob p-" + s.p.short }, gBlob);
+      s.rows.forEach(function (r) {
+        var cx = Math.max(-AX, Math.min(AX, r.a)), cy = Math.max(-AX, Math.min(AX, r.d));
+        sv("circle", { cx: X(cx), cy: Y(cy), r: bwPx, fill: "url(#" + id + ")" }, gp);
+      });
+    });
+    /* The plot box clips them: a season near the edge would otherwise paint over the ticks. */
+    var clip = uid("odc");
+    sv("rect", { x: ML, y: MT, width: PW, height: PH },
+       sv("clipPath", { id: clip }, defs));
+    gBlob.setAttribute("clip-path", "url(#" + clip + ")");
+
     var marks = [];
     series.forEach(function (s) {
       var gp = sv("g", { class: "od-series p-" + s.p.short }, svg);
@@ -956,197 +1028,9 @@
       if (evt.key === "Enter") { evt.preventDefault(); openMatch(); }
     });
 
-    /* ---- the small multiples --------------------------------------------- */
-    var BINS = 4;
-    function binOf(v) {
-      var k = Math.floor((v + AX) / (2 * AX) * BINS);
-      return k < 0 ? 0 : k > BINS - 1 ? BINS - 1 : k;   /* the outer bins are open-ended */
-    }
-    function edgeOf(k) { return -AX + k * (2 * AX / BINS); }
-    function rangeOf(k, key) {
-      if (!k) return "up to " + val(key, edgeOf(1));
-      if (k === BINS - 1) return val(key, edgeOf(k)) + " and above";
-      return val(key, edgeOf(k)) + " to " + val(key, edgeOf(k + 1));
-    }
-
-    var top = 0, small = series[0], big = series[0];
-    series.forEach(function (s) {
-      var grid = [], j, i;
-      for (j = 0; j < BINS; j++) { grid[j] = []; for (i = 0; i < BINS; i++) grid[j][i] = 0; }
-      s.rows.forEach(function (r) { grid[binOf(r.d)][binOf(r.a)] += 1; });
-      s.grid = grid;
-      for (j = 0; j < BINS; j++) {
-        for (i = 0; i < BINS; i++) top = Math.max(top, grid[j][i] / s.rows.length);
-      }
-      if (s.rows.length < small.rows.length) small = s;
-      if (s.rows.length > big.rows.length) big = s;
-    });
-    /* The ramp top, rounded UP to the next five points of share so the legend
-       reads in round numbers. Widened, never narrowed: no cell can clip it. */
-    var TOP = Math.ceil(top / 0.05) * 0.05 || 0.05;
-    /* The most ink a cell may take, and it is a contrast floor rather than a
-       taste: the count is printed inside the cell, and --ink over the darkest of
-       the four hues stops clearing 4.5:1 above this. */
-    var INK = 0.42;
-
-    var CELL = 46, PLOT = CELL * BINS, SLOT = 240, PX = 52, PY = 38;
-    var GW = SLOT * series.length, GH = PY + PLOT + 44;
-
-    var ramp = el("div", "od-ramp", host);
-    ramp.setAttribute("role", "group");
-    ramp.setAttribute("aria-label", "The ink ramp, in share of a player's own matches");
-    el("span", "od-ramp-lab", ramp, "share of that player's matches");
-    var qi, st, sw;
-    for (qi = 0; qi <= 4; qi++) {
-      st = el("span", "od-step", ramp);
-      sw = el("span", "od-sw", st);
-      el("i", null, sw).style.opacity = (INK * qi / 4).toFixed(3);
-      el("b", null, st, num(TOP * qi / 4, SHARE));
-    }
-
-    var pan = el("div", "fig-scroll od-panels", host);
-    pan.tabIndex = 0;
-    pan.setAttribute("role", "region");
-    pan.setAttribute("aria-label", "One binned panel per player — scrolls sideways");
-    var gsvg = sv("svg", {
-      class: "od-grid", viewBox: "0 0 " + GW + " " + GH,
-      preserveAspectRatio: "xMidYMid meet", role: "img", tabindex: "0"
-    }, pan);
-    var gtId = uid("od"), gdId = uid("od");
-    gsvg.setAttribute("aria-labelledby", gtId + " " + gdId);
-    sv("title", { id: gtId }, gsvg).textContent =
-      "The same plane as the scatter, in " + BINS + " by " + BINS + " bins, one panel per player, "
-      + "each inked by that cell's share of that player's own matches.";
-    sv("desc", { id: gdId }, gsvg).textContent = series.map(function (s) {
-      var best = { c: -1, i: 0, j: 0 }, j, i;
-      for (j = 0; j < BINS; j++) {
-        for (i = 0; i < BINS; i++) if (s.grid[j][i] > best.c) best = { c: s.grid[j][i], i: i, j: j };
-      }
-      return who(s.p.name) + ": " + s.rows.length + " matches, fullest cell " + best.c
-        + " of them at " + A_ + " " + rangeOf(best.i, "attack_mwpa") + ", "
-        + D_ + " " + rangeOf(best.j, "defense_mwpa") + ".";
-    }).join(" ") + " Every count is printed in its own cell.";
-
-    var cursors = [];
-    series.forEach(function (s, k) {
-      var x0 = SLOT * k + PX, y0 = PY, gp = sv("g", { class: "od-series p-" + s.p.short }, gsvg);
-      var j, i, c, cx, cy, net, nl;
-      text(x0, PY - 18, who(s.p.name), "od-panel-name", gp, "start");
-      text(x0 + PLOT, PY - 18, s.rows.length + " matches", "od-panel-n", gp, "end");
-      for (j = 0; j < BINS; j++) {
-        for (i = 0; i < BINS; i++) {
-          c = s.grid[j][i];
-          cx = x0 + i * CELL;
-          cy = y0 + (BINS - 1 - j) * CELL;
-          sv("rect", { class: "od-cell", x: cx, y: cy, width: CELL, height: CELL,
-                       "fill-opacity": (INK * (c / s.rows.length) / TOP).toFixed(3) }, gp);
-          /* Ink carries the density, the digit carries the count, and a cell
-             nothing landed in gets the middot every measured zero on this site
-             gets. Never a blank. */
-          text(cx + CELL / 2, cy + CELL / 2 + 4, c ? String(c) : MID, "od-count", gp, "middle");
-        }
-      }
-      net = sv("g", { class: "od-net" }, gp);
-      for (i = 1; i < BINS; i++) {
-        if (i === BINS / 2) continue;          /* that edge is the null, drawn in --ink below */
-        sv("line", { x1: x0 + i * CELL, x2: x0 + i * CELL, y1: y0, y2: y0 + PLOT }, net);
-        sv("line", { y1: y0 + i * CELL, y2: y0 + i * CELL, x1: x0, x2: x0 + PLOT }, net);
-      }
-      nl = sv("g", { class: "od-null" }, gp);
-      sv("line", { x1: x0 + PLOT / 2, x2: x0 + PLOT / 2, y1: y0, y2: y0 + PLOT }, nl);
-      sv("line", { y1: y0 + PLOT / 2, y2: y0 + PLOT / 2, x1: x0, x2: x0 + PLOT }, nl);
-      sv("rect", { class: "od-frame", x: x0, y: y0, width: PLOT, height: PLOT }, gp);
-      cursors.push(sv("rect", { class: "od-cursor", x: x0, y: y0, width: CELL, height: CELL,
-                                visibility: "hidden" }, gp));
-    });
-
-    /* One axis, labelled once. The four panels are the same box on the same
-       bins — that is the only reason they can be compared — so labelling all
-       four would be the same three numbers printed twelve times. */
-    var ax = sv("g", { class: "grid" }, gsvg);
-    [-AX, 0, AX].forEach(function (t, n) {
-      text(PX + n * PLOT / 2, PY + PLOT + 16, val("attack_mwpa", t), "tick", ax,
-           n === 0 ? "start" : n === 1 ? "middle" : "end");
-      text(PX - 6, PY + PLOT - n * PLOT / 2 + 3.5, val("defense_mwpa", t), "tick", ax, "end");
-    });
-    text(PX, GH - 6, A_ + " across, " + D_ + " up", "axis-title", ax, "start");
-
-    var pread = el("div", "fig-readout od-read od-read-grid", host);
-    pread.setAttribute("role", "status");
-    pread.setAttribute("aria-live", "polite");
-    var ci = -1, cj = -1;
-
-    function restPanels() {
-      if (ci < 0 && pread.firstChild) return;
-      cursors.forEach(function (c) { c.setAttribute("visibility", "hidden"); });
-      ci = -1; cj = -1;
-      pread.textContent = "";
-      el("p", "od-rest", pread,
-         "Point at a cell for the same cell in all four panels. The ink is that cell's share of "
-         + "that player's own matches, on one ramp, so a season of " + small.rows.length
-         + " and a season of " + big.rows.length + " can be compared; the number in the cell is "
-         + "the count.");
-    }
-    function sayCell(i2, j2) {
-      ci = i2; cj = j2;
-      cursors.forEach(function (c, k) {
-        c.setAttribute("x", SLOT * k + PX + i2 * CELL);
-        c.setAttribute("y", PY + (BINS - 1 - j2) * CELL);
-        c.setAttribute("visibility", "visible");
-      });
-      pread.textContent = "";
-      var tb = el("table", "od-tbl", pread);
-      el("caption", null, tb, A_ + " " + rangeOf(i2, "attack_mwpa") + " · "
-        + D_ + " " + rangeOf(j2, "defense_mwpa"));
-      var hr = el("tr", null, el("thead", null, tb));
-      [["Player", "l"], [label("matches", "Matches"), "n"], ["Share", "n"]].forEach(function (h) {
-        el("th", h[1], hr, h[0]).setAttribute("scope", "col");
-      });
-      var body = el("tbody", null, tb);
-      series.forEach(function (s) {
-        var c = s.grid[j2][i2], tr = el("tr", "p-" + s.p.short, body);
-        el("th", "l hue", tr, who(s.p.name)).setAttribute("scope", "row");
-        el("td", c ? "n" : "n zero", tr, c ? String(c) : MID);
-        el("td", c ? "n" : "n zero", tr, c ? num(c / s.rows.length, SHARE) : MID);
-      });
-    }
-    gsvg.addEventListener("pointermove", function (evt) {
-      var box = gsvg.getBoundingClientRect(), k = box.width / GW || 1;
-      var vx = (evt.clientX - box.left) / k, vy = (evt.clientY - box.top) / k;
-      var lx = vx - Math.floor(vx / SLOT) * SLOT - PX, ly = vy - PY, i2, j2;
-      if (lx < 0 || lx >= PLOT || ly < 0 || ly >= PLOT) { if (ci >= 0) restPanels(); return; }
-      i2 = Math.floor(lx / CELL);
-      j2 = BINS - 1 - Math.floor(ly / CELL);
-      if (i2 !== ci || j2 !== cj) sayCell(i2, j2);
-    });
-    gsvg.addEventListener("pointerleave", restPanels);
-    gsvg.addEventListener("blur", restPanels);
-    gsvg.addEventListener("keydown", function (evt) {
-      var dx = evt.key === "ArrowRight" ? 1 : evt.key === "ArrowLeft" ? -1 : 0;
-      var dy = evt.key === "ArrowUp" ? 1 : evt.key === "ArrowDown" ? -1 : 0;
-      if (!dx && !dy) return;
-      evt.preventDefault();
-      /* The first press opens on the cell just above and right of the null, not
-         on a corner: that is where the seasons are, and a cursor that starts in
-         an empty corner starts on a fact nobody has. */
-      if (ci < 0) { sayCell(BINS / 2, BINS / 2); return; }
-      sayCell(Math.max(0, Math.min(BINS - 1, ci + dx)),
-              Math.max(0, Math.min(BINS - 1, cj + dy)));
-    });
-
-    /* One line. The reader can see the grid, the panel headings already print each season's
-       match count, and the readout above says what the ink is; what a caption still has to
-       carry is why the grid is this coarse — the smallest season — and where the outliers
-       went. Everything else was prose restating the picture. */
-    var cap = el("p", "note od-cap", host);
-    cap.textContent = BINS + " bins a side, edges on the null, which is as fine as "
-      + who(small.p.name) + "'s " + small.rows.length
-      + " matches go before a cell is one match. The outer bins are open-ended"
-      + (off ? " and hold the " + off + " of " + total + " player-matches off the axis." : ".");
-
-    /* The legend keys isolate a player in BOTH figures at once. Each carries
-       that player's exposure and the mean of each half, which is the one-line
-       version of the panel beside it. */
+    /* The legend keys isolate a player — which on this figure is the whole reading, because
+       four translucent fields over one plane are four fields over one plane. Each key carries
+       that player's exposure and the mean of each half, which is where their blob is centred. */
     series.forEach(function (s) {
       var b = el("button", "legend-key p-" + s.p.short, legend), key;
       b.type = "button";
@@ -1170,7 +1054,6 @@
     });
 
     restScatter();
-    restPanels();
   }
 
   /* THE MATCH FIGURE. One continuous match win probability curve; the vertical

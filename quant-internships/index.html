@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Summer 2027 quant internships · the whole board</title>
-<meta name="description" content="Every Summer 2027 quantitative trading, research and developer internship in the United States open to an undergraduate graduating May 2028 — market makers, multistrat funds, quant asset managers, bank strats, digital assets, event contracts, energy — graded S to F, with one-application policies and direct links.">
+<meta name="description" content="Every US Summer 2027 quant trading, research and developer internship open to an undergraduate graduating May 2028, in one table — with pay, application limits and interview intel.">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("quant-internships-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&display=swap">
 <link rel="stylesheet" href="assets/style.css">
 <script defer src="/assets/hub.js"></script></head>
 <body>
@@ -18,11 +19,8 @@
   <div class="masthead">
     <h1>Summer 2027 <em>quant internships</em></h1>
     <p class="standfirst">
-      Every quantitative trading, research and developer seat in the United States open to an
-      undergraduate graduating <strong>May 2028</strong>. One card per firm, every role that firm
-      posts inside it — because the one-application policies are a firm-level fact, and the roles
-      competing for that single slot have to be read together.
-      PhD- and Master's-only postings are excluded by name.
+      Every US quant trading, research and developer seat open to an undergraduate graduating
+      <strong>May 2028</strong>.
     </p>
   </div>
   <div class="header-side">
@@ -40,24 +38,24 @@
       <span class="dot"></span>Andrew mode
     </button>
     <span class="filter-group">
-      <span class="label">Role</span>
       <button class="chip" type="button" data-type="QR" aria-pressed="false">QR</button>
       <button class="chip" type="button" data-type="QT" aria-pressed="false">QT</button>
       <button class="chip" type="button" data-type="QD" aria-pressed="false">QD</button>
     </span>
     <span class="filter-group">
-      <span class="label">Grade</span>
       <button class="chip g" type="button" data-grade="S" aria-pressed="false">S</button>
       <button class="chip g" type="button" data-grade="A" aria-pressed="false">A</button>
       <button class="chip g" type="button" data-grade="B" aria-pressed="false">B</button>
       <button class="chip g" type="button" data-grade="C" aria-pressed="false">C</button>
     </span>
     <input class="search" id="search" type="search" placeholder="Search firms, roles, interview notes…" aria-label="Search roles and interview notes">
-    <span class="spacer"></span>
+    <button class="chip more" type="button" id="more-toggle" aria-pressed="false" aria-controls="more-filters">Filters +</button>
     <button class="reset" type="button" id="reset">Reset</button>
+    <span class="spacer"></span>
+    <p class="summary" id="summary"></p>
   </div>
 
-  <div class="filter-row second">
+  <div class="filter-row second" id="more-filters" hidden>
     <span class="filter-group">
       <span class="label">Kind</span>
       <button class="chip" type="button" data-cat="mm" aria-pressed="false">Market makers</button>
@@ -84,122 +82,109 @@
       <button class="chip" type="button" id="only-one" aria-pressed="false">One-app only</button>
       <button class="chip" type="button" id="only-deadline" aria-pressed="false">Has a deadline</button>
       <button class="chip" type="button" id="hide-applied" aria-pressed="false">Hide applied</button>
-    </span>
-    <span class="spacer"></span>
-    <span class="filter-group sorts">
-      <span class="label">Sort</span>
-      <button class="sortbtn" type="button" data-sortkey="fit" aria-pressed="true">Fit</button>
-      <button class="sortbtn" type="button" data-sortkey="grade" aria-pressed="false">Grade</button>
-      <button class="sortbtn" type="button" data-sortkey="comp" aria-pressed="false">Pay</button>
-      <button class="sortbtn" type="button" data-sortkey="deadline" aria-pressed="false">Deadline</button>
-      <button class="sortbtn" type="button" data-sortkey="firm" aria-pressed="false">A–Z</button>
+      <button class="sortbtn" type="button" data-sortkey="deadline" aria-pressed="false">Sort by deadline</button>
     </span>
   </div>
-
-  <p class="summary" id="summary"></p>
 </div>
 
 <main id="main">
-  <div id="board" class="board"></div>
+  <table class="board" id="board">
+    <thead>
+      <tr>
+        <th class="c-grade" scope="col"><button class="sortbtn" type="button" data-sortkey="grade" aria-pressed="false">Gr</button></th>
+        <th class="c-firm" scope="col"><button class="sortbtn" type="button" data-sortkey="firm" aria-pressed="false">Firm</button></th>
+        <th class="c-role" scope="col">Role</th>
+        <th class="c-loc" scope="col">Where</th>
+        <th class="c-pay" scope="col"><button class="sortbtn" type="button" data-sortkey="comp" aria-pressed="false">Pay</button></th>
+        <th class="c-fit" scope="col"><button class="sortbtn" type="button" data-sortkey="fit" aria-pressed="true">Fit</button></th>
+        <th class="c-act" scope="col"><span class="vh">Apply</span></th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
   <p class="empty" id="empty" hidden>Nothing matches those filters.</p>
 
   <section class="notes">
-    <h2>How to read this</h2>
-    <ul>
-      <li><strong>Andrew mode</strong> is on by default. It sorts by fit against one specific
-        résumé — Duke mathematics and computer science, May 2028, a daily-RAPM basketball valuation
-        model, a Julia PDE library, a real-money Polymarket and Kalshi book, a county-level
-        degree-day pricing engine — orders roles <span class="rt" data-t="QR">QR</span> before
-        <span class="rt" data-t="QT">QT</span> before <span class="rt" data-t="QD">QD</span>,
-        hides grade F, and prints the reason each seat scored what it did. Turn it off
-        (or press <code>a</code>) and the board reverts to a neutral, grade-ordered list.
-        The weights live in one table at the top of <code>assets/app.js</code>.</li>
-      <li><strong>Grade</strong> is a read on selectivity, compensation and exit value — not a
-        judgement of the firm as a business.
-        <span class="grade sm" data-g="S">S</span> is the handful of seats where an offer resets
-        your career. <span class="grade sm" data-g="A">A</span> is elite and pays at the top of
-        the market. <span class="grade sm" data-g="B">B</span> is a real quant seat at a real
-        quant firm. <span class="grade sm" data-g="C">C</span> is smaller, regional, or a genuine
-        quant desk inside a firm that is not primarily a quant shop.
-        <strong>Every firm on this board has been vetted against community sources</strong> —
-        r/quant, QuantNet, Blind, levels.fyi — for whether the work is actually quantitative.
-        Firms whose "quant" seat turned out to be operations, risk reporting, regulatory
-        engineering or team-side sports analytics have been removed rather than parked in a
-        low tier.</li>
-      <li><strong>Interview process</strong> sits in a collapsed panel on each card. It is
-        assembled from what candidates have publicly reported — round counts, assessment
-        formats and time limits, the question types that actually come up, and the stage people
-        say they were unprepared for. Each panel carries a confidence mark and links its
-        sources. It is a prior, not a promise: formats change between cycles, and community
-        reports are anecdote.</li>
-      <li><strong>Type.</strong> <span class="rt" data-t="QT">QT</span> quantitative trader,
-        <span class="rt" data-t="QR">QR</span> quantitative researcher,
-        <span class="rt" data-t="QD">QD</span> quantitative developer. Pure software, FPGA and
-        hardware roles are left out even at quant firms.</li>
-      <li><strong>The policy line under each firm name</strong> is the application limit. Where it
-        is red the choice is usually irreversible for the season, and Andrew mode prints a
-        <em>spend it on</em> recommendation naming the single role to use that application on.</li>
-      <li><strong>Pay</strong> is what the firm posts where a pay-transparency law forces it, and
-        what candidates report otherwise. The source is printed under every figure. Treat reported
-        figures as approximate.</li>
-      <li><strong>Search reaches inside the interview panels.</strong> That is the point of having
-        them: <code>cooldown</code> returns Optiver alone, <code>market making game</code> finds the
-        firms that run one, and <code>take-home</code>, <code>superday</code>, <code>case study</code>
-        and <code>poker</code> each pick out a different shape of process. Search a format, not just
-        a firm.</li>
-      <li><strong>Mark</strong> stores an "applied" flag in this browser only. Nothing leaves the page.</li>
-    </ul>
+    <details class="note">
+      <summary>How to read the table</summary>
+      <ul class="legend">
+        <li><span class="grade sm" data-g="S">S</span> an offer resets your career — three firms:
+          Jane Street, Citadel Securities, HRT</li>
+        <li><span class="grade sm" data-g="A">A</span> elite, top-of-market pay</li>
+        <li><span class="grade sm" data-g="B">B</span> a real quant seat at a real quant firm</li>
+        <li><span class="grade sm" data-g="C">C</span> small, regional, or a quant desk in a firm that
+          is not a quant shop</li>
+        <li><span class="rt" data-t="QR">QR</span> researcher ·
+          <span class="rt" data-t="QT">QT</span> trader ·
+          <span class="rt" data-t="QD">QD</span> developer</li>
+        <li><span class="one">1&times;</span> one application for the whole firm, all season</li>
+      </ul>
+      <ul>
+        <li><strong>Ink</strong> pay was posted in the job description, <strong>grey</strong> is
+          candidate-reported, <strong>+</strong> means the row has more.</li>
+        <li><strong>Search reaches inside the interview panels</strong>, which is the point of having
+          them: <code>cooldown</code> returns Optiver alone, <code>market making game</code> finds the
+          firms that run one.</li>
+        <li><strong>Andrew mode</strong> sorts by fit against one résumé and puts QR above QT.
+          <strong>✓</strong> is stored in this browser only; nothing leaves the page.</li>
+        <li>Twenty-one firms were <strong>removed</strong> in August 2026 — no undergraduate-eligible
+          Summer 2027 req to apply to, or a "quant" seat that turned out to be portfolio analytics,
+          dashboarding or fundamental equity research. PhD- and Master's-only reqs are out by rule.</li>
+      </ul>
+    </details>
 
-    <h2 id="strategy">The shape of the decision</h2>
-    <p>Undergraduate QR and undergraduate QT are not the same contest, and the difference is not
-      the one most people assume.</p>
-    <ul>
-      <li><strong>You are not competing with PhDs for QR.</strong> At Citadel Securities, IMC,
-        Jump, Two Sigma, Virtu, HRT, SIG, Optiver, Five Rings and Tower the PhD candidates apply
-        to a <em>different requisition</em>. Those reqs are excluded from this board by name, in
-        the header of <code>assets/data.js</code>. The undergraduate-eligible QR seat pools you
-        with master's students, not with fifth-year PhDs.</li>
-      <li><strong>QT is the only pool that is one hundred per cent your peers</strong> — and that
-        cuts against it, not for it. There is no degree gate, so the funnel is the largest in the
-        market and the résumé stops mattering. The filter moves to the assessment.</li>
-      <li><strong>So the résumé does its work in QR and almost none of it in QT.</strong> That is
-        the argument for leading QR wherever an undergraduate-eligible QR seat exists, and taking
-        QT where it does not.</li>
-      <li><strong>Where a firm forces one application</strong>, that is the only place the question
-        actually bites. Andrew mode makes the call on the card.</li>
-    </ul>
+    <details class="note" id="strategy">
+      <summary>QR or QT — mostly not a decision</summary>
+      <ul>
+        <li><strong>It is a forced choice at one firm out of 65.</strong> Virtu, which is
+          one-application-only and posts a QR req titled "(Undergrad)". At HRT and Optiver a single
+          requisition explicitly covers both. Everywhere else, filing both costs a form. Lead QR in
+          how the résumé is written and where the prep goes; run QT in parallel; stop treating it as
+          a strategy.</li>
+        <li><strong>"You are not competing with PhDs for QR" is only half true</strong>, and an
+          earlier version of this page asserted it flatly. Separate BS/MS-eligible QR requisitions do
+          exist at Citadel Securities, Citadel, IMC, D. E. Shaw, DRW, Jump, Virtu, Akuna, AQR,
+          Arrowstreet, Aquatic and Voloridge. They do <em>not</em> at Two Sigma, Jane Street or HRT,
+          where one all-levels req puts undergraduates directly against PhDs — and at
+          <strong>SIG and Five Rings the QR seat is PhD-only</strong>, so the undergraduate door
+          there is the trading req.</li>
+        <li><strong>QT has no degree gate</strong>, so the funnel is the largest in the market and
+          the résumé stops mattering — but note the failure mode this creates. Applying to ten QT
+          desks is not ten independent draws: the post-assessment rounds are the same games and the
+          same person every time.</li>
+        <li><strong>The timed arithmetic screen is the real gate</strong>, and it is the one part of
+          this that is purely trainable. Be sceptical of the thresholds people circulate for the
+          80-in-8 (55, 56, 65 all get quoted) — none is employer-confirmed and Optiver publishes no
+          figure. Drill it because it is a hard gate, not because someone attached a number to it.</li>
+        <li><strong>Optiver is the one firm to hold back.</strong> One campus role at a time
+          <em>plus</em> an eight-month global cooldown after a failed assessment — the only cooldown
+          on the board. A cold attempt is genuinely expensive. Everywhere else, apply now: review is
+          rolling and the desirable offices fill first.</li>
+      </ul>
+    </details>
 
-    <h2>Applying</h2>
-    <ul>
-      <li>Almost every prop shop here reviews on a <strong>rolling basis</strong>. Applying in
-        early August is materially better than applying in late September with the same résumé.
-        Banks are the exception — they have hard deadlines. Filter to
-        <em>Has a deadline</em> and sort by <em>Deadline</em> before doing anything else.</li>
-      <li>The online assessments are the real filter, not the résumé. Most are timed mental
-        arithmetic and probability. Practise before you spend an application on a firm you care
-        about — and sequence the firms with a re-application cooldown <em>last</em>.</li>
-      <li>Watch the graduation windows. Several postings name a range rather than a class year;
-        the range is quoted verbatim under each role title.</li>
-      <li><strong>Apply on the firm's own board.</strong> Scraper mirrors — Lensa, Jobright,
-        ZipRecruiter reposts, BeBee — re-host real requisitions with stale windows, wrong pay
-        and dead links, and they outrank the firms themselves. Three impostor applicant-tracking
-        board tokens turned up while building this page: Greenhouse <code>bridgeway</code>,
-        Ashby <code>dimensional</code> and Ashby <code>numeric</code> all resolve to unrelated
-        companies. And nothing that sells you a "funded account" evaluation — FTMO, Apex Trader
-        Funding, TopStep — is an employer; the CFTC sued MyForexFunds over that model in 2023.</li>
-    </ul>
-
-    <h2>Keyboard</h2>
-    <ul>
-      <li><code>/</code> focus search · <code>Esc</code> clear it</li>
-      <li><code>1</code> <code>2</code> <code>3</code> toggle QR / QT / QD · <code>a</code> Andrew mode · <code>0</code> reset everything</li>
-    </ul>
+    <details class="note">
+      <summary>Applying</summary>
+      <ul>
+        <li>Almost every prop shop reviews <strong>rolling</strong>. Early August beats late September
+          with the same résumé. Banks are the exception — filter to <em>Has a deadline</em> and sort by
+          deadline before doing anything else.</li>
+        <li>The online assessments are the real filter, not the résumé. Most are timed mental arithmetic
+          and probability. Sequence the firms with a re-application cooldown <em>last</em>.</li>
+        <li><strong>Apply on the firm's own board.</strong> Lensa, Jobright, ZipRecruiter reposts and
+          BeBee re-host real reqs with stale windows and dead links, and they outrank the firms
+          themselves in search. And nothing selling a "funded account" evaluation — FTMO, Apex,
+          TopStep — is an employer; the CFTC sued MyForexFunds over that model in 2023.</li>
+        <li><code>/</code> search · <code>Esc</code> clear · <code>1</code> <code>2</code> <code>3</code>
+          toggle QR/QT/QD · <code>a</code> Andrew mode · <code>0</code> reset.</li>
+      </ul>
+    </details>
   </section>
 </main>
 
 <footer class="site-footer">
   <span id="stamp">Checked 5 August 2026</span>
-  <span>Postings close without notice. Verify on the firm's own page before relying on a card.</span>
+  <span>Postings close without notice. Verify on the firm's own page before relying on a row.</span>
 </footer>
 
 <script src="assets/data.js"></script>

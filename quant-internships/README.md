@@ -4,8 +4,9 @@ A single static page listing every Summer 2027 quantitative trading, research an
 internship in the United States open to an undergraduate graduating **May 2028**, with direct
 application links, posted compensation, and each firm's application-limit policy.
 
-**86 firms, 145 roles**, checked 5 August 2026. Every firm carries a community-sourced
-interview-process panel and, where one could be established, an honest reputation read.
+**67 firms, 126 roles**, data checked 5 August 2026, graded, culled and expanded 10 August 2026. Every firm
+carries a community-sourced interview-process panel and, where one could be established, an honest
+reputation read.
 
 Built the same way as the other sites in `~/Desktop/Code`: static HTML, one token-based
 stylesheet, one vanilla-JS IIFE. No framework, no bundler, no `package.json`.
@@ -13,7 +14,7 @@ stylesheet, one vanilla-JS IIFE. No framework, no bundler, no `package.json`.
 ```
 index.html          markup, filter controls, board shell, notes
 assets/style.css    design tokens + all styling; light and dark via [data-theme]
-assets/app.js       fit model, filtering, sorting, search, applied-tracking (one IIFE)
+assets/app.js       fit model, table render, drawers, filtering, sorting, search (one IIFE)
 assets/data.js      the firms and roles — this is the only file you normally edit
 favicon.svg
 ```
@@ -30,10 +31,37 @@ Then open <http://localhost:8787/quant-internships/>.
 
 ## Shape
 
-`data.js` exports `FIRMS`: one object per firm, with every role that firm posts nested
-inside it. **The grouping is load-bearing.** Application limits are a firm-level fact, so the
-roles that compete for a single slot have to be rendered together or the decision cannot be
-made. A flat role list — which this page used to be — hides exactly the thing that matters.
+`data.js` exports `FIRMS`: one object per firm, with every role that firm posts nested inside it.
+**The grouping is load-bearing.** Application limits are a firm-level fact, so the roles that
+compete for a single slot have to be readable together or the decision cannot be made.
+
+The page renders **one table row per role**, not one card per firm. The grouping survives the
+flattening: roles from one firm stay adjacent, only the first row of a run prints the grade and the
+firm name, and a heavier rule marks where a run starts. The version before this one was a card per
+firm with the eligibility window, the notes and the fit rationale printed under every role — about
+250px of vertical space per firm, forty screens of scroll for 145 roles, and the reason this
+rewrite happened. A row is now 34px.
+
+Everything that is not a glanceable column lives in a **drawer** that opens under the row: the
+verbatim eligibility window, the pay string in full, the firm's policy and assessment, the
+"spend it on" recommendation, and the interview panel (itself a nested `<details>`, because it is
+an order of magnitude larger than everything else). Drawers are only built for rows that are open,
+so a closed board costs nothing.
+
+### Columns
+
+| column | width | notes |
+|---|---|---|
+| Gr | 62px | first row of a firm run only |
+| Firm | 18% | first row of a run only; `1×` badge when `one_only` |
+| Role | rest | chevron, type mark, ISO deadline, title (truncates) |
+| Where | 12% | first location + `+n`; hidden below 1000px |
+| Pay | 12% | compressed headline figure; hidden below 700px |
+| Fit | 44px | Andrew mode only |
+| Apply | 128px | apply link + the applied toggle |
+
+Columns drop rather than wrap as the viewport narrows. Everything dropped is still one tap away in
+the drawer.
 
 The full field contract is documented in the header comment of `data.js`. Four rules matter:
 
@@ -52,16 +80,44 @@ the `data.js` header so a future update doesn't "rediscover" them.
 
 ## Grades
 
-`S` `A` `B` `C` are a read on selectivity, compensation and exit value — not a ranking of the
-firms as businesses. `S` is the handful of seats where an offer resets a career; `C` is
-smaller, regional, or a genuine quant desk inside a firm that is not primarily a quant shop.
-
-There is no D or F tier. Every firm on the board is a quant seat: the B and C tiers were
-audited firm by firm against community sources, and anything whose "quant" role turned out to
-be operations, credit-risk reporting, regulatory engineering or team-side sports analytics was
-**removed** rather than parked in a low tier. Eleven firms were cut that way and seventeen were
-regraded in both directions. The scam warning that used to live in an F tier is now a line in
+`S` `A` `B` `C` are a read on selectivity, compensation and exit value — not a ranking of the firms
+as businesses. There is no D or F tier; the scam warning that used to live in an F tier is a line in
 the Applying notes, where it cannot be mistaken for somewhere to apply.
+
+**`S` is three firms: Jane Street, Citadel Securities, Hudson River Trading.** It was ten. Jump,
+Optiver, SIG, Five Rings, D. E. Shaw, Citadel and Two Sigma were all S and are all A now — every one
+of them pays materially below the three above, and a ten-firm S tier is not a tier, it is a list of
+firms you have heard of. **Do not let it grow back.** If a future pass wants to promote something to
+S, the bar is top-of-market undergraduate pay *and* the widest exit optionality on the board, and
+something else should probably come out.
+
+Twenty-one firms were **cut** on 10 August 2026, for one of two reasons, and both matter:
+
+1. **Nothing to apply to.** No undergraduate-eligible Summer 2027 quant requisition exists —
+   the internship is PhD-only (PIMCO, Talos), the cycle already closed (Deutsche Bank), or the firm
+   simply posts no internship (Headlands, Tudor, Graham, Valkyrie, Qube, Marshall Wace, PEAK6).
+   A board whose entire value is being applied-to-able cannot carry a firm with no seat.
+2. **The "quant" seat is not quantitative work.** T. Rowe Price's is fundamental equity research,
+   IEX's is an exchange generalist, Cboe's is dashboards for operational efficiency, Bloomberg's is
+   Global Data collection and QA, Vanguard's is portfolio analytics, DraftKings' and FanDuel's are
+   product analytics, Cargill's is commodity merchandising.
+
+A separate expansion sweep the same day checked **75 firms absent from the board** — including XTX,
+Quantlab and Vatic by name — against their own careers pages and ATS boards, and added two:
+**Quadrature Capital** (a NY quant-developer internship inside a generic "Internships" req) and
+**DL Trading** (sports and prediction-market pricing in Chicago, the closest published match on the
+whole board to four cycles of Kelly-sized event-contract trading).
+
+The other 73 failed, and the reasons matter more than the names: no US role, no internship
+requisition of any kind, a graduate-only gate, a cycle already closed, or the Cargill failure mode —
+a commercial rotation wearing a quant label. Both the cuts and the 73 rejections are listed by name
+with their reasons in the header of `data.js`, so a future sweep does not rediscover them. Two are flagged **re-add on sight**: DraftKings (if a Predictions or Railbird intern
+req ever posts) and Valkyrie (if any intern req posts) — both were cut on absence, not on quality.
+
+The sports rule still holds and is worth restating: **sports betting is in, sports analytics is
+out.** A sportsbook pricing or trading seat is quantitative work against a market. A league, team or
+product analytics seat is not, however interesting it is. That rule is what removed DraftKings and
+FanDuel even though both own genuine event-contract businesses.
 
 The sports rule is worth stating explicitly because it will come up again: **sports betting is
 in, sports analytics is out.** A sportsbook pricing or trading seat is quantitative work
@@ -92,9 +148,9 @@ public. `low` is a real answer, not a failure.
 
 ## Andrew mode
 
-On by default. It sorts by fit against one specific résumé, orders roles QR before QT before
-QD, hides grade F, and prints the reason each seat scored what it did. Every weight lives in
-one table at the top of `app.js` — change the résumé, change that table, change nothing else.
+On by default. It sorts by fit against one specific résumé, orders roles QR before QT before QD,
+and prints the reason each seat scored what it did inside the row drawer. Every weight lives in one
+table at the top of `app.js` — change the résumé, change that table, change nothing else.
 
 Two invariants that were each violated by an earlier version and are worth preserving:
 
@@ -163,9 +219,33 @@ f=lambda u:(subprocess.run(['curl','-s','-o','/dev/null','-w','%{http_code}','-L
 
 ## Ordering
 
-Firms sort by the active sort key — fit, grade, pay, deadline or name. Within a card, roles
-sort QR before QT before QD in Andrew mode, then by fit. Firm order in `data.js` is the
-tiebreak the grade sort respects, so reordering the file changes presentation within a tier.
+Firms sort by the active sort key — fit, grade, pay, deadline or name — and the column headers are
+the sort control. Within a firm run, roles sort QR before QT before QD in Andrew mode, then by fit.
+Firm order in `data.js` is the tiebreak the grade sort respects, so reordering the file changes
+presentation within a tier.
+
+## The pay column, and its self-check
+
+Pay strings in `data.js` are verbatim and run to 70 characters. `compShort()` in `app.js` reduces
+them to a headline figure and a period, and a trailing `+` says the drawer has more.
+
+The rule that matters: **a period only counts when it is written as a rate** — `/week`, `per week`,
+`a week`, `weekly`. A bare noun does not. `$71,000 total for the 8-week internship` and `$50,000 for
+10 weeks` are whole-internship figures, and an earlier version of this rendered both as a weekly
+rate. That is the one error on this page that would change where somebody applies.
+
+Append `?selftest` to the URL. It asserts the compressor against the cases that have actually gone
+wrong and then prints every live pay string next to its compression, so a data edit that breaks one
+is visible in the console:
+
+```bash
+open "http://localhost:8787/quant-internships/?selftest"
+```
+
+`deadline` is **strictly `YYYY-MM-DD`** — the page renders it as a badge and sorts on it as a
+string. An earlier version stored whole sentences there (`Posting states "Anticipated Posting Close
+Date: Dec 29, 2025" — that date is in the PAST…`), which broke the sort and pushed role titles off
+the row. That prose belongs in `deadline_note`, which the drawer renders.
 
 ## Keyboard
 

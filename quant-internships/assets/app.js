@@ -1,15 +1,22 @@
 /* ─────────────────────────────────────────────────────────────
    app.js — one IIFE, no dependencies.
 
-   Reads FIRMS from data.js. Every firm is a card; every role the
-   firm posts is a line inside that card. That grouping is the
-   whole point of the file: the one-application policies are a
-   FIRM-level fact, so the roles that compete for a single slot
-   have to be visible together or the decision can't be made.
+   Reads FIRMS from data.js and renders ONE TABLE ROW PER ROLE.
+   The table is the whole point of the file: 145 roles have to be
+   scannable in a couple of screens, so everything that is not a
+   glanceable column — the verbatim eligibility window, the pay
+   string in full, the firm's application-limit policy, the
+   interview process — lives in a drawer that opens under the row.
+
+   Firm grouping survives the flattening: roles from one firm stay
+   adjacent, and only the first row of a run prints the grade and
+   the firm name. That matters because the one-application policies
+   are a FIRM-level fact, so the roles competing for a single slot
+   still have to be read together.
 
    Owns six pieces of state — role type, category, grade, location,
    free text, and the applied set (localStorage) — plus the Andrew
-   mode flag, which changes the sort key and reveals the fit rail.
+   mode flag, which changes the sort key and reveals the fit column.
 
    Nothing here talks to the network.
    ───────────────────────────────────────────────────────────── */
@@ -232,7 +239,7 @@
 
   /* ── sorting ───────────────────────────────────────────────── */
   function roleKey(role) {
-    // Inside a card, Andrew mode puts QR first; otherwise best fit wins anyway.
+    // Inside a firm run, Andrew mode puts QR first; otherwise best fit wins anyway.
     return [typeRank(role.role_type), -(role._fit || 0), role._i];
   }
 
@@ -256,6 +263,7 @@
   }
 
   /* ── render ────────────────────────────────────────────────── */
+  var rows = $("#rows");
   var board = $("#board");
   var empty = $("#empty");
   var tally = $("#tally-n");
@@ -268,12 +276,134 @@
       .replace(/"/g, "&quot;");
   }
 
-  function locHTML(role) {
-    return role.locations.map(function (l) {
-      return /new york|nyc/i.test(l)
-        ? '<span class="nyc">' + esc(l) + "</span>"
-        : esc(l);
-    }).join(" · ");
+  function visibleCols() {
+    return $$("#board thead th").filter(function (th) {
+      return getComputedStyle(th).display !== "none";
+    }).length || 7;
+  }
+
+  var CATS = {
+    mm: "market maker",
+    multistrat: "multistrat fund",
+    am: "quant asset manager",
+    bank: "bank / sell-side",
+    crypto: "digital assets",
+    event: "event & sports",
+    energy: "energy & commodities",
+    boutique: "boutique",
+    exchange: "exchange / venue",
+    adjacent: "quant-adjacent"
+  };
+
+  /* ── column compression ────────────────────────────────────────
+     Pay strings run to 70 characters ("$4,900/week (Bachelor's),
+     $5,000/week (Master's), $5,500/week (PhD); 10 weeks…"), which is
+     the single widest thing on the board. The column shows the lead
+     figure and its period; the drawer keeps the string verbatim, and
+     a trailing + says there is more to read.
+     ───────────────────────────────────────────────────────────── */
+  // A period only counts when it is written as a RATE — "/week", "per week",
+  // "a week", "weekly". A bare noun does not: "$71,000 total for the 8-week
+  // internship" and "$50,000 for 10 weeks" both name a whole-internship figure,
+  // and an earlier version of this turned them into $71,000/wk and $50,000/wk.
+  var PERIODS = [[/(?:\/\s*|per\s+|an?\s+)h(?:ou)?r\b|hourly/i, "/hr"],
+                 [/(?:\/\s*|per\s+|a\s+)week\b|weekly/i, "/wk"],
+                 [/(?:\/\s*|per\s+|a\s+)month\b|monthly/i, "/mo"],
+                 [/annual|(?:\/\s*|per\s+|a\s+)(?:year|yr)\b|yearly/i, "/yr"]];
+
+  // "to" is a range separator as often as an en-dash on these postings, and a
+  // trailing k ("$110k - $120k") has to survive.
+  var MONEY = /\$\s?[\d,]*\d(?:\.\d+)?k?(?:\s*(?:[-–—]|to)\s*\$?\s?[\d,]*\d(?:\.\d+)?k?)?/i;
+  var BARE_USD = /[\d,]*\d(?:\.\d+)?\s*USD/i;   // "weekly base salary of 5,800 USD"
+
+  function compShort(s) {
+    if (!s) return "";
+    var fig = s.match(MONEY), bare = false;
+    if (!fig) { fig = s.match(BARE_USD); bare = !!fig; }
+    if (!fig) return s.length > 16 ? s.slice(0, 15) + "…" : s;
+    var num = (bare ? "$" : "") + fig[0]
+      .replace(/\s*USD/i, "").replace(/\s+/g, "").replace(/-|—|to/i, "–");
+    // Nearest period to the figure wins — "Annual Base Salary: $300,000" has its
+    // unit before the number, "$25,000/month base" after it, and "$25 per hour
+    // for 40 hours per week" has both.
+    var best = "", bestD = 1e9;
+    PERIODS.forEach(function (p) {
+      var m = s.match(p[0]);
+      if (!m) return;
+      var d = Math.abs(m.index - fig.index);
+      if (d < bestD) { bestD = d; best = p[1]; }
+    });
+    return num + best;
+  }
+
+  // Heuristic, and deliberately slack: a "+" that fires on "$300,000 annualized
+  // base" — where the drawer adds nothing — trains the reader to ignore it.
+  function compTruncated(role) {
+    return !!role.comp && role.comp.trim().length > compShort(role.comp).length + 10;
+  }
+
+  /* Self-check. ?selftest in the URL asserts the pay compressor against the
+     cases that have actually gone wrong, then reports over the live data.
+     A wrong period on a pay figure is the one error on this page that would
+     change where someone applies. */
+  function selftest() {
+    var cases = [
+      ["$71,000 total for the 8-week internship including a sign-on bonus", "$71,000"],
+      ["$50,000 for 10 weeks, plus a $10,000 housing stipend", "$50,000"],
+      ["$2,250 for the one-week program", "$2,250"],
+      ["Annual Base Salary: $300,000, plus sign-on bonus", "$300,000/yr"],
+      ["$4,500 to $5,800 per week", "$4,500–$5,800/wk"],
+      ["$110k - $120k", "$110k–$120k"],
+      ["$25 per hour for 40 hours per week", "$25/hr"],
+      ["New York: weekly base salary of 5,800 USD, plus signing bonus", "$5,800/wk"],
+      ["$4,900/week (Bachelor's), $5,000/week (Master's)", "$4,900/wk"],
+      ["$72.12/hr for the Quantitative Researcher Intern role", "$72.12/hr"],
+      ["$25,000/month base + $25,000 sign-on", "$25,000/mo"],
+      ["$300,000 base salary", "$300,000"],
+      ["", ""]
+    ];
+    var bad = cases.filter(function (c) { return compShort(c[0]) !== c[1]; });
+    bad.forEach(function (c) {
+      console.error("compShort FAIL", JSON.stringify(c[0]), "→", JSON.stringify(compShort(c[0])),
+        "expected", JSON.stringify(c[1]));
+    });
+    console.log(bad.length ? bad.length + " compShort failures" : "compShort: " + cases.length + " ok");
+    console.log("live pay strings:\n" + ALL.filter(function (r) { return r.comp; })
+      .map(function (r) { return compShort(r.comp).padEnd(22) + "  ⟵  " + r.comp; }).join("\n"));
+  }
+  if (location.search.indexOf("selftest") > -1) selftest();
+
+  function locShort(role) {
+    var l = role.locations;
+    if (!l.length) return '<span class="unknown">—</span>';
+    var first = /new york|nyc/i.test(l[0])
+      ? '<span class="nyc">' + esc(l[0].replace(/,\s*NY$/, "")) + "</span>"
+      : esc(l[0].replace(/,\s*[A-Z]{2}$/, ""));
+    return first + (l.length > 1 ? '<span class="more">+' + (l.length - 1) + "</span>" : "");
+  }
+
+  /* role.notes doubles as the maintainer's changelog — 28 of 123 open with
+     "Re-verified — still live, comp unchanged.", "NEW ROW.", "URL CAVEAT - READ
+     THIS:" or similar. Those are bookkeeping addressed to whoever maintains the
+     board, not to someone deciding where to apply. Strip the marker and keep
+     whatever it was prefixed to, which is usually the real note; drop the row
+     entirely when nothing substantial survives. The full string stays in
+     data.js and stays searchable — this only governs what is printed. */
+  var MAINT_MARKER = /^\s*(?:re-?verified\b[^.]*\.|new row\b[^.]*\.|dedupe before publishing\.?|caveat the maintainer should keep:|url caveat\s*[-–—]\s*read this:|classification call:)\s*/i;
+
+  function candidateNote(s) {
+    var t = String(s || ""), prev;
+    do { prev = t; t = t.replace(MAINT_MARKER, ""); } while (t !== prev);
+    t = t.trim();
+    return t.length > 15 ? t : "";
+  }
+
+  // 35 of 65 firms carry a policy that states nothing — "Not stated", "No limit
+  // stated", "No restriction stated" — and each was rendering a labelled row in
+  // the drawer of every one of that firm's roles. The 8 firms with a genuine cap
+  // are already flagged by the 1× chip on the row itself.
+  function realPolicy(p) {
+    return p && !/^(not stated|none stated|no restriction|no limit|no stated)/i.test(p) ? p : "";
   }
 
   function whyHTML(role) {
@@ -288,105 +418,158 @@
     return bits.join(" · ");
   }
 
-  function roleHTML(role) {
-    var isApplied = applied.has(role.id);
+  /* ── the row ───────────────────────────────────────────────── */
+  function rowHTML(role, isFirst) {
     var firm = role._firm;
-
-    var compInner = role.comp
-      ? '<span class="n">' + esc(role.comp) + "</span>"
-        + (role.comp_source ? '<span class="src">' + esc(role.comp_source) + "</span>" : "")
-      : '<span class="unknown">not disclosed</span>';
+    var isApplied = applied.has(role.id);
+    var open = openRows.has(role.id);
 
     var applyBtn;
     if (role.closed) {
       applyBtn = '<span class="apply closed" aria-disabled="true">Closed</span>';
     } else if (role.status === "soon") {
+      var opensTxt = role.opens || "Opens soon";
       applyBtn = role.apply_url
-        ? '<a class="apply soon" href="' + esc(role.apply_url) + '" target="_blank" rel="noopener">'
-          + esc(role.opens || "Opens soon") + "</a>"
-        : '<span class="apply soon" aria-disabled="true">' + esc(role.opens || "Opens soon") + "</span>";
+        ? '<a class="apply soon" href="' + esc(role.apply_url) + '" target="_blank" rel="noopener" title="'
+          + esc(opensTxt) + '">Soon</a>'
+        : '<span class="apply soon" aria-disabled="true" title="' + esc(opensTxt) + '">Soon</span>';
     } else if (role.apply_url) {
-      applyBtn = '<a class="apply" href="' + esc(role.apply_url) + '" target="_blank" rel="noopener">Apply &rarr;</a>';
+      applyBtn = '<a class="apply" href="' + esc(role.apply_url) + '" target="_blank" rel="noopener">Apply</a>';
     } else {
       applyBtn = '<span class="apply" aria-disabled="true">No link</span>';
     }
 
-    var why = andrew ? whyHTML(role) : "";
+    var cls = "r" + (isFirst ? " grp-first" : "") + (open ? " is-open" : "")
+      + (isApplied ? " is-applied" : "") + (role.status === "soon" ? " is-soon" : "")
+      + (role.closed ? " is-closed" : "");
 
-    return '<li class="role' + (isApplied ? " is-applied" : "")
-      + (role.status === "soon" ? " is-soon" : "") + (role.closed ? " is-closed" : "")
-      + '" data-id="' + esc(role.id) + '">'
-      + '<span class="rt" data-t="' + esc(role.role_type) + '">' + esc(role.role_type) + "</span>"
-      + '<div class="role-main">'
-        + '<div class="role-title">' + esc(role.title)
-          + (role.deadline ? '<span class="deadline">due ' + esc(role.deadline) + "</span>" : "")
-        + "</div>"
-        + (role.eligibility_note ? '<div class="elig">' + esc(role.eligibility_note) + "</div>" : "")
-        + (role.notes ? '<div class="rnote">' + esc(role.notes) + "</div>" : "")
-        + (why ? '<div class="why">' + why + "</div>" : "")
-      + "</div>"
-      + '<div class="role-loc">' + locHTML(role) + "</div>"
-      + '<div class="role-comp">' + compInner + "</div>"
-      + (andrew ? '<div class="fit" title="fit against the résumé"><span class="fit-n">' + role._fit + "</span></div>" : "")
-      + '<div class="role-act">' + applyBtn
+    return '<tr class="' + cls + '" data-id="' + esc(role.id) + '">'
+      + '<td class="c-grade">' + (isFirst
+          ? '<span class="grade" data-g="' + esc(firm.grade) + '">' + esc(firm.grade) + "</span>" : "")
+      + "</td>"
+      + '<td class="c-firm">' + (isFirst
+          ? '<span class="fname">' + esc(firm.name) + "</span>"
+            + (firm.one_only ? '<span class="one" title="' + esc(firm.policy || "one application only")
+                + '">1&times;</span>' : "")
+          : "")
+      + "</td>"
+      // The deadline sits before the title, not after it: the title cell
+      // truncates with an ellipsis and a due date that scrolls off the end is
+      // the one thing on the row that must never be lost.
+      + '<td class="c-role" title="' + esc(role.title) + '">'
+        + '<span class="chev" aria-hidden="true">▸</span>'
+        + '<span class="rt" data-t="' + esc(role.role_type) + '">' + esc(role.role_type) + "</span>"
+        // ISO only. data.js used to carry whole sentences in this field
+        // ("Posting states 'Anticipated Posting Close Date: Dec 29, 2025' — that
+        // date is in the PAST…"), which both broke the deadline sort and pushed
+        // the role title clean off the row. The prose lives in deadline_note now.
+        + (/^\d{4}-\d{2}-\d{2}$/.test(role.deadline || "")
+            ? '<span class="deadline">' + esc(role.deadline) + "</span>" : "")
+        + '<span class="rtitle">' + esc(role.title) + "</span>"
+      + "</td>"
+      + '<td class="c-loc">' + locShort(role) + "</td>"
+      + '<td class="c-pay">' + (role.comp
+          ? '<span class="n" data-src="' + esc(role.comp_source || "") + '" title="' + esc(role.comp) + '">'
+            + esc(compShort(role.comp)) + (compTruncated(role) ? '<span class="plus">+</span>' : "") + "</span>"
+          : '<span class="unknown">—</span>')
+      + "</td>"
+      + '<td class="c-fit">' + (andrew ? '<span class="fit-n">' + role._fit + "</span>" : "") + "</td>"
+      + '<td class="c-act">' + applyBtn
         + '<button class="done" type="button" aria-pressed="' + (isApplied ? "true" : "false")
-        + '" data-id="' + esc(role.id) + '">' + (isApplied ? "✓ applied" : "mark") + "</button>"
-      + "</div>"
-      + "</li>";
+        + '" data-id="' + esc(role.id) + '" aria-label="Mark applied">'
+        + (isApplied ? "✓" : "○") + "</button>"
+      + "</td>"
+      + "</tr>"
+      + (open ? drawerHTML(role) : "");
   }
 
-  function cardHTML(group) {
-    var firm = group.firm;
-    var roles = group.roles;
-    var appliedHere = roles.filter(function (r) { return applied.has(r.id); }).length;
+  /* ── the drawer ────────────────────────────────────────────────
+     Everything that used to be printed under every role and made the
+     page unscrollable: the verbatim eligibility window, the pay string
+     in full, the firm's policy and assessment, and the interview panel.
+     Built only for rows that are actually open, so the closed board
+     costs nothing.
+     ───────────────────────────────────────────────────────────── */
+  function drawerHTML(role) {
+    var firm = role._firm;
+    // The row truncates the title — with an ellipsis on desktop, a two-line clamp
+    // on a phone — so the drawer has to state it in full, with the firm, or the
+    // longest titles are simply unreadable.
+    var bits = '<p class="dw-title">' + esc(firm.name) + " &middot; " + esc(role.title) + "</p>";
 
+    if (andrew && role._why && role._why.length)
+      bits += '<p class="why">' + whyHTML(role) + "</p>";
+
+    if (role.eligibility_note)
+      bits += '<div class="dw-b"><span class="label">Eligibility, as posted</span><p class="elig">'
+        + esc(role.eligibility_note) + "</p></div>";
+
+    var note = candidateNote(role.notes);
+    if (note)
+      bits += '<div class="dw-b"><span class="label">Note</span><p>' + esc(note) + "</p></div>";
+
+    var facts = [];
+    if (role.comp)
+      facts.push("<span><b>Pay</b> " + esc(role.comp)
+        + (role.comp_source ? ' <i class="src">(' + esc(role.comp_source) + ")</i>" : "") + "</span>");
+    if (role.locations.length > 1)
+      facts.push("<span><b>Locations</b> " + esc(role.locations.join(" · ")) + "</span>");
+    if (role.status === "soon" && role.opens)
+      facts.push("<span><b>Opens</b> " + esc(role.opens) + "</span>");
+    if (role.deadline_note)
+      facts.push("<span><b>Closing</b> " + esc(role.deadline_note) + "</span>");
+    if (facts.length) bits += '<p class="dw-facts">' + facts.join("") + "</p>";
+
+    // The firm-level block. Repeated in every row of a firm run on purpose:
+    // a drawer has to be readable without scrolling back to the firm's first row.
+    var fb = '<span><b>' + esc(CATS[firm.category] || firm.category) + "</b></span>";
+    var pol = realPolicy(firm.policy);
+    if (pol)
+      fb += '<span class="' + (firm.one_only ? "one-only" : "") + '"><b>Applications</b> '
+        + esc(pol) + "</span>";
+    if (firm.cooldown) fb += '<span class="cool"><b>Cooldown</b> ' + esc(firm.cooldown) + "</span>";
+    // firm.oa is set on 8 firms and all 8 also carry intel.oa, which the panel
+    // below prints under "The assessment". Only show it when the panel will not.
+    if (firm.oa && !(firm.intel && firm.intel.oa))
+      fb += "<span><b>Assessment</b> " + esc(firm.oa) + "</span>";
+    bits += '<p class="dw-firm">' + fb + "</p>";
+
+    if (firm.note) bits += '<p class="dw-note">' + esc(firm.note) + "</p>";
+
+    // When one application is all you get, the competing roles have to be
+    // adjacent and the call has to be made here.
     var pick = "";
     if (andrew && firm.pick) {
       // Hand-written where the rule is too nuanced to compute — Akuna's two
       // firewalled families, Millennium's degree split across its two slots.
-      pick = '<p class="pick"><span class="label">how to spend it</span>' + esc(firm.pick) + "</p>";
-    } else if (andrew && firm.one_only && roles.length > 1) {
-      // The whole reason firms are cards: when one application is all you get,
-      // the competing roles have to be adjacent and the call has to be made here.
-      var ranked = roles.slice().sort(function (a, b) { return b._fit - a._fit; });
-      var n = firm.cap || 1;
-      pick = '<p class="pick"><span class="label">'
-        + (n > 1 ? "spend them on" : "spend it on") + "</span>"
-        + ranked.slice(0, n).map(function (r) {
-            return '<span class="rt" data-t="' + esc(r.role_type) + '">' + esc(r.role_type) + "</span> "
-              + esc(r.title);
-          }).join(" &nbsp;·&nbsp; ")
-        + "</p>";
+      pick = esc(firm.pick);
+    } else if (andrew && firm.one_only && (firm.roles || []).length > 1) {
+      var ranked = firm.roles.slice().sort(function (a, b) { return b._fit - a._fit; });
+      pick = ranked.slice(0, firm.cap || 1).map(function (r) {
+        return '<span class="rt" data-t="' + esc(r.role_type) + '">' + esc(r.role_type) + "</span> "
+          + esc(r.title);
+      }).join(" &nbsp;·&nbsp; ");
     }
+    if (pick)
+      bits += '<p class="pick"><span class="label">'
+        + ((firm.cap || 1) > 1 ? "spend them on" : "spend it on") + "</span>" + pick + "</p>";
 
-    return '<article class="card' + (appliedHere ? " has-applied" : "") + '" data-firm="' + esc(firm.key) + '">'
-      + '<header class="card-head">'
-        + '<span class="grade" data-g="' + esc(firm.grade) + '">' + esc(firm.grade) + "</span>"
-        + '<div class="card-id">'
-          + "<h3>" + esc(firm.name) + "</h3>"
-          + (firm.note ? '<p class="firm-note">' + esc(firm.note) + "</p>" : "")
-        + "</div>"
-        + '<div class="card-meta">'
-          + '<span class="cat">' + esc(CATS[firm.category] || firm.category) + "</span>"
-          + (firm.policy
-              ? '<span class="policy' + (firm.one_only ? " one-only" : "") + '">' + esc(firm.policy) + "</span>"
-              : "")
-          + (firm.cooldown ? '<span class="cooldown">' + esc(firm.cooldown) + "</span>" : "")
-        + "</div>"
-      + "</header>"
-      + pick
-      + '<ul class="roles">' + roles.map(roleHTML).join("") + "</ul>"
-      + (firm.oa ? '<p class="oa"><span class="label">assessment</span> ' + esc(firm.oa) + "</p>" : "")
-      + intelHTML(firm)
-      + "</article>";
+    bits += intelHTML(firm);
+
+    // Derived, not literal: the visible column count changes with Andrew mode
+    // and with two responsive breakpoints, and a hand-maintained 7 was already
+    // wrong with Andrew mode off.
+    return '<tr class="d" data-for="' + esc(role.id) + '"><td colspan="' + visibleCols() + '">'
+      + '<div class="dw">' + bits + "</div></td></tr>";
   }
 
   /* ── interview intel ───────────────────────────────────────────
-     A native <details>. No JS toggle, no ARIA to get wrong, and it
-     stays open across re-renders only if the browser keeps the node —
-     which it does not, so the open set is tracked below.
+     A native <details> nested inside the drawer. No JS toggle, no ARIA
+     to get wrong. render() replaces innerHTML, so the open set is
+     tracked below and reapplied.
      ───────────────────────────────────────────────────────────── */
   var openIntel = new Set();
+  var openRows = new Set();
 
   function listHTML(cls, items, limit) {
     if (!items || !items.length) return "";
@@ -401,7 +584,7 @@
     d = d || {};
     var isOpen = openIntel.has(firm.key);
 
-    var rounds = (d.rounds || []).map(function (r, i) {
+    var rounds = (d.rounds || []).map(function (r) {
       return "<li>"
         + '<span class="stage">' + esc(r.stage) + "</span>"
         + (r.format ? '<span class="fmt">' + esc(r.format) + "</span>" : "")
@@ -436,7 +619,7 @@
 
     // Suppress the round-count badge when the count itself is one of the claims a
     // verification pass could not corroborate — the badge is the most glanceable
-    // thing on the card and must not assert what the body below it retracts.
+    // thing here and must not assert what the body below it retracts.
     var countDisputed = (d.unverified || []).some(function (u) { return /round/i.test(u); });
 
     return '<details class="intel" data-firm="' + esc(firm.key) + '"' + (isOpen ? " open" : "") + ">"
@@ -468,19 +651,6 @@
       + "</div></details>";
   }
 
-  var CATS = {
-    mm: "market maker",
-    multistrat: "multistrat fund",
-    am: "quant asset manager",
-    bank: "bank / sell-side",
-    crypto: "digital assets",
-    event: "event & sports",
-    energy: "energy & commodities",
-    boutique: "boutique",
-    exchange: "exchange / venue",
-    adjacent: "quant-adjacent"
-  };
-
   function render() {
     var kept = ALL.filter(roleMatches);
 
@@ -507,8 +677,12 @@
     var keyFn = GROUP_SORTS[state.sort] || GROUP_SORTS.grade;
     groups.sort(function (a, b) { return cmp(keyFn(a), keyFn(b)) * state.dir; });
 
-    board.innerHTML = groups.map(cardHTML).join("");
+    rows.innerHTML = groups.map(function (g) {
+      return g.roles.map(function (role, i) { return rowHTML(role, i === 0); }).join("");
+    }).join("");
+
     empty.hidden = groups.length > 0;
+    board.hidden = groups.length === 0;
 
     tally.textContent = kept.length;
     var appliedCount = ALL.filter(function (r) { return applied.has(r.id); }).length;
@@ -529,8 +703,14 @@
     summary.innerHTML = gBits.join(" ") + '<span class="sep"></span>' + tBits.join(" ");
 
     $$(".sortbtn").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.dataset.sortkey === state.sort ? "true" : "false");
+      var on = b.dataset.sortkey === state.sort;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.dataset.dir = on && state.dir < 0 ? "up" : "down";
     });
+
+    // .summary lives inside the sticky bar and its content changes on every
+    // render, so a filter can rewrap the bar and move where the thead must stick.
+    syncStickyOffset();
   }
 
   /* ── events ────────────────────────────────────────────────── */
@@ -562,6 +742,17 @@
   wireToggle("#hide-applied", "hideApplied");
   wireToggle("#only-one", "onlyOneOnly");
   wireToggle("#only-deadline", "onlyDeadline");
+
+  // The nine "kind" chips, five locations and five status toggles are a second
+  // row that almost nobody needs on arrival. Off by default; the board starts
+  // one row shorter and the table starts higher up the screen.
+  var moreBtn = $("#more-toggle"), moreRow = $("#more-filters");
+  moreBtn.addEventListener("click", function () {
+    var on = moreBtn.getAttribute("aria-pressed") !== "true";
+    moreBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    moreRow.hidden = !on;
+    syncStickyOffset();
+  });
 
   var andrewBtn = $("#andrew");
   function paintAndrew() {
@@ -600,23 +791,35 @@
     state.onlyOneOnly = false; state.onlyDeadline = false;
     state.sort = andrew ? "fit" : "grade"; state.dir = 1;
     search.value = "";
+    openRows.clear();
     $$(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+    moreRow.hidden = true;
     render();
   });
 
-  board.addEventListener("click", function (e) {
-    var btn = e.target.closest(".done");
-    if (!btn) return;
-    var id = btn.dataset.id;
-    if (applied.has(id)) applied.delete(id); else applied.add(id);
-    persistApplied();
+  rows.addEventListener("click", function (e) {
+    var done = e.target.closest(".done");
+    if (done) {
+      var id = done.dataset.id;
+      if (applied.has(id)) applied.delete(id); else applied.add(id);
+      persistApplied();
+      render();
+      return;
+    }
+    // Anything inside the open drawer — a source link, the intel disclosure —
+    // must not collapse the row out from under the click.
+    if (e.target.closest(".apply") || e.target.closest(".d")) return;
+    var tr = e.target.closest("tr.r");
+    if (!tr) return;
+    var rid = tr.dataset.id;
+    if (openRows.has(rid)) openRows.delete(rid); else openRows.add(rid);
     render();
   });
 
   // render() replaces innerHTML, so an expanded <details> would collapse on the
   // next keystroke in the search box. Track the open set and reapply it.
   // "toggle" does not bubble, hence the capture phase.
-  board.addEventListener("toggle", function (e) {
+  rows.addEventListener("toggle", function (e) {
     var d = e.target;
     if (!d.classList || !d.classList.contains("intel")) return;
     if (d.open) openIntel.add(d.dataset.firm); else openIntel.delete(d.dataset.firm);
@@ -638,8 +841,8 @@
   paintToggle();
 
   /* ── sticky offset ─────────────────────────────────────────── */
-  // The controls bar is sticky at top:0 and wraps on narrow screens, so the
-  // board needs to be told where it actually ends.
+  // The controls bar is sticky at top:0 and wraps on narrow screens, and the
+  // table head is sticky under it, so both need to be told where it ends.
   var controls = $(".controls");
   function syncStickyOffset() {
     var h = controls && getComputedStyle(controls).position === "sticky"
@@ -649,6 +852,10 @@
   }
   syncStickyOffset();
   window.addEventListener("resize", syncStickyOffset);
+  // Measured before the webfonts swap in, .controls came out 94px against an
+  // actual 97px and the sticky thead clipped the top of the first row until
+  // something else triggered a resync.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncStickyOffset);
 
   /* ── keyboard ──────────────────────────────────────────────── */
   document.addEventListener("keydown", function (e) {
@@ -670,4 +877,5 @@
   });
 
   render();
+  syncStickyOffset();
 })();

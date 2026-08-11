@@ -56,7 +56,7 @@ so a closed board costs nothing.
 | Firm | 18% | first row of a run only; `1×` badge when `one_only` |
 | Role | rest | chevron, type mark, ISO deadline, title (truncates) |
 | Where | 12% | first location + `+n`; hidden below 1000px |
-| Pay | 12% | compressed headline figure; hidden below 700px |
+| Pay | 12% | total over the internship, or the posted figure; hidden below 700px |
 | Fit | 44px | Andrew mode only |
 | Apply | 128px | apply link + the applied toggle |
 
@@ -220,14 +220,49 @@ f=lambda u:(subprocess.run(['curl','-s','-o','/dev/null','-w','%{http_code}','-L
 ## Ordering
 
 Firms sort by the active sort key — fit, grade, pay, deadline or name — and the column headers are
-the sort control. Within a firm run, roles sort QR before QT before QD in Andrew mode, then by fit.
+the sort control. Within a firm run, roles sort QR before QT before QD in Andrew mode, then by fit —
+except under the pay sort, where they sort by pay too, so a firm is never led by its one role with
+no disclosed figure.
 Firm order in `data.js` is the tiebreak the grade sort respects, so reordering the file changes
 presentation within a tier.
+
+## Defaults
+
+Two things are filtered or transformed before you see them, and both are worth knowing:
+
+**Roles that have not opened yet are hidden.** 22 of 126. They are noise while you are deciding
+where to spend an afternoon. The `+22 opening soon` chip in the main control row brings them back —
+deliberately in the main row and not behind `Filters +`, because a filter that is on by default and
+invisible is a trap.
+
+**Pay is the total over the internship, not a rate.** Firms post weekly, monthly, annualised and
+lump-sum figures; none of them compare by eye, and the board's whole job is comparison. The column
+shows one number and marks it `≈` because it is derived:
+
+```
+total = comp_rank × weeks ÷ (52/12)
+```
+
+`comp_rank` is the input, not the `comp` string — it is approximate monthly USD, entered per role by
+whoever read the posting, and it already resolves the awkward cases ($71,000 over 8 weeks is
+recorded as 38,458/month). Re-parsing the prose would reproduce that work worse.
+
+Only 27 roles state a length. The rest assume **10 weeks** and carry a `*`. Every stated length on
+the board falls between 8 and 11 weeks, so the assumption is never far wrong, but it is an
+assumption and the row says so. The drawer prints the arithmetic in full and the firm's own wording
+beside it, and the `≈ total / as posted` toggle under the Pay header switches the column back to
+verbatim figures.
+
+**The only real check on any of this**: two postings state a total outright — Bridgewater's `$71,000
+total for the 8-week internship` and Walleye's `$50,000 for 10 weeks`. The conversion reproduces
+both exactly from `comp_rank` and the extracted length. Both are asserted in `selftest()`; if either
+breaks, every other total on the board is wrong too.
 
 ## The pay column, and its self-check
 
 Pay strings in `data.js` are verbatim and run to 70 characters. `compShort()` in `app.js` reduces
-them to a headline figure and a period, and a trailing `+` says the drawer has more.
+them to a headline figure and a period for the *as posted* mode, and a trailing `+` says the drawer
+has more.
 
 The rule that matters: **a period only counts when it is written as a rate** — `/week`, `per week`,
 `a week`, `weekly`. A bare noun does not. `$71,000 total for the 8-week internship` and `$50,000 for
@@ -235,12 +270,16 @@ The rule that matters: **a period only counts when it is written as a rate** —
 rate. That is the one error on this page that would change where somebody applies.
 
 Append `?selftest` to the URL. It asserts the compressor against the cases that have actually gone
-wrong and then prints every live pay string next to its compression, so a data edit that breaks one
-is visible in the console:
+wrong, checks both stated-total anchors against the derived total, and reports any role with a
+`comp` but no `comp_rank` (which would silently lose its total). `?selftest=full` adds a table of
+every live pay string next to its compression and its computed total:
 
 ```bash
-open "http://localhost:8787/quant-internships/?selftest"
+open "http://localhost:8787/quant-internships/?selftest=full"
 ```
+
+`comp_rank` is now load-bearing, not just a sort key — a role with `comp` and a null `comp_rank`
+shows no total at all. The self-check names them.
 
 `deadline` is **strictly `YYYY-MM-DD`** — the page renders it as a badge and sorts on it as a
 string. An earlier version stored whole sentences there (`Posting states "Anticipated Posting Close

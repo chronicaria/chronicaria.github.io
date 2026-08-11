@@ -305,6 +305,32 @@ a:hover { color: var(--petrol-bright); }
   min-width: 0;
 }
 .chip.more[aria-pressed="false"] { border-style: dashed; }
+/* Not a filter you switch on — a bucket of roles held back, so it reads as an
+   addition rather than a constraint. */
+.chip.soon[aria-pressed="false"] { border-style: dashed; color: var(--gilt); border-color: color-mix(in srgb, var(--gilt) 45%, transparent); }
+.chip.soon[aria-pressed="true"] { background: var(--gilt); border-color: var(--gilt); color: var(--paper); }
+
+/* Sits under the Pay header as its unit label, because that is what it changes. */
+.paymode {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .06em;
+  text-transform: lowercase;
+  background: none;
+  border: none;
+  border-bottom: 1px dotted var(--rule-strong);
+  color: var(--gray-soft);
+  padding: 0;
+  cursor: pointer;
+  transition: color .25s ease, border-color .25s ease;
+}
+.paymode:hover { color: var(--petrol); border-bottom-color: var(--petrol); }
+
+/* The assumed-length mark. Deliberately faint: it qualifies the number, it is
+   not a warning about it. */
+.c-pay .approx { color: var(--gray-soft); margin-left: 1px; }
 .summary .sep { width: 1px; height: 11px; background: var(--rule-strong); display: inline-block; }
 .summary .rt, .summary .grade { margin-right: 3px; }
 

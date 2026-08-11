@@ -49,6 +49,7 @@
       <button class="chip g" type="button" data-grade="C" aria-pressed="false">C</button>
     </span>
     <input class="search" id="search" type="search" placeholder="Search firms, roles, interview notes…" aria-label="Search roles and interview notes">
+    <button class="chip soon" type="button" id="show-soon" aria-pressed="false">+ opening soon</button>
     <button class="chip more" type="button" id="more-toggle" aria-pressed="false" aria-controls="more-filters">Filters +</button>
     <button class="reset" type="button" id="reset">Reset</button>
     <span class="spacer"></span>
@@ -62,23 +63,15 @@
       <button class="chip" type="button" data-cat="multistrat" aria-pressed="false">Multistrat</button>
       <button class="chip" type="button" data-cat="am" aria-pressed="false">Asset managers</button>
       <button class="chip" type="button" data-cat="bank" aria-pressed="false">Banks</button>
-      <button class="chip" type="button" data-cat="crypto" aria-pressed="false">Digital assets</button>
-      <button class="chip" type="button" data-cat="event" aria-pressed="false">Event &amp; sports</button>
-      <button class="chip" type="button" data-cat="energy" aria-pressed="false">Energy</button>
-      <button class="chip" type="button" data-cat="exchange" aria-pressed="false">Exchanges</button>
-      <button class="chip" type="button" data-cat="boutique" aria-pressed="false">Boutiques</button>
+      <button class="chip" type="button" data-cat="other" aria-pressed="false">Event, energy &amp; crypto</button>
     </span>
     <span class="filter-group">
       <span class="label">Where</span>
       <button class="chip" type="button" data-loc="NYC" aria-pressed="false">NYC</button>
       <button class="chip" type="button" data-loc="Chicago" aria-pressed="false">Chicago</button>
-      <button class="chip" type="button" data-loc="Northeast" aria-pressed="false">Northeast</button>
-      <button class="chip" type="button" data-loc="South" aria-pressed="false">South</button>
-      <button class="chip" type="button" data-loc="West" aria-pressed="false">West</button>
+      <button class="chip" type="button" data-loc="Elsewhere" aria-pressed="false">Elsewhere</button>
     </span>
     <span class="filter-group">
-      <button class="chip" type="button" data-status="open" aria-pressed="false">Open now</button>
-      <button class="chip" type="button" data-status="soon" aria-pressed="false">Opening soon</button>
       <button class="chip" type="button" id="only-one" aria-pressed="false">One-app only</button>
       <button class="chip" type="button" id="only-deadline" aria-pressed="false">Has a deadline</button>
       <button class="chip" type="button" id="hide-applied" aria-pressed="false">Hide applied</button>
@@ -95,7 +88,7 @@
         <th class="c-firm" scope="col"><button class="sortbtn" type="button" data-sortkey="firm" aria-pressed="false">Firm</button></th>
         <th class="c-role" scope="col">Role</th>
         <th class="c-loc" scope="col">Where</th>
-        <th class="c-pay" scope="col"><button class="sortbtn" type="button" data-sortkey="comp" aria-pressed="false">Pay</button></th>
+        <th class="c-pay" scope="col"><button class="sortbtn" type="button" data-sortkey="comp" aria-pressed="false">Pay</button><button class="paymode" type="button" id="pay-mode" aria-pressed="true">≈ total</button></th>
         <th class="c-fit" scope="col"><button class="sortbtn" type="button" data-sortkey="fit" aria-pressed="true">Fit</button></th>
         <th class="c-act" scope="col"><span class="vh">Apply</span></th>
       </tr>
@@ -120,8 +113,15 @@
         <li><span class="one">1&times;</span> one application for the whole firm, all season</li>
       </ul>
       <ul>
-        <li><strong>Ink</strong> pay was posted in the job description, <strong>grey</strong> is
-          candidate-reported, <strong>+</strong> means the row has more.</li>
+        <li><strong>Pay is the whole internship by default</strong>, not a rate — firms post
+          weekly, monthly, annualised and lump-sum figures and none of them compare by eye.
+          <strong>≈</strong> means the number is derived: the posted figure × the internship
+          length. Only 26 roles state a length; the rest assume ten weeks and carry a
+          <strong>*</strong>. Open the row for the arithmetic and the firm's own wording, or switch
+          the Pay column to <em>as posted</em>. <strong>Ink</strong> was in the job description,
+          <strong>grey</strong> is candidate-reported.</li>
+        <li><strong>Roles that have not opened yet are hidden.</strong> The
+          <em>+ opening soon</em> chip brings them back.</li>
         <li><strong>Search reaches inside the interview panels</strong>, which is the point of having
           them: <code>cooldown</code> returns Optiver alone, <code>market making game</code> finds the
           firms that run one.</li>

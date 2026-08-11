@@ -960,7 +960,7 @@ var FIRMS = [
         locations: ["Chicago, IL"],
         apply_url: "https://www.akunacapital.com/careers/job/7986086/?gh_jid=7986086",
         eligibility_note: "\"Graduating between December 2027 – August 2028\"; pursuing a BS/MS/PhD in engineering, economics, statistics, mathematics, computer science, actuarial science or related field; must be able to attend…",
-        comp: "$2,250 for the one-week program", comp_source: "", comp_rank: null,
+        comp: "$2,250 for the one-week program", comp_source: "", comp_rank: 9750,
         tags: ["options", "games", "microstructure"],
         undergrad_explicit: true, class_2028: true,
         notes: "NOT A SUMMER INTERNSHIP — this is a one-week micro-internship / insight programme, and the posting is an expression of interest rather than a dated req. Included because the eligibility window matches the candidate…"
@@ -1688,7 +1688,7 @@ var FIRMS = [
         locations: ["New York, NY"],
         apply_url: "https://job-boards.greenhouse.io/pdtpartners/jobs/8077685",
         eligibility_note: "\"Current Bachelor's, Master's, or PhD students pursuing degrees in rigorous, highly technical fields (e.g., Computer Science, Computer Engineering) who are eligible for full-time roles starting in…",
-        comp: "$180,000 (not inclusive of any potential bonus amounts)", comp_source: "", comp_rank: null,
+        comp: "$180,000 (not inclusive of any potential bonus amounts)", comp_source: "", comp_rank: 15000,
         tags: ["cpp", "stats"],
         undergrad_explicit: true, class_2028: true,
         notes: "Counted QD, not excluded as pure SWE: \"Software Engineers at PDT are responsible for building and maintaining the technology that enables all parts of the trading life cycle\", and the project list includes learning…"
@@ -2389,7 +2389,7 @@ var FIRMS = [
         locations: ["Boston, MA"],
         apply_url: "https://job-boards.greenhouse.io/walleyecapital-external-students/jobs/4679168006",
         eligibility_note: "\"Pursuing an undergraduate or advanced degree in computer science, engineering, statistics, mathematics, or a related field, with an expected graduation date between December 2027 and June 2028.\"…",
-        comp: "$20,000/month, plus a $10,000 housing stipend and covered domestic…", comp_source: "", comp_rank: null,
+        comp: "$20,000/month, plus a $10,000 housing stipend and covered domestic…", comp_source: "", comp_rank: 20000,
         tags: ["cpp", "stats"],
         undergrad_explicit: true, class_2028: true,
         notes: "10 weeks in Boston, June-August 2027. Alpha/portfolio-construction infrastructure, data pipelines, partnering with traders and researchers on strategies. The one-application rule is now moot in practice: the non-PhD…"

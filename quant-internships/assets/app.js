@@ -26,6 +26,7 @@
   var THEME_KEY = "quant-internships-theme";
   var APPLIED_KEY = "quant-internships-applied";
   var ANDREW_KEY = "quant-internships-andrew";
+  var PAY_KEY = "quant-internships-paytotal";
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -160,12 +161,23 @@
     if (stored !== null) andrew = stored === "1";
   } catch (e) { /* ignore */ }
 
+  // Pay is shown as a total over the internship by default; "as posted" keeps the
+  // firm's own wording and units, which is honest but not comparable by eye.
+  var payTotal = true;
+  try {
+    var storedPay = localStorage.getItem(PAY_KEY);
+    if (storedPay !== null) payTotal = storedPay === "1";
+  } catch (e) { /* ignore */ }
+
   var state = {
     types: new Set(),      // empty = all
     cats: new Set(),
     grades: new Set(),
     locs: new Set(),
-    statuses: new Set(),
+    // 22 of 126 roles are not open yet. They are noise while you are deciding
+    // where to spend an afternoon, so they are out by default and come back
+    // through one visible toggle rather than a chip buried in a disclosure.
+    showSoon: false,
     q: "",
     hideApplied: false,
     onlyOneOnly: false,
@@ -187,14 +199,25 @@
     return role.locations.some(function (l) { return /new york|nyc/i.test(l); });
   }
 
+  /* Two axes, eight chips between them, down from fourteen.
+
+     Where: 72 of 126 roles are New York and 28 are Chicago. Splitting the
+     remaining 26 into Northeast / South / West produced a chip that returned a
+     single role, so the tail is one bucket.
+
+     Kind: market makers, multistrat funds, asset managers and banks are the
+     four groups anyone actually filters on. Event contracts, energy, digital
+     assets and boutiques are 11 roles between them and share a chip. The
+     underlying `category` field is untouched — the drawer still prints the
+     precise one, and search still matches it. */
   function locBucket(role) {
     if (isNYC(role)) return "NYC";
     if (role.locations.some(function (l) { return /chicago/i.test(l); })) return "Chicago";
-    if (role.locations.some(function (l) { return /boston|greenwich|stamford|conn|philadelphia|bala/i.test(l); })) return "Northeast";
-    if (role.locations.some(function (l) { return /austin|houston|dallas|miami|jupiter|palm beach|charlotte|atlanta/i.test(l); })) return "South";
-    if (role.locations.some(function (l) { return /san francisco|palo alto|menlo|seattle|los angeles|newport|denver|boulder/i.test(l); })) return "West";
-    return "Other";
+    return "Elsewhere";
   }
+
+  var CAT_GROUP = { mm: "mm", multistrat: "multistrat", am: "am", bank: "bank" };
+  function catBucket(firm) { return CAT_GROUP[firm.category] || "other"; }
 
   /* ── filtering ─────────────────────────────────────────────── */
   // The interview panels are the densest text on the page, so search has to reach
@@ -217,10 +240,10 @@
   function roleMatches(role) {
     var firm = role._firm;
     if (state.types.size && !state.types.has(role.role_type)) return false;
-    if (state.cats.size && !state.cats.has(firm.category)) return false;
+    if (state.cats.size && !state.cats.has(catBucket(firm))) return false;
     if (state.grades.size && !state.grades.has(firm.grade)) return false;
     if (state.locs.size && !state.locs.has(locBucket(role))) return false;
-    if (state.statuses.size && !state.statuses.has(role.status || "open")) return false;
+    if (!state.showSoon && role.status === "soon") return false;
     if (state.hideApplied && applied.has(role.id)) return false;
     if (state.onlyOneOnly && !firm.one_only) return false;
     if (state.onlyDeadline && !role.deadline) return false;
@@ -239,7 +262,14 @@
 
   /* ── sorting ───────────────────────────────────────────────── */
   function roleKey(role) {
-    // Inside a firm run, Andrew mode puts QR first; otherwise best fit wins anyway.
+    // Sorting the board by pay and then seeing a firm led by its one role with no
+    // disclosed figure reads as a broken sort. When pay is the key, it orders
+    // inside the firm too.
+    if (state.sort === "comp") {
+      var p = payTotal ? totalPay(role) : role.comp_rank;
+      return [p == null ? 1 : 0, -(p || 0), role._i];
+    }
+    // Otherwise, Andrew mode puts QR first; best fit wins inside that.
     return [typeRank(role.role_type), -(role._fit || 0), role._i];
   }
 
@@ -342,6 +372,78 @@
     return !!role.comp && role.comp.trim().length > compShort(role.comp).length + 10;
   }
 
+  /* ── total pay over the internship ─────────────────────────────
+     The board quotes what each firm posts, which is four different
+     units — $8,600/week, $300,000 annualized, $25,000/month, $71,000
+     for the whole thing — and no two of them are comparable by eye.
+     The default column converts everything to one number: what the
+     internship actually pays, end to end.
+
+     comp_rank is the input, not the comp string. It is approximate
+     MONTHLY USD, entered per role by whoever read the posting, and it
+     already resolves the awkward cases correctly ($71,000 over 8 weeks
+     is recorded as 38,458/month). Re-parsing the prose would only
+     reproduce that work worse.
+
+     total = comp_rank × weeks ÷ (52/12)
+
+     The number is derived, so it always renders behind a ≈ and the
+     drawer prints the arithmetic. Two roles on the board state a total
+     outright — Bridgewater's $71,000 over 8 weeks and Walleye's $50,000
+     over 10 — and this reproduces both exactly, which is the only real
+     check available. Both are in selftest().
+     ───────────────────────────────────────────────────────────── */
+  var WEEKS_PER_MONTH = 52 / 12;
+  var WEEKS_ASSUMED = 10;   // the modal US quant internship
+  var WEEK_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8,
+                     nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14,
+                     fifteen: 15, sixteen: 16 };
+  var WEEKS_RE = new RegExp("\\b(\\d{1,2})\\s*-?\\s*week|\\b("
+    + Object.keys(WEEK_WORDS).join("|") + ")[-\\s]week", "i");
+
+  // Only 26 of 126 roles state a length anywhere, and every one of those falls
+  // between 8 and 11 weeks, so the assumed 10 is never far wrong. Scanned across
+  // the role's own text and its firm's, because "Ten-week programme" is usually
+  // written once at firm level.
+  function weeksOf(role) {
+    var firm = role._firm || {};
+    var hay = [role.comp, role.notes, role.eligibility_note, role.title, firm.note, firm.oa]
+      .filter(Boolean).join(" ");
+    var m = hay.match(WEEKS_RE);
+    if (!m) return { weeks: WEEKS_ASSUMED, stated: false };
+    var n = m[1] ? parseInt(m[1], 10) : WEEK_WORDS[m[2].toLowerCase()];
+    if (!(n >= 1 && n <= 16)) return { weeks: WEEKS_ASSUMED, stated: false };
+    return { weeks: n, stated: true };
+  }
+
+  function totalPay(role) {
+    if (role.comp_rank == null) return null;
+    return role.comp_rank * weeksOf(role).weeks / WEEKS_PER_MONTH;
+  }
+
+  // Rounded hard on purpose. comp_rank is approximate and the length is often
+  // assumed, so a figure like $53,847 would claim a precision that is not there.
+  function fmtTotal(n) {
+    var r = n >= 20000 ? Math.round(n / 1000) * 1000 : Math.round(n / 100) * 100;
+    return "≈$" + r.toLocaleString("en-US");
+  }
+
+  function payCell(role) {
+    if (payTotal) {
+      var t = totalPay(role);
+      if (t == null) return '<span class="unknown">—</span>';
+      var w = weeksOf(role);
+      return '<span class="n" data-src="' + esc(role.comp_source || "") + '" title="'
+        + esc(fmtTotal(t) + " over " + w.weeks + " weeks" + (w.stated ? "" : " (assumed)")
+              + " — from: " + role.comp) + '">' + esc(fmtTotal(t))
+        + (w.stated ? "" : '<span class="approx" aria-hidden="true">*</span>') + "</span>";
+    }
+    if (!role.comp) return '<span class="unknown">—</span>';
+    return '<span class="n" data-src="' + esc(role.comp_source || "") + '" title="' + esc(role.comp)
+      + '">' + esc(compShort(role.comp)) + (compTruncated(role) ? '<span class="plus">+</span>' : "")
+      + "</span>";
+  }
+
   /* Self-check. ?selftest in the URL asserts the pay compressor against the
      cases that have actually gone wrong, then reports over the live data.
      A wrong period on a pay figure is the one error on this page that would
@@ -368,8 +470,42 @@
         "expected", JSON.stringify(c[1]));
     });
     console.log(bad.length ? bad.length + " compShort failures" : "compShort: " + cases.length + " ok");
-    console.log("live pay strings:\n" + ALL.filter(function (r) { return r.comp; })
-      .map(function (r) { return compShort(r.comp).padEnd(22) + "  ⟵  " + r.comp; }).join("\n"));
+
+    /* The only real check on the derived total: two postings state one outright,
+       and the conversion has to reproduce both from comp_rank and the length.
+       If either breaks, every other total on the board is wrong too. */
+    var anchors = [
+      ["bridgewater", 71000, "$71,000 total for the 8-week internship"],
+      ["walleye", 50000, "$50,000 for 10 weeks"]
+    ];
+    var tbad = 0;
+    anchors.forEach(function (a) {
+      var role = ALL.filter(function (r) {
+        return r._firm.key === a[0] && r.comp && r.comp.indexOf("$" + a[1].toLocaleString("en-US")) === 0;
+      })[0];
+      if (!role) { console.error("totalPay ANCHOR MISSING", a[0], a[2]); tbad++; return; }
+      var got = totalPay(role), w = weeksOf(role);
+      if (fmtTotal(got) !== "≈$" + a[1].toLocaleString("en-US")) {
+        console.error("totalPay FAIL", a[0], "→", fmtTotal(got), "expected ≈$" + a[1].toLocaleString("en-US"),
+          "(" + w.weeks + "w " + (w.stated ? "stated" : "assumed") + ", rank " + role.comp_rank + ")");
+        tbad++;
+      }
+    });
+    var noRank = ALL.filter(function (r) { return r.comp && r.comp_rank == null; });
+    if (noRank.length) console.error(noRank.length + " roles have comp but no comp_rank — no total for them:",
+      noRank.map(function (r) { return r.id; }));
+    console.log(tbad ? tbad + " totalPay failures"
+      : "totalPay: both stated-total anchors reproduce exactly; "
+        + ALL.filter(function (r) { return weeksOf(r).stated; }).length + " roles state a length, "
+        + ALL.filter(function (r) { return totalPay(r) != null; }).length + " totals computable");
+    // The full table is 66 lines and drowns the assertions. ?selftest=full for it.
+    if (/selftest=full/.test(location.search))
+      console.log("live pay strings:\n" + ALL.filter(function (r) { return r.comp; })
+        .map(function (r) {
+          var t = totalPay(r);
+          return (t == null ? "—" : fmtTotal(t)).padEnd(10) + compShort(r.comp).padEnd(22)
+            + "  ⟵  " + r.comp;
+        }).join("\n"));
   }
   if (location.search.indexOf("selftest") > -1) selftest();
 
@@ -468,11 +604,7 @@
         + '<span class="rtitle">' + esc(role.title) + "</span>"
       + "</td>"
       + '<td class="c-loc">' + locShort(role) + "</td>"
-      + '<td class="c-pay">' + (role.comp
-          ? '<span class="n" data-src="' + esc(role.comp_source || "") + '" title="' + esc(role.comp) + '">'
-            + esc(compShort(role.comp)) + (compTruncated(role) ? '<span class="plus">+</span>' : "") + "</span>"
-          : '<span class="unknown">—</span>')
-      + "</td>"
+      + '<td class="c-pay">' + payCell(role) + "</td>"
       + '<td class="c-fit">' + (andrew ? '<span class="fit-n">' + role._fit + "</span>" : "") + "</td>"
       + '<td class="c-act">' + applyBtn
         + '<button class="done" type="button" aria-pressed="' + (isApplied ? "true" : "false")
@@ -509,9 +641,20 @@
       bits += '<div class="dw-b"><span class="label">Note</span><p>' + esc(note) + "</p></div>";
 
     var facts = [];
-    if (role.comp)
-      facts.push("<span><b>Pay</b> " + esc(role.comp)
+    if (role.comp) {
+      facts.push("<span><b>Pay, as posted</b> " + esc(role.comp)
         + (role.comp_source ? ' <i class="src">(' + esc(role.comp_source) + ")</i>" : "") + "</span>");
+      // Show the arithmetic. A derived number on a board about money has to be
+      // auditable, and the assumed length is the part worth doubting.
+      var t = totalPay(role);
+      if (t != null) {
+        var w = weeksOf(role);
+        facts.push("<span><b>Over the internship</b> " + esc(fmtTotal(t)) + " — $"
+          + esc(Math.round(role.comp_rank / WEEKS_PER_MONTH).toLocaleString("en-US")) + "/week × "
+          + w.weeks + " weeks" + (w.stated ? " (stated)" : ", length not stated so 10 assumed")
+          + "</span>");
+      }
+    }
     if (role.locations.length > 1)
       facts.push("<span><b>Locations</b> " + esc(role.locations.join(" · ")) + "</span>");
     if (role.status === "soon" && role.opens)
@@ -666,7 +809,10 @@
       var g = byFirm[f.key];
       g.roles.push(role);
       if (role._fit > g.top) g.top = role._fit;
-      if (role.comp_rank != null && (g.pay == null || role.comp_rank > g.pay)) g.pay = role.comp_rank;
+      // Sort on whatever the Pay column is currently showing. The two orders
+      // differ wherever the internship length differs.
+      var p = payTotal ? totalPay(role) : role.comp_rank;
+      if (p != null && (g.pay == null || p > g.pay)) g.pay = p;
       if (role.deadline && (!g.deadline || role.deadline < g.deadline)) g.deadline = role.deadline;
     });
 
@@ -728,7 +874,6 @@
   wireChips(".chip[data-cat]", "cats", "cat");
   wireChips(".chip[data-grade]", "grades", "grade");
   wireChips(".chip[data-loc]", "locs", "loc");
-  wireChips(".chip[data-status]", "statuses", "status");
 
   function wireToggle(id, key) {
     var btn = $(id);
@@ -742,6 +887,28 @@
   wireToggle("#hide-applied", "hideApplied");
   wireToggle("#only-one", "onlyOneOnly");
   wireToggle("#only-deadline", "onlyDeadline");
+  wireToggle("#show-soon", "showSoon");
+
+  var payBtn = $("#pay-mode");
+  function paintPay() {
+    payBtn.setAttribute("aria-pressed", payTotal ? "true" : "false");
+    payBtn.textContent = payTotal ? "≈ total" : "as posted";
+    payBtn.title = payTotal
+      ? "Showing what the internship pays end to end. Click for each firm's own figure and units."
+      : "Showing each firm's posted figure — weekly, monthly, annualised, or a lump sum. Click for one comparable total.";
+  }
+  payBtn.addEventListener("click", function () {
+    payTotal = !payTotal;
+    try { localStorage.setItem(PAY_KEY, payTotal ? "1" : "0"); } catch (e) { /* ignore */ }
+    paintPay();
+    render();
+  });
+  paintPay();
+
+  // The chip has to say how many roles it would add, or nobody presses it.
+  var soonBtn = $("#show-soon");
+  soonBtn.textContent = "+" + ALL.filter(function (r) { return r.status === "soon"; }).length
+    + " opening soon";
 
   // The nine "kind" chips, five locations and five status toggles are a second
   // row that almost nobody needs on arrival. Off by default; the board starts
@@ -786,8 +953,8 @@
 
   $("#reset").addEventListener("click", function () {
     state.types.clear(); state.cats.clear(); state.grades.clear();
-    state.locs.clear(); state.statuses.clear();
-    state.q = ""; state.hideApplied = false;
+    state.locs.clear();
+    state.q = ""; state.hideApplied = false; state.showSoon = false;
     state.onlyOneOnly = false; state.onlyDeadline = false;
     state.sort = andrew ? "fit" : "grade"; state.dir = 1;
     search.value = "";

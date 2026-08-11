@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-11T18:00:00Z",
-  "updated": "2026-08-11T19:35:59Z",
+  "valid_time_utc": "2026-08-11T21:00:00Z",
+  "updated": "2026-08-11T22:13:26Z",
   "hottest": [
     {
-      "name": "Woods",
-      "state": "OK",
-      "temp_f": 102.5
+      "name": "Russell",
+      "state": "KS",
+      "temp_f": 106.4
     },
     {
-      "name": "Alfalfa",
-      "state": "OK",
-      "temp_f": 102.4
+      "name": "Graham",
+      "state": "KS",
+      "temp_f": 106.4
     },
     {
-      "name": "Grant",
-      "state": "OK",
-      "temp_f": 101.6
+      "name": "Decatur",
+      "state": "KS",
+      "temp_f": 106.1
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.8
+      "temp_f": 48.9
     },
     {
-      "name": "North Slope",
+      "name": "Yakutat",
       "state": "AK",
-      "temp_f": 50.2
+      "temp_f": 52.1
     },
     {
-      "name": "Nome",
+      "name": "Aleutians East",
       "state": "AK",
-      "temp_f": 50.5
+      "temp_f": 53.6
     }
   ],
   "national": {
-    "min_f": 48.8,
-    "max_f": 102.5,
-    "mean_f": 85.4
+    "min_f": 48.9,
+    "max_f": 106.4,
+    "mean_f": 86.8
   }
 }

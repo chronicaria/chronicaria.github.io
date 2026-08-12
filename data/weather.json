@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-12T15:00:00Z",
-  "updated": "2026-08-12T16:27:14Z",
+  "valid_time_utc": "2026-08-12T18:00:00Z",
+  "updated": "2026-08-12T19:38:32Z",
   "hottest": [
-    {
-      "name": "Alfalfa",
-      "state": "OK",
-      "temp_f": 94.2
-    },
     {
       "name": "Woods",
       "state": "OK",
-      "temp_f": 93.5
+      "temp_f": 104.0
     },
     {
-      "name": "Major",
+      "name": "Alfalfa",
       "state": "OK",
-      "temp_f": 93.5
+      "temp_f": 104.0
+    },
+    {
+      "name": "Barber",
+      "state": "KS",
+      "temp_f": 102.9
     }
   ],
   "coldest": [
     {
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 48.3
+    },
+    {
+      "name": "Yakutat",
+      "state": "AK",
+      "temp_f": 50.1
+    },
+    {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 45.1
-    },
-    {
-      "name": "North Slope",
-      "state": "AK",
-      "temp_f": 46.3
-    },
-    {
-      "name": "Skagway",
-      "state": "AK",
-      "temp_f": 47.8
+      "temp_f": 51.6
     }
   ],
   "national": {
-    "min_f": 45.1,
-    "max_f": 94.2,
-    "mean_f": 77.6
+    "min_f": 48.3,
+    "max_f": 104.0,
+    "mean_f": 83.8
   }
 }

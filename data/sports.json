@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-12T13:52:59Z",
+ "updated": "2026-08-12T19:31:43Z",
  "errors": [],
  "teams": [
   {
@@ -415,7 +415,36 @@
      "score": "97-132"
     }
    ],
-   "next": []
+   "next": [
+    {
+     "date": "2026-10-31T00:00Z",
+     "opp": "Rockets",
+     "oppAbbr": "HOU",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909283"
+    },
+    {
+     "date": "2026-11-07T01:00Z",
+     "opp": "Jazz",
+     "oppAbbr": "UTAH",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909290"
+    },
+    {
+     "date": "2026-11-25T03:00Z",
+     "opp": "Nuggets",
+     "oppAbbr": "DEN",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909316"
+    },
+    {
+     "date": "2026-11-28T02:00Z",
+     "opp": "Suns",
+     "oppAbbr": "PHX",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909332"
+    }
+   ]
   },
   {
    "key": "spurs",

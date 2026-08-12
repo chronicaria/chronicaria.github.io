@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-12T04:00:00Z",
-  "updated": "2026-08-12T05:15:09Z",
+  "valid_time_utc": "2026-08-12T07:00:00Z",
+  "updated": "2026-08-12T08:00:27Z",
   "hottest": [
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 93.5
-    },
-    {
-      "name": "King",
-      "state": "TX",
-      "temp_f": 92.5
+      "temp_f": 89.2
     },
     {
       "name": "Foard",
       "state": "TX",
-      "temp_f": 92.3
+      "temp_f": 88.6
+    },
+    {
+      "name": "Jackson",
+      "state": "OK",
+      "temp_f": 88.5
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.8
+      "temp_f": 48.2
     },
     {
       "name": "Yakutat",
       "state": "AK",
-      "temp_f": 50.6
+      "temp_f": 49.2
     },
     {
-      "name": "San Juan",
-      "state": "CO",
-      "temp_f": 51.3
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 49.3
     }
   ],
   "national": {
-    "min_f": 48.8,
-    "max_f": 93.5,
-    "mean_f": 74.6
+    "min_f": 48.2,
+    "max_f": 89.2,
+    "mean_f": 72.1
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-12T18:00:00Z",
-  "updated": "2026-08-12T19:38:32Z",
+  "valid_time_utc": "2026-08-12T21:00:00Z",
+  "updated": "2026-08-12T22:11:39Z",
   "hottest": [
-    {
-      "name": "Woods",
-      "state": "OK",
-      "temp_f": 104.0
-    },
     {
       "name": "Alfalfa",
       "state": "OK",
-      "temp_f": 104.0
+      "temp_f": 106.2
     },
     {
-      "name": "Barber",
+      "name": "Woods",
+      "state": "OK",
+      "temp_f": 106.1
+    },
+    {
+      "name": "Kingman",
       "state": "KS",
-      "temp_f": 102.9
+      "temp_f": 105.5
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.3
+      "temp_f": 48.8
     },
     {
       "name": "Yakutat",
       "state": "AK",
-      "temp_f": 50.1
+      "temp_f": 52.6
     },
     {
-      "name": "Copper River",
+      "name": "Kodiak Island",
       "state": "AK",
-      "temp_f": 51.6
+      "temp_f": 54.2
     }
   ],
   "national": {
-    "min_f": 48.3,
-    "max_f": 104.0,
-    "mean_f": 83.8
+    "min_f": 48.8,
+    "max_f": 106.2,
+    "mean_f": 85.6
   }
 }

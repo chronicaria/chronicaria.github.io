@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-11T21:00:00Z",
-  "updated": "2026-08-11T22:13:26Z",
+  "valid_time_utc": "2026-08-12T02:00:00Z",
+  "updated": "2026-08-12T03:05:31Z",
   "hottest": [
     {
-      "name": "Russell",
-      "state": "KS",
-      "temp_f": 106.4
+      "name": "Foard",
+      "state": "TX",
+      "temp_f": 96.8
     },
     {
-      "name": "Graham",
-      "state": "KS",
-      "temp_f": 106.4
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 96.6
     },
     {
-      "name": "Decatur",
-      "state": "KS",
-      "temp_f": 106.1
+      "name": "Cottle",
+      "state": "TX",
+      "temp_f": 96.5
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.9
+      "temp_f": 49.6
     },
     {
       "name": "Yakutat",
       "state": "AK",
-      "temp_f": 52.1
+      "temp_f": 51.9
     },
     {
-      "name": "Aleutians East",
-      "state": "AK",
-      "temp_f": 53.6
+      "name": "San Juan",
+      "state": "CO",
+      "temp_f": 53.3
     }
   ],
   "national": {
-    "min_f": 48.9,
-    "max_f": 106.4,
-    "mean_f": 86.8
+    "min_f": 49.6,
+    "max_f": 96.8,
+    "mean_f": 77.6
   }
 }

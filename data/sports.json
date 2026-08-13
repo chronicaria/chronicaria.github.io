@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-12T19:31:43Z",
+ "updated": "2026-08-13T03:03:55Z",
  "errors": [],
  "teams": [
   {
@@ -109,11 +109,75 @@
    ],
    "next": [
     {
+     "date": "2026-11-02T05:00Z",
+     "opp": "Army",
+     "oppAbbr": "ARMY",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909562",
+     "tbd": true
+    },
+    {
+     "date": "2026-11-05T05:00Z",
+     "opp": "Coastal",
+     "oppAbbr": "CCU",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909563",
+     "tbd": true
+    },
+    {
+     "date": "2026-11-10T05:00Z",
+     "opp": "Michigan St",
+     "oppAbbr": "MSU",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909564",
+     "tbd": true
+    },
+    {
+     "date": "2026-11-13T05:00Z",
+     "opp": "SIUE",
+     "oppAbbr": "SIUE",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909565",
+     "tbd": true
+    },
+    {
+     "date": "2026-11-17T05:00Z",
+     "opp": "Illinois",
+     "oppAbbr": "ILL",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909566",
+     "tbd": true
+    },
+    {
+     "date": "2026-11-21T05:00Z",
+     "opp": "Washington St",
+     "oppAbbr": "WSU",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909567",
+     "tbd": true
+    },
+    {
+     "date": "2026-11-25T05:00Z",
+     "opp": "UConn",
+     "oppAbbr": "CONN",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909568",
+     "tbd": true
+    },
+    {
      "date": "2026-12-01T05:00Z",
      "opp": "Florida",
      "oppAbbr": "FLA",
      "home": false,
      "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906775",
+     "tbd": true
+    },
+    {
+     "date": "2026-12-04T05:00Z",
+     "opp": "Harvard",
+     "oppAbbr": "HARV",
+     "home": true,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909569",
      "tbd": true
     },
     {
@@ -443,6 +507,13 @@
      "oppAbbr": "PHX",
      "home": false,
      "url": "https://www.espn.com/nba/game/_/gameId/401909332"
+    },
+    {
+     "date": "2027-02-15T19:30Z",
+     "opp": "76ers",
+     "oppAbbr": "PHI",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909478"
     }
    ]
   },

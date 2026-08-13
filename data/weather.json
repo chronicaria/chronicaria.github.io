@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-13T13:00:00Z",
-  "updated": "2026-08-13T13:58:33Z",
+  "valid_time_utc": "2026-08-13T15:00:00Z",
+  "updated": "2026-08-13T16:25:40Z",
   "hottest": [
+    {
+      "name": "Woods",
+      "state": "OK",
+      "temp_f": 94.4
+    },
     {
       "name": "Alfalfa",
       "state": "OK",
-      "temp_f": 86.4
+      "temp_f": 94.3
     },
     {
-      "name": "Pinellas",
-      "state": "FL",
-      "temp_f": 86.3
-    },
-    {
-      "name": "Garfield",
+      "name": "Major",
       "state": "OK",
-      "temp_f": 86.0
+      "temp_f": 93.5
     }
   ],
   "coldest": [
     {
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 46.2
+    },
+    {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 44.0
+      "temp_f": 46.9
     },
     {
-      "name": "Hinsdale",
-      "state": "CO",
-      "temp_f": 45.2
-    },
-    {
-      "name": "Lake",
-      "state": "CO",
-      "temp_f": 45.4
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 48.0
     }
   ],
   "national": {
-    "min_f": 44.0,
-    "max_f": 86.4,
-    "mean_f": 72.3
+    "min_f": 46.2,
+    "max_f": 94.4,
+    "mean_f": 77.8
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-13T18:00:00Z",
-  "updated": "2026-08-13T19:35:35Z",
+  "valid_time_utc": "2026-08-13T21:00:00Z",
+  "updated": "2026-08-13T22:12:23Z",
   "hottest": [
     {
       "name": "Woods",
       "state": "OK",
-      "temp_f": 105.6
+      "temp_f": 109.1
+    },
+    {
+      "name": "Alfalfa",
+      "state": "OK",
+      "temp_f": 109.0
     },
     {
       "name": "Barber",
       "state": "KS",
-      "temp_f": 104.6
-    },
-    {
-      "name": "Woodward",
-      "state": "OK",
-      "temp_f": 104.2
+      "temp_f": 108.2
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 47.5
+      "temp_f": 47.6
     },
     {
       "name": "Glacier",
       "state": "MT",
-      "temp_f": 50.5
+      "temp_f": 51.6
     },
     {
-      "name": "Lewis and Clark",
-      "state": "MT",
-      "temp_f": 52.8
+      "name": "San Juan",
+      "state": "CO",
+      "temp_f": 52.3
     }
   ],
   "national": {
-    "min_f": 47.5,
-    "max_f": 105.6,
-    "mean_f": 83.9
+    "min_f": 47.6,
+    "max_f": 109.1,
+    "mean_f": 85.6
   }
 }

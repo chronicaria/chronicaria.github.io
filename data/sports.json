@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-13T13:53:16Z",
+ "updated": "2026-08-13T19:29:56Z",
  "errors": [],
  "teams": [
   {
@@ -481,11 +481,60 @@
    ],
    "next": [
     {
+     "date": "2026-10-22T00:30Z",
+     "opp": "Rockets",
+     "oppAbbr": "HOU",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909840"
+    },
+    {
+     "date": "2026-10-23T23:00Z",
+     "opp": "Pacers",
+     "oppAbbr": "IND",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909844"
+    },
+    {
+     "date": "2026-10-25T00:00Z",
+     "opp": "Spurs",
+     "oppAbbr": "SA",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909858"
+    },
+    {
+     "date": "2026-10-26T23:30Z",
+     "opp": "Heat",
+     "oppAbbr": "MIA",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909871"
+    },
+    {
+     "date": "2026-10-29T01:30Z",
+     "opp": "Thunder",
+     "oppAbbr": "OKC",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909891"
+    },
+    {
      "date": "2026-10-31T00:00Z",
      "opp": "Rockets",
      "oppAbbr": "HOU",
      "home": true,
      "url": "https://www.espn.com/nba/game/_/gameId/401909283"
+    },
+    {
+     "date": "2026-11-03T01:00Z",
+     "opp": "Kings",
+     "oppAbbr": "SAC",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909913"
+    },
+    {
+     "date": "2026-11-05T02:30Z",
+     "opp": "Spurs",
+     "oppAbbr": "SA",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909933"
     },
     {
      "date": "2026-11-07T01:00Z",
@@ -495,25 +544,11 @@
      "url": "https://www.espn.com/nba/game/_/gameId/401909290"
     },
     {
-     "date": "2026-11-25T03:00Z",
-     "opp": "Nuggets",
-     "oppAbbr": "DEN",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401909316"
-    },
-    {
-     "date": "2026-11-28T02:00Z",
-     "opp": "Suns",
-     "oppAbbr": "PHX",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401909332"
-    },
-    {
-     "date": "2027-02-15T19:30Z",
-     "opp": "76ers",
-     "oppAbbr": "PHI",
+     "date": "2026-11-09T00:30Z",
+     "opp": "Nets",
+     "oppAbbr": "BKN",
      "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401909478"
+     "url": "https://www.espn.com/nba/game/_/gameId/401909948"
     }
    ]
   },

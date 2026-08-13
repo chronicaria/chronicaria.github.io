@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-13T07:00:00Z",
-  "updated": "2026-08-13T08:02:17Z",
+  "valid_time_utc": "2026-08-13T09:00:00Z",
+  "updated": "2026-08-13T10:37:01Z",
   "hottest": [
     {
       "name": "Cottle",
       "state": "TX",
-      "temp_f": 91.3
-    },
-    {
-      "name": "King",
-      "state": "TX",
-      "temp_f": 90.5
+      "temp_f": 88.7
     },
     {
       "name": "Hall",
       "state": "TX",
-      "temp_f": 90.3
+      "temp_f": 88.3
+    },
+    {
+      "name": "Childress",
+      "state": "TX",
+      "temp_f": 87.9
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 44.9
+      "temp_f": 43.0
     },
     {
       "name": "Lake",
       "state": "CO",
-      "temp_f": 47.0
+      "temp_f": 45.9
     },
     {
-      "name": "Summit",
+      "name": "Hinsdale",
       "state": "CO",
-      "temp_f": 47.7
+      "temp_f": 46.8
     }
   ],
   "national": {
-    "min_f": 44.9,
-    "max_f": 91.3,
-    "mean_f": 71.9
+    "min_f": 43.0,
+    "max_f": 88.7,
+    "mean_f": 70.7
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-13T09:00:00Z",
-  "updated": "2026-08-13T10:37:01Z",
+  "valid_time_utc": "2026-08-13T13:00:00Z",
+  "updated": "2026-08-13T13:58:33Z",
   "hottest": [
     {
-      "name": "Cottle",
-      "state": "TX",
-      "temp_f": 88.7
+      "name": "Alfalfa",
+      "state": "OK",
+      "temp_f": 86.4
     },
     {
-      "name": "Hall",
-      "state": "TX",
-      "temp_f": 88.3
+      "name": "Pinellas",
+      "state": "FL",
+      "temp_f": 86.3
     },
     {
-      "name": "Childress",
-      "state": "TX",
-      "temp_f": 87.9
+      "name": "Garfield",
+      "state": "OK",
+      "temp_f": 86.0
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 43.0
-    },
-    {
-      "name": "Lake",
-      "state": "CO",
-      "temp_f": 45.9
+      "temp_f": 44.0
     },
     {
       "name": "Hinsdale",
       "state": "CO",
-      "temp_f": 46.8
+      "temp_f": 45.2
+    },
+    {
+      "name": "Lake",
+      "state": "CO",
+      "temp_f": 45.4
     }
   ],
   "national": {
-    "min_f": 43.0,
-    "max_f": 88.7,
-    "mean_f": 70.7
+    "min_f": 44.0,
+    "max_f": 86.4,
+    "mean_f": 72.3
   }
 }

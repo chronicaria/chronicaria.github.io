@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-13T02:00:00Z",
-  "updated": "2026-08-13T03:09:07Z",
+  "valid_time_utc": "2026-08-13T04:00:00Z",
+  "updated": "2026-08-13T05:18:49Z",
   "hottest": [
-    {
-      "name": "Cottle",
-      "state": "TX",
-      "temp_f": 98.8
-    },
     {
       "name": "King",
       "state": "TX",
-      "temp_f": 98.5
+      "temp_f": 94.7
     },
     {
       "name": "Foard",
       "state": "TX",
-      "temp_f": 98.4
+      "temp_f": 94.6
+    },
+    {
+      "name": "Cottle",
+      "state": "TX",
+      "temp_f": 94.6
     }
   ],
   "coldest": [
     {
-      "name": "Aleutians West",
-      "state": "AK",
-      "temp_f": 49.4
-    },
-    {
-      "name": "Glacier",
-      "state": "MT",
-      "temp_f": 50.5
+      "name": "San Juan",
+      "state": "CO",
+      "temp_f": 48.0
     },
     {
       "name": "Lake",
       "state": "CO",
-      "temp_f": 51.0
+      "temp_f": 48.1
+    },
+    {
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 49.0
     }
   ],
   "national": {
-    "min_f": 49.4,
-    "max_f": 98.8,
-    "mean_f": 76.8
+    "min_f": 48.0,
+    "max_f": 94.7,
+    "mean_f": 74.1
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-14T07:00:00Z",
-  "updated": "2026-08-14T07:58:43Z",
+  "valid_time_utc": "2026-08-14T09:00:00Z",
+  "updated": "2026-08-14T10:34:06Z",
   "hottest": [
+    {
+      "name": "Knox",
+      "state": "TX",
+      "temp_f": 87.5
+    },
+    {
+      "name": "Foard",
+      "state": "TX",
+      "temp_f": 87.0
+    },
     {
       "name": "Woods",
       "state": "OK",
-      "temp_f": 89.9
-    },
-    {
-      "name": "Harper",
-      "state": "OK",
-      "temp_f": 89.6
-    },
-    {
-      "name": "Alfalfa",
-      "state": "OK",
-      "temp_f": 89.5
+      "temp_f": 86.6
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 43.4
+      "temp_f": 42.2
     },
     {
       "name": "Hinsdale",
       "state": "CO",
-      "temp_f": 46.1
+      "temp_f": 44.8
     },
     {
       "name": "Lake",
       "state": "CO",
-      "temp_f": 46.8
+      "temp_f": 46.7
     }
   ],
   "national": {
-    "min_f": 43.4,
-    "max_f": 89.9,
-    "mean_f": 72.0
+    "min_f": 42.2,
+    "max_f": 87.5,
+    "mean_f": 70.8
   }
 }

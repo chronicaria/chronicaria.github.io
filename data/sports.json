@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-13T19:29:56Z",
+ "updated": "2026-08-14T03:02:44Z",
  "errors": [],
  "teams": [
   {
@@ -577,7 +577,7 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "0-0",
+   "record": "0-0-1",
    "standing": "",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-14T04:00:00Z",
-  "updated": "2026-08-14T05:15:50Z",
+  "valid_time_utc": "2026-08-14T07:00:00Z",
+  "updated": "2026-08-14T07:58:43Z",
   "hottest": [
     {
-      "name": "King",
-      "state": "TX",
-      "temp_f": 95.0
-    },
-    {
-      "name": "Cottle",
-      "state": "TX",
-      "temp_f": 94.9
+      "name": "Woods",
+      "state": "OK",
+      "temp_f": 89.9
     },
     {
       "name": "Harper",
       "state": "OK",
-      "temp_f": 94.8
+      "temp_f": 89.6
+    },
+    {
+      "name": "Alfalfa",
+      "state": "OK",
+      "temp_f": 89.5
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 45.9
+      "temp_f": 43.4
     },
     {
-      "name": "Aleutians West",
-      "state": "AK",
-      "temp_f": 48.2
+      "name": "Hinsdale",
+      "state": "CO",
+      "temp_f": 46.1
     },
     {
-      "name": "Teton",
-      "state": "WY",
-      "temp_f": 48.7
+      "name": "Lake",
+      "state": "CO",
+      "temp_f": 46.8
     }
   ],
   "national": {
-    "min_f": 45.9,
-    "max_f": 95.0,
-    "mean_f": 74.3
+    "min_f": 43.4,
+    "max_f": 89.9,
+    "mean_f": 72.0
   }
 }

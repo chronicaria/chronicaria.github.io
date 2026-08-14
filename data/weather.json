@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-14T13:00:00Z",
-  "updated": "2026-08-14T13:54:23Z",
+  "valid_time_utc": "2026-08-14T15:00:00Z",
+  "updated": "2026-08-14T16:24:34Z",
   "hottest": [
     {
-      "name": "Pinellas",
-      "state": "FL",
-      "temp_f": 86.4
+      "name": "Sharp",
+      "state": "AR",
+      "temp_f": 92.1
     },
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 86.0
+      "name": "Greene",
+      "state": "NC",
+      "temp_f": 91.7
     },
     {
-      "name": "Lee",
-      "state": "FL",
-      "temp_f": 86.0
+      "name": "Grant",
+      "state": "OK",
+      "temp_f": 91.7
     }
   ],
   "coldest": [
     {
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 47.8
+    },
+    {
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 47.9
+    },
+    {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 41.9
-    },
-    {
-      "name": "Hinsdale",
-      "state": "CO",
-      "temp_f": 43.9
-    },
-    {
-      "name": "Lake",
-      "state": "CO",
-      "temp_f": 44.1
+      "temp_f": 48.0
     }
   ],
   "national": {
-    "min_f": 41.9,
-    "max_f": 86.4,
-    "mean_f": 72.4
+    "min_f": 47.8,
+    "max_f": 92.1,
+    "mean_f": 77.6
   }
 }

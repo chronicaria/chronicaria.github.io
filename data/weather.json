@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-14T15:00:00Z",
-  "updated": "2026-08-14T16:24:34Z",
+  "valid_time_utc": "2026-08-14T18:00:00Z",
+  "updated": "2026-08-14T19:29:50Z",
   "hottest": [
     {
-      "name": "Sharp",
-      "state": "AR",
-      "temp_f": 92.1
-    },
-    {
-      "name": "Greene",
-      "state": "NC",
-      "temp_f": 91.7
-    },
-    {
-      "name": "Grant",
+      "name": "Woods",
       "state": "OK",
-      "temp_f": 91.7
+      "temp_f": 102.9
+    },
+    {
+      "name": "Alfalfa",
+      "state": "OK",
+      "temp_f": 102.5
+    },
+    {
+      "name": "Woodward",
+      "state": "OK",
+      "temp_f": 102.1
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 47.8
+      "temp_f": 47.6
     },
     {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 47.9
+      "name": "Glacier",
+      "state": "MT",
+      "temp_f": 48.9
     },
     {
-      "name": "San Juan",
-      "state": "CO",
-      "temp_f": 48.0
+      "name": "Teton",
+      "state": "MT",
+      "temp_f": 51.8
     }
   ],
   "national": {
-    "min_f": 47.8,
-    "max_f": 92.1,
-    "mean_f": 77.6
+    "min_f": 47.6,
+    "max_f": 102.9,
+    "mean_f": 83.3
   }
 }

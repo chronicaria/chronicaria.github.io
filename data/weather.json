@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-14T09:00:00Z",
-  "updated": "2026-08-14T10:34:06Z",
+  "valid_time_utc": "2026-08-14T13:00:00Z",
+  "updated": "2026-08-14T13:54:23Z",
   "hottest": [
     {
-      "name": "Knox",
-      "state": "TX",
-      "temp_f": 87.5
+      "name": "Pinellas",
+      "state": "FL",
+      "temp_f": 86.4
     },
     {
-      "name": "Foard",
-      "state": "TX",
-      "temp_f": 87.0
+      "name": "Miami-Dade",
+      "state": "FL",
+      "temp_f": 86.0
     },
     {
-      "name": "Woods",
-      "state": "OK",
-      "temp_f": 86.6
+      "name": "Lee",
+      "state": "FL",
+      "temp_f": 86.0
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 42.2
+      "temp_f": 41.9
     },
     {
       "name": "Hinsdale",
       "state": "CO",
-      "temp_f": 44.8
+      "temp_f": 43.9
     },
     {
       "name": "Lake",
       "state": "CO",
-      "temp_f": 46.7
+      "temp_f": 44.1
     }
   ],
   "national": {
-    "min_f": 42.2,
-    "max_f": 87.5,
-    "mean_f": 70.8
+    "min_f": 41.9,
+    "max_f": 86.4,
+    "mean_f": 72.4
   }
 }

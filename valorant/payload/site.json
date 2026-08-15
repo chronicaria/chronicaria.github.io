@@ -2,15 +2,15 @@
   "meta": {
     "act": "e11a4",
     "release": "model_suite_release_2026-08-02_v15",
-    "matches": 96,
-    "rounds": 1956,
-    "round_players": 19453,
-    "players": 776,
+    "matches": 100,
+    "rounds": 2046,
+    "round_players": 20331,
+    "players": 811,
     "bootstrap": 100000,
     "seed": 20260726,
     "confidence": 0.95,
-    "mean_leverage": 0.16000625403664115,
-    "generated_at": "2026-08-10",
+    "mean_leverage": 0.16105550910747443,
+    "generated_at": "2026-08-15",
     "gate": {
       "rank_players": true,
       "rate_floor_rounds": 0,
@@ -124,11 +124,11 @@
       "duel_key": "duel_credit"
     },
     "ladder": {
-      "n": 181,
+      "n": 186,
       "minimum_ranked": 5,
-      "r_mwpa": 0.034,
-      "r_lobby_adjustment": 0.154,
-      "r_lobby_adjustment_rate": 0.121,
+      "r_mwpa": 0.024,
+      "r_lobby_adjustment": 0.15,
+      "r_lobby_adjustment_rate": 0.115,
       "lobby_spread_median": 4.0,
       "lobby_spread_max": 8
     },
@@ -1002,11 +1002,11 @@
     "cav": [
       {
         "id": "act_scope",
-        "text": "Every number here is act e11a4 alone — 96 matches, 1,956 rounds — with nothing pooled across acts."
+        "text": "Every number here is act e11a4 alone — 100 matches, 2,046 rounds — with nothing pooled across acts."
       },
       {
         "id": "two_scoring_provenances",
-        "text": "65 of these matches were priced inside the model release, each by a fold fit without it. 31 were collected after the release was cut, and cross-fitting keeps its predictions but not its models, so those are priced by a refit on the release's own core at the parameters all five folds already chose. Neither kind was in the training data of the model that scored it; what differs is that one model saw four fifths of the corpus and the other saw all of it, worth a mean 0.6% of round win probability across the act's states."
+        "text": "65 of these matches were priced inside the model release, each by a fold fit without it. 35 were collected after the release was cut, and cross-fitting keeps its predictions but not its models, so those are priced by a refit on the release's own core at the parameters all five folds already chose. Neither kind was in the training data of the model that scored it; what differs is that one model saw four fifths of the corpus and the other saw all of it, worth a mean 0.6% of round win probability across the act's states."
       },
       {
         "id": "surrendered_rounds_are_not_played_rounds",
@@ -1018,7 +1018,7 @@
       },
       {
         "id": "side_split_unresolvable",
-        "text": "The attack/defense split cannot resolve at this exposure: it needs roughly 14,000 rounds at this credit variance and the act has 1,956. Both cells are published with their intervals; the width there is the sample, not the player."
+        "text": "The attack/defense split cannot resolve at this exposure: it needs roughly 14,000 rounds at this credit variance and the act has 2,046. Both cells are published with their intervals; the width there is the sample, not the player."
       },
       {
         "id": "no_abilities",
@@ -1030,7 +1030,7 @@
       },
       {
         "id": "noindex_is_not_access_control",
-        "text": "A noindex tag and a robots.txt keep this out of search results, which is not access control: the pages sit in a public repository, readable by anyone with the URL, including round-level detail on 772 players who did not consent to any of it. The point was raised before the build and the decision to publish was reaffirmed."
+        "text": "A noindex tag and a robots.txt keep this out of search results, which is not access control: the pages sit in a public repository, readable by anyone with the URL, including round-level detail on 807 players who did not consent to any of it. The point was raised before the build and the decision to publish was reaffirmed."
       },
       {
         "id": "thin_cells_shown",
@@ -1042,7 +1042,7 @@
       },
       {
         "id": "duel_tags_incomplete",
-        "text": "Duel tags cover 9,766 of 9,832 earned rows; the missing 66, 0.7%, are 60 clutch_lost, 4 opening_death and 2 traded across 65 rounds. They have no round-player row to attach to, because the ledger scores nobody who was alive and produced no kill, death, plant, defuse or clock share — a clutch lost without firing is the modal case."
+        "text": "Duel tags cover 10,232 of 10,310 earned rows; the missing 78, 0.8%, are 72 clutch_lost, 4 opening_death and 2 traded across 77 rounds. They have no round-player row to attach to, because the ledger scores nobody who was alive and produced no kill, death, plant, defuse or clock share — a clutch lost without firing is the modal case."
       },
       {
         "id": "single_match_interval",
@@ -1070,11 +1070,11 @@
       },
       {
         "id": "components_include_the_lobby_adjustment",
-        "text": "The five credit types decompose the raw ledger before the lobby centering, so a further row carries that centering and the rows sum to the headline exactly. Across the four the raw five sum to +5.2014 against a headline sum of +2.9671, and the lobby adjustment is the -2.2343 between them."
+        "text": "The five credit types decompose the raw ledger before the lobby centering, so a further row carries that centering and the rows sum to the headline exactly. Across the four the raw five sum to +5.1668 against a headline sum of +2.8829, and the lobby adjustment is the -2.2839 between them."
       },
       {
         "id": "wp_curve_boundary_seam",
-        "text": "The curve steps at a round boundary and the step is real: the match model runs every future round at a constant win probability of 0.5, so a boundary is the score talking, and the round-start node then moves it to the model's price on the round about to be played. Across the 1,956 rounds of this act the median step is 1.5 match win probability points and the largest is 10.4; neither end of it is a player."
+        "text": "The curve steps at a round boundary and the step is real: the match model runs every future round at a constant win probability of 0.5, so a boundary is the score talking, and the round-start node then moves it to the model's price on the round about to be played. Across the 2,046 rounds of this act the median step is 1.5 match win probability points and the largest is 10.9; neither end of it is a player."
       },
       {
         "id": "leverage_widens",
@@ -1082,11 +1082,11 @@
       },
       {
         "id": "buy_bands_local",
-        "text": "The buy classes are cut from this corpus's own team-loadout distribution, not from Counter-Strike convention. Eco rounds are won 42.4% of the time in this act, against roughly one in thirty in professional Counter-Strike, which is direct evidence that the imported cut points describe a different game."
+        "text": "The buy classes are cut from this corpus's own team-loadout distribution, not from Counter-Strike convention. Eco rounds are won 42.2% of the time in this act, against roughly one in thirty in professional Counter-Strike, which is direct evidence that the imported cut points describe a different game."
       },
       {
         "id": "synergy_is_ordered",
-        "text": "Synergy is ordered: each row is the subject's own MWPA over the rounds a given partner also played, not a joint estimate, so the two directions of a pairing are different numbers. martin and snorlax are the only pairing with real shared exposure, at 1,094 shared rounds; themarias and trzzcko never shared a round in this act, and that cell is null, not zero."
+        "text": "Synergy is ordered: each row is the subject's own MWPA over the rounds a given partner also played, not a joint estimate, so the two directions of a pairing are different numbers. martin and snorlax are the only pairing with real shared exposure, at 1,097 shared rounds; themarias and trzzcko never shared a round in this act, and that cell is null, not zero."
       },
       {
         "id": "descriptive_not_causal",
@@ -1094,11 +1094,11 @@
       },
       {
         "id": "tier_placement_window",
-        "text": "A player's first 5 act matches are played before the platform has issued a rank: not a missing value and not a zero, but the measured answer that no division existed yet. Verified rather than assumed — 144 of the 776 act players who have such a match carry it as a strict prefix, with no counterexamples."
+        "text": "A player's first 5 act matches are played before the platform has issued a rank: not a missing value and not a zero, but the measured answer that no division existed yet. Verified rather than assumed — 144 of the 811 act players who have such a match carry it as a strict prefix, with no counterexamples."
       },
       {
         "id": "tier_is_not_mwpa",
-        "text": "The ladder is a second instrument and it is not measuring this: over the 181 focal player-matches with at least 5 ranked others in the lobby, the lobby's mean division correlates with that match's MWPA at r = +0.034, with the lobby adjustment at r = +0.154, and with that adjustment as a rate at r = +0.121. Lobbies are not division-homogeneous either — the median spread inside one is 4 divisions and the widest is 8."
+        "text": "The ladder is a second instrument and it is not measuring this: over the 186 focal player-matches with at least 5 ranked others in the lobby, the lobby's mean division correlates with that match's MWPA at r = +0.024, with the lobby adjustment at r = +0.150, and with that adjustment as a rate at r = +0.115. Lobbies are not division-homogeneous either — the median spread inside one is 4 divisions and the widest is 8."
       },
       {
         "id": "imagery_is_not_a_mark",
@@ -1106,7 +1106,7 @@
       },
       {
         "id": "where_imagery_is_allowed",
-        "text": "The round ledger stays words: across 19,444 named cells Vandal alone is 33.3%, so an icon column there repeats and is texture rather than navigation. The silhouettes ship in the `by weapon` breakdown, where every row is a distinct weapon; a division badge ships only beside the division word and never in a cell carrying a player hue, because Riot's gold sits within OKLab ΔE 3.5 of one player's own hue; map art is refused. The player card is the one place the art is not eighteen pixels tall — everywhere else it rides inside a table row and the row's line box is the constraint, and a card is not a row, so the agents and the guns on it are drawn at the size the files actually are. Nothing else about them changes: the word is beside every picture, the weapon plate comes with the weapon art, and the header control still takes all of it away without losing a fact."
+        "text": "The round ledger stays words: across 20,322 named cells Vandal alone is 33.3%, so an icon column there repeats and is texture rather than navigation. The silhouettes ship in the `by weapon` breakdown, where every row is a distinct weapon; a division badge ships only beside the division word and never in a cell carrying a player hue, because Riot's gold sits within OKLab ΔE 3.5 of one player's own hue; map art is refused. The player card is the one place the art is not eighteen pixels tall — everywhere else it rides inside a table row and the row's line box is the constraint, and a card is not a row, so the agents and the guns on it are drawn at the size the files actually are. Nothing else about them changes: the word is beside every picture, the weapon plate comes with the weapon art, and the header control still takes all of it away without losing a fact."
       },
       {
         "id": "riot_assets",
@@ -1114,7 +1114,7 @@
       },
       {
         "id": "unrated_is_not_a_division",
-        "text": "16.7% of this act's player-matches carry no division, and no badge ships for that state: Riot's enum puts `Unrated` at id 0 on the ladder that has Iron 2 at 4, which would draw the absence of a rank as a rung below the lowest one, and `Unrated` is also the name of a queue while all 96 of these matches are Competitive. It is the word `placement` everywhere it appears — not an em dash, which on this site means NOT MEASURED — and on the ladder it gets an empty slot in a dashed hairline."
+        "text": "16.0% of this act's player-matches carry no division, and no badge ships for that state: Riot's enum puts `Unrated` at id 0 on the ladder that has Iron 2 at 4, which would draw the absence of a rank as a rung below the lowest one, and `Unrated` is also the name of a queue while all 100 of these matches are Competitive. It is the word `placement` everywhere it appears — not an em dash, which on this site means NOT MEASURED — and on the ladder it gets an empty slot in a dashed hairline."
       }
     ]
   },
@@ -1125,11 +1125,11 @@
       "short": "trzzcko",
       "rank": 1,
       "impact": 0.046898,
-      "impact_lo": -0.010885,
-      "impact_hi": 0.117538,
+      "impact_lo": -0.010509,
+      "impact_hi": 0.117199,
       "rate": 0.2495,
-      "lo": -0.0579,
-      "hi": 0.6252,
+      "lo": -0.0559,
+      "hi": 0.6234,
       "covers_zero": true,
       "total": 1.641438,
       "rounds": 658,
@@ -1150,23 +1150,23 @@
       "name": "SN0RLAX#143",
       "short": "snorlax",
       "rank": 2,
-      "impact": 0.018501,
-      "impact_lo": -0.02201,
-      "impact_hi": 0.059615,
-      "rate": 0.0909,
-      "lo": -0.1081,
-      "hi": 0.2928,
+      "impact": 0.017103,
+      "impact_lo": -0.021908,
+      "impact_hi": 0.056519,
+      "rate": 0.0836,
+      "lo": -0.1071,
+      "hi": 0.2763,
       "covers_zero": true,
-      "total": 1.591092,
-      "rounds": 1751,
-      "matches": 86,
+      "total": 1.53926,
+      "rounds": 1841,
+      "matches": 90,
       "ladder": {
         "first": "Bronze 2",
         "last": "Silver 1",
         "low": "Bronze 1",
         "high": "Silver 1",
         "placement": 5,
-        "ranked": 81,
+        "ranked": 85,
         "steps_up": 5,
         "steps_down": 3
       }
@@ -1177,11 +1177,11 @@
       "short": "themarias",
       "rank": 3,
       "impact": -0.001839,
-      "impact_lo": -0.162415,
-      "impact_hi": 0.123513,
+      "impact_lo": -0.163664,
+      "impact_hi": 0.122187,
       "rate": -0.0094,
-      "lo": -0.8329,
-      "hi": 0.6334,
+      "lo": -0.8393,
+      "hi": 0.6266,
       "covers_zero": true,
       "total": -0.01471,
       "rounds": 156,
@@ -1202,23 +1202,23 @@
       "name": "MartinLutherKing#racis",
       "short": "martin",
       "rank": 4,
-      "impact": -0.004249,
-      "impact_lo": -0.040286,
-      "impact_hi": 0.031473,
-      "rate": -0.0213,
-      "lo": -0.2016,
-      "hi": 0.1575,
+      "impact": -0.004718,
+      "impact_lo": -0.040267,
+      "impact_hi": 0.029924,
+      "rate": -0.024,
+      "lo": -0.2044,
+      "hi": 0.1519,
       "covers_zero": true,
-      "total": -0.250675,
-      "rounds": 1179,
-      "matches": 59,
+      "total": -0.283098,
+      "rounds": 1182,
+      "matches": 60,
       "ladder": {
         "first": "Bronze 1",
         "last": "Silver 1",
         "low": "Bronze 1",
         "high": "Silver 1",
         "placement": 5,
-        "ranked": 54,
+        "ranked": 55,
         "steps_up": 5,
         "steps_down": 2
       }
@@ -1814,6 +1814,16 @@
         "mwpa": -0.192219,
         "cumulative": -0.250675,
         "rounds": 16,
+        "won": false
+      },
+      {
+        "i": 59,
+        "match_id": "5a79ab8e-07a0-4c2d-ae61-57879ea348db",
+        "started_at": "2026-08-14T02:30:31.574Z",
+        "map": "Breeze",
+        "mwpa": -0.032423,
+        "cumulative": -0.283098,
+        "rounds": 3,
         "won": false
       }
     ],
@@ -2676,6 +2686,46 @@
         "mwpa": -0.280739,
         "cumulative": 1.591092,
         "rounds": 24,
+        "won": false
+      },
+      {
+        "i": 86,
+        "match_id": "5a79ab8e-07a0-4c2d-ae61-57879ea348db",
+        "started_at": "2026-08-14T02:30:31.574Z",
+        "map": "Breeze",
+        "mwpa": 0.081582,
+        "cumulative": 1.672674,
+        "rounds": 21,
+        "won": false
+      },
+      {
+        "i": 87,
+        "match_id": "56d70024-10c6-4183-8c27-3f1b04cd25db",
+        "started_at": "2026-08-14T03:07:07.367Z",
+        "map": "Summit",
+        "mwpa": 0.031312,
+        "cumulative": 1.703986,
+        "rounds": 23,
+        "won": false
+      },
+      {
+        "i": 88,
+        "match_id": "328724ab-8496-49bb-9e0d-40aad05b17c6",
+        "started_at": "2026-08-14T03:46:34.809Z",
+        "map": "Summit",
+        "mwpa": -0.075649,
+        "cumulative": 1.628337,
+        "rounds": 24,
+        "won": false
+      },
+      {
+        "i": 89,
+        "match_id": "0f48f46e-deee-4f6b-8cf6-1f31138b32b1",
+        "started_at": "2026-08-14T04:27:36.234Z",
+        "map": "Lotus",
+        "mwpa": -0.089077,
+        "cumulative": 1.53926,
+        "rounds": 22,
         "won": false
       }
     ],
@@ -4549,6 +4599,63 @@
       "focal": [
         "martin",
         "trzzcko"
+      ]
+    },
+    {
+      "match_id": "5a79ab8e-07a0-4c2d-ae61-57879ea348db",
+      "started_at": "2026-08-14T02:30:31.574Z",
+      "map": "Breeze",
+      "rounds": 21,
+      "score": [
+        8,
+        13
+      ],
+      "won": false,
+      "focal": [
+        "martin",
+        "snorlax"
+      ]
+    },
+    {
+      "match_id": "56d70024-10c6-4183-8c27-3f1b04cd25db",
+      "started_at": "2026-08-14T03:07:07.367Z",
+      "map": "Summit",
+      "rounds": 23,
+      "score": [
+        10,
+        13
+      ],
+      "won": false,
+      "focal": [
+        "snorlax"
+      ]
+    },
+    {
+      "match_id": "328724ab-8496-49bb-9e0d-40aad05b17c6",
+      "started_at": "2026-08-14T03:46:34.809Z",
+      "map": "Summit",
+      "rounds": 24,
+      "score": [
+        11,
+        13
+      ],
+      "won": false,
+      "focal": [
+        "snorlax"
+      ]
+    },
+    {
+      "match_id": "0f48f46e-deee-4f6b-8cf6-1f31138b32b1",
+      "started_at": "2026-08-14T04:27:36.234Z",
+      "map": "Lotus",
+      "rounds": 22,
+      "score": [
+        9,
+        13
+      ],
+      "won": false,
+      "focal": [
+        "snorlax"
       ]
     }
   ]

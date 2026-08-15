@@ -56,7 +56,7 @@ CONFIDENCE = 0.95
 # the 83-match corpus, where the 68-match corpus read 0.16427272872711246. The guard below is the
 # point of the literal — a ledger whose mean leverage is not this one is not the ledger this
 # payload was written for, and the run stops rather than emitting numbers off the wrong corpus.
-MEAN_LEVERAGE = 0.16000625403664115
+MEAN_LEVERAGE = 0.16105550910747443
 
 RATE_FLOOR_ROUNDS = 0
 THIN_ROUNDS = 20

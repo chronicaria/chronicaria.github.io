@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-15T12:00:00Z",
-  "updated": "2026-08-15T13:09:00Z",
+  "valid_time_utc": "2026-08-15T14:00:00Z",
+  "updated": "2026-08-15T15:47:18Z",
   "hottest": [
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 84.9
+      "name": "Pender",
+      "state": "NC",
+      "temp_f": 89.1
     },
     {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 83.4
+      "name": "Bladen",
+      "state": "NC",
+      "temp_f": 88.9
     },
     {
-      "name": "Galveston",
-      "state": "TX",
-      "temp_f": 83.4
+      "name": "Columbus",
+      "state": "NC",
+      "temp_f": 88.5
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 40.2
+      "temp_f": 44.5
     },
     {
-      "name": "Lake",
-      "state": "CO",
-      "temp_f": 42.2
+      "name": "Teton",
+      "state": "WY",
+      "temp_f": 46.3
     },
     {
-      "name": "Hinsdale",
-      "state": "CO",
-      "temp_f": 42.8
+      "name": "Alpine",
+      "state": "CA",
+      "temp_f": 46.8
     }
   ],
   "national": {
-    "min_f": 40.2,
-    "max_f": 84.9,
-    "mean_f": 70.0
+    "min_f": 44.5,
+    "max_f": 89.1,
+    "mean_f": 74.8
   }
 }

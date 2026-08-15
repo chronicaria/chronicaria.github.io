@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-15T14:00:00Z",
-  "updated": "2026-08-15T15:47:18Z",
+  "valid_time_utc": "2026-08-15T18:00:00Z",
+  "updated": "2026-08-15T18:57:40Z",
   "hottest": [
     {
-      "name": "Pender",
-      "state": "NC",
-      "temp_f": 89.1
+      "name": "Sharp",
+      "state": "AR",
+      "temp_f": 100.0
     },
     {
-      "name": "Bladen",
-      "state": "NC",
-      "temp_f": 88.9
+      "name": "Major",
+      "state": "OK",
+      "temp_f": 99.9
     },
     {
-      "name": "Columbus",
-      "state": "NC",
-      "temp_f": 88.5
+      "name": "Independence",
+      "state": "AR",
+      "temp_f": 99.7
     }
   ],
   "coldest": [
     {
-      "name": "San Juan",
-      "state": "CO",
-      "temp_f": 44.5
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 47.9
     },
     {
-      "name": "Teton",
-      "state": "WY",
-      "temp_f": 46.3
+      "name": "Aleutians East",
+      "state": "AK",
+      "temp_f": 52.7
     },
     {
-      "name": "Alpine",
-      "state": "CA",
-      "temp_f": 46.8
+      "name": "Dillingham",
+      "state": "AK",
+      "temp_f": 53.5
     }
   ],
   "national": {
-    "min_f": 44.5,
-    "max_f": 89.1,
-    "mean_f": 74.8
+    "min_f": 47.9,
+    "max_f": 100.0,
+    "mean_f": 83.6
   }
 }

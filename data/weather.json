@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-15T03:00:00Z",
-  "updated": "2026-08-15T04:05:33Z",
+  "valid_time_utc": "2026-08-15T06:00:00Z",
+  "updated": "2026-08-15T07:08:00Z",
   "hottest": [
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 95.1
+      "temp_f": 89.1
     },
     {
       "name": "Cottle",
       "state": "TX",
-      "temp_f": 94.2
+      "temp_f": 88.2
     },
     {
       "name": "Hall",
       "state": "TX",
-      "temp_f": 93.7
+      "temp_f": 88.2
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 47.7
+      "temp_f": 43.9
     },
     {
       "name": "Lake",
       "state": "CO",
-      "temp_f": 48.6
+      "temp_f": 45.4
     },
     {
       "name": "Teton",
       "state": "WY",
-      "temp_f": 48.7
+      "temp_f": 45.9
     }
   ],
   "national": {
-    "min_f": 47.7,
-    "max_f": 95.1,
-    "mean_f": 75.0
+    "min_f": 43.9,
+    "max_f": 89.1,
+    "mean_f": 72.3
   }
 }

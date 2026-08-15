@@ -1,28 +1,28 @@
 {
-  "valid_time_utc": "2026-08-15T18:00:00Z",
-  "updated": "2026-08-15T18:57:40Z",
+  "valid_time_utc": "2026-08-15T20:00:00Z",
+  "updated": "2026-08-15T21:48:06Z",
   "hottest": [
     {
-      "name": "Sharp",
-      "state": "AR",
-      "temp_f": 100.0
+      "name": "Alfalfa",
+      "state": "OK",
+      "temp_f": 104.5
+    },
+    {
+      "name": "Woods",
+      "state": "OK",
+      "temp_f": 104.2
     },
     {
       "name": "Major",
       "state": "OK",
-      "temp_f": 99.9
-    },
-    {
-      "name": "Independence",
-      "state": "AR",
-      "temp_f": 99.7
+      "temp_f": 104.1
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 47.9
+      "temp_f": 48.0
     },
     {
       "name": "Aleutians East",
@@ -30,14 +30,14 @@
       "temp_f": 52.7
     },
     {
-      "name": "Dillingham",
+      "name": "Kodiak Island",
       "state": "AK",
-      "temp_f": 53.5
+      "temp_f": 54.5
     }
   ],
   "national": {
-    "min_f": 47.9,
-    "max_f": 100.0,
-    "mean_f": 83.6
+    "min_f": 48.0,
+    "max_f": 104.5,
+    "mean_f": 85.4
   }
 }

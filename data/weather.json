@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-15T09:00:00Z",
-  "updated": "2026-08-15T09:50:59Z",
+  "valid_time_utc": "2026-08-15T12:00:00Z",
+  "updated": "2026-08-15T13:09:00Z",
   "hottest": [
     {
       "name": "St. Bernard",
       "state": "LA",
-      "temp_f": 85.4
+      "temp_f": 84.9
     },
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 85.2
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 83.4
     },
     {
-      "name": "Hidalgo",
+      "name": "Galveston",
       "state": "TX",
-      "temp_f": 84.2
+      "temp_f": 83.4
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 42.0
+      "temp_f": 40.2
     },
     {
       "name": "Lake",
       "state": "CO",
-      "temp_f": 43.2
+      "temp_f": 42.2
     },
     {
-      "name": "Teton",
-      "state": "WY",
-      "temp_f": 44.1
+      "name": "Hinsdale",
+      "state": "CO",
+      "temp_f": 42.8
     }
   ],
   "national": {
-    "min_f": 42.0,
-    "max_f": 85.4,
-    "mean_f": 70.4
+    "min_f": 40.2,
+    "max_f": 84.9,
+    "mean_f": 70.0
   }
 }

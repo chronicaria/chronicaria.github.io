@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-15T20:00:00Z",
-  "updated": "2026-08-15T21:48:06Z",
+  "valid_time_utc": "2026-08-16T01:00:00Z",
+  "updated": "2026-08-16T02:07:36Z",
   "hottest": [
     {
-      "name": "Alfalfa",
-      "state": "OK",
-      "temp_f": 104.5
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 102.4
     },
     {
-      "name": "Woods",
-      "state": "OK",
-      "temp_f": 104.2
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 100.8
     },
     {
-      "name": "Major",
-      "state": "OK",
-      "temp_f": 104.1
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 100.6
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.0
+      "temp_f": 48.3
+    },
+    {
+      "name": "Clear Creek",
+      "state": "CO",
+      "temp_f": 52.9
     },
     {
       "name": "Aleutians East",
       "state": "AK",
-      "temp_f": 52.7
-    },
-    {
-      "name": "Kodiak Island",
-      "state": "AK",
-      "temp_f": 54.5
+      "temp_f": 52.9
     }
   ],
   "national": {
-    "min_f": 48.0,
-    "max_f": 104.5,
-    "mean_f": 85.4
+    "min_f": 48.3,
+    "max_f": 102.4,
+    "mean_f": 79.5
   }
 }

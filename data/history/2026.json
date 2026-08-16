@@ -549,6 +549,16 @@
    "home": false,
    "res": "D",
    "score": "1-1"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-08-16T02:30Z",
+   "opp": "San Diego",
+   "home": true,
+   "res": "L",
+   "score": "0-1"
   }
  ]
 }

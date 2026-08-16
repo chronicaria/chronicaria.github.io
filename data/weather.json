@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-16T01:00:00Z",
-  "updated": "2026-08-16T02:07:36Z",
+  "valid_time_utc": "2026-08-16T03:00:00Z",
+  "updated": "2026-08-16T04:09:05Z",
   "hottest": [
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 102.4
+      "temp_f": 96.3
     },
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 100.8
+      "temp_f": 96.0
     },
     {
-      "name": "La Paz",
+      "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 100.6
+      "temp_f": 95.5
     }
   ],
   "coldest": [
     {
+      "name": "San Juan",
+      "state": "CO",
+      "temp_f": 48.1
+    },
+    {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.3
+      "temp_f": 48.4
     },
     {
       "name": "Clear Creek",
       "state": "CO",
-      "temp_f": 52.9
-    },
-    {
-      "name": "Aleutians East",
-      "state": "AK",
-      "temp_f": 52.9
+      "temp_f": 48.9
     }
   ],
   "national": {
-    "min_f": 48.3,
-    "max_f": 102.4,
-    "mean_f": 79.5
+    "min_f": 48.1,
+    "max_f": 96.3,
+    "mean_f": 75.4
   }
 }

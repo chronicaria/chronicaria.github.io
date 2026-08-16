@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-16T18:00:00Z",
-  "updated": "2026-08-16T18:57:06Z",
+  "valid_time_utc": "2026-08-16T20:00:00Z",
+  "updated": "2026-08-16T21:46:26Z",
   "hottest": [
     {
-      "name": "Hughes",
-      "state": "OK",
-      "temp_f": 102.3
-    },
-    {
-      "name": "Independence",
-      "state": "AR",
-      "temp_f": 102.0
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 105.1
     },
     {
       "name": "Coal",
       "state": "OK",
-      "temp_f": 101.8
+      "temp_f": 104.7
+    },
+    {
+      "name": "Independence",
+      "state": "AR",
+      "temp_f": 104.1
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 47.7
-    },
-    {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 50.1
+      "temp_f": 48.0
     },
     {
       "name": "Yakutat",
       "state": "AK",
-      "temp_f": 50.7
+      "temp_f": 50.0
+    },
+    {
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 50.6
     }
   ],
   "national": {
-    "min_f": 47.7,
-    "max_f": 102.3,
-    "mean_f": 84.1
+    "min_f": 48.0,
+    "max_f": 105.1,
+    "mean_f": 85.7
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-16T12:00:00Z",
-  "updated": "2026-08-16T13:10:48Z",
+  "valid_time_utc": "2026-08-16T14:00:00Z",
+  "updated": "2026-08-16T15:48:22Z",
   "hottest": [
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 85.8
+      "name": "Chicot",
+      "state": "AR",
+      "temp_f": 89.9
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 85.5
+      "name": "Independence",
+      "state": "AR",
+      "temp_f": 89.8
     },
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 85.0
+      "name": "Desha",
+      "state": "AR",
+      "temp_f": 89.4
     }
   ],
   "coldest": [
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 39.7
+      "temp_f": 45.0
     },
     {
-      "name": "Lake",
-      "state": "CO",
-      "temp_f": 40.7
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 47.1
     },
     {
-      "name": "Hinsdale",
-      "state": "CO",
-      "temp_f": 42.5
+      "name": "Deer Lodge",
+      "state": "MT",
+      "temp_f": 47.1
     }
   ],
   "national": {
-    "min_f": 39.7,
-    "max_f": 85.8,
-    "mean_f": 70.0
+    "min_f": 45.0,
+    "max_f": 89.9,
+    "mean_f": 75.0
   }
 }

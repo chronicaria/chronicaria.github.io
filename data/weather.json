@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-16T14:00:00Z",
-  "updated": "2026-08-16T15:48:22Z",
+  "valid_time_utc": "2026-08-16T18:00:00Z",
+  "updated": "2026-08-16T18:57:06Z",
   "hottest": [
     {
-      "name": "Chicot",
-      "state": "AR",
-      "temp_f": 89.9
+      "name": "Hughes",
+      "state": "OK",
+      "temp_f": 102.3
     },
     {
       "name": "Independence",
       "state": "AR",
-      "temp_f": 89.8
+      "temp_f": 102.0
     },
     {
-      "name": "Desha",
-      "state": "AR",
-      "temp_f": 89.4
+      "name": "Coal",
+      "state": "OK",
+      "temp_f": 101.8
     }
   ],
   "coldest": [
     {
-      "name": "San Juan",
-      "state": "CO",
-      "temp_f": 45.0
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 47.7
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 47.1
+      "temp_f": 50.1
     },
     {
-      "name": "Deer Lodge",
-      "state": "MT",
-      "temp_f": 47.1
+      "name": "Yakutat",
+      "state": "AK",
+      "temp_f": 50.7
     }
   ],
   "national": {
-    "min_f": 45.0,
-    "max_f": 89.9,
-    "mean_f": 75.0
+    "min_f": 47.7,
+    "max_f": 102.3,
+    "mean_f": 84.1
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-16T20:00:00Z",
-  "updated": "2026-08-16T21:46:26Z",
+  "valid_time_utc": "2026-08-17T01:00:00Z",
+  "updated": "2026-08-17T02:05:17Z",
   "hottest": [
     {
       "name": "Yuma",
       "state": "AZ",
+      "temp_f": 106.5
+    },
+    {
+      "name": "Imperial",
+      "state": "CA",
       "temp_f": 105.1
     },
     {
-      "name": "Coal",
-      "state": "OK",
-      "temp_f": 104.7
-    },
-    {
-      "name": "Independence",
-      "state": "AR",
-      "temp_f": 104.1
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 104.6
     }
   ],
   "coldest": [
     {
       "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.0
+      "temp_f": 48.4
     },
     {
       "name": "Yakutat",
       "state": "AK",
-      "temp_f": 50.0
+      "temp_f": 50.2
     },
     {
-      "name": "Copper River",
+      "name": "Aleutians East",
       "state": "AK",
-      "temp_f": 50.6
+      "temp_f": 52.3
     }
   ],
   "national": {
-    "min_f": 48.0,
-    "max_f": 105.1,
-    "mean_f": 85.7
+    "min_f": 48.4,
+    "max_f": 106.5,
+    "mean_f": 79.4
   }
 }

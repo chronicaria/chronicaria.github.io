@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-17T12:00:00Z",
-  "updated": "2026-08-17T13:22:25Z",
+  "valid_time_utc": "2026-08-17T15:00:00Z",
+  "updated": "2026-08-17T15:51:11Z",
   "hottest": [
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 86.0
+      "name": "Calhoun",
+      "state": "MS",
+      "temp_f": 93.8
+    },
+    {
+      "name": "Chickasaw",
+      "state": "MS",
+      "temp_f": 93.4
     },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 85.7
-    },
-    {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 84.9
+      "temp_f": 93.4
     }
   ],
   "coldest": [
     {
-      "name": "San Juan",
-      "state": "CO",
-      "temp_f": 42.2
+      "name": "Matanuska-Susitna",
+      "state": "AK",
+      "temp_f": 45.4
     },
     {
-      "name": "Lake",
-      "state": "CO",
-      "temp_f": 43.2
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 45.8
     },
     {
-      "name": "Hinsdale",
-      "state": "CO",
-      "temp_f": 44.7
+      "name": "Skagway",
+      "state": "AK",
+      "temp_f": 48.0
     }
   ],
   "national": {
-    "min_f": 42.2,
-    "max_f": 86.0,
-    "mean_f": 68.8
+    "min_f": 45.4,
+    "max_f": 93.8,
+    "mean_f": 77.7
   }
 }

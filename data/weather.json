@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-17T15:00:00Z",
-  "updated": "2026-08-17T15:51:11Z",
+  "valid_time_utc": "2026-08-17T18:00:00Z",
+  "updated": "2026-08-17T19:08:40Z",
   "hottest": [
-    {
-      "name": "Calhoun",
-      "state": "MS",
-      "temp_f": 93.8
-    },
-    {
-      "name": "Chickasaw",
-      "state": "MS",
-      "temp_f": 93.4
-    },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 93.4
+      "temp_f": 104.5
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 103.1
+    },
+    {
+      "name": "Maricopa",
+      "state": "AZ",
+      "temp_f": 102.8
     }
   ],
   "coldest": [
     {
       "name": "Matanuska-Susitna",
       "state": "AK",
-      "temp_f": 45.4
+      "temp_f": 46.4
     },
     {
-      "name": "Copper River",
+      "name": "Denali",
       "state": "AK",
-      "temp_f": 45.8
+      "temp_f": 47.5
     },
     {
-      "name": "Skagway",
+      "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 48.0
+      "temp_f": 48.4
     }
   ],
   "national": {
-    "min_f": 45.4,
-    "max_f": 93.8,
-    "mean_f": 77.7
+    "min_f": 46.4,
+    "max_f": 104.5,
+    "mean_f": 84.4
   }
 }

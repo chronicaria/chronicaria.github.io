@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-19T18:00:00Z",
-  "updated": "2026-08-19T19:04:11Z",
+  "valid_time_utc": "2026-08-19T21:00:00Z",
+  "updated": "2026-08-19T21:53:41Z",
   "hottest": [
     {
       "name": "Hughes",
       "state": "OK",
-      "temp_f": 106.3
-    },
-    {
-      "name": "Okfuskee",
-      "state": "OK",
-      "temp_f": 106.3
+      "temp_f": 109.6
     },
     {
       "name": "Seminole",
       "state": "OK",
-      "temp_f": 106.0
+      "temp_f": 108.8
+    },
+    {
+      "name": "Pittsburg",
+      "state": "OK",
+      "temp_f": 108.7
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 43.0
-    },
-    {
-      "name": "Nome",
-      "state": "AK",
-      "temp_f": 44.5
+      "temp_f": 44.2
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 45.2
+      "temp_f": 47.5
+    },
+    {
+      "name": "Juneau",
+      "state": "AK",
+      "temp_f": 47.6
     }
   ],
   "national": {
-    "min_f": 43.0,
-    "max_f": 106.3,
-    "mean_f": 83.6
+    "min_f": 44.2,
+    "max_f": 109.6,
+    "mean_f": 85.9
   }
 }

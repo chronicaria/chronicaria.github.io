@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-19T12:00:00Z",
-  "updated": "2026-08-19T13:26:15Z",
+  "valid_time_utc": "2026-08-19T15:00:00Z",
+  "updated": "2026-08-19T15:59:31Z",
   "hottest": [
     {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 87.1
+      "name": "Haskell",
+      "state": "OK",
+      "temp_f": 95.6
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 86.8
+      "name": "Muskogee",
+      "state": "OK",
+      "temp_f": 95.3
     },
     {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 86.4
+      "name": "McIntosh",
+      "state": "OK",
+      "temp_f": 95.0
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 40.3
+      "temp_f": 39.3
     },
     {
-      "name": "Koochiching",
-      "state": "MN",
-      "temp_f": 42.1
+      "name": "Nome",
+      "state": "AK",
+      "temp_f": 43.1
     },
     {
-      "name": "Price",
-      "state": "WI",
-      "temp_f": 43.0
+      "name": "Matanuska-Susitna",
+      "state": "AK",
+      "temp_f": 43.4
     }
   ],
   "national": {
-    "min_f": 40.3,
-    "max_f": 87.1,
-    "mean_f": 67.5
+    "min_f": 39.3,
+    "max_f": 95.6,
+    "mean_f": 76.9
   }
 }

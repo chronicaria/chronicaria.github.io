@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-19T15:00:00Z",
-  "updated": "2026-08-19T15:59:31Z",
+  "valid_time_utc": "2026-08-19T18:00:00Z",
+  "updated": "2026-08-19T19:04:11Z",
   "hottest": [
     {
-      "name": "Haskell",
+      "name": "Hughes",
       "state": "OK",
-      "temp_f": 95.6
+      "temp_f": 106.3
     },
     {
-      "name": "Muskogee",
+      "name": "Okfuskee",
       "state": "OK",
-      "temp_f": 95.3
+      "temp_f": 106.3
     },
     {
-      "name": "McIntosh",
+      "name": "Seminole",
       "state": "OK",
-      "temp_f": 95.0
+      "temp_f": 106.0
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
+      "name": "North Slope",
       "state": "AK",
-      "temp_f": 39.3
+      "temp_f": 43.0
     },
     {
       "name": "Nome",
       "state": "AK",
-      "temp_f": 43.1
+      "temp_f": 44.5
     },
     {
-      "name": "Matanuska-Susitna",
+      "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 43.4
+      "temp_f": 45.2
     }
   ],
   "national": {
-    "min_f": 39.3,
-    "max_f": 95.6,
-    "mean_f": 76.9
+    "min_f": 43.0,
+    "max_f": 106.3,
+    "mean_f": 83.6
   }
 }

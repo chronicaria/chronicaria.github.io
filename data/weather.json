@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-20T18:00:00Z",
-  "updated": "2026-08-20T19:11:46Z",
+  "valid_time_utc": "2026-08-20T21:00:00Z",
+  "updated": "2026-08-20T21:55:13Z",
   "hottest": [
     {
-      "name": "Tillman",
+      "name": "Coal",
       "state": "OK",
-      "temp_f": 104.8
+      "temp_f": 108.7
     },
     {
-      "name": "Wilbarger",
-      "state": "TX",
-      "temp_f": 104.4
+      "name": "Pontotoc",
+      "state": "OK",
+      "temp_f": 108.3
     },
     {
-      "name": "Love",
+      "name": "Hughes",
       "state": "OK",
-      "temp_f": 104.0
+      "temp_f": 108.2
     }
   ],
   "coldest": [
     {
-      "name": "North Slope",
+      "name": "Skagway",
       "state": "AK",
-      "temp_f": 44.7
+      "temp_f": 46.6
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 45.4
+      "temp_f": 48.5
     },
     {
-      "name": "Skagway",
+      "name": "Yakutat",
       "state": "AK",
-      "temp_f": 45.8
+      "temp_f": 49.4
     }
   ],
   "national": {
-    "min_f": 44.7,
-    "max_f": 104.8,
-    "mean_f": 84.3
+    "min_f": 46.6,
+    "max_f": 108.7,
+    "mean_f": 86.4
   }
 }

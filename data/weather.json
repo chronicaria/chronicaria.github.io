@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-19T21:00:00Z",
-  "updated": "2026-08-19T21:53:41Z",
+  "valid_time_utc": "2026-08-20T01:00:00Z",
+  "updated": "2026-08-20T02:00:40Z",
   "hottest": [
     {
-      "name": "Hughes",
-      "state": "OK",
-      "temp_f": 109.6
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 106.5
     },
     {
-      "name": "Seminole",
-      "state": "OK",
-      "temp_f": 108.8
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 106.3
     },
     {
-      "name": "Pittsburg",
-      "state": "OK",
-      "temp_f": 108.7
+      "name": "Maricopa",
+      "state": "AZ",
+      "temp_f": 106.1
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 44.2
-    },
-    {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 47.5
+      "temp_f": 46.1
     },
     {
       "name": "Juneau",
       "state": "AK",
-      "temp_f": 47.6
+      "temp_f": 49.2
+    },
+    {
+      "name": "Aleutians West",
+      "state": "AK",
+      "temp_f": 49.3
     }
   ],
   "national": {
-    "min_f": 44.2,
-    "max_f": 109.6,
-    "mean_f": 85.9
+    "min_f": 46.1,
+    "max_f": 106.5,
+    "mean_f": 79.0
   }
 }

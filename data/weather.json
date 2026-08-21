@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-21T15:00:00Z",
-  "updated": "2026-08-21T16:00:22Z",
+  "valid_time_utc": "2026-08-21T18:00:00Z",
+  "updated": "2026-08-21T19:07:40Z",
   "hottest": [
     {
-      "name": "Cottle",
-      "state": "TX",
-      "temp_f": 95.0
+      "name": "Greer",
+      "state": "OK",
+      "temp_f": 105.5
     },
     {
-      "name": "King",
-      "state": "TX",
-      "temp_f": 94.7
+      "name": "Jackson",
+      "state": "OK",
+      "temp_f": 105.1
     },
     {
-      "name": "Foard",
-      "state": "TX",
-      "temp_f": 94.5
+      "name": "Beckham",
+      "state": "OK",
+      "temp_f": 105.0
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 40.9
+      "temp_f": 44.0
     },
     {
       "name": "Matanuska-Susitna",
       "state": "AK",
-      "temp_f": 44.8
+      "temp_f": 46.6
     },
     {
-      "name": "North Slope",
+      "name": "Skagway",
       "state": "AK",
-      "temp_f": 45.8
+      "temp_f": 46.9
     }
   ],
   "national": {
-    "min_f": 40.9,
-    "max_f": 95.0,
-    "mean_f": 76.6
+    "min_f": 44.0,
+    "max_f": 105.5,
+    "mean_f": 83.8
   }
 }

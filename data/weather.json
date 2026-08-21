@@ -1,33 +1,33 @@
 {
-  "valid_time_utc": "2026-08-20T21:00:00Z",
-  "updated": "2026-08-20T21:55:13Z",
+  "valid_time_utc": "2026-08-21T01:00:00Z",
+  "updated": "2026-08-21T02:08:52Z",
   "hottest": [
     {
-      "name": "Coal",
-      "state": "OK",
-      "temp_f": 108.7
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 103.3
     },
     {
-      "name": "Pontotoc",
-      "state": "OK",
-      "temp_f": 108.3
+      "name": "Maricopa",
+      "state": "AZ",
+      "temp_f": 102.6
     },
     {
-      "name": "Hughes",
-      "state": "OK",
-      "temp_f": 108.2
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 102.0
     }
   ],
   "coldest": [
     {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 46.6
+      "temp_f": 46.4
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 48.5
+      "temp_f": 48.8
     },
     {
       "name": "Yakutat",
@@ -36,8 +36,8 @@
     }
   ],
   "national": {
-    "min_f": 46.6,
-    "max_f": 108.7,
-    "mean_f": 86.4
+    "min_f": 46.4,
+    "max_f": 103.3,
+    "mean_f": 79.1
   }
 }

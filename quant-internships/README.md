@@ -1,12 +1,47 @@
 # Summer 2027 quant internships
 
 A single static page listing every Summer 2027 quantitative trading, research and developer
-internship in the United States open to an undergraduate graduating **May 2028**, with direct
-application links, posted compensation, and each firm's application-limit policy.
+internship open to an undergraduate graduating **May 2028**, with direct application links, posted
+compensation, and each firm's application-limit policy. US first, but no longer US-only.
 
-**67 firms, 126 roles**, data checked 5 August 2026, graded, culled and expanded 10 August 2026. Every firm
-carries a community-sourced interview-process panel and, where one could be established, an honest
-reputation read.
+**162 firms, 261 roles**, data checked 20 August 2026, graded, culled and expanded 10 August 2026,
+widened 20 August 2026. Every firm from the original board carries a community-sourced
+interview-process panel and, where one could be established, an honest reputation read.
+
+## The 20 August 2026 widening
+
+The board was built US-only, buy-side-only and strict-quant-only. That charter excluded a large
+amount of work worth applying to, so it was relaxed on three axes at once:
+
+- **Non-US roles are in scope.** London, Amsterdam, Hong Kong, Oslo, Montreal. `locBucket` in
+  `app.js` gained an `International` bucket; it decides by whether a location is written `City, ST`
+  with a real US state code, which is the convention every US posting on the board follows.
+- **Sell-side is in scope.** Bank quant strats, quant risk, model validation, market risk. Banks
+  stay at grade **B** — Goldman, JPM and Citi were already B, and the new arrivals match them.
+- **Quant-adjacent is in scope.** Data science, economic consulting, national labs, actuarial and
+  catastrophe modelling. These share a `Data science & adjacent` chip via `CAT_GROUP`.
+
+Roles were found by two fan-out sweeps (12 segments, then 10) in which each agent fetched every
+requisition before recording it, followed by an adversarial pass that re-fetched every URL and
+killed **85 rows**. The kill reasons are worth knowing, because they are what a naive sweep gets
+wrong:
+
+| reason | note |
+|---|---|
+| plain SWE wearing a quant label | the most common failure by a wide margin |
+| generic careers page, not a requisition | agents will happily cite a landing page |
+| PhD- or Master's-only | out by the board's existing rule |
+| aggregator repost | Lensa, Jobright, Jorb, ZipRecruiter |
+| wrong cycle | Summer 2026 reqs still live |
+
+Two mechanical lessons carried forward: most careers pages are JavaScript shells that return
+nothing to a plain fetch, so the ATS JSON APIs (`boards-api.greenhouse.io`, Workday `/wday/cxs/`,
+Lever, Ashby) are the reliable path; and any HTTP call in a sweep needs a hard timeout, because one
+unanswering host stalled an entire segment for the better part of an hour.
+
+**`status: "soon"`** now carries real weight — 66 of the 261 roles. It is August, and most Summer
+2027 bank and big-tech programmes have not opened. A `soon` row is a programme that reliably runs
+every year, with evidence for its timing in `notes`. The *+ opening soon* chip reveals them.
 
 Built the same way as the other sites in `~/Desktop/Code`: static HTML, one token-based
 stylesheet, one vanilla-JS IIFE. No framework, no bundler, no `package.json`.

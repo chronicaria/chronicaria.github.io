@@ -189,7 +189,7 @@
 
 var FIRMS = [
   {
-    key: "jane-street", name: "Jane Street", grade: "S", category: "mm",
+    key: "jane-street", name: "Jane Street", grade: "S", category: "mm", applied_firm: true,
     note: "The most permissive firm here: “when we receive an application, we consider it for all open roles globally.” Nine live intern reqs — there is no reason to submit only one.",
     policy: "Apply to any and all roles", one_only: false,
     oa: "Collaborative probability and market-making games.",
@@ -299,7 +299,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "jump", name: "Jump Trading", grade: "A", category: "mm",
+    key: "jump", name: "Jump Trading", grade: "A", category: "mm", applied_firm: true,
     note: "Jump runs Chicago and New York on single combined reqs; a separate PhD-designated QR intern req exists.",
     policy: "No restriction stated", one_only: false,
     oa: "Probability and coding.",
@@ -577,7 +577,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "five-rings", name: "Five Rings", grade: "A", category: "mm",
+    key: "five-rings", name: "Five Rings", grade: "A", category: "mm", applied_firm: true,
     note: "New finding: “applicants are able to apply to multiple positions, but we strongly encourage you to only apply to your top choice.” Not a hard cap.",
     policy: "Multiple allowed, top choice encouraged", one_only: false,
     intel: {
@@ -630,7 +630,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "hrt", name: "Hudson River Trading", grade: "S", category: "mm",
+    key: "hrt", name: "Hudson River Trading", grade: "S", category: "mm", applied_firm: true,
     note: "“We do not allow multiple applications. Please apply to the ONE role you are most interested in” — but HRT then considers you for every open role off that one application, so the cost of choosing is lower than it looks.",
     policy: "One application only", one_only: true,
     oa: "HackerRank-style coding plus probability. C++/Python.",
@@ -684,7 +684,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "optiver", name: "Optiver", grade: "A", category: "mm",
+    key: "optiver", name: "Optiver", grade: "A", category: "mm", applied_firm: true,
     note: "The most constrained firm on this board, and the previous version of this page had it wrong. It is a sequential one-at-a-time cap — “you will only be considered for one campus role at a time” — on top of an 8-month cooldown that counts across every office and RESETS if you reapply early. A failed assessment in autumn 2026 can end the whole cycle.",
     policy: "One campus role at a time", one_only: true,
     cooldown: "8-month global cooldown after a failed assessment",
@@ -740,7 +740,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "de-shaw", name: "D. E. Shaw", grade: "A", category: "multistrat",
+    key: "de-shaw", name: "D. E. Shaw", grade: "A", category: "multistrat", applied_firm: true,
     note: "An on-site widget adds roles to a single application bundle. Removing a role from the bundle withdraws that application, so assemble it before submitting.",
     policy: "Bundle several roles into one submission", one_only: false,
     intel: {
@@ -868,7 +868,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "two-sigma", name: "Two Sigma", grade: "A", category: "multistrat",
+    key: "two-sigma", name: "Two Sigma", grade: "A", category: "multistrat", applied_firm: true,
     note: "Only two 2027 summer reqs live. Eligibility is unusually open: “all levels welcome, from bachelor’s to doctorate”, with pay tiered by degree.",
     policy: "No limit stated", one_only: false,
     intel: {
@@ -910,7 +910,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "akuna", name: "Akuna Capital", grade: "A", category: "mm",
+    key: "akuna", name: "Akuna Capital", grade: "A", category: "mm", applied_firm: true,
     note: "The acknowledgement is a required Yes/No on the form, not body text.",
     policy: "One Quant/Tech application + one Trading application", one_only: true,
     cap: 2,
@@ -979,7 +979,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "drw", name: "DRW", grade: "A", category: "mm",
+    key: "drw", name: "DRW", grade: "A", category: "mm", applied_firm: true,
     note: "Bespoke JS board — the campus filter has to be clicked. Cumberland, DRW’s digital-assets arm, recruits through the same reqs.",
     policy: "No restriction stated", one_only: false,
     intel: {
@@ -1031,7 +1031,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "imc", name: "IMC Trading", grade: "A", category: "mm",
+    key: "imc", name: "IMC Trading", grade: "A", category: "mm", applied_firm: true,
     note: "Correction to the previous version of this page: the cap is per ROLE, not per firm. “Though you may apply to multiple roles… each application will be evaluated on the criteria for that role.” Focusing is encouraged, not enforced.",
     policy: "One per role; multiple roles allowed", one_only: false,
     oa: "Timed maths and probability.",
@@ -1086,7 +1086,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "tower", name: "Tower Research", grade: "A", category: "mm",
+    key: "tower", name: "Tower Research", grade: "A", category: "mm", applied_firm: true,
     note: "NYC HFT firm, Hudson Yards. Runs separate QT and QD intern tracks plus a PhD-only trader track.",
     policy: "No restriction stated", one_only: false,
     intel: {
@@ -1237,7 +1237,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "old-mission", name: "Old Mission Capital", grade: "B", category: "mm",
+    key: "old-mission", name: "Old Mission Capital", grade: "B", category: "mm", applied_firm: true,
     note: "ETF/options market maker with Chicago and NYC offices. Their only 2027 internship is Chicago-based despite the NYC presence.",
     policy: "No restriction stated", one_only: false,
     intel: {
@@ -1279,7 +1279,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "radix", name: "Radix Trading", grade: "A", category: "mm",
+    key: "radix", name: "Radix Trading", grade: "A", category: "mm", applied_firm: true,
     note: "Radix runs two Greenhouse boards, radixuniversity and radixexperienced. “One of our Job Postings” spans both — they are a single funnel.",
     policy: "One application only", one_only: true,
     oa: "C++ heavy.",
@@ -1318,7 +1318,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "millennium", name: "Millennium", grade: "A", category: "multistrat",
+    key: "millennium", name: "Millennium", grade: "A", category: "multistrat", applied_firm: true,
     note: "Campus reqs live on an Eightfold microsite that is invisible from the main board.",
     policy: "Two applications maximum, across all locations", one_only: true,
     cap: 2,
@@ -1385,7 +1385,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "point72", name: "Point72", grade: "A", category: "multistrat",
+    key: "point72", name: "Point72", grade: "A", category: "multistrat", applied_firm: true,
     note: "The one-application rule binds only the 12 Academy reqs. The New York quantitative internships do not carry it.",
     policy: "One Academy application; the NY quant reqs are unrestricted", one_only: false,
     intel: {
@@ -1451,7 +1451,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "aquatic", name: "Aquatic Capital", grade: "B", category: "multistrat",
+    key: "aquatic", name: "Aquatic Capital", grade: "B", category: "multistrat", applied_firm: true,
     note: "Chicago-headquartered quantitative manager, early growth stage. Board carried 9 reqs on 5 Aug 2026.",
     firm_type: "systematic / ML-driven quantitative hedge fund",
     headcount: "~91–102 (sources differ; FINTRX 91, other aggregators 102)",
@@ -1510,7 +1510,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "voloridge", name: "Voloridge", grade: "B", category: "multistrat",
+    key: "voloridge", name: "Voloridge", grade: "B", category: "multistrat", applied_firm: true,
     note: "~$5bn systematic market-neutral fund founded by David Vogel. Small, secretive, genuinely quantitative - one of the very few real quant research shops in Florida outside Miami. Onsite Jupiter FL only, not remote.",
     firm_type: "pure systematic / data-science quantitative hedge fund",
     headcount: "112 (as of March 2023)",
@@ -1739,7 +1739,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "squarepoint", name: "Squarepoint", grade: "A", category: "multistrat",
+    key: "squarepoint", name: "Squarepoint", grade: "A", category: "multistrat", applied_firm: true,
     note: "The instruction opens the req in bold: apply only to the one job you feel best fits. The form repeats it and lets you name a second role you are interested in.",
     policy: "One application only", one_only: true,
     intel: {
@@ -1909,7 +1909,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "arrowstreet", name: "Arrowstreet Capital", grade: "A", category: "am",
+    key: "arrowstreet", name: "Arrowstreet Capital", grade: "A", category: "am", applied_firm: true,
     note: "Boston-based systematic global equity manager. Dedicated Workday campus site (arrowstreetcapital.wd5, site Campus_Careers) carrying exactly two Summer 2027 intern reqs plus two experienced-hire reqs.",
     policy: "QR and QD interns are separate reqs on the same campus…", one_only: false,
     intel: {
@@ -1998,7 +1998,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "quadrature-capital", name: "Quadrature Capital", grade: "B", category: "am",
+    key: "quadrature-capital", name: "Quadrature Capital", grade: "B", category: "am", applied_firm: true,
     note: "Single generic \"Internships\" req covers both London and New York and both the quant and the pure-infra streams; only the Quant Development stream is in scope.",
     policy: "No limit stated", one_only: false,
     roles: [
@@ -2073,7 +2073,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "ctc", name: "Chicago Trading Co.", grade: "B", category: "mm",
+    key: "ctc", name: "Chicago Trading Co.", grade: "B", category: "mm", applied_firm: true,
     note: "Ten-week programme with a week-long options class and a quant curriculum; housing in the Loop. Board currently shows experienced-hire reqs only.",
     firm_type: "options market maker / proprietary derivatives trading firm",
     headcount: "~500 (widely cited; CTC's own site publishes no figure, so treat as approximate)",
@@ -2169,7 +2169,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "maven", name: "Maven Securities", grade: "B", category: "mm",
+    key: "maven", name: "Maven Securities", grade: "B", category: "mm", applied_firm: true,
     note: "London-headquartered options market maker with a Chicago office. Firm-by-firm sweeps tend to file Maven as London-only and drop it; the Chicago intern req is a real US role.",
     firm_type: "proprietary options and derivatives market maker",
     headcount: "300+",
@@ -2259,7 +2259,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "stevens", name: "Stevens Capital Management", grade: "B", category: "multistrat",
+    key: "stevens", name: "Stevens Capital Management", grade: "B", category: "multistrat", applied_firm: true,
     note: "Radnor PA (Philadelphia Main Line) systematic firm, ~29 reqs, essentially no campus-marketing presence. Aggregators mislabel its intern req as PhD-only, which is why it gets skipped.",
     firm_type: "quantitative hedge fund (systematic, multi-strategy)",
     headcount: "not publicly verified; described as a multi-billion-dollar manager",
@@ -2397,7 +2397,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "walleye", name: "Walleye Capital", grade: "B", category: "multistrat",
+    key: "walleye", name: "Walleye Capital", grade: "B", category: "multistrat", applied_firm: true,
     note: "The students board has thinned sharply since July — the Central Equity, Investment Data Science and Volatility Trading Developer intern reqs have all come down. What is left is listed here.",
     firm_type: "multi-strategy hedge fund, originally an options market maker; houses the Quantic systematic business and an equity…",
     headcount: "350+ across five main offices",
@@ -2606,7 +2606,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "castleton", name: "Castleton Commodities", grade: "B", category: "energy",
+    key: "castleton", name: "Castleton Commodities", grade: "B", category: "energy", applied_firm: true,
     note: "Energy commodities merchant, HQ Stamford CT. Runs a genuine US campus programme; full Workday board enumerated 5 Aug 2026 (31 live reqs).",
     firm_type: "Global physical + financial energy merchant with a genuine in-house quantitative research function",
     headcount: "~650 (2015 figure, Wikipedia; likely higher now)",
@@ -2667,7 +2667,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "jpm", name: "J.P. Morgan", grade: "B", category: "bank",
+    key: "jpm", name: "J.P. Morgan", grade: "B", category: "bank", applied_firm: true,
     note: "This is the flagship undergrad-eligible sell-side quant seat this cycle. It is the Quantitative Trading & Research (QR) Markets group — systematic trading, financial engineering, stat modeling, portfolio optimization, alpha research.",
     firm_type: "bank quant research group — genuine quant seat inside a larger institution",
     headcount: "a third-party guide (quantt.co.uk, not JPM-endorsed) puts QR at roughly 700 quants across…",
@@ -2766,7 +2766,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "citi", name: "Citi", grade: "B", category: "bank",
+    key: "citi", name: "Citi", grade: "B", category: "bank", applied_firm: true,
     note: "This is Citi MQA — the Markets Quantitative Analysis group. Explicitly a quant req chosen AT APPLICATION, not a track assigned later.",
     firm_type: "bank front-office desk quant group — genuine quant seat inside a larger institution",
     headcount: "not published",
@@ -2796,6 +2796,22 @@ var FIRMS = [
       ],
     },
     roles: [
+      /* +20 Aug sweep */
+      {
+        id: "citi-markets-quant-analysis-sa-nyc", role_type: "QR", status: "open",
+        title: "Markets - Quantitative Analysis, Summer Analyst - New York City - US, 2027",
+        locations: ["New York, NY"],
+        apply_url: "https://citi.wd5.myworkdayjobs.com/2/job/New-York-New-York-United-States/Markets---Quantitative-Analysis--Summer-Analyst---New-York-City---US--2027_25928747",
+        eligibility_note: "You are obtaining a Bachelor's or Master's degree (graduating in Fall 2027 or Spring 2028) and majoring in Quantitative Finance, Computer Science, Engineering, Mathematics, and/or a closely related field",
+        deadline_note: "startDate 2025-12-22; the req JSON contains no endDate key at all, so there is no published close date. Confirmed still served by the live posting endpoint with canApply=true on 2026-08-20.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Eligibility quote re-verified verbatim; graduation window 'Fall 2027 or Spring 2028' is an exact match for a May 2028 grad. Explicit gates also verified verbatim: 'You currently maintain a GPA of 3.3 or above', 'You have excellent programming skills in C++, Python or Java', 'You have excellent mathematical skills, specifically as it relates to Data Analysis and Statistical Modeling.' Real desk placement: 'Summer Analysts will be placed on a quantitative modeling desk and assigned a summer project';"
+      },
+      /* end +20 Aug sweep */
+
       {
         id: "citi-qr", role_type: "QR", status: "open",
         title: "Markets - Quantitative Analysis, Summer Analyst - New York City - US, 2027",
@@ -2898,6 +2914,126 @@ var FIRMS = [
       ],
     },
     roles: [
+      /* +20 Aug sweep */
+      {
+        id: "gs-core-quant-strats-nyc", role_type: "QR", status: "open",
+        title: "2027 | Americas | New York City Area | The Core Quantitative Strats | Summer Analyst",
+        locations: ["New York, NY"],
+        apply_url: "https://higher.gs.com/roles/171533",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "$110,000-$115,000 annualised", comp_source: "req JSON compensation field (minSalary 110000,", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified applyActive=true, status=POSTED, division 'Engineering Division'. Req text verbatim: 'Our quantitative strategists are at the cutting edge of our business, solving real-world problems through a variety of analytical methods... you will use your advanced training in mathematics, programming and logical thinking to construct quantitative models.' The Core covers Risk, Controllers, Compliance and Corporate Treasury - genuinely model-building, not dashboarding."
+      },
+      {
+        id: "gs-ficc-equities-quant-strats-nyc", role_type: "QR", status: "open",
+        title: "2027 | Americas | New York City Area | FICC and Equities (Sales and Trading) Quantitative Strats | Summer Analyst",
+        locations: ["New York, NY"],
+        apply_url: "https://higher.gs.com/roles/171563",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "$110,000-$115,000 annualised", comp_source: "req JSON compensation field, re-read 2026-08-20", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified applyActive=true, status=POSTED. Closest thing in this segment to a trading-floor quant seat; division text verbatim: 'Global Banking & Markets (Public) / FICC and Equities (Sales and Trading) enables our clients to buy and sell financial products, raise funding and manage risk. We make markets and facilitate client transactions in fixed income, equity, currency and commodity products.' Highest-priority GS application."
+      },
+      {
+        id: "gs-awm-quant-strats-nyc", role_type: "QR", status: "open",
+        title: "2027 | Americas | New York City Area | Asset and Wealth Management Quantitative Strats | Summer Analyst",
+        locations: ["New York, NY"],
+        apply_url: "https://higher.gs.com/roles/171550",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "$110,000-$115,000 annualised", comp_source: "req JSON compensation field, re-read 2026-08-20", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified applyActive=true, status=POSTED. Buy-side-flavoured quant strats - portfolio construction and systematic investing rather than market-making."
+      },
+      {
+        id: "gs-ibd-quant-strats-nyc", role_type: "QR", status: "open",
+        title: "2027 | Americas | New York City Area | Investment Banking Quantitative Strats | Summer Analyst",
+        locations: ["New York, NY"],
+        apply_url: "https://higher.gs.com/roles/171547",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "$110,000-$115,000 annualised", comp_source: "req JSON compensation field, re-read 2026-08-20", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified applyActive=true, status=POSTED. Least 'markets' of the four NYC strats desks but still a modelling seat; useful as a fourth pick to diversify desk exposure."
+      },
+      {
+        id: "gs-core-quant-strats-dallas", role_type: "QR", status: "open",
+        title: "2027 | Americas | Dallas Metro Area | The Core Quantitative Strats | Summer Analyst",
+        locations: ["Dallas, TX"],
+        apply_url: "https://higher.gs.com/roles/171534",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified applyActive=true, status=POSTED. Compensation is genuinely null on this req (the NYC copy publishes $110-115k), so the blank is confirmed, not an omission. Materially less competitive than the NYC copy of the same desk - worth one of his four slots as a hedge."
+      },
+      {
+        id: "gs-ibd-quant-strats-dallas", role_type: "QR", status: "open",
+        title: "2027 | Americas | Dallas Metro Area | Investment Banking Quantitative Strats | Summer Analyst",
+        locations: ["Dallas, TX"],
+        apply_url: "https://higher.gs.com/roles/171548",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified applyActive=true, status=POSTED. Compensation null on the req."
+      },
+      {
+        id: "gs-awm-quant-strats-dallas", role_type: "QR", status: "open",
+        title: "2027 | Americas | Dallas Metro Area | Asset and Wealth Management Quantitative Strats | Summer Analyst",
+        locations: ["Dallas, TX"],
+        apply_url: "https://higher.gs.com/roles/171532",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified independently by the verifier: applyActive=true, status=POSTED, title and Dallas location confirmed from the role JSON. Same programme as the NYC copy."
+      },
+      {
+        id: "gs-core-quant-strats-slc", role_type: "QR", status: "open",
+        title: "2027 | Americas | Salt Lake City | The Core Quantitative Strats | Summer Analyst",
+        locations: ["Salt Lake City, UT"],
+        apply_url: "https://higher.gs.com/roles/171551",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified applyActive=true, status=POSTED. Salt Lake City is Goldman's second-largest Americas office and the least-contested location for The Core strats seat."
+      },
+      {
+        id: "gs-awm-quant-strats-slc", role_type: "QR", status: "open",
+        title: "2027 | Americas | Salt Lake City | Asset and Wealth Management Quantitative Strats | Summer Analyst",
+        locations: ["Salt Lake City, UT"],
+        apply_url: "https://higher.gs.com/roles/171549",
+        eligibility_note: "Our Summer Analyst Program is a nine to ten week summer internship for students pursuing a bachelors / graduate degree.",
+        deadline_note: "No end date published in the role JSON; Goldman reviews on a rolling basis. Re-verified 2026-08-20: applyActive=true, status=POSTED.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-verified independently by the verifier: applyActive=true, status=POSTED, title and Salt Lake City location confirmed from the role JSON."
+      },
+      /* end +20 Aug sweep */
+
       {
         id: "goldman-qr", role_type: "QR", status: "soon",
         title: "Quantitative Strategist (Strats) Summer Analyst — 2027 Summer Analyst Program, Americas",
@@ -2912,7 +3048,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "blackedge", name: "BlackEdge Capital", grade: "C", category: "mm",
+    key: "blackedge", name: "BlackEdge Capital", grade: "C", category: "mm", applied_firm: true,
     note: "Chicago options market maker, ~50 people. Not on most aggregator lists; absent from Simplify until late July 2026. Genuine long-tail find.",
     firm_type: "options market maker (proprietary trading)",
     headcount: "not disclosed; self-described as small — third-party revenue/headcount scrapers for this…",
@@ -2966,7 +3102,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "transmarket", name: "TransMarket Group", grade: "C", category: "mm",
+    key: "transmarket", name: "TransMarket Group", grade: "C", category: "mm", applied_firm: true,
     note: "Chicago proprietary trading firm, hires rolling. Its careers page loads listings via JS so scrapers often see nothing - the Greenhouse reqs are the only reliable handle.",
     firm_type: "proprietary trading firm — electronic market making and algorithmic trading in futures, government debt, rates, FX and…",
     headcount: "~150 including interns",
@@ -3022,7 +3158,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "dv", name: "DV Trading", grade: "C", category: "mm",
+    key: "dv", name: "DV Trading", grade: "C", category: "mm", applied_firm: true,
     note: "Chicago/Toronto prop firm with a sprawling 50-req board that is overwhelmingly experienced-hire and heavily non-US - the single US campus req is easy to lose in the noise.",
     firm_type: "proprietary trading firm / multi-asset market maker (futures, commodities and energy, equities, crypto)",
     headcount: "450+ across the DV Group of firms",
@@ -3197,7 +3333,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "tradebot", name: "Tradebot Systems", grade: "C", category: "mm",
+    key: "tradebot", name: "Tradebot Systems", grade: "C", category: "mm", applied_firm: true,
     note: "Kansas City HFT firm founded by Dave Cummings in 1999; small headcount, high volume. Location is inferred from the firm's sole office, not stated on the posting.",
     firm_type: "high-frequency equities proprietary trading firm",
     headcount: "~40",
@@ -3240,7 +3376,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "seven", name: "Seven Research", grade: "C", category: "multistrat",
+    key: "seven", name: "Seven Research", grade: "C", category: "multistrat", applied_firm: true,
     note: "Very small NYC systematic/ML shop. On the NUFT list but almost nowhere else; easy to miss because the firm name reads like an academic lab.",
     firm_type: "systematic proprietary trading / quant research startup (founded Nov 2024)",
     headcount: "very small — 8 open reqs across 2 departments; no public headcount",
@@ -3470,7 +3606,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "dl-trading", name: "DL Trading (Dime Line Trading)", grade: "C", category: "event",
+    key: "dl-trading", name: "DL Trading (Dime Line Trading)", grade: "C", category: "event", applied_firm: true,
     note: "Sports-betting and prediction-market pricing, the single closest published match to four cycles of Kelly-sized Polymarket/Kalshi trading and an NBA possession-level valuation model.",
     policy: "No limit stated. Two separate intern reqs (QT and QD) are posted concurrently, implying both can be applied to. Note that two sibling full-time new-grad 2027 reqs sit on the same board and are not internships.", one_only: false,
     reputation: "Nothing found. Searches of r/quant, Blind and the usual candidate forums turned up no discussion of this firm at all - consistent with its size and its deliberately anonymised Greenhouse token. Absence of reputation is itself a signal: there is no candidate-reported interview loop, no comp data point, and no verification of the internship's quality beyond the firm's own posting.",
@@ -3577,6 +3713,23 @@ var FIRMS = [
       ],
     },
     roles: [
+      /* +20 Aug sweep */
+      {
+        id: "bofa-qdap-sa-2027", role_type: "QD", status: "open",
+        title: "Quantitative Data Analytics Summer Analyst Program - 2027",
+        locations: ["Atlanta, GA", "Charlotte, NC", "Chicago, IL", "New York, NY"],
+        apply_url: "https://careers.bankofamerica.com/en-us/students/job-detail/14420/quantitative-data-analytics-summer-analyst-program-multiple-locations-esomprank-6deokjwsy7-11",
+        eligibility_note: "Degree Type : Bachelor's or Bachelor's direct to Master's degree from an accredited college or university Graduation Dates : between November 2027 and August 2028",
+        deadline: "2026-11-07",
+        deadline_note: "'Apply by Nov 7, 2026' in the careers-site page header, corroborated by 'Application Deadline November 7 2026' on the Tal.net application page.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "IMPORTANT - he must pick the right track. The application asks you to stack-rank profiles, and there are two, both quoted verbatim from the live page: 'Quantitative Analyst: Apply mathematical and statistical models to understand and solve financial and risk management problems' versus 'Data Analyst: Broad responsibilities for collecting, cleaning, analyzing data..."
+      },
+      /* end +20 Aug sweep */
+
       {
         id: "bofa-qr", role_type: "QR", status: "soon",
         title: "Global Markets Quantitative Strategies Summer Analyst — 2027",
@@ -3591,7 +3744,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "anthelion", name: "Anthelion Capital", grade: "C", category: "boutique",
+    key: "anthelion", name: "Anthelion Capital", grade: "C", category: "boutique", applied_firm: true,
     note: "Tiny Midtown Manhattan systematic startup building its first platform. Four live reqs total. Exactly the twelve-person-shop profile this sweep was meant to surface.",
     firm_type: "private-credit and structured-finance investment manager with an in-house quantitative strategies and data-science team…",
     headcount: "small investment team; ~$3.15bn regulatory AUM",
@@ -3629,7 +3782,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "axq", name: "AXQ Capital", grade: "C", category: "boutique",
+    key: "axq", name: "AXQ Capital", grade: "C", category: "boutique", applied_firm: true,
     note: "Global quant firm founded 2018, NYC plus Beijing/Shanghai/Hong Kong. Almost invisible on US campus channels - the NYC intern req is the only campus role on a 19-req board.",
     firm_type: "systematic market-neutral equity manager — boutique quant fund, Schonfeld spin-out",
     headcount: "30+ per the firm's own site (a 2024 filing-derived figure put it at ~10–20)",
@@ -3672,4 +3825,2204 @@ var FIRMS = [
       },
     ]
   },
+  /* ── EXPANSION SWEEP, 20 AUGUST 2026 ─────────────────────────────
+     The board's charter widened here. Non-US roles, sell-side bank quant,
+     quant risk, data science and quant-adjacent seats are all in scope now;
+     every one of them was excluded by rule before this date. Two waves swept
+     the market, and each requisition was fetched before it was written down.
+     A second adversarial pass re-fetched every URL and killed 85 rows that
+     404'd, turned out to be PhD-only, or were plain software engineering
+     wearing a quant label — that last failure mode was the most common by far.
+     Rows with status "soon" are programmes that reliably run every year and
+     have not opened yet; each carries evidence for its timing in `notes`.
+     ─────────────────────────────────────────────────────────────── */
+  {
+    key: "g-research", name: "G-Research", grade: "A", category: "mm",
+    note: "London systematic quant research firm. Runs four separate 10-week Summer 2027 internships (all 21 June - 27 Aug 2027, Central London). THREE OF THE FOUR ARE POSTGRAD-ONLY and are excluded: Quant Research Internship requires 'final or penultimate year of a Masters or PhD';",
+    policy: "Please only apply for one internship position, choosing the role that best matches your skills and interests.", one_only: true,
+    oa: "Not stated on the requisition page",
+    roles: [
+      {
+        id: "g-research-ds-intern", role_type: "QR", status: "open",
+        title: "Data Science Internship",
+        locations: ["London"],
+        apply_url: "https://gresearch.wd103.myworkdayjobs.com/G-Research/job/London-UK/Data-Science-Internship_R3679",
+        eligibility_note: "A current undergraduate, master's or PhD student in a quantitative subject",
+        deadline_note: "No deadline stated on the requisition. Workday shows it posted 2026-07-31.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["ml", "stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "10-week summer programme, 21st June - 27th August 2027, 09:00-17:30, Central London. Work is data blending, statistical analysis and ML applied to discovering/enriching research datasets — genuinely quantitative, not dashboarding. Re-verified 2026-08-20: page live, title and dates match, eligibility line is verbatim, and the one-application policy sentence appears at the top of the description exactly as quoted. Comp line on the req says 'Highly competitive compensation plus accommodation' with no figure."
+      },
+    ]
+  },
+  {
+    key: "quantbot-technologies", name: "Quantbot Technologies", grade: "A", category: "multistrat",
+    note: "Systematic quant investment firm (Schonfeld-affiliated lineage), NY HQ with London and Hong Kong desks. Best find in this segment: multiple genuinely undergrad-open Summer 2027 reqs.",
+    roles: [
+      {
+        id: "quantbot-technologies-qr-ny", role_type: "QR", status: "open",
+        title: "Quantitative Researcher Internship - 2027 [New York]",
+        locations: ["New York, NY"],
+        apply_url: "https://www.quantbot.com/careers/4299496009?gh_jid=4299496009",
+        eligibility_note: "Enrollment in a Bachelor’s, Master’s, or PhD program in a STEM field (e.g., statistics, computer science, mathematics), ideally with one year left in your academic program",
+        deadline_note: "No deadline stated on the posting; req last updated 2026-08-12.",
+        comp: "$175,000-$200,000 annualised base, prorated over the internship", comp_source: "posted", comp_rank: 15600,
+        tags: ["ml", "stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED: title, location, eligibility line and comp sentence all confirmed verbatim against the live requisition on 2026-08-20. 10-12 week program, June-August, dedicated mentor. Alpha discovery and systematic strategy design across asset classes; explicitly says finance knowledge is not essential. Wants Python, C or C++."
+      },
+      {
+        id: "quantbot-technologies-qd-ny", role_type: "QD", status: "open",
+        title: "Quantitative Developer Internship - 2027 [New York]",
+        locations: ["New York, NY"],
+        apply_url: "https://www.quantbot.com/careers/4341038009?gh_jid=4341038009",
+        eligibility_note: "Enrollment in a Bachelor’s or Master’s program in a STEM field (e.g., computer science, mathematics, electrical engineering). Graduates and students in their penultimate year are encouraged to apply.",
+        deadline_note: "No deadline stated; req last updated 2026-08-11.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["cpp"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20. Genuinely quant-flavoured QD, not infra: embedded within a PM team alongside their developer and researcher, collaborating with quantitative researchers to 'develop, test, and deploy software applications that facilitate quantitative models and trading strategies'. Wants C++ (preferred) plus Python; Rust a plus; interest in low-level performance optimisation, networking and Linux internals. Mathematics is explicitly named in the accepted degree list, and 'penultimate year' fits him."
+      },
+      {
+        id: "quantbot-technologies-dta-ny", role_type: "QR", status: "open",
+        title: "Data Trading Analyst Summer Internship - 2027 [New York]",
+        locations: ["New York, NY"],
+        apply_url: "https://www.quantbot.com/careers/4299767009?gh_jid=4299767009",
+        eligibility_note: "Enrollment in a Bachelor’s or Master’s program in Computer Science or Data Science-related field. Juniors and seniors encouraged to apply.",
+        deadline_note: "No deadline stated; req last updated 2026-08-11.",
+        comp: "$70,000-$95,000 annualised base, prorated", comp_source: "posted", comp_rank: 6900,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20. Data Trading Lab team. Survives the quant-label test but only just, and the role_type tag flatters it: the genuine statistics content is real (exploratory data analysis on alternative datasets for predictive signals, correlation studies, regression analysis, time-series modelling) but roughly half the listed responsibilities are data engineering - ETL pipelines, data quality monitoring tools, script optimisation, internal Python library building. Wants advanced Python, SQL, Linux."
+      },
+      {
+        id: "quantbot-technologies-qr-hk", role_type: "QR", status: "open",
+        title: "Quantitative Researcher Internship - 2027 [Hong Kong]",
+        locations: ["Hong Kong"],
+        apply_url: "https://www.quantbot.com/careers/4348629009?gh_jid=4348629009",
+        eligibility_note: "Enrollment in a Bachelor’s, Master’s, or PhD program in a STEM field (e.g., statistics, computer science, mathematics). Seniors and students in their penultimate year are encouraged to apply.",
+        deadline_note: "No deadline stated; req last updated 2026-08-11.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["ml", "stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20. 10-week program, June-August. Same research remit as the NY req and confirmed undergrad-open, unlike the London QR which is MS/PhD only. Non-US, so outside this segment's nominal scope - worth a second application only if he is genuinely open to relocating to Hong Kong. No comp stated."
+      },
+      {
+        id: "quantbot-technologies-dta-hk", role_type: "QR", status: "open",
+        title: "Data Trading Analyst Summer Internship - 2027 [Hong Kong]",
+        locations: ["Hong Kong"],
+        apply_url: "https://www.quantbot.com/careers/4344638009?gh_jid=4344638009",
+        eligibility_note: "Enrollment in a Bachelor’s, Master’s, or PhD program in Computer Science or Data Science related field. Seniors and students in their penultimate year are encouraged to apply.",
+        deadline_note: "No deadline stated; req last updated 2026-08-11.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20. Hong Kong variant of the Data Trading Lab internship, same half-statistics half-data-engineering split as the NY version. Advanced Python plus Linux/UNIX; SQL preferred. Non-US and lower-priority than both the HK QR and the NY reqs; realistically the weakest Quantbot application of the six."
+      },
+      {
+        id: "quantbot-technologies-dta-london", role_type: "QR", status: "open",
+        title: "Data Trading Analyst Summer Internship - 2027 [London]",
+        locations: ["London, UK"],
+        apply_url: "https://www.quantbot.com/careers/4299858009?gh_jid=4299858009",
+        eligibility_note: "Enrollment in a Bachelor’s or Master’s program in Computer Science or Data Science related field. Students in their final year are encouraged to apply.",
+        deadline_note: "No deadline stated; req last updated 2026-08-11.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "cpp"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20. London Data Trading Lab req; wants Python AND C++ plus SQL and Linux, so it is the most engineering-heavy of the three DTA reqs. The hard requirement is only Bachelor's enrolment, which he meets, but the soft line says 'students in their final year' rather than penultimate - as a rising senior applying for summer 2027 he is entering rather than in his final year, making this a slightly weaker fit than the NY and HK versions. Non-US."
+      },
+    ]
+  },
+  {
+    key: "alliancebernstein", name: "AllianceBernstein", grade: "B", category: "am",
+    note: "VERIFIED 20 Aug 2026. AB runs campus hiring on a separate Workday board from its main careers board — abglobal.wd1 site `abcampuscareers`, not `alliancebernsteincareers`. I re-enumerated the campus board: exactly 1 live req (Mumbai Research Associate), which matches AB's own stated September open.",
+    roles: [
+      {
+        id: "alliancebernstein-2027-investments-summer-intern", role_type: "QD", status: "soon", opens: "opens Sept",
+        title: "Investments Summer Intern (Summer 2027)",
+        locations: ["New York, NY", "Nashville, TN"],
+        apply_url: "https://abglobal.wd1.myworkdayjobs.com/abcampuscareers",
+        eligibility_note: "Business units across the firm offer 10-week internships for current college juniors.",
+        deadline_note: "AB states the window runs from early September to around April, but Investments seats fill far earlier — treat September/October as the real deadline.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE RE-VERIFIED FIRST-HAND on AB's student-programs page, three verbatim sentences: 'Applications will go live beginning of September.'; 'The application period typically opens in early September and wraps up around April of the following year.'; and 'The vetting and recruiting process will also begin in September and continue through March of the following year."
+      },
+    ]
+  },
+  {
+    key: "amazon", name: "Amazon", grade: "B", category: "tech",
+    note: "Amazon's Summer 2027 US university cycle is provably underway — but the science/DS reqs lag the ops and PM reqs by a month or two every year. Their Economist and Applied Scientist internships are normally PhD/Master's-gated, so only the Data Scientist row is returned.",
+    roles: [
+      {
+        id: "amazon-data-scientist-intern-2027", role_type: "QD", status: "soon", opens: "opens Sept-Oct",
+        title: "Data Scientist Intern - Summer 2027",
+        locations: ["Seattle, WA", "Bellevue, WA", "New York, NY", "Arlington, VA"],
+        apply_url: "https://www.amazon.jobs/en/search?base_query=data%20scientist%20intern&category%5B%5D=data-science",
+        eligibility_note: "Verbatim from amazon.jobs' own internships page: \"Our internships are for rising seniors and recent graduates with an undergraduate, master's, or doctorate degree.\"",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: evidence independently re-confirmed via amazon.jobs/en/search.json, and the eligibility_note is verbatim-exact against the internships-for-students page. Dated 2027 reqs live today: \"Product Manager Technical (PMT) Intern - Summer 2027\" (id 10509639, Seattle) posted 20 Aug 2026; nine \"Area Manager Intern - Summer 2027\" reqs posted 5-6 Aug 2026; \"Pathways Operations Manager Intern - Summer 2027\" posted 3 Aug 2026; \"2027 Tax Intern (Summer Internship)\" posted 30 May 2026. So the cycle is open."
+      },
+    ]
+  },
+  {
+    key: "analysis-group", name: "Analysis Group", grade: "B", category: "adjacent",
+    note: "One of the largest international economics consulting firms (1,500+ professionals, 15 offices). Research Professionals build data-driven economic and financial models in SAS, R, Stata and Python for antitrust, valuation, damages and health-economics cases.",
+    roles: [
+      {
+        id: "analysis-group-rp-intern-montreal-toronto", role_type: "QR", status: "open",
+        title: "Summer Research Professional Intern - Generalist - Montreal/Toronto (2027 Start Date)",
+        locations: ["Montreal, QC", "Toronto, ON"],
+        apply_url: "https://analystcareers-analysisgroup.icims.com/jobs/3007/job",
+        eligibility_note: "pursuing a bachelor's and/or master's degree focus in computer science, data science, economics, finance, mathematics, statistics, or related subjects graduating in winter 2027 or summer 2028",
+        deadline_note: "No close date published on the posting.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "event-markets"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Eligibility quote confirmed verbatim off the live requisition, including the 'graduating in winter 2027 or summer 2028' window — a May 2028 graduate is squarely in scope. Responsibilities confirmed verbatim too: 'you will help develop data-driven models to address complex economic and financial problems using tools such as SAS, R, Stata, Python'. Real econometrics, not slide-making, though report drafting and presentation prep are also listed."
+      },
+    ]
+  },
+  {
+    key: "apple", name: "Apple", grade: "B", category: "tech",
+    note: "Apple runs undergrad-specific internship pipeline reqs by discipline. The ML/AI Undergrad req is live and US-wide and is the correct door for a strong maths/stats undergrad.",
+    roles: [
+      {
+        id: "apple-mlai-undergrad-internships", role_type: "QR", status: "open",
+        title: "Machine Learning and Artificial Intelligence Undergrad Internships",
+        locations: ["United States"],
+        apply_url: "https://jobs.apple.com/en-us/details/200664780-3810/machine-learning-and-artificial-intelligence-undergrad-internships",
+        eligibility_note: "\"Pursuing an undergraduate (BS/BA) degree in Computer Science, Computer Engineering, Data Science, Applied Mathematics, or related field\" and \"At the end of the internship, you must return to school to continue your education or the internship must be the last requirement for you to graduate.\"",
+        deadline_note: "Evergreen pipeline requisition (type PIPE); no close date published.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: independently re-fetched jobs.apple.com/api/v1/jobDetails/200664780-3810 and the HTML detail page (HTTP 200, no redirect). Live, type PIPE, postDateInGMT 2026-05-21, locations ['United States']. The eligibility_note above is verbatim-exact against the minimumQualifications field."
+      },
+      {
+        id: "apple-2027-internships-data", role_type: "QD", status: "soon", opens: "opens Sept-Nov",
+        title: "2027 Apple Internship - data science / analytics tracks",
+        locations: ["Cupertino, CA", "Austin, TX", "Sunnyvale, CA"],
+        apply_url: "https://jobs.apple.com/en-us/search?search=internship&sort=newest",
+        eligibility_note: "From the live 2027-labelled sibling requisition (id 200676942-3715, \"2027 Apple Internship - Information Systems and Technology\"): \"Pursuing an undergraduate or graduate degree in computer science, electrical engineering, computer engineering, data science, design,",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: evidence independently confirmed by fetching both sibling reqs through the jobDetails API. (1) 200676942-3715 \"2027 Apple Internship - Information Systems and Technology\", postDateInGMT 2026-08-11, location Shanghai — its minimumQualifications match the eligibility_note above verbatim."
+      },
+    ]
+  },
+  {
+    key: "bates-white", name: "Bates White Economic Consulting", grade: "B", category: "adjacent",
+    note: "Boutique DC econometrics shop — competition, energy, finance, mass torts. Ten weeks, Stata/R/Python/SQL, a real case study. Single office (Washington DC), so location choice is nil, but the quant density is high and the cohort is small.",
+    policy: "Single US office (Washington DC). Separate tracks for bachelor's/master's, PhD, and business services.", one_only: false,
+    roles: [
+      {
+        id: "bates-white-summer-consultant-2027", role_type: "QR", status: "open",
+        title: "Summer Consultant—2027",
+        locations: ["Washington, DC"],
+        apply_url: "https://bateswhite-apply.viglobalcloud.com/viRecruitSelfApply/RecDefault.aspx?FilterREID=3",
+        eligibility_note: "Candidates graduating between December 2027 and spring 2028 are eligible to apply.",
+        deadline_note: "Portal shows \"Date Posted Aug 07, 2026\" and \"Application Deadline Aug 07, 2036\" — a ten-year placeholder, i.e. no real deadline is enforced in the system. Treat as rolling; apply early.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live 20 Aug 2026. Note for re-checking: WebFetch gets a 403 from this host; a plain curl with a normal browser user-agent works, and the FilterREID=3 URL 302s to a session-tagged ?Tag=... URL that renders the req server-side. Title on the portal is \"Summer Consultant—2027\" (em dash, no space) — corrected from the sweep's \"Summer Consultant — 2027\". Eligibility sentence matched verbatim."
+      },
+    ]
+  },
+  {
+    key: "berkeley-research-group", name: "Berkeley Research Group (BRG)", grade: "B", category: "adjacent",
+    note: "Disputes/investigations, corporate finance and economics. The 2027 Summer Associate req is the widest-geography econ-consulting internship open right now — nine US cities",
+    policy: "One application covers all nine listed locations; you rank location and practice-area preferences in the form.", one_only: false,
+    roles: [
+      {
+        id: "berkeley-research-group-summer-associate-2027", role_type: "QR", status: "open",
+        title: "2027 Summer Associate (Intern)",
+        locations: ["Washington, DC", "New York, NY", "Chicago, IL", "Boston, MA", "Los Angeles, CA", "Houston, TX", "Emeryville, CA", "Pittsburgh, PA", "Tampa, FL"],
+        apply_url: "https://thinkbrg.wd5.myworkdayjobs.com/en-US/BRG_External_Career_Site/job/Washington-DC/XMLNAME-2027-Summer-Associate--Intern-_JR100976",
+        eligibility_note: "Progression towards a Bachelor's or Master's degree in Economics, Mathematics, Data Science, Statistics, Accounting, Business, Finance, Healthcare Administration or a related analytical field, with an expected graduation date between Winter 2027 and Summer 2028.",
+        deadline: "2026-10-16",
+        deadline_note: "CORRECTED — there are three staged deadlines, not one. Req text: \"Deadline for priority review: September 5. Deadline for secondary review: September 19.",
+        comp: "$25–$40/hour", comp_source: "Workday req JR100976: \"Salary Range: $25/hour - $40/hour\"", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live 20 Aug 2026 via the Workday CXS API (thinkbrg.wd5, BRG_External_Career_Site), req JR100976, \"Posted 16 Days Ago\". Location and the eight additionalLocations matched the sweep's list exactly. Genuinely quant: \"Combine programming, model building, and statistical analysis skills using relational database and statistical programs to analyze a variety of subjects with software such as SQL, R, Stata, SAS, Python,"
+      },
+    ]
+  },
+  {
+    key: "bnp-paribas", name: "BNP Paribas", grade: "B", category: "bank",
+    note: "IMPORTANT: BNP's headline quant role, '2027 - Summer Associate Internship - Global Markets, Quantitative Research & Trading' (New York, $150,000 base), is EXCLUDED — it requires 'Advanced degree (MA/MS/MFin or PhD)'.",
+    roles: [
+      {
+        id: "bnp-paribas-qt", role_type: "QT", status: "open",
+        title: "London - 2027 Summer Internship - Global Markets",
+        locations: ["London, UK"],
+        apply_url: "https://careers.bnpparibas.co.uk/jobs/london-2027-summer-internship-global-markets/",
+        eligibility_note: "Candidates are required to be in their penultimate year of study",
+        deadline_note: "No closing date stated on the page; APPLY button live at re-verification (20 Aug 2026).",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["vol", "options", "microstructure"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "RE-VERIFIED 20 Aug 2026: title, London location, penultimate-year eligibility and live APPLY button all confirmed on BNP's own careers site. Also requires a 2:1 minimum and cites 'strong mathematical and analytical capabilities'. Apply flow hands off to BNP's own portal at bwelcome.hr.bnpparibas (jobId=106077). Global Markets London houses the strats/quant research desks; the US quant req is Master's/PhD-only so this is the undergraduate door."
+      },
+    ]
+  },
+  {
+    key: "bp", name: "BP (Integrated Supply & Trading)", grade: "B", category: "energy",
+    note: "BP IST is one of the most desirable seats in this segment for a maths-heavy undergrad: the Analytics track puts interns on the trading desks building supply/demand, weather, storage and generation models.",
+    policy: "BP enforces one application per academic year globally — a second application is withdrawn.", one_only: true,
+    roles: [
+      {
+        id: "bp-us-supply-trading-shipping-summer-internship-2027", role_type: "QT", status: "soon", opens: "opens late Sept - Oct 20…",
+        title: "Summer Internship - Supply, Trading & Shipping (US) - Analytics / Trading / Finance & Risk tracks",
+        locations: ["Chicago, IL", "Houston, TX"],
+        apply_url: "https://bpinternational.wd3.myworkdayjobs.com/en-US/bpCareers",
+        eligibility_note: "",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        class_2028: true,
+        notes: "EVIDENCE (verified by the verifier, 2026-08-20). LAST-CYCLE POSTING DATES: BP's US STS intern reqs for Summer 2026 posted late September / early October 2025 — a Bentley University careers post dated 2025-10-09 flags \"bp Summer Intern - Supply, Trading, & Shipping Finance & Risk\" in Houston, and the Chicago tracks (\"Summer Internship - Supply, Trading, & Shipping - Analytics\", \"- Trading\", \"- Commercial\") were circulating on university boards from late Sept 2025. That is the basis for the Sept-Oct 2026 estimate."
+      },
+    ]
+  },
+  {
+    key: "brattle-group", name: "The Brattle Group", grade: "B", category: "adjacent",
+    note: "Energy, antitrust, securities and regulatory economics; the internship is explicitly aimed at rising seniors from quantitative disciplines and the work is model-building in R/Python/Stata/SAS/VBA.",
+    policy: "Firm-hosted Greenhouse (token thebrattlegroup). Separate Research Analyst Intern (undergrad) and Summer Associate (PhD/M…", one_only: false,
+    roles: [
+      {
+        id: "brattle-group-research-analyst-intern-2027", role_type: "QR", status: "soon", opens: "opens in the autumn (Sep…",
+        title: "Research Analyst Intern (Economics & Finance) - Summer 2027",
+        locations: ["Boston, MA", "Chicago, IL", "New York, NY", "San Francisco, CA", "Washington, DC", "Toronto, ON"],
+        apply_url: "https://job-boards.greenhouse.io/thebrattlegroup",
+        eligibility_note: "From Brattle's own Summer Internships page, re-verified 20 Aug 2026: \"Rising seniors pursuing a Bachelor's degree in a quantitative discipline: economics, math, finance, engineering, or a related field\".",
+        deadline_note: "ADDED. Last cycle's Summer 2026 intern req was removed on 29 January 2026, so the effective close is late January — this is a long, slow-burning window, not an autumn sprint.",
+        comp: "$1,850/week", comp_source: "Brattle Summer 2026 Research Analyst Intern req (Washington…", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE UPGRADED — the sweep conceded it had no Brattle-authored sentence naming a window, which under this wave's rules would have killed the row. I found one. Last cycle's Research Analyst Intern (Economics & Finance) - Summer 2026 req carried the sentence: \"Please note that while we accept applications for our internship position starting in the fall, we will not begin actively contacting candidates for interviews until November 2025.\" That is Brattle stating the window in its own words"
+      },
+    ]
+  },
+  {
+    key: "capital-group", name: "Capital Group", grade: "B", category: "am",
+    note: "VERIFIED 20 Aug 2026. $2.5tn manager; the Capital Associates Program is its investment-track pipeline and takes roughly ten interns globally a year, which makes it one of the most selective seats in asset management.",
+    roles: [
+      {
+        id: "capital-group-2027-cap-summer-internship", role_type: "QR", status: "soon", opens: "opens Jan 2027",
+        title: "Capital Associates Program (CAP) Summer Internship",
+        locations: ["Los Angeles, CA"],
+        apply_url: "https://capgroup.wd1.myworkdayjobs.com/en-US/capitalgroupcareers",
+        eligibility_note: "Undergraduate students in their junior (penultimate) year may apply for a 10-week CAP Summer Internship to experience Capital Group and the program firsthand.",
+        deadline_note: "Capital Group states only that applications open in January; it does NOT publish a close date. Prior cycles are reported to have closed by early February, so the window is short",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE RE-VERIFIED FIRST-HAND on Capital Group's own CAP page, verbatim: 'Applications open in January in the U.S. and in late summer for Europe and Asia.' The eligibility quote above is verbatim from the same page. QUANT DENSITY CONFIRMED, which upgrades the sweep's 'moderate' read: the CAP page describes a rotation example involving designing regression analysis in R to assess ETF flow impacts on stock returns within the Quantitative Research Analytics division."
+      },
+    ]
+  },
+  {
+    key: "cargill", name: "Cargill", grade: "B", category: "energy",
+    note: "The only firm in this segment with live, independently re-fetched, undergrad-eligible Summer 2027 reqs as of 20 Aug 2026. Both reqs state graduation Dec 2027-Aug 2028, which fits a May 2028 grad exactly.",
+    roles: [
+      {
+        id: "cargill-price-risk-qr", role_type: "QR", status: "open",
+        title: "Price Risk Solutions Intern - Summer 2027",
+        locations: ["Wayzata, MN", "Minneapolis, MN"],
+        apply_url: "https://careers.cargill.com/en/job/wayzata/price-risk-solutions-intern-summer-2027/23251/99132515568",
+        eligibility_note: "Pursuing a bachelor's or master's degree from an accredited program graduating between December 2027 to August 2028",
+        deadline_note: "No deadline stated on the posting. Posted 12 Aug 2026.",
+        comp: "$23.13-$32.02 hourly", comp_source: "posted", comp_rank: null,
+        tags: ["commodities", "stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 20 Aug 2026: page live, title/locations/pay/eligibility all match the sweep exactly; eligibility sentence confirmed verbatim. Commodity price-driver and market-risk analysis for customer hedging programmes: assessing price drivers, customer segmentation and risk assessment methods, working with trading and commercial desks. Genuinely price-risk flavoured rather than dashboarding, but it is a commercial/analyst seat, not a modelling-heavy QR desk. 12-week programme, May/June-Aug 2027."
+      },
+      {
+        id: "cargill-commodity-trading-qt", role_type: "QT", status: "open",
+        title: "Commodity Trading Internship - 2027",
+        locations: ["Blair, NE", "Wayzata, MN", "Amarillo, TX", "Olathe, KS", "Eddyville, IA"],
+        apply_url: "https://careers.cargill.com/en/job/blair/commodity-trading-internship-2027/23251/98714735712",
+        eligibility_note: "Pursuing a bachelor's or master's degree from an accredited program graduating between December 2027 and August 2028",
+        deadline_note: "No deadline stated on the posting. Posted 3 Aug 2026.",
+        comp: "$23.13-$32.02 hourly", comp_source: "posted", comp_rank: null,
+        tags: ["commodities"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 20 Aug 2026: page live, all five locations, pay band and eligibility sentence confirmed verbatim. Physical ag commodity trading: supply/demand analysis, negotiating purchase/sale contracts, transportation logistics, crop survey trips. This is merchandising, NOT quant trading - the QT tag overstates it. Include for breadth in physical commodities only; do not treat it as a quant-desk substitute. 12-week programme, May/June-Aug 2027."
+      },
+    ]
+  },
+  {
+    key: "cboe", name: "Cboe Global Markets", grade: "B", category: "exchange",
+    note: "Best genuine quant seat among US exchanges: Cboe's Data & Analytics team runs a Quantitative Research Intern role (Python/SQL, modelling, research with business application) explicitly open to Bachelor's candidates. Programme runs June-August, 3 days in office / 2 remote.",
+    roles: [
+      {
+        id: "cboe-quant-research-intern-2027", role_type: "QR", status: "soon", opens: "opens Dec (last cycle po…",
+        title: "Quantitative Research Intern, Data & Analytics - Summer 2027",
+        locations: ["Chicago, IL", "Kansas City, MO", "New York, NY"],
+        apply_url: "https://careers.cboe.com/us/en/c/intern-jobs",
+        eligibility_note: "No live requisition exists to quote today. From the previous cycle's requisition (Cboe req R-4112, Jun 2026 start, now closed): candidates must be 'currently pursuing a Bachelor's or Master's degree in a quantitative field (e.g., Financial Engineering, Mathematics, Statistics,",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["options"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER RESCUED THIS ROW. The sweep filed it with inferred timing ('Treat opens fall 2026 as inferred from the June start, not as a Cboe statement'), which fails the evidence bar — so I went looking for a last-cycle posting date and found one. Last cycle's Quantitative Research Intern req carries structured JobPosting metadata reading datePosted 2025-12-21 for the Jun-2026 start,"
+      },
+    ]
+  },
+  {
+    key: "cdpq", name: "CDPQ (La Caisse)", grade: "B", category: "am",
+    note: "VERIFIED 2026-08-20 via the Workday CXS API. CDPQ's university-recruitment board (cdpq.wd10 / CDPQ-recrutement-universitaire) is live with May-August 2027 internships, all posted 2026-08-18, no end date on the requisitions.",
+    oa: "Pre-recorded video interview: 'Les personnes candidates retenues pour la prochaine étape sont invitées à compléter une entrevue vidéo préenregistrée.' Evaluated over a five-week window.",
+    roles: [
+      {
+        id: "cdpq-quant-finance", role_type: "QR", status: "open",
+        title: "Bassin de stages - Finance quantitative (dès mai 2027)",
+        locations: ["Montreal, Canada"],
+        apply_url: "https://cdpq.wd10.myworkdayjobs.com/CDPQ-recrutement-universitaire/job/Montreal/Bassin-de-stages---Finance-quantitative--ds-mai-2027-_R05093",
+        eligibility_note: "Personnes inscrites dans un programme de premier cycle ou de deuxième cycle en finance quantitative, ingénierie financière, analyse/intelligence d'affaires, mathématiques, finance ou toute autre discipline connexe ; Connaissance d'outils informatiques (ex.",
+        deadline_note: "No end date on the requisition (CXS endDate is null). Posted 2026-08-18, rolling.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "numerics", "vol"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED: req R05093, posted 2026-08-18, still live. 'Stage d'une durée de quatre (4) mois – Mai à août 2027. Nombre de postes offerts : 12.' Duties confirmed verbatim: 'Participer au développement et à l'amélioration de modèles quantitatifs liés à la mesure des risques, à la prévision des rendements et à la construction de portefeuille' and 'Réaliser des analyses de type backtests, simulations et analyses de performance'."
+      },
+      {
+        id: "cdpq-econ-analysis", role_type: "QR", status: "open",
+        title: "Stagiaire, Analyse économique et financière (dès mai 2027)",
+        locations: ["Montreal, Canada"],
+        apply_url: "https://cdpq.wd10.myworkdayjobs.com/CDPQ-recrutement-universitaire/job/Montreal/Stagiaire--Analyse-conomique-et-financire--ds-mai-2027-_R05075-3",
+        eligibility_note: "Études universitaires de premier ou deuxième cycle en économie, en finance ou dans tout autre domaine connexe ; Intérêt marqué pour l'économétrie et/ou la macroéconomie",
+        deadline_note: "No end date on the requisition. Posted 2026-08-18.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "ml"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED: req R05075, posted 2026-08-18, live. 'Stage d'une durée de quatre (4) mois ou (8) mois – mai à août ou mai à décembre 2027.' Real modelling content: 'Participer au développement et à l'amélioration des processus analytiques et des modèles utilisés dans le développement des prévisions économiques et financières.' HONEST CAVEAT the sweeper omitted: the opening paragraph describes a large support component"
+      },
+    ]
+  },
+  {
+    key: "charles-river-associates", name: "Charles River Associates (CRA)", grade: "B", category: "adjacent",
+    note: "One of the biggest volume hirers in the segment, across six practice tracks; the Economics Consulting track is the quant one. Their Greenhouse board (token charlesriverassociates) is live and already carries the July-2027 full-time campus reqs posted 18-19 Aug 2026,",
+    policy: "Firm-hosted Greenhouse. You indicate geographic and practice preferences in the application.", one_only: false,
+    roles: [
+      {
+        id: "charles-river-associates-econ-intern-summer-2027", role_type: "QR", status: "soon", opens: "opens Aug-Sept 2026",
+        title: "Economics Consulting Analyst/Associate Intern (Summer 2027)",
+        locations: ["Boston, MA", "Chicago, IL", "New York, NY", "Oakland, CA", "Washington, DC", "Los Angeles, CA", "Tallahassee, FL"],
+        apply_url: "https://job-boards.greenhouse.io/charlesriverassociates",
+        eligibility_note: "Not yet published for the Summer 2027 req. Last cycle's equivalent was titled \"(2027 Bachelor's/Master's graduates) Economics Consulting Analyst/Associate Intern (Summer 2026)\" — i.e.",
+        deadline_note: "CRA FAQ, verified verbatim: \"Internship recruiting typically concludes in March.\" Rolling review, no single hard date.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        class_2028: true,
+        notes: "TIMING EVIDENCE VERIFIED — I re-fetched crai.com/cra-careers/faqs on 20 Aug 2026 and the two load-bearing sentences are there verbatim: \"Internship opportunities are typically posted on our website in mid-August\" and \"Internship recruiting typically concludes in March.\" That is a firm-authored statement of the window, which is what keeps this row alive."
+      },
+    ]
+  },
+  {
+    key: "cigna", name: "The Cigna Group", grade: "B", category: "insurance",
+    note: "Actuarial Executive Development Program (AEDP). One of the largest structured health-actuarial internships in the US and the clearest fit in this segment: undergraduate-explicit, five US locations, housing provided, paid actuarial exam study materials.",
+    policy: "Recruitment is fully remote: recruiter screen, first round, then a final round of three interviews with leaders.", one_only: false,
+    roles: [
+      {
+        id: "cigna-actuarial-intern-s2027", role_type: "QR", status: "open",
+        title: "Actuarial Internship - Summer 2027",
+        locations: ["Bloomfield, CT", "Austin, TX", "Philadelphia, PA", "Franklin, TN", "Denver, CO"],
+        apply_url: "https://cigna.wd5.myworkdayjobs.com/cignacareers/job/Bloomfield-CT/Actuarial-Internship---Summer-2027_26006087",
+        eligibility_note: "Currently progressing toward a bachelor's degree and has completed at least two years a preferred major of actuarial science, mathematics, statistics, finance, economics, or data analytics.",
+        deadline_note: "No end date on the requisition record (endDate was null in the Workday API response, re-confirmed 2026-08-20); apply early, this is a rolling campus process.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Posted 2026-08-05 (Workday startDate; API showed 'Posted 15 Days Ago' on 2026-08-20). 11-week programme, on-site Mon-Fri 40 hrs/week. Paid travel plus fully furnished housing (typically shared with other actuarial interns). Minimum 3.2 GPA. Completion of at least one actuarial exam preferred. Wants strong Excel plus exposure to Python, R, SQL and AI-enabled tools. Own a high-impact actuarial project supporting pricing, forecasting or reserving. Direct pipeline into the full-time AEDP."
+      },
+    ]
+  },
+  {
+    key: "coinbase", name: "Coinbase", grade: "B", category: "crypto",
+    note: "UPGRADED on verification. The sweep asserted Coinbase's intern seats were all software engineering; that is wrong. The Summer 2026 cycle carried a Data Science Intern (NYC), a Machine Learning Engineer Intern (SF), an Analytics Engineer Intern and a Data Engineer Intern,",
+    policy: "Each candidate may submit a maximum of four applications within any 30-day period.", one_only: false,
+    roles: [
+      {
+        id: "coinbase-qd-intern-2027", role_type: "QD", status: "soon", opens: "opens Aug–Oct 2026",
+        title: "Summer 2027 Internship — Data Science / Machine Learning / Analytics Engineering tracks",
+        locations: ["New York, NY", "San Francisco, CA"],
+        apply_url: "https://www.coinbase.com/careers/positions",
+        eligibility_note: "From last cycle's Data Science Intern requisition (gh_jid 7309504, New York), read via a mirror rather than coinbase.com, which 403s a fetch — verbatim: \"This is a 12-week internship during summer 2026.\" and, under nice-to-haves, \"Currently pursuing a BA/BS degree in a quantitative field (ex Math,",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "VERIFIED 20 Aug 2026: Greenhouse board token `coinbase` — department \"Internships & Emerging Talent Positions\" (id 60542) is live with 0 open requisitions; \"Data Science\" (45789, 3 open) and \"Machine Learning\" (191286, 4 open) are standing departments. CORRECTION TO THE SWEEP: last cycle's intern reqs were not all SWE. Confirmed Summer 2026 seats: Data Science Intern (7309504, NYC), Machine Learning Engineer Intern (7294075, SF), Analytics Engineer Intern (7309530, NYC), Data Engineer Intern (7309526, NYC)."
+      },
+    ]
+  },
+  {
+    key: "compass-lexecon", name: "Compass Lexecon", grade: "B", category: "adjacent",
+    note: "FTI's competition-economics arm, but it recruits on its own Workday site and its own calendar — a genuinely separate application from the FTI Economic Consulting intern req. The US Summer Internship is the single undergraduate entry point and it is quantitative case work.",
+    policy: "Separate Workday site (CompassLexeconCareers) on the same fticonsulting wd108 tenant as FTI proper.", one_only: false,
+    roles: [
+      {
+        id: "compass-lexecon-summer-internship-2027", role_type: "QR", status: "soon", opens: "opens Oct 2026",
+        title: "Summer Internship (US) — Summer 2027",
+        locations: ["United States"],
+        apply_url: "https://fticonsulting.wd108.myworkdayjobs.com/CompassLexeconCareers",
+        eligibility_note: "From Compass Lexecon's Students & Graduates page, re-verified verbatim 20 Aug 2026: \"In the U.S. and Latin America, interns join us during the summer before their final year of studies or before entering a graduate program.\"",
+        deadline_note: "Last cycle's deadline was \"Monday, November 3\" for a programme running \"10 weeks from June through August of 2026\". Expect a similar early-November close for the Summer 2027 cycle.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE VERIFIED — the Columbia University Department of Economics posting of the equivalent Compass Lexecon summer internship (econ.columbia.edu/summer-internship-compass-lexecon/) went up in October 2025 with a deadline of Monday 3 November for a programme running 10 weeks from June through August 2026, and named the four required materials: cover letter, resume, unofficial transcript, writing sample (preferred). So the Summer 2027 edition should post around October 2026 and close early November."
+      },
+    ]
+  },
+  {
+    key: "cornerstone-research", name: "Cornerstone Research", grade: "B", category: "adjacent",
+    note: "The cleanest fit in this segment. Litigation/antitrust/securities economics; Summer Analysts build financial and economic models, analyse large datasets and run statistical techniques. Programme is explicitly the summer between junior and senior year, so it is aimed exactly at a May 2028 grad.",
+    policy: "US applicants apply through the online portal; separate UK and Belgium iCIMS portals exist for those offices.", one_only: false,
+    roles: [
+      {
+        id: "cornerstone-research-summer-analyst-2027", role_type: "QR", status: "open",
+        title: "Summer Analyst (Summer 2027)",
+        locations: ["United States"],
+        apply_url: "https://ug-chire.icims.com/jobs/4087/summer-analyst/job",
+        eligibility_note: "In your junior year of an undergraduate degree; with an expected graduation date of December 2027 – June 2028.",
+        deadline: "2026-09-27",
+        deadline_note: "Req text, confirmed verbatim: \"For US Applicants: Please submit your application through our online portal by our deadline: September 27, 2026 for consideration.\"",
+        comp: "$4,326.92 bi-weekly", comp_source: "iCIMS req 2026-4087: \"The bi-weekly salary for the Summer An…", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live 20 Aug 2026 via https://ug-chire.icims.com/jobs/4087/summer-analyst/job?in_iframe=1 — req ID 2026-4087, category \"Summer Analyst\", location US. Every quoted string in this row matched the page character-for-character. Duty bullets are genuinely quantitative: \"Developing financial and economic models; Analyzing large datasets; Examining market and industry behavior\". Firm states \"successful applicants typically have a GPA higher than a 3.6\"."
+      },
+    ]
+  },
+  {
+    key: "cvs-health", name: "CVS Health (Aetna)", grade: "B", category: "insurance",
+    note: "Aetna's actuarial arm inside CVS Health. Only firm in this segment with a published pay rate. Graduation-window eligibility explicitly covers a May 2028 graduate.",
+    roles: [
+      {
+        id: "cvs-health-actuarial-corporate-intern-s2027", role_type: "QR", status: "open",
+        title: "Actuarial Corporate Internship",
+        locations: ["Hartford, CT"],
+        apply_url: "https://cvshealth.wd1.myworkdayjobs.com/CVS_Health_Careers/job/CT---Hartford/Actuarial-Corporate-Internship_R1015250",
+        eligibility_note: "Be currently pursuing a Bachelor's degree / Have an anticipated graduation date between September 2027 and August 2030",
+        deadline_note: "Posting states verbatim: 'This job does not have an application deadline, as CVS Health accepts applications on an ongoing basis.' endDate on the Workday record is null.",
+        comp: "$26.50/hr at 40 hrs/week (posting Pay Range section states $26.00 - $31.00)", comp_source: "posted", comp_rank: 1,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Posted 2026-08-19. Title does not carry the year but the description confirms it verbatim: 'The Summer 2027 program will run May 26th - August 6th 2027 (Dates subject to change)'. 10-week full-time programme, hybrid with 3 days (generally Tue/Wed/Thu) in the Hartford CT office. Intern housing provided; no work on July 4th plus two days paid leave."
+      },
+    ]
+  },
+  {
+    key: "da-vinci", name: "Da Vinci Trading (Da Vinci Derivatives)", grade: "B", category: "mm",
+    note: "Amsterdam options market maker. The live Quant Trading Intern req names the class of 2028 explicitly — the single cleanest eligibility match in this whole segment for a May-2028 graduate. They cover flights and accommodation in Amsterdam, so the geography is not a cost barrier.",
+    oa: "Online assessment (numerical quiz), then online introductory call, online technical interview, online final interview",
+    roles: [
+      {
+        id: "da-vinci-qt-intern", role_type: "QT", status: "open",
+        title: "Quant Trading Intern",
+        locations: ["Amsterdam"],
+        apply_url: "https://job-boards.eu.greenhouse.io/davinciderivatives/jobs/4196845101",
+        eligibility_note: "If you are a student graduating in 2028 from fields such as mathematics, physics, engineering or similar, we invite you to apply for this internship!",
+        deadline_note: "Rolling. The page states: 'We will begin reviewing the first batch of applications on Monday, 27 July, and will continue to consider applications after this date.' No year is given for that date",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["options", "vol", "numerics", "games"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "8-week structured programme: weeks 1-2 theory classes, 3-4 simulated trading, 5 programming training, 6-8 projects. Re-verified 2026-08-20: eligibility sentence confirmed verbatim, graduation-year dropdown offers 2026/2027/2028. The req itself prints NO start date or summer year — the 2028 graduation gate is what makes Summer 2027 the sensible read, but confirm the window with the recruiter. Benefits: full coverage of flights and stay in Amsterdam, meals, gym."
+      },
+    ]
+  },
+  {
+    key: "databricks", name: "Databricks", grade: "B", category: "tech",
+    note: "Their 2027 intern reqs are live on the Greenhouse board, one first published today, and both carry an explicit 'fall 2027 or spring 2028' graduation line — so the 2027 cycle is demonstrably open at Databricks and scoped to his class.",
+    roles: [
+      {
+        id: "databricks-research-ml-intern-2027", role_type: "QD", status: "soon", opens: "opens Sept-Oct",
+        title: "Data Science Intern (2027)",
+        locations: ["San Francisco, CA", "Mountain View, CA", "Bellevue, WA"],
+        apply_url: "https://www.databricks.com/company/careers/open-positions?department=University%20Recruiting&location=all",
+        eligibility_note: "Verbatim from the Databricks university recruiting page: \"Our ideal intern candidates are undergraduate and graduate students pursuing degrees in computer science or related fields who have a fundamental understanding of deep learning and are proficient in software engineering using PyTorch.\" The cl…",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: CORRECTED. The sweep titled this \"Research / Machine Learning Intern (2027) - non-PhD track\" and typed it QR. I fetched the Databricks university recruiting page and it names exactly three intern tracks — Software Engineering, Data Science, and Product Management. There is no research or ML intern track for non-PhDs; the only research seat on the board is the PhD-gated one. Retitled to the track that actually exists and re-typed QR->QD."
+      },
+    ]
+  },
+  {
+    key: "doe-suli", name: "U.S. DOE Office of Science — SULI (17 national labs)", grade: "B", category: "adjacent",
+    note: "Highest-leverage row in the segment: one application, 17 DOE labs, and the summer cycle timing is documented rather than guessed. Host labs include real applied-maths/statistics/computational-science groups (Argonne MCS, ORNL CSMD, PNNL, LBNL CRD, LLNL CASC, LANL CCS).",
+    policy: "One SULI application routes to up to 3 host labs (Argonne, Brookhaven, Oak Ridge, PNNL, LANL, LLNL, NREL, INL, SLAC,", one_only: true,
+    roles: [
+      {
+        id: "doe-suli-summer-2027", role_type: "QR", status: "soon", opens: "opens late Oct",
+        title: "Science Undergraduate Laboratory Internships (SULI) — Summer 2027 term",
+        locations: ["Argonne IL", "Oak Ridge TN", "Richland WA", "Los Alamos NM", "Livermore CA", "Berkeley CA", "Upton NY", "Golden CO", "Idaho Falls ID", "Menlo Park CA", "Batavia IL"],
+        apply_url: "https://science.osti.gov/wdts/suli",
+        eligibility_note: "\"Must be a United States Citizen or Lawful Permanent Resident at the time of application.\" / \"Be a currently enrolled full-time undergraduate student at an accredited institution\" with \"at least 6 credit hours in STEM fields and a minimum of 12 total undergraduate credit hours\" and \"a cumulative GPA…",
+        deadline_note: "Summer 2027 dates not yet published. Summer 2026 opened 23 Oct 2025 and closed 7 Jan 2026 5:00 PM ET per the SULI Key Dates page; expect the same shape for Summer 2027.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "Timing VERIFIED by verifier directly on https://science.osti.gov/wdts/suli/Key-Dates: Summer 2026 opened 23 Oct 2025, closed 7 Jan 2026 5:00 PM ET; Fall 2026 opened 12 Mar 2026, closed 20 May 2026; Spring 2027 opened 8 Jul 2026, closes 30 Sep 2026 5:00 PM ET (live right now). No Summer 2027 row on the page yet."
+      },
+    ]
+  },
+  {
+    key: "draftkings", name: "DraftKings", grade: "B", category: "event",
+    note: "The largest US event-markets employer with a real internship pipeline. Runs a 10-week Boston summer programme plus six-month co-ops. The Trading team (sportsbook pricing and risk) is the quant heart of the business; the Data Science intern track is the realistic undergrad entry point.",
+    roles: [
+      {
+        id: "draftkings-qd-ds-intern-2027", role_type: "QD", status: "soon", opens: "opens Sep–Nov 2026",
+        title: "Data Science Intern — Summer 2027",
+        locations: ["Boston, MA"],
+        apply_url: "https://careers.draftkings.com/early-careers/internships-co-ops/",
+        eligibility_note: "No verbatim eligibility sentence is available — DraftKings sits behind Cloudflare and their own careers page is a marketing shell. What is readable at https://careers.draftkings.com/early-careers/internships-co-ops/ : the page is titled \"DraftKings 2026 Internships & Co-Ops\",",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        notes: "VERIFIED 20 Aug 2026: the internships/co-ops page loads and is a genuine programme page (not a redirect to a generic careers home). TIMING CORRECTED — the sweep claimed August 2025; the traceable evidence is that \"Data Science Intern (Summer 2026)\", Boston, was publicly live from September 2025 (ZipRecruiter, Snagajob, Breakroom mirrors), alongside \"Analyst Intern (Summer 2026)\". So diarise Sep–Nov 2026, and start checking early September."
+      },
+    ]
+  },
+  {
+    key: "dtcc", name: "DTCC (Depository Trust & Clearing Corporation)", grade: "B", category: "exchange",
+    note: "Post-trade clearing/settlement utility. Quant relevance is via the Risk Management org (margin/quantitative risk); the published programme itself is generic, so screen the req when it posts. Best-evidenced 'soon' row in the segment: DTCC publishes its own recruiting timeline.",
+    policy: "US work authorisation without sponsorship required", one_only: false,
+    roles: [
+      {
+        id: "dtcc-summer-internship-2027", role_type: "QD", status: "soon", opens: "opens Aug-Oct",
+        title: "DTCC Summer Internship Program - Summer 2027",
+        locations: ["Jersey City, NJ", "Dallas, TX", "Tampa, FL", "Boston, MA"],
+        apply_url: "https://www.dtcc.com/careers/early-career-programs",
+        eligibility_note: "Verbatim from DTCC's Early Career Programs page, PROGRAM REQUIREMENTS for the Summer Internship Program: 'Full-time undergraduates. Minimum 3.2 GPA upon graduation. Strong analytical and communication skills.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER RE-CHECKED 20 Aug 2026, first-hand. dtcc.com 403s both curl and WebFetch, so I loaded the page in a headless browser and read the DOM directly. Confirmed verbatim: 'Summer Internship Timeline / August - October Applications open / October - December Interviews and selection process / January - May Early engagement and onboarding process / June Start of program'. So the window is open NOW."
+      },
+    ]
+  },
+  {
+    key: "engineers-gate", name: "Engineers Gate", grade: "B", category: "multistrat",
+    note: "Systematic multi-PM fund (New York HQ, London and Hong Kong offices), not on the board. The only intern requisition on its Greenhouse board is the Hong Kong QR role, and it is explicitly Bachelor's-eligible with a published salary band.",
+    roles: [
+      {
+        id: "engineers-gate-qr-intern", role_type: "QR", status: "open",
+        title: "Quantitative Research Intern",
+        locations: ["Hong Kong"],
+        apply_url: "https://job-boards.greenhouse.io/engineersgate/jobs/7946542",
+        eligibility_note: "Bachelor's, Master's, or Ph.D. from a top-tier university in a quantitative field (Computer Science, Mathematics, Engineering, Physics, Statistics, Finance, Economics, or related)",
+        deadline_note: "No deadline stated on the posting.",
+        comp: "$120,000–$192,000, prorated based on the duration of the internship", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "ml", "microstructure"],
+        undergrad_explicit: true,
+        notes: "Season/year NOT specified on the requisition — the only caveat on this one, re-confirmed on the verification fetch. Required: \"Strong programming skills in Python (required); experience with SQL, databases, and Linux environments\". Hong Kong-based; the rest of Engineers Gate's live board is infrastructure and ops, so this is the sole student entry point."
+      },
+    ]
+  },
+  {
+    key: "exxonmobil", name: "ExxonMobil", grade: "B", category: "energy",
+    note: "The best seat in this segment. ExxonMobil's Global Trading org sits in Spring, TX (north Houston) and the trading student req explicitly names mathematics, statistics and econometrics as relevant degrees and asks for Python/C#/SQL on the data/analytics track",
+    policy: "Evergreen student-pipeline reqs rather than dated postings; ExxonMobil recruits into Trading from these pooled requisiti…", one_only: false,
+    roles: [
+      {
+        id: "exxonmobil-trading-student-internship", role_type: "QT", status: "open",
+        title: "Students Seeking Internship/Co-op Opportunities in Trading",
+        locations: ["Spring, TX (Houston area)"],
+        apply_url: "https://jobs.exxonmobil.com/job/Spring-Students-Seeking-InternshipCo-op-Opportunities-in-Trading-TX-77389/1417886900/",
+        eligibility_note: "\"Have strong academic performance in any discipline.\"; \"Degrees in economics, finance, mathematics, statistics, econometrics, physics, data science, supply chain, and engineering are all relevant.\"",
+        deadline_note: "No deadline stated on the req; it is an evergreen pooled requisition.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["commodities"],
+        undergrad_explicit: false,
+        class_2028: true,
+        notes: "VERIFIER: re-fetched 2026-08-20, page is live, title and location match, and both quoted sentences are present verbatim. Duty text: interns \"contribute in a variety of areas supporting commodities spanning Crude, Products, Natural Gas & Power, and Freight\" across analytics, risk and compliance; duration \"Summer Internships: ~ 3 months\", \"Co-ops: ~ 4 months\". Python/C#/SQL are named for the data/analytics track."
+      },
+    ]
+  },
+  {
+    key: "fanduel", name: "FanDuel", grade: "B", category: "event",
+    note: "\"Summer League\" is a 10-week paid US/Canada internship. FanDuel's Greenhouse board carries both a dedicated Internship department and a standing Risk & Trading department containing a live Algorithmic Trading Senior Manager seat",
+    roles: [
+      {
+        id: "fanduel-qd-ds-intern-2027", role_type: "QD", status: "soon", opens: "opens late 2026",
+        title: "Data Science Intern — Summer League 2027",
+        locations: ["New York, NY", "Jersey City, NJ"],
+        apply_url: "https://www.fanduel.careers/teams/intern",
+        eligibility_note: "Last cycle's requisition wording (Data Science Intern – Summer 2026, New York), read via mirrors rather than FanDuel's own page: \"planning for bachelor's degree completion between August 2026 – June 2028, in a technical or STEM field (e.g., computer science, natural science, Machine Learning,",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        class_2028: true,
+        notes: "VERIFIED 20 Aug 2026: Greenhouse department counts confirmed exactly as stated, and Risk & Trading does contain \"Algorithmic Trading Senior Manager\" (Jersey City) plus a Data Science Manager — a genuine quant desk sits behind this. fanduel.careers/teams/intern loads and links to https://app.ripplematch.com/v2/public/company/fanduel, FanDuel's own company portal, not a scraped aggregator."
+      },
+    ]
+  },
+  {
+    key: "federal-reserve-board", name: "Board of Governors of the Federal Reserve System", grade: "B", category: "bank",
+    note: "The single highest-value regulator target in this segment and it is about to open. The Board's careers page states outright that internships post each September for the following summer, so Summer 2027 reqs should appear within weeks of 20 Aug 2026. US citizenship required — fine.",
+    policy: "US citizens only for the summer internship program", one_only: false,
+    roles: [
+      {
+        id: "federal-reserve-board-summer-intern", role_type: "QR", status: "soon", opens: "September 2026",
+        title: "Federal Reserve Board Summer Internship Program (Summer 2027)",
+        locations: ["Washington, DC"],
+        apply_url: "https://www.federalreserve.gov/careers-internships.htm",
+        eligibility_note: "Applicants must be currently enrolled in an undergraduate or graduate degree program at an accredited university and returning to continue studies after the internship.",
+        deadline_note: "Page states: \"The majority of our internship opportunities will be posted each September for openings that begin the following summer.\"",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "RE-VERIFIED 2026-08-20: all three quotes confirmed verbatim on federalreserve.gov/careers-internships.htm, including \"Employment in the Board's summer internship program is granted to U.S. citizens.\" and the selection-criteria sentence. CAVEAT the board should carry: this apply_url is the Board's internships information page, NOT a requisition — there is no Summer 2027 posting or apply link on it yet, and the page directs you to the job search portal filtered to the \"Intern Group\" category."
+      },
+    ]
+  },
+  {
+    key: "fti-consulting", name: "FTI Consulting", grade: "B", category: "adjacent",
+    note: "Runs a genuine, large summer 2027 internship programme, open now, with a priority deadline of 28 Aug and a hard 18 Sept close. Two of the five segments are worth applying to: Economic Consulting (healthcare economics and industry/network economics) and Forensic & Litigation Consulting (whose Data &…",
+    policy: "You pick practice area and location inside the application. FTI's own instruction: \"Apply to your preferred business seg…", one_only: false,
+    roles: [
+      {
+        id: "fti-consulting-2027-intern-economic-consulting", role_type: "QR", status: "open",
+        title: "2027 Intern - Economic Consulting",
+        locations: ["Los Angeles, CA", "San Francisco, CA", "Washington, DC", "McLean, VA"],
+        apply_url: "https://fticonsulting.wd108.myworkdayjobs.com/en-US/FTIConsultingCareers/job/United-States/XMLNAME-2027-Intern---Economic-Consulting_JR260359",
+        eligibility_note: "Actively pursuing a full-time bachelor's degree or completing a fifth-year master's program with a graduation date between December 2027 – September 2028.",
+        deadline: "2026-09-18",
+        deadline_note: "CORRECTED to add the priority date. Req text: \"Applications Open: July 27. Priority Deadline: August 28.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live 20 Aug 2026 via the Workday CXS API (fticonsulting.wd108, FTIConsultingCareers), req JR260359, \"Posted 13 Days Ago\". Programme runs \"between late May 2027 and August 2027\", 40 hrs/week. Practices under this segment confirmed as exactly two: Center for Healthcare Economics & Policy (Los Angeles, San Francisco, Washington DC) and Network & Industry Strategies (McLean, VA)."
+      },
+      {
+        id: "fti-consulting-2027-intern-flc", role_type: "QD", status: "open",
+        title: "2027 Intern - Forensic & Litigation Consulting",
+        locations: ["Boston, MA", "Chicago, IL", "New York, NY", "Los Angeles, CA", "Washington, DC", "Dallas, TX", "Houston, TX", "Irvine, CA", "San Francisco, CA"],
+        apply_url: "https://fticonsulting.wd108.myworkdayjobs.com/en-US/FTIConsultingCareers/job/United-States/XMLNAME-2027-Intern---Forensic---Litigation-Consulting_JR260337",
+        eligibility_note: "Actively pursuing a full-time bachelor's degree or completing a fifth-year master's program with a graduation date between December 2027 – September 2028.",
+        deadline: "2026-09-18",
+        deadline_note: "Same segment timeline as the Economic Consulting req: Priority Deadline August 28, Final Deadline September 18. Workday endDate 2026-09-18; startDate 2026-08-20 (refreshed today).",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live 20 Aug 2026 via the Workday CXS API, req JR260337, \"Posted Today\". LOCATIONS CORRECTED: the sweep listed only the Data & Analytics cities. Read from the req, the quant practices and their actual cities are — Data & Analytics (Boston, Chicago, Los Angeles, New York, Washington DC); AI Data & Analytics (Boston, New York); Data & Analytics Software Solutions (New York); Dispute Advisory Services (Chicago, Dallas, Houston, Irvine, New York, San Francisco). The locations field now reflects that union."
+      },
+    ]
+  },
+  {
+    key: "google", name: "Google", grade: "B", category: "tech",
+    note: "Google's 2027 intern cycle has demonstrably started — but every 2027 requisition live today is PhD-gated. The undergrad-accessible research door is Student Researcher, BS/MS, which posts on a rolling seasonal basis;",
+    roles: [
+      {
+        id: "google-student-researcher-bsms-2027", role_type: "QR", status: "soon", opens: "opens Oct-Jan",
+        title: "Student Researcher, BS/MS (Winter/Summer 2027)",
+        locations: ["Mountain View, CA", "New York, NY", "Cambridge, MA", "Seattle, WA"],
+        apply_url: "https://www.google.com/about/careers/applications/jobs/results/?employment_type=INTERN&q=student%20researcher",
+        eligibility_note: "Verbatim from the currently-live BS/MS requisition (job 113855697199735494, \"Student Researcher, BS/MS, Fall 2026\"): \"Currently enrolled in a Bachelor's or Master's degree in Computer Science, Linguistics, Statistics, Biostatistics, Applied Mathematics, Operations Research, Economics,",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: partially re-verified. I confirmed the live requisition page for job id 113855697199735494 resolves and its title is exactly \"Student Researcher, BS/MS, Fall 2026\", which establishes that the BS/MS (non-PhD) Student Researcher track genuinely exists and is currently posting."
+      },
+    ]
+  },
+  {
+    key: "humana", name: "Humana", grade: "B", category: "insurance",
+    note: "Fortune 50 health insurer running a 12-week structured actuarial internship in Louisville. Has a HARD application deadline of 2026-10-10 on the requisition record, which makes it the most time-sensitive item in this segment.",
+    roles: [
+      {
+        id: "humana-actuarial-intern-s2027", role_type: "QR", status: "open",
+        title: "Actuarial Internship – Summer 2027",
+        locations: ["Louisville, KY"],
+        apply_url: "https://humana.wd5.myworkdayjobs.com/Humana_External_Career_Site/job/Louisville-KY/Actuarial-Internship---Summer-2027_R-427297",
+        eligibility_note: "Current full-time undergraduate or graduate student majoring in Actuarial Science, Mathematics, Statistics, or a closely related field",
+        deadline: "2026-10-10",
+        deadline_note: "endDate on the Workday requisition record is 2026-10-10, independently re-confirmed via the job API on 2026-08-20. This is a real posted close date, not an inference.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Posted 2026-08-19, closes 2026-10-10. 12-week in-person programme in Louisville KY, dates stated on the posting as May 24 – August 13, 2027, 40 hrs/week Mon-Fri. Housing stipend provided. Preferred quals confirmed verbatim: minimum cumulative GPA 3.0, completion of multiple Society of Actuaries exams, and sat or scheduled for at least one SOA exam."
+      },
+    ]
+  },
+  {
+    key: "institute-for-defense-analyses", name: "Institute for Defense Analyses (IDA)", grade: "B", category: "adjacent",
+    note: "Best-timed row after NSA: applications for the 2027 Summer Associate Program open 1 September 2026, in twelve days. IDA is a genuine quantitative-analysis shop (operations research, statistics, cost analysis) and takes rising seniors — his class year.",
+    roles: [
+      {
+        id: "institute-for-defense-analyses-summer-associate-2027", role_type: "QR", status: "soon", opens: "opens Sept 1",
+        title: "2027 Summer Associate Program",
+        locations: ["Alexandria, VA", "Washington, DC"],
+        apply_url: "https://www.ida.org/careers/students-and-recent-graduates/internships-and-fellowships/summer-associates",
+        eligibility_note: "\"IDA seeks both undergraduate (rising seniors) and graduate students with strong GPAs (3.3 or above)\" across disciplines including \"mathematics ... operations research ...",
+        deadline_note: "Applications open 1 September 2026. No hard close date published; \"evaluation of applications will be on-going between October and February\".",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Verifier: apply_url corrected — the sweep's /en/ path 404s to plain fetchers; the canonical URL above returns 200. ida.org is an Angular shell so page text is only readable through the search index, which corroborates both the 1 September 2026 opening date for the 2027 programme and the rising-senior/3.3-GPA eligibility line, plus \"IDA's preference for the program is graduate students, but they will consider undergraduates who are rising seniors\"."
+      },
+    ]
+  },
+  {
+    key: "invesco", name: "Invesco", grade: "B", category: "am",
+    note: "VERIFIED 2026-08-20 on Invesco's early-careers Workday site (invesco.wd1/IVZearlycareers). All reqs posted 2026-08-17, no end dates, 9-week program starting June 2027, $40/hr across the board.",
+    roles: [
+      {
+        id: "invesco-etf-2027", role_type: "QR", status: "open",
+        title: "Early Career Intern - Investments (ETF)",
+        locations: ["Downers Grove, IL"],
+        apply_url: "https://invesco.wd1.myworkdayjobs.com/IVZearlycareers/job/Downers-Grove-Illinois/Early-Career-Intern---Investments--ETF-_R-15047",
+        eligibility_note: "Currently enrolled in a bachelor's degree program and be a rising Junior graduating by summer of 2028",
+        deadline_note: "No requisition end date. Posted 2026-08-17.",
+        comp: "$40/hr", comp_source: "posted", comp_rank: 40,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED: req R-15047, posted 2026-08-17. The most technical of the Invesco set. Duty confirmed verbatim: 'Conduct investment strategy, security and market analysis using quantitative, fundamental, peer and market research.' Minimum qualifications include 'Intermediate proficiency with Python and Excel' — the only Invesco req where Python is a MINIMUM rather than a preference."
+      },
+      {
+        id: "invesco-risk-2027", role_type: "QR", status: "open",
+        title: "Early Career Intern - Investments (Risk)",
+        locations: ["New York, NY"],
+        apply_url: "https://invesco.wd1.myworkdayjobs.com/IVZearlycareers/job/New-York-New-York/Early-Career-Intern---Investments--Risk-_R-15052",
+        eligibility_note: "Currently enrolled in a bachelor's degree program and be a rising Junior graduating by summer of 2028",
+        deadline_note: "No requisition end date. Posted 2026-08-17.",
+        comp: "$40/hr", comp_source: "posted", comp_rank: 40,
+        tags: ["stats", "vol"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED: req R-15052, posted 2026-08-17. Investment Risk team. Duties confirmed: 'Assist the senior investment risk team in gathering and analyzing data to provide risk-related insights and recommendations to investment teams across various loan strategies' and 'researching industry trends, analyzing portfolio constituent financial metrics, and market data'. Capstone project presented to senior Investment Risk management."
+      },
+      {
+        id: "invesco-capmkts-2027", role_type: "QR", status: "open",
+        title: "Early Career Intern - Investments (Capital Markets)",
+        locations: ["Atlanta, GA"],
+        apply_url: "https://invesco.wd1.myworkdayjobs.com/IVZearlycareers/job/Atlanta-Georgia/Early-Career-Intern---Investments--Capital-Markets-_R-15094",
+        eligibility_note: "Currently enrolled in a bachelor's degree program and be a rising Junior graduating by summer of 2028",
+        deadline_note: "No requisition end date. Posted 2026-08-17.",
+        comp: "$40/hr", comp_source: "posted", comp_rank: 40,
+        tags: ["microstructure", "stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED: req R-15094, posted 2026-08-17. CORRECTED role_type from QT to QR — there is no trading in this req; the sweeper's QT label was wrong. Genuine microstructure content: 'Research market structure and trading dynamics (liquidity, spreads, pricing efficiency) and understand how they connect to Invesco's business' and 'Learn how funds trade in primary and secondary markets, gaining exposure to both active and exchange-traded fund ecosystems.' MARGINAL"
+      },
+    ]
+  },
+  {
+    key: "jhu-apl", name: "Johns Hopkins University Applied Physics Laboratory", grade: "B", category: "adjacent",
+    note: "APL's 2027 student cycle has started (2027 co-op and 2027 graduate reqs posted July–August 2026), but College Summer Intern Program reqs specifically post \"each fall\". Strong AI/ML/data-science and national-security-analysis groups.",
+    roles: [
+      {
+        id: "jhu-apl-college-summer-intern-2027", role_type: "QR", status: "soon", opens: "opens fall",
+        title: "APL College Summer Intern Program — 2027 (AI/ML, Data Science, Math & Physics tracks)",
+        locations: ["Laurel, MD"],
+        apply_url: "https://careers.jhuapl.edu/internships",
+        eligibility_note: "\"A minimum GPA of 3.0\" and \"Enrollment as a full-time student for the semester following your internship.\" Due to APL badging requirements, student interns must be US citizens.",
+        deadline_note: "No deadline — \"Internship opportunities are posted each fall on a rolling basis and remain open until filled.\" Prior cycles encouraged applying by 31 March for early consideration.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "Timing quote VERIFIED verbatim by verifier on https://www.jhuapl.edu/careers/internships — \"Internship opportunities are posted each fall on a rolling basis and remain open until filled\" — together with the 3.0 GPA and full-time-enrollment lines. Note the quotes live on jhuapl.edu, not on careers.jhuapl.edu (the apply_url), which is the job-board front end and returns 200 with the focus-area filters."
+      },
+    ]
+  },
+  {
+    key: "llnl", name: "Lawrence Livermore National Laboratory", grade: "B", category: "adjacent",
+    note: "The only DOE lab in this set that publishes an explicit posting window for summer internships. Its Center for Applied Scientific Computing and Computational Engineering Division are real applied-maths employers.",
+    roles: [
+      {
+        id: "llnl-summer-student-internship-2027", role_type: "QR", status: "soon", opens: "opens Sept",
+        title: "Summer 2027 student internships — computational science, applied mathematics, statistics",
+        locations: ["Livermore, CA"],
+        apply_url: "https://www.llnl.gov/join-our-team/careers/find-your-job",
+        eligibility_note: "\"We hire interns at a variety of educational levels, including community college, undergraduate, and graduate\"; \"We accept applications from international students; however, visa sponsorship support varies by position and department\".",
+        deadline_note: "No single deadline — \"Internships for summer positions are generally posted September–February\". Mentors phone-screen candidates \"anytime between December–April\".",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "VERIFIED by verifier on LLNL's student careers page: the September–February posting window and both eligibility sentences are LLNL's own text, which is why this is an evidenced \"soon\" and not a guess. Search the jobs board for \"intern\" plus \"CASC\", \"data science\", \"uncertainty quantification\". LLNL is also a SULI host lab, so the SULI application is a second parallel route in — do not treat these as two independent shots at the same group."
+      },
+    ]
+  },
+  {
+    key: "macquarie", name: "Macquarie Group", grade: "B", category: "bank",
+    note: "Passes only under the widened sell-side scope, and only just. Re-fetched and confirmed live on 20 Aug 2026 with a hard 14 September 2026 close — about three and a half weeks out, the tightest live deadline on this segment.",
+    roles: [
+      {
+        id: "macquarie-qt", role_type: "QT", status: "open",
+        title: "2027 Commodities and Global Markets Summer Internship Program",
+        locations: ["New York, NY"],
+        apply_url: "https://recruitment.macquarie.com/en_US/careers/JobDetail/2027-Commodities-and-Global-Markets-Summer-Internship-Program/23275",
+        eligibility_note: "This internship is for students expecting to graduate between December 2027 – June 2028.",
+        deadline: "2026-09-14",
+        deadline_note: "Posting states applications close Monday, September 14, 2026.",
+        comp: "Estimated salary amount is the equivalent of $90,000 - $110,000 annually,", comp_source: "posted", comp_rank: null,
+        tags: ["commodities", "vol"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "RE-VERIFIED 20 Aug 2026: title, New York location, Dec-2027–Jun-2028 graduation window, 14 Sep 2026 close and the $90k–$110k band all confirmed on Macquarie's own ATS (recruitment.macquarie.com, requisition 23275). Posting dated 3 Aug 2026; rolling recruitment; 'Apply now' live. May 2028 graduation sits inside the window."
+      },
+      {
+        id: "macquarie-cgm-intern-ny", role_type: "QT", status: "open",
+        title: "2027 Commodities and Global Markets Summer Internship Program",
+        locations: ["New York"],
+        apply_url: "https://recruitment.macquarie.com/en_US/careers/JobDetail?jobId=23275",
+        eligibility_note: "students expecting to graduate between December 2027 – June 2028",
+        deadline: "2026-09-14",
+        deadline_note: "Posting states 'Applications close on Monday, September 14, 2026'; rolling review ahead of that, so apply early",
+        comp: "$90,000–$110,000 annualised, prorated", comp_source: "posted", comp_rank: null,
+        tags: ["commodities"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Re-fetched 20 Aug 2026: live, deadline still ahead. Ten weeks. Streams are Commodities, Financial Markets, and Lending and Asset Finance. A parallel Houston posting exists at jobId=23276, unfetched. Broad markets programme, not a ring-fenced quant track — treat as a QT-adjacent shot, not a research seat."
+      },
+    ]
+  },
+  {
+    key: "marsh-mclennan", name: "Marsh McLennan (Oliver Wyman)", grade: "B", category: "insurance",
+    note: "VERIFIED 2026-08-20 against the MMC Workday CXS record for R_356561: live, canApply true, endDate 2026-08-23, 'timeLeftToApply: 2 days left to apply'. Oliver Wyman's Actuarial Practice is the quantitative arm of Marsh McLennan: pricing, reserving, valuation,",
+    policy: "Candidates rank their preferred practice (ICG vs Health/Life/P&C) within the single application", one_only: false,
+    roles: [
+      {
+        id: "marsh-mclennan-ow-actuarial-2027", role_type: "QR", status: "open",
+        title: "Oliver Wyman Actuarial - Internship - Summer 2027",
+        locations: ["New York, NY", "Boston, MA", "Chicago, IL", "Hartford, CT", "Philadelphia, PA", "Atlanta, GA", "Milwaukee, WI", "Charlotte, NC", "Washington, DC", "Houston, TX", "San Francisco, CA", "Los Angeles, CA", "Seattle, WA"],
+        apply_url: "https://mmc.wd1.myworkdayjobs.com/MMC/job/New-York---1166/Oliver-Wyman-Actuarial---Internship---Summer-2027_R_356561",
+        eligibility_note: "Class of 2028 or 2029; Currently pursuing a degree in Actuarial Science, Mathematics, Statistics, or another STEM or business-related field; Minimum GPA of 3.5",
+        deadline: "2026-08-23",
+        deadline_note: "Verified: Workday endDate 2026-08-23, page reads 'End Date: August 23, 2026' and '2 days left to apply'. Apply immediately.",
+        comp: "$1,350-$1,600/week", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Req R_356561, posted 2026-07-02, hybrid (3 days/week in office). One application covers three tracks: Actuarial & Strategy (ICG, Chicago/New York only) and Actuarial in Health, Life or P&C. Office availability varies by practice and is aligned during interviews. All interns do a six-week actuarial bootcamp. Posting asks for interest in the CAS, SOA or CFA track but does NOT require an exam pass."
+      },
+    ]
+  },
+  {
+    key: "mfs-investment-management", name: "MFS Investment Management", grade: "B", category: "am",
+    note: "VERIFIED 20 Aug 2026. MFS runs a named Quantitative Research undergraduate summer intern seat inside the Quantitative Solutions group — the team that owns risk management for all MFS portfolios, multi-asset PM, and the quant stock-selection models behind Blended Research and Systematic Research.",
+    roles: [
+      {
+        id: "mfs-2027-quantitative-research-summer-intern", role_type: "QR", status: "soon", opens: "opens fall",
+        title: "Quantitative Research Undergraduate Summer Intern",
+        locations: ["Boston, MA"],
+        apply_url: "https://mfs.wd1.myworkdayjobs.com/MFS-Careers",
+        eligibility_note: "Our program is available to undergraduate and graduate level students who are currently enrolled in a college or university.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE RE-VERIFIED FIRST-HAND on mfs.com's careers page, verbatim: 'Internships run from May through August, with the recruitment process starting in the fall of the previous year.' The eligibility quote above is verbatim from the same page, which also points to mfs.wd1.myworkdayjobs.com/MFS-Careers as the portal."
+      },
+    ]
+  },
+  {
+    key: "miso", name: "MISO (Midcontinent Independent System Operator)", grade: "B", category: "energy",
+    note: "Best-evidenced row in this segment. Quant surface is real: live full-time reqs on the same board include FTR/market-engineering, resource-adequacy and electricity-markets R&D seats at Carmel.",
+    policy: "MISO cannot sponsor international students.", one_only: false,
+    roles: [
+      {
+        id: "miso-summer-intern-market-ops", role_type: "QR", status: "soon", opens: "opens Sept",
+        title: "Summer Internship Program — Market Operations / System Operations / Grid Planning",
+        locations: ["Carmel, IN", "Eagan, MN", "Little Rock, AR"],
+        apply_url: "https://careers.misoenergy.org/jobs/",
+        eligibility_note: "Open to a wide range of majors, including Engineering, Computer Science, Data Science, IT, Cybersecurity, Business, Finance, Legal and HR.",
+        deadline_note: "Applications accepted Sept–Oct; interviews Oct (video interviews Oct–Dec); offers extended Oct–Nov; programme starts late May.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "VERIFIER RE-CONFIRMED 20 Aug 2026 by fetching careers.misoenergy.org/internships-coops/ directly. Verbatim from MISO's own page: \"Internship positions are posted on MISO's website beginning in September.\" The same page carries a Recruiting Timeline table: Internships — Accepting Applications \"September - October\", Interviews \"October\", Offers Extended \"October - November\", Program Start \"Late May\"."
+      },
+    ]
+  },
+  {
+    key: "mit-lincoln-laboratory", name: "MIT Lincoln Laboratory", grade: "B", category: "adjacent",
+    note: "The only lab in this segment with a live, applyable Summer 2027 requisition today. FFRDC with genuine quantitative groups (decision science, AI/ML, radar signal processing, air-traffic modelling). US citizenship required across the board.",
+    roles: [
+      {
+        id: "mit-lincoln-laboratory-radar-summer-2027", role_type: "QR", status: "open",
+        title: "Airborne Radar Systems and Techniques Intern (Summer 2027) - Group 105",
+        locations: ["Lexington, MA"],
+        apply_url: "https://careers.ll.mit.edu/job/Lexington-Airborne-Radar-Systems-and-Techniques-Intern-%28Summer-2027%29-Group-105-MA-02420/1410581200/",
+        eligibility_note: "\"Enrolling in an undergraduate degree program for Electrical Engineering, Computer Engineering, Mathematics, Computer Science, or a related field\"; \"U.S. citizenship is required.\"; must be able to obtain and maintain a Secret level DoD security clearance; \"18 or older by 1 June 2027\".",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED by verifier directly against the requisition: title, Lexington MA, requisition ID 43154, posting date 18 Aug 2026, Summer 2027 confirmed, citizenship and undergraduate-eligibility sentences all present as quoted. Signal-processing/estimation work; maths majors explicitly named as eligible. Not a markets-quant seat — treat as applied estimation research. Prior BWSI UAS-SAR familiarity listed as a plus."
+      },
+      {
+        id: "mit-lincoln-laboratory-summer-research-program", role_type: "QR", status: "soon", opens: "opens Sept–Dec",
+        title: "Summer 2027 intern requisitions — posted group-by-group across the autumn",
+        locations: ["Lexington, MA"],
+        apply_url: "https://careers.ll.mit.edu/search/?q=Summer%202027",
+        eligibility_note: "\"Enrolling in an undergraduate degree program for Electrical Engineering, Computer Engineering, Mathematics, Computer Science, or a related field\" and \"U.S. citizenship is required.\" (quoted from the live Group 105 Summer 2027 requisition, representative of the programme's intern reqs).",
+        deadline_note: "Reqs are posted group-by-group across the autumn; there is no single deadline.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "Verifier re-ran this exact search URL on 20 Aug 2026 and confirms the sweep: exactly two \"(Summer 2027)\" intern reqs are live — Group 105 Airborne Radar (posted 18 Aug 2026) and Group 67 Optical & Quantum Communications. The rest of the board is Fall 2026 / Jan–Aug 2027 co-ops. Title corrected: the sweep's \"AI/ML, decision science, systems analysis\" named groups that have not posted anything — that was projection, not evidence."
+      },
+    ]
+  },
+  {
+    key: "mitre", name: "The MITRE Corporation", grade: "B", category: "adjacent",
+    note: "MITRE runs a named requisition literally called \"Internships in Data Science, Operations Research, Math and Statistics\" — the best title-match in the segment. Not live today (prior req R112397 returns HTTP 410 Gone) but reposts at the start of the autumn season.",
+    roles: [
+      {
+        id: "mitre-ds-or-math-stats-intern-2027", role_type: "QR", status: "soon", opens: "opens Sept",
+        title: "Internships in Data Science, Operations Research, Math and Statistics",
+        locations: ["McLean, VA", "Bedford, MA"],
+        apply_url: "https://careers.mitre.org/us/en/co-ops-interns",
+        eligibility_note: "\"MITRE does not hire students who will need sponsorship to work in the U.S. either now or in the future.\" \"Most of our interns are rising college juniors or seniors, but we hire exceptional students at every level\". Interns must be full-time students in an accredited degree programme.",
+        deadline_note: "No fixed deadline; rolling from September. \"If you will not be considered for an internship this year, we will let you know by early November\",",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "Verifier fetched careers.mitre.org/us/en/co-ops-interns and confirms verbatim: \"Our internships last 10-12 weeks\"; \"one of three starting dates in late May or early June ... and one of three end dates in late July or early August\"; the early-November notification line; the no-sponsorship line; the rising-junior/senior line; and \"converts over half of our interns to full-time employees\"."
+      },
+    ]
+  },
+  {
+    key: "moodys", name: "Moody's Corporation", grade: "B", category: "adjacent",
+    note: "Ratings + Moody's Analytics (credit risk modelling, structured finance model development, economic research). Explicit self-published September posting date. Quant relevance is the Moody's Analytics modelling track, not the ratings-analyst track.",
+    roles: [
+      {
+        id: "moodys-global-internship-2027", role_type: "QD", status: "soon", opens: "opens Sept",
+        title: "Moody's Global Internship Program - Summer 2027",
+        locations: ["New York, NY", "San Francisco, CA", "Chicago, IL", "London, UK"],
+        apply_url: "https://careers.moodys.com/en/early-careers",
+        eligibility_note: "Verbatim from careers.moodys.com/en/early-careers, Global Internship Program section: 'Open to current students, our summer positions are posted from September, and depending on your location, off-cycle and end-of-studies internships could be an option too.'",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        class_2028: true,
+        notes: "VERIFIER RE-CHECKED 20 Aug 2026, first-hand. Fetched careers.moodys.com/en/early-careers directly and confirmed the quoted sentence verbatim: 'Summer positions are posted from September, and depending on your location, off-cycle and end-of-studies internships could be an option too.' That is a firm statement of the window and it lands next month."
+      },
+    ]
+  },
+  {
+    key: "mufg", name: "MUFG", grade: "B", category: "bank",
+    note: "MUFG's 2027 CIBM Summer Intern Program has a Global Markets track with an explicit undergrad graduation window that matches May 2028. Application window is tight: opened 3 Aug 2026, closes 4 Sep 2026, and no first-round invite by 18 Sep 2026 means rejection.",
+    roles: [
+      {
+        id: "mufg-qt", role_type: "QT", status: "open",
+        title: "2027 Corporate, Investment Banking and Markets (CIBM) Summer Intern Program - Global Markets | New York",
+        locations: ["New York, NY"],
+        apply_url: "https://mufgub.wd3.myworkdayjobs.com/en-US/mufg-careers/job/New-York-NY/XMLNAME-2027-Corporate--Investment-Banking-and-Markets--CIBM--Summer-Intern-Program---Global-Markets---New-York_10074422-WD-2",
+        eligibility_note: "Undergraduate student, graduating in Winter 2027 or Spring 2028",
+        deadline: "2026-09-04",
+        deadline_note: "Posting: 'Application Opens: 8/3/26. Application Closes: 9/4/26 unless otherwise noted by your school's Handshake/Career Services Centers Job Posting.'",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "microstructure", "options"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "RE-VERIFIED 20 Aug 2026 against MUFG's own Workday requisition JSON (mufgub/mufg-careers, req 10074422-WD-2): title, NY location, 'Undergraduate student, graduating in Winter 2027 or Spring 2028', and the 8/3/26–9/4/26 window all confirmed verbatim. Placement groups: 'Global Markets: Sales & Trading, Derivatives/ FX Sales'. Tentative internship period 31 May – 6 Aug 2027, 10 weeks. GPA 3.3+ preferred. Posting asks for 'Strong verbal, writing, mathematical and statistical skills'."
+      },
+    ]
+  },
+  {
+    key: "nasa", name: "NASA (OSTEM internships — JPL, Goddard, Ames, Langley)", grade: "B", category: "adjacent",
+    note: "One profile, many centres — efficient for a volume wave. Quant-relevant projects sit at JPL (mission design, estimation, statistics), Goddard (climate/geophysical modelling) and Ames (aeronautics OR, air-traffic modelling).",
+    policy: "One NASA STEM Gateway profile applies across all centres", one_only: true,
+    roles: [
+      {
+        id: "nasa-ostem-summer-2027", role_type: "QR", status: "soon", opens: "opens fall 2026",
+        title: "OSTEM Summer 2027 Internship Session",
+        locations: ["Pasadena, CA (JPL)", "Greenbelt, MD (Goddard)", "Mountain View, CA (Ames)", "Hampton, VA (Langley)", "Houston, TX (JSC)"],
+        apply_url: "https://stemgateway.nasa.gov/public/s/explore-opportunities",
+        eligibility_note: "\"U.S. Citizen\"; minimum GPA \"3.0 on a 4.0 scale\"; must be \"a full-time or part-time college student (undergraduate through graduate-level)\"; at least 16 years old.",
+        deadline: "2027-02-26",
+        deadline_note: "\"Summer 2027 Application Deadline: February 26, 2027 (11:59 p.m. ET)\" per NASA's internship programmes page. The summer session runs 10 weeks.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "Deadline and eligibility VERIFIED by verifier on nasa.gov/learning-resources/internship-programs — the 26 Feb 2027 Summer 2027 date is stated explicitly, as are the 3.0 GPA and citizenship gates. Opportunities post to STEM Gateway on a rolling basis through the autumn and are matched by mentor, so the February date is a CLOSE, not an open — applying early in the window materially helps. Separate lower bar exists on the Pathways programme (2.9 GPA) but that is a different, longer-term route."
+      },
+    ]
+  },
+  {
+    key: "nbim", name: "Norges Bank Investment Management", grade: "B", category: "am",
+    note: "The Norwegian sovereign wealth fund ($1.8tn+). VERIFIED 2026-08-20: NBIM's own careers page states the 2027 window explicitly, which makes this the only 'soon' entry in the segment backed by a real published date rather than a prior-cycle inference. Every other 'soon' entry in the sweep was killed.",
+    roles: [
+      {
+        id: "nbim-summer-2027", role_type: "QR", status: "soon", opens: "2026-09-28",
+        title: "Summer Internship 2027",
+        locations: ["Oslo, Norway", "London, United Kingdom", "New York, NY"],
+        apply_url: "https://www.nbim.no/en/about-us/career/summer-internship/",
+        eligibility_note: "Applications for our 2027 summer internships in Oslo, London and New York opens on 28 September. The application deadline is on 15 October.",
+        deadline: "2026-10-15",
+        deadline_note: "Window stated verbatim on the firm's own page: opens 28 September 2026, deadline 15 October 2026. Three-week window — diarise it.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["ml", "stats", "microstructure"],
+        undergrad_explicit: false,
+        class_2028: true,
+        notes: "VERIFIED on the firm's own page, not an aggregator. 'The programme lasts for eight weeks between June and August in Oslo, London or New York.' Eligibility is only 'The programme is for current students who: take initiative, are curious and have a desire to learn' — no degree level named, hence undergrad_explicit false; historically takes undergraduates."
+      },
+    ]
+  },
+  {
+    key: "nera-economic-consulting", name: "NERA Economic Consulting", grade: "B", category: "adjacent",
+    note: "Classic econometrics shop — antitrust, securities, energy, international arbitration. The summer internship duties are model-building and econometric analysis, which is the right shape. Two frictions: it posts through the shared Marsh McLennan Workday, and the US intern req is not up yet.",
+    policy: "Applies through the Marsh McLennan (MMC) Workday tenant, which also hosts Mercer, Guy Carpenter and Oliver Wyman reqs.", one_only: false,
+    roles: [
+      {
+        id: "nera-economic-consulting-summer-intern-2027", role_type: "QR", status: "soon", opens: "opens Sept 2026",
+        title: "NERA Summer Intern (Summer 2027)",
+        locations: ["New York, NY", "Washington, DC", "Chicago, IL", "San Francisco, CA", "Boston, MA", "White Plains, NY"],
+        apply_url: "https://mmc.wd1.myworkdayjobs.com/MMC?q=NERA",
+        eligibility_note: "Not yet published for Summer 2027. Last cycle's req was circulated as \"Summer Internship (2027 Grads)\" and welcomed candidates \"who are a BA or a BS in any major, or a Masters Degree, graduating by Summer 2027\" — so the Summer 2027 edition should read \"graduating by Summer 2028\".",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE VERIFIED — the last-cycle posting date checks out. The equivalent req, \"Summer Internship (2027 Grads) – NERA Economic Consulting\", was circulated on 11 September 2025 (econugblog.wordpress.com/2025/09/11/, and carried by Yale OCS as \"NERA Summer Internship (Summer 2027 Grads)\"). The same posting names exactly the six offices listed here — New York City, San Francisco, Chicago, Washington DC, White Plains and Boston — so the location list is evidenced, not guessed."
+      },
+    ]
+  },
+  {
+    key: "netflix", name: "Netflix", grade: "B", category: "tech",
+    note: "The best-evidenced 'soon' row in the whole segment and the only firm here that publishes its own posting window — which says roles start going up right about now. Also states most internships sit in Engineering and 'Data and Insights', which is the relevant org.",
+    roles: [
+      {
+        id: "netflix-data-insights-intern-2027", role_type: "QD", status: "soon", opens: "opens mid-Aug-Sept",
+        title: "Data Science & Insights Intern, Summer 2027",
+        locations: ["Los Gatos, CA", "Los Angeles, CA"],
+        apply_url: "https://jobs.netflix.com/careers/internships",
+        eligibility_note: "\"We welcome students who are enrolled in a university and pursuing a bachelor's, master's, or doctoral degree.\"",
+        deadline_note: "Netflix states its \"intern recruiting season generally runs from late summer to the end of March the following year\", so a late application is not automatically dead.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: independently re-fetched jobs.netflix.com/careers/internships and confirmed every quote verbatim. Firm-stated timing: \"we usually start posting roles on a rolling basis around mid-August to early September each year, and our intern recruiting season generally runs from late summer to the end of March the following year\" (the sweep had truncated the trailing 'the following year' — corrected in deadline_note above)."
+      },
+    ]
+  },
+  {
+    key: "nist", name: "National Institute of Standards and Technology (NIST) — SURF", grade: "B", category: "adjacent",
+    note: "SURF places undergraduates in NIST's Statistical Engineering Division and Applied and Computational Mathematics Division — genuinely quantitative host groups, unusual for a government lab programme. Applications go through USAJobs, not a private ATS.",
+    roles: [
+      {
+        id: "nist-surf-2027", role_type: "QR", status: "soon", opens: "opens fall",
+        title: "Summer Undergraduate Research Fellowship (SURF) 2027",
+        locations: ["Gaithersburg, MD", "Boulder, CO"],
+        apply_url: "https://www.nist.gov/surf",
+        eligibility_note: "Must be \"a U.S. citizen or U.S. permanent resident able to provide proof on your application\"; \"a full-time undergraduate student in an accredited two-year or four-year college in the U.S.\"; \"at least 18 years old\". First-years and graduating seniors are eligible. No GPA floor stated.",
+        deadline_note: "NIST's own SURF page says \"check back in the fall for 2027 SURF Program Dates\". Recent cycles have opened in the autumn with a winter deadline.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "VERIFIED by verifier on nist.gov/surf: the sentence \"check back in the fall for 2027 SURF Program Dates\" is on the page, as are all eligibility quotes above. That is a programme page stating when the dates land — weaker than LLNL's explicit window but concrete enough to keep. Applications go through USAJobs and \"All documents are required and must be submitted for consideration\", preferably as PDFs — the transcript/essay package is heavier than a typical ATS apply, so start early."
+      },
+    ]
+  },
+  {
+    key: "northwestern-mutual", name: "Northwestern Mutual", grade: "B", category: "insurance",
+    note: "VERIFIED 20 Aug 2026: both reqs live on the Workday CXS API, both eligibility blocks verbatim, pay range recovered for both. Insurance general-account manager rather than a pure asset manager, but it runs a $130bn fixed-income book with a named Quantitative Research & Analytics team,",
+    roles: [
+      {
+        id: "northwestern-mutual-2027-public-investments-quant-analyst", role_type: "QR", status: "open",
+        title: "Public Investments Quantitative Analyst Intern, Summer 2027",
+        locations: ["Milwaukee, WI"],
+        apply_url: "https://northwesternmutual.wd5.myworkdayjobs.com/CORPORATE-CAREERS/job/Milwaukee-WI-Corporate/Public-Investments-Quantitative-Analyst-Intern--Summer-2027_JR-45807",
+        eligibility_note: "Progress towards a Bachelor's degree in a quantitative field (e.g., Quantitative Finance, Computer/Data Science, Finance, Mathematics). / Strong development skills in languages such as SQL, Python, Streamlit, dbt, etc.",
+        deadline_note: "No end date on the requisition.",
+        comp: "$16.50-$30.00/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live, Workday startDate 2026-08-12. QR label holds up on inspection — the JD's own heading is 'Public Investments - Quantitative Analyst Internship (undergraduate-level)' and it explicitly promises 'Leverage quantitative methods such as portfolio optimization, Monte Carlo simulation, risk measurement, and backtesting', plus 'Utilize machine learning and AI techniques to develop predictive models, optimize model parameters, research new signals, and deploy models into the Snowflake production environment'."
+      },
+      {
+        id: "northwestern-mutual-2027-credit-investment-intern", role_type: "QD", status: "open",
+        title: "Public Investments - Credit Investment Intern, Summer 2027",
+        locations: ["Milwaukee, WI"],
+        apply_url: "https://northwesternmutual.wd5.myworkdayjobs.com/CORPORATE-CAREERS/job/Milwaukee-WI-Corporate/Public-Investments---Credit-Investment-Intern--Summer-2027_JR-45802",
+        eligibility_note: "Pursuing a Bachelor's degree in Finance, Investments, Accounting, Economics, or related field from an accredited college or university / Cumulative grade point average of 3.0 or higher / Employer immigration sponsorship is not available for this role",
+        deadline_note: "No end date on the requisition.",
+        comp: "$16.50-$30.00/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live, Workday startDate 2026-08-18, eligibility verbatim including the sponsorship line. Lower quant density than its sibling — it is fundamental credit research first, with duties centred on company-specific forecast models, industry outlooks and meetings with management teams and Wall Street analysts."
+      },
+    ]
+  },
+  {
+    key: "nsa", name: "National Security Agency (NSA)", grade: "B", category: "adjacent",
+    note: "ACT THIS WEEK. The Director's Summer Program is the most maths-selective undergraduate internship in the United States — explicitly aimed at top undergraduate mathematics majors. VERIFIER CORRECTION: the sweep's 15 October deadline is stale handout text.",
+    policy: "Single IC candidate profile; NSA student programmes share the standard job application process", one_only: false,
+    roles: [
+      {
+        id: "nsa-directors-summer-program-2027", role_type: "QR", status: "soon", opens: "open now, closes 5 Sept",
+        title: "Director's Summer Program (DSP) — Summer 2027",
+        locations: ["Fort Meade, MD"],
+        apply_url: "https://apply.intelligencecareers.gov/job-listings?agency=NSA",
+        eligibility_note: "\"The Director's Summer Program (DSP) is the National Security Agency's premier outreach program to the nation's most outstanding undergraduate mathematics majors.\" Applicants \"should have demonstrated superior mathematical aptitude\";",
+        deadline: "2026-09-05",
+        deadline_note: "CORRECTED by verifier. The live Summer 2027 DSP posting states: \"Applications are accepted 15 August - 5 September 11:59pm EST\".",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Verifier could not read the firm-hosted requisition — apply.intelligencecareers.gov is an Angular SPA that returns only its shell to every /api path tried, and intelligencecareers.gov timed out. Status therefore left at \"soon\" (programme/board URL) rather than promoted to \"open\", but the requisition demonstrably EXISTS: \"NSA Summer 2027 Internship Program - Directors Summer Program\", posted 19 Aug 2026, with the 15 Aug – 5 Sept window, corroborated across eight separate NSA Summer 2027 programme postings."
+      },
+    ]
+  },
+  {
+    key: "nvidia", name: "NVIDIA", grade: "B", category: "tech",
+    note: "The one unambiguous win in this segment right now. NVIDIA opened its entire 2027 internship family on 19 Aug 2026 (re-verified via the Workday cxs API: 14 reqs match 'intern 2027', all 'Posted Yesterday').",
+    roles: [
+      {
+        id: "nvidia-2027-deep-learning-intern", role_type: "QR", status: "open",
+        title: "NVIDIA 2027 Internships: Deep Learning",
+        locations: ["Santa Clara, CA"],
+        apply_url: "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/US-CA-Santa-Clara/NVIDIA-2027-Internships--Deep-Learning_JR2023497-1",
+        eligibility_note: "\"Must be actively enrolled in a university pursuing a B.S., M.S., or Ph.D. degree in Electrical Engineering, Computer Engineering, or a related field, for the full duration of the internship; anticipated graduation date (month and year) must be clearly indicated on a resume or CV to be considered.\"",
+        deadline_note: "Requisition states: \"Applications are accepted on an ongoing basis. This posting is for an existing vacancy.\" No hard close date published.",
+        comp: "$20-$71/hour", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: independently re-fetched both the search API and the req detail JSON (jobPostingInfo for JR2023497). Confirmed startDate 2026-08-19, title exact, location 'US, CA, Santa Clara', no endDate. The eligibility_note above is verbatim-exact against the req body, as is the comp sentence. 12-week full-time internship. Req says \"We're looking for students pursuing a B.S., M.S., or Ph.D."
+      },
+    ]
+  },
+  {
+    key: "ny-fed", name: "Federal Reserve Bank of New York", grade: "B", category: "bank",
+    note: "The NY Fed Undergraduate Summer Analyst Program is undergrad-junior-explicit and the page names September 2026 as the month the 2027 programme information goes live — i.e. imminent.",
+    roles: [
+      {
+        id: "ny-fed-undergrad-summer-analyst", role_type: "QR", status: "soon", opens: "September 2026",
+        title: "Undergraduate Summer Analyst Program (Summer 2027)",
+        locations: ["New York, NY"],
+        apply_url: "https://www.newyorkfed.org/careers/student-programs-and-internships/junior-summer-analyst-program",
+        eligibility_note: "The Undergraduate Summer Analyst Program gives undergraduate juniors the opportunity to gain valuable work experience at a unique institution.",
+        deadline_note: "Page states: \"Applications for our summer 2026 junior internships have closed. Please check back in September 2026 for information on our 2027 program.\"",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "RE-VERIFIED 2026-08-20 (page 403s to plain WebFetch; retrieved with a browser user-agent). Both quotes confirmed verbatim. Also on the page: \"Junior interns work in one specific business area or function for ten weeks\" and \"The New York Fed's internships are available for undergraduates (sophomores and juniors) and graduate students."
+      },
+    ]
+  },
+  {
+    key: "nyiso", name: "New York ISO", grade: "B", category: "energy",
+    note: "NYISO runs THREE separate Greenhouse boards and most applicants only ever see the first: `nyiso` (full-time), `nyisointernships` (summer programme), `nyisocoops` (co-ops). All three are queryable via boards-api.greenhouse.io.",
+    roles: [
+      {
+        id: "nyiso-research-engineering-coop", role_type: "QR", status: "open",
+        title: "Research & Engineering Co-Op",
+        locations: ["Rensselaer, NY"],
+        apply_url: "https://job-boards.greenhouse.io/nyisocoops/jobs/5210759007",
+        eligibility_note: "Pursuing a Bachelor's, Master's degree or PhD in Electrical Engineering, Power Systems Engineering, Operations Research, Computer Engineering, or a related quantitative discipline.",
+        comp: "$20–$35 USD per hour", comp_source: "Greenhouse pay-transparency block on the live req", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "VERIFIER RE-FETCHED the Greenhouse API on 20 Aug 2026: req CoOp1583, id 5210759007, first_published 2026-08-12, still live, URL returns HTTP 200. Eligibility_note above is verbatim and undergrad-eligible (Bachelor's listed first, not PhD-only). Duty bullets verbatim: \"Execute and analyze SCUC, RTC, and RTD simulation studies\" and \"Evaluate impacts on power flows, shift factors, transmission constraints, dispatch outcomes,"
+      },
+    ]
+  },
+  {
+    key: "peak6", name: "PEAK6 Capital Management", grade: "B", category: "mm",
+    note: "Long-standing Chicago proprietary options market maker, based in the Chicago Board of Trade building, 25+ years old. VERIFIED 2026-08-20 against the Workday CXS API (tenant `peak6group`, site `PEAK6`, 12 live reqs).",
+    roles: [
+      {
+        id: "peak6-qt-bootcamp", role_type: "QT", status: "open",
+        title: "Trading Bootcamp Micro-Internship - Summer 2027",
+        locations: ["Chicago, IL"],
+        apply_url: "https://peak6group.wd1.myworkdayjobs.com/PEAK6/job/Chicago-IL/Trading-Bootcamp-Micro-Internship---Summer-2027_JR105057-1",
+        eligibility_note: "Junior standing with a graduation date between December 2027 and June 2028",
+        deadline_note: "Posting says: \"We are currently accepting applications for this program. We will begin interviewing for this role in January 2027.\" No hard close date given. Posted 2026-08-11.",
+        comp: "$25-$31.25 an hour", comp_source: "posted", comp_rank: 4800,
+        tags: ["options"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20 - req id JR105057-1, posted 2026-08-11, every quoted line confirmed. Set expectations correctly: this is a ONE-WEEK program, not a ten-week internship. Two sessions, May 24-28 2027 or August 16-20 2027, fully funded including flights and housing. Posting says 'Open to all undergraduate juniors'. Content is options trading education plus deploying a real-world trading strategy on their desk."
+      },
+    ]
+  },
+  {
+    key: "pgim", name: "PGIM (Prudential Financial)", grade: "B", category: "am",
+    note: "$1.3tn AUM. FULLY VERIFIED 2026-08-20 on Prudential's own Workday tenant (pru.wd5/Careers), req R-124835, posted 2026-08-14, requisition end date 2026-09-15.",
+    policy: "Apply to up to three roles that best match your interests and skills.", one_only: false,
+    oa: "First round is a recorded/asynchronous video interview: 'Complete a first-round video interview | If selected, you'll be invited to record responses to a few interview questions.'",
+    roles: [
+      {
+        id: "pgim-pag-public-credit-2027", role_type: "QR", status: "open",
+        title: "PGIM: 2027 Public Credit, Summer Investment Analyst Program (Portfolio Analysis Group)",
+        locations: ["Newark, NJ, USA (Hybrid)"],
+        apply_url: "https://pru.wd5.myworkdayjobs.com/Careers/job/Newark-NJ-USA/PGIM--2027-Public-Credit--Summer-Investment-Analyst-Program--Portfolio-Analysis-Group-_R-124835-2",
+        eligibility_note: "Candidates must be enrolled in an accredited bachelor's program or 5th year master's program graduating between December 2027 and May 2028",
+        deadline: "2026-09-14",
+        deadline_note: "'Application Deadline: September 14, 2026 at midnight ET (We review applications on a rolling basis and reserve the right to close earlier based on volume or role availability.)' Workday requisition e…",
+        comp: "$40.00/hour", comp_source: "posted", comp_rank: 40,
+        tags: ["stats", "numerics", "vol"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim. Program dates 'Monday, June 7th, 2027 – Friday August 13th, 2027' (10 weeks). Minimum 3.2 GPA. Quant content confirmed: 'evaluates portfolio positioning with respect to risk exposures and alpha objectives, provides portfolio construction and alignment insight, and analyzes performance drivers..."
+      },
+    ]
+  },
+  {
+    key: "phillips-66", name: "Phillips 66", grade: "B", category: "energy",
+    note: "The cleanest match in the segment: the 2027 cycle is already open, the graduation window is explicitly August 2027 or later (so a May 2028 graduate qualifies), and the work is energy-market analysis inside Supply & Trading.",
+    policy: "Sponsorship not available: candidates must be a U.S. citizen or national, or an alien admitted as permanent resident,", one_only: false,
+    roles: [
+      {
+        id: "phillips-66-2027-university-intern-commercial", role_type: "QD", status: "open",
+        title: "2027 University Intern - Commercial",
+        locations: ["Houston, TX"],
+        apply_url: "https://careers.phillips66.com/job/Houston-2027-University-Intern-Commercial-TX-77042/1418244000/",
+        eligibility_note: "\"Currently enrolled in a Bachelor's degree program in Engineering, Economics, Finance, Mathematics/Data Analytics, Supply Chain Management, or equivalent field of study or a Master's degree in Economics, Finance or MBA\"; \"Graduation date of August 2027 or later\";",
+        deadline_note: "No deadline printed on the req. Phillips 66 posted the whole 2027 university intern slate at once in mid-August 2026, so assume rolling review and apply early.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: re-fetched 2026-08-20, live with an active Apply button; title, Houston location, the Bachelor's-degree sentence, the \"Graduation date of August 2027 or later\" sentence and the no-sponsorship language all confirmed verbatim. role_type corrected QR -> QD: the duty text is \"Complete value-adding projects analyzing energy markets in Supply & Trading, Business Development, and Optimization\" and \"Develop technical proficiency with Excel, Tableau, and coding applications\""
+      },
+    ]
+  },
+  {
+    key: "pimco", name: "PIMCO", grade: "B", category: "am",
+    note: "VERIFIED 20 Aug 2026: all three reqs live via the Workday CXS API (tenant `pimco`, site `pimco-careers`), all three eligibility blocks verbatim, and hourly rates recovered from the requisition bodies that the sweep left blank.",
+    roles: [
+      {
+        id: "pimco-2027-client-solutions-analytics", role_type: "QD", status: "open",
+        title: "2027 Summer Intern - Client Solutions & Analytics Analyst, US",
+        locations: ["Newport Beach, CA"],
+        apply_url: "https://pimco.wd1.myworkdayjobs.com/pimco-careers/job/Newport-Beach-CA-USA/XMLNAME-2027-Summer-Intern---Client-Solutions---Analytics-Analyst--US_R106605",
+        eligibility_note: "Are pursuing an undergraduate degree with a major in Business/Finance, Economics, Mathematics, Engineering or applied science / Must be able to begin full time employment at a PIMCO office between January 2028 - August 2028 / Must be enrolled at a university during the Fall 2027 semester (August 202…",
+        deadline_note: "No end date on the requisition; PIMCO reviews on a rolling basis.",
+        comp: "$43.26/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live, Workday startDate 2026-08-18, eligibility block verbatim. ROLE_TYPE CORRECTED QR->QD. The sweep graded this the best of the three on the strength of the team blurb ('leverage quantitative analyses, financial modeling, data-driven research'), but that sentence describes the Solutions team, not this seat."
+      },
+      {
+        id: "pimco-2027-trading-analyst", role_type: "QT", status: "open",
+        title: "2027 Summer Intern - Trading Analyst, US",
+        locations: ["Newport Beach, CA"],
+        apply_url: "https://pimco.wd1.myworkdayjobs.com/pimco-careers/job/Newport-Beach-CA-USA/XMLNAME-2027-Summer-Intern---Trading-Analyst--US_R106763",
+        eligibility_note: "Pursuing an undergraduate degree / Must be able to begin full time employment at a PIMCO office between January 2028 - August 2028 / Must be enrolled at a university during the Fall 2027 semester (August 2027 - December 2027) / Have a minimum 3.2 cumulative collegiate grade point average on a 4.0 sc…",
+        deadline_note: "No end date on the requisition.",
+        comp: "$52.88/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live, Workday startDate 2026-08-20 — posted the day the sweep ran, as fresh as a requisition gets. This is the strongest of the three PIMCO seats and the role_type survives scrutiny: the JD requires 'Possess outstanding analytical and mathematical skills' and 'proficiency in at least one of the following: Python, SQL, and/or VBA', with duties including analysing and developing trade ideas in fixed income and building tools to streamline processes."
+      },
+      {
+        id: "pimco-2027-capital-markets-group", role_type: "QD", status: "open",
+        title: "2027 Summer Intern - Capital Markets Group Analyst",
+        locations: ["New York, NY"],
+        apply_url: "https://pimco.wd1.myworkdayjobs.com/pimco-careers/job/New-York-NY-USA/XMLNAME-2027-Summer-Intern---Capital-Markets-Group-Analyst_R106743",
+        eligibility_note: "Pursuing an undergraduate degree / Must be able to begin full time employment at a PIMCO office between January 2028 - August 2028 / Must be enrolled at a university during the Fall 2027 semester (August 2027 - December 2027) / Have a minimum 3.2 cumulative collegiate grade point average on a 4.0 sc…",
+        deadline_note: "No end date on the requisition.",
+        comp: "$52.88/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live, Workday startDate 2026-08-18. ROLE_TYPE CORRECTED QT->QD, and rank it last of the three. The JD names no programming language and no quantitative method at all — the desired-skills list is entirely soft (academic credentials, leadership, enthusiasm, communication, work ethic) and the duties are 'market intelligence, transaction analysis, and execution support' on the alternative-credit and private-strategies desk."
+      },
+    ]
+  },
+  {
+    key: "tenaska", name: "Tenaska / Tenaska Marketing Ventures", grade: "B", category: "energy",
+    note: "The most trading-shaped firm in this segment, and the verifier confirmed the quant surface independently. Board is UKG/UltiPro; the LoadSearchResults POST endpoint returns clean JSON.",
+    roles: [
+      {
+        id: "tenaska-energy-finance-rotational-intern", role_type: "QR", status: "soon", opens: "opens Aug-Sept (inferred…",
+        title: "Energy Finance & Business — Summer Rotational Internship Program (Tenaska Marketing Ventures)",
+        locations: ["Omaha, NE"],
+        apply_url: "https://recruiting.ultipro.com/TEN1001TEINC/JobBoard/52989607-07f5-4be5-b6f7-1878fa879db5/?q=",
+        eligibility_note: "",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        notes: "VERIFIER RE-QUERIED Tenaska's UltiPro board API on 20 Aug 2026: 18 live reqs, confirmed one by one. Quant surface confirmed real and Omaha/Denver-based — Quantitative Analyst (TMV Omaha, posted 2026-07-28), Market Risk Analyst (TMV Omaha, 2026-08-19), Market Fundamentals Analyst (TMV Denver, 2026-08-10), Senior Business Intelligence Analyst (TMV Omaha, 2026-08-12)."
+      },
+    ]
+  },
+  {
+    key: "tiktok", name: "TikTok", grade: "B", category: "tech",
+    note: "By far the largest live Summer 2027 data-science pool in big tech right now — TikTok/ByteDance run an unusually early global campus cycle, so their 2027 reqs are open in Aug 2026 while Google/Meta/Netflix/Uber/Amazon have not posted theirs.",
+    roles: [
+      {
+        id: "tiktok-ds-product", role_type: "QR", status: "open",
+        title: "Data Science Intern (TikTok Product) - 2027 Summer",
+        locations: ["San Jose, CA"],
+        apply_url: "https://lifeattiktok.com/search/7669683639101884725",
+        eligibility_note: "Currently pursuing a Undergraduate/ Master's in Data Science or a related Data Science discipline.",
+        deadline_note: "Applications are reviewed on a rolling basis; no fixed close date stated.",
+        comp: "$35/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "ml"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Covers User Growth, PGC, Content Ecosystem, Social, Creation and Product Infrastructure analytics. The broadest and most experimentation-heavy of the TikTok DS reqs — best single application of the set. Req code A219514."
+      },
+      {
+        id: "tiktok-ds-integrity", role_type: "QR", status: "open",
+        title: "Data Science Intern (TikTok Integrity and Safety) - 2027 Summer",
+        locations: ["San Jose, CA"],
+        apply_url: "https://lifeattiktok.com/search/7669682935444900149",
+        eligibility_note: "Currently pursuing a Undergraduate/ Master's in Data Science or a related Data Science discipline.",
+        deadline_note: "Rolling review, apply early.",
+        comp: "$35/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "ml"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Trust & safety data analysis — classification, prevalence estimation, policy-effect measurement. Same eligibility wording as the Product req, so applying to both is cheap."
+      },
+      {
+        id: "tiktok-ds-live", role_type: "QR", status: "open",
+        title: "Data Science Intern (TikTok LIVE) - 2027 Summer",
+        locations: ["San Jose, CA"],
+        apply_url: "https://lifeattiktok.com/search/7669700822370945333",
+        eligibility_note: "Individuals who are completing or have recently completed a Bachelor's/ Master's degree in Data Science or a related discipline.",
+        comp: "$35/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Verifier read the responsibilities in full: 'Conduct scientific evaluation with statistical methods, including A/B testing and casual [sic] inference' and 'Design metrics framework to measure product healthiness... understand root causes of metric movements'. Genuine experimentation work, not reporting. Wording is 'completing or have recently completed a Bachelor's' — slightly looser than the other two, still fine for a rising senior."
+      },
+      {
+        id: "tiktok-ds-vod", role_type: "QR", status: "open",
+        title: "Data Scientist Intern (VOD Data) - 2027 Summer",
+        locations: ["San Jose, CA"],
+        apply_url: "https://lifeattiktok.com/search/7670287013157095733",
+        eligibility_note: "Currently pursuing an Undergraduate/Master in Computer Science, Computer Engineering or a related technical discipline",
+        comp: "$45/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "CS/CompE framing worried me, so I pulled the responsibilities to test it against the no-plain-engineering rule: 'Conduct experimentation, define launch standards', 'Quantify the impact of creation tool performance on user behavior, such as publish rate, retention, and engagement', 'use data mining... build models that enable personalized publishing experience'. Hive/Spark/SQL appear only as tooling, not as the job. Survives — it is experimentation and modelling, not pipeline engineering."
+      },
+      {
+        id: "tiktok-mle-ads-measurement", role_type: "QR", status: "open",
+        title: "Machine Learning Engineer Intern (Ads Signal & Measurement) - 2027 Summer",
+        locations: ["San Jose, CA"],
+        apply_url: "https://lifeattiktok.com/search/7669700361976809733",
+        eligibility_note: "Currently pursuing a Bachelor's or above degree in Computer Science, Statistics, Mathematics, Electrical Engineering, or a related technical discipline.",
+        comp: "$45/hr", comp_source: "posted", comp_rank: null,
+        tags: ["ml", "stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Verified as real measurement science, not an ML-labelled SWE req: responsibilities name 'multi-touch attribution (MTA), modeled conversions, and incrementality measurement', 'probabilistic matching models and graph algorithms', and 'Conversion Lift, Brand Lift, Split Test'. This is the closest thing to causal-inference/econometrics work in TikTok's ML org, and it explicitly names Statistics and Mathematics at Bachelor's level while most sibling MLE reqs on the same board are Master's- or PhD-gated."
+      },
+    ]
+  },
+  {
+    key: "trowe-price", name: "T. Rowe Price", grade: "B", category: "am",
+    note: "VERIFIED 20 Aug 2026 and the strongest not-yet-open target in this segment. T. Rowe runs a genuinely quantitative undergraduate internship placed directly into the Quantitative Equity department for 10 weeks in Baltimore.",
+    roles: [
+      {
+        id: "trowe-price-2027-quantitative-investing-internship", role_type: "QR", status: "soon", opens: "opens Aug-Sept",
+        title: "2027 Quantitative Investing Internship Program",
+        locations: ["Baltimore, MD"],
+        apply_url: "https://troweprice.gr8people.com/jobs?query=intern",
+        eligibility_note: "Full time student pursing a bachelor's degree with an expected graduation date of December 2026 - May/June 2027 / Demonstrated programming skills or aptitude, especially with R, MATLAB, Python and object-oriented programming / Major: Computer Science, Engineering, Economics, Mathematics,",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE INDEPENDENTLY RE-VERIFIED, two strands. (1) The 2026 edition is gr8people req 21364, title '2026 Quantitative Investing Internship Program', and I re-pulled its JSON-LD: datePosted 2025-07-30T22:00:38Z, Baltimore MD. So it opened at the end of July in the prior cycle."
+      },
+    ]
+  },
+  {
+    key: "ubs", name: "UBS", grade: "B", category: "bank",
+    note: "Global Markets summer internship is explicitly tagged 'Quantitative Analysis' in UBS's own job-board taxonomy. London req verified live in a real browser session on 20 Aug 2026 with a hard 30-Sep-2026 deadline.",
+    roles: [
+      {
+        id: "ubs-qt", role_type: "QT", status: "open",
+        title: "2027 Summer Internship - Global Markets - London",
+        locations: ["London, UK"],
+        apply_url: "https://jobs.ubs.com/TGnewUI/Search/home/HomeWithPreLoad?partnerid=25008&siteid=5131&PageType=JobDetails&jobid=349219",
+        eligibility_note: "is in their penultimate or final year of their bachelor or master's degree",
+        deadline: "2026-09-30",
+        deadline_note: "Page states 'Application Deadline 30-Sep-2026'.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["vol", "microstructure", "stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 20 Aug 2026 in a real browser (jobs.ubs.com is an Angular app; plain HTTP fetch returns only the session-expired shell, so a WebFetch 'expired' reading is a false negative). Job Reference #341776BR, City: London, Investment Bank division. Function tags on the posting: 'Equities, Quantitative Analysis, Sales, Sales and trading, Trading'. Eligibility and 'Apply' button confirmed live. 10-week paid programme. Substance is Global Markets sales & trading rather than a dedicated quant desk."
+      },
+    ]
+  },
+  {
+    key: "verisk", name: "Verisk (Extreme Event Solutions)", grade: "B", category: "insurance",
+    note: "Catastrophe/weather risk modelling — the closest thing in this segment to a real quantitative seat that hires undergraduates. Extreme Event Solutions builds stochastic hurricane/earthquake/flood models; the student programme explicitly spans actuarial, data science and AI/ML.",
+    roles: [
+      {
+        id: "verisk-qd-summer-2027", role_type: "QD", status: "soon", opens: "opens Aug–Sep",
+        title: "Summer 2027 Internship — data science / AI-ML / catastrophe modelling tracks",
+        locations: ["Boston, MA", "Jersey City, NJ", "United States"],
+        apply_url: "https://www.verisk.com/company/careers/student-opportunities/",
+        eligibility_note: "Verbatim from the Verisk student-opportunities page: \"While positions are posted throughout the year, summer internship positions are typically posted in August and September.\" and \"In locations throughout the United States and UK, and in Krakow, Poland, you'll find posted positions in actuarial,",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["weather"],
+        undergrad_explicit: false,
+        notes: "VERIFIED 20 Aug 2026: I re-fetched https://www.verisk.com/company/careers/student-opportunities/ (HTTP 200, 227KB) and both quoted sentences are present word-for-word in the page text. Strongest timing evidence in this segment — the window it names is open right now."
+      },
+    ]
+  },
+  {
+    key: "wec", name: "WEC Energy Group (We Energies)", grade: "B", category: "energy",
+    note: "The only firm in this segment already posting Summer 2027 reqs. Board is SuccessFactors at careers.wecenergygroup.com; its keyword search does not filter properly, so page the raw list.",
+    roles: [
+      {
+        id: "wec-energy-analytics-intern", role_type: "QR", status: "soon", opens: "opens Aug-Nov",
+        title: "Intern – Energy Analytics (Power Operations)",
+        locations: ["Milwaukee, WI"],
+        apply_url: "https://careers.wecenergygroup.com/search/?q=intern",
+        eligibility_note: "Current pursuit of a Bachelor's or Master's degree in Business, Analytics, Computer Science, Data Science, Mathematics, Engineering, and other related majors",
+        deadline_note: "Prior cycle carried a 15 November application deadline; the live Summer 2027 intern reqs on the board today carry an end date of 11/15/2026.",
+        comp: "$22.00/hr (prior cycle, second-hand)", comp_source: "prior-cycle WEC req text (not re-verified;", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "TIMING EVIDENCE (verifier re-confirmed 20 Aug 2026): I fetched WEC's live req careers.wecenergygroup.com/job/Milwaukee-Intern-Financial-and-Regulatory-Planning-WI-53203/1420744500/ and it states verbatim \"This internship is full-time during the Summer of 2027\", requires \"a graduation date after June 2027\" (he graduates May 2028 — fine), pays \"$21.30\" per hour, and carries End Date 11/15/2026. So WEC's Summer 2027 cycle is open and rolling right now and closes around 15 Nov 2026."
+      },
+    ]
+  },
+  {
+    key: "wellington-management", name: "Wellington Management", grade: "B", category: "am",
+    note: "GRADE DOWNGRADED A->B. $1tn+ active manager with a 10-week programme across Boston, Chicago and San Francisco, and the cleanest timing evidence of any firm in this segment — Wellington states its own open date on its own page, which I confirmed first-hand.",
+    roles: [
+      {
+        id: "wellington-2027-undergraduate-summer-internship", role_type: "QR", status: "soon", opens: "opens Sept",
+        title: "Undergraduate Summer Internship Program (Summer 2027)",
+        locations: ["Boston, MA", "Chicago, IL", "San Francisco, CA"],
+        apply_url: "https://wellington.wd5.myworkdayjobs.com/Campus",
+        eligibility_note: "Our summer internship program is specifically designed for current sophomores and juniors -- students who will be rising juniors and seniors during the internship period.",
+        deadline_note: "Prior cycle opened Wednesday 10 September 2025. The close date is NOT published by Wellington — treat late October as an unverified rule of thumb, not a stated deadline.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE RE-VERIFIED FIRST-HAND at wellington.com/en/about-us/campus-programs, verbatim: 'Applications for our 2026 US internships open on Wednesday, September 10, 2025.' That is a firm-stated, dated open for the prior cycle, which puts the 2027 US open in the first half of September 2026. The eligibility quote above was also confirmed verbatim on the same page, and it fits: for a Summer 2027 internship a May 2028 graduate is a rising senior."
+      },
+    ]
+  },
+  {
+    key: "worldquant", name: "WorldQuant", grade: "B", category: "multistrat",
+    note: "Large global quantitative manager (Old Greenwich HQ, ~26 offices), not on the board. Its US intern requisitions are not currently live; the only undergraduate-eligible, genuinely quantitative, correctly-timed intern req on the board is the Beijing/Shanghai QR role,",
+    roles: [
+      {
+        id: "worldquant-qr-intern-cn", role_type: "QR", status: "open",
+        title: "Quantitative Research Intern",
+        locations: ["Beijing", "Shanghai"],
+        apply_url: "https://job-boards.greenhouse.io/worldquant/jobs/4084570006",
+        eligibility_note: "Pursuing a B.S., M.S. or Ph.D. degree from a leading university in related fields",
+        deadline_note: "No deadline stated on the posting.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "ml", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Posting also states \"Candidates should be graduating in late 2027 or 2028\" — a direct match. Season is not named, so confirm it is the summer cohort. China-based; visa/relocation practicality is his call, but non-US is now in scope."
+      },
+    ]
+  },
+  {
+    key: "xantium", name: "Xantium", grade: "B", category: "multistrat",
+    note: "Tudor-Investment-backed multi-strategy quant firm, launched recently and scaling fast; derivatives and volatility across equity/index, commodities and rates. Offices London, NYC, Abu Dhabi, Salt Lake City. Not the same firm as XTX Markets despite the similar name.",
+    roles: [
+      {
+        id: "xantium-qr-intern", role_type: "QR", status: "open",
+        title: "Quantitative Researcher Internship",
+        locations: ["New York, NY", "London, UK"],
+        apply_url: "https://job-boards.greenhouse.io/xantium/jobs/4371217009",
+        eligibility_note: "We may consider individuals pursuing bachelor's and master’s degrees, provided they can demonstrate strong competitive math backgrounds and strong academic records.",
+        deadline_note: "No application deadline stated on the posting; req first published 2026-08-17, last updated 2026-08-17.",
+        comp: "$16,000 to $19,000+ per month, plus relocation (New York)", comp_source: "posted", comp_rank: 17500,
+        tags: ["vol", "options", "stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20; posting opens 'Xantium is seeking Quantitative Researcher Interns for our New York and London offices for Summer 2027.' IMPORTANT nuance, and the reason this survives the PhD-only screen: the headline preference is PhD - 'Ideal candidates will be in their penultimate year of their PhD studies in a highly quantitative field' - but the very next sentence explicitly opens the door to bachelor's candidates with a strong competitive-maths record."
+      },
+      {
+        id: "xantium-qd-intern", role_type: "QD", status: "open",
+        title: "Quantitative Developer Intern",
+        locations: ["New York, NY", "London, UK"],
+        apply_url: "https://job-boards.greenhouse.io/xantium/jobs/4360768009",
+        eligibility_note: "Candidates must be in their penultimate year, studying Computer Science.",
+        deadline_note: "No application deadline stated on the posting; req first published 2026-08-17, last updated 2026-08-18.",
+        comp: "$16,000 to $19,000+ per month, plus relocation (New York)", comp_source: "posted", comp_rank: 17500,
+        tags: ["cpp"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20; posting is badged 'for Summer 2027'. Penultimate year fits a May-2028 graduate applying for summer 2027. Genuine quant dev work - fast market data into a trading system, integrated research and execution frameworks for fast predictors, cloud simulation and research frameworks. Tech stack is Python and C++, on-prem and cloud."
+      },
+    ]
+  },
+  {
+    key: "american-express", name: "American Express", grade: "C", category: "adjacent",
+    note: "VERIFIER RE-CHECKED 2026-08-20 via the Oracle recruiting API (egug.fa.us2.oraclecloud.com, siteNumber CX_1). Both reqs are live, RequisitionType Campus, posted 2026-08-03, and BOTH carry ExternalPostedEndDate 2026-09-30T05:00:00+00:00.",
+    roles: [
+      {
+        id: "amex-strategy-analytics-cfr-ny", role_type: "QD", status: "open",
+        title: "Campus Undergraduate Summer Internship Program - 2027 Strategy & Analytics, Credit & Fraud Risk - New York, NY",
+        locations: ["New York, NY"],
+        apply_url: "https://careers.americanexpress.com/en/sites/CX_1/job/26011984",
+        eligibility_note: "Currently enrolled in full-time bachelor's degree program Bachelor's degree candidates with an expected graduation date between December 2027 and June 2028",
+        deadline: "2026-09-30",
+        deadline_note: "ExternalPostedEndDate = 2026-09-30T05:00:00+00:00, re-read from the requisition JSON on 2026-08-20. Posted 2026-08-03. Earliest deadline in the segment - front-load it.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Graduation window December 2027 - June 2028 covers a May 2028 grad. Quote verified verbatim. Genuine content sits at the org level: CFR 'develop[s] industry-first data capabilities, build[s] profitable decision-making frameworks, create[s] machine learning-powered predictive models', split into 'Credit Risk Strategy: monitors credit portfolios and optimizes profit-based risk management decisions at all stages of the customer credit lifecycle' and 'Fraud Risk Strategy'."
+      },
+      {
+        id: "amex-strategy-analytics-cfr-phx", role_type: "QD", status: "open",
+        title: "Campus Undergraduate Summer Internship Program - 2027 Strategy & Analytics, Credit & Fraud Risk - Phoenix, AZ",
+        locations: ["Phoenix, AZ"],
+        apply_url: "https://careers.americanexpress.com/en/sites/CX_1/job/26011990",
+        eligibility_note: "Currently enrolled in full-time bachelor's degree program Bachelor's degree candidates with an expected graduation date between December 2027 and June 2028",
+        deadline: "2026-09-30",
+        deadline_note: "VERIFIER CORRECTION: the sweep left this blank and assumed the New York window. Fetched individually on 2026-08-20 - ExternalPostedEndDate = 2026-09-30T05:00:00+00:00, identical to the New York twin.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Same programme and same requisition text as the NY req, Phoenix location (PrimaryLocation field confirms Phoenix, AZ). Amex's Credit & Fraud Risk organisation is heavily Phoenix-based, so headcount here is larger and competition lower than New York. Same business-analytics caveat as the NY row applies."
+      },
+    ]
+  },
+  {
+    key: "caladan", name: "Caladan (Alpha Lab Capital)", grade: "C", category: "crypto",
+    note: "Crypto-native HFT/market-making firm (formerly Alpha Lab Capital), Singapore-headquartered with an engineering office in Ho Chi Minh City. Verified live 2026-08-20: apply_url loads the full requisition with the claimed title and eligibility text.",
+    roles: [
+      {
+        id: "caladan-qr", role_type: "QR", status: "open",
+        title: "2027 2H Technology / Quant Intern",
+        locations: ["Singapore"],
+        apply_url: "https://caladan.xyz/career/6122233004?gh_jid=6122233004",
+        eligibility_note: "3rd or 4th year undergraduates or Masters students studying a STEM or adjacent subject",
+        deadline_note: "No deadline stated on the requisition; verified live on 2026-08-20.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["microstructure", "ml", "stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 2026-08-20: fetched the apply_url directly; title, Singapore location, May-December 2027 window, and the verbatim eligibility line all confirmed on the live page. Single requisition covering two tracks: 'Software Engineers & Algo Developers' and 'Quant Research & Trading'."
+      },
+    ]
+  },
+  {
+    key: "capital-one", name: "Capital One", grade: "C", category: "bank",
+    note: "Capital One's Data Science internships for Summer 2027 are explicitly Master's-only and PhD-only and are therefore excluded. The bachelor's-eligible Summer 2027 intern reqs are Business Analyst and Data Analyst.",
+    roles: [
+      {
+        id: "capital-one-ba-intern", role_type: "QR", status: "open",
+        title: "Business Analyst Intern - Summer 2027",
+        locations: ["McLean, VA", "Richmond, VA", "Plano, TX", "New York, NY", "Chicago, IL"],
+        apply_url: "https://www.capitalonecareers.com/job/mclean/business-analyst-intern-summer-2027/31238/99109660512",
+        eligibility_note: "Currently pursuing a Bachelor's degree or higher with an expectation that you will complete your most recent full-time degree program by August 2028 or earlier",
+        comp: "$99,000 (Chicago/Plano/Richmond), $109,000 (McLean),", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 2026-08-20 on capitalonecareers.com — live posting, all five locations and all three pay bands confirmed. Bachelor's-eligible, no Master's/PhD requirement. Second basic qualification: must continue in the same degree program after the internship. Ten weeks June–August 2027. Posting promises \"technical skills through coding and modeling\" and names SQL and Python, with project areas including \"analyzing the business impacts of credit approval and real-time fraud detection\"."
+      },
+    ]
+  },
+  {
+    key: "equinor", name: "Equinor", grade: "C", category: "energy",
+    note: "Programme page only - no individual requisition exists yet. Kept because the page carries a specific, dated 2027 application window and names Finance & Trading as one of its disciplines. Equinor's trading arm (including Danske Commodities) does real power/gas quant work.",
+    roles: [
+      {
+        id: "equinor-summer-2027-finance-trading", role_type: "QR", status: "soon", opens: "2026-09-25",
+        title: "Equinor Summer Internship 2027 (Finance & Trading discipline)",
+        locations: ["Norway"],
+        apply_url: "https://www.equinor.com/careers/summer-interns",
+        eligibility_note: "The application period for the 2027 summer internship is open from 25 September to 15 October.",
+        deadline: "2026-10-15",
+        deadline_note: "Application window 25 Sept - 15 Oct 2026, re-verified verbatim on Equinor's own summer-interns page 20 Aug 2026. Individual requisitions are not yet posted.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["commodities"],
+        undergrad_explicit: false,
+        notes: "CORRECTIONS APPLIED: title reworded - 'Finance & Trading' is one of six named discipline areas on the programme page, not a standalone requisition title, so the original title implied a req that does not exist. Locations narrowed to 'Norway' - the page does NOT name Stavanger or Oslo; the sweeper's city list was unsourced. The page states no degree-level eligibility, so bachelor eligibility is UNCONFIRMED and Equinor's summer programme historically skews to students with 3+ completed years."
+      },
+    ]
+  },
+  {
+    key: "franklin-templeton", name: "Franklin Templeton", grade: "C", category: "am",
+    note: "VERIFIED 2026-08-20 on franklintempleton.wd5 (site 'Invitation-Only'). Both UK Investment Management reqs are live, posted 2026-08-20, requisition end date 2027-03-01, canApply true. Explicitly penultimate-year, which is Andrew's 2026-27 year.",
+    roles: [
+      {
+        id: "franklin-templeton-uk-london-im-2027", role_type: "QR", status: "open",
+        title: "UK Summer Intern - London - Investment Management",
+        locations: ["London, United Kingdom"],
+        apply_url: "https://franklintempleton.wd5.myworkdayjobs.com/Invitation-Only/job/London-United-Kingdom/UK-Summer-Intern---London---Investment-Management_869326",
+        eligibility_note: "If you are a penultimate-year student, our 10-week Summer Internship, starting in June, offers valuable business experience, on-the-job training and the opportunity to learn from industry experts, company leaders and peers.",
+        deadline: "2027-03-01",
+        deadline_note: "Workday requisition end date is 2027-03-01. No explicit application deadline in the posting body; assume rolling and apply early.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED: req 869326, posted 2026-08-20, end 2027-03-01, canApply true. Title CORRECTED — the sweeper appended '(Summer Internship Programme 2027)', which is a section heading in the body, not part of the requisition title. Placement areas named verbatim: Equities, Fixed Income, Alternatives, Multi-Asset Solutions, Investment Solutions, Sustainability."
+      },
+      {
+        id: "franklin-templeton-uk-edinburgh-im-2027", role_type: "QR", status: "open",
+        title: "UK Summer Intern - Edinburgh - Investment Management",
+        locations: ["Edinburgh, United Kingdom"],
+        apply_url: "https://franklintempleton.wd5.myworkdayjobs.com/Invitation-Only/job/Edinburgh-United-Kingdom/UK-Summer-Intern---Edinburgh---Investment-Management_869318",
+        eligibility_note: "If you are a penultimate-year student, our 10-week Summer Internship, starting in June, offers valuable business experience, on-the-job training and the opportunity to learn from industry experts, company leaders and peers.",
+        deadline: "2027-03-01",
+        deadline_note: "Workday requisition end date is 2027-03-01.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "URL CORRECTED — the sweeper's apply_url had FOUR hyphens ('Edinburgh----Investment-Management') and 404s against the API. The canonical externalPath from the Workday board search is three hyphens: 'UK-Summer-Intern---Edinburgh---Investment-Management_869318'. Corrected URL verified: req 869318, posted 2026-08-20, end 2027-03-01, canApply true."
+      },
+    ]
+  },
+  {
+    key: "garda-capital-partners", name: "Garda Capital Partners", grade: "C", category: "multistrat",
+    note: "Fixed-income relative-value firm, 22+ years, offices in Wayzata, New York, West Palm Beach, Geneva, Zug, Copenhagen, Singapore, Scottsdale. Posted 18 Aug 2026 - two days before the sweep checked, exactly the kind of req a live-only sweep run a week earlier would have missed.",
+    policy: "Greenhouse, rolling, no posted deadline", one_only: false,
+    roles: [
+      {
+        id: "garda-swe-intern-2027", role_type: "QD", status: "open",
+        title: "Software Engineer Intern",
+        locations: ["New York, NY"],
+        apply_url: "https://job-boards.greenhouse.io/gardacp/jobs/6146213004",
+        eligibility_note: "Verbatim from the Greenhouse req: \"Pursuing a Bachelor's or Master's Degree in Computer Science, Engineering, Mathematics, or Quantitative Finance\". Also verbatim: \"Garda is seeking a Software Engineer Intern to join our Research and Technology (R&T) team based in our New York office for the summer…",
+        deadline_note: "No deadline stated in the req (application_deadline is null in the API); first_published 2026-08-18T16:01:53-04:00, requisition_id 571.",
+        comp: "$50/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: req confirmed live, department 'Research & Technology (Internship)', office NYC. Title corrected - the req title is exactly 'Software Engineer Intern', with the Summer 2027 framing in the body rather than the title. Graded C deliberately, and read the duty bullets before spending effort."
+      },
+    ]
+  },
+  {
+    key: "gemini", name: "Gemini", grade: "C", category: "crypto",
+    note: "DOWNGRADED B→C. Gemini is the only crypto exchange in this segment that publishes an explicit internship calendar, and the eligibility language explicitly covers bachelor's students — but no quant or data intern seat has ever actually appeared.",
+    roles: [
+      {
+        id: "gemini-qd-summer-2027", role_type: "QD", status: "soon", opens: "opens late Fall",
+        title: "Summer 2027 Internship Program — Data / Financial Risk tracks",
+        locations: ["New York, NY"],
+        apply_url: "https://www.gemini.com/early-careers",
+        eligibility_note: "Verbatim from Gemini's internship FAQ: \"For Summer internships, positions will be available in late Fall through early Spring.\" On eligibility, verbatim: \"current students pursuing an associates, bachelors, masters or PHD\".",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "VERIFIED 20 Aug 2026: I re-fetched https://www.gemini.com/internships-faq and all three quotes are verbatim, including the late-Fall-through-early-Spring window. Greenhouse token `gemini` confirmed: department \"Internships\" (85693) live with 0 open reqs — programme exists and is between cycles — alongside standing \"Data\" (229799, 1 open) and \"Financial Risk\" (307037, 0 open) departments, which is where a quant-flavoured intern seat would appear if one ever does."
+      },
+    ]
+  },
+  {
+    key: "infinitequant", name: "InfiniteQuant", grade: "C", category: "mm",
+    note: "Privately owned and funded proprietary HFT firm, downtown Manhattan plus Dubai (JLT) and Hong Kong, full in-house stack from market data through execution. Trades high-frequency stat arb in global commodities and digital assets plus market making, and runs a sports/prediction-market track.",
+    oa: "Posting describes: 1-2 rounds with Quants, a coding test, then a final interview.",
+    roles: [
+      {
+        id: "infinitequant-qd", role_type: "QD", status: "open",
+        title: "Quantitative Developer - Internship - Summer 2027",
+        locations: ["New York, NY", "Dubai, UAE", "Hong Kong"],
+        apply_url: "https://jobs.smartrecruiters.com/InfiniteQuant/744000144281579",
+        eligibility_note: "Candidates must pursue or hold a Bachelor’s Degree or higher in a CS related degree.",
+        deadline_note: "No deadline stated; posting released 2026-08-19.",
+        comp: "$6,000-$10,000 per month", comp_source: "posted", comp_rank: 8000,
+        tags: ["cpp", "microstructure", "event-markets", "sports"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 2026-08-20 - title, Summer 2027 badge, eligibility line, salary range and interview process all confirmed on the live SmartRecruiters posting. Genuinely quant-flavoured QD rather than infra: building and maintaining HFT systems, implementing quant prototypes into optimised code, and contributing to the data pipeline, simulators and backtester. Wants strong C++ and Python. Says visa sponsorship available. The 'CS related degree' wording is the main friction for a maths/stats major."
+      },
+    ]
+  },
+  {
+    key: "keybank", name: "KeyBank", grade: "C", category: "bank",
+    note: "Best pure bank-risk find of this sweep, and verified live on 2026-08-20. KeyBank runs two separate undergraduate-only summer programmes whose placement menus explicitly name Model Risk, Market Risk, Market & Treasury Risk, and Quantitative Modeling & Advanced Analytics.",
+    roles: [
+      {
+        id: "keybank-qr", role_type: "QR", status: "open",
+        title: "2027 Summer Analytics and Quantitative Modeling Internship- Cleveland",
+        locations: ["Cleveland, OH"],
+        apply_url: "https://keybank.wd5.myworkdayjobs.com/en-US/External_Career_Site/job/Cleveland-OH/XMLNAME-2027-Summer-Analytics-and-Quantitative-Modeling-Internship--Cleveland_R-41380",
+        eligibility_note: "Must have completed at least three years toward a four-year, undergraduate degree program with coursework in mathematics, statistics, engineering, finance, economics, computer science, business analytics, data science, or other quantitative fields of study,",
+        deadline: "2026-09-04",
+        deadline_note: "Workday startDate 2026-08-17, endDate 2026-09-04 on the requisition.",
+        comp: "Undergraduate $25/hour; Graduate $28/hour; plus $2,000 sign-on bonus", comp_source: "posted", comp_rank: null,
+        tags: ["ml", "stats", "numerics", "vol"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "RE-VERIFIED 20 Aug 2026 via KeyBank's Workday requisition JSON (req R-41380, canApply true). Eligibility quote, comp and dates all confirmed verbatim; the description states 'The Intern Program takes place in the Summer of 2027'. 10.5-week in-person programme in Cleveland. Placement areas: Quantitative Modeling and Advanced Analytics, Model Risk, Market Risk, Client & Employee Experience, Commercial Analytics, Fraud Analytics, Credit Portfolio Management. Minimum 3.5 undergraduate GPA."
+      },
+      {
+        id: "keybank-risk-intern", role_type: "QR", status: "open",
+        title: "2027 Summer Risk Management Internship Program- Cleveland",
+        locations: ["Cleveland, OH"],
+        apply_url: "https://keybank.wd5.myworkdayjobs.com/en-US/External_Career_Site/job/Cleveland-OH/XMLNAME-2027-Summer-Risk-Management-Internship-Program--Cleveland_R-41378",
+        eligibility_note: "Must have completed at least three years toward a four-year, undergraduate degree program with focused coursework in finance, accounting, actuarial science, economics and/or data science (preferred), with an anticipated graduation in May 2028 or December 2027",
+        deadline: "2026-09-04",
+        deadline_note: "Workday endDate 2026-09-04; body repeats \"Job Posting Expiration Date: 09/04/2026\"",
+        comp: "$23/hour plus $2,000 summer internship sign-on bonus", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 2026-08-20 via KeyBank Workday CXS req R-41378. Lower GPA floor (3.3) than the quant-modelling sibling req. Placement areas: Anti-Money Laundering, Enterprise Risk, Operational Risk, Compliance, Credit Risk, Market and Treasury Risk, Model Risk — so the quant content is placement-dependent and most of the menu is not quantitative."
+      },
+    ]
+  },
+  {
+    key: "mako", name: "Mako Group", grade: "C", category: "mm",
+    note: "Options market maker since 1999, offices in London, Dublin, Amsterdam, Singapore, Sydney, Brisbane, Chengdu. VERIFIER re-pulled boards-api.greenhouse.io/v1/boards/mako on 20 Aug 2026: 7 reqs, all experienced (Equity Analyst x2 Dublin, Financial Controller London, IT Operations Analyst London,",
+    policy: "Greenhouse-backed board at mako.com/opportunities (token 'mako')", one_only: false,
+    roles: [
+      {
+        id: "mako-summer-internship-london", role_type: "QT", status: "soon", opens: "last cycle's req posted…",
+        title: "Mako Summer Internship - Trading & Technology",
+        locations: ["London"],
+        apply_url: "https://www.mako.com/opportunities/",
+        eligibility_note: "Verbatim from mako.com/early-careers/ (verifier re-fetched, exact match): \"Mako has multiple, early career pathways for aspiring traders and technologists,",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "TIMING EVIDENCE, strengthened by the verifier. Mako's Early Careers page states verbatim: \"Our one-month Summer internship runs annually from July and our 18-month Graduate Trader programme commences in late September, as does our 12-month Software Engineer graduate programme. Please check the opportunities page for any open applications.\" That fixes the cadence."
+      },
+    ]
+  },
+  {
+    key: "marathon-petroleum", name: "Marathon Petroleum (MPC)", grade: "C", category: "energy",
+    note: "MPC posted its Summer 2027 intern slate on 17 August 2026, so the timing is ideal, but the fit is weak: the Commercial req is a multi-department pool whose placements are Scheduling, Marketing, Analytics, Coordinating and Systems Support, and the desired majors named are business, marketing,",
+    roles: [
+      {
+        id: "marathon-petroleum-intern-commercial-summer-2027", role_type: "QD", status: "open",
+        title: "Intern/Co-op - Commercial (Summer 2027)",
+        locations: ["Findlay, OH", "Houston, TX", "San Antonio, TX", "Cary, NC", "Duluth, GA"],
+        apply_url: "https://mpc.wd1.myworkdayjobs.com/en-US/MPCCareers/job/Findlay-OH-Main-Bldg/Intern-Co-op---Commercial--Summer-2027-_00023273",
+        eligibility_note: "\"Marathon Petroleum Company LP (MPC) offers internship and co-op opportunities to high-performing college students who want meaningful hands-on experiences in their fields of study.\" Desired majors for the Scheduling placement: \"Business Administration, Management, Marketing, Supply Chain,",
+        deadline_note: "Posted 2026-08-17 (\"Posted 3 Days Ago\" as of 2026-08-20); no end date set on the Workday record.",
+        comp: "$20.19-$25.24/hr", comp_source: "Pay range stated on the Workday req (read via the mpc/MPCCar…", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIER: confirmed live via the Workday CXS job-detail API on 2026-08-20 — title exact, all five locations match (Findlay OH, Cary NC, Houston TX, Duluth GA, San Antonio TX), posted three days ago. The req covers Scheduling (resource/product-delivery optimisation), Marketing (trend and customer analysis), Analytics (data collection and business insight), Coordinating and Systems Support; it requires concurrent bachelor's enrolment, US work authorisation, 40 hours/week and strong Excel."
+      },
+    ]
+  },
+  {
+    key: "milliman", name: "Milliman", grade: "C", category: "insurance",
+    note: "Actuarial and financial-risk consulting. Several Summer 2027 internships are already live on their UltiPro board (recruiting2.ultipro.com/MIL1017) — neither Workday nor Greenhouse, which is likely why it gets missed.",
+    policy: "Practice-by-practice hiring — each office posts its own intern req, so several separate applications are possible.", one_only: false,
+    roles: [
+      {
+        id: "milliman-actuarial-intern-frm-life-lts-2027", role_type: "QR", status: "open",
+        title: "Actuarial Intern - Summer 2027 Internship/Co-Op (May 2027 Start) - FRM, Life, LTS",
+        locations: ["Chicago, IL"],
+        apply_url: "https://recruiting2.ultipro.com/MIL1017/JobBoard/f54234e9-dfde-b183-fd20-4fbdb19cba7a/OpportunityDetail?opportunityId=9046020d-55da-4ba3-bbc2-549260724bb5",
+        eligibility_note: "No graduation-year sentence is published in the requisition. Verbatim scope from the req: \"The candidate will be assigned to work in either the Mergers and Acquisitions or the Financial Risk Management group.",
+        deadline_note: "No deadline published on the UltiPro board. Posted 2026-08-12, req ACTUA010602.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        notes: "VERIFIED live 20 Aug 2026. The OpportunityDetail page is a JS shell; the req is readable through POST recruiting2.ultipro.com/MIL1017/JobBoard/f54234e9-dfde-b183-fd20-4fbdb19cba7a/JobBoardView/LoadSearchResults. Opportunity id, title, req number ACTUA010602 and posted date 2026-08-12 all matched, locations \"09-Chicago\" and \"17-Chicago FRM\", and the quoted scope sentence matched verbatim."
+      },
+    ]
+  },
+  {
+    key: "nationwide", name: "Nationwide", grade: "C", category: "insurance",
+    note: "VERIFIED 2026-08-20 against Nationwide's Workday CXS records for reqs 099736 and 099735: both live, canApply true, both startDate 2026-08-09 and endDate 2026-10-30. A genuinely open ten-week window rather than a scramble.",
+    roles: [
+      {
+        id: "nationwide-pc-actuarial-2027", role_type: "QR", status: "open",
+        title: "Summer 2027 P&C Actuarial Internship",
+        locations: ["Columbus, OH", "Des Moines, IA"],
+        apply_url: "https://nationwide.wd1.myworkdayjobs.com/Nationwide_Career/job/Ohio---Columbus-Metro/Summer-2027-P-C-Actuarial-Internship_099736",
+        eligibility_note: "Participants should have advanced skills in mathematics and statistics or have a background in modeling, programming or quantitative analysis",
+        deadline: "2026-10-30",
+        deadline_note: "Verified: Workday endDate 2026-10-30",
+        comp: "$23-$50/hr (stated national hourly range for Nationwide internships)", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: false,
+        notes: "Req 099736, posted 2026-08-09. Twelve-week program across pricing, research and reserving for personal, commercial and agribusiness lines. Full-time program supports the CAS exam process with fee, study-material and designation reimbursement plus study hours. Posting states no graduation-year filter, so class of 2028 is not excluded on its face. Eligibility quote verified verbatim against the Qualifications block."
+      },
+      {
+        id: "nationwide-financial-actuarial-2027", role_type: "QR", status: "open",
+        title: "Summer 2027 Nationwide Financial Actuarial Internship",
+        locations: ["Columbus, OH"],
+        apply_url: "https://nationwide.wd1.myworkdayjobs.com/Nationwide_Career/job/Ohio---Columbus-Metro/Summer-2027-Nationwide-Financial-Actuarial-Internship_099735",
+        eligibility_note: "Students pursuing a degree in Actuarial Science, Mathematics, Statistics or have a similar background in modeling, programming or quantitative analysis",
+        deadline: "2026-10-30",
+        deadline_note: "Verified: Workday endDate 2026-10-30",
+        comp: "$23-$50/hr (stated national hourly range for Nationwide internships)", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: false,
+        notes: "Req 099735, posted 2026-08-09. Twelve weeks in Columbus OH only (no Des Moines option on this req). Actuarial pricing, product development, valuation and financial reporting for life insurance, annuities and retirement plans. Reimburses one preliminary exam taken after the start date and before year end. Distinct requisition from the P&C one, both can be applied to. Eligibility quote verified verbatim. Also asks for 'Superior academic achievement' without naming a GPA number."
+      },
+    ]
+  },
+  {
+    key: "pnc", name: "PNC Financial Services", grade: "C", category: "bank",
+    note: "Two distinct undergraduate summer reqs, both re-verified live on PNC's own Workday on 20 Aug 2026. The Data, Modeling & Analytics one explicitly puts interns 'directly with PNC's team of quantitative analysts, portfolio managers, and data scientists' — that is the genuinely quantitative one.",
+    roles: [
+      {
+        id: "pnc-qr", role_type: "QR", status: "open",
+        title: "Data, Modeling, and Analytics Undergraduate Intern",
+        locations: ["Pittsburgh, PA", "Tysons, VA"],
+        apply_url: "https://pnc.wd5.myworkdayjobs.com/en-US/External/job/Data--Modeling--and-Analytics-Undergraduate-Intern_R231526-1",
+        eligibility_note: "Working toward a bachelor's degree, preferably STEM or business majors (e.g. Analytics, Data Science, Mathematics, Statistics, Finance, Economics, Business). Other majors can be considered if there is a strong proven interest in analytics.  Junior status Minimum GPA 3.2.",
+        deadline_note: "Posting says 'Generally, this opening is expected to be posted for two business days from 08/04/2026, although it may be longer with business discretion'",
+        comp: "Base Salary:  $25.24 – $42.07 (hourly)", comp_source: "posted", comp_rank: null,
+        tags: ["ml", "stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "RE-VERIFIED 20 Aug 2026 via PNC's Workday requisition JSON (req R231526-1, startDate 2026-08-04, canApply true, no end date). Eligibility quote and salary band confirmed verbatim. Workday's location field lists only Pittsburgh; the description names 'Pittsburgh, PA or Tysons, VA'. Tooling named: SQL, Python, R, Tableau, AWS, Hadoop, GitHub Copilot. No visa sponsorship, no STEM OPT. CAVEAT THAT SURVIVES VERIFICATION: the title carries no year."
+      },
+      {
+        id: "pnc-qt", role_type: "QT", status: "open",
+        title: "Corporate & Institutional Banking Undergraduate Summer 2027 Intern - Capital Markets",
+        locations: ["Pittsburgh, PA", "Chicago, IL", "Houston, TX", "Dallas, TX", "New York, NY", "Philadelphia, PA", "San Francisco, CA"],
+        apply_url: "https://pnc.wd5.myworkdayjobs.com/en-US/External/job/PA---Pittsburgh-15222/Corporate---Institutional-Banking-Undergraduate-Summer-2027-Intern---Capital-Markets_R218205-1",
+        eligibility_note: "Working toward Bachelor's Degree, preferred business relevant majors (e.g., Finance, Accounting, IT, Economics, Marketing, Math, Statistics, HR, Management, Communications, Business Law, Psychology, Logistics, Engineering, Computer Science, Actuarial Sciences), junior status, Minimum GPA 3.2.",
+        deadline_note: "CORRECTED: the sweeper's '04/13/2026' reading was wrong. Workday startDate is 2026-08-03 (posted 17 days ago) with no end date and canApply true as of 20 Aug 2026. No published close date.",
+        comp: "Base Salary:  $18.00 – $35.00 (hourly)", comp_source: "posted", comp_rank: null,
+        tags: ["options", "commodities", "microstructure"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "RE-VERIFIED 20 Aug 2026 via PNC's Workday requisition JSON (req R218205-1). CORRECTED: San Francisco, CA is also on the requisition and was missing from the sweep. Placement segments named: Chief Investment Office (portfolio management and hedging), Corporate Treasury, Derivatives, Foreign Exchange, Fixed Income, Financial Institutions Group, Structured Products Group."
+      },
+    ]
+  },
+  {
+    key: "readystate", name: "Readystate Asset Management", grade: "C", category: "multistrat",
+    note: "Multi-strategy investment firm (Chicago HQ, New York office), not on the board. Single live intern requisition, covering both the 2027 and 2028 summers in one posting — so applying now is the correct move for summer 2027.",
+    roles: [
+      {
+        id: "readystate-inv-intern", role_type: "QR", status: "open",
+        title: "Investment Intern (Summer 2027 & 2028)",
+        locations: ["Chicago", "New York"],
+        apply_url: "https://job-boards.greenhouse.io/readystate/jobs/4171077008",
+        eligibility_note: "Finance and accounting background are helpful but not required.",
+        deadline_note: "No deadline stated on the posting.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: false,
+        notes: "The posting names no degree level and no class year at all — that is why the eligibility quote above is thin; there is no stronger sentence on the page, confirmed on re-fetch. Quantitative track verbatim: \"Analysts with a quantitative focus will develop systematic trading techniques and/or conduct quantitative research, with an emphasis on alpha signal development, predictive pricing and strategy implementation\". Also asks for \"Working knowledge of Microsoft Excel, Python, R, and/or other data analytic tools\"."
+      },
+    ]
+  },
+  {
+    key: "regions", name: "Regions Financial", grade: "C", category: "bank",
+    note: "Regions' Emerging Talent Program 2027 Risk Management intern req is the one that fits: the Market, Liquidity and Capital Risk placement covers investment portfolio analysis, interest rate risk, regulatory gap analysis, capital planning and capital/liquidity stress testing.",
+    roles: [
+      {
+        id: "regions-risk-intern", role_type: "QR", status: "open",
+        title: "2027 ETP Intern - Risk Management, Birmingham, AL",
+        locations: ["Birmingham, AL"],
+        apply_url: "https://regions.wd5.myworkdayjobs.com/Regions_Careers/job/Birmingham-AL---Regions-Center/XMLNAME-2027-Intern---Risk-Management--Birmingham--AL_R104915",
+        eligibility_note: "Current undergraduate or graduate student with expected graduation of December 2027 or May/ June 2028, majoring in technical (ex. data science, technology) or business fields",
+        deadline_note: "No endDate in the Workday req (startDate 2026-08-05); Regions states postings stay open a minimum of five business days from posting, so this one is past its floor and could close at any time",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "vol"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 2026-08-20 via Regions Workday CXS req R104915. Placement menu confirmed verbatim: Enterprise Compliance and Operational Risk, Consumer and Wealth Risk, Enterprise Credit Risk, Market/Liquidity/Capital Risk, Enterprise Risk Management. The Market, Liquidity and Capital Risk placement is the quant one — \"investment portfolio analysis, interest rate risk (IRR), regulatory gap analysis... capital and liquidity stress testing\". Enterprise Credit Risk is Excel/PowerPoint/Power BI flavoured."
+      },
+    ]
+  },
+  {
+    key: "sandia", name: "Sandia National Laboratories", grade: "C", category: "adjacent",
+    note: "Large R&D internship programme with strong optimisation, uncertainty-quantification and statistics groups. Downgraded B→C by the verifier: Sandia publishes no posting window and no last-cycle dates, and its PeopleSoft portal cannot be enumerated,",
+    roles: [
+      {
+        id: "sandia-rd-undergraduate-summer-intern-2027", role_type: "QR", status: "soon", opens: "opens rolling",
+        title: "R&D Undergraduate Summer Intern — Summer 2027 (statistics, optimisation, computational science)",
+        locations: ["Albuquerque, NM", "Livermore, CA"],
+        apply_url: "https://www.sandia.gov/careers/career-possibilities/students-and-postdocs/internships/",
+        eligibility_note: "\"Full-time enrollment status (typically 12 units for undergraduates and 9 units for graduate students)\" at an accredited college, university or high school; GPA \"3.0/4.0 for undergraduate and high school students applying for Research and Development (R&D), Technical, or Business positions\"; \"U.S.",
+        deadline_note: "Rolling, no published window. Sandia's own how-to-apply guidance is to \"apply for an internship position at least three months prior to their desired start date\", i.e.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "Verifier fetched the internships page and confirms the enrollment, GPA, citizenship and age lines verbatim — but the page does NOT contain any posting window, and the sweep's \"opens Oct–Feb\" was unsupported, so that field is corrected to \"rolling\". The three-months-ahead guidance is real and sits on sandia.gov/careers/careers/students-and-postdocs/internships-co-ops/how-to-apply/. Summer internships \"typically run 10-12 weeks, generally from May to the last Thursday in August\"."
+      },
+    ]
+  },
+  {
+    key: "scientech-research", name: "Scientech Research", grade: "C", category: "mm",
+    note: "New Jersey quant trading firm founded by Wall Street veterans, with a Shanghai research office. Trades global futures, equities and options. Genuinely off the beaten path - it does not appear in any of the standard 2027 trackers.",
+    policy: "Ashby, evergreen reqs", one_only: false,
+    roles: [
+      {
+        id: "scientech-qd-intern", role_type: "QD", status: "open",
+        title: "Quantitative Developer Intern",
+        locations: ["New Jersey"],
+        apply_url: "https://jobs.ashbyhq.com/scientech-research/47be106e-4a2a-4814-bca8-4a7b97816d7c",
+        eligibility_note: "No degree gate stated. The qualifications list, verbatim in full: \"Experience in writing C++ in a large-scale codebase for a professional setting.\" / \"Experience in Python programming language.\" / \"Work experience with low latency trading platforms is a plus.\" / \"Familiarity with cloud platforms suc…",
+        deadline_note: "Evergreen. Ashby publishedAt 2025-03-04, employmentType 'Intern'; URL returns 200 as of 20 Aug 2026, so the req has been open ~17 months.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["cpp"],
+        undergrad_explicit: false,
+        notes: "The work itself is real quant-dev: \"Design and implement low-latency live trading platforms in C++\" and \"Design and implement high-performance backtesting research framework in a cloud computing ecosystem\". Two caveats. First, it is an 18-month-old evergreen req,"
+      },
+    ]
+  },
+  {
+    key: "shell", name: "Shell (Trading & Supply)", grade: "C", category: "energy",
+    note: "Shell runs a US Assessed Internship Programme based mainly in Texas and Louisiana with commercial tracks; Shell Trading's US arm is Houston-based. Shell has genuine quant seats on the board (Gas Quant Structurer, Senior Quantitative Analyst Market Risk,",
+    roles: [
+      {
+        id: "shell-us-trading-supply-summer-internship-2027", role_type: "QD", status: "soon", opens: "opens Oct 2026 (estimate…",
+        title: "Shell Assessed Internship Programme 2027 - United States",
+        locations: ["Houston, TX"],
+        apply_url: "https://shell.wd3.myworkdayjobs.com/en-US/shellcareers",
+        eligibility_note: "",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        class_2028: true,
+        notes: "EVIDENCE (verified by the verifier, 2026-08-20). TITLE CORRECTED: the programme's real name is \"Shell Assessed Internship Program - United States\"; the previous \"(Trading & Supply / Commercial)\" suffix was not on any req and has been removed. LAST-CYCLE POSTING WINDOW: the US edition for Summer 2026 posted 2025-10-14 and was pulled 2025-11-30 — roughly a six-week mid-October to late-November window, which is the basis for the Oct 2026 estimate."
+      },
+    ]
+  },
+  {
+    key: "the-hartford", name: "The Hartford", grade: "C", category: "insurance",
+    note: "VERIFIED 2026-08-20: both reqs return live Workday CXS records with canApply true, and neither carries an endDate. Both sit on The Hartford's Careers_Restricted Workday site, which is publicly reachable but not linked from the main careers page,",
+    roles: [
+      {
+        id: "the-hartford-erm-intern", role_type: "QR", status: "open",
+        title: "Intern, Enterprise Risk Management",
+        locations: ["Hartford, CT"],
+        apply_url: "https://thehartford.wd5.myworkdayjobs.com/Careers_Restricted/job/Hartford-CT/Intern--Enterprise-Risk-Management_R2626403",
+        eligibility_note: "Students expecting to graduate in January 2027 or May of 2028 with a Bachelor's degree and a GPA of 3.2 or higher",
+        deadline_note: "No endDate field on the requisition; verified open and accepting applications on 2026-08-20",
+        comp: "$25-$26/hr", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Req R2626403, posted 2026-08-13, hybrid, the freshest req in this segment. Ten weeks, summer-long project with a Capstone presentation to senior management. Covers Financial & Market Risk, Insurance Risk and Operational Risk plus emerging Cyber and AI risk. Eligibility quote verified verbatim."
+      },
+      {
+        id: "the-hartford-actuarial-2027", role_type: "QR", status: "open",
+        title: "Intern, Actuarial Student Program (Summer 2027)",
+        locations: ["Hartford, CT"],
+        apply_url: "https://thehartford.wd5.myworkdayjobs.com/Careers_Restricted/job/Hartford-CT/Intern--Actuarial-Student-Program--Summer-2027-_R2624619",
+        eligibility_note: "candidates should be pursuing a bachelors or masters degree in actuarial science, math, economics, finance, and/or other science related fields. Candidates are required to have passed at least one actuarial exam.",
+        deadline_note: "No endDate field on the requisition; verified open and accepting applications on 2026-08-20",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        notes: "Req R2624619, posted 2026-07-30. Eleven weeks, begins late May 2027, fully in-person in Hartford with travel and housing funding. Rotations span personal and commercial pricing, corporate reserving, data science, ERM and employee benefits; training includes R coding. Eligibility quote verified verbatim, and the 'bachelors or masters' wording confirms undergrad eligibility. HARD GATE: at least one actuarial exam must already be passed, so only worth an application if Andrew sits Exam P or FM before applying."
+      },
+    ]
+  },
+  {
+    key: "the-nuclear-company", name: "The Nuclear Company", grade: "C", category: "tech",
+    note: "Venture-backed nuclear plant developer in Washington DC running a full 12-week Summer 2027 programme (May-August) with housing. The Data Science req is undergraduate-eligible and the graduation window is written to fit exactly his class year.",
+    roles: [
+      {
+        id: "the-nuclear-company-ds", role_type: "QR", status: "open",
+        title: "Summer 2027 Data Science Intern",
+        locations: ["Washington, DC"],
+        apply_url: "https://job-boards.greenhouse.io/thenuclearcompany/jobs/5383244008",
+        eligibility_note: "Currently pursuing a BS or MS in Data Science, Statistics, Computer Science, Applied Math, or a related quantitative field. Expected graduation between December 2027 and June 2028",
+        deadline_note: "No published deadline; live application form present on the page.",
+        comp: "$25.00/hour plus $2,000 monthly housing stipend", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Title, DC location, degree line, graduation window and pay all re-confirmed on the live page. 12 weeks, May-August 2027, on-site DC five days a week, housing and relocation for interns outside the DC metro, with a requirement to return to school afterwards. The graduation clause 'December 2027 and June 2028' is unusually tight and he lands inside it. Lowest pay on this board by a wide margin — the housing stipend is what makes it competitive."
+      },
+    ]
+  },
+  {
+    key: "trexquant", name: "Trexquant Investment", grade: "C", category: "boutique",
+    note: "Stamford CT systematic quant fund (founded 2014, multi-billion global equity/liquid-asset portfolio) run by ex-WorldQuant people. Not a market maker, but squarely in the quant long tail and not on either exclusion list. VERIFIER: downgraded B->C.",
+    policy: "Workable board, rolling; separate US/China/India intern tracks", one_only: false,
+    oa: "Historically a subjective/quantitative test then interview rounds",
+    roles: [
+      {
+        id: "trexquant-qr-intern-2027", role_type: "QR", status: "soon", opens: "opens Sept (last evidenc…",
+        title: "Quantitative Researcher - Summer Internship (USA)",
+        locations: ["Stamford, CT", "New York, NY"],
+        apply_url: "https://apply.workable.com/trexquant/",
+        eligibility_note: "Not verifiable verbatim right now - the US intern req is not live. VERIFIER re-read the live Workable widget API on 20 Aug 2026 and confirms the only intern-titled row is 'Quantitative Researcher Intern -Summer 2026 year (CHINA)', Beijing, published_on 2025-11-20.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: false,
+        notes: "TIMING EVIDENCE (verifier-confirmed): Wayback snapshot 20240919111613 of apply.workable.com/trexquant/j/395FAA35E8/ carries the exact title 'Quantitative Researcher - Summer 2025 Internship (USA) - Trexquant Investment', so a US intern req was demonstrably live on 19 Sep 2024. That is a real last-cycle posting date and it clears the evidence bar."
+      },
+    ]
+  },
+  {
+    key: "trillium", name: "Trillium", grade: "C", category: "mm",
+    note: "Proprietary trading firm in US equities, US options, Canadian equities and OTC equities, 20+ years old, HQ New York with trading floors in Chicago and Miami. Trades on its own capital with in-house technology.",
+    policy: "Posting states: \"*This position is open in any of our three locations: New York, NY | Chicago, IL | Miami,", one_only: true,
+    roles: [
+      {
+        id: "trillium-qt-nyc", role_type: "QT", status: "open",
+        title: "Summer 2027 Equity Trader Internship",
+        locations: ["New York, NY"],
+        apply_url: "https://www.trlm.com/apply/5076003007?gh_jid=5076003007",
+        eligibility_note: "The position is intended for rising seniors (Spring 2028 graduation) with a cumulative 3.5+ GPA.",
+        deadline_note: "No deadline stated; req last updated 2026-08-04.",
+        comp: "$1,000/week (gross), six weeks June-July 2027", comp_source: "posted", comp_rank: 4300,
+        tags: ["microstructure", "options"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED verbatim 2026-08-20 - eligibility line, comp sentence and one-city policy all confirmed word-for-word. TITLE CORRECTED to the exact ATS title (the city is carried in the locations field, not the title). The graduation-year language is the cleanest match of anything in this segment: it names Spring 2028 explicitly and adds 'Students entering their senior year of undergraduate or final year of a master's program are encouraged to apply.' Work includes researching market microstructure patterns for inefficien…"
+      },
+      {
+        id: "trillium-qt-chi", role_type: "QT", status: "open",
+        title: "Summer 2027 Equity Trader Internship",
+        locations: ["Chicago, IL"],
+        apply_url: "https://www.trlm.com/apply/5076017007?gh_jid=5076017007",
+        eligibility_note: "The position is intended for rising seniors (Spring 2028 graduation) with a cumulative 3.5+ GPA.",
+        deadline_note: "No deadline stated; req last updated 2026-08-04.",
+        comp: "$1,000/week (gross), six weeks June-July 2027", comp_source: "posted", comp_rank: 4300,
+        tags: ["microstructure", "options"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live 2026-08-20 (req id 5076017007, Chicago). TITLE CORRECTED to the exact ATS title. Identical requisition text to the NYC posting. Listed separately because it is a separate req id, but the firm explicitly asks that he pick one city only - do not apply to this and the NYC or Miami req."
+      },
+      {
+        id: "trillium-qt-mia", role_type: "QT", status: "open",
+        title: "Summer 2027 Equity Trader Internship",
+        locations: ["Miami, FL"],
+        apply_url: "https://www.trlm.com/apply/5076067007?gh_jid=5076067007",
+        eligibility_note: "The position is intended for rising seniors (Spring 2028 graduation) with a cumulative 3.5+ GPA.",
+        deadline_note: "No deadline stated; req last updated 2026-08-04.",
+        comp: "$1,000/week (gross), six weeks June-July 2027", comp_source: "posted", comp_rank: 4300,
+        tags: ["microstructure", "options"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED live 2026-08-20 (req id 5076067007, Miami). TITLE CORRECTED to the exact ATS title. Identical requisition text to the NYC posting. One city only."
+      },
+    ]
+  },
+  {
+    key: "wells-fargo", name: "Wells Fargo", grade: "C", category: "bank",
+    note: "Wells Fargo's dedicated Quantitative Analytics summer internships (Capital Markets, RADS) are Master's/PhD-only for 2027 and are therefore excluded. The Corporate Risk Development Program intern req is the bachelor's-eligible entry into the same Corporate Risk organisation,",
+    roles: [
+      {
+        id: "wells-fargo-crdp-intern", role_type: "QR", status: "open",
+        title: "2027 Corporate Risk Development Program Summer Internship (Core Risk) - Early Careers",
+        locations: ["Charlotte, NC"],
+        apply_url: "https://www.wellsfargojobs.com/en/jobs/r-556123/2027-corporate-risk-development-program-summer-internship-core-risk-early-careers/",
+        eligibility_note: "Currently pursuing a bachelor's degree with an expected graduation date between December 2027 – June 2028",
+        deadline: "2026-09-09",
+        deadline_note: "Posting states 9 September 2026 and warns \"this job posting may be removed prior to the indicated close date\" due to application volume",
+        comp: "$34.62/hour", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "ml"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "VERIFIED 2026-08-20 on wellsfargojobs.com — live, Apply Now present. CORRECTION to the sweeper's read: the posting names ten placement groups, including Model Risk Management and Independent Testing & Validation alongside Compliance, Consumer Banking and Lending Risk, Corporate & Investment Banking Risk, Finance Risk, Financial Crimes, Operational Risk, Technology Risk and Wealth & Investment Management Risk."
+      },
+    ]
+  },
+  {
+    key: "westat", name: "Westat", grade: "C", category: "adjacent",
+    note: "Employee-owned survey-research and statistics firm — the quant angle is survey methodology, sampling and applied statistics rather than markets, but it is a real statistics apprenticeship and it explicitly takes undergraduates.",
+    roles: [
+      {
+        id: "westat-summer-internship-2027", role_type: "QR", status: "soon", opens: "opens late Oct",
+        title: "Summer 2027 Internship Program — statistics / survey methodology",
+        locations: ["Bethesda, MD"],
+        apply_url: "https://www.westat.com/careers/",
+        eligibility_note: "\"Westat's Summer Internship Program is 11 weeks and offers opportunities to undergraduate, graduate, and doctoral students\"; the internship is \"based at Westat's Bethesda, Maryland office, with onsite participation required up to three days per week\", 40 hours/week Monday–Friday.",
+        deadline_note: "Last-cycle evidence: Summer 2025 internships \"were posted online beginning in late October\". The Summer 2026 programme ran 1 June – 14 August 2026.",
+        comp: "", comp_source: "", comp_rank: null,
+        tags: ["stats"],
+        undergrad_explicit: true,
+        notes: "Verifier fetched westat.com/careers (200) and confirms the 11-week programme and the undergraduate/graduate/doctoral eligibility line on Westat's own page. The late-October posting date is a LAST-CYCLE fact (Summer 2025) recovered from the search index, not a forward commitment — the live page itself gives no window, and the board runs on BrassRing (sjobs.brassring.com), which does not answer unauthenticated fetches."
+      },
+    ]
+  },
+  {
+    key: "wincent", name: "Wincent", grade: "C", category: "crypto",
+    note: "Crypto HFT firm of 150+ people, mostly engineers, traders and quants, self-reporting roughly 1% of global crypto trading volume. Verified live 2026-08-20: firm-hosted posting on wincent.com with an embedded application form — not an ATS redirect, not an aggregator.",
+    policy: "Candidates may not apply more than 3 times in any 60 days for any job", one_only: false,
+    cooldown: "90 days before re-applying to the same role without an offer",
+    roles: [
+      {
+        id: "wincent-qr", role_type: "QR", status: "open",
+        title: "Quantitative Research Internship - Quant Research/Trading - Starting Summer 2027",
+        locations: ["Bratislava, Slovakia"],
+        apply_url: "https://www.wincent.com/careers/quantitative-research-internship-quant-research-trading-starting-summer-2027/",
+        eligibility_note: "Basic coding skills in Python or similar languages, with a willingness to learn and adapt",
+        deadline_note: "No deadline stated. Verified live with an active application form on 2026-08-20.",
+        comp: "EUR 5,000 per month", comp_source: "posted", comp_rank: null,
+        tags: ["stats", "microstructure"],
+        undergrad_explicit: false,
+        notes: "VERIFIED 2026-08-20 across two independent fetches. ELIGIBILITY GAP: the posting states NO degree-level, graduation-year, or enrolment requirement at all — it neither includes nor excludes undergraduates, so undergrad_explicit is false rather than true. That is an absence of a restriction, not a documented permission."
+      },
+    ]
+  },
+  {
+    key: "zipline", name: "Zipline", grade: "C", category: "tech",
+    note: "Autonomous drone-delivery company in South San Francisco with a genuinely deep quantitative bench — a Systems Modeling team doing physics-based simulation and design optimisation, and a Droid Perception team training camera-only 3D/semantic ML models.",
+    roles: [
+      {
+        id: "zipline-perception", role_type: "QR", status: "open",
+        title: "Perception Intern (Summer 2027)",
+        locations: ["South San Francisco, CA"],
+        apply_url: "https://www.zipline.com/open-roles?gh_jid=7909570003",
+        eligibility_note: "You must have completed the second year of your undergraduate studies. Master's and PhD students are also eligible",
+        comp: "$50/hour", comp_source: "posted", comp_rank: null,
+        tags: ["ml", "numerics"],
+        undergrad_explicit: true,
+        class_2028: true,
+        notes: "Confirmed verbatim against the Greenhouse record. The clearest undergraduate eligibility sentence in this segment. Work is ML model experimentation, evaluation and integration on onboard/offboard camera-only perception, training on real, simulated and internet-scale data; asks for 3D computer vision, multi-view depth estimation, semantic segmentation, Gaussian splatting, PyTorch/JAX. In person in South San Francisco, May/June - August/September 2027; relocation and housing stipend may apply."
+      },
+    ]
+  },
+  /* ── end expansion sweep ─────────────────────────────────────── */
 ];

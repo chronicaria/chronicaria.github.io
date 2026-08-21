@@ -146,6 +146,23 @@
     if (raw) JSON.parse(raw).forEach(function (id) { applied.add(id); });
   } catch (e) { /* private mode, ignore */ }
 
+  /* Seed from the application log of 20 August 2026 — 58 applications across 35 firms.
+     Firm-level, because the log records firms and counts, not which requisition went in;
+     a firm marked applied_firm grays all of its rows. Runs exactly once, then the tick
+     boxes are authoritative, so unticking a row here is not undone on the next load. */
+  var SEED_KEY = "quant-internships-seeded-2026-08-20";
+  function seedApplied() {
+    try {
+      if (localStorage.getItem(SEED_KEY)) return;
+    } catch (e) { return; }        // private mode: leave the set alone
+    FIRMS.forEach(function (firm) {
+      if (!firm.applied_firm) return;
+      (firm.roles || []).forEach(function (role) { applied.add(role.id); });
+    });
+    try { localStorage.setItem(SEED_KEY, "1"); } catch (e) { /* ignore */ }
+    persistApplied();
+  }
+
   function persistApplied() {
     // Array.from, not slice.call — a Set has no length, so slice yields [].
     var out = [];
@@ -153,6 +170,8 @@
     try { localStorage.setItem(APPLIED_KEY, JSON.stringify(out)); }
     catch (e) { /* private mode, ignore */ }
   }
+
+  seedApplied();
 
   /* ── state ─────────────────────────────────────────────────── */
   var andrew = true;
@@ -210,13 +229,23 @@
      assets and boutiques are 11 roles between them and share a chip. The
      underlying `category` field is untouched — the drawer still prints the
      precise one, and search still matches it. */
+  // US postings are written "City, ST"; non-US ones are not. That is the whole test.
+  // ", UK" also matches a bare two-letter pattern, so the state has to be a real one.
+  var US_STATE = /,\s*(A[LKZR]|C[AOT]|D[EC]|FL|GA|HI|I[DLNA]|K[SY]|LA|M[EDAINSOT]|N[EVHJMYCD]|OH|OK|OR|P[AR]|RI|S[CD]|T[NX]|UT|V[TA]|W[AVIY])\b/;
+  var US_WORDS = /united states|remote \(us|\busa\b/i;
+  function isUS(role) {
+    return role.locations.some(function (l) { return US_STATE.test(l) || US_WORDS.test(l); });
+  }
   function locBucket(role) {
     if (isNYC(role)) return "NYC";
     if (role.locations.some(function (l) { return /chicago/i.test(l); })) return "Chicago";
+    if (!isUS(role)) return "International";
     return "Elsewhere";
   }
 
-  var CAT_GROUP = { mm: "mm", multistrat: "multistrat", am: "am", bank: "bank" };
+  var CAT_GROUP = { mm: "mm", multistrat: "multistrat", am: "am", bank: "bank",
+                    tech: "adjacent", insurance: "adjacent", adjacent: "adjacent",
+                    exchange: "adjacent" };
   function catBucket(firm) { return CAT_GROUP[firm.category] || "other"; }
 
   /* ── filtering ─────────────────────────────────────────────── */

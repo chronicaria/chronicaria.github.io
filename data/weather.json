@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-21T01:00:00Z",
-  "updated": "2026-08-21T02:08:52Z",
+  "valid_time_utc": "2026-08-21T03:00:00Z",
+  "updated": "2026-08-21T04:10:43Z",
   "hottest": [
-    {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 103.3
-    },
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 102.6
+      "temp_f": 97.1
+    },
+    {
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 97.0
     },
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 102.0
+      "temp_f": 96.3
     }
   ],
   "coldest": [
     {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 46.4
+      "temp_f": 46.5
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 48.8
+      "temp_f": 47.2
     },
     {
       "name": "Yakutat",
       "state": "AK",
-      "temp_f": 49.4
+      "temp_f": 49.5
     }
   ],
   "national": {
-    "min_f": 46.4,
-    "max_f": 103.3,
-    "mean_f": 79.1
+    "min_f": 46.5,
+    "max_f": 97.1,
+    "mean_f": 74.3
   }
 }

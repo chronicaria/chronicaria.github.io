@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-21T18:00:00Z",
-  "updated": "2026-08-21T19:07:40Z",
+  "valid_time_utc": "2026-08-21T21:00:00Z",
+  "updated": "2026-08-21T21:51:03Z",
   "hottest": [
     {
-      "name": "Greer",
-      "state": "OK",
-      "temp_f": 105.5
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 110.0
+    },
+    {
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 108.2
     },
     {
       "name": "Jackson",
       "state": "OK",
-      "temp_f": 105.1
-    },
-    {
-      "name": "Beckham",
-      "state": "OK",
-      "temp_f": 105.0
+      "temp_f": 108.0
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 44.0
+      "temp_f": 45.9
     },
     {
-      "name": "Matanuska-Susitna",
+      "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 46.6
+      "temp_f": 48.6
     },
     {
-      "name": "Skagway",
+      "name": "Yakutat",
       "state": "AK",
-      "temp_f": 46.9
+      "temp_f": 48.7
     }
   ],
   "national": {
-    "min_f": 44.0,
-    "max_f": 105.5,
-    "mean_f": 83.8
+    "min_f": 45.9,
+    "max_f": 110.0,
+    "mean_f": 85.6
   }
 }

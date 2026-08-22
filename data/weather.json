@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-22T09:00:00Z",
-  "updated": "2026-08-22T09:52:22Z",
+  "valid_time_utc": "2026-08-22T12:00:00Z",
+  "updated": "2026-08-22T13:10:30Z",
   "hottest": [
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 92.3
+      "temp_f": 88.5
     },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 92.0
+      "temp_f": 87.8
     },
     {
-      "name": "Maricopa",
+      "name": "La Paz",
       "state": "AZ",
-      "temp_f": 91.2
+      "temp_f": 87.6
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 39.1
+      "temp_f": 38.0
     },
     {
-      "name": "Aroostook",
-      "state": "ME",
-      "temp_f": 44.3
-    },
-    {
-      "name": "Yakutat",
+      "name": "North Slope",
       "state": "AK",
-      "temp_f": 44.3
+      "temp_f": 43.4
+    },
+    {
+      "name": "Matanuska-Susitna",
+      "state": "AK",
+      "temp_f": 43.4
     }
   ],
   "national": {
-    "min_f": 39.1,
-    "max_f": 92.3,
-    "mean_f": 67.8
+    "min_f": 38.0,
+    "max_f": 88.5,
+    "mean_f": 67.0
   }
 }

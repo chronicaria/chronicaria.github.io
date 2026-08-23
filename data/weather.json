@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-23T15:00:00Z",
-  "updated": "2026-08-23T15:49:06Z",
+  "valid_time_utc": "2026-08-23T18:00:00Z",
+  "updated": "2026-08-23T18:58:08Z",
   "hottest": [
     {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 94.8
+      "name": "Tarrant",
+      "state": "TX",
+      "temp_f": 104.7
     },
     {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 94.4
+      "name": "Hood",
+      "state": "TX",
+      "temp_f": 104.4
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 94.4
+      "name": "Somervell",
+      "state": "TX",
+      "temp_f": 104.1
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 34.8
-    },
-    {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 34.9
+      "temp_f": 38.1
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 36.1
+      "temp_f": 40.7
+    },
+    {
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 41.6
     }
   ],
   "national": {
-    "min_f": 34.8,
-    "max_f": 94.8,
-    "mean_f": 74.4
+    "min_f": 38.1,
+    "max_f": 104.7,
+    "mean_f": 81.2
   }
 }

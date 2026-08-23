@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-23T07:06:45Z",
+ "updated": "2026-08-23T13:06:32Z",
  "errors": [],
  "teams": [
   {
@@ -204,6 +204,87 @@
    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
    "color": "00539b",
    "form": [
+    {
+     "date": "2025-09-27T16:00Z",
+     "opp": "Syracuse",
+     "oppAbbr": "SYR",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754545",
+     "res": "W",
+     "score": "38-3"
+    },
+    {
+     "date": "2025-10-05T02:30Z",
+     "opp": "California",
+     "oppAbbr": "CAL",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754551",
+     "res": "W",
+     "score": "45-21"
+    },
+    {
+     "date": "2025-10-18T16:00Z",
+     "opp": "Georgia Tech",
+     "oppAbbr": "GT",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754566",
+     "res": "L",
+     "score": "18-27"
+    },
+    {
+     "date": "2025-11-01T16:00Z",
+     "opp": "Clemson",
+     "oppAbbr": "CLEM",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754577",
+     "res": "W",
+     "score": "46-45"
+    },
+    {
+     "date": "2025-11-08T20:30Z",
+     "opp": "UConn",
+     "oppAbbr": "CONN",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754590",
+     "res": "L",
+     "score": "34-37"
+    },
+    {
+     "date": "2025-11-15T20:35Z",
+     "opp": "Virginia",
+     "oppAbbr": "UVA",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754593",
+     "res": "L",
+     "score": "17-34"
+    },
+    {
+     "date": "2025-11-22T20:30Z",
+     "opp": "North Carolina",
+     "oppAbbr": "UNC",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754600",
+     "res": "W",
+     "score": "32-25"
+    },
+    {
+     "date": "2025-11-29T20:30Z",
+     "opp": "Wake Forest",
+     "oppAbbr": "WAKE",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401754610",
+     "res": "W",
+     "score": "49-32"
+    },
+    {
+     "date": "2025-12-07T01:00Z",
+     "opp": "Virginia",
+     "oppAbbr": "UVA",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401777328",
+     "res": "W",
+     "score": "27-20"
+    },
     {
      "date": "2025-12-31T19:00Z",
      "opp": "Arizona St",

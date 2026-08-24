@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-24T12:00:00Z",
-  "updated": "2026-08-24T13:31:44Z",
+  "valid_time_utc": "2026-08-24T15:00:00Z",
+  "updated": "2026-08-24T16:05:43Z",
   "hottest": [
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 88.7
+      "name": "Jackson",
+      "state": "OK",
+      "temp_f": 96.1
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 86.0
+      "name": "Tillman",
+      "state": "OK",
+      "temp_f": 95.9
     },
     {
-      "name": "Dallas",
-      "state": "TX",
-      "temp_f": 84.8
+      "name": "Cotton",
+      "state": "OK",
+      "temp_f": 95.5
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 38.9
+      "temp_f": 37.2
     },
     {
-      "name": "Denali",
+      "name": "Matanuska-Susitna",
       "state": "AK",
-      "temp_f": 39.6
+      "temp_f": 41.0
     },
     {
-      "name": "Price",
-      "state": "WI",
-      "temp_f": 39.8
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 41.4
     }
   ],
   "national": {
-    "min_f": 38.9,
-    "max_f": 88.7,
-    "mean_f": 64.1
+    "min_f": 37.2,
+    "max_f": 96.1,
+    "mean_f": 74.3
   }
 }

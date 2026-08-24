@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-24T09:00:00Z",
-  "updated": "2026-08-24T10:11:45Z",
+  "valid_time_utc": "2026-08-24T12:00:00Z",
+  "updated": "2026-08-24T13:31:44Z",
   "hottest": [
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 90.5
+      "temp_f": 88.7
     },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 88.4
+      "temp_f": 86.0
     },
     {
-      "name": "Stonewall",
+      "name": "Dallas",
       "state": "TX",
-      "temp_f": 88.3
+      "temp_f": 84.8
     }
   ],
   "coldest": [
     {
-      "name": "Vilas",
-      "state": "WI",
-      "temp_f": 39.7
-    },
-    {
-      "name": "Iron",
-      "state": "MI",
-      "temp_f": 40.0
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 38.9
     },
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 40.4
+      "temp_f": 39.6
+    },
+    {
+      "name": "Price",
+      "state": "WI",
+      "temp_f": 39.8
     }
   ],
   "national": {
-    "min_f": 39.7,
-    "max_f": 90.5,
-    "mean_f": 64.9
+    "min_f": 38.9,
+    "max_f": 88.7,
+    "mean_f": 64.1
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-24T18:00:00Z",
-  "updated": "2026-08-24T19:10:49Z",
+  "valid_time_utc": "2026-08-24T21:00:00Z",
+  "updated": "2026-08-24T21:55:15Z",
   "hottest": [
     {
-      "name": "Love",
+      "name": "Kiowa",
       "state": "OK",
-      "temp_f": 106.9
+      "temp_f": 111.0
     },
     {
-      "name": "Cotton",
-      "state": "OK",
-      "temp_f": 106.6
+      "name": "Jack",
+      "state": "TX",
+      "temp_f": 110.3
     },
     {
-      "name": "Jefferson",
+      "name": "Caddo",
       "state": "OK",
-      "temp_f": 106.4
+      "temp_f": 110.2
     }
   ],
   "coldest": [
     {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 44.7
+      "temp_f": 46.4
     },
     {
-      "name": "Copper River",
+      "name": "Nome",
       "state": "AK",
-      "temp_f": 44.9
+      "temp_f": 47.4
     },
     {
-      "name": "North Slope",
+      "name": "Juneau",
       "state": "AK",
-      "temp_f": 45.0
+      "temp_f": 49.9
     }
   ],
   "national": {
-    "min_f": 44.7,
-    "max_f": 106.9,
-    "mean_f": 81.0
+    "min_f": 46.4,
+    "max_f": 111.0,
+    "mean_f": 83.2
   }
 }

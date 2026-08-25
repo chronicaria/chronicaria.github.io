@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-25T09:00:00Z",
-  "updated": "2026-08-25T10:02:00Z",
+  "valid_time_utc": "2026-08-25T12:00:00Z",
+  "updated": "2026-08-25T13:29:49Z",
   "hottest": [
-    {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 91.1
-    },
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 90.8
+      "temp_f": 88.8
+    },
+    {
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 88.0
     },
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 88.7
+      "temp_f": 85.6
     }
   ],
   "coldest": [
     {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 41.4
+      "temp_f": 41.3
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 43.3
+      "temp_f": 41.5
     },
     {
       "name": "Nome",
       "state": "AK",
-      "temp_f": 43.5
+      "temp_f": 42.5
     }
   ],
   "national": {
-    "min_f": 41.4,
-    "max_f": 91.1,
-    "mean_f": 65.1
+    "min_f": 41.3,
+    "max_f": 88.8,
+    "mean_f": 64.5
   }
 }

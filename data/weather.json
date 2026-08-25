@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-25T01:00:00Z",
-  "updated": "2026-08-25T02:02:49Z",
+  "valid_time_utc": "2026-08-25T03:00:00Z",
+  "updated": "2026-08-25T04:09:48Z",
   "hottest": [
-    {
-      "name": "Cottle",
-      "state": "TX",
-      "temp_f": 105.4
-    },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 105.3
+      "temp_f": 100.6
     },
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 105.0
+      "temp_f": 100.4
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 98.7
     }
   ],
   "coldest": [
     {
       "name": "Nome",
       "state": "AK",
-      "temp_f": 47.5
-    },
-    {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 50.3
+      "temp_f": 46.9
     },
     {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 50.9
+      "temp_f": 47.8
+    },
+    {
+      "name": "San Juan",
+      "state": "CO",
+      "temp_f": 48.3
     }
   ],
   "national": {
-    "min_f": 47.5,
-    "max_f": 105.4,
-    "mean_f": 75.6
+    "min_f": 46.9,
+    "max_f": 100.6,
+    "mean_f": 71.0
   }
 }

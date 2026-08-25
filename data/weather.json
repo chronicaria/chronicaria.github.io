@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-25T12:00:00Z",
-  "updated": "2026-08-25T13:29:49Z",
+  "valid_time_utc": "2026-08-25T15:00:00Z",
+  "updated": "2026-08-25T16:09:39Z",
   "hottest": [
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 88.8
+      "name": "Wilbarger",
+      "state": "TX",
+      "temp_f": 95.1
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 88.0
+      "name": "Cotton",
+      "state": "OK",
+      "temp_f": 95.0
     },
     {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 85.6
+      "name": "Cottle",
+      "state": "TX",
+      "temp_f": 94.9
     }
   ],
   "coldest": [
     {
-      "name": "Skagway",
-      "state": "AK",
-      "temp_f": 41.3
-    },
-    {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 41.5
+      "temp_f": 40.7
     },
     {
-      "name": "Nome",
+      "name": "Copper River",
       "state": "AK",
-      "temp_f": 42.5
+      "temp_f": 42.0
+    },
+    {
+      "name": "North Slope",
+      "state": "AK",
+      "temp_f": 42.1
     }
   ],
   "national": {
-    "min_f": 41.3,
-    "max_f": 88.8,
-    "mean_f": 64.5
+    "min_f": 40.7,
+    "max_f": 95.1,
+    "mean_f": 74.6
   }
 }

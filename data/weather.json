@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-24T21:00:00Z",
-  "updated": "2026-08-24T21:55:15Z",
+  "valid_time_utc": "2026-08-25T01:00:00Z",
+  "updated": "2026-08-25T02:02:49Z",
   "hottest": [
     {
-      "name": "Kiowa",
-      "state": "OK",
-      "temp_f": 111.0
-    },
-    {
-      "name": "Jack",
+      "name": "Cottle",
       "state": "TX",
-      "temp_f": 110.3
+      "temp_f": 105.4
     },
     {
-      "name": "Caddo",
-      "state": "OK",
-      "temp_f": 110.2
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 105.3
+    },
+    {
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 105.0
     }
   ],
   "coldest": [
     {
-      "name": "Skagway",
-      "state": "AK",
-      "temp_f": 46.4
-    },
-    {
       "name": "Nome",
       "state": "AK",
-      "temp_f": 47.4
+      "temp_f": 47.5
     },
     {
-      "name": "Juneau",
+      "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 49.9
+      "temp_f": 50.3
+    },
+    {
+      "name": "Skagway",
+      "state": "AK",
+      "temp_f": 50.9
     }
   ],
   "national": {
-    "min_f": 46.4,
-    "max_f": 111.0,
-    "mean_f": 83.2
+    "min_f": 47.5,
+    "max_f": 105.4,
+    "mean_f": 75.6
   }
 }

@@ -1253,7 +1253,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "virtu", name: "Virtu Financial", grade: "A", category: "mm",
+    key: "virtu", name: "Virtu Financial", grade: "A", category: "mm", applied_firm: true,
     note: "The rule is not in the job description — it is a required question on the Greenhouse form. Reading the posting alone would tell you Virtu is permissive. It is not.",
     policy: "One application only", one_only: true,
     oa: "Programming gate before the interview loop.",
@@ -1723,7 +1723,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "bridgewater", name: "Bridgewater", grade: "B", category: "multistrat",
+    key: "bridgewater", name: "Bridgewater", grade: "B", category: "multistrat", applied_firm: true,
     note: "Bridgewater merged its two former application routes into one.",
     policy: "One consolidated application", one_only: false,
     intel: {
@@ -2996,7 +2996,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "goldman", name: "Goldman Sachs", grade: "B", category: "bank",
+    key: "goldman", name: "Goldman Sachs", grade: "B", category: "bank", applied_firm: true,
     note: "Bank application limits are enforced after login and are not publicly readable. Treat any bank as one-programme-per-cycle until the portal says otherwise.",
     firm_type: "bank strats desk — genuine quant seat inside a larger institution, not a standalone quant firm",
     headcount: "not publicly broken out; Strats is widely described as the largest strats organisation on…",
@@ -3993,7 +3993,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "quantbot-technologies", name: "Quantbot Technologies", grade: "A", category: "multistrat",
+    key: "quantbot-technologies", name: "Quantbot Technologies", grade: "A", category: "multistrat", applied_firm: true,
     note: "Systematic quant investment firm (Schonfeld-affiliated lineage), NY HQ with London and Hong Kong desks. Best find in this segment: multiple genuinely undergrad-open Summer 2027 reqs.",
     roles: [
       {
@@ -4501,7 +4501,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "da-vinci", name: "Da Vinci Trading (Da Vinci Derivatives)", grade: "B", category: "mm",
+    key: "da-vinci", name: "Da Vinci Trading (Da Vinci Derivatives)", grade: "B", category: "mm", applied_firm: true,
     note: "Amsterdam options market maker. The live Quant Trading Intern req names the class of 2028 explicitly — the single cleanest eligibility match in this whole segment for a May-2028 graduate. They cover flights and accommodation in Amsterdam, so the geography is not a cost barrier.",
     oa: "Online assessment (numerical quiz), then online introductory call, online technical interview, online final interview",
     roles: [
@@ -5845,7 +5845,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "worldquant", name: "WorldQuant", grade: "B", category: "multistrat",
+    key: "worldquant", name: "WorldQuant", grade: "B", category: "multistrat", applied_firm: true,
     note: "Large global quantitative manager (Old Greenwich HQ, ~26 offices), not on the board. Its US intern requisitions are not currently live; the only undergraduate-eligible, genuinely quantitative, correctly-timed intern req on the board is the Beijing/Shanghai QR role,",
     roles: [
       {
@@ -5864,7 +5864,7 @@ var FIRMS = [
     ]
   },
   {
-    key: "xantium", name: "Xantium", grade: "B", category: "multistrat",
+    key: "xantium", name: "Xantium", grade: "B", category: "multistrat", applied_firm: true,
     note: "Tudor-Investment-backed multi-strategy quant firm, launched recently and scaling fast; derivatives and volatility across equity/index, commodities and rates. Offices London, NYC, Abu Dhabi, Salt Lake City. Not the same firm as XTX Markets despite the similar name.",
     roles: [
       {

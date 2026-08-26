@@ -146,11 +146,23 @@
     if (raw) JSON.parse(raw).forEach(function (id) { applied.add(id); });
   } catch (e) { /* private mode, ignore */ }
 
-  /* Seed from the application log of 20 August 2026 — 58 applications across 35 firms.
-     Firm-level, because the log records firms and counts, not which requisition went in;
-     a firm marked applied_firm grays all of its rows. Runs exactly once, then the tick
-     boxes are authoritative, so unticking a row here is not undone on the next load. */
-  var SEED_KEY = "quant-internships-seeded-2026-08-20";
+  /* Seed from the application log, re-derived 26 August 2026 straight from Gmail
+     confirmation emails: 42 firms on this board, plus Detroit Lions, which is not.
+     Firm-level, because the log records firms rather than which requisition went in;
+     a firm marked applied_firm grays all of its rows. Runs exactly once per SEED_KEY,
+     then the tick boxes are authoritative.
+
+     The key is dated, and BUMPING IT RE-RUNS THE SEED. That is deliberate — the
+     20 August seed marked 35 firms and missed seven that had confirmation emails
+     sitting in the inbox (Bridgewater, Da Vinci, Goldman, Quantbot, Virtu, WorldQuant,
+     Xantium), so anyone who had already loaded the page would never have seen them
+     grey. The re-run only ADDS; a row ticked by hand stays ticked. The one cost is
+     that a row deliberately UNticked gets re-ticked once. Bump the date again only
+     when the underlying flags actually change.
+
+     Group One Trading is deliberately NOT flagged: the application was started and
+     abandoned, and their own reminder email says so. */
+  var SEED_KEY = "quant-internships-seeded-2026-08-26";
   function seedApplied() {
     try {
       if (localStorage.getItem(SEED_KEY)) return;

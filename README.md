@@ -1,8 +1,8 @@
 # chronicaria.github.io
 
 Andrew Park's personal site, and the eight projects that used to live in their own
-repositories. Plain retro HTML at the top level — default browser styling, no build step —
-served from the root of `main` by GitHub Pages.
+repositories. Plain HTML at the top level — one small shared stylesheet block, no build
+step — served from the root of `main` by GitHub Pages.
 
 ## Structure
 
@@ -12,9 +12,10 @@ daily/                The Gothic Times — the live morning paper (front page + 
                       the morgue/archive page is gone, each edition overwrites the last)
 music.html            Classical repertoire
 literature.html       Reading log
-notes/                Course notes — the only top-level pages that load JS (KaTeX)
+notes/                Course notes (MATH 541, MATH 581) — LaTeX rendered with KaTeX,
+                      .tex sources committed alongside
 sports.html           Redirect stub → /daily/sports.html (trackers live at the sports desk)
-weather.html          Redirect stub → /nyc-weather/ (county map folded into the dashboard)
+weather.html          Simple weather page — county map + extremes from data/weather.json
 404.html              Themed not-found
 
 fantasy/              The Fantasy Encyclopedias — sport picker over two corpora,
@@ -39,9 +40,11 @@ tools/county-temp-map RTMA → county choropleth generator (its work/ cache is g
 
 ## Design
 
-The top level is deliberately plain: default browser styling, one line of `<style>` to cap
-the line length, and no JavaScript — except KaTeX on the `notes/` pages, which need it for
-the math. `sw.js` is a self-destroying service worker: earlier versions of the site
+The top level is deliberately simple: one shared `<style>` block per page (Archivo from
+Google Fonts, black-on-white, bordered tables, a 60em column) and no JavaScript — except
+KaTeX on the `notes/` pages, which need it for the math, and a small fetch on
+`weather.html` that fills the current numbers from `data/weather.json`. `sw.js` is a
+self-destroying service worker: earlier versions of the site
 installed an offline cache, and returning visitors would keep seeing it otherwise. On
 activate it deletes every cache, unregisters itself, and reloads its clients. The
 sub-projects keep their own designs.

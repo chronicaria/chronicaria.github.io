@@ -5,17 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Andrew Park</title>
-<style>body{max-width:60em;margin:2em auto;padding:0 1em;line-height:1.5;font-family:system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}th{text-align:left}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+body{max-width:60em;margin:2.5em auto;padding:0 1.25em;line-height:1.55;font-family:Archivo,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+nav{font-weight:600;text-transform:uppercase;font-size:.82em;letter-spacing:.09em;border-bottom:2px solid #111;padding-bottom:.7em;margin-bottom:1.5em}
+nav a{text-decoration:none;color:#111}
+nav a:hover{text-decoration:underline}
+h1{font-size:2.5em;font-weight:900;letter-spacing:-.02em;line-height:1.1;margin:.5em 0 .35em}
+h2{font-size:1.45em;font-weight:900;letter-spacing:-.01em;margin:1.7em 0 .5em;border-bottom:2px solid #111;padding-bottom:.12em}
+h3{font-size:1.1em;font-weight:700;margin:1.4em 0 .4em}
+h4{font-size:1em;font-weight:700;font-style:italic;margin:1.2em 0 .3em}
+table{border-collapse:collapse;margin:1.1em 0}
+th,td{border:1px solid #ddd;padding:.45em .75em;text-align:left;vertical-align:top}
+th{background:#f4f4f4;font-size:.8em;text-transform:uppercase;letter-spacing:.05em}
+tr:nth-child(even) td{background:#fafafa}
+blockquote{border:1.5px solid #111;padding:.9em 1.1em;margin:1.4em 0;background:#fafafa}
+dt{font-weight:700}
+dd{margin:0 0 .6em 1.4em}
+hr{border:none;border-top:1px solid #ddd;margin:2.2em 0 1em}
+footer{font-size:.85em;color:#666;font-style:italic}
+</style>
 </head>
 <body>
-<p><a href="/">home</a> | <a href="/notes/">notes</a> | <a href="/music.html">music</a> | <a href="/literature.html">literature</a> | <a href="/daily/">daily</a></p>
-<hr>
+<nav><a href="/">home</a> · <a href="/notes/">notes</a> · <a href="/music.html">music</a> · <a href="/literature.html">literature</a> · <a href="/weather.html">weather</a> · <a href="/daily/">daily</a></nav>
 <h1>Andrew Park</h1>
 <p>B.S. Mathematics and B.S. Computer Science at Duke University, Class of 2028, GPA 3.96/4. Interested in quantitative research: probability, stochastic processes, forecasting, markets. Based in New York, NY and Durham, NC.</p>
 <p><a href="mailto:andrewpark.us@duke.edu">andrewpark.us@duke.edu</a> | <a href="https://github.com/chronicaria">github</a> | <a href="https://www.linkedin.com/in/andrewparkus/">linkedin</a> | <a href="/assets/andrew-park-resume.pdf">resume (pdf)</a></p>
 
 <h2>Education</h2>
-<table border="1" cellpadding="4">
+<table>
 <tr><th>School</th><th>Credential</th><th>Years</th><th>Honors</th></tr>
 <tr><td>Duke University, Trinity College of Arts &amp; Sciences (Durham, NC)</td><td>B.S. Mathematics, B.S. Computer Science — GPA 3.96/4</td><td>expected May 2028</td><td>Julia Dale Prize for first-year mathematical excellence; Dean's List with Distinction</td></tr>
 <tr><td>Stuyvesant High School (New York, NY)</td><td></td><td>2024</td><td>ACT 36; National Merit Scholar</td></tr>
@@ -50,7 +70,7 @@
 </ul>
 
 <h2>Coursework</h2>
-<table border="1" cellpadding="4">
+<table>
 <tr><th>Semester</th><th>Course</th><th>Code</th><th>Notes</th></tr>
 <tr><td rowspan="4">Fall 2024</td><td><a href="https://cs.duke.edu/courses/data-structures-and-algorithms-0">Data Structures &amp; Algorithms</a></td><td>COMPSCI 201</td><td></td></tr>
 <tr><td><a href="https://math.duke.edu/courses/linear-algebra">Linear Algebra</a></td><td>MATH 221</td><td></td></tr>
@@ -62,7 +82,7 @@
 <tr><td><a href="https://cs.duke.edu/courses/computer-architecture-1">Computer Architecture</a></td><td>COMPSCI 250D</td><td></td></tr>
 <tr><td><a href="https://cmrs.trinity.duke.edu/courses/dantes-divine-comedy-hell-purgatory-and-paradise">Dante's Divine Comedy</a></td><td>MEDREN 341</td><td></td></tr>
 <tr><td rowspan="4">Fall 2025</td><td><a href="https://math.duke.edu/courses/introduction-algebraic-structures-i">Algebraic Structures I</a></td><td>MATH 501</td><td>grad</td></tr>
-<tr><td><a href="https://math.duke.edu/courses/mathematical-finance">Mathematical Finance</a></td><td>MATH 581</td><td>grad</td></tr>
+<tr><td><a href="https://math.duke.edu/courses/mathematical-finance">Mathematical Finance</a></td><td>MATH 581</td><td>grad — <a href="/notes/math581.html">notes</a></td></tr>
 <tr><td><a href="https://cs.duke.edu/courses/human-flourishing-digital-age">Human Flourishing in the Digital Age</a></td><td>COMPSCI 247S</td><td></td></tr>
 <tr><td><a href="https://scholars.duke.edu/course/ENVIRON210D">Conserving the Variety of Life</a></td><td>ENVIRON 210D</td><td></td></tr>
 <tr><td rowspan="5">Spring 2026</td><td><a href="https://math.duke.edu/courses/real-analysis-i">Real Analysis I</a></td><td>MATH 531</td><td>grad</td></tr>
@@ -70,15 +90,14 @@
 <tr><td><a href="https://cs.duke.edu/courses/graphics-software-architecture">Graphics Software Architecture</a></td><td>COMPSCI 345</td><td></td></tr>
 <tr><td><a href="https://english.duke.edu/spring-2026-courses">Romanticism Across the Arts</a></td><td>ENGLISH 490S</td><td></td></tr>
 <tr><td><a href="https://music.duke.edu/ensembles/chamber-music">Chamber Music</a></td><td>MUSIC 211</td><td></td></tr>
-<tr><td rowspan="5">Fall 2026 (in progress)</td><td><a href="https://math.duke.edu/courses/applied-stochastic-processes">Applied Stochastic Processes</a></td><td>MATH 541</td><td>grad — <a href="/notes/math541.html">notes</a></td></tr>
-<tr><td><a href="https://cs.duke.edu/courses/discrete-mathematics-and-proofs">Discrete Mathematics &amp; Proofs</a></td><td>COMPSCI 232</td><td></td></tr>
-<tr><td><a href="https://undergraduate.bulletins.duke.edu/courses/0172924/tab-aoYks">Energy and Environment</a></td><td>ECS 231</td><td></td></tr>
-<tr><td><a href="https://polisci.duke.edu/courses/introduction-american-political-thought">Introduction to American Political Thought</a></td><td>POLSCI 265S</td><td></td></tr>
-<tr><td><a href="https://music.duke.edu/courses/classical-piano-0">Classical Piano</a></td><td>MUSIC 203-1</td><td></td></tr>
+<tr><td rowspan="4">Fall 2026 (in progress)</td><td><a href="https://math.duke.edu/courses/applied-stochastic-processes">Applied Stochastic Processes</a></td><td>MATH 541</td><td>grad — <a href="/notes/math541.html">notes</a></td></tr>
+<tr><td><a href="https://cs.duke.edu/courses/introduction-design-and-analysis-algorithms-0">Introduction to the Design and Analysis of Algorithms</a></td><td>COMPSCI 330</td><td></td></tr>
+<tr><td><a href="https://polisci.duke.edu/courses/games-and-politics">Games and Politics</a></td><td>POLSCI 332</td><td></td></tr>
+<tr><td><a href="https://cmrs.trinity.duke.edu/courses/problem-love-western-literature">The Problem of Love in Western Literature</a></td><td>MEDREN 304</td><td></td></tr>
 </table>
 
 <h2>Skills</h2>
-<table border="1" cellpadding="4">
+<table>
 <tr><th>Languages</th><td>Python, Julia, SQL, Java</td></tr>
 <tr><th>Tools</th><td>NumPy, pandas, SciPy, scikit-learn, XGBoost, Arrow/Parquet, Git, LaTeX</td></tr>
 <tr><th>Methods</th><td>probability, statistics, regression, stochastic processes, Monte Carlo, backtesting, portfolio optimization</td></tr>
@@ -89,7 +108,7 @@
 <p>Classical piano, and first violin in the New York Youth Symphony, including a Grammy-winning recording; more on the <a href="/music.html">music</a> page. Also nineteenth-century <a href="/literature.html">literature</a>.</p>
 
 <h2>Elsewhere on this site</h2>
-<table border="1" cellpadding="4">
+<table>
 <tr><th>Page</th><th>What it is</th></tr>
 <tr><td><a href="/notes/">notes</a></td><td>course notes, LaTeX rendered with KaTeX</td></tr>
 <tr><td><a href="/daily/">daily</a></td><td>a self-printing daily paper</td></tr>
@@ -97,10 +116,10 @@
 <tr><td><a href="/valorant/">valorant</a></td><td>Valorant MWPA, a win-probability-added model</td></tr>
 <tr><td><a href="/fantasy/">fantasy</a></td><td>fantasy encyclopedias</td></tr>
 <tr><td><a href="/quant-internships/">quant internships</a></td><td>quant internship tracker</td></tr>
-<tr><td><a href="/nyc-weather/">weather</a></td><td>county temperature map and weather dashboard</td></tr>
+<tr><td><a href="/weather.html">weather</a></td><td>the county temperature map, simply — full dashboard at <a href="/nyc-weather/">nyc-weather</a></td></tr>
 <tr><td><a href="/winter-trip/">winter trip</a></td><td>Italy, winter 2026–27</td></tr>
 </table>
 <hr>
-<p><i>last updated: August 26, 2026</i></p>
+<footer>last updated: August 26, 2026</footer>
 </body>
 </html>

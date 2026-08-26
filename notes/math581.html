@@ -1,0 +1,1967 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>MATH 581 — Mathematical Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+body{max-width:60em;margin:2.5em auto;padding:0 1.25em;line-height:1.55;font-family:Archivo,Helvetica,Arial,sans-serif;color:#111;background:#fff}
+nav{font-weight:600;text-transform:uppercase;font-size:.82em;letter-spacing:.09em;border-bottom:2px solid #111;padding-bottom:.7em;margin-bottom:1.5em}
+nav a{text-decoration:none;color:#111}
+nav a:hover{text-decoration:underline}
+h1{font-size:2.5em;font-weight:900;letter-spacing:-.02em;line-height:1.1;margin:.5em 0 .35em}
+h2{font-size:1.45em;font-weight:900;letter-spacing:-.01em;margin:1.7em 0 .5em;border-bottom:2px solid #111;padding-bottom:.12em}
+h3{font-size:1.1em;font-weight:700;margin:1.4em 0 .4em}
+h4{font-size:1em;font-weight:700;font-style:italic;margin:1.2em 0 .3em}
+table{border-collapse:collapse;margin:1.1em 0}
+th,td{border:1px solid #ddd;padding:.45em .75em;text-align:left;vertical-align:top}
+th{background:#f4f4f4;font-size:.8em;text-transform:uppercase;letter-spacing:.05em}
+tr:nth-child(even) td{background:#fafafa}
+blockquote{border:1.5px solid #111;padding:.9em 1.1em;margin:1.4em 0;background:#fafafa}
+dt{font-weight:700}
+dd{margin:0 0 .6em 1.4em}
+hr{border:none;border-top:1px solid #ddd;margin:2.2em 0 1em}
+footer{font-size:.85em;color:#666;font-style:italic}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+</head>
+<body>
+<nav><a href="/">home</a> · <a href="/notes/">notes</a> · <a href="/music.html">music</a> · <a href="/literature.html">literature</a> · <a href="/weather.html">weather</a> · <a href="/daily/">daily</a></nav>
+
+<h1>MATH 581: Mathematical Finance</h1>
+<p>Course notes · Andrew Park · Professor Xavier Mela · Duke University, Fall 2025 · <a href="/notes/math581.tex">LaTeX source</a></p>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#s2">2. The Time Value of Money</a>
+<ul>
+<li><a href="#s2-1">2.1 Interest and Compounding</a></li>
+<li><a href="#s2-2">2.2 Net Cash Flows</a></li>
+<li><a href="#s2-3">2.3 Annuities and Loans</a></li>
+<li><a href="#s2-4">2.4 Amortization</a></li>
+<li><a href="#s2-5">2.5 The Dividend Discount Model</a></li>
+<li><a href="#s2-6">2.6 Bonds</a></li>
+</ul>
+</li>
+<li><a href="#s3">3. Markowitz Portfolio Theory</a>
+<ul>
+<li><a href="#s3-1">3.1 2-Security Portfolio</a></li>
+<li><a href="#s3-2">3.2 N-Security Portfolio</a></li>
+<li><a href="#s3-3">3.3 Utility Functions</a></li>
+</ul>
+</li>
+<li><a href="#s4">4. Capital Market Theory</a>
+<ul>
+<li><a href="#s4-1">4.1 The Market Portfolio</a></li>
+<li><a href="#s4-2">4.2 The Capital Asset Pricing Model</a></li>
+</ul>
+</li>
+<li><a href="#s5">5. Binomial Trees and Security Pricing Modeling</a>
+<ul>
+<li><a href="#s5-1">5.1 Binomial Tree Model of Security Prices</a></li>
+<li><a href="#s5-2">5.2 The Cox-Ross-Rubinstein Binomial Tree</a></li>
+<li><a href="#s5-3">5.3 From CRR Tree to Continuous Time Model</a></li>
+</ul>
+</li>
+<li><a href="#s6">6. Stochastic Calculus and the GBM Model</a>
+<ul>
+<li><a href="#s6-1">6.1 Standard Brownian Motion</a></li>
+<li><a href="#s6-2">6.2 Geometric Brownian Motion</a></li>
+<li><a href="#s6-3">6.3 Ito's Lemma</a></li>
+</ul>
+</li>
+<li><a href="#s7">7. Call Options</a>
+<ul>
+<li><a href="#s7-1">7.1 Options</a></li>
+</ul>
+</li>
+<li><a href="#s8">8. The BSM Model and European Option Pricing</a>
+<ul>
+<li><a href="#s8-1">8.1 Binomial Approach to Pricing European Options</a></li>
+<li><a href="#s8-2">8.2 Binomial Approach (Part II)</a></li>
+<li><a href="#s8-3">8.3 From the Binomial Model to Black-Scholes-Merton (BSM)</a></li>
+<li><a href="#s8-4">8.4 Derivation of the BSM PDE</a></li>
+</ul>
+</li>
+</ul>
+
+<h2 id="s2">2. The Time Value of Money</h2>
+
+<h3 id="s2-1">2.1 Interest and Compounding</h3>
+<p><b>Simple Interest:</b> Only the principal is reinvested at the end of each year.</p>
+<ol type="i">
+<li>\(F_0\): amount lent/borrowed at time \(t_0\) (Present Value/Principal).</li>
+<li>\(F_\tau\): amount at time \(t_0 + \tau\), after time \(\tau\) (Future Value).</li>
+<li>\(r\): annual interest rate. Assume \(\tau\) is in years.</li>
+</ol>
+\[
+F_\tau = (1+\tau r)F_0
+\]
+<p>The <i>discount factor</i> is \(\frac{1}{1+\tau r}\).</p>
+<p><b>Banker's Rule:</b> Use exact time (the number of days from \(t_0\) to \(t_0 + \tau\)) and ordinary interest (\(1 \text{ year} = 360 \text{ days}\), \(1 \text{ month} = 30 \text{ days}\)).</p>
+<p><b>Compound Interest:</b> Divide each year into \(k\) equal time periods, and apply simple interest at the end of each period to the previous balance.</p>
+<ol type="i">
+<li>\(F_i = F(\frac{i}{k})\): future value at the end of the \(i^{th}\) period.</li>
+</ol>
+\[
+F_k(\tau) = (1+\frac{r}{k})^{\tau k} F_0, F_n = (1+\frac{r}{k})^nF_0
+\]
+
+<h4>2.1.1 Simple vs Compound Return Rate</h4>
+<p>The return rate over \(\tau\) years is:</p>
+<ol type="i">
+<li>Simple Interest: \(R = \frac{(1+\tau r)F_0 - F_0}{F_0} = \tau r\).</li>
+<li>Compound Interest: \(R = \frac{(1+\frac{r}{k})^{\tau k}F_0 - F_0}{F_0} = (1+\frac{r}{k})^{\tau k} - 1\).</li>
+</ol>
+<p><b>Example (APR vs APY):</b> A credit card company advertises a \(10.99\%\) APR (annual percentage rate). How much interest did you pay after \(1\) year given \(F_0 = \$2\,500\) (assuming no payment is made and no late fees incurred)?</p>
+<ol type="i">
+<li>In fact, they use daily compounding:
+\[
+\text{APY} = (1+\frac{.1099}{365})^{365} - 1 = 11.61\%, \text{Interest} = 11.61\% \cdot \$2\,500 \approx \$290.37
+\]
+</li>
+</ol>
+
+<h4>2.1.2 Fractional Compounding</h4>
+<p>If \(x\) is a nonnegative real number, the future value after \(x\) interest periods is:</p>
+\[
+F_x = (1+\frac{r}{k})^x F_0
+\]
+
+<h4>2.1.3 Continuous Compounding</h4>
+<p><b>Claim:</b> For a fixed time \(\tau\), the future value \(F_{\tau k}\) is an increasing function of \(k\).</p>
+<ol type="i">
+<li><i>Proof:</i> We want to show that if \(k_1 &lt; k_2\), then:
+\[
+\left(1 + \frac{r}{k_1}\right)^{k_1} &lt; \left(1 + \frac{r}{k_2}\right)^{k_2}
+\]
+</li>
+<li>We remove \(F_0\) and \(\tau\), since they're positive constants and don't affect the inequality direction. We simplify the problem to \(\tau = 1\).</li>
+<li>Recall the Binomial Theorem: \((a+b)^n = \sum_{i=0}^n \binom{n}{i} a^{n-i} b^i\).</li>
+<li>Expand the LHS (\(k_1\)):
+\[
+\begin{aligned}
+\left(1 + \frac{r}{k_1}\right)^{k_1} &amp;= 1 + k_1 \left(\frac{r}{k_1}\right) + \frac{k_1(k_1-1)}{2!} \left(\frac{r}{k_1}\right)^2 + \dots + \frac{k_1(k_1-1)\dots(k_1-(k_1-1))}{k_1!} \left(\frac{r}{k_1}\right)^{k_1} \\
+&amp;= 1 + r + \frac{1}{2!} \underbrace{\frac{k_1}{k_1}}_{1} \underbrace{\frac{k_1-1}{k_1}}_{(1-\frac{1}{k_1})} r^2 + \dots + \frac{1}{k_1!} \underbrace{1 \cdot \left(1-\frac{1}{k_1}\right) \dots \left(1-\frac{k_1-1}{k_1}\right)}_{\text{Product terms}} r^{k_1}
+\end{aligned}
+\]
+</li>
+<li>Compare to LHS (\(k_2\)):
+Since \(k_1 &lt; k_2\), it implies \(\frac{1}{k_1} > \frac{1}{k_2}\) and therefore \(\left(1 - \frac{1}{k_1}\right) &lt; \left(1 - \frac{1}{k_2}\right)\). This means every term in the expansion of \(k_1\) is <b>strictly smaller</b> than the corresponding term in the expansion of \(k_2\).</li>
+<li>The expansion of \((1 + \frac{r}{k_2})^{k_2}\) has two advantages:
+<ol type="a">
+<li>Each corresponding term is larger (as shown above).</li>
+<li>It has more terms (\(k_2 + 1\) terms vs \(k_1 + 1\) terms), and all terms are positive.</li>
+</ol>
+\[
+\left(1 + \frac{r}{k_1}\right)^{k_1} &lt; \underbrace{1 + r + \frac{1 \cdot (1-\frac{1}{k_2})}{2!}r^2 + \dots}_{\text{1st } k_1+1 \text{ terms of } k_2 \text{ expansion}} + \dots &lt; \left(1 + \frac{r}{k_2}\right)^{k_2}
+\]
+</li>
+</ol>
+<p><b>Claim:</b> The limit of \(F_{\tau k}\) as \(k \to \infty\) is called the future value under continuous compounding: \(F_{cts} = e^{\tau r}F_0\).</p>
+<ol type="i">
+<li><i>Proof:</i> Recall the definition of \(e\).
+\[
+\lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^x = e
+\]
+</li>
+<li>Let \(x = \frac{k}{r}\). As \(k \to \infty\), \(x \to \infty\).
+\[
+\text{Substitute } \frac{k}{r} \text{ for } x: \lim_{k \to \infty} \left(1 + \frac{r}{k}\right)^{k/r} = e
+\]
+</li>
+<li>The discrete future value formula is \(F_k(\tau) = \left(1 + \frac{r}{k}\right)^{\tau k} F_0\). We rearrange the exponent to isolate the term that converges to \(e\):
+\[
+F_k(\tau) = \left[ \left(1 + \frac{r}{k}\right)^{\frac{k}{r}} \right]^{r \tau} \cdot F_0
+\]
+</li>
+<li>Take the limit:
+\[
+\lim_{k \to \infty} F_k(\tau) = \left[ \underbrace{\lim_{k \to \infty} \left(1 + \frac{r}{k}\right)^{k/r}}_{\to e} \right]^{r \tau} \cdot F_0 = e^{r \tau} F_0
+\]
+</li>
+</ol>
+
+<h3 id="s2-2">2.2 Net Cash Flows</h3>
+
+<h4>2.2.1 Present Value and NPV of a Sequence of Net Cash Flows</h4>
+<p>Suppose that you are considering a new investment opportunity requiring an initial capital of \(C_0\) to generate future net cash flows:</p>
+\[
+C_1, C_2, \dots, C_n
+\]
+<p>at future times \(t_1, t_2, \dots, t_n\).</p>
+<p>The <b>present value</b> of this sequence of cash flows under \(k\)-periodic compounding and discount rate of \(r\) is:</p>
+\[
+PV(r) = \frac{C_1}{(1+\frac{r}{k})^{(t_1 - t_0)k}} + \frac{C_2}{(1+\frac{r}{k})^{(t_2 - t_0)k}} + \dots + \frac{C_n}{(1+\frac{r}{k})^{(t_n - t_0)k}}
+\]
+<p>The <b>net present value</b> of the net cash flows is:</p>
+\[
+NPV(r) = PV(r) - C_0
+\]
+<p>The \(r_{RRR}\) is the mean compounding (annual) growth rate from investing in an alternative opportunity in the marketplace with business profile and risk similar to the new investment opportunity.</p>
+
+<h4>2.2.2 Investing in a Startup</h4>
+<p><b>Example:</b> Decide whether to invest \(\$250\,000\) in a startup given that:</p>
+<ol type="i">
+<li>Projected earnings are \(\$175\,000\) in \(12\) months and \(\$225 \,000\) in \(18\) months.</li>
+<li>Projected expenditures are \(\$20\,000\) in \(12\) months and \(\$10\,000\) in \(18\) months.</li>
+<li>The mean compounding growth rate from investing in an appropriate alternative opportunity is estimated to be \(15\%\) (\(r_{RRR}\)). Assume monthly compounding.</li>
+</ol>
+\[
+\begin{gathered}
+C_1 = \$175\,000 - \$20\,000 = \$155\,000, C_2= \$225\,000 - \$10\,000 = \$215\,000 \\
+PV(15\%) = \frac{155000}{(1+\frac{.15}{12})^{12}} + \frac{215000}{(1+\frac{.15}{12})^{18}} \approx \$305\,454 \\
+NPV(15\%) = 305454 - 250000 = \$55\,454 > 0
+\end{gathered}
+\]
+
+<h4>2.2.3 Internal Return Rate</h4>
+<p>An IRR of the new investment is a positive solution, \(r = r_{IRR}\), of the equation \(NPV(r)=0 \Leftrightarrow PV(r) = C_0\).</p>
+\[
+C_0 = \frac{C_1}{(1+\frac{r}{k})^{(t_1-t_0)k}} + \dots + \frac{C_n}{(1+\frac{r}{k})^{(t_n-t_0)k}}
+\]
+<p>Solve for \(r\) above.</p>
+<p>In the previous example:</p>
+\[
+250000 = \frac{155000}{(1+\frac{r}{12})^{12}} + \frac{215000}{(1+\frac{r}{12})^{18}} \Rightarrow r \approx 29.42\%
+\]
+
+<h3 id="s2-3">2.3 Annuities and Loans</h3>
+
+<h4>2.3.1 Annuities</h4>
+<p><b>Definition:</b> An annuity is a series of payments made at equal time periods with interest.</p>
+<ol type="i">
+<li><b>Term:</b> Time from \(1^{st}\) to last payment.</li>
+<li><b>Ordinary annuity:</b> Payments occur at the <i>end</i> of each time period.</li>
+<li><b>Assumption:</b> We divide each year into \(k\) equal-length payment periods with interest rate \(r\) (\(k\)-periodic compounding).</li>
+</ol>
+<p><b>1. Future Value (\(S_n\))</b><br>
+The Future Value (FV) is the total accrued amount at the end of the term. Let \(S_i\) be the total accrued at the end of period \(i\):</p>
+\[
+\begin{aligned}
+S_1 &amp;= P \\
+S_2 &amp;= P + \left(1+\frac{r}{k}\right)S_1 = P + \left(1+\frac{r}{k}\right)P \\
+&amp;\vdots \\
+S_n &amp;= P + \left(1+\frac{r}{k}\right)P + \dots + \left(1+\frac{r}{k}\right)^{n-1}P
+\end{aligned}
+\]
+<p>Using the geometric sum formula (\(1+x+\dots+x^{n-1} = \frac{x^n-1}{x-1}\)):</p>
+\[
+\boxed{S_n = P \cdot \frac{(1+\frac{r}{k})^n - 1}{r/k}}
+\]
+<p><b>2. Present Value (\(A_n\))</b><br>
+The Present Value (PV) is the amount needed today to generate the cash flow \(P\) for \(n\) periods. We sum the PV of each individual payment:</p>
+\[
+A_n = \underbrace{\frac{P}{1+\frac{r}{k}}}_{\substack{\text{PV of} \\ \text{1st payment}}}
++ \underbrace{\frac{P}{(1+\frac{r}{k})^2}}_{\substack{\text{PV of} \\ \text{2nd payment}}}
++ \dots
++ \underbrace{\frac{P}{(1+\frac{r}{k})^n}}_{\substack{\text{PV of } n\text{th} \\ \text{payment}}}
+\]
+<p>To relate this to Future Value, multiply by \((1+\frac{r}{k})^n\):</p>
+\[
+\left(1+\frac{r}{k}\right)^n A_n = S_n \implies A_n = S_n \left(1+\frac{r}{k}\right)^{-n}
+\]
+<p>Substituting the formula for \(S_n\):</p>
+\[
+\boxed{A_n = P \cdot \frac{1 - (1+\frac{r}{k})^{-n}}{r/k}}
+\]
+
+<h4>2.3.2 Perpetuity</h4>
+<p><b>Definition:</b> A sequence of cash flows that continues indefinitely (\(n \to \infty\)).</p>
+<ol type="i">
+<li><b>Future Value:</b> Doesn't exist.</li>
+<li><b>Present Value:</b> Taking the limit of \(A_n\):
+\[
+A_{\infty} = \lim_{n \to \infty} \frac{1-(1+\frac{r}{k})^{-n}}{r/k}P = \boxed{\frac{P}{r/k}}
+\]
+</li>
+</ol>
+
+<h4>2.3.3 The Special Case of a Loan</h4>
+<p>A loan is essentially an annuity where the <b>Loan Amount</b> equals the <b>Present Value</b> (\(A_n\)).</p>
+<ol type="i">
+<li>\(P = \) monthly payment (\(k=12\)).</li>
+<li>\(A_n = \) principal (loan amount).</li>
+<li><b>Total Cost of Loan:</b> \(nP - A_n\) (Total Payments \(-\) Principal \(=\) Total Interest).</li>
+</ol>
+<p><b>Key Formulas (Rearrangements of \(A_n\))</b></p>
+<ol>
+<li><b>Find Loan Amount (\(A_n\))</b> given payment, rate, term:
+\[
+A_n = P \cdot \frac{1 - (1+\frac{r}{k})^{-n}}{r/k}
+\]
+</li>
+<li><b>Find Payment (\(P\))</b> given loan, rate, term:
+\[
+P = A_n \cdot \frac{r/k}{1 - (1+\frac{r}{k})^{-n}}
+\]
+</li>
+<li><b>Find Term (\(n\))</b> given loan, payment, rate:
+\[
+n = -\frac{\ln\left(1 - \frac{A_n (r/k)}{P}\right)}{\ln\left(1+\frac{r}{k}\right)}
+\]
+</li>
+</ol>
+<p><b>Notice:</b> Doubling the monthly payment will reduce the term of the loan by <i>more</i> than half (e.g., a 30-year term might drop to less than 10 years).</p>
+
+<h3 id="s2-4">2.4 Amortization</h3>
+<p><b>Definition:</b> Amortization is the reducing of a given loan amount (the principal) through a series of payments over a fixed time span. One portion of each payment goes towards the principal and the other goes towards the interest.</p>
+
+<h4>2.4.1 Amortization Schedules</h4>
+<h4>Remaining Balance (\(B_i\))</h4>
+<p>Assume \(k\)-periodic compounding (e.g., \(k=12\)) with payment \(P\) and loan amount \(A_n\). Let \(y = 1 + \frac{r}{k}\).</p>
+<p>The remaining balance \(B_i\) after \(i\) periods follows the recursion:</p>
+\[
+\begin{aligned}
+B_0 &amp;= A_n \\
+B_1 &amp;= y B_0 - P = y A_n - P \\
+B_2 &amp;= y B_1 - P = y(y A_n - P) - P = y^2 A_n - (1+y)P \\
+&amp;\vdots \\
+B_i &amp;= y^i A_n - (1 + y + \dots + y^{i-1})P
+\end{aligned}
+\]
+<p>Using the geometric sum formula for the payment term:</p>
+\[
+B_i = y^i A_n - \frac{y^i - 1}{y - 1} P
+\]
+<p>Recall from the Annuity derivation that \(P = A_n \frac{y^n(y-1)}{y^n - 1}\). Substituting this into the equation for \(B_i\) and simplifying yields:</p>
+\[
+\boxed{B_i = A_n \frac{(1+\frac{r}{k})^n - (1+\frac{r}{k})^i}{(1+\frac{r}{k})^n - 1}}
+\]
+<p><i>Note: At the end of the loan (\(i=n\)), \(B_n = 0\).</i></p>
+<p><b>Decomposition of Payment (\(P = \mathcal{I}_i + \mathcal{B}_i\))</b>
+Each payment \(P\) is split into an interest portion (\(\mathcal{I}_i\)) and a principal repayment portion (\(\mathcal{B}_i\)). Note that \(\mathcal{B}_i \neq B_i\).</p>
+<p><b>Interest Payment (\(\mathcal{I}_i\))</b>
+Interest is calculated on the remaining balance from the <i>previous</i> period (\(B_{i-1}\)).</p>
+\[
+\mathcal{I}_i = \frac{r}{k} B_{i-1}
+\]
+<p>Substituting the formula for \(B_{i-1}\) (using index \(i-1\)):</p>
+\[
+\boxed{\mathcal{I}_i = A_n \frac{r}{k} \frac{(1+\frac{r}{k})^n - (1+\frac{r}{k})^{i-1}}{(1+\frac{r}{k})^n - 1}}
+\]
+<p><b>Principal Payment (\(\mathcal{B}_i\))</b>
+The remainder of the payment goes toward reducing the loan balance.</p>
+\[
+\mathcal{B}_i = P - \mathcal{I}_i
+\]
+<p>After algebraic simplification,:</p>
+\[
+\boxed{\mathcal{B}_i = A_n \frac{r}{k} \frac{(1+\frac{r}{k})^{i-1}}{(1+\frac{r}{k})^n - 1}}
+\]
+
+<h4>2.4.2 Key Properties</h4>
+<ol type="i">
+<li><b>Sum of Principal Payments:</b> The sum of all portions paid towards principal must equal the original loan amount.
+\[
+\sum_{i=1}^n \mathcal{B}_i = A_n = \text{Principal (Loan)}
+\]
+</li>
+<li><b>Sum of Interest Payments:</b> The total amount paid (\(nP\)) minus the principal (\(A_n\)) equals the total cost of the loan.
+\[
+\sum_{i=1}^n \mathcal{I}_i = nP - A_n = \text{Total Interest Paid}
+\]
+</li>
+</ol>
+<p><b>Example (Equity in a House):</b> A couple bought a house \(11\) years ago for \(\$225\,000\). They put down \(10\%\) and took out a \(15\)-year mortgage at \(5.75\%\) (with monthly compounding) for the remaining balance. Suppose that the current net market value of their house (its current market value minus selling costs) is now \(\$350\,000\).</p>
+<ol type="i">
+<li>What is their monthly payment?</li>
+<li>How much equity do they have in the house today?</li>
+<li>Compare the \(1^{st}\) and \(132^{nd}\) interest payments.</li>
+</ol>
+<p><i>Solution:</i> The loan is \(A_n = 225000-22500 = \$202\,500\).</p>
+<ol type="i">
+<li>\(P = \frac{\frac{r}{k}}{1 - (1+\frac{r}{k})^{-n}}A_n = \frac{\frac{.0575}{12}}{1 - (1+\frac{.0575}{12})^{-180}}202500 \approx \$1\,682\).</li>
+<li>\(\text{Equity} = \text{Net Market Value} - \text{Unpaid Balance}\). The unpaid balance is:
+\[
+B_{132} = \frac{(1+\frac{.0575}{12})^{180} - (1+\frac{.0575}{12})^{132}}{(1+\frac{.0575}{12})^{180} - 1}202500 \approx 71953 \Rightarrow \text{Equity} \approx \$278\,047
+\]
+</li>
+<li>\(\mathcal{I}_1 = \frac{r}{k}A_n = \frac{.0575}{12}202500 \approx \$970\). \(\mathcal{I}_{132} = \frac{(1+\frac{.0575}{12})^{180} - (1+\frac{.0575}{12})^{131}}{(1+\frac{.0575}{12})^{180} - 1}202500 \approx \$351\).</li>
+</ol>
+
+<h3 id="s2-5">2.5 The Dividend Discount Model</h3>
+<p><b>Hypotheses:</b></p>
+<ol type="i">
+<li>If a stock is held for \(n\) years, then its current value is the present value of the sequence of its expected future cash dividends through \(n\) years plus the present value of the stock's expected price (\(S_n\)) in \(n\) years.</li>
+<li>There is a dividend (annual) growth rate \(g\): the expected dividend paid at the end of the \(i^{th}\) period is:
+\[
+D_i = (1+\frac{g}{k})^iD_0
+\]
+</li>
+<li>The present value is calculated using the <i>required return rate</i> (RRR) of the stock \(r\), and it's assumed that \(r>g\).
+\[
+S_0 = \frac{D_1}{1+\frac{r}{k}} + \frac{D_2}{(1+\frac{r}{k})^2} + \dots + \frac{D_n}{(1+\frac{r}{k})^n} + \frac{S_n}{(1+\frac{r}{k})^n}
+\]
+</li>
+</ol>
+<p>If you hold the stock in perpetuity (indefinitely) rather than for \(n\) years, then there is no terminal price, and the stock's present share price becomes:</p>
+<ol>
+<li>\(S_0 = \sum_{n=1}^\infty \frac{D_n}{(1+\frac{r}{k})^n} = \sum_{i=1}^n \frac{(1+\frac{g}{k})^n}{(1+\frac{r}{k})^n}D_0\).</li>
+<li>Recall that \(D_n = (1+\frac{g}{k})^nD_0\) and \(r > g\).</li>
+<li>By the geometric sum formula:
+\[
+S_0 = \frac{\frac{1+\frac{g}{k}}{1+\frac{r}{k}}}{1 - \frac{1+\frac{g}{k}}{1+\frac{r}{k}}}D_0 =\frac{(1+\frac{g}{k})D_0}{1+\frac{r}{k}-(1+\frac{g}{k})} = \frac{(1+\frac{g}{k})D_0}{\frac{r-g}{k}}
+\]
+</li>
+<li>Simplifying, we get the <b>Gordon growth model</b>:
+\[
+\boxed{S_0 = \frac{(1+\frac{g}{k})D_0}{\frac{r-g}{k}}=\frac{D_1}{\frac{r}{k} - \frac{g}{k}}}
+\]
+</li>
+</ol>
+<p><b>Example:</b> Suppose that a <i>preferred stock</i> has a fixed total annual cash dividend per share of \(\$2.50\). Assume an annual required return of \(13\%\) for the stock. How much should you pay for the preferred stock according to the DDM?</p>
+<ol type="i">
+<li><i>Solution:</i> \(g= 0 , D_i = 2.5\), so \(S_0 = \frac{2.5}{.13 - 0} \approx \$19.23\).</li>
+<li><i>Note:</i> A preferred stock grants its holder ownership in a corporation, but no voting rights, and a claim on assets in the event of bankruptcy that comes before any claim of the <i>common stock</i> holders. Preferred stocks promise to pay a fixed cash dividend.</li>
+</ol>
+<p><b>Example:</b> Now, suppose the total cash dividend of a <i>common stock</i> last year was \(\$2.75\) per share and dividends are expected to increase at \(3\%\) per annum. If the annual required return rate is \(10\%\), find the share price of the stock today according to the DDM.</p>
+<ol type="i">
+<li><i>Solution:</i> \(D_0 = 2.75, g=.03, r = .1\), so \(S_0 = \frac{(1+.03)275}{.1-.03} \approx \$40.46\).</li>
+<li><i>Note:</i> Common stocks don't promise to pay cash dividends. Nonetheless, if a common stock currently pays no cash dividends, there is still investor expectation that earnings are being reinvested in the company to create growth which will lead to cash dividends in the future.</li>
+</ol>
+
+<h3 id="s2-6">2.6 Bonds</h3>
+
+<h4>2.6.1 Terminology</h4>
+<ol type="i">
+<li>A <b>bond</b> is a contract between an issuer (bond seller) and a lender (bondholder) legally binding the issuer to repay the lender a specified fixed amount at maturity and a series of interest payments during the life of the bond.</li>
+<li>The <b>issue date</b> of a bond is the date on which the bond issuer receives the loan from the lender and from which the lender is entitled to receive interest from the issuer.</li>
+<li>The <b>maturity value</b> \(\mathcal{M}\) (or as <b>Par/Face Value</b>) equals the amount borrowed at the time the bond was issued (typically \(\$1\,000\)).</li>
+<li>The <b>maturity date</b> is when the bond issuer must repay the lender the bond's maturity value.</li>
+<li>The <b>term to maturity</b> is the time between the issue and maturity date (Short term, intermediate term and long term bonds have terms of respectively 1-5, 5-12 and 12+ years).</li>
+<li>Bonds are sold first in the <b>primary market</b>, and resold in the <b>secondary market</b>.</li>
+<li>The bond seller must issue a series of <b>coupon payments</b> \(\mathcal{C}\) (interest payments), typically earned twice a year. The <b>coupon rate</b>, \(r_C\) is:
+\[
+r_C = \frac{\text{annual coupon payment}}{\text{maturity value}} = \frac{2\mathcal{C}}{\mathcal{M}}, \mathcal{C} = \frac{r_C}{2}\mathcal{M}
+\]
+<ol type="a">
+<li><i>Example:</i> A bond selling for \(\$1\,000\) and coupon rate \(3\%\) pays a coupon payment of \(\$15\) every six months.</li>
+</ol>
+</li>
+<li>The <b>current yield</b> is the annual interest payment divided by the current market price of the bond:
+\[
+r = \frac{\text{annual coupon payment}}{\text{current bond price}} = \frac{2\mathcal{C}}{B}
+\]
+</li>
+<li>A bond's <b>yield to maturity</b>, \(r_Y\), is the marketplace's annual required return rate of the bond held to maturity. The value of the bond on the secondary market, if \(n\) coupon payments remain, is the present value of all future coupon payments plus the present value of the maturity value:
+\[
+\begin{aligned}
+B(n) &amp;= \underbrace{\frac{C}{1 + r_y/2} + \frac{C}{(1 + r_y/2)^2} + \dots + \frac{C}{(1 + r_y/2)^n}}_{\text{PV of an annuity}} + \frac{M}{(1 + r_y/2)^n} \\
+&amp;= \boxed{\frac{(1 + r_y/2)^n - 1}{(1 + r_y/2)^n (r_y/2)} \cdot C + \frac{M}{(1 + r_y/2)^n}} \quad \left(C = \frac{r_c}{2}M\right)
+\end{aligned}
+\]
+<ol type="a">
+<li>If you purchase a \(20\) year bond with maturity value of \(\$1\,000\) and coupon rate \(3\%\), at a discount of \(\$900\), then the current yield is \(r=\frac{30}{900} = 3.33\%\). The yield to maturity is:
+\[
+900 = \frac{1000}{(1+\frac{r_Y}{2})^{2 \times 20}} + \frac{(1+\frac{r_Y}{2})^{2 \times 20} - 1}{(1+\frac{r_Y}{2})^{2 \times 20}\frac{r_Y}{2}}15 \implies r_Y \approx 3.7\%
+\]
+</li>
+</ol>
+</li>
+</ol>
+
+<h4>2.6.2 Bonds Valuation and YTM</h4>
+<p><b>Proposition:</b></p>
+<ol>
+<li>\(B(n) = M \Leftrightarrow r_Y = r_C = r\) (Par bond).</li>
+<li>\(B(n) > M \Leftrightarrow r_Y &lt; r &lt; r_C\) (Premium bond).</li>
+<li>\(B(n) &lt; M \Leftrightarrow r_Y > r > r_C\) (Discount bond).</li>
+</ol>
+<p><b>Example:</b> A \(10\)-year bond has maturity value \(\$1\,000\) and coupon rate \(6\%\). Find the market value of the bond \(6\) years after it was issued when \(\text{YTM}=10\%, 5\%, 6\%\).</p>
+<ol type="i">
+<li>Since there's \(4\) years left, there must be \(8\) periods left.</li>
+<li>\(r_Y = 10\%\), \(B(8) = \frac{(1+\frac{.1}{2})^8 - 1}{(1+\frac{.1}{2})^8}\frac{.1}{2}(30) + \frac{1000}{(1+\frac{.1}{2})^8} \approx \$370.7\) (Discount bond).</li>
+<li>\(r_Y = 5\%\), \(B(8) \approx \$1035.9\) (Premium bond).</li>
+<li>\(r_Y = r_C = 6\%\), \(B(8) \approx \$1\,000\).</li>
+</ol>
+<p><b>Example:</b> Suppose that a \(30\)-year bond with \(3\%\) coupon rate was issued by the US Treasury today. If in \(10\) years the Fed raises interest rates and another \(30\)-year bond with an annual \(6\%\) coupon rate is issued, no investors will buy a bond with \(3\%\) annual yield. So the current yield of the first bond will be forced to approach \(6\%\) on the issue date of the second bond under the law of supply and demand.</p>
+
+<h2 id="s3">3. Markowitz Portfolio Theory</h2>
+
+<h3 id="s3-1">3.1 2-Security Portfolio</h3>
+
+<h4>3.1.1 Definitions and Setup</h4>
+<p>Consider a portfolio of \(2\) securities with unit prices \(S_1(t)\) and \(S_2(t)\). The return rates \(R_i\) over \([t_0, t_f]\) are random variables defined by:</p>
+\[
+R_i = \underbrace{\frac{S_i(t_f) - S_i(t_0)}{S_i(t_0)}}_{\text{capital gain}} + \underbrace{\frac{D_i}{S_i(t_0)}}_{\text{dividend yield}} \quad (i = 1, 2)
+\]
+<p><b>Properties:</b></p>
+<ol type="i">
+<li><b>Expected Return:</b> \(\mu_i = \mathbb{E}(R_i)\).</li>
+<li><b>Volatility:</b> \(\sigma_i = \sqrt{\text{Var}(R_i)}\).</li>
+<li><b>Risk Assumption:</b> Both securities are <i>risky</i>, i.e., \(\sigma_i \neq 0\).</li>
+<li><b>Covariance &amp; Correlation:</b> \(\sigma_{12} = \text{Cov}(R_1, R_2)\) and \(\rho_{12} = \frac{\sigma_{12}}{\sigma_1 \sigma_2}\).</li>
+</ol>
+<p><b>Portfolio Weights:</b>
+\(V_P(t_0)\) is the total investment, with the weights for each security being:</p>
+\[
+w_1 = \frac{n_1S_1(t_0)}{V_P(t_0)}, \quad w_2 = \frac{n_2S_2(t_0)}{V_P(t_0)}, \quad \text{with } w_1 + w_2 = 1.
+\]
+<p><i>Note:</i> We allow <b>short selling</b>, meaning weights can be negative (\(w_i &lt; 0\)) or greater than 1.</p>
+
+<h4>3.1.2 The 1-Variable Problem</h4>
+<p>To simplify, let \(w = w_1\) and \(1-w = w_2\). The portfolio properties are:</p>
+\[
+\begin{aligned}
+\text{Return: } R_P(w) &amp;= wR_1 + (1-w)R_2 \\
+\text{Exp. Return: } \mu_P(w) &amp;= w\mu_1 + (1-w)\mu_2 \\
+\text{Variance: } \sigma_P(w)^2 &amp;= w^2\sigma_1^2 + 2w(1-w)\sigma_{12} + (1-w)^2\sigma_2^2
+\end{aligned}
+\]
+<p>Recall that \(\text{Var}(aX+bY) = a^2\text{Var}(X) + 2ab\text{Cov}(X,Y) + b^2\text{Var}(Y)\).</p>
+<p><b>Feasible &amp; Efficient Sets:</b></p>
+<ol type="i">
+<li><b>Feasible Set (\(F_P\)):</b> All possible pairs \((\sigma_P(w), \mu_P(w))\) for \(w \in \mathbb{R}\).</li>
+<li><b>Efficient Frontier (\(M_E\)):</b> The subset of \(F_P\) containing portfolios with the least risk for a given return, and largest return for a given risk.</li>
+</ol>
+
+<h4>3.1.3 The Efficient Frontier (Derivation)</h4>
+<p>We seek the relationship between \(\sigma_P\) and \(\mu_P\) independent of \(w\).</p>
+<ol>
+<li><b>Weight as function of Return:</b>
+From \(\mu_p = w\mu_1 + (1-w)\mu_2\), we isolate \(w\):
+\[ w = \frac{\mu_P - \mu_2}{\mu_1 - \mu_2} \]
+</li>
+<li><b>Substitute into Variance:</b>
+Plugging this \(w\) into the variance equation yields a quadratic equation of the form \(\sigma_P^2 = A\mu_P^2 + B\mu_P + C\).</li>
+</ol>
+<p>This implies the points \((\sigma_P, \mu_P)\) lie on a <b>hyperbola</b>, provided \(\rho \neq \pm 1\). (If \(\rho = \pm 1\), the relation degenerates to straight lines).</p>
+<blockquote>
+<p>The set \(F_P\) of feasible portfolios satisfies the hyperbola equation:</p>
+\[
+\sigma_P^2 = \mathbb{A}\mu_P^2 + \mathbb{B}\mu_P + \mathbb{C}
+\]
+<p>where the constants are:</p>
+\[
+\begin{aligned}
+\mathbb{A} &amp;= \frac{\sigma_1^2 - 2\rho \sigma_1 \sigma_2 + \sigma_2^2}{(\mu_1 - \mu_2)^2} \\
+\mathbb{B} &amp;= -2\frac{(\sigma_2^2 - \rho \sigma_1 \sigma_2)\mu_1 + (\sigma_1^2 - \rho \sigma_1 \sigma_2)\mu_2}{(\mu_1 - \mu_2)^2} \\
+\mathbb{C} &amp;= \frac{\sigma_1^2\mu_2^2 + \sigma_2^2\mu_1^2 - 2\rho \sigma_1 \sigma_2 \mu_1 \mu_2}{(\mu_1 - \mu_2)^2}
+\end{aligned}
+\]
+</blockquote>
+<p><b>Global Minimum Variance Portfolio (\(w_G\))</b><br>
+Since the variance \(\sigma_P^2(w) = aw^2 + bw + c\) is a parabola opening upward, the minimum occurs at the vertex \(w = -b/2a\).</p>
+\[
+w_G = \frac{\sigma_2^2 - \rho \sigma_1 \sigma_2}{\sigma_1^2 - 2 \rho \sigma_1 \sigma_2 + \sigma_2^2}, \quad 1-w_G = \frac{\sigma_1^2 - \rho \sigma_1 \sigma_2}{\sigma_1^2 - 2\rho \sigma_1 \sigma_2 + \sigma_2^2}
+\]
+<p><b>Note:</b> The Efficient Frontier \(M_E\) corresponds to the <b>top portion</b> of the hyperbola (all points above the global minimum variance portfolio).</p>
+
+<h4>3.1.4 Diversification Effects</h4>
+<p>The portfolio risk is:</p>
+\[
+\sigma_P = \sqrt{w^2\sigma_1^2 + 2w(1-w)\rho \sigma_1 \sigma_2 + (1-w)^2 \sigma_2^2}
+\]
+<ol type="i">
+<li>Assuming no short selling: \(w(1-w) \ge 0\).</li>
+<li>The portfolio risk decreases as \(\rho\) decreases from \(1\) to \(-1\).</li>
+<li>As \(\rho\) decreases, the securities covary less in the same direction, providing a hedge.</li>
+<li>Therefore, portfolio risk decreases as diversification increases.</li>
+</ol>
+
+<h3 id="s3-2">3.2 N-Security Portfolio</h3>
+<p>Consider a portfolio of \(N\) securities with unit prices \(S_i\), for \(i= 1\) to \(N\). For each security, consider its return rate over \([t_0, t_f]\):</p>
+\[
+R_i = \frac{S_i(t_f) - S_i(t_0)}{S_i(t_0)} + \frac{D_i}{S_i(t_0)} \quad (i= 1, \dots, N)
+\]
+<p>As before, \(S_i, R_i, D_i\) are random variables.</p>
+<ol type="i">
+<li><b>Expected Return / Volatility:</b> \(\mu_i = \mathbb{E}(R_i), \sigma_i = \sqrt{\text{Var}(R_i)}\).</li>
+<li><b>Covariance / Correlation:</b> \(\sigma_{ij} = \text{Cov}(R_i, R_j), \rho_{ij} = \frac{\sigma_{ij}}{\sigma_i \sigma_j}\).</li>
+<li>All securities are risky: \(\sigma_i > 0\).</li>
+<li><b>NOTE:</b> We cannot have identical expected returns \(\mu_1 = \dots = \mu_N\), identical risks \(\sigma_1 = \dots = \sigma_N\), or perfect correlation \(\rho_{ij} = \pm 1\) for any distinct pair \(i, j\).</li>
+<li>\(\mu_i, \sigma_i, \sigma_{ij}, \rho_{ij}\) are assumed known from historical data.</li>
+</ol>
+<p>What percentage of the money \(V_P(t_0)\) should you allocate today to each security to create an efficient portfolio?</p>
+\[
+V_P(t_0) = \sum_{i=1}^n n_iS_i(t_0) = \underbrace{\frac{n_iS_i(t_0)}{V_P(t_0)}}_{w_i: \text{ weights}} V_P(t_0)
+\]
+<p>Now, using vectors, we define:</p>
+\[
+\vec{w} = \begin{bmatrix}
+w_1 \\ \vdots \\ w_N
+\end{bmatrix}, \vec{e} = \begin{bmatrix}
+1 \\ \vdots \\ 1
+\end{bmatrix}
+\]
+<p>Note that \(\vec{w}^T\vec{e} = \vec{w} \cdot \vec{e} = w_1 + \dots + w_N = 1\).</p>
+\[
+\begin{aligned}
+\text{Space of weights without short selling: } W_N^* &amp;= \{\vec{w}  \mid \vec{w}^T\vec{e} = 1, w_i \ge 0\} \\
+\text{Space of weights with short selling: } W_N &amp;= \{\vec{w} \mid \vec{w}^T\vec{e} = 1\}
+\end{aligned}
+\]
+<p>We now have the following:</p>
+<blockquote>
+\[
+\begin{aligned}
+\textbf{Portfolio Return: } R_P &amp;= \sum_{i=1}^N w_iR_i = \vec{w}^T\vec{R} \\
+\textbf{Expected Return: } \mu_P &amp;= \sum_{i=1}^N w_i \mu_i = \vec{w}^T \vec{\mu} \\
+\textbf{Portfolio Variance: } \sigma_P^2 &amp;= \sum_{i=1}^N w_i^2 \sigma_i^2 + 2 \sum_{1 \leq i &lt; j \le N} w_iw_j\underbrace{\rho \sigma_i \sigma_j}_{\sigma_{ij}} = \vec{w}^T V\vec{w}
+\end{aligned}
+\]
+<p>Where:</p>
+\[
+\vec{R} = \begin{bmatrix}
+R_1 \\ \vdots \\ R_N
+\end{bmatrix}, \vec{\mu} = \begin{bmatrix}
+\mu_1 \\ \vdots \\ \mu_N
+\end{bmatrix}, V = \begin{bmatrix}
+\sigma_1^2 &amp; \dots &amp; \sigma_{1N} \\ \vdots &amp; \ddots &amp; \vdots \\ \sigma_{N1} &amp; \dots &amp; \sigma_N^2
+\end{bmatrix} = \begin{bmatrix}
+\sigma_{ij}
+\end{bmatrix}
+\]
+<p>Notice:</p>
+<ol type="i">
+<li>\(V\) is symmetric: \(V^T = V\) or \(\sigma_{ij} = \sigma_{ji}\).</li>
+<li>\(V\) is positive semi-definite: \(\vec{w}^TV\vec{w} \ge 0\).</li>
+<li>If \(V\) is positive definite: \(\vec{w}^T V \vec{w} > 0, \vec{w} \neq 0\), then \(V\) is invertible and \(V^{-1}\) is also symmetric.</li>
+</ol>
+</blockquote>
+<p>To find the equation of the efficient frontier, we find the minimum variance portfolio for a given expected return \(\mu\).</p>
+
+<h4>3.2.1 Optimization</h4>
+<p><b>Lagrange Multipliers:</b> The minimum (or maximum) of a function \(f(\vec{x})\) under two constraints \(g(\vec{x}) = c_1\) and \(h(\vec{x}) = c_2\) occurs at point where</p>
+\[
+\frac{\partial f}{\partial \vec{x}} = \lambda_1 \frac{\partial g}{\partial \vec{x}} + \lambda_2 \frac{\partial h}{\partial \vec{x}}
+\]
+<p>Here, we minimize:</p>
+<ol type="i">
+<li>Minimize \(f(\vec{w}) = \frac{\sigma_P^2}{2} = \frac{\vec{w}^TV\vec{w}}{2}\).</li>
+<li>Under two constraints: \(g(\vec{w}) = \vec{w}^T\vec{e} = 1\) and \(h(\vec{w}) = \vec{w}^T\vec{\mu} = \mu\).</li>
+</ol>
+<p><b>Derivation Steps:</b></p>
+<ol>
+<li><b>Compute Gradients:</b>
+Using the identity \(\frac{\partial}{\partial \vec{x}}(\vec{x}^T A \vec{x}) = (A^T + A)\vec{x}\) (and since \(V\) is symmetric, \(V^T=V\)):
+\[
+\frac{\partial f}{\partial \vec{w}} = \frac{(V^T + V)\vec{w}}{2} = V\vec{w}, \frac{\partial g}{\partial \vec{w}} = \vec{e}, \frac{\partial h}{\partial \vec{w}} = \vec{\mu}
+\]
+</li>
+<li><b>Set up the System of Equations:</b>
+Plugging these into the Lagrange condition:
+\[
+V\vec{w} = \lambda_1 \vec{e} + \lambda_2 \vec{\mu}, \text{ with constraints } \vec{w}^T \vec{e} = 1 \text{ and } \vec{w}^T \vec{\mu} = \mu \tag{1}
+\]
+</li>
+<li><b>Solve for \(\vec{w}\) in terms of \(\lambda\):</b>
+Multiply Eq (1) by \(V^{-1}\):
+\[
+\vec{w} = \lambda_1 V^{-1}\vec{e} + \lambda_2 V^{-1}\vec{\mu} \tag{2}
+\]
+</li>
+<li><b>Solve for \(\lambda_1\) and \(\lambda_2\):</b>
+Multiply Eq (2) by \(\vec{e}^T\) and \(\vec{\mu}^T\) respectively to apply the constraints:
+\[
+\begin{aligned}
+\vec{w}^T \vec{e} &amp;= \lambda_1 (\vec{e}^T V^{-1} \vec{e}) + \lambda_2 (\vec{e}^T V^{-1} \vec{\mu}) = 1 \\
+\vec{w}^T \vec{\mu} &amp;= \lambda_1 (\vec{\mu}^T V^{-1} \vec{e}) + \lambda_2 (\vec{\mu}^T V^{-1} \vec{\mu}) = \mu
+\end{aligned}
+\]
+We define the scalars (constants):
+\[
+\begin{aligned}
+A &amp;= \vec{e}^T V^{-1} \vec{e} \\
+B &amp;= \vec{e}^T V^{-1} \vec{\mu} = \vec{\mu}^T V^{-1} \vec{e} \quad \text{(since \(V^{-1}\) is symmetric)} \\
+C &amp;= \vec{\mu}^T V^{-1} \vec{\mu}
+\end{aligned}
+\]
+This gives the linear system:
+\[
+\begin{aligned}
+A\lambda_1 + B\lambda_2 &amp;= 1 \\
+B\lambda_1 + C\lambda_2 &amp;= \mu
+\end{aligned}
+\]
+Solving this system for \(\lambda_1, \lambda_2\) (provided \(AC - B^2 \neq 0\)):
+\[
+\begin{bmatrix} \lambda_1 \\ \lambda_2 \end{bmatrix}
+= \frac{1}{AC - B^2} \begin{bmatrix} C &amp; -B \\ -B &amp; A \end{bmatrix} \begin{bmatrix} 1 \\ \mu \end{bmatrix}
+= \begin{bmatrix} \frac{C - B\mu}{AC - B^2} \\ \frac{A\mu - B}{AC - B^2} \end{bmatrix}
+\]
+</li>
+<li><b>Final Weight Vector Formula:</b>
+Substitute \(\lambda_1\) and \(\lambda_2\) back into Eq (2):
+\[
+\boxed{\vec{w} = \frac{C - B\mu}{AC - B^2}V^{-1}\vec{e} + \frac{A\mu - B}{AC - B^2}V^{-1}\vec{\mu}}
+\]
+</li>
+</ol>
+
+<h4>3.2.2 The Efficient Frontier (N-Security)</h4>
+<p>Substituting the optimal weight vector \(\vec{w}\) back into the variance equation \(\sigma_P^2 = \vec{w}^T V \vec{w}\) yields the variance as a function of return \(\mu\):</p>
+\[
+\begin{aligned}
+\sigma_P^2 &amp;= \vec{w}^T (\lambda_1 \vec{e} + \lambda_2 \vec{\mu}) = \lambda_1(1) + \lambda_2(\mu) \\
+&amp;= \frac{C - B\mu}{AC - B^2} + \mu \frac{A\mu - B}{AC - B^2}\\
+&amp;= \frac{A\mu_P^2 - 2B\mu_P + C}{AC - B^2}
+\end{aligned}
+\]
+<p>The <b>Efficient Frontier</b> (\(M_E\)) is the top part of this hyperbola.</p>
+
+<h4>3.2.3 Global Minimum Variance Portfolio</h4>
+<p>To find the GMV portfolio, we minimize \(\sigma_P^2\) with respect to \(\mu_P\). Setting \(\frac{d\sigma_P^2}{d\mu_P} = 0\):</p>
+\[
+\begin{aligned}
+2A\mu_G - 2B &amp;= 0 \implies \mu_G = \frac{B}{A} \\
+\sigma_G^2 &amp;= \frac{A(B/A)^2 - 2B(B/A) + C}{AC - B^2} = \frac{1}{A}
+\end{aligned}
+\]
+<p>The weights of the GMV portfolio are found by plugging \(\mu = \frac{B}{A}\) into the weight formula. The term associated with \(V^{-1}\vec{\mu}\) vanishes (\(A(\frac{B}{A})-B = 0\)):</p>
+\[
+\boxed{\vec{w}_G = \frac{1}{A}V^{-1}\vec{e}}
+\]
+
+<h4>3.2.4 3-Security Portfolio Visualization</h4>
+<ol type="i">
+<li><b>With Short Selling (\(F_P\)):</b> The feasible set is the entire region to the right of the hyperbola (extending to infinity).</li>
+<li><b>No Short Selling (\(F_P^*\)):</b> The feasible set is a bounded region (often shaped like a croissant). The vertices of this region represent portfolios consisting of a single asset.</li>
+</ol>
+
+<h3 id="s3-3">3.3 Utility Functions</h3>
+<p>The question of where to invest on \(M_E\) depends on the investor's risk tolerance, which can be measured using a <b>utility function</b>.</p>
+<p><b>Definition:</b> If \(x = \text{return (rate)}\) of a portfolio on \(M_E\), then a utility function is a function \(u(x)\) such that \(x_1 &lt; x_2 \implies u(x_1) &lt; u(x_2)\) (increasing), that measures the &ldquo;degree of satisfaction&rdquo;.</p>
+<ol type="i">
+<li>Risk Seeking: \(u'' > 0\).</li>
+<li>Risk Averse: \(u'' &lt; 0\).</li>
+<li>Risk Neutral \(u'' = 0\).</li>
+</ol>
+<p>We want to find the <b>optimal portfolio</b>, which maximizes \(\mathbb{E}(u(R_p))\).</p>
+<p><b>Example:</b> Consider \(u(x) = ax-\frac{b}{2}x^2\), where \(a, b > 0, x &lt; \frac{a}{b}\).</p>
+<ol type="i">
+<li>\(u(R_p) = aR_p - \frac{b}{2}R_p^2 \implies \mathbb{E}(u(R_P)) = a\mu_p - \frac{b}{2}(\sigma_p^2 + \mu_p^2)\)</li>
+</ol>
+<p>When \(u(x)=x^a\) or \(u(x) = x^{\frac{1}{3}}\), then we can use a Taylor approximation of order \(2\) about \(x = \mu_p\):</p>
+\[
+u(x) \approx u(\mu_p) + u'(\mu_p)(x-\mu_p) + \frac{1}{2}u''(\mu_p)(x-\mu_p)^2
+\]
+<p>As \(x \to R_p\):</p>
+\[
+\begin{aligned}
+u(R_p) &amp;\approx u(\mu_p) + u'(\mu_p)(R_p-\mu_p) + \frac{1}{2}u''(\mu_p)(R_p-\mu_p)^2 \\
+\mathbb{E}(u(R_p)) &amp;\approx u(\mu_p) + u'(\mu_p) \cdot 0 + \frac{1}{2}u''(\mu_p)\sigma_p^2
+\end{aligned}
+\]
+<p>Hence, we must maximize \(\mathbb{E}(u(R_p)) = u(\mu_p) + \frac{1}{2}u''(\mu_p)\sigma_p^2\).</p>
+<p><b>Example (2-Security Portfolio):</b></p>
+\[
+\begin{aligned}
+\text{Security 1: }&amp; \mu_1 = 13\%, \sigma_1 = 15\% \\
+\text{Security 2: }&amp; \mu_2 = 14\%, \sigma_2 = 20\% \quad (\rho_{12} = -.3)
+\end{aligned}
+\]
+<p>An investor with utility function \(u(x) = x^{\frac{1}{3}}\) (risk averse) wants to invest \(1\) million dollars. Find their optimal portfolio.</p>
+<ol type="i">
+<li><i>Solution:</i> \(u(x) = x^{\frac{1}{3}} \implies u'(x) = \frac{1}{3}x^{-\frac{2}{3}}, u''(x) = -\frac{2}{9}x^{-\frac{5}{3}}\).
+\[
+\begin{aligned}
+f(w) &amp;= \mathbb{E}(u(R_p)) = u(\mu_p) + \frac{1}{2}u''(\mu_p)\sigma_p^2 = \mu_p^{\frac{1}{3}} - \frac{1}{9}\mu_p^{-\frac{5}{3}}\sigma_p^2 \\
+&amp;= [.13w + .14(1-w)]^{\frac{1}{3}} \\
+&amp;- \frac{1}{9}[.13w + .14(1-w)]^{-\frac{5}{3}}((.15)^2w^2 + 2w(1-w)(-.3)(.15)(.2) + (.2)^2(1-w)^2)^2
+\end{aligned}
+\]
+</li>
+<li>Maximizing: \(w = .575769\), so we invest \(\$575\,769\) in Security 1 and the rest in Security 2.</li>
+</ol>
+
+<h2 id="s4">4. Capital Market Theory</h2>
+
+<h3 id="s4-1">4.1 The Market Portfolio</h3>
+<p>We consider portfolios with \(N\) risky securities: \((\sigma_i, \mu_i)\) and a risk-free security with risk free rate \(r\): \((0, r)\). This is equivalent to portfolios with two securities:</p>
+<ol type="i">
+<li>Security 1: The risk-free security \((0,r)\).</li>
+<li>Security 2: A portfolio of the \(N\) securities \((\sigma_B, \mu_B)\).</li>
+</ol>
+
+<h4>4.1.1 Capital Allocation Line</h4>
+<p>Let \((\sigma_P, \mu_P)\) be the portfolio with weights \((w,1-w)\), with \(w\) in the risk-free security and \(1-w\) in a portfolio of the \(N\) securities.</p>
+<ol type="i">
+<li><b>Expected Return:</b> \(\mu_P = w \cdot r + (1-w)\mu_B\).</li>
+<li><b>Standard Deviation:</b> Recall the variance formula for a two-asset portfolio. Since the risk-free asset has a variance of \(0\) and correlation \(\rho = 0\) with the risky asset:
+\[
+\begin{aligned}
+\sigma_P^2 &amp;= w^2 \cdot 0 + 2w(1-w) \cdot 0 \cdot \sigma_B \cdot \rho + (1-w)^2 \sigma_B^2 \\
+\sigma_P &amp;= (1-w)\sigma_B
+\end{aligned}
+\]
+</li>
+<li><b>Weights:</b> Derived from the standard deviation equation:
+\[
+1-w = \frac{\sigma_P}{\sigma_B}, w = 1 - \frac{\sigma_P}{\sigma_B} = \frac{\sigma_B - \sigma_P}{\sigma_B}
+\]
+</li>
+<li>Substitute back into the expected return equation:
+\[
+\mu_P = \left( \frac{\sigma_B - \sigma_P}{\sigma_B} \right) \cdot r + \left( \frac{\sigma_P}{\sigma_B} \right) \mu_B
+\]
+</li>
+</ol>
+<p>Rearranging, we get the equation of a line:</p>
+\[
+\boxed{\mu_P = \underbrace{\left( \frac{\mu_B - r}{\sigma_B} \right)}_{\text{Sharpe Ratio}} \cdot \sigma_P + r}
+\]
+
+<h4>4.1.2 Capital Market Line</h4>
+<p>Let \(M_{E, N}\) be the efficient frontier for only the \(N\) securities. The efficient frontier \(M_{E, N+1}\) for the \(N\) securities and the risk-free security is the highest CAL, the one that is tangent to \(M_{E, N}\).</p>
+<p>Let \((\sigma_M, \mu_M)\) be the portfolio on \(M_E\) that makes the CAL through \((0, r)\) and \((\sigma_M, \mu_M)\) tangent to \(M_E\). The CAL is then called the <b>Capital Market Line</b> (CML) and \((\sigma_M, \mu_M)\) is called the <b>market portfolio</b>. \(M_{E, N+1} = \) CML.</p>
+<p><b>Example:</b> Suppose that you have \(\$2\,000\) to invest. Assume a risk-free rate of \(6\%\) and market expected return of \(12\%\).</p>
+<ol type="i">
+<li>If you invest \(\$1\,500\) in a risk-free security and put the rest in the market portfolio, then what are the expected portfolio return rate and risk?
+<ol type="a">
+<li><i>Solution:</i> \(w =.75\) (risk free), \(1-w = .25\) (market).</li>
+<li>\(\mu_p = .75(.06) + .25(.12) \approx 7.5\%\).</li>
+<li>\(\sigma_p = .25 \sigma_M\).</li>
+</ol>
+</li>
+<li>If you add leverage to your portfolio by borrowing \(\$1\,500\) at the risk-free rate, then what are the expected portfolio return rate and risk?
+<ol type="a">
+<li><i>Solution:</i> \(w = -.75\), \(1-w = 1.75\).</li>
+<li>\(\mu_p = -.75(-.06) + 1.75(.12) \approx 16.5\%\) (Around 2x).</li>
+<li>\(\sigma_p = 1.75\sigma_M\) (7x).</li>
+</ol>
+</li>
+</ol>
+
+<h4>4.1.3 The Market Portfolio</h4>
+<p><b>Exercise:</b> Find \(\mu_M\) in terms of \(A, B, C, V, \vec{\mu}, r\).</p>
+\[
+\text{Line (CML):} \quad \mu_P = \frac{\mu_M - r}{\sigma_M}\sigma_P + r \tag{3}
+\]
+\[
+\text{Frontier (Hyperbola):} \quad \sigma_P^2 = \frac{A\mu_P^2 - 2B\mu_P + C}{AC - B^2} \tag{4}
+\]
+<p>At the tangency point \(M\), the slopes must be equal. We choose run over rise, so from (3), the inverse slope is:</p>
+\[
+\frac{d\sigma_P}{d\mu_P}\bigg|_{(\sigma_M, \mu_M)} = \frac{\sigma_M}{\mu_M - r}
+\]
+<p>Now, we differentiate (4) with respect to \(\mu_P\):</p>
+\[
+\frac{d}{d\mu_P}(\sigma_P^2) = \frac{d}{d\mu_P}\left( \frac{A\mu_P^2 - 2B\mu_P + C}{AC - B^2} \right)
+\]
+\[
+2\sigma_P \cdot \frac{d\sigma_P}{d\mu_P} = \frac{2A\mu_P - 2B}{AC - B^2}
+\]
+<p>Evaluating at point \(M\):</p>
+\[
+\sigma_M \frac{d\sigma_P}{d\mu_P} = \frac{A\mu_M - B}{AC - B^2} \implies \frac{d\sigma_P}{d\mu_P} = \frac{1}{\sigma_M} \frac{A\mu_M - B}{AC - B^2}
+\]
+<p>Now, set the geometric slope equal to the derivative slope:</p>
+\[
+\begin{aligned}
+\frac{\sigma_M}{\mu_M - r} &amp;= \frac{1}{\sigma_M} \frac{A\mu_M - B}{AC - B^2} \\
+(AC - B^2)\sigma_M^2 &amp;= (\mu_M - r)(A\mu_M - B)
+\end{aligned}
+\]
+<p>Substitute (4) back in for the LHS and expand the RHS:</p>
+\[
+\begin{aligned}
+A\mu_M^2 - 2B\mu_M + C &amp;= A\mu_M^2 - B\mu_M - Ar\mu_M + Br \\
+-2B\mu_M + C &amp;= - B\mu_M - Ar\mu_M + Br \\
+\mu_M(B - Ar) &amp;= C - Br
+\end{aligned}
+\]
+<p>Our final result is \(\boxed{\mu_M = \frac{C - Br}{B - Ar}}\).</p>
+
+<h3 id="s4-2">4.2 The Capital Asset Pricing Model</h3>
+<p><b>Definition:</b> For a security \((R_i, \mu_i, \sigma_i)\), we define its <b>beta</b> as</p>
+\[
+\beta_i = \frac{\text{Cov}(R_i, R_M)}{\sigma_M^2}
+\]
+<p>where \((R_M, \mu_M, \sigma_M)\) is the market portfolio.</p>
+<ol type="i">
+<li>Measures the degree to which the security's return moves in step with the market's return.</li>
+<li>\(|\beta_i| = \frac{|\rho_{iM}|\sigma_i \sigma_M}{\sigma_M^2} = |\rho_{iM}|\frac{\sigma_i}{\sigma_M} \implies \sigma_i \ge |\beta_i|\sigma_M\).</li>
+<li>\(0 &lt; \beta_i &lt; 1\): the stock fluctuates less than the market (defensive stock).</li>
+<li>\(\beta_i > 1\): the stock fluctuates more than the market (aggressive stock).</li>
+</ol>
+<p><b>Definition:</b> If \(r\) is the risk free rate then</p>
+<ol type="i">
+<li>\(\mu_i - r\) is the <b>risk premium of the security</b>.</li>
+<li>\(\mu_M - r\) is the <b>risk premium of the market portfolio</b>.</li>
+</ol>
+<blockquote>
+<p><b>Theorem (CAPM):</b> Assuming \(V\) is positive definite, \(\vec{\mu}\) and \(\vec{e}\) are linearly independent and \(0 \le r &lt; \mu_G\), then</p>
+\[
+\beta_i = \frac{\mu_i - r}{\mu_M - r} \implies \mu_i = r + \beta_i(\mu_M - r)
+\]
+<p>A point under the Security Market Line is overpriced, while a point above is underpriced.</p>
+</blockquote>
+<p><b>Proof:</b></p>
+\[
+\beta_i = \frac{\text{Cov}(R_i, R_M)}{\text{Var}(R_M)} = \frac{\text{Cov}(R_i, R_M)}{\text{Cov}(R_M, R_M)}
+\]
+<p>To compute these covariances, recall:</p>
+<ol type="i">
+<li>Covariance of two portfolios: \(\vec{w}_{P_1}^T V \vec{w}_{P_2}\).</li>
+<li>Security \(i\) has weight vector \(\vec{e}_i^T = [0 \dots 1 \dots 0]\) (1 at the \(i^{th}\) position).</li>
+<li>The Market Portfolio weights (\(\vec{w}_M\)) are given by \(\vec{w}_M = V^{-1} \frac{\vec{\mu} - r\vec{e}}{B - Ar}\).</li>
+</ol>
+<p>Substitute the matrix forms into the Beta fraction:</p>
+\[
+\beta_i = \frac{\vec{e}_i^T V \vec{w}_M}{\vec{w}_M^T V \vec{w}_M}
+\]
+<p>Now, substitute the definition of \(\vec{w}_M\) into the \(V \vec{w}_M\) term:</p>
+\[
+V \vec{w}_M = V \left( V^{-1} \frac{\vec{\mu} - r\vec{e}}{B - Ar} \right) = \frac{\vec{\mu} - r\vec{e}}{B - Ar}
+\]
+<p>Substitute this back into the numerator and denominator:</p>
+\[
+\beta_i = \frac{\vec{e}_i^T \left( \frac{\vec{\mu} - r\vec{e}}{B - Ar} \right)}{\vec{w}_M^T \left( \frac{\vec{\mu} - r\vec{e}}{B - Ar} \right)} = \frac{\vec{e}_i^T (\vec{\mu} - r\vec{e})}{\vec{w}_M^T (\vec{\mu} - r\vec{e})}
+\]
+<p>Distribute the transpose vectors:</p>
+<ol type="i">
+<li><b>Numerator:</b> Since \(\vec{e}_i\) selects the \(i\)-th element: \(\vec{e}_i^T \vec{\mu} = \mu_i\) and \(\vec{e}_i^T \vec{e} = 1\), giving \(\mu_i - r\).</li>
+<li><b>Denominator:</b> Since weights sum to 1 (\(\vec{w}_M^T \vec{e} = 1\)) and portfolio return is \(\vec{w}_M^T \vec{\mu} = \mu_M\), giving \(\mu_M - r\).</li>
+</ol>
+<p>We get the final result: \(\beta_i = \frac{\mu_i - r}{\mu_M - r}\).</p>
+
+<h4>4.2.1 Security Pricing via CAPM</h4>
+<p>Recall that the return of a security over the interval \([t_0, t_f]\) is:</p>
+\[
+R_{t_0}(t_f) = \frac{S(t_f) - S(t_0) + D_{t_0}(t_f)}{S(t_0)}
+\]
+<p>We apply the expectation operator \(\mathbb{E}\) to find the expected return \(\mu_i\):</p>
+\[
+\mu_i = \mathbb{E}[R] = \frac{\mathbb{E}[S(t_f)] - S(t_0) + \mathbb{E}[D_{t_0}(t_f)]}{S(t_0)}
+\]
+<p>We rearrange the equation, solving for the current price \(S(t_0)\):</p>
+\[
+\begin{aligned}
+\mu_i S(t_0) &amp;= \mathbb{E}[S(t_f)] - S(t_0) + \mathbb{E}[D_{t_0}(t_f)] \\
+S(t_0) &amp;= \frac{\mathbb{E}[S(t_f)] + \mathbb{E}[D_{t_0}(t_f)]}{1 + \mu_i}
+\end{aligned}
+\]
+<p>From the CAPM Theorem, we know \(\mu_i = r + \beta_i(\mu_M - r)\). Plugging this into the denominator, we get the pricing formula:</p>
+\[
+\boxed{S(t_0) = \frac{\mathbb{E}[S(t_f)] + \mathbb{E}[D_{t_0}(t_f)]}{1 + r + \beta_i(\mu_M - r)}}
+\]
+
+<h2 id="s5">5. Binomial Trees and Security Pricing Modeling</h2>
+
+<h3 id="s5-1">5.1 Binomial Tree Model of Security Prices</h3>
+<p>We fix a time interval \([t_0, t_f]\) and let \(\tau = t_f - t_0\). Next, we divide \([t_0, t_f]\) into \(n\) subintervals \([t_0, t_1], \dots, [t_{n-1}, t_n]\) of the same length \(h_n = \frac{\tau}{n}\).</p>
+<p>Let \(S(t)\) be the price of the security at time \(t\), then we denote \(S_j = S(t_j)\). \(S_0\) is assumed known (current price), and \(S_1, \dots, S_n\) are random variables.</p>
+<p>The <b>gross returns</b> are independent random variables:</p>
+\[
+\frac{S_1}{S_0}, \frac{S_2}{S_1}, \dots, \frac{S_n}{S_{n-1}} \text{ (i.i.d)}
+\]
+<p>where:</p>
+\[
+\frac{S_j}{S_{j-1}} = \begin{cases}
+u_n \text{ with probability } p_n \\
+d_n \text{ with probability } 1 - p_n
+\end{cases}
+\]
+<p>If \(N_U\) is the random variable giving the number of upticks in the price, then \(N_U\) follows a \(\text{Binomial}(n, p_n)\):</p>
+\[
+\mathbb{P}(N_U = k) = {n\choose k} p_n^k (1-p_n)^{n-k} = \mathbb{P}(S_n = S_0u_n^kd_n^{n-k})
+\]
+<p>The expected value of the future price \(S_n\) can be found in two ways:</p>
+<ol>
+<li>\(\mathbb{E}(S_n) = \sum S_0 u_n^k d_n^{n-k} \mathbb{P}(S_u = S_0u_n^k d_n^{n-k})\).</li>
+<li>Use the i.i.d property of the gross return:
+\[
+\frac{S_n}{S_0} = \frac{S_n}{S_{n-1}} \times \dots \times \frac{S_1}{S_0} \implies \mathbb{E}(\frac{S_n}{S_0}) = \mathbb{E}(\frac{S_n}{S_{n-1}}) \times \dots \times \mathbb{E}(\frac{S_1}{S_0}) = (\mathbb{E}(\frac{S_j}{S_{j-1}}))^n
+\]
+As such, \(\mathbb{E}(S_n) = S_0[p_nu_n + (1-p_n)d_n]^n\).</li>
+</ol>
+<p><b>Example:</b> Suppose a stock is worth \(\$100\) today. Using a \(20\)-period binomial tree over \(1\) month, with \(u_{20} = 1.02, d_{20} = .98, p_{20} = .53\):</p>
+<ol type="i">
+<li>Find the lowest and highest possible prices.</li>
+<li>Find the \(15^{th}\) lowest price.</li>
+<li>Find the probability that the price is the \(15^{th}\) lowest price.</li>
+<li>Find the expected value of the stock price in \(1\) month.</li>
+</ol>
+<p><i>Solution:</i></p>
+<ol type="i">
+<li>Lowest: \(S_0d_{20}^{20} = 100(.98)^{20} \approx \$66.76\), Highest: \(S_0u_{20}^{20} = 100(1.02)^{20} \approx \$148.59\).</li>
+<li>\(S_0u_{20}^{14}d_{20}^{6} = 100(1.02)^{14}(.98)^{6} \approx \$116.89\).</li>
+<li>\(\mathbb{P}(S_{20} = S_0u_{20}^{14}d_{20}^6) = \mathbb{P}(N_U = 14) = {20 \choose 14}(.53)^{14}(.47)^6 \approx 5.8\%\).</li>
+<li>\(\mathbb{E}(S_{20}) = 100[(.53)(1.02) + (.47)(.98)]^{20} \approx \$102.43\).</li>
+</ol>
+
+<h3 id="s5-2">5.2 The Cox-Ross-Rubinstein Binomial Tree</h3>
+<p>The CRR tree model assumes that \(u_nd_n = 1\).</p>
+<ol type="i">
+<li>The expected time-step return rate per unit time period converges to a constant \(m\), the <b>instantaneous expected return</b>.
+\[
+\frac{\mathbb{E}(R(t_0,t_1))}{h_n} \to m \text{ as } n \to \infty, \text{ where } R(t_0, t_1) = \frac{S_1 - S_0 + D(t_0, t_1)}{S_0}
+\]
+</li>
+<li>The expected time-step log return rate per unit time period converges to a constant \(\mu\), the <b>instantaneous log return</b> or <b>drift</b>:
+\[
+\mu_n = \frac{\mathbb{E}(\ln \frac{S_1}{S_0})}{h_n} \to \mu \text{ as } n \to \infty
+\]
+</li>
+<li>The variance of the time-step log return per unit time step converges to \(\sigma^2\), the square of the <b>volatility</b>:
+\[
+\sigma_n^2 = \frac{\text{Var}(\ln \frac{S_1}{S_0})}{h_n} \to \sigma^2 \text{ as } n \to \infty
+\]
+</li>
+</ol>
+<p><b>Proposition 1:</b> \(\boxed{\mu_nh_n = p_n\ln u_n + (1-p_n)\ln d_n}\).</p>
+<p><i>Proof:</i> Recall the following:</p>
+\[
+\mu_n = \frac{\mathbb{E}(\ln \frac{S_1}{S_0})}{h_n}, \frac{S_j}{S_{j-1}} = \begin{cases}
+u_n \text{ with probability } p \\
+d_n \text{ with probability } 1-p
+\end{cases}
+\]
+<p>We know:</p>
+\[
+\ln \frac{S_1}{S_0} = \begin{cases}
+\ln u_n \text{ with probability } p \\
+\ln d_n \text{ with probability } 1-p
+\end{cases}
+\]
+<p>As such, \(\mu_nh_n = \mathbb{E}(\ln \frac{S_1}{S_0}) = p_n \ln u_n + (1-p_n)\ln d_n\).</p>
+<p><b>Proposition 2:</b> \(\boxed{\sigma_n^2 h_n = p_n(1-p_n)[\ln \frac{u_n}{d_n}]^2}\).</p>
+<p><i>Proof:</i>
+We know:</p>
+\[
+(\ln \frac{S_1}{S_0})^2 = \begin{cases}
+(\ln u_n)^2 \text{ with probability } p \\
+(\ln d_n)^2 \text{ with probability } 1-p
+\end{cases}
+\]
+<p>As well, since \(\sigma_n^2 = \frac{\text{Var}(\ln \frac{S_1}{S_0})}{h_n}\):</p>
+\[
+\begin{aligned}
+\sigma_n^2 h_n &amp;= \text{Var}(\ln \frac{S_1}{S_0}) = \mathbb{E}[(\ln \frac{S_1}{S_0})^2] - [\mathbb{E}(\ln \frac{S_1}{S_0})]^2 \\
+&amp;= p_n(\ln u_n)^2 + (1-p_n)(\ln d_n)^2 - (p_n \ln u_n + (1-p_n)\ln d_n)^2 \\
+&amp;= p_n (1-p_n)[(\ln u_n)^2 + (\ln d_n)^2 - 2 \ln u_n \ln d_n] \\
+&amp;= p_n(1-p_n)[\ln u_n - \ln d_n]^2
+\end{aligned}
+\]
+<p><b>Proposition 3:</b> \(\boxed{\mu = m - q - \frac{\sigma^2}{2}}\).</p>
+<p><i>Proof:</i>
+Let \(h_n = t_1 - t_0\) and \(q\) be the dividend rate such that \(D(t_0, t_1) = q S_0 h_n\). Define the return \(R_1 = \frac{S_1 - S_0}{S_0} = \frac{S_1}{S_0} - 1 \implies \frac{S_1}{S_0} = 1 + R_1\). Using the Taylor expansion \(\ln(1+x) \approx x - \frac{x^2}{2}\) (for \(x \approx 0\)):</p>
+\[
+\begin{aligned}
+h_n \mu_n &amp;= \mathbb{E}(\ln \frac{S_1}{S_0}) = \mathbb{E}(\ln(1+R_1)) \\
+&amp;\approx \mathbb{E}(R_1 - \frac{R_1^2}{2}) \\
+&amp;= \mathbb{E}(R_1) - \frac{1}{2}\mathbb{E}(R_1^2)
+\end{aligned}
+\]
+<p>We evaluate the terms:</p>
+<ol>
+<li>\(\mathbb{E}(R_1) = \mathbb{E}(\frac{S_1-S_0+D_0}{S_0}) - \frac{D_0}{S_0} \approx m h_n - q h_n = (m-q)h_n\).</li>
+<li>\(\text{Var}(\ln \frac{S_1}{S_0}) \approx \text{Var}(R_1) = \mathbb{E}(R_1^2) - [\mathbb{E}(R_1)]^2\).
+<ol type="a">
+<li>We assume \(n\) is large, so terms of order \(h_n^2\) (like \([\mathbb{E}(R_1)]^2 \approx [(m-q)h_n]^2\)) are negligible.</li>
+<li>Therefore, \(\mathbb{E}(R_1^2) \approx \text{Var}(\ln \frac{S_1}{S_0}) = \sigma^2 h_n\).</li>
+</ol>
+</li>
+</ol>
+<p>Substituting back:</p>
+\[
+h_n \mu_n \approx (m-q)h_n - \frac{1}{2}\sigma^2 h_n \implies \mu \approx m - q - \frac{\sigma^2}{2}
+\]
+
+<h4>5.2.1 The Cox-Ross-Rubinstein (CRR) Binomial Tree Theorem</h4>
+<blockquote>
+<p><b>Theorem:</b> Given a security with volatility \(\sigma\), drift \(\mu\), expected return \(m\), and dividend rate \(q\), the parameters \(u_n, d_n\) and \(p_n\) for a CRR tree are given by:</p>
+<ol type="a">
+<li>\(u_n \approx e^{\sigma\sqrt{h_n}}\)</li>
+<li>\(d_n \approx e^{-\sigma\sqrt{h_n}}\)</li>
+<li>\(p_n \approx \frac{1}{2}\left(1 + \frac{\mu}{\sigma}\sqrt{h_n}\right) \approx \frac{e^{(m-q)h_n} - d_n}{u_n - d_n}\)</li>
+</ol>
+</blockquote>
+<p><i>Proof of (a) and (b):</i>
+We impose the symmetry constraint \(u_n d_n = 1 \implies \ln d_n = - \ln u_n\).
+From Proposition 2:</p>
+\[
+\sigma^2 h_n = p_n(1-p_n)[\ln u_n - \ln d_n]^2 = p_n(1-p_n)[2 \ln u_n]^2
+\]
+<p>Assuming \(p_n \approx \frac{1}{2}\) (to first order):</p>
+\[
+\begin{aligned}
+\sigma^2 h_n &amp;\approx \frac{1}{2}\left(1-\frac{1}{2}\right) 4 (\ln u_n)^2 \\
+\sigma^2 h_n &amp;\approx (\ln u_n)^2 \implies \ln u_n \approx \sigma\sqrt{h_n}
+\end{aligned}
+\]
+<p>Thus, \(u_n \approx e^{\sigma\sqrt{h_n}}\) and \(d_n = 1/u_n \approx e^{-\sigma\sqrt{h_n}}\).</p>
+<p><i>Proof of (c) (Derivation of Exact Formula):</i>
+We solve for \(p_n\) by matching the expected future price.</p>
+\[
+\begin{aligned}
+\mathbb{E}\left(\frac{S_1}{S_0}\right) &amp;= p_n u_n + (1-p_n)d_n \\
+\mathbb{E}(1+R_1) &amp;\approx 1 + (m-q)h_n \approx e^{(m-q)h_n}
+\end{aligned}
+\]
+<p>Equating the two expressions:</p>
+\[
+\begin{aligned}
+p_n u_n + d_n - p_n d_n &amp;= e^{(m-q)h_n} \\
+p_n(u_n - d_n) &amp;= e^{(m-q)h_n} - d_n \\
+p_n &amp;= \frac{e^{(m-q)h_n} - d_n}{u_n - d_n}
+\end{aligned}
+\]
+<p><i>Proof of (c) (Derivation of Approximation):</i>
+Alternatively, using Proposition 1 and Parts A/B:</p>
+\[
+\begin{aligned}
+\mu h_n &amp;= p_n \ln u_n + (1-p_n) \ln d_n \\
+\mu h_n &amp;= p_n (\sigma\sqrt{h_n}) + (1-p_n)(-\sigma\sqrt{h_n}) \\
+\mu h_n &amp;= \sigma\sqrt{h_n} (2p_n - 1)
+\end{aligned}
+\]
+<p>Solving for \(p_n\):</p>
+\[
+2p_n - 1 \approx \frac{\mu\sqrt{h_n}}{\sigma} \implies p_n \approx \frac{1}{2}\left(1 + \frac{\mu}{\sigma}\sqrt{h_n}\right)
+\]
+
+<h3 id="s5-3">5.3 From CRR Tree to Continuous Time Model</h3>
+<p><b>Question:</b> Does the CRR tree model converge as \(n \to \infty\) to a continuous model?</p>
+<p>Let the total time be \(t\). We divide the interval \([0, t]\) into \(n\) steps of length \(h_n = \frac{t}{n}\).
+The price at time \(t\), \(S_n(t)\), can be written as the product of independent increments:</p>
+\[
+S_n(t) = S_0 \cdot \frac{S_1}{S_0} \cdot \frac{S_2}{S_1} \dots \frac{S_n}{S_{n-1}} \implies \ln \frac{S_n(t)}{S_0} = \sum_{j=1}^{n} \ln \frac{S_j}{S_{j-1}}
+\]
+<p>Let \(Y_{n,j} = \ln \frac{S_j}{S_{j-1}}\) be the log returns, which are i.i.d for fixed \(n\).
+We define the standardized log return:</p>
+\[
+X_{n,j} = \frac{Y_{n,j} - \mathbb{E}(Y_{n,j})}{\sqrt{\text{Var}(Y_{n,j})}}
+\]
+<p>From previous propositions, we know \(\mathbb{E}(Y_{n,j}) \approx \mu h_n\) and \(\text{Var}(Y_{n,j}) \approx \sigma^2 h_n\).
+Substituting in:</p>
+\[
+\ln \frac{S_n(t)}{S_0} \approx \sum_{j=1}^{n} (\mu h_n + \sigma\sqrt{h_n} X_{n,j}) = \mu (n h_n) + \sigma\sqrt{n h_n} \left( \frac{1}{\sqrt{n}} \sum_{j=1}^{n} X_{n,j} \right)
+\]
+<p>Since \(n h_n = t\):</p>
+\[
+S_n(t) = S_0 \exp \left[ \mu t + \sigma\sqrt{t} \left( \frac{1}{\sqrt{n}} \sum_{j=1}^{n} X_{n,j} \right) \right]
+\]
+
+<h4>5.3.1 The Limit Theorem (Lindeberg CLT)</h4>
+<p>We cannot use the classic Central Limit Theorem (CLT) because we have a <b>triangular array</b> of random variables (the distribution of \(X_{n,j}\) depends on \(n\)).
+Instead, we use the <b>Lindeberg Central Limit Theorem (LCLT)</b>.</p>
+<p><b>Theorem (LCLT):</b> For a triangular array of independent random variables \(X_{n,j}\), if:</p>
+<ol>
+<li>\(\mathbb{E}(X_{n,j}) = 0\) (True by definition).</li>
+<li>\(\sum_{j=1}^{n} \mathbb{E}(X_{n,j}^2) = 1\) (True, sum is \(n \cdot \frac{1}{n} = 1\)).</li>
+<li><b>Lindeberg Condition:</b> For any \(\epsilon > 0\), \(\lim_{n \to \infty} \sum \mathbb{E}(X_{n,j}^2 \mathbf{1}_{\{|X_{n,j}| > \epsilon\}}) = 0\).</li>
+</ol>
+<p>Then:</p>
+\[
+\frac{1}{\sqrt{n}} \sum_{j=1}^{n} X_{n,j} \xrightarrow{d} Z \sim N(0,1)
+\]
+<p><b>Checking the Condition:</b>
+In the CRR model, \(X_{n,j}\) takes values relating to \(\ln u_n\) and \(\ln d_n\). As \(n \to \infty\), \(h_n \to 0\), so \(\ln u_n \approx \sigma\sqrt{h_n} \to 0\). Thus, for large \(n\), \(|X_{n,j}| &lt; \epsilon\), satisfying the condition.</p>
+<p><b>Conclusion:</b>
+As \(n \to \infty\):</p>
+\[
+S_n(t) \to S_t = S_0 \exp(X_t) \quad \text{where } X_t \sim N(\mu t, \sigma^2 t)
+\]
+<p>\(S_t\) is a <b>Lognormal</b> random variable.</p>
+
+<h4>5.3.2 The Continuous-Time Security Price Formula</h4>
+<p><b>Definition:</b> \(S_t\) is a continuous function of time satisfying:</p>
+<ol type="i">
+<li><b>Stationarity of log returns:</b> \(\ln \frac{S_{t+s}}{S_s} \stackrel{d}{=} \ln \frac{S_t}{S_0}\).</li>
+<li><b>Independence:</b> If \(t_1 &lt; t_2 &lt; \dots &lt; t_n\), then \(\ln \frac{S_{t_1}}{S_{t_0}}, \dots, \ln \frac{S_{t_n}}{S_{t_{n-1}}}\) are independent.</li>
+<li><b>Lognormality:</b> \(\ln \frac{S_t}{S_0} \stackrel{d}{=} \mu t + \sigma\sqrt{t}Z \sim N(\mu t, \sigma^2 t)\).</li>
+</ol>
+<p><b>Exercise:</b> Let \(S_t = S_0 e^{X_t}\) where \(X_t \sim N(\mu t, \sigma^2 t)\). We know if \(X \sim N(a, b^2)\), then \(\mathbb{E}(e^X) = e^{a + \frac{b^2}{2}}\):</p>
+<ol type="i">
+<li><b>Expected Value:</b> \(\mathbb{E}(S_t) = S_0 \mathbb{E}(e^{X_t})\)/ Here, \(a = \mu t, b^2 = \sigma^2t\), so \(\mathbb{E}(S_t) = \boxed{S_0 e^{(\mu + \frac{\sigma^2}{2})t}}\).</li>
+<li><b>Variance:</b> \(\text{Var}(S_t) = \mathbb{E}(S_t^2) - (\mathbb{E}(S_t))^2\).
+<ol type="a">
+<li>First, compute \(\mathbb{E}(S_t^2)\):
+\[
+\mathbb{E}(S_t^2) = S_0^2 \mathbb{E}((e^{X_t})^2) = S_0^2 \mathbb{E}(e^{2X_t})
+\]
+</li>
+<li>Since \(X_t \sim N(\mu t, \sigma^2 t) \implies 2X_t \sim N(2\mu t, 4\sigma^2 t)\), we have \(\mathbb{E}(e^{2X_t}) = e^{2\mu t + \frac{4\sigma^2 t}{2}} = e^{2\mu t + 2\sigma^2 t}\).</li>
+<li>Now, substitute back into the variance formula:
+\[
+\begin{aligned}
+\text{Var}(S_t) &amp;= S_0^2 e^{2\mu t + 2\sigma^2 t} - \left( S_0 e^{\mu t + \frac{\sigma^2}{2}t} \right)^2 \\
+&amp;= S_0^2 e^{2\mu t + 2\sigma^2 t} - S_0^2 e^{2\mu t + \sigma^2 t} \\
+&amp;= S_0^2 e^{2\mu t + \sigma^2 t} (e^{\sigma^2 t} - 1)
+\end{aligned}
+\]
+</li>
+<li>Using \(\mathbb{E}(S_t)\) notation: \(\boxed{\text{Var}(S_t) = S_0^2 (e^{\sigma^2 t} - 1) e^{(2\mu + \sigma^2)t}}\).</li>
+</ol>
+</li>
+</ol>
+
+<h2 id="s6">6. Stochastic Calculus and the GBM Model</h2>
+
+<h3 id="s6-1">6.1 Standard Brownian Motion</h3>
+<p><b>Definition:</b> A collection of random variables \((X_n)_{n \ge 0}\) (discrete time) or \((X_t)_{t \ge 0}\) (continuous time) is called a <b>stochastic process</b>.</p>
+<p><b>Definition:</b> Given \(R_1, R_2, \dots\) i.i.d. random variables, the stochastic process</p>
+\[
+W_k = \begin{cases}
+w_0 + R_1 + \dots + R_k &amp; \text{if } k \ge 1 \\
+w_0 &amp; \text{if } k = 0
+\end{cases}
+\]
+<p>is called a <b>random walk</b>.</p>
+<p>Consider the following game: flip a fair coin \(a\) times (\(n\) flips per unit time). The winnings for the \(k^{th}\) flip are:</p>
+\[
+R_k = \begin{cases}
++\frac{1}{\sqrt{n}} &amp; \text{with probability } \frac{1}{2} \\
+-\frac{1}{\sqrt{n}} &amp; \text{with probability } \frac{1}{2} \\
+\end{cases}
+\]
+<p>Then, let \((W_k)_{k \ge 0}\) be the process defined by \(W_k = \sum_{i=1}^k R_i\) (with \(W_0=0\)), representing total winnings after \(k\) flips.</p>
+
+<h4>6.1.1 Properties of \((W_k)_{k \ge 0}\)</h4>
+<ol type="i">
+<li>\(\mathbb{E}(W_k) = 0\).</li>
+<li>\(\text{Var}(W_k) = \frac{k}{n}=t_k\).</li>
+<li><b>Stationarity:</b> \(W_l - W_k \stackrel{\text{d}}{=} W_{l-k}\), for \(l > k\).</li>
+<li><b>Independent Increments:</b> \(W_1-W_0, \dots, W_k - W_{k-1}\) are independent.</li>
+<li><b>Markov Property:</b>
+\[
+P(W_{k+1} = s_{k+1} \mid W_1 = s_1, \dots, W_k = s_k) = P(W_{k+1} = s_{k+1} \mid W_k = s_k)
+\]
+</li>
+<li><b>Martingale Property:</b> \(\mathbb{E}(W_{k+1} \mid W_0, \dots, W_k) = W_k\).</li>
+<li><b>Convergence:</b> \(W_{\lfloor tn \rfloor} \xrightarrow[n \to \infty]{d} N(0,t)\). (e.g., \(W(t_n) \rightarrow N(0,1)\)).</li>
+<li><b>Quadratic Variation:</b> \(\sum_{i=1}^k (W(t_i) - W(t_{i-1}))^2 = t_k\).</li>
+</ol>
+<p>Let \((W^{(n)}(t))_{t \ge 0}\) be the continuous time extension of \((W_k)_{k \ge 0}\) such that if \(t_k = \frac{k}{n}\):</p>
+\[
+\begin{cases}
+W^{(n)}(t_k) = W_k \\
+W^{(n)}(t) \text{ is affine on } [t_k, t_{k+1}] \implies W^{(n)}(t) = W_k + \frac{t - t_k}{1/n}(W_{k+1} - W_k)
+\end{cases}
+\]
+<p><b>Theorem:</b> \((W^{(n)}(t))_{t \ge 0}\) converges (in distribution) to a stochastic process \((B(t))_{t \ge 0}\) called <b>Standard Brownian Motion</b> (SBM) or <b>Wiener Process</b>.</p>
+<blockquote>
+<p><b>Definition:</b> The stochastic process \((B(t))_{t \ge 0}\) is called <b>Standard Brownian Motion</b> if:</p>
+<ol type="i">
+<li>\(B(0) = 0\).</li>
+<li>\(B(t)\) is continuous a.s.</li>
+<li>\(B(t) - B(s) \sim N(0, t-s)\), for all \(0 \le s &lt; t\).</li>
+<li>\(B(t)\) has independent increments.</li>
+</ol>
+</blockquote>
+<table>
+<tr><th><b>SRW</b> (\(W\))</th><th><b>SBM</b> (\(B\))</th></tr>
+<tr><td>\(t_k = \frac{k}{n}\)</td><td>\(t\)</td></tr>
+<tr><td>\(t_{k+1} - t_k = \frac{1}{n}\)</td><td>\(dt\)</td></tr>
+<tr><td>\(W_k = W(t_k)\)</td><td>\(B(t)\)</td></tr>
+<tr><td>\(R_k = W_{k+1} - W_k\)</td><td>\(dB(t) = B(t+dt) - B(t)\)</td></tr>
+<tr><td>\(R_i\) i.i.d.</td><td>\(dB(t_i)\) i.i.d.</td></tr>
+<tr><td>\(\mathbb{E}(W_k) = 0, \quad \text{Var}(W_k) = t_k\)</td><td>\(\mathbb{E}(B(t)) = 0, \quad \text{Var}(B(t)) = t\)</td></tr>
+<tr><td>Markov &amp; Martingale</td><td>Markov &amp; Martingale</td></tr>
+<tr><td>QV: \(\sum (W(t_i) - W(t_{i-1}))^2 = t_k\)</td><td>QV: \(\sum (B(t_i) - B(t_{i-1}))^2 \xrightarrow[m.s.]{} t\)</td></tr>
+</table>
+
+<h3 id="s6-2">6.2 Geometric Brownian Motion</h3>
+<blockquote>
+<p><b>Definition:</b> The stochastic process \((X(t))_{t \ge 0}\) is called a <b>Brownian motion with drift and scaling</b> if:</p>
+<ol type="i">
+<li>\(X(0) = x_0\)</li>
+<li>\(X(t)\) is continuous a.s.</li>
+<li>\(X(t) - X(s) \sim N(\mu(t-s),\sigma^2(t-s))\), for all \(0 \leq s &lt; t\).</li>
+<li>\(X(t)\) has independent increments.</li>
+</ol>
+<p>The drift is \(\mu\). Note: \(X(t) \sim N(\mu t, \sigma^2 t) \implies \mathbb{E}(X(t)) = \mu t\).</p>
+</blockquote>
+<p>If \(B\) is a Standard Brownian Motion, then:</p>
+\[
+X(t) \stackrel{\text{d}}{=} x_0 + \mu t + \sigma B(t) \sim N(x_0 + \mu t, \sigma^2 t)
+\]
+<p>This process satisfies the stochastic differential equation (SDE):</p>
+\[
+\begin{aligned}
+dX(t) &amp;= X(t+dt) - X(t) \\
+&amp;= \mu dt + \sigma (B(t+dt) - B(t)) \\
+&amp;= \boxed{\mu dt + \sigma dB(t)}
+\end{aligned}
+\]
+<p>Note: If \(\mu = 0, \sigma = 1\), then \(dX(t) = dB(t) \implies X(t) = B(t)\).</p>
+
+<h4>6.2.1 Lognormal Model for Security Prices</h4>
+<p>Recall the continuous time model for security prices from Chapter 5 satisfies:</p>
+<ol type="i">
+<li>\(S_t\) is continuous a.e.</li>
+<li><b>Stationarity</b> of log returns.</li>
+<li><b>Independence</b> of log returns.</li>
+<li><b>Lognormality</b>: \(\ln \frac{S_t}{S_0} \sim N(\mu t, \sigma^2t)\).</li>
+</ol>
+<p>Let \(X(t) = \ln \frac{S_t}{S_0}\). Since \(X(0)=0\), \(X\) is continuous, and increments are normally distributed, \(X(t)\) is a <b>Brownian motion with drift and scaling</b>.</p>
+\[
+\begin{aligned}
+X(t) &amp;= \ln \frac{S_t}{S_0} \implies S_t = S_0e^{X(t)} = S_0e^{\mu t + \sigma B(t)}
+\end{aligned}
+\]
+<blockquote>
+<p><b>Definition:</b> The stochastic process \((S(t))_{t \ge 0}\) is called a <b>Geometric Brownian Motion (GBM)</b> if</p>
+\[
+S(t) = S_0e^{X(t)}
+\]
+<p>where \((X(t))_{t \ge 0}\) is a Brownian motion with drift and scaling.</p>
+</blockquote>
+
+<h4>Deriving the SDE for \(S(t)\)</h4>
+<p>We seek coefficients for \(dS(t) = (\dots) dt + (\dots) dB_t\).</p>
+<p><b>1. Setup:</b> \(\ln \frac{S_{t+dt}}{S_t} \sim N(\mu dt, \sigma^2 dt) \implies \frac{S_{t+dt}}{S_t} \stackrel{d}{=} e^{\mu dt + \sigma dB_t}\).</p>
+<p><b>2. Expansion:</b> Using Taylor series \(e^x \approx 1 + x + \frac{x^2}{2}\) with \(x = \mu dt + \sigma dB_t\):</p>
+\[
+\begin{aligned}
+\frac{S_{t+dt}}{S_t} &amp;\approx 1 + (\mu dt + \sigma dB_t) + \frac{1}{2}(\mu dt + \sigma dB_t)^2
+\end{aligned}
+\]
+<p><b>3. Apply Ito Rules:</b> Recall \((dt)^2 \to 0\), \(dt \cdot dB_t \to 0\), and \((dB_t)^2 \to dt\).</p>
+\[
+\begin{aligned}
+\frac{S_{t+dt}}{S_t} &amp;= 1 + \mu dt + \sigma dB_t + \frac{1}{2}\sigma^2 (dB_t)^2 \\
+&amp;= 1 + \left(\mu + \frac{\sigma^2}{2}\right)dt + \sigma dB_t
+\end{aligned}
+\]
+<p><b>4. Result:</b> Rearranging for \(dS_t = S_{t+dt} - S_t\):</p>
+\[
+\boxed{dS_t = S_t \underbrace{\left(\mu + \frac{\sigma^2}{2}\right)}_{\text{Drift Term}} dt + S_t \underbrace{\sigma}_{\text{Diffusion}} dB_t}
+\]
+<p><b>Property:</b> \((S(t))_{t \ge 0}\) is a GBM such that \(S(t) \stackrel{\text{d}}{=} S_0e^{\mu t + \sigma B(t)}\) iff</p>
+\[
+dS(t) = \left( \mu + \frac{\sigma^2}{2}\right) S(t) dt + \sigma S(t)dB(t)
+\]
+<p><i>Notation Note:</i> Often written as \(dS_t = (m-q)S_t dt + \sigma S_t dB_t\), where \(m-q = \mu + \frac{\sigma^2}{2}\).</p>
+<p><b>Example (Naive/Incorrect Approach):</b> Solving \(dS_t = (m-q)S_t dt + \sigma S_t dB_t\).</p>
+<ol>
+<li>Standard Calculus: \(\int \frac{dS}{S} = \ln S_t - \ln S_0\).</li>
+<li>Integrating RHS: \(\int (m-q)dt + \sigma dB = (m-q)t + \sigma B(t)\).</li>
+<li>Result: \(S(t) = S_0 e^{(m-q)t + \sigma B(t)}\). <b>This is INCORRECT.</b> It misses the \(-\frac{\sigma^2}{2}\) term because regular calculus does not account for quadratic variation (\((dB)^2 \to dt\)).</li>
+</ol>
+
+<h3 id="s6-3">6.3 Ito's Lemma</h3>
+<blockquote>
+<p><b>Ito's Lemma:</b> Let \(X\) be a process satisfying \(dX(t) = a(X,t) dt + b(X,t) dB(t)\).
+Let \(f(x,t)\) be continuously differentiable in \(t\) and twice in \(x\). Let \(Y(t)=f(X(t),t)\). Then:</p>
+\[
+\begin{aligned}
+dY(t) &amp;= \left( \frac{\partial f}{\partial t} + a \frac{\partial f}{\partial x} + \frac{1}{2}b^2 \frac{\partial^2f}{\partial x^2}\right)dt + b \frac{\partial f}{\partial x} dB(t)
+\end{aligned}
+\]
+<p>In short: \(df = (f_t + af_x + \frac{1}{2}b^2f_{xx})dt + bf_xdB\).</p>
+</blockquote>
+<p><b>Cases:</b></p>
+<ol type="i">
+<li>SBM: \(a=0, b=1\).</li>
+<li>BM with drift: \(a=\mu, b=\sigma\).</li>
+<li>Lognormal: \(a=(m-q)S, b=\sigma S\).</li>
+</ol>
+
+<h4>6.3.1 Examples of Ito's Lemma</h4>
+<p><b>1. Find \(d(B^2(t))\):</b><br>
+\(f(x,t) = x^2\) and \(X=B\) (\(a=0, b=1\)).</p>
+\[
+f_t = 0, \quad f_x = 2x = 2B, \quad f_{xx} = 2 \implies \boxed{d(B^2) = dt + 2B dB}
+\]
+<p><b>2. Find \(d(t + e^{B(t)})\):</b><br>
+\(f(x,t) = t + e^x\) and \(X=B\) (\(a=0, b=1\)).</p>
+\[
+f_t = 1, \quad f_x = e^B, \quad f_{xx} = e^B \implies \boxed{d(t+e^B) = (1 + \frac{1}{2}e^B)dt + e^B dB}
+\]
+<p><b>3. Find \(d(\ln S(t))\) for GBM:</b><br>
+\(f(S,t) = \ln S\). Process is \(dS = (m-q)S dt + \sigma S dB\) (so \(a=(m-q)S, b=\sigma S\)).</p>
+\[
+f_t = 0, \quad f_S = \frac{1}{S}, \quad f_{SS} = -\frac{1}{S^2}
+\]
+<p>Applying Ito:</p>
+\[
+\begin{aligned}
+d(\ln S) &amp;= \left( 0 + (m-q)S \frac{1}{S} + \frac{1}{2}(\sigma S)^2 \left(-\frac{1}{S^2}\right) \right) dt + \sigma S \frac{1}{S} dB \\
+&amp;= \boxed{\left( m - q - \frac{\sigma^2}{2} \right) dt + \sigma dB}
+\end{aligned}
+\]
+
+<h4>Solving the GBM SDE (Correct Approach)</h4>
+<p>To solve \(dS(t) = (m-q)S(t)dt + \sigma S(t)dB(t)\), we integrate the result from Example 3 above.</p>
+\[
+\begin{aligned}
+\int_0^t d(\ln S) &amp;= \int_0^t \left( m - q - \frac{\sigma^2}{2} \right) dt + \int_0^t \sigma dB \\
+\ln S_t - \ln S_0 &amp;= \left( m - q - \frac{\sigma^2}{2} \right)t + \sigma B_t
+\end{aligned}
+\]
+<p>Exponentiating both sides:</p>
+\[ \boxed{S_t = S_0 e^{\left( m - q - \frac{\sigma^2}{2} \right)t + \sigma B_t}} \]
+
+<h4>6.3.2 Ito's Integral</h4>
+<blockquote>
+<p>Consider a partition \(0 = t_0 &lt; \dots &lt; t_n = t\). The Ito integral of a process \(f\) is:</p>
+\[
+\int_{0}^{t}f(s)dB(s) = \lim_{n \to \infty}\sum_{i=1}^{n}f(t_{i-1})(B(t_i) - B(t_{i-1}))
+\]
+<p><i>Key:</i> The integrand is evaluated at the <b>left</b> endpoint \(t_{i-1}\) .</p>
+</blockquote>
+<p><b>Example: Calculate \(\int_0^t B(s) dB(s)\).</b>
+Using the identity \(x^2-y^2 = (x-y)^2 + 2y(x-y)\) on the sum \(\sum (B_{t_i}^2 - B_{t_{i-1}}^2)\):</p>
+\[ B(t)^2 - B(0)^2 = \underbrace{\sum (B_{t_i} - B_{t_{i-1}})^2}_{\to t \text{ (Quad. Var.)}} + 2 \underbrace{\sum B_{t_{i-1}}(B_{t_i} - B_{t_{i-1}})}_{\to \int B dB} \]
+\[ \implies B^2(t) = t + 2 \int_0^t B(s) dB(s) \implies \boxed{\int_0^t B(s) dB(s) = \frac{B^2(t)}{2} - \frac{t}{2}} \]
+<p><b>SDE in Integral Form:</b>
+\(dX(t) = a dt + b dB(t)\) is shorthand for:</p>
+\[ X(t) - X(0) = \int_{0}^{t}a(X(s),s) ds + \int_{0}^{t}b(X(s),s)dB(s) \]
+<p><b>Properties of Ito's Integral (\(\mathcal{I}(t) = \int_{0}^{t} f(s)dB(s)\)):</b></p>
+<ol type="i">
+<li>\(\mathcal{I}(t)\) is a martingale.</li>
+<li>\(\mathbb{E}(\mathcal{I}(t)) = 0\).</li>
+<li><b>Isometry:</b> \(\text{Var}(\mathcal{I}(t)) = \mathbb{E}[(\int f dB)^2] = \mathbb{E}[\int f^2 ds]\).</li>
+<li>If \(f\) is deterministic, \(\int_{0}^{t}f(s)dB(s) \sim N(0, \int_{0}^{t}f^2(s)ds)\).</li>
+</ol>
+
+<h2 id="s7">7. Call Options</h2>
+
+<h3 id="s7-1">7.1 Options</h3>
+<p><b>European Options:</b></p>
+<ol type="i">
+<li>A <b>call option</b> is a contract giving the buyer (or holder) the right (but not the obligation) to buy an asset from the seller (or writer) for a price fixed in advance called the strike price (or exercise price), at a specified future date called the exercise date.</li>
+<li>A <b>put option</b> gives the right to sell the underlying asset.</li>
+</ol>
+<p><b>American Options:</b> Can be exercised at any time prior to the exercise date.</p>
+<p><b>Law of One Price:</b> Suppose investment \(A\) costs \(C_A\) and investment \(B\) costs \(C_B\). If the payoff from investment \(A = \) payoff of investment \(B\), then either \(C_A = C_B\) or there is an arbitrage.</p>
+<p>Assume no arbitrage in what follows!</p>
+<p>The <b>premium</b> of an option contract is the amount that the buyer needs to pay and the seller receives at the time when both parties enter into the contract. A premium must be paid because otherwise there is an arbitrage since the payoff is \(\ge 0\).</p>
+<p><b>Notations:</b></p>
+<ol type="i">
+<li>\(t\): time contract was entered and premium paid</li>
+<li>\(T\): exercise date</li>
+<li>\(S(t)\): price of the underlying asset at time \(t\)</li>
+<li>\(K\): strike price</li>
+<li>\(C(t)\): call price (premium) at time \(t\)</li>
+<li>\(P(t)\): put price (premium) at time \(t\)</li>
+</ol>
+<p><b>Call Option:</b></p>
+<ol type="i">
+<li>\(\text{Payoff} = \max \{S(T) - K, 0\} = C(T)\).</li>
+<li>\(\text{Profit} = \max \{S(T) - K, 0\} - C(t)e^{r(T-t)}\), where the latter term is the time value of money factor.</li>
+</ol>
+<p><b>Put Option:</b></p>
+<ol type="i">
+<li>\(\text{Payoff} = \max \{K-S(T), 0\}\).</li>
+<li>\(\text{Profit} = \max \{K-S(T), 0\} - P(t)e^{r(T-t)}\), where the latter term is the time value of money factor.</li>
+</ol>
+<p><b>Example:</b> On March 22, the call option strike price of Rolls-Royce was \(\$220\), with exercise date May 22. Suppose that the option sold for \(\$19.5\) and you bought it using a loan at \(5.23\%\). For what values of the stock price at expiration will you make a profit?</p>
+<ol type="i">
+<li><i>Solution:</i> \(\text{Profit} = \max \{S(T) - K, 0\} - C(t)e^{r(T-t)} > 0 \implies S(T) > 220 + 19.5e^{.0523 \cdot \frac{2}{12}} = \$239.67\).</li>
+</ol>
+
+<h4>Question (Non-dividend paying stock. Ignore time value)</h4>
+<p>Jon and Paul both bought an American call option at time \(t_0 = 0\), with underlying asset price \(S(t)\), strike price \(K\), and expiration \(T\).</p>
+<p>At time \(t\) (\(0 &lt; t &lt; T\)), assume \(S(t) > K\).</p>
+<ol type="i">
+<li><b>Jon</b> decides to exercise his call immediately.</li>
+<li>Can <b>Paul</b> keep his call until expiration and make sure that his payoff is at least as good as Jon's?</li>
+</ol>
+
+<h4>Strategy Comparison</h4>
+<dl>
+<dt>Jon's Payoff (at time \(t\)):</dt>
+<dd>Exercises immediately.
+\[
+\text{Payoff} = S(t) - K
+\]
+</dd>
+<dt>Paul's Strategy:</dt>
+<dd>Paul keeps the option but wants to secure cash now to match Jon.
+<ol>
+<li><b>Short sell</b> the asset at time \(t\). Receives \(S(t)\).</li>
+<li>Wait until time \(T\).</li>
+<li><b>Close short position</b> by buying back the asset at the cheapest price between \(K\) (using the option) or \(S(T)\) (market price).</li>
+</ol>
+</dd>
+<dt>Paul's Payoff (at time \(T\)):</dt>
+<dd>
+\[
+\text{Payoff} = \max \{ \underbrace{S(t) - K}_{\text{Exercise Option}}, \quad \underbrace{S(t) - S(T)}_{\text{Buy at Market}} \}
+\]
+</dd>
+</dl>
+<p><b>Conclusion:</b> Paul's payoff is always \(\ge S(t) - K\). Therefore, it is never optimal to exercise an American call on a non-dividend paying stock early.</p>
+
+<h4>Put-Call Parity</h4>
+<blockquote>
+<p><b>Theorem:</b> Let \(C(t)\) and \(P(t)\) be the premium paid for a European call and put with strike price \(K\), underlying security price \(S(t)\), and exercise date \(T\). Let \(r\) be the risk-free rate. Then:</p>
+\[
+\boxed{C(t) = S(t) + P(t) - K e^{-r(T-t)}}
+\]
+</blockquote>
+<ol type="i">
+<li><i>Proof:</i> At time \(t\):
+<ol type="a">
+<li><b>Portfolio A</b>:
+<ol type="i">
+<li>1 Call (long)</li>
+</ol>
+</li>
+<li><b>Portfolio B</b>:
+<ol type="i">
+<li>1 share (long)</li>
+<li>1 put (long)</li>
+<li>Borrow \(Ke^{-r(T-t)}\) at risk-free rate (Short Bond)</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Claim: \(V_A(T) = V_B(T)\). We analyze the payoffs at maturity \(T\):</li>
+</ol>
+<table>
+<tr><th>Component</th><th>\(\boldsymbol{S(T) \ge K}\)</th><th>\(\boldsymbol{S(T) &lt; K}\)</th></tr>
+<tr><td><b>Portfolio A</b> (Call)</td><td><b>\(S(T) - K\)</b></td><td><b>\(0\)</b></td></tr>
+<tr><td colspan="3"><b>Portfolio B</b></td></tr>
+<tr><td>1 Share (\(S(T)\))</td><td>\(S(T)\)</td><td>\(S(T)\)</td></tr>
+<tr><td>1 Put</td><td>\(0\)</td><td>\(K - S(T)\)</td></tr>
+<tr><td>Repay Loan</td><td>\(-K\)</td><td>\(-K\)</td></tr>
+<tr><td><b>Total B</b></td><td><b>\(S(T) - K\)</b></td><td><b>\(0\)</b></td></tr>
+</table>
+<p><b>Conclusion (Law of One Price)</b>: Since the payoffs at time \(T\) are identical in all states of the world (\(V_A(T) = V_B(T)\)), the value of the portfolios at time \(t\) must be equal to prevent arbitrage.</p>
+\[
+V_A(t) = V_B(t) \implies C(t) = S(t) + P(t) - Ke^{-r(T-t)}
+\]
+
+<h2 id="s8">8. The BSM Model and European Option Pricing</h2>
+
+<h3 id="s8-1">8.1 Binomial Approach to Pricing European Options</h3>
+<p><b>Question:</b> What is the no-arbitrage price of a European call option with strike price \(\$100\)? (Assume the risk-free rate is \(5\%\)).</p>
+<ol type="i">
+<li>Terminal payoff of the call is \(C(T) = \begin{cases}
+10 \text{ up} \\
+0 \text{ down}
+\end{cases}\).</li>
+<li>Consider the <i>replicating portfolio</i> at \(t\):
+<ol type="a">
+<li>\(\frac{1}{2}\) unit of share.</li>
+<li>Borrow \(45e^{-\frac{.05}{12}}\) at risk-free.</li>
+</ol>
+</li>
+<li>Value of the portfolio at \(T\):
+\[
+V(T) = \frac{1}{2}S(T) - 45 = \begin{cases}
+\frac{1}{2}(110) - 45 = 10 \\
+\frac{1}{2}(90) - 45 = 0
+\end{cases} = C(T)
+\]
+</li>
+<li>We know \(C(T) = V(T)\), and by the Law of One Price, we have \(C(t) = V(t) = \frac{1}{2}(100) - 45e^{-\frac{.05}{12}} \approx \$5.22\).</li>
+</ol>
+
+<h4>8.1.1 1-Step Binomial Tree</h4>
+<ol>
+<li>Consider the time interval \([t_0, t_1] = [t, T]\) and let \(h = t_1 - t_0\).</li>
+<li>\(S(t) = \) price of the security at time \(t\).</li>
+<li>Dividends (if any) are reinvested to purchase more units of the security:
+\[
+\Delta(t_1) = e^{qh} \Delta(t_0) \text{ (} q= \text{ dividend rate})
+\]
+</li>
+<li>\(C(t) = \) price at time \(t\) of the European call option, with underlying security \(S(t)\), strike price \(K\) and expiration \(T\).</li>
+<li>
+\[
+S(t_1) = \begin{cases}
+S(t_0)u \text{ with probability } p \\
+S(t_0)d \text{ with probability } 1-p
+\end{cases} \text{ (} u > 1, 0 &lt; d &lt; 1, 0 &lt; p &lt; 1 \text{)}
+\]
+</li>
+<li>
+\[
+C(t_1) = \max\{S(t_1)-K, 0\} = \begin{cases}
+\max\{S(t_0)u - K, 0\} = C_u(t_1) \text{ with probability } p \\
+\max\{S(t_0)d - K, 0\} = C_d(t_1) \text{ with probability } 1-p
+\end{cases}
+\]
+</li>
+</ol>
+<p><b>Idea:</b> Create a <b>replicating portfolio</b> that has the same payoff as the call option. Then, by the Law of One Price, the price of the call at time \(t_0\) is equal to the value of the portfolio at time \(t_0\).</p>
+<p>Consider the portfolio: long \(\Delta(t_0)\) units of the security and short (borrow) \(b_0\) at risk-free rate \(r\).</p>
+<p>The value of the portfolio at \(t_0\) is then:</p>
+\[
+V(t_0) = \Delta(t_0)S(t_0) - b_0
+\]
+<p>We need to find \(\Delta(t_0)\) and \(b_0\) so that \(V(t_1) = C(t_1)\).</p>
+<p>Let \(h = t_1 - t_0\). The value of the portfolio at time \(t_1\) must match the option payoff \(C(t_1)\) in both the &ldquo;up&rdquo; and &ldquo;down&rdquo; states:</p>
+\[
+V(t_1) = \underbrace{\Delta(t_1)S(t_1)}_{e^{qh}\Delta(t_0)S(t_1)} - b_0 e^{rh} = C(t_1)
+\]
+<p>This yields a system of 2 equations with 2 unknowns (\(\Delta(t_0)\) and \(b_0\)):</p>
+\[
+\text{Up state: } e^{qh}\Delta(t_0)S(t_0)u - b_0 e^{rh} = C_u \tag{5}
+\]
+\[
+\text{Down state: } e^{qh}\Delta(t_0)S(t_0)d - b_0 e^{rh} = C_d \tag{6}
+\]
+<p>Solving the system:</p>
+<ol>
+<li>Subtract (6) from (5):
+\[
+e^{qh}\Delta(t_0)S(t_0)(u-d) = C_u - C_d \implies \boxed{\Delta(t_0) = e^{-qh}\frac{C_u - C_d}{S(t_0)(u-d)}}
+\]
+</li>
+<li>Plug \(\Delta(t_0)\) back into (5) to find \(b_0\):
+\[
+b_0 = e^{-rh} \frac{dC_u - uC_d}{u-d}
+\]
+</li>
+</ol>
+<p><b>Pricing the Call Option:</b>
+Using the Law of One Price (LOP), \(C(t_0) = V(t_0)\):</p>
+\[
+C(t_0) = \Delta(t_0)S(t_0) - b_0
+\]
+<p>Substituting the expressions for \(\Delta(t_0)\) and \(b_0\):</p>
+\[
+C(t_0) = e^{-qh}\frac{C_u - C_d}{u-d} - e^{-rh} \frac{dC_u - uC_d}{u-d}
+\]
+<p>Simplifying this expression yields the <b>1-Step Binomial Pricing Formula</b>:</p>
+\[
+\boxed{C(t_0) = e^{-rh} \left[ \frac{e^{(r-q)h} - d}{u-d}C_u + \frac{u - e^{(r-q)h}}{u-d}C_d \right]}
+\]
+<p><b>Example:</b> A stock price is \(\$20\). After 3 months, it is either \(\$22\) or \(\$18\). How much should a call option to buy the stock for \(\$21\) in 3 months cost? Assume a risk-free rate of \(5\%\) and no dividends (\(q=0\)).</p>
+<p><i>Parameters:</i></p>
+<ol>
+<li>\(S_0 = 20, K = 21, r = 0.05, h = \frac{3}{12} = 0.25\).</li>
+<li>\(u = \frac{22}{20} = 1.1\), \(d = \frac{18}{20} = 0.9\).</li>
+</ol>
+<p><i>Step 1: Calculate Payoffs at \(t_1\)</i></p>
+\[
+\begin{aligned}
+C_u &amp;= \max(S_u - K, 0) = \max(22 - 21, 0) = 1 \\
+C_d &amp;= \max(S_d - K, 0) = \max(18 - 21, 0) = 0
+\end{aligned}
+\]
+<p><i>Step 2: Apply Formula</i></p>
+\[
+\begin{aligned}
+C(t_0) &amp;= e^{-0.05(0.25)} \left[ \frac{e^{(0.05)(0.25)} \cdot 1 - 0.9 \cdot 1}{1.1 - 0.9}(1) + 0 \right] \\
+&amp;= e^{-0.0125} \left[ \frac{1.0126 - 0.9}{0.2} \right] \\
+&amp;\approx 0.9875 \left[ \frac{0.1126}{0.2} \right] \\
+&amp;\approx \boxed{\$0.56}
+\end{aligned}
+\]
+
+<h3 id="s8-2">8.2 Binomial Approach (Part II)</h3>
+
+<h4>8.2.1 Risk Neutral Valuation</h4>
+<p><b>Observation:</b> In the previous 1-step pricing formula, the result was independent of the real-world probability \(p\) of the stock moving up or down.</p>
+<p><b>The Risk Neutral Hypothesis:</b>
+We assume a theoretical world where investors are indifferent to risk. In this world, the expected return on the stock is exactly the risk-free rate (adjusted for dividends \(q\)).</p>
+\[
+\mathbb{E}[S(t_1)] = S(t_0)e^{(r-q)h}
+\]
+<p>Let \(p^*\) be the <b>risk neutral probability</b> of an up move. We solve for \(p^*\) such that the expected future stock price matches the forward price:</p>
+\[
+\begin{aligned}
+p^* S(t_0) u + (1-p^*) S(t_0) d &amp;= S(t_0) e^{(r-q)h} \\
+p^* u + (1-p^*) d &amp;= e^{(r-q)h} \\
+p^*(u-d) + d &amp;= e^{(r-q)h}
+\end{aligned}
+\]
+<p>Solving for \(p^*\):</p>
+\[
+\boxed{p^* = \frac{e^{(r-q)h} - d}{u - d}}
+\]
+<p><i>Note:</i> For no arbitrage to exist, we must have \(d &lt; e^{(r-q)h} &lt; u\), which implies \(p^* \in (0,1)\).</p>
+<p><b>Risk Neutral Pricing Formula:</b>
+Substituting \(p^*\) into the 1-step pricing formula derived previously, the price becomes the discounted expected payoff under the risk-neutral measure:</p>
+\[
+\begin{aligned}
+C(t_0) &amp;= e^{-rh} [ p^* C_u(t_1) + (1-p^*) C_d(t_1) ] \\
+&amp;= e^{-rh} \mathbb{E}^* [ C(t_1) ]
+\end{aligned}
+\]
+
+<h4>8.2.2 2-Step Binomial Tree</h4>
+<p>We extend to \(t_2 = 2h\). The tree now branches from \(t_0 \to t_1 \to t_2\).</p>
+<ol type="i">
+<li>At \(t_2\), there are three possible states: \(uu, ud, dd\).</li>
+<li>The payoffs are \(C_{u^2}(t_2), C_{ud}(t_2),C_{d^2}(t_2)\).</li>
+</ol>
+<p>Using the recursive property of risk-neutral valuation:</p>
+<ol>
+<li>Value at \(t_1\) (Up node): \(C_u(t_1) = e^{-rh} [ p^* C_{u^2} + (1-p^*) C_{ud} ]\).</li>
+<li>Value at \(t_1\) (Down node): \(C_d(t_1) = e^{-rh} [ p^* C_{ud} + (1-p^*) C_{d^2} ]\).</li>
+<li>Value at \(t_0\): \(C(t_0) = e^{-rh} [ p^* C_u(t_1) + (1-p^*) C_d(t_1) ]\).</li>
+</ol>
+<p>Substituting the expressions for \(t_1\) into the equation for \(t_0\) gives the 2-step formula:</p>
+\[
+C(t_0) = e^{-r(2h)} \left[ (p^*)^2 C_{u^2} + 2p^*(1-p^*) C_{ud} + (1-p^*)^2 C_{d^2} \right]
+\]
+
+<h4>8.2.3 n-Step Binomial Tree</h4>
+<p>By mathematical induction (see TW#9, Problem 6), we can generalize this to an \(n\)-step tree where the total time is \(T = nh\).</p>
+<p><b>Theorem:</b> The price of a European Option at time \(t_0\) for an \(n\)-step binomial tree is:</p>
+\[
+\boxed{C(t_0; n) = e^{-(nh)r} \sum_{i=0}^{n} \binom{n}{i} (p^*)^i (1-p^*)^{n-i} C_{u^i d^{n-i}}(t_n)}
+\]
+<p>Where:</p>
+<ol type="i">
+<li>\(\binom{n}{i} = \frac{n!}{i!(n-i)!}\) is the number of paths with exactly \(i\) up moves.</li>
+<li>\(C_{u^i d^{n-i}}(t_n) = \max \{ S_0 u^i d^{n-i} - K, 0 \}\) is the payoff at expiration with \(i\) up moves and \(n-i\) down moves.</li>
+<li>\(p^* = \frac{e^{(r-q)h} - d}{u-d}\).</li>
+</ol>
+
+<h3 id="s8-3">8.3 From the Binomial Model to Black-Scholes-Merton (BSM)</h3>
+<p><b>Goal:</b> We want to find the limit of the Binomial Option Pricing formula as the number of steps \(n \to \infty\) (and consequently the time step \(h \to 0\)), converging to a continuous-time model.</p>
+
+<h4>8.3.1 Derivation</h4>
+<p>Consider the \(n\)-step binomial formula over the interval \([t, T]\). Let \(\tau = T-t\) and \(n h = \tau\).</p>
+\[
+C(t) = e^{-r\tau} \sum_{i=0}^{n} \binom{n}{i} (p^*)^i (1-p^*)^{n-i} C_{u^i d^{n-i}}(T)
+\]
+<p>where the payoff is \(C_{u^i d^{n-i}}(T) = \max \{ S_t u^i d^{n-i} - K, 0 \}\).</p>
+<p><b>1. Separating In-the-Money Paths:</b>
+Let \(k_*\) be the threshold number of &ldquo;up&rdquo; moves such that the option expires in the money:</p>
+<ol>
+<li>If \(i &lt; k_*\), \(S_T &lt; K\) and the payoff is 0.</li>
+<li>If \(i \ge k_*\), \(S_T \ge K\) and the payoff is \(S_t u^i d^{n-i} - K\).</li>
+</ol>
+<p>We can split the summation into two parts starting from \(k_*\):</p>
+\[
+\begin{aligned}
+C(t) &amp;= e^{-r\tau} \sum_{i=k_*}^{n} \binom{n}{i} (p^*)^i (1-p^*)^{n-i} (S_t u^i d^{n-i} - K) \\
+&amp;= \underbrace{S_t e^{-r\tau} \sum_{i=k_*}^{n} \binom{n}{i} (p^*)^i (1-p^*)^{n-i} u^i d^{n-i}}_{\text{Asset Term}} - \underbrace{K e^{-r\tau} \sum_{i=k_*}^{n} \binom{n}{i} (p^*)^i (1-p^*)^{n-i}}_{\text{Strike Term}}
+\end{aligned}
+\]
+<p><b>2. Interpreting Probabilities:</b></p>
+<ol>
+<li>The <b>Strike Term</b> can be rewritten using the cumulative binomial probability. Let \(X_n \sim \text{Binom}(n, p^*)\). The sum represents \(P(X_n \ge k_*)\).</li>
+<li>The <b>Asset Term</b> can be simplified by defining a new probability measure \(\hat{p}_*\) (related to the term \(p^* u\)). Let \(Y_n \sim \text{Binom}(n, \hat{p}_*)\). The sum simplifies to \(S_t e^{-q\tau} P(Y_n \ge k_*)\).</li>
+</ol>
+<p>Thus:</p>
+\[
+C(t) = S_t e^{-q\tau} P(Y_n \ge k_*) - K e^{-r\tau} P(X_n \ge k_*)
+\]
+<p><b>3. Applying the Central Limit Theorem (CLT):</b>
+As \(n \to \infty\), the binomial distributions converge to the Normal distribution.</p>
+\[
+\begin{aligned}
+P(Y_n \ge k_*) &amp;\xrightarrow{n \to \infty} N(d_1) \quad (\text{or } N(d_+)) \\
+P(X_n \ge k_*) &amp;\xrightarrow{n \to \infty} N(d_2) \quad (\text{or } N(d_-))
+\end{aligned}
+\]
+
+<h4>8.3.2 The Black-Scholes-Merton Theorem</h4>
+<p><b>Theorem (BSM Formula):</b> The price of a European call option at time \(t\) with expiry \(T\) is:</p>
+\[
+\boxed{C(t) = e^{-q(T-t)} S(t) N(d_1) - e^{-r(T-t)} K N(d_2)}
+\]
+<p>where:</p>
+<ol>
+<li>\(N(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{x} e^{-z^2/2} dz\) is the standard normal CDF.</li>
+<li>\(d_1 = \frac{\ln(S(t)/K) + (r - q + \frac{\sigma^2}{2})(T-t)}{\sigma\sqrt{T-t}}\)</li>
+<li>\(d_2 = d_1 - \sigma\sqrt{T-t} = \frac{\ln(S(t)/K) + (r - q - \frac{\sigma^2}{2})(T-t)}{\sigma\sqrt{T-t}}\)</li>
+</ol>
+<p><b>Generalization (Time-Dependent Parameters):</b>
+If \(r, q, \sigma\) are functions of time, the formula holds with the replacements:</p>
+\[
+r(T-t) \to \int_t^T r(s) ds, \quad q(T-t) \to \int_t^T q(s) ds, \quad \sigma\sqrt{T-t} \to \sqrt{\int_t^T \sigma^2(s) ds}
+\]
+
+<h4>8.3.3 Example Calculation</h4>
+<p><b>Problem:</b> A security with volatility \(20\%\) sells for \(\$30\). Risk-free rate is \(8\%\). Find the no-arbitrage cost of a call option with strike \(\$34\) expiring in 3 months. Dividend rate \(q=0\).</p>
+<p><b>Parameters:</b> \(\sigma = 0.2, S_t = 30, r = 0.08, T-t = 0.25, K = 34, q = 0\).</p>
+<ol type="i">
+<li><b>Calculate \(d_1\)</b>
+\[
+\begin{aligned}
+d_1 &amp;= \frac{\ln(30/34) + (0.08 - 0 + 0.02)(0.25)}{0.2\sqrt{0.25}} \\
+d_1 &amp;= \frac{-0.125 + 0.025}{0.1} = \frac{-0.10016}{0.1} \approx -1.0016
+\end{aligned}
+\]
+</li>
+<li><b>Calculate \(d_2\)</b>
+\[
+d_2 = d_1 - \sigma\sqrt{T-t} = -1.0016 - 0.1 = -1.1016
+\]
+</li>
+<li><b>Calculate Option Price:</b> Using standard normal tables:
+Using standard normal tables:
+\[
+N(-1.0016) \approx 0.158, \quad N(-1.1016) \approx 0.135
+\]
+Plug into the formula:
+\[
+\begin{aligned}
+C(t) &amp;= 30 N(-1.0016) - 34 e^{-0.08(0.25)} N(-1.1016) \\
+&amp;= 30(0.15827) - 34(0.9802)(0.13532) \\
+&amp;\approx \boxed{\$0.24}
+\end{aligned}
+\]
+</li>
+<li><i>Remark:</i> Comparing this to a 100-step binomial tree yields a very similar result (\(\$0.56\) in the previous 1-step example was a rough approximation).</li>
+</ol>
+
+<h3 id="s8-4">8.4 Derivation of the BSM PDE</h3>
+
+<h4>8.4.1 SBM Model: Market Place Assumptions</h4>
+<ol type="i">
+<li><b>Equilibrium:</b> supply equals demand.</li>
+<li>No arbitrage.</li>
+<li>Access to information: there is immediate availability of accurate information on all securities.</li>
+<li>Efficiency: a security's price adjusts instantly to new information, so its current price reflects all known information concerning the security.</li>
+<li>Liquidity: any number of units (even a fractional amount) of a security can be bought and sold instantly.</li>
+<li>No transaction costs.</li>
+<li>Borrowing/lending: borrowing and lending are at the risk-free rate \(r\).</li>
+<li>Short selling is allowed without restriction; in particular, the funds from a short sale can be used immediately to trade.</li>
+</ol>
+
+<h4>8.4.2 Log-normal assumption</h4>
+<p>We assume that the price of the underlying security \(S(t)\) follows a Geometric Brownian Motion (GBM):</p>
+\[
+dS = (m-q)S dt + \sigma SdB
+\]
+
+<h4>8.4.3 Derivation of the BSM PDE</h4>
+<p>Let \(f(S(t),t)\) be the price of the derivative at time \(t\) (call option, put option, \(\dots\)).</p>
+<p>Consider the portfolio:</p>
+<ol>
+<li>Short \(1\) unit of the derivative.</li>
+<li>Long \(\Delta\) units of the security.</li>
+</ol>
+<p>So at time \(t\) its value is \(V(t) = S(t)\Delta(t) - f(S(t),t)\). We must find \(\Delta\) such that the portfolio is risk-free.</p>
+<p>We calculate the differential change in the portfolio value \(dV\) over a small time step \(dt\).</p>
+\[
+dV = d(S\Delta) - df
+\]
+<p>Using the product rule for differentials \(d(XY) = XdY + YdX + dXdY\):</p>
+\[
+dV = (\Delta dS + S d\Delta + dS d\Delta) - df
+\]
+<p><b>Assumption (Dividend Reinvestment):</b> The change in the number of units held (\(S d\Delta + dS d\Delta\)) comes from reinvesting the dividends paid by the security.</p>
+\[
+S d\Delta + dS d\Delta = (q S \Delta) dt
+\]
+<p>Thus, the equation becomes:</p>
+\[
+dV = \Delta dS + q S \Delta dt - df \tag{7}
+\]
+<p><b>Expansions using Itô's Lemma</b></p>
+<p>We substitute the dynamics of \(S\) and \(f\):</p>
+<ol>
+<li><b>Security Dynamics (GBM):</b>
+\[
+dS = (m-q)S dt + \sigma S dB
+\]
+</li>
+<li><b>Derivative Dynamics (Itô's Lemma):</b>
+\[
+df = \left( \frac{\partial f}{\partial t} + (m-q)S \frac{\partial f}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 f}{\partial S^2} \right) dt + \sigma S \frac{\partial f}{\partial S} dB
+\]
+</li>
+</ol>
+<p>Substituting these into Eq (7) and grouping terms by \(dt\) and \(dB\):</p>
+\[
+\begin{aligned}
+dV &amp;= \Delta [(m-q)S dt + \sigma S dB] + qS\Delta dt \\
+&amp;\quad - \left[ \left( \frac{\partial f}{\partial t} + (m-q)S \frac{\partial f}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 f}{\partial S^2} \right) dt + \sigma S \frac{\partial f}{\partial S} dB \right]
+\end{aligned}
+\]
+<p>Rearranging to isolate the stochastic part (\(dB\)):</p>
+\[
+dV = \left[ (m-q)S\left(\Delta - \frac{\partial f}{\partial S}\right) + Sq\Delta - \frac{\partial f}{\partial t} - \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 f}{\partial S^2} \right] dt + \sigma S \left( \Delta - \frac{\partial f}{\partial S} \right) dB
+\]
+<p><b>Delta Hedging and No Arbitrage</b></p>
+<p>To make the portfolio risk-free, we eliminate the \(dB\) term by choosing:</p>
+\[
+\Delta = \frac{\partial f}{\partial S} \quad \text{(&ldquo;Delta Hedging&rdquo;)}
+\]
+<p>Substituting this back into the equation for \(dV\), the stochastic term vanishes, and the \((m-q)S(\dots)\) term becomes zero:</p>
+\[
+dV = \left[ Sq\Delta - \frac{\partial f}{\partial t} - \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 f}{\partial S^2} \right] dt
+\]
+<p>Since the portfolio is now risk-free, by the <b>No Arbitrage</b> principle, it must earn risk-free rate \(r\):</p>
+\[
+dV = r V dt = r(S\Delta - f) dt
+\]
+<p>Equating the two expressions for \(dV\):</p>
+\[
+Sq\Delta - \frac{\partial f}{\partial t} - \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 f}{\partial S^2} = r(S\Delta - f)
+\]
+<p>Substituting \(\Delta = \frac{\partial f}{\partial S}\) and rearranging terms yields the <b>Black-Scholes-Merton PDE</b>:</p>
+\[
+\boxed{\frac{\partial f}{\partial t} + (r-q)S \frac{\partial f}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 f}{\partial S^2} = rf}
+\]
+
+<h4>8.4.4 The BSM PDE</h4>
+\[
+\boxed{\frac{\partial f}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2f}{\partial s^2} + (r-q)S\frac{\partial f}{\partial s} - rf = 0}
+\]
+<ol type="i">
+<li>PDE is independent of \(\mu\) (drift/growth parameter). The derivative price is independent of how fast/slow the security is growing, it only depends on the volatility.</li>
+<li>All derivatives satisfy the same PDE: calls, puts, etc., hence it has many solutions. All must impose different boundary conditions in each case.</li>
+</ol>
+
+<h4>8.4.5 Boundary Conditions (Case \(q = 0\))</h4>
+<p>Boundary conditions for a European call option \(f = C\):</p>
+<ol type="i">
+<li>\(C(S(T),T) = \max\{S(T) - K, 0\}\): Final condition.</li>
+<li>\(C(0, t) = 0\): No one will buy the call on a security whose price is zero.</li>
+<li>\(C(S(t),t) \approx S(t)\), as \(S \to \infty\): If at any time the market believes the security will increase without bound then everyone will want to buy the call, which increases until it reaches \(S(t)\).</li>
+</ol>
+
+<h4>8.4.6 Solving BSM</h4>
+<p>We must solve:</p>
+\[
+\frac{\partial C}{\partial t} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2C}{\partial s^2} + (r-q)S\frac{\partial C}{\partial s} - rC = 0
+\]
+<p>We turn this into a constant coefficient equation by doing a change of variables:</p>
+<ol type="i">
+<li>\(S = Ke^x \Leftrightarrow x = \log \frac{S}{K}\).</li>
+<li>\(t = T - \frac{\tau}{\frac{\sigma^2}{2}} \Leftrightarrow \tau = \frac{\sigma^2}{2}(T-t)\).</li>
+<li>\(C = Kv(x, \tau) \Leftrightarrow v(x, \tau) = \frac{C(S,t)}{K}\).</li>
+<li>Let \(a = \frac{\tau}{\frac{\sigma^2}{2}}\).</li>
+</ol>
+<p>The BSM PDE becomes (exercise):</p>
+\[
+\frac{\partial v}{\partial \tau} = \frac{\partial^2v}{\partial x^2} + (a-1)\frac{\partial v}{\partial x} - av
+\]
+<p>We can turn this into the heat equation with the following substitution:</p>
+\[
+v(x,\tau) = e^{-\frac{1}{2}(a-1)x - \frac{1}{4}(a+1)^2\tau}u(x, \tau)
+\]
+<p>This gives us:</p>
+\[
+\frac{\partial u}{\partial \tau } = \frac{\partial ^2 u }{\partial x^2}
+\]
+<p>However, by changing variables, we changed the boundary and final conditions. In particular, the final condition at \(t = T\), i.e., \(\tau = 0\) is:</p>
+\[
+v(x,0) = \frac{\max{\{S(T)-K, 0}\}}{K} = \max\{e^x - 1, 0\}
+\]
+<p>and for the heat equation, the condition is then:</p>
+\[
+u(x,0) = e^{\frac{1}{2}(a-1)x}v(x,0) = \max\{e^{\frac{1}{2}(a+1)x}-e^{\frac{1}{2}(a-1)x}, 0\} := u_0(x)
+\]
+<p>The heat equation has solution:</p>
+\[
+u(x,\tau) = \frac{1}{2\sqrt{\pi \tau}}\int_{-\infty}^{\infty} u_0(s)e^{-\frac{(x-s)^2}{4\tau}}ds
+\]
+<p>Hence, we get:</p>
+\[
+\begin{aligned}
+u(x,\tau) &amp;= \frac{1}{2\sqrt{\pi \tau}}\int_{-\infty}^{\infty} \max\{e^{\frac{1}{2}(a+1)s}-e^{\frac{1}{2}(a-1)s}, 0\}e^{-\frac{(x-s)^2}{4\tau}}ds \\
+&amp;= e^{\frac{1}{2}(a+1)x+\frac{1}{4}(a+1)^2\tau}\frac{1}{\sqrt{2\pi}}\int_{-\frac{x}{\sqrt{2\tau}}-\frac{1}{2}(a+1)\sqrt{2\tau}}^{\infty} e^{-\frac{u^2}{2}}du \\
+&amp;- e^{\frac{1}{2}(a-1)x+\frac{1}{4}(a-1)^2\tau}\frac{1}{\sqrt{2\pi}}\int_{-\frac{x}{\sqrt{2\tau}}-\frac{1}{2}(a-1)\sqrt{2\tau}}^{\infty} e^{-\frac{u^2}{2}}du
+\end{aligned}
+\]
+<p>And finally, since \(C(S(t),t) = Kv(x,\tau) = Ke^{-\frac{1}{2}(a-1)x-\frac{1}{4}(a+1)^2\tau}u(x,\tau)\), we have:</p>
+\[
+C(S(t),t) = S(t)N(d_+) - Ke^{-r(T-t)}N(d_{-})
+\]
+<p>To get the pricing formula for the put option, you can redo the same thing with different boundary condition:</p>
+<ol type="i">
+<li>\(P(0,t) = K\).</li>
+<li>\(P(S(T),t) = \max\{K - S(T), 0\}\).</li>
+<li>\(P(S,t) \approx 0\) as \(S \to \infty\).</li>
+</ol>
+
+<p>Fin!</p>
+
+<hr>
+<footer>last updated: August 26, 2026</footer>
+</body>
+</html>

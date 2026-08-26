@@ -44,7 +44,7 @@ PAGES = {
 
 # Extra sitemap entries that aren't in the nav.
 SITEMAP_EXTRA = [
-    "/notes/", "/notes/math541.html",
+    "/notes/", "/notes/math541.html", "/notes/math581.html", "/weather.html",
     "/daily/sports.html", "/daily/ai.html", "/daily/markets.html",
     "/daily/elections.html", "/daily/math.html",
 ]

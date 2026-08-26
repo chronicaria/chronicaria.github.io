@@ -1,0 +1,286 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{tcolorbox}
+\usepackage{mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue]{hyperref}
+
+% --- Paragraph style: no indent, small gap between paragraphs ---
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4\baselineskip}
+
+% --- Tighter, unindented lists ---
+\setlist[enumerate]{leftmargin=*, itemsep=0.2em, topsep=0.2em, parsep=0pt}
+\setlist[itemize]{leftmargin=*, itemsep=0.2em, topsep=0.2em, parsep=0pt}
+
+% --- Section headings ---
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\section}{0pt}{1.2\baselineskip}{0.4\baselineskip}
+\titlespacing*{\subsection}{0pt}{0.8\baselineskip}{0.25\baselineskip}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{notation}[theorem]{Notation}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\p}{\partial}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\F}{\mathcal{F}}
+
+\title{\textbf{MATH 541: Applied Stochastic Processes}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Course schedule}
+\addcontentsline{toc}{section}{Course schedule}
+
+\begingroup
+\setlength{\parskip}{0pt}
+\renewcommand{\arraystretch}{1.2}
+\noindent
+\begin{tabularx}{\textwidth}{@{} >{\raggedright\arraybackslash}p{0.19\textwidth}
+                                 >{\raggedright\arraybackslash}X
+                                 >{\raggedright\arraybackslash}p{0.15\textwidth} @{}}
+\toprule
+\textbf{Meetings} & \textbf{Topic} & \textbf{Textbook sections} \\
+\midrule
+W 08/26--F 08/28 & Finite Markov chains. Invariant measures. Classification of states. & \S1.1--1.3 \\
+W 09/02--F 09/04 & Return times. Transient states. & \S1.4--1.6 \\
+W 09/09--F 09/11 & Countable Markov chains. Recurrence, transience, positive recurrence, null recurrence. & \S2.1--2.3 \\
+W 09/16--F 09/18 & Branching process, Poisson process. & \S2.4, \S3.1 \\
+W 09/23--F 09/25 & General continuous-time Markov chains. & \S3.2--3.4 \\
+W 09/30--F 10/02 & Reversibility and time-reversal of Markov chains. & Ch.\ 7 \\
+W 10/07--F 10/09 & Mixing times. Cheeger inequalities. & \\
+\midrule
+W 10/14 & \textbf{Midterm exam in class} & \\
+\midrule
+F 10/16 & Conditional expectation & \S5.1 \\
+W 10/21--F 10/23 & Martingales and the optional sampling theorem & \S5.2--5.3 \\
+W 10/28--F 10/30 & Uniform integrability and the martingale convergence theorem & \S5.4--5.5 \\
+W 11/04--F 11/06 & Martingale convergence, cont'd. Maximal inequalities. & \S5.5--5.6 \\
+W 11/11--F 11/13 & Review of random walk. Introduction to Brownian motion. Markov property of Brownian motion. & \S8.1--8.2 \\
+W 11/18--F 11/20 & Brownian motion in higher dimensions. Introduction to path properties of Brownian motion. & \S8.4 \\
+\midrule
+W 11/25--F 11/27 & \textbf{Thanksgiving holiday: no class} & \\
+\midrule
+W 12/02--F 12/04 & Brownian motion and partial differential equations. Recurrence and transience of Brownian motion. & \S8.5 \\
+\midrule
+Sunday 12/13, 9am--12pm & \textbf{Final exam} & \\
+\bottomrule
+\end{tabularx}
+\endgroup
+
+\section{8/26/26}
+
+\subsection{Probability review}
+
+\begin{definition}[Probability space]
+A \emph{probability space} is a triple \((\Omega, \F, \PP)\), where:
+\begin{enumerate}
+    \item \(\Omega\) is the \emph{sample space} of possible outcomes;
+
+    \item \(\F \subseteq 2^{\Omega}\) is the collection of \emph{events} (for us, think \(\F = 2^{\Omega}\));
+
+    \item \(\PP: \F \to [0,1]\) satisfies
+    \begin{enumerate}
+        \item \(\PP(\varnothing) = 0\) and \(\PP(\Omega) = 1\);
+
+        \item \(\PP(A^c) = 1 - \PP(A)\) for every \(A \in \F\);
+
+        \item if \(A_1, A_2, \dots\) are pairwise disjoint, then
+        \(\PP\!\left(\bigcup_{i} A_i\right) = \sum_i \PP(A_i)\).
+    \end{enumerate}
+\end{enumerate}
+\end{definition}
+
+A \emph{random variable} is a map \(X : \Omega \to \X\) for some range \(\X\).
+
+\begin{definition}[Independence]
+A family of events \(A_1, \dots, A_n\) is \emph{independent} if for every
+\(1 \le i_1 < i_2 < \dots < i_k \le n\),
+\begin{equation*}
+    \PP\!\left(A_{i_1} \cap A_{i_2} \cap \dots \cap A_{i_k}\right)
+    = \PP(A_{i_1})\,\PP(A_{i_2}) \cdots \PP(A_{i_k}).
+\end{equation*}
+A family of random variables \(X_1, \dots, X_n\) is independent if for all
+\(B_1, \dots, B_n \subseteq \X\),
+\begin{equation*}
+    \PP\!\left(X_i \in B_i \text{ for all } i = 1, \dots, n\right)
+    = \prod_{i=1}^{n} \PP(X_i \in B_i).
+\end{equation*}
+\end{definition}
+
+If \(A, B\) are events with \(\PP(B) > 0\), the \emph{conditional probability} of \(A\) given \(B\) is
+\begin{equation*}
+    \PP(A \mid B) = \frac{\PP(A \cap B)}{\PP(B)}.
+\end{equation*}
+
+\begin{definition}[Stochastic process]
+A \emph{stochastic process} is a family of random variables indexed by some set \(\mathcal{T}\).
+\end{definition}
+
+Traditionally \(\mathcal{T} = \N\), \(\R\), or \(\R_{\ge 0}\).
+
+\subsection{Markov chains}
+
+Fix a \emph{state space} \(\X\) and an \(\X\)-valued stochastic process \(X_0, X_1, X_2, \dots\) indexed by \(\N\).
+
+\begin{definition}[Markov chain]
+The process \((X_n)_{n \in \N}\) is a \emph{Markov chain} if for all \(n \in \N\) and all states
+\(i_0, i_1, \dots, i_{n-1}, i, j \in \X\) for which the conditioning event has positive probability,
+\begin{equation*}
+    \PP\!\left(X_{n+1} = j \mid X_n = i,\, X_{n-1} = i_{n-1},\, \dots,\, X_0 = i_0\right)
+    = \PP\!\left(X_{n+1} = j \mid X_n = i\right).
+\end{equation*}
+That is: \emph{the future is independent of the past, given the present} (the \emph{Markov property}).
+\end{definition}
+
+\begin{definition}[Time-homogeneity]
+A Markov chain is \emph{time-homogeneous} if \(\PP(X_{n+1} = j \mid X_n = i)\) does not depend on \(n\).
+In that case we write
+\begin{equation*}
+    p_{ij} \coloneqq \PP(X_{n+1} = j \mid X_n = i),
+\end{equation*}
+the \emph{transition probabilities} of the chain.
+\end{definition}
+
+Note that \(p_{ij} \in [0,1]\) and \(\sum_{j \in \X} p_{ij} = 1\) for every \(i\). From now on, all chains are
+assumed time-homogeneous.
+
+\begin{proposition}\label{prop:path}
+Let \((X_n)\) be a time-homogeneous Markov chain and let \(i_0, i_1, \dots, i_n \in \X\). Then
+\begin{equation*}
+    \PP\!\left(X_0 = i_0,\, X_1 = i_1,\, \dots,\, X_n = i_n\right)
+    = \PP(X_0 = i_0)\, p_{i_0 i_1} p_{i_1 i_2} \cdots p_{i_{n-1} i_n}.
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+By induction on \(n\). The case \(n = 0\) is the statement \(\PP(X_0 = i_0) = \PP(X_0 = i_0)\).
+
+Assume the formula holds for \(n-1\). Write \(A = \{X_0 = i_0, \dots, X_{n-1} = i_{n-1}\}\).
+If \(\PP(A) = 0\), then both sides vanish (the left side because it is at most \(\PP(A)\), the right side by the
+inductive hypothesis), so assume \(\PP(A) > 0\). By the definition of conditional probability,
+\begin{equation*}
+    \PP\!\left(X_n = i_n,\, A\right) = \PP\!\left(X_n = i_n \mid A\right) \PP(A).
+\end{equation*}
+By the Markov property and time-homogeneity, \(\PP(X_n = i_n \mid A) = \PP(X_n = i_n \mid X_{n-1} = i_{n-1}) = p_{i_{n-1} i_n}\).
+Applying the inductive hypothesis to \(\PP(A)\) gives
+\begin{equation*}
+    \PP\!\left(X_n = i_n,\, A\right)
+    = p_{i_{n-1} i_n} \cdot \PP(X_0 = i_0)\, p_{i_0 i_1} \cdots p_{i_{n-2} i_{n-1}},
+\end{equation*}
+which is the claim. \qedhere
+\end{proof}
+
+\begin{remark}
+So the law of the chain is determined by two ingredients: the initial distribution of \(X_0\) and the transition
+probabilities \(p_{ij}\).
+\end{remark}
+
+We organize the \(p_{ij}\) into a \emph{transition matrix} \(P = (p_{ij})_{i, j \in \X}\). If \(|\X| = N\), this is
+the \(N \times N\) matrix
+\begin{equation*}
+    P = \begin{pmatrix}
+        p_{11} & p_{12} & \dots  & p_{1N} \\
+        p_{21} & p_{22} & \dots  & p_{2N} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        p_{N1} & p_{N2} & \dots  & p_{NN}
+    \end{pmatrix}.
+\end{equation*}
+
+Its entries are nonnegative and each row sums to \(1\); such a matrix is called a \emph{stochastic matrix}.
+
+\begin{example}[Simple weather model]
+Take \(\X = \{\text{raining},\ \text{not raining}\}\). If it rains today, it rains tomorrow with probability
+\(\alpha\); if it does not rain today, it rains tomorrow with probability \(\beta\). Labelling rows by today's
+weather and columns by tomorrow's, \(R = \text{raining}\) and \(N = \text{not raining}\):
+\begin{equation*}
+    P = \bordermatrix{
+        ~ & R & N \cr
+        R & \alpha & 1 - \alpha \cr
+        N & \beta  & 1 - \beta  \cr
+    }.
+\end{equation*}
+Each row sums to \(1\), as it must.
+\end{example}
+
+\begin{example}[Random walk with absorbing boundaries]
+Let \(\X = \{0, 1, \dots, M\}\). From an interior state the walker steps right with probability \(p\) and left with
+probability \(1 - p\); the states \(0\) and \(M\) are \emph{absorbing} (``falling off the cliff''). Explicitly:
+\begin{enumerate}
+    \item \(p_{00} = p_{MM} = 1\);
+
+    \item \(p_{i,\,i+1} = p\) for all \(1 \le i \le M-1\);
+
+    \item \(p_{i,\,i-1} = 1 - p\) for all \(1 \le i \le M-1\);
+
+    \item \(p_{ij} = 0\) otherwise.
+\end{enumerate}
+Indexing rows and columns by \(0, 1, \dots, M\),
+\begin{equation*}
+    P = \begin{pmatrix}
+        1   & 0   & 0   & \dots  & \dots & 0 \\
+        1-p & 0   & p   & \ddots &       & \vdots \\
+        0   & 1-p & 0   & p      & \ddots & \vdots \\
+        \vdots & \ddots & \ddots & \ddots & \ddots & 0 \\
+        \vdots &     & \ddots & 1-p & 0 & p \\
+        0   & \dots & \dots & 0 & 0 & 1
+    \end{pmatrix}.
+\end{equation*}
+If instead the boundaries are \emph{reflecting}, only the first and last rows change.
+\end{example}
+
+\begin{example}[Random walk on a graph]
+Let \(G = (V, E)\) be a finite graph, where \(V\) is the vertex set and \(E\) the edge set,
+\begin{equation*}
+    E \subseteq \binom{V}{2} = \bigl\{\, \{i, j\} \;:\; i, j \in V,\ i \neq j \,\bigr\}.
+\end{equation*}
+Write \(i \sim j\) when \(\{i, j\} \in E\) (``\(i\) is adjacent to \(j\)''), and define the \emph{degree} of a vertex
+\(i\) by
+\begin{equation*}
+    d_i = \#\{\, j \in V \;:\; j \sim i \,\}.
+\end{equation*}
+Assume \(d_i \ge 1\) for every \(i\), i.e.\ no isolated vertices. Simple random walk on \(G\) is the chain with state
+space \(\X = V\) and
+\begin{equation*}
+    p_{ij} = \begin{cases}
+        1/d_i, & j \sim i, \\
+        0,     & \text{otherwise.}
+    \end{cases}
+\end{equation*}
+This is stochastic: \(\sum_{j} p_{ij} = d_i \cdot \frac{1}{d_i} = 1\).
+\end{example}
+
+The Markov property is not a property of a physical system. It is a property of the model. We can always enlarge the state space to include whatever memory we may need to model the next step.
+
+\end{document}

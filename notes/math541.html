@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>MATH 541 — Applied Stochastic Processes</title>
+<style>body{max-width:42em;margin:2em auto;padding:0 1em;line-height:1.4}</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],macros:{'\\R':'\\mathbb{R}','\\N':'\\mathbb{N}','\\PP':'\\mathbb{P}','\\X':'\\mathcal{X}','\\F':'\\mathcal{F}','\\p':'\\partial'}});"></script>
+</head>
+<body>
+<p><a href="/">home</a> | <a href="/notes/">notes</a> | <a href="/music.html">music</a> | <a href="/literature.html">literature</a> | <a href="/daily/">daily</a></p>
+<hr>
+<h1>MATH 541: Applied Stochastic Processes</h1>
+<p><a href="/notes/math541.tex">LaTeX source</a></p>
+
+<h2>Course schedule</h2>
+<table border="1" cellpadding="4">
+<tr><th>Meetings</th><th>Topic</th><th>Textbook sections</th></tr>
+<tr><td>W 08/26–F 08/28</td><td>Finite Markov chains. Invariant measures. Classification of states.</td><td>&sect;1.1–1.3</td></tr>
+<tr><td>W 09/02–F 09/04</td><td>Return times. Transient states.</td><td>&sect;1.4–1.6</td></tr>
+<tr><td>W 09/09–F 09/11</td><td>Countable Markov chains. Recurrence, transience, positive recurrence, null recurrence.</td><td>&sect;2.1–2.3</td></tr>
+<tr><td>W 09/16–F 09/18</td><td>Branching process, Poisson process.</td><td>&sect;2.4, &sect;3.1</td></tr>
+<tr><td>W 09/23–F 09/25</td><td>General continuous-time Markov chains.</td><td>&sect;3.2–3.4</td></tr>
+<tr><td>W 09/30–F 10/02</td><td>Reversibility and time-reversal of Markov chains.</td><td>Ch. 7</td></tr>
+<tr><td>W 10/07–F 10/09</td><td>Mixing times. Cheeger inequalities.</td><td></td></tr>
+<tr><td>W 10/14</td><td><b>Midterm exam in class</b></td><td></td></tr>
+<tr><td>F 10/16</td><td>Conditional expectation</td><td>&sect;5.1</td></tr>
+<tr><td>W 10/21–F 10/23</td><td>Martingales and the optional sampling theorem</td><td>&sect;5.2–5.3</td></tr>
+<tr><td>W 10/28–F 10/30</td><td>Uniform integrability and the martingale convergence theorem</td><td>&sect;5.4–5.5</td></tr>
+<tr><td>W 11/04–F 11/06</td><td>Martingale convergence, cont'd. Maximal inequalities.</td><td>&sect;5.5–5.6</td></tr>
+<tr><td>W 11/11–F 11/13</td><td>Review of random walk. Introduction to Brownian motion. Markov property of Brownian motion.</td><td>&sect;8.1–8.2</td></tr>
+<tr><td>W 11/18–F 11/20</td><td>Brownian motion in higher dimensions. Introduction to path properties of Brownian motion.</td><td>&sect;8.4</td></tr>
+<tr><td>W 11/25–F 11/27</td><td><b>Thanksgiving holiday: no class</b></td><td></td></tr>
+<tr><td>W 12/02–F 12/04</td><td>Brownian motion and partial differential equations. Recurrence and transience of Brownian motion.</td><td>&sect;8.5</td></tr>
+<tr><td>Sunday 12/13, 9am–12pm</td><td><b>Final exam</b></td><td></td></tr>
+</table>
+
+<h2>8/26/26</h2>
+
+<h3>Probability review</h3>
+
+<p><b>Definition 1.1 (Probability space).</b> A <i>probability space</i> is a triple \((\Omega, \F, \PP)\), where:</p>
+<ol>
+<li>\(\Omega\) is the <i>sample space</i> of possible outcomes;</li>
+<li>\(\F \subseteq 2^{\Omega}\) is the collection of <i>events</i> (for us, think \(\F = 2^{\Omega}\));</li>
+<li>\(\PP: \F \to [0,1]\) satisfies
+<ol type="a">
+<li>\(\PP(\varnothing) = 0\) and \(\PP(\Omega) = 1\);</li>
+<li>\(\PP(A^c) = 1 - \PP(A)\) for every \(A \in \F\);</li>
+<li>if \(A_1, A_2, \dots\) are pairwise disjoint, then \(\PP\!\left(\bigcup_{i} A_i\right) = \sum_i \PP(A_i)\).</li>
+</ol>
+</li>
+</ol>
+
+<p>A <i>random variable</i> is a map \(X : \Omega \to \X\) for some range \(\X\).</p>
+
+<p><b>Definition 1.2 (Independence).</b> A family of events \(A_1, \dots, A_n\) is <i>independent</i> if for every
+\(1 \le i_1 &lt; i_2 &lt; \dots &lt; i_k \le n\),
+\[
+    \PP\!\left(A_{i_1} \cap A_{i_2} \cap \dots \cap A_{i_k}\right)
+    = \PP(A_{i_1})\,\PP(A_{i_2}) \cdots \PP(A_{i_k}).
+\]
+A family of random variables \(X_1, \dots, X_n\) is independent if for all
+\(B_1, \dots, B_n \subseteq \X\),
+\[
+    \PP\!\left(X_i \in B_i \text{ for all } i = 1, \dots, n\right)
+    = \prod_{i=1}^{n} \PP(X_i \in B_i).
+\]</p>
+
+<p>If \(A, B\) are events with \(\PP(B) &gt; 0\), the <i>conditional probability</i> of \(A\) given \(B\) is
+\[
+    \PP(A \mid B) = \frac{\PP(A \cap B)}{\PP(B)}.
+\]</p>
+
+<p><b>Definition 1.3 (Stochastic process).</b> A <i>stochastic process</i> is a family of random variables indexed by some set \(\mathcal{T}\).</p>
+
+<p>Traditionally \(\mathcal{T} = \N\), \(\R\), or \(\R_{\ge 0}\).</p>
+
+<h3>Markov chains</h3>
+
+<p>Fix a <i>state space</i> \(\X\) and an \(\X\)-valued stochastic process \(X_0, X_1, X_2, \dots\) indexed by \(\N\).</p>
+
+<p><b>Definition 1.4 (Markov chain).</b> The process \((X_n)_{n \in \N}\) is a <i>Markov chain</i> if for all \(n \in \N\) and all states
+\(i_0, i_1, \dots, i_{n-1}, i, j \in \X\) for which the conditioning event has positive probability,
+\[
+    \PP\!\left(X_{n+1} = j \mid X_n = i,\, X_{n-1} = i_{n-1},\, \dots,\, X_0 = i_0\right)
+    = \PP\!\left(X_{n+1} = j \mid X_n = i\right).
+\]
+That is: <i>the future is independent of the past, given the present</i> (the <i>Markov property</i>).</p>
+
+<p><b>Definition 1.5 (Time-homogeneity).</b> A Markov chain is <i>time-homogeneous</i> if \(\PP(X_{n+1} = j \mid X_n = i)\) does not depend on \(n\).
+In that case we write
+\[
+    p_{ij} \coloneqq \PP(X_{n+1} = j \mid X_n = i),
+\]
+the <i>transition probabilities</i> of the chain.</p>
+
+<p>Note that \(p_{ij} \in [0,1]\) and \(\sum_{j \in \X} p_{ij} = 1\) for every \(i\). From now on, all chains are
+assumed time-homogeneous.</p>
+
+<p><b>Proposition 1.6.</b> Let \((X_n)\) be a time-homogeneous Markov chain and let \(i_0, i_1, \dots, i_n \in \X\). Then
+\[
+    \PP\!\left(X_0 = i_0,\, X_1 = i_1,\, \dots,\, X_n = i_n\right)
+    = \PP(X_0 = i_0)\, p_{i_0 i_1} p_{i_1 i_2} \cdots p_{i_{n-1} i_n}.
+\]</p>
+
+<p><i>Proof.</i> By induction on \(n\). The case \(n = 0\) is the statement \(\PP(X_0 = i_0) = \PP(X_0 = i_0)\).</p>
+
+<p>Assume the formula holds for \(n-1\). Write \(A = \{X_0 = i_0, \dots, X_{n-1} = i_{n-1}\}\).
+If \(\PP(A) = 0\), then both sides vanish (the left side because it is at most \(\PP(A)\), the right side by the
+inductive hypothesis), so assume \(\PP(A) &gt; 0\). By the definition of conditional probability,
+\[
+    \PP\!\left(X_n = i_n,\, A\right) = \PP\!\left(X_n = i_n \mid A\right) \PP(A).
+\]
+By the Markov property and time-homogeneity, \(\PP(X_n = i_n \mid A) = \PP(X_n = i_n \mid X_{n-1} = i_{n-1}) = p_{i_{n-1} i_n}\).
+Applying the inductive hypothesis to \(\PP(A)\) gives
+\[
+    \PP\!\left(X_n = i_n,\, A\right)
+    = p_{i_{n-1} i_n} \cdot \PP(X_0 = i_0)\, p_{i_0 i_1} \cdots p_{i_{n-2} i_{n-1}},
+\]
+which is the claim. &#8718;</p>
+
+<p><b>Remark 1.7.</b> So the law of the chain is determined by two ingredients: the initial distribution of \(X_0\) and the transition
+probabilities \(p_{ij}\).</p>
+
+<p>We organize the \(p_{ij}\) into a <i>transition matrix</i> \(P = (p_{ij})_{i, j \in \X}\). If \(|\X| = N\), this is
+the \(N \times N\) matrix
+\[
+    P = \begin{pmatrix}
+        p_{11} &amp; p_{12} &amp; \dots  &amp; p_{1N} \\
+        p_{21} &amp; p_{22} &amp; \dots  &amp; p_{2N} \\
+        \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+        p_{N1} &amp; p_{N2} &amp; \dots  &amp; p_{NN}
+    \end{pmatrix}.
+\]</p>
+
+<p>Its entries are nonnegative and each row sums to \(1\); such a matrix is called a <i>stochastic matrix</i>.</p>
+
+<p><b>Example 1.8 (Simple weather model).</b> Take \(\X = \{\text{raining},\ \text{not raining}\}\). If it rains today, it rains tomorrow with probability
+\(\alpha\); if it does not rain today, it rains tomorrow with probability \(\beta\). Labelling rows by today's
+weather and columns by tomorrow's, \(R = \text{raining}\) and \(N = \text{not raining}\):
+\[
+    P = \begin{array}{c|cc}
+          &amp; R      &amp; N          \\ \hline
+        R &amp; \alpha &amp; 1 - \alpha \\
+        N &amp; \beta  &amp; 1 - \beta
+    \end{array}.
+\]
+Each row sums to \(1\), as it must.</p>
+
+<p><b>Example 1.9 (Random walk with absorbing boundaries).</b> Let \(\X = \{0, 1, \dots, M\}\). From an interior state the walker steps right with probability \(p\) and left with
+probability \(1 - p\); the states \(0\) and \(M\) are <i>absorbing</i> (“falling off the cliff”). Explicitly:</p>
+<ol>
+<li>\(p_{00} = p_{MM} = 1\);</li>
+<li>\(p_{i,\,i+1} = p\) for all \(1 \le i \le M-1\);</li>
+<li>\(p_{i,\,i-1} = 1 - p\) for all \(1 \le i \le M-1\);</li>
+<li>\(p_{ij} = 0\) otherwise.</li>
+</ol>
+<p>Indexing rows and columns by \(0, 1, \dots, M\),
+\[
+    P = \begin{pmatrix}
+        1   &amp; 0   &amp; 0   &amp; \dots  &amp; \dots &amp; 0 \\
+        1-p &amp; 0   &amp; p   &amp; \ddots &amp;       &amp; \vdots \\
+        0   &amp; 1-p &amp; 0   &amp; p      &amp; \ddots &amp; \vdots \\
+        \vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \ddots &amp; 0 \\
+        \vdots &amp;     &amp; \ddots &amp; 1-p &amp; 0 &amp; p \\
+        0   &amp; \dots &amp; \dots &amp; 0 &amp; 0 &amp; 1
+    \end{pmatrix}.
+\]
+If instead the boundaries are <i>reflecting</i>, only the first and last rows change.</p>
+
+<p><b>Example 1.10 (Random walk on a graph).</b> Let \(G = (V, E)\) be a finite graph, where \(V\) is the vertex set and \(E\) the edge set,
+\[
+    E \subseteq \binom{V}{2} = \bigl\{\, \{i, j\} \;:\; i, j \in V,\ i \neq j \,\bigr\}.
+\]
+Write \(i \sim j\) when \(\{i, j\} \in E\) (“\(i\) is adjacent to \(j\)”), and define the <i>degree</i> of a vertex
+\(i\) by
+\[
+    d_i = \#\{\, j \in V \;:\; j \sim i \,\}.
+\]
+Assume \(d_i \ge 1\) for every \(i\), i.e. no isolated vertices. Simple random walk on \(G\) is the chain with state
+space \(\X = V\) and
+\[
+    p_{ij} = \begin{cases}
+        1/d_i, &amp; j \sim i, \\
+        0,     &amp; \text{otherwise.}
+    \end{cases}
+\]
+This is stochastic: \(\sum_{j} p_{ij} = d_i \cdot \frac{1}{d_i} = 1\).</p>
+
+<p>The Markov property is not a property of a physical system. It is a property of the model. We can always enlarge the state space to include whatever memory we may need to model the next step.</p>
+<hr>
+<p><i>last updated: August 26, 2026</i></p>
+</body>
+</html>

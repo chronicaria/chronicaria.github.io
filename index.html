@@ -1,356 +1,113 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Andrew Park</title>
-  <meta name="description" content="Andrew Park — Duke '28, B.S. Mathematics &amp; Computer Science (GPA 3.96). Probabilistic modeling, forecasting, and quantitative research. Aspiring quant trader/researcher.">
-  <meta property="og:title" content="Andrew Park">
-  <meta property="og:description" content="Quantitative researcher in training — Bayesian forecasting, numerical methods, and game-theory/markets. Duke Mathematics &amp; CS, Class of 2028.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://chronicaria.github.io/assets/og/home.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
-  <link rel="apple-touch-icon" href="assets/icon-180.png">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23faf9f4'/%3E%3Crect x='5' y='5' width='90' height='90' fill='none' stroke='%23003153' stroke-width='4'/%3E%3Ctext x='50' y='68' font-family='Didot,Georgia,serif' font-size='48' font-weight='700' fill='%23003153' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
-  <link rel="manifest" href="manifest.json">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/home.css">
-  <script defer src="assets/site.js"></script>
-  <script defer src="assets/ui.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Andrew Park</title>
+<style>body{max-width:42em;margin:2em auto;padding:0 1em;line-height:1.4}</style>
 </head>
-<body data-section="home">
+<body>
+<p><a href="/">home</a> | <a href="/notes/">notes</a> | <a href="/music.html">music</a> | <a href="/literature.html">literature</a> | <a href="/daily/">daily</a></p>
+<hr>
+<h1>Andrew Park</h1>
+<p>B.S. Mathematics and B.S. Computer Science at Duke University, Class of 2028, GPA 3.96/4. Interested in quantitative research: probability, stochastic processes, forecasting, markets. Based in New York, NY and Durham, NC.</p>
+<p><a href="mailto:andrewpark.us@duke.edu">andrewpark.us@duke.edu</a> | <a href="https://github.com/chronicaria">github</a> | <a href="https://www.linkedin.com/in/andrewparkus/">linkedin</a> | <a href="/assets/andrew-park-resume.pdf">resume (pdf)</a></p>
 
-  <a class="skip" href="#main">Skip to content</a>
+<h2>Education</h2>
+<p><b>Duke University</b>, Trinity College of Arts &amp; Sciences (Durham, NC). B.S. Mathematics, B.S. Computer Science. GPA 3.96/4, expected May 2028. Julia Dale Prize for first-year mathematical excellence; Dean's List with Distinction. Graded graduate Mathematical Finance as an undergraduate TA, plus proof-based problem sets in linear algebra, multivariable calculus, and differential equations.</p>
+<p><b>Stuyvesant High School</b> (New York, NY). ACT 36, National Merit Scholar.</p>
 
-  <header class="mast">
-    <div class="topstrip">
-      <span class="place">New York, NY — Durham, NC</span>
-      <button class="nav-burger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav" data-nav-burger>☰ Menu</button>
-      <span class="topstrip-right">
-        <span data-date></span>
-        <button class="theme-toggle" type="button" data-theme-toggle>◐ light mode</button>
-      </span>
-    </div>
+<h2>Experience</h2>
+<p><b>Quantitative Research Intern, DataBallR</b> (May 2026 - present)</p>
+<ul>
+<li>Daily RAPM, a public multi-league player valuation model at <a href="https://andrewjparkus.github.io">andrewjparkus.github.io</a>.</li>
+<li>Designed a Kalman rating model that grades 10,681 college, G League and NBA players on the same scale.</li>
+<li>Led the 2026-27 season projection: player minutes, team depth charts, rotations and games missed each get their own model rather than one black box that prints a number.</li>
+<li>Improved on the Vegas closing line for NBA game margins by blending the ratings into it; over 12,034 games and 12 held-out seasons the fit put about 30% of its weight on the model.</li>
+</ul>
+<p><b>PRUV Research Fellow, Duke Mathematics</b> (April 2025 - present)</p>
+<ul>
+<li>Senior thesis under Professor J. Thomas Beale; manuscript in preparation.</li>
+<li>Modeled atmospheric flow on rapidly spinning brown dwarfs, which bulge out of the spherical shape nearly every current paper in the field assumes.</li>
+<li>Directed a 4,500-line Julia solver that puts the shallow-water equations on those non-spherical figures using Beale's surface discretization, verified against exact solutions to second-order spatial accuracy; the rotational signal came out thousands of times stronger than the sphere predicts.</li>
+</ul>
 
-    <div class="masthead">
-      <h1><a href="index.html">Andrew Park</a></h1>
-      <p class="dateline smallcaps">Duke University · Class of 2028</p>
-    </div>
+<h2>Projects</h2>
+<p><b>Prediction-Market Trading &amp; Election Forecasting</b> (June 2022 - present)</p>
+<ul>
+<li>Founded and led a seven-person team that built a U.S. election model on precinct returns back to 1912.</li>
+<li>Built a portfolio optimizer over it, sizing positions with fractional Kelly and hedging the national environment; traded the book on Polymarket and Kalshi across presidential, Senate, House and gubernatorial races.</li>
+</ul>
+<p><b>Duke Poker Club, Founder &amp; President</b> (January 2025 - present)</p>
+<ul>
+<li>Re-launched the club to 100+ members, secured a collegiate Kalshi partnership and trained the intercollegiate tournament team.</li>
+<li>Interviewed by <a href="https://www.wsj.com/business/media/prediction-markets-campus-e57cd19f">The Wall Street Journal</a> on college poker and prediction markets.</li>
+</ul>
 
-    <nav class="primary-nav" id="site-nav">
-      <a class="active" href="/">Home</a>
-      <a href="/daily/">Newspaper</a>
-      <div class="nav-drop">
-        <button type="button" class="nav-drop-btn">Interests</button>
-        <div class="nav-drop-menu">
-          <a href="/music.html">Music</a>
-          <a href="/literature.html">Literature</a>
-        </div>
-      </div>
-      <div class="nav-drop">
-        <button type="button" class="nav-drop-btn">Projects</button>
-        <div class="nav-drop-menu">
-          <a href="/fantasy/">Fantasy Encyclopedias</a>
-          <a href="/valorant/">Valorant MWPA</a>
-          <a href="/quant-internships/">Quant Internships</a>
-          <a href="/nyc-weather/">Weather Dashboard</a>
-          <a href="/winter-trip/">Italy, winter 2026–27</a>
-        </div>
-      </div>
-    </nav>
-  </header>
+<h2>Coursework</h2>
+<h3>Fall 2024</h3>
+<ul>
+<li><a href="https://cs.duke.edu/courses/data-structures-and-algorithms-0">Data Structures &amp; Algorithms</a> (COMPSCI 201)</li>
+<li><a href="https://math.duke.edu/courses/linear-algebra">Linear Algebra</a> (MATH 221)</li>
+<li><a href="https://romancestudies.duke.edu/courses/french-current-affairs">French for Current Affairs</a> (FRENCH 303S)</li>
+<li><a href="https://twp.duke.edu/students/undergraduate/writing101">Academic Writing</a> (WRITING 101)</li>
+</ul>
+<h3>Spring 2025</h3>
+<ul>
+<li><a href="https://math.duke.edu/courses/advanced-multivariable-calculus-0">Advanced Multivariable Calculus</a> (MATH 222)</li>
+<li><a href="https://math.duke.edu/courses/advanced-introduction-probability">Advanced Intro to Probability</a> (MATH 340)</li>
+<li><a href="https://math.duke.edu/courses/elementary-differential-equations">Elementary Differential Equations</a> (MATH 356)</li>
+<li><a href="https://cs.duke.edu/courses/computer-architecture-1">Computer Architecture</a> (COMPSCI 250D)</li>
+<li><a href="https://cmrs.trinity.duke.edu/courses/dantes-divine-comedy-hell-purgatory-and-paradise">Dante's Divine Comedy</a> (MEDREN 341)</li>
+</ul>
+<h3>Fall 2025</h3>
+<ul>
+<li><a href="https://math.duke.edu/courses/introduction-algebraic-structures-i">Algebraic Structures I</a> (MATH 501) (grad)</li>
+<li><a href="https://math.duke.edu/courses/mathematical-finance">Mathematical Finance</a> (MATH 581) (grad)</li>
+<li><a href="https://cs.duke.edu/courses/human-flourishing-digital-age">Human Flourishing in the Digital Age</a> (COMPSCI 247S)</li>
+<li><a href="https://scholars.duke.edu/course/ENVIRON210D">Conserving the Variety of Life</a> (ENVIRON 210D)</li>
+</ul>
+<h3>Spring 2026</h3>
+<ul>
+<li><a href="https://math.duke.edu/courses/real-analysis-i">Real Analysis I</a> (MATH 531) (grad)</li>
+<li><a href="https://math.duke.edu/courses/financial-derivatives">Financial Derivatives</a> (MATH 582) (grad)</li>
+<li><a href="https://cs.duke.edu/courses/graphics-software-architecture">Graphics Software Architecture</a> (COMPSCI 345)</li>
+<li><a href="https://english.duke.edu/spring-2026-courses">Romanticism Across the Arts</a> (ENGLISH 490S)</li>
+<li><a href="https://music.duke.edu/ensembles/chamber-music">Chamber Music</a> (MUSIC 211)</li>
+</ul>
+<h3>Fall 2026 (in progress)</h3>
+<ul>
+<li><a href="https://math.duke.edu/courses/applied-stochastic-processes">Applied Stochastic Processes</a> (MATH 541) (grad) <a href="/notes/math541.html">(notes)</a></li>
+<li><a href="https://cs.duke.edu/courses/discrete-mathematics-and-proofs">Discrete Mathematics &amp; Proofs</a> (COMPSCI 232)</li>
+<li><a href="https://undergraduate.bulletins.duke.edu/courses/0172924/tab-aoYks">Energy and Environment</a> (ECS 231)</li>
+<li><a href="https://polisci.duke.edu/courses/introduction-american-political-thought">Introduction to American Political Thought</a> (POLSCI 265S)</li>
+<li><a href="https://music.duke.edu/courses/classical-piano-0">Classical Piano</a> (MUSIC 203-1)</li>
+</ul>
 
-  <main class="sheet" id="main">
+<h2>Skills</h2>
+<ul>
+<li><b>Languages:</b> Python, Julia, SQL, Java</li>
+<li><b>Tools:</b> NumPy, pandas, SciPy, scikit-learn, XGBoost, Arrow/Parquet, Git, LaTeX</li>
+<li><b>Methods:</b> probability, statistics, regression, stochastic processes, Monte Carlo, backtesting, portfolio optimization</li>
+<li><b>Spoken:</b> English and Korean (native), French (fluent)</li>
+</ul>
 
-    <section class="standfirst">
-      <p class="deck">B.S. Mathematics · Second major in Computer Science · GPA 3.96 / 4.00</p>
-      <div class="btn-row">
-        <a class="btn primary" href="assets/andrew-park-resume.pdf" target="_blank" rel="noopener">Résumé</a>
-        <a class="btn" href="https://github.com/chronicaria" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn" href="https://www.linkedin.com/in/andrewparkus/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="btn" href="mailto:andrewpark.us@duke.edu">Email</a>
-      </div>
-    </section>
+<h2>Interests</h2>
+<p>Classical piano, and first violin in the New York Youth Symphony, including a Grammy-winning recording; more on the <a href="/music.html">music</a> page. Also nineteenth-century <a href="/literature.html">literature</a>.</p>
 
-    <div class="oxford"></div>
-
-    <div class="columns">
-      <div class="main-col">
-
-        <section class="reveal" id="research-exp">
-          <h2>Experience</h2>
-
-          <article class="entry">
-            <div class="entry-head">
-              <h3>Quantitative Research Intern</h3>
-              <span class="when">May 2026 – present</span>
-            </div>
-            <p class="org"><a href="https://databallr.com/" target="_blank" rel="noopener">DataBallR</a> ·
-              Daily RAPM, a public multi-league basketball valuation model at
-              <a href="https://andrewjparkus.github.io/model.html" target="_blank" rel="noopener">andrewjparkus.github.io</a></p>
-            <ul>
-              <li>Blending my ratings with the <strong>Las Vegas closing line</strong> beats the line alone
-                on NBA margins across <strong>12,034 held-out games</strong> — with ~<strong>30% weight on
-                my number</strong>.</li>
-              <li>Published the 2026-27 season projection before the schedule dropped: minutes model,
-                automated depth charts, Monte Carlo playoff odds, all 30 win totals frozen in public version
-                control.</li>
-              <li>Directed the daily valuation system: a regularized regression over <strong>49M+
-                possessions</strong> placing <strong>10,681</strong> NBA, NCAA and G League players on one
-                scale, benchmarked against EPM, BPM, RAPTOR and DARKO.</li>
-            </ul>
-            <div class="chips"><span class="chip">Ridge regression</span><span class="chip">LSQR</span><span class="chip">Monte Carlo</span><span class="chip">Python</span></div>
-          </article>
-
-          <article class="entry">
-            <div class="entry-head">
-              <h3><a href="https://math.duke.edu/undergraduate/pruv" target="_blank" rel="noopener">PRUV Research Fellow</a></h3>
-              <span class="when">April 2025 – present</span>
-            </div>
-            <p class="org"><a href="https://math.duke.edu/" target="_blank" rel="noopener">Duke Mathematics</a> ·
-              senior thesis under <a href="https://scholars.duke.edu/person/beale" target="_blank" rel="noopener">Prof. J. Thomas Beale</a></p>
-            <ul>
-              <li>Model atmospheric flow on brown dwarfs, solving the true flattened figure instead of the
-                usual sphere — a rotational signal <strong>thousands of times stronger</strong> than the
-                spherical case predicts.</li>
-              <li>Implemented Prof. Beale's surface-PDE method
-                (<a href="https://doi.org/10.1137/19M1272135" target="_blank" rel="noopener">SIAM J. Sci.
-                Comput.</a>, 2020) as a <strong>4,500-line Julia library</strong>, scaled with sparse,
-                matrix-free linear algebra — no surface meshing.</li>
-              <li>Verified <strong>second-order accuracy</strong> against exact solutions on <strong>10
-                distorted planetary shapes</strong>; writing up a 40-page manuscript.</li>
-            </ul>
-            <div class="chips"><span class="chip">Julia</span><span class="chip">GMRES</span><span class="chip">Numerical PDEs</span></div>
-          </article>
-
-          <article class="entry">
-            <div class="entry-head">
-              <h3>Teaching Assistant &amp; Grader</h3>
-              <span class="when">July 2025 – present</span>
-            </div>
-            <p class="org"><a href="https://math.duke.edu/" target="_blank" rel="noopener">Duke Mathematics</a></p>
-            <ul>
-              <li>Teaching assistant for <strong>graduate Mathematical Finance as an undergraduate</strong>,
-                plus proof-based problem sets for <strong>400+ students</strong> in Linear Algebra,
-                Multivariable Calculus and Differential Equations.</li>
-            </ul>
-          </article>
-
-        </section>
-
-        <section class="reveal" id="projects">
-          <h2>Projects &amp; Leadership</h2>
-
-          <article class="entry">
-            <div class="entry-head">
-              <h3>Election Forecasting &amp; Prediction Markets</h3>
-              <span class="when">Sep 2021 – present</span>
-            </div>
-            <ul>
-              <li>County- and precinct-level U.S. forecasting engine on returns back to <strong>1912</strong>:
-                per-county <strong>ideology vectors</strong> push national and state swings into races with
-                no polling. Directed seven contributors.</li>
-              <li>Ran the book on <a href="https://polymarket.com/" target="_blank" rel="noopener">Polymarket</a>
-                and <a href="https://kalshi.com/" target="_blank" rel="noopener">Kalshi</a> across four cycles,
-                sized by <strong>fractional Kelly</strong> and <strong>hedged across presidential, Senate and
-                House</strong> contracts.</li>
-            </ul>
-            <div class="chips"><span class="chip">Python</span><span class="chip">SQL</span><span class="chip">Fractional Kelly</span></div>
-          </article>
-
-          <article class="entry">
-            <div class="entry-head">
-              <h3>Weather Derivatives Pricing Engine</h3>
-              <span class="when">2026</span>
-            </div>
-            <ul>
-              <li>Pricing county-level degree-day options: seasonal and trend fits of <strong>75 years of
-                daily temperature</strong> for <strong>all 3,107 U.S. counties</strong>, closing the basis
-                gap CME's big-city stations leave open.</li>
-            </ul>
-            <div class="chips"><span class="chip">Python</span><span class="chip">Time series</span><span class="chip">Regression</span></div>
-          </article>
-
-          <article class="entry">
-            <div class="entry-head">
-              <h3><a href="https://www.instagram.com/duke_poker/" target="_blank" rel="noopener">Duke Poker Club</a>, Founder &amp; President</h3>
-              <span class="when">Jan 2025 – present</span>
-            </div>
-            <ul>
-              <li>Re-launched the club to <strong>100+ members</strong>: collegiate
-                <a href="https://kalshi.com/" target="_blank" rel="noopener">Kalshi</a> partnership, tournament
-                team for <a href="https://pokeripa.com/" target="_blank" rel="noopener">IPA</a> events, and a
-                <a href="https://www.wsj.com/business/media/prediction-markets-campus-e57cd19f" target="_blank" rel="noopener"><em>Wall Street Journal</em></a>
-                interview on college poker and prediction markets.</li>
-            </ul>
-          </article>
-
-        </section>
-
-      </div>
-
-      <aside class="side-col">
-
-        <section class="reveal" id="education">
-          <h2>Education</h2>
-          <article class="entry">
-            <div class="entry-head">
-              <h3>Duke University</h3>
-              <span class="when">Exp. May 2028</span>
-            </div>
-            <p class="org"><a href="https://trinity.duke.edu/" target="_blank" rel="noopener">Trinity College of Arts &amp; Sciences</a> · Durham, NC</p>
-            <p>B.S. Mathematics, second major in Computer Science. GPA 3.96 / 4.00.</p>
-            <p><a href="https://math.duke.edu/undergraduate/pruv" target="_blank" rel="noopener">PRUV Fellow</a> ·
-              <a href="https://math.duke.edu/julia-dale-prize" target="_blank" rel="noopener">Julia Dale Prize</a>
-              for first-year mathematical excellence · Dean's List with Distinction.</p>
-          </article>
-          <article class="entry">
-            <div class="entry-head">
-              <h3><a href="https://stuy.enschool.org/" target="_blank" rel="noopener">Stuyvesant High School</a></h3>
-              <span class="when">New York, NY</span>
-            </div>
-            <p>ACT 36 · National Merit Scholar.</p>
-          </article>
-
-        </section>
-
-        <section class="reveal" id="skills">
-          <h2>Skills</h2>
-          <p class="eyebrow smallcaps">Languages</p>
-          <div class="chips">
-            <span class="chip">Python</span><span class="chip">C++</span><span class="chip">Julia</span>
-            <span class="chip">SQL</span><span class="chip">Java</span><span class="chip">MIPS</span>
-          </div>
-          <p class="eyebrow smallcaps">Tools</p>
-          <div class="chips">
-            <span class="chip">NumPy</span><span class="chip">pandas</span><span class="chip">scikit-learn</span>
-            <span class="chip">XGBoost</span><span class="chip">Arrow / Parquet</span>
-            <span class="chip">Git</span><span class="chip">LaTeX</span>
-          </div>
-          <p class="eyebrow smallcaps">Methods</p>
-          <div class="chips">
-            <span class="chip">Statistical modeling</span><span class="chip">Stochastic processes</span>
-            <span class="chip">Monte Carlo</span><span class="chip">Backtesting</span>
-            <span class="chip">Numerical methods</span><span class="chip">Portfolio construction &amp; sizing</span>
-          </div>
-          <p class="eyebrow smallcaps">Spoken</p>
-          <div class="chips">
-            <span class="chip">English (native)</span><span class="chip">Korean (native)</span>
-            <span class="chip">French (fluent)</span>
-          </div>
-          <p class="eyebrow smallcaps">Interests</p>
-          <p class="aside-note">Classical piano; violin on a 2023 Grammy-winning orchestral recording;
-            nineteenth-century literature.</p>
-
-        </section>
-
-      </aside>
-    </div>
-
-    <div class="oxford listings-rule"></div>
-
-    <section class="listings reveal" id="coursework">
-      <div class="section-title-row">
-        <h2>Coursework</h2>
-        <span class="note">graduate courses tagged</span>
-      </div>
-      <div class="semester-grid">
-
-        <div class="semester">
-          <h3>Fall 2024</h3>
-          <ul>
-            <li><a href="https://cs.duke.edu/courses/data-structures-and-algorithms-0" target="_blank" rel="noopener">Data Structures &amp; Algorithms</a><span class="code dept-cs">COMPSCI 201</span></li>
-            <li><a href="https://math.duke.edu/courses/linear-algebra" target="_blank" rel="noopener">Linear Algebra</a><span class="code dept-math">MATH 221</span></li>
-            <li><a href="https://romancestudies.duke.edu/courses/french-current-affairs" target="_blank" rel="noopener">French for Current Affairs</a><span class="code dept-hum">FRENCH 303S</span></li>
-            <li><a href="https://twp.duke.edu/students/undergraduate/writing101" target="_blank" rel="noopener">Academic Writing</a><span class="code dept-hum">WRITING 101</span></li>
-          </ul>
-        </div>
-
-        <div class="semester">
-          <h3>Spring 2025</h3>
-          <ul>
-            <li><a href="https://math.duke.edu/courses/advanced-multivariable-calculus-0" target="_blank" rel="noopener">Advanced Multivariable Calculus</a><span class="code dept-math">MATH 222</span></li>
-            <li><a href="https://math.duke.edu/courses/advanced-introduction-probability" target="_blank" rel="noopener">Advanced Intro to Probability</a><span class="code dept-math">MATH 340</span></li>
-            <li><a href="https://math.duke.edu/courses/elementary-differential-equations" target="_blank" rel="noopener">Elementary Differential Equations</a><span class="code dept-math">MATH 356</span></li>
-            <li><a href="https://cs.duke.edu/courses/computer-architecture-1" target="_blank" rel="noopener">Computer Architecture</a><span class="code dept-cs">COMPSCI 250D</span></li>
-            <li><a href="https://cmrs.trinity.duke.edu/courses/dantes-divine-comedy-hell-purgatory-and-paradise" target="_blank" rel="noopener">Dante's Divine Comedy</a><span class="code dept-hum">MEDREN 341</span></li>
-          </ul>
-        </div>
-
-        <div class="semester">
-          <h3>Fall 2025</h3>
-          <ul>
-            <li><a href="https://math.duke.edu/courses/introduction-algebraic-structures-i" target="_blank" rel="noopener">Algebraic Structures I</a><span class="tag grad">GRAD</span><span class="code dept-math grad">MATH 501</span></li>
-            <li><a href="https://math.duke.edu/courses/mathematical-finance" target="_blank" rel="noopener">Mathematical Finance</a><span class="tag grad">GRAD</span><span class="code dept-math grad">MATH 581</span></li>
-            <li><a href="https://cs.duke.edu/courses/human-flourishing-digital-age" target="_blank" rel="noopener">Human Flourishing in the Digital Age</a><span class="code dept-cs">COMPSCI 247S</span></li>
-            <li><a href="https://scholars.duke.edu/course/ENVIRON210D" target="_blank" rel="noopener">Conserving the Variety of Life</a><span class="code dept-hum">ENVIRON 210D</span></li>
-          </ul>
-        </div>
-
-        <div class="semester">
-          <h3>Spring 2026</h3>
-          <ul>
-            <li><a href="https://math.duke.edu/courses/real-analysis-i" target="_blank" rel="noopener">Real Analysis I</a><span class="tag grad">GRAD</span><span class="code dept-math grad">MATH 531</span></li>
-            <li><a href="https://math.duke.edu/courses/financial-derivatives" target="_blank" rel="noopener">Financial Derivatives</a><span class="tag grad">GRAD</span><span class="code dept-math grad">MATH 582</span></li>
-            <li><a href="https://cs.duke.edu/courses/graphics-software-architecture" target="_blank" rel="noopener">Graphics Software Architecture</a><span class="code dept-cs">COMPSCI 345</span></li>
-            <li><a href="https://english.duke.edu/spring-2026-courses" target="_blank" rel="noopener">Romanticism Across the Arts</a><span class="code dept-hum">ENGLISH 490S</span></li>
-            <li><a href="https://music.duke.edu/ensembles/chamber-music" target="_blank" rel="noopener">Chamber Music</a><span class="code dept-hum">MUSIC 211</span></li>
-          </ul>
-        </div>
-
-        <div class="semester">
-          <h3>Fall 2026 <span class="tag">— enrolled</span></h3>
-          <ul>
-            <li><a href="https://math.duke.edu/courses/measure-and-integration" target="_blank" rel="noopener">Measure &amp; Integration</a><span class="tag grad">GRAD</span><span class="code dept-math grad">MATH 631</span></li>
-            <li><a href="https://cs.duke.edu/courses/discrete-mathematics-and-proofs" target="_blank" rel="noopener">Discrete Mathematics &amp; Proofs</a><span class="code dept-cs">COMPSCI 232</span></li>
-            <li><a href="https://undergraduate.bulletins.duke.edu/courses/0172924/tab-aoYks" target="_blank" rel="noopener">Energy and Environment</a><span class="code dept-hum">ECS 231</span></li>
-            <li><a href="https://polisci.duke.edu/courses/introduction-american-political-thought" target="_blank" rel="noopener">Introduction to American Political Thought</a><span class="code dept-hum">POLSCI 265S</span></li>
-            <li><a href="https://music.duke.edu/courses/classical-piano-0" target="_blank" rel="noopener">Classical Piano</a><span class="code dept-hum">MUSIC 203-1</span></li>
-          </ul>
-        </div>
-
-        <div class="semester">
-          <h3>Spring 2027</h3>
-        </div>
-
-        <div class="semester">
-          <h3>Fall 2027</h3>
-        </div>
-
-        <div class="semester">
-          <h3>Spring 2028</h3>
-        </div>
-
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <div>© <span data-year>2026</span> Andrew Park · <span class="monogram">AP</span></div>
-      <div class="links">
-        <a href="mailto:andrewpark.us@duke.edu">andrewpark.us@duke.edu</a> ·
-        <a href="https://github.com/chronicaria" target="_blank" rel="noopener">GitHub</a> ·
-        <a href="https://www.linkedin.com/in/andrewparkus/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="assets/andrew-park-resume.pdf" target="_blank" rel="noopener">Résumé</a>
-      </div>
-      <div class="colophon">Set in Bodoni Moda &amp; Newsreader · plain HTML/CSS, no frameworks harmed.</div>
-    </footer>
-
-  </main>
-
-  <script>
-    document.documentElement.classList.add("js");
-    document.querySelector("[data-date]").textContent =
-      new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-      });
-    }, { rootMargin: "0px 0px -8% 0px" });
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-  </script>
-
+<h2>Elsewhere on this site</h2>
+<ul>
+<li><a href="/notes/">notes</a> - course notes</li>
+<li><a href="/daily/">daily</a> - a self-printing daily paper</li>
+<li><a href="https://andrewjparkus.github.io">Daily RAPM</a> - public multi-league basketball player valuation</li>
+<li><a href="/valorant/">valorant</a> - Valorant MWPA, a win-probability-added model</li>
+<li><a href="/fantasy/">fantasy</a> - fantasy encyclopedias</li>
+<li><a href="/quant-internships/">quant internships</a> - quant internship tracker</li>
+<li><a href="/nyc-weather/">weather</a> - county temperature map and weather dashboard</li>
+<li><a href="/winter-trip/">winter trip</a> - Italy, winter 2026-27</li>
+</ul>
+<hr>
+<p><i>last updated: August 26, 2026</i></p>
 </body>
 </html>

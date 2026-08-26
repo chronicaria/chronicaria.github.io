@@ -1,8 +1,8 @@
 # chronicaria.github.io
 
 Andrew Park's personal site, and the eight projects that used to live in their own
-repositories. Plain HTML/CSS/JS at the top level, no build step, served from the root of
-`main` by GitHub Pages.
+repositories. Plain retro HTML at the top level — default browser styling, no build step —
+served from the root of `main` by GitHub Pages.
 
 ## Structure
 
@@ -12,6 +12,7 @@ daily/                The Gothic Times — the live morning paper (front page + 
                       the morgue/archive page is gone, each edition overwrites the last)
 music.html            Classical repertoire
 literature.html       Reading log
+notes/                Course notes — the only top-level pages that load JS (KaTeX)
 sports.html           Redirect stub → /daily/sports.html (trackers live at the sports desk)
 weather.html          Redirect stub → /nyc-weather/ (county map folded into the dashboard)
 404.html              Themed not-found
@@ -28,15 +29,22 @@ quant-internships/    Summer 2027 quant internship board — 59 roles, 38 firms
 concerto/             Piano concerto pairwise ranker — archived: kept at its URL, noindexed, out of all nav
 equipotential/        Live paper — archived: kept at its URL, noindexed, out of all nav
 
-assets/home.css       Landing page — the broadsheet design system
-assets/styles.css     Every other top-level page
-assets/daily.css      Newspaper components
+assets/daily.css      Newspaper components (the paper keeps its own design)
 assets/hub.js         The prussian band that ties the sub-projects back here
-assets/site.js        Nav burger + dropdowns + JSON loader
+sw.js                 Self-destroying service worker (see Design)
 scripts/              update_daily · update_sports · update_weather · make_og · make_district_map
 data/                 JSON for the top-level pages (see data/README.md)
 tools/county-temp-map RTMA → county choropleth generator (its work/ cache is gitignored)
 ```
+
+## Design
+
+The top level is deliberately plain: default browser styling, one line of `<style>` to cap
+the line length, and no JavaScript — except KaTeX on the `notes/` pages, which need it for
+the math. `sw.js` is a self-destroying service worker: earlier versions of the site
+installed an offline cache, and returning visitors would keep seeing it otherwise. On
+activate it deletes every cache, unregisters itself, and reloads its clients. The
+sub-projects keep their own designs.
 
 ## How the sub-projects are wired in
 
@@ -51,8 +59,7 @@ What they share is one line before `</head>`:
 none of the eight stylesheets underneath can reach into it and none of its rules leak out.
 The band links home, names the section you are in, and carries a menu of everything else.
 
-The top-level pages don't load it — they already have the real navigation, which now
-carries a Projects dropdown alongside Interests.
+The top-level pages don't load it — they link everything with plain HTML.
 
 All navigation is root-absolute (`/music.html`, `/fantasy/`), so the same nav block
 works at any depth. That means **the site must be served from a domain root**, not a

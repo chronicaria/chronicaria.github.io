@@ -1,103 +1,33 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Literature — Andrew Park</title>
-  <meta name="description" content="Andrew Park's reading log — current books, yearly shelves, and one-line takes.">
-  <script>document.documentElement.dataset.theme = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");</script>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23faf9f4'/%3E%3Crect x='5' y='5' width='90' height='90' fill='none' stroke='%23003153' stroke-width='4'/%3E%3Ctext x='50' y='68' font-family='Didot,Georgia,serif' font-size='46' font-weight='700' fill='%23003153' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
-  <link rel="apple-touch-icon" href="assets/icon-180.png">
-  <link rel="manifest" href="manifest.json">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css">
-  <script defer src="assets/site.js"></script>
-  <script defer src="assets/ui.js"></script>
-  <script defer src="assets/literature.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Literature — Andrew Park</title>
+<style>body{max-width:42em;margin:2em auto;padding:0 1em;line-height:1.4}</style>
 </head>
-<body data-section="literature">
+<body>
+<p><a href="/">home</a> | <a href="/notes/">notes</a> | <a href="/music.html">music</a> | <a href="/literature.html">literature</a> | <a href="/daily/">daily</a></p>
+<hr>
+<h1>Literature</h1>
+<p>Novels, Romanticism, the English minor at work. A reading log with standards: what's open right now, every book finished with a one-line take, and a shelf that fills as the year goes on.</p>
 
-  <header class="site-header">
-    <div class="brand"><a href="index.html">Andrew <span>Park</span></a></div>
-    <button class="nav-burger" type="button" aria-label="Toggle menu" data-nav-burger>☰ Menu</button>
-    <nav class="primary-nav">
-      <a href="/">Home</a>
-      <a href="/daily/">Newspaper</a>
-      <div class="nav-drop">
-        <button type="button" class="nav-drop-btn active">Interests</button>
-        <div class="nav-drop-menu">
-          <a href="/music.html">Music</a>
-          <a class="active" href="/literature.html">Literature</a>
-        </div>
-      </div>
-      <div class="nav-drop">
-        <button type="button" class="nav-drop-btn">Projects</button>
-        <div class="nav-drop-menu">
-          <a href="/fantasy/">Fantasy Encyclopedias</a>
-          <a href="/valorant/">Valorant MWPA</a>
-          <a href="/quant-internships/">Quant Internships</a>
-          <a href="/nyc-weather/">Weather Dashboard</a>
-          <a href="/winter-trip/">Italy, winter 2026–27</a>
-        </div>
-      </div>
-    </nav>
-  </header>
+<h2>Currently reading</h2>
+<p><b>The Count of Monte Cristo</b> — Alexandre Dumas (1844–46, 1,055 pages).<br>
+The revenge epic, taken at full unabridged length.<br>
+45% through — chapter 53 of 117, page 500 of 1,055.</p>
 
-  <main class="page-shell">
+<h2>The shelf — 2026</h2>
+<p>Nothing finished yet this year — the book in progress is 1,055 pages, so have some patience.</p>
 
-    <section class="page-hero">
-      <div>
-        <p class="eyebrow">Novels · Romanticism · the English minor at work</p>
-        <h1>Literature</h1>
-        <p class="tagline">A reading log with standards: what's open right now, every book finished
-          with a one-line take, and a shelf that fills as the year goes on.</p>
-      </div>
-      <label class="select-label">Year
-        <select data-year-filter></select>
-      </label>
-    </section>
-
-    <div class="placeholder-panel" data-books-error hidden>
-      <p>The shelf came up empty — the reading log didn't load. Try a refresh.</p>
-    </div>
-
-    <section class="card">
-      <h2>Currently reading</h2>
-      <div data-current></div>
-    </section>
-
-    <section class="card">
-      <h2>The shelf</h2>
-      <div class="shelf" data-shelf></div>
-      <div class="shelf-base"></div>
-      <p class="small-copy muted" style="margin:.5rem 0 0;" data-shelf-note></p>
-    </section>
-
-    <section class="card" data-planned-wrap hidden>
-      <h2>Planned reads</h2>
-      <div data-planned></div>
-    </section>
-
-    <section class="card" data-log-wrap hidden>
-      <h2>The log</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th style="text-align:left;">Title</th><th style="text-align:left;">Author</th><th>Pages</th><th>Finished</th><th>Rating</th><th style="text-align:left;">One-line take</th></tr>
-          </thead>
-          <tbody data-log-rows></tbody>
-        </table>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <span>© <span data-year>2026</span> Andrew Park · <span class="monogram">AP</span></span>
-      <span class="footer-tools"> <button class="theme-toggle" type="button" data-theme-toggle>◐ light mode</button>
-      </span>
-    </footer>
-
-  </main>
+<h2>Planned reads</h2>
+<ul>
+<li>War and Peace — Leo Tolstoy (1869, 1,225 pages)</li>
+<li>Les Misérables — Victor Hugo (1862, 1,463 pages)</li>
+<li>The Mountain in the Sea — Ray Nayler (2022, 464 pages)</li>
+</ul>
+<hr>
+<p><i>last updated: August 26, 2026</i></p>
 </body>
 </html>

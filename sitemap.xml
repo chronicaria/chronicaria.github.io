@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://chronicaria.github.io/</loc></url>
+  <url><loc>https://chronicaria.github.io/notes/</loc></url>
+  <url><loc>https://chronicaria.github.io/notes/math541.html</loc></url>
   <url><loc>https://chronicaria.github.io/daily/</loc></url>
   <url><loc>https://chronicaria.github.io/daily/sports.html</loc></url>
   <url><loc>https://chronicaria.github.io/daily/ai.html</loc></url>

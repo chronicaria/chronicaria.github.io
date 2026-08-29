@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-29T16:47:36Z",
+ "updated": "2026-08-29T20:59:53Z",
  "errors": [],
  "teams": [
   {
@@ -560,8 +560,8 @@
    "id": "367",
    "name": "Tottenham Hotspur",
    "abbr": "TOT",
-   "record": "0-0-1",
-   "standing": "17th in English Premier League",
+   "record": "0-0-2",
+   "standing": "20th in English Premier League",
    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
    "color": "ffffff",
    "form": [
@@ -573,6 +573,15 @@
      "url": "https://www.espn.com/soccer/match/_/gameId/401879321",
      "res": "L",
      "score": "0-3"
+    },
+    {
+     "date": "2026-08-29T16:30Z",
+     "opp": "Newcastle",
+     "oppAbbr": "NEW",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/401879312",
+     "res": "L",
+     "score": "0-2"
     }
    ],
    "next": []
@@ -586,7 +595,7 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "0-1-1",
+   "record": "0-2-1",
    "standing": "",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",

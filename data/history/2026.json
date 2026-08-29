@@ -589,6 +589,16 @@
    "home": true,
    "res": "D",
    "score": "1-1"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-08-29T16:30Z",
+   "opp": "Newcastle",
+   "home": true,
+   "res": "L",
+   "score": "0-2"
   }
  ]
 }

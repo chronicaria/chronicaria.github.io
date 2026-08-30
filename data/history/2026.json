@@ -599,6 +599,16 @@
    "home": true,
    "res": "L",
    "score": "0-2"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-08-29T23:30Z",
+   "opp": "D.C. United",
+   "home": false,
+   "res": "D",
+   "score": "0-0"
   }
  ]
 }

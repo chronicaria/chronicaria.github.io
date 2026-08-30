@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-30T16:00:00Z",
-  "updated": "2026-08-30T16:55:22Z",
+  "valid_time_utc": "2026-08-30T20:00:00Z",
+  "updated": "2026-08-30T21:24:14Z",
   "hottest": [
     {
-      "name": "Kingfisher",
+      "name": "Alfalfa",
       "state": "OK",
-      "temp_f": 95.8
+      "temp_f": 104.8
     },
     {
-      "name": "Garfield",
+      "name": "Grant",
       "state": "OK",
-      "temp_f": 95.7
+      "temp_f": 104.6
     },
     {
-      "name": "Love",
-      "state": "OK",
-      "temp_f": 94.9
+      "name": "Barber",
+      "state": "KS",
+      "temp_f": 104.2
     }
   ],
   "coldest": [
     {
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 41.2
+    },
+    {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 32.4
+      "temp_f": 42.3
     },
     {
-      "name": "Southeast Fairbanks",
+      "name": "North Slope",
       "state": "AK",
-      "temp_f": 35.3
-    },
-    {
-      "name": "Matanuska-Susitna",
-      "state": "AK",
-      "temp_f": 37.3
+      "temp_f": 42.8
     }
   ],
   "national": {
-    "min_f": 32.4,
-    "max_f": 95.8,
-    "mean_f": 79.1
+    "min_f": 41.2,
+    "max_f": 104.8,
+    "mean_f": 85.0
   }
 }

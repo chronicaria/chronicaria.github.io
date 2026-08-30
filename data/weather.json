@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-30T20:00:00Z",
-  "updated": "2026-08-30T21:24:14Z",
+  "valid_time_utc": "2026-08-30T22:00:00Z",
+  "updated": "2026-08-30T23:43:59Z",
   "hottest": [
+    {
+      "name": "Rice",
+      "state": "KS",
+      "temp_f": 105.0
+    },
     {
       "name": "Alfalfa",
       "state": "OK",
-      "temp_f": 104.8
+      "temp_f": 104.7
     },
     {
       "name": "Grant",
       "state": "OK",
-      "temp_f": 104.6
-    },
-    {
-      "name": "Barber",
-      "state": "KS",
-      "temp_f": 104.2
+      "temp_f": 104.5
     }
   ],
   "coldest": [
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 41.2
+      "temp_f": 40.6
     },
     {
-      "name": "Copper River",
+      "name": "Nome",
       "state": "AK",
-      "temp_f": 42.3
+      "temp_f": 42.5
     },
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 42.8
+      "temp_f": 44.1
     }
   ],
   "national": {
-    "min_f": 41.2,
-    "max_f": 104.8,
-    "mean_f": 85.0
+    "min_f": 40.6,
+    "max_f": 105.0,
+    "mean_f": 84.7
   }
 }

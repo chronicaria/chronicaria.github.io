@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-30T22:00:00Z",
-  "updated": "2026-08-30T23:43:59Z",
+  "valid_time_utc": "2026-08-31T05:00:00Z",
+  "updated": "2026-08-31T05:56:51Z",
   "hottest": [
     {
-      "name": "Rice",
-      "state": "KS",
-      "temp_f": 105.0
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 93.0
     },
     {
-      "name": "Alfalfa",
-      "state": "OK",
-      "temp_f": 104.7
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 91.6
     },
     {
-      "name": "Grant",
-      "state": "OK",
-      "temp_f": 104.5
+      "name": "Cottle",
+      "state": "TX",
+      "temp_f": 88.4
     }
   ],
   "coldest": [
     {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 40.6
-    },
-    {
       "name": "Nome",
       "state": "AK",
-      "temp_f": 42.5
+      "temp_f": 38.1
     },
     {
-      "name": "North Slope",
+      "name": "Denali",
       "state": "AK",
-      "temp_f": 44.1
+      "temp_f": 39.1
+    },
+    {
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 39.3
     }
   ],
   "national": {
-    "min_f": 40.6,
-    "max_f": 105.0,
-    "mean_f": 84.7
+    "min_f": 38.1,
+    "max_f": 93.0,
+    "mean_f": 71.9
   }
 }

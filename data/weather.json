@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-08-31T20:00:00Z",
-  "updated": "2026-08-31T20:59:37Z",
+  "valid_time_utc": "2026-08-31T23:00:00Z",
+  "updated": "2026-09-01T00:44:42Z",
   "hottest": [
-    {
-      "name": "Starr",
-      "state": "TX",
-      "temp_f": 104.2
-    },
     {
       "name": "Zapata",
       "state": "TX",
-      "temp_f": 104.2
+      "temp_f": 103.9
     },
     {
-      "name": "Alfalfa",
-      "state": "OK",
-      "temp_f": 103.5
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 103.7
+    },
+    {
+      "name": "Starr",
+      "state": "TX",
+      "temp_f": 102.4
     }
   ],
   "coldest": [
     {
-      "name": "Denali",
-      "state": "AK",
-      "temp_f": 33.9
-    },
-    {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 35.5
+      "temp_f": 35.8
+    },
+    {
+      "name": "Denali",
+      "state": "AK",
+      "temp_f": 37.3
     },
     {
       "name": "Matanuska-Susitna",
       "state": "AK",
-      "temp_f": 37.0
+      "temp_f": 40.2
     }
   ],
   "national": {
-    "min_f": 33.9,
-    "max_f": 104.2,
-    "mean_f": 86.7
+    "min_f": 35.8,
+    "max_f": 103.9,
+    "mean_f": 85.3
   }
 }

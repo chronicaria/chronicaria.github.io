@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-02T10:00:00Z",
-  "updated": "2026-09-02T11:36:41Z",
+  "valid_time_utc": "2026-09-02T15:00:00Z",
+  "updated": "2026-09-02T16:47:46Z",
   "hottest": [
     {
-      "name": "Galveston",
-      "state": "TX",
-      "temp_f": 84.6
+      "name": "Nash",
+      "state": "NC",
+      "temp_f": 92.3
     },
     {
-      "name": "Matagorda",
-      "state": "TX",
-      "temp_f": 83.9
+      "name": "Campbell",
+      "state": "VA",
+      "temp_f": 92.1
     },
     {
-      "name": "Chambers",
-      "state": "TX",
-      "temp_f": 83.8
+      "name": "Appomattox",
+      "state": "VA",
+      "temp_f": 92.0
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 30.0
-    },
-    {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 31.0
+      "temp_f": 29.0
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 31.5
+      "temp_f": 29.6
+    },
+    {
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 29.9
     }
   ],
   "national": {
-    "min_f": 30.0,
-    "max_f": 84.6,
-    "mean_f": 69.5
+    "min_f": 29.0,
+    "max_f": 92.3,
+    "mean_f": 79.5
   }
 }

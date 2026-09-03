@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-03T10:00:00Z",
-  "updated": "2026-09-03T11:33:19Z",
+  "valid_time_utc": "2026-09-03T15:00:00Z",
+  "updated": "2026-09-03T16:37:42Z",
   "hottest": [
     {
-      "name": "Galveston",
-      "state": "TX",
-      "temp_f": 84.9
+      "name": "Itawamba",
+      "state": "MS",
+      "temp_f": 92.3
     },
     {
-      "name": "Calhoun",
-      "state": "TX",
-      "temp_f": 84.5
+      "name": "Lauderdale",
+      "state": "TN",
+      "temp_f": 92.3
     },
     {
-      "name": "Aransas",
-      "state": "TX",
-      "temp_f": 84.3
+      "name": "Ripley",
+      "state": "MO",
+      "temp_f": 92.2
     }
   ],
   "coldest": [
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 28.7
+      "temp_f": 27.6
     },
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 30.1
+      "temp_f": 29.1
     },
     {
-      "name": "Copper River",
+      "name": "Fairbanks North Star",
       "state": "AK",
-      "temp_f": 31.2
+      "temp_f": 29.3
     }
   ],
   "national": {
-    "min_f": 28.7,
-    "max_f": 84.9,
-    "mean_f": 70.2
+    "min_f": 27.6,
+    "max_f": 92.3,
+    "mean_f": 79.3
   }
 }

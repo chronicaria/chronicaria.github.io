@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-03T15:00:00Z",
-  "updated": "2026-09-03T16:37:42Z",
+  "valid_time_utc": "2026-09-03T20:00:00Z",
+  "updated": "2026-09-03T21:14:21Z",
   "hottest": [
     {
-      "name": "Itawamba",
-      "state": "MS",
-      "temp_f": 92.3
+      "name": "Zapata",
+      "state": "TX",
+      "temp_f": 105.0
     },
     {
-      "name": "Lauderdale",
-      "state": "TN",
-      "temp_f": 92.3
+      "name": "Jones",
+      "state": "TX",
+      "temp_f": 104.9
     },
     {
-      "name": "Ripley",
-      "state": "MO",
-      "temp_f": 92.2
+      "name": "Starr",
+      "state": "TX",
+      "temp_f": 104.8
     }
   ],
   "coldest": [
     {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 27.6
-    },
-    {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 29.1
+      "temp_f": 32.8
     },
     {
-      "name": "Fairbanks North Star",
+      "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 29.3
+      "temp_f": 36.8
+    },
+    {
+      "name": "Denali",
+      "state": "AK",
+      "temp_f": 41.5
     }
   ],
   "national": {
-    "min_f": 27.6,
-    "max_f": 92.3,
-    "mean_f": 79.3
+    "min_f": 32.8,
+    "max_f": 105.0,
+    "mean_f": 87.9
   }
 }

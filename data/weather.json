@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-03T20:00:00Z",
-  "updated": "2026-09-03T21:14:21Z",
+  "valid_time_utc": "2026-09-03T22:00:00Z",
+  "updated": "2026-09-03T23:27:31Z",
   "hottest": [
     {
       "name": "Zapata",
       "state": "TX",
-      "temp_f": 105.0
-    },
-    {
-      "name": "Jones",
-      "state": "TX",
-      "temp_f": 104.9
+      "temp_f": 106.9
     },
     {
       "name": "Starr",
       "state": "TX",
-      "temp_f": 104.8
+      "temp_f": 106.0
+    },
+    {
+      "name": "Stonewall",
+      "state": "TX",
+      "temp_f": 105.6
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 32.8
+      "temp_f": 34.0
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 36.8
+      "temp_f": 37.9
     },
     {
-      "name": "Denali",
+      "name": "Fairbanks North Star",
       "state": "AK",
-      "temp_f": 41.5
+      "temp_f": 43.9
     }
   ],
   "national": {
-    "min_f": 32.8,
-    "max_f": 105.0,
-    "mean_f": 87.9
+    "min_f": 34.0,
+    "max_f": 106.9,
+    "mean_f": 87.3
   }
 }

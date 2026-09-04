@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-04T04:00:00Z",
-  "updated": "2026-09-04T04:57:23Z",
+  "valid_time_utc": "2026-09-04T10:00:00Z",
+  "updated": "2026-09-04T11:36:04Z",
   "hottest": [
     {
-      "name": "Stonewall",
-      "state": "TX",
-      "temp_f": 92.3
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 84.4
     },
     {
-      "name": "King",
+      "name": "Aransas",
       "state": "TX",
-      "temp_f": 92.3
+      "temp_f": 83.7
     },
     {
-      "name": "Cottle",
+      "name": "Galveston",
       "state": "TX",
-      "temp_f": 91.2
+      "temp_f": 83.5
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 34.2
+      "temp_f": 31.6
     },
     {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 38.2
+      "name": "Klamath",
+      "state": "OR",
+      "temp_f": 36.4
     },
     {
-      "name": "Fairbanks North Star",
-      "state": "AK",
-      "temp_f": 42.1
+      "name": "Deschutes",
+      "state": "OR",
+      "temp_f": 38.4
     }
   ],
   "national": {
-    "min_f": 34.2,
-    "max_f": 92.3,
-    "mean_f": 74.6
+    "min_f": 31.6,
+    "max_f": 84.4,
+    "mean_f": 70.0
   }
 }

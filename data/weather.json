@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-04T10:00:00Z",
-  "updated": "2026-09-04T11:36:04Z",
+  "valid_time_utc": "2026-09-04T15:00:00Z",
+  "updated": "2026-09-04T16:33:01Z",
   "hottest": [
     {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 84.4
+      "name": "Appomattox",
+      "state": "VA",
+      "temp_f": 93.5
     },
     {
-      "name": "Aransas",
-      "state": "TX",
-      "temp_f": 83.7
+      "name": "Sharp",
+      "state": "AR",
+      "temp_f": 93.3
     },
     {
-      "name": "Galveston",
-      "state": "TX",
-      "temp_f": 83.5
+      "name": "Campbell",
+      "state": "VA",
+      "temp_f": 93.3
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 31.6
+      "temp_f": 31.3
     },
     {
       "name": "Klamath",
       "state": "OR",
-      "temp_f": 36.4
+      "temp_f": 37.4
     },
     {
-      "name": "Deschutes",
+      "name": "Lake",
       "state": "OR",
-      "temp_f": 38.4
+      "temp_f": 39.9
     }
   ],
   "national": {
-    "min_f": 31.6,
-    "max_f": 84.4,
-    "mean_f": 70.0
+    "min_f": 31.3,
+    "max_f": 93.5,
+    "mean_f": 79.2
   }
 }

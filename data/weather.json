@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-04T15:00:00Z",
-  "updated": "2026-09-04T16:33:01Z",
+  "valid_time_utc": "2026-09-04T20:00:00Z",
+  "updated": "2026-09-04T20:57:12Z",
   "hottest": [
     {
-      "name": "Appomattox",
-      "state": "VA",
-      "temp_f": 93.5
+      "name": "Cottle",
+      "state": "TX",
+      "temp_f": 104.2
     },
     {
-      "name": "Sharp",
-      "state": "AR",
-      "temp_f": 93.3
+      "name": "Childress",
+      "state": "TX",
+      "temp_f": 103.5
     },
     {
-      "name": "Campbell",
-      "state": "VA",
-      "temp_f": 93.3
+      "name": "Starr",
+      "state": "TX",
+      "temp_f": 103.2
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 31.3
+      "temp_f": 33.1
     },
     {
-      "name": "Klamath",
-      "state": "OR",
-      "temp_f": 37.4
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 43.1
     },
     {
-      "name": "Lake",
-      "state": "OR",
-      "temp_f": 39.9
+      "name": "Yukon-Koyukuk",
+      "state": "AK",
+      "temp_f": 46.6
     }
   ],
   "national": {
-    "min_f": 31.3,
-    "max_f": 93.5,
-    "mean_f": 79.2
+    "min_f": 33.1,
+    "max_f": 104.2,
+    "mean_f": 87.4
   }
 }

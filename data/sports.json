@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-05T15:20:41Z",
+ "updated": "2026-09-05T20:29:04Z",
  "errors": [],
  "teams": [
   {
@@ -297,13 +297,6 @@
    ],
    "next": [
     {
-     "date": "2026-09-05T19:30Z",
-     "opp": "Tulane",
-     "oppAbbr": "TULN",
-     "home": true,
-     "url": "https://www.espn.com/college-football/game/_/gameId/401858209"
-    },
-    {
      "date": "2026-09-12T19:30Z",
      "opp": "Illinois",
      "oppAbbr": "ILL",
@@ -370,6 +363,13 @@
      "home": false,
      "url": "https://www.espn.com/college-football/game/_/gameId/401858296",
      "tbd": true
+    },
+    {
+     "date": "2026-11-21T00:30Z",
+     "opp": "Clemson",
+     "oppAbbr": "CLEM",
+     "home": true,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858303"
     }
    ]
   },
@@ -560,8 +560,8 @@
    "id": "367",
    "name": "Tottenham Hotspur",
    "abbr": "TOT",
-   "record": "0-0-2",
-   "standing": "20th in English Premier League",
+   "record": "0-1-2",
+   "standing": "18th in English Premier League",
    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
    "color": "ffffff",
    "form": [
@@ -582,6 +582,15 @@
      "url": "https://www.espn.com/soccer/match/_/gameId/401879312",
      "res": "L",
      "score": "0-2"
+    },
+    {
+     "date": "2026-09-05T14:00Z",
+     "opp": "Nottm Forest",
+     "oppAbbr": "NFO",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/401878780",
+     "res": "D",
+     "score": "0-0"
     }
    ],
    "next": []

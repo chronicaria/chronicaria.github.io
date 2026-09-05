@@ -609,6 +609,16 @@
    "home": false,
    "res": "D",
    "score": "0-0"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-09-05T14:00Z",
+   "opp": "Nottm Forest",
+   "home": false,
+   "res": "D",
+   "score": "0-0"
   }
  ]
 }

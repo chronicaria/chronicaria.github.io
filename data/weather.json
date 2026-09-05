@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-04T22:00:00Z",
-  "updated": "2026-09-04T23:12:09Z",
+  "valid_time_utc": "2026-09-05T04:00:00Z",
+  "updated": "2026-09-05T04:51:01Z",
   "hottest": [
     {
-      "name": "Zapata",
-      "state": "TX",
-      "temp_f": 104.2
+      "name": "Maricopa",
+      "state": "AZ",
+      "temp_f": 90.7
     },
     {
-      "name": "Childress",
-      "state": "TX",
-      "temp_f": 104.1
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 90.6
     },
     {
-      "name": "Hall",
+      "name": "Hardeman",
       "state": "TX",
-      "temp_f": 104.0
+      "temp_f": 90.4
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 34.3
+      "temp_f": 34.6
     },
     {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 44.6
+      "name": "Alpine",
+      "state": "CA",
+      "temp_f": 43.4
     },
     {
-      "name": "Yukon-Koyukuk",
-      "state": "AK",
-      "temp_f": 48.3
+      "name": "Deschutes",
+      "state": "OR",
+      "temp_f": 44.4
     }
   ],
   "national": {
-    "min_f": 34.3,
-    "max_f": 104.2,
-    "mean_f": 86.5
+    "min_f": 34.6,
+    "max_f": 90.7,
+    "mean_f": 74.1
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-05T04:00:00Z",
-  "updated": "2026-09-05T04:51:01Z",
+  "valid_time_utc": "2026-09-05T10:00:00Z",
+  "updated": "2026-09-05T10:51:19Z",
   "hottest": [
     {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 90.7
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 83.7
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 90.6
-    },
-    {
-      "name": "Hardeman",
+      "name": "Calhoun",
       "state": "TX",
-      "temp_f": 90.4
+      "temp_f": 83.5
+    },
+    {
+      "name": "Aransas",
+      "state": "TX",
+      "temp_f": 83.5
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 34.6
-    },
-    {
-      "name": "Alpine",
-      "state": "CA",
-      "temp_f": 43.4
+      "temp_f": 32.5
     },
     {
       "name": "Deschutes",
       "state": "OR",
-      "temp_f": 44.4
+      "temp_f": 36.9
+    },
+    {
+      "name": "Klamath",
+      "state": "OR",
+      "temp_f": 37.6
     }
   ],
   "national": {
-    "min_f": 34.6,
-    "max_f": 90.7,
-    "mean_f": 74.1
+    "min_f": 32.5,
+    "max_f": 83.7,
+    "mean_f": 69.6
   }
 }

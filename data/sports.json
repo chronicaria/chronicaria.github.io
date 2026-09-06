@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-06T04:49:42Z",
+ "updated": "2026-09-06T11:06:11Z",
  "errors": [],
  "teams": [
   {
@@ -523,8 +523,8 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "0-2-1",
-   "standing": "",
+   "record": "0-0",
+   "standing": "1st in AFC South",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",
    "form": [

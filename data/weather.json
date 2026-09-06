@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-06T19:00:00Z",
-  "updated": "2026-09-06T20:41:24Z",
+  "valid_time_utc": "2026-09-06T22:00:00Z",
+  "updated": "2026-09-06T23:00:30Z",
   "hottest": [
     {
-      "name": "Sunflower",
-      "state": "MS",
-      "temp_f": 103.5
+      "name": "Okmulgee",
+      "state": "OK",
+      "temp_f": 103.9
     },
     {
-      "name": "Phillips",
-      "state": "AR",
+      "name": "Coal",
+      "state": "OK",
+      "temp_f": 103.3
+    },
+    {
+      "name": "Seminole",
+      "state": "OK",
       "temp_f": 103.2
-    },
-    {
-      "name": "Coahoma",
-      "state": "MS",
-      "temp_f": 102.8
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 38.8
+      "temp_f": 42.1
     },
     {
       "name": "Skagway",
       "state": "AK",
-      "temp_f": 45.0
+      "temp_f": 46.7
     },
     {
-      "name": "Copper River",
+      "name": "Aleutians West",
       "state": "AK",
-      "temp_f": 45.2
+      "temp_f": 48.3
     }
   ],
   "national": {
-    "min_f": 38.8,
-    "max_f": 103.5,
-    "mean_f": 83.4
+    "min_f": 42.1,
+    "max_f": 103.9,
+    "mean_f": 82.5
   }
 }

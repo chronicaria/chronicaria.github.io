@@ -619,6 +619,26 @@
    "home": false,
    "res": "D",
    "score": "0-0"
+  },
+  {
+   "team": "duke-fb",
+   "label": "Duke FB",
+   "league": "NCAA FB",
+   "date": "2026-09-05T19:30Z",
+   "opp": "Tulane",
+   "home": true,
+   "res": "W",
+   "score": "17-3"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-09-06T01:30Z",
+   "opp": "Salt Lake",
+   "home": false,
+   "res": "D",
+   "score": "2-2"
   }
  ]
 }

@@ -1,21 +1,21 @@
 {
-  "valid_time_utc": "2026-09-06T22:00:00Z",
-  "updated": "2026-09-06T23:00:30Z",
+  "valid_time_utc": "2026-09-07T04:00:00Z",
+  "updated": "2026-09-07T05:05:07Z",
   "hottest": [
     {
-      "name": "Okmulgee",
-      "state": "OK",
-      "temp_f": 103.9
+      "name": "Maricopa",
+      "state": "AZ",
+      "temp_f": 89.3
     },
     {
-      "name": "Coal",
-      "state": "OK",
-      "temp_f": 103.3
+      "name": "Knox",
+      "state": "TX",
+      "temp_f": 89.3
     },
     {
-      "name": "Seminole",
-      "state": "OK",
-      "temp_f": 103.2
+      "name": "King",
+      "state": "TX",
+      "temp_f": 89.1
     }
   ],
   "coldest": [
@@ -25,19 +25,19 @@
       "temp_f": 42.1
     },
     {
-      "name": "Skagway",
-      "state": "AK",
-      "temp_f": 46.7
+      "name": "Deschutes",
+      "state": "OR",
+      "temp_f": 44.4
     },
     {
-      "name": "Aleutians West",
-      "state": "AK",
-      "temp_f": 48.3
+      "name": "Lake",
+      "state": "OR",
+      "temp_f": 44.5
     }
   ],
   "national": {
     "min_f": 42.1,
-    "max_f": 103.9,
-    "mean_f": 82.5
+    "max_f": 89.3,
+    "mean_f": 70.1
   }
 }

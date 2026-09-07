@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-07T04:00:00Z",
-  "updated": "2026-09-07T05:05:07Z",
+  "valid_time_utc": "2026-09-07T12:00:00Z",
+  "updated": "2026-09-07T12:56:36Z",
   "hottest": [
     {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 89.3
+      "name": "Lee",
+      "state": "FL",
+      "temp_f": 84.4
     },
     {
-      "name": "Knox",
-      "state": "TX",
-      "temp_f": 89.3
+      "name": "Pinellas",
+      "state": "FL",
+      "temp_f": 83.9
     },
     {
-      "name": "King",
-      "state": "TX",
-      "temp_f": 89.1
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 83.8
     }
   ],
   "coldest": [
     {
-      "name": "North Slope",
-      "state": "AK",
-      "temp_f": 42.1
-    },
-    {
-      "name": "Deschutes",
+      "name": "Klamath",
       "state": "OR",
-      "temp_f": 44.4
+      "temp_f": 34.5
     },
     {
       "name": "Lake",
       "state": "OR",
-      "temp_f": 44.5
+      "temp_f": 35.9
+    },
+    {
+      "name": "Deschutes",
+      "state": "OR",
+      "temp_f": 37.2
     }
   ],
   "national": {
-    "min_f": 42.1,
-    "max_f": 89.3,
-    "mean_f": 70.1
+    "min_f": 34.5,
+    "max_f": 84.4,
+    "mean_f": 65.4
   }
 }

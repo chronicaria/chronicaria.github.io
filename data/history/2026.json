@@ -639,6 +639,16 @@
    "home": false,
    "res": "D",
    "score": "2-2"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-09-10T02:30Z",
+   "opp": "Red Bull NY",
+   "home": true,
+   "res": "W",
+   "score": "2-0"
   }
  ]
 }

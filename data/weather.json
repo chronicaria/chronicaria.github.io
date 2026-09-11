@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-11T15:00:00Z",
-  "updated": "2026-09-11T16:42:02Z",
+  "valid_time_utc": "2026-09-11T20:00:00Z",
+  "updated": "2026-09-11T21:10:29Z",
   "hottest": [
     {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 89.9
+      "name": "Starr",
+      "state": "TX",
+      "temp_f": 104.2
     },
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 89.4
+      "name": "McMullen",
+      "state": "TX",
+      "temp_f": 104.1
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 89.2
+      "name": "Brooks",
+      "state": "TX",
+      "temp_f": 103.5
     }
   ],
   "coldest": [
     {
+      "name": "North Slope",
+      "state": "AK",
+      "temp_f": 47.9
+    },
+    {
+      "name": "Judith Basin",
+      "state": "MT",
+      "temp_f": 48.4
+    },
+    {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 36.8
-    },
-    {
-      "name": "Skagway",
-      "state": "AK",
-      "temp_f": 38.9
-    },
-    {
-      "name": "Matanuska-Susitna",
-      "state": "AK",
-      "temp_f": 39.5
+      "temp_f": 48.6
     }
   ],
   "national": {
-    "min_f": 36.8,
-    "max_f": 89.9,
-    "mean_f": 73.9
+    "min_f": 47.9,
+    "max_f": 104.2,
+    "mean_f": 82.4
   }
 }

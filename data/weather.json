@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-11T04:00:00Z",
-  "updated": "2026-09-11T05:01:23Z",
+  "valid_time_utc": "2026-09-11T10:00:00Z",
+  "updated": "2026-09-11T11:42:22Z",
   "hottest": [
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 97.8
+      "temp_f": 91.1
     },
     {
       "name": "La Paz",
       "state": "AZ",
-      "temp_f": 97.1
+      "temp_f": 89.4
     },
     {
-      "name": "Yuma",
+      "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 96.7
+      "temp_f": 88.8
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 41.4
+      "temp_f": 38.9
     },
     {
-      "name": "Skagway",
-      "state": "AK",
-      "temp_f": 42.7
+      "name": "Lake",
+      "state": "CO",
+      "temp_f": 40.9
     },
     {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 43.9
+      "name": "Missaukee",
+      "state": "MI",
+      "temp_f": 41.7
     }
   ],
   "national": {
-    "min_f": 41.4,
-    "max_f": 97.8,
-    "mean_f": 70.4
+    "min_f": 38.9,
+    "max_f": 91.1,
+    "mean_f": 66.2
   }
 }

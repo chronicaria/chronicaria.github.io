@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-12T10:00:00Z",
-  "updated": "2026-09-12T11:07:45Z",
+  "valid_time_utc": "2026-09-12T14:00:00Z",
+  "updated": "2026-09-12T15:45:55Z",
   "hottest": [
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 85.5
+      "name": "Miami-Dade",
+      "state": "FL",
+      "temp_f": 87.0
     },
     {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 84.9
+      "name": "Matagorda",
+      "state": "TX",
+      "temp_f": 86.9
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 84.6
+      "name": "Palm Beach",
+      "state": "FL",
+      "temp_f": 86.7
     }
   ],
   "coldest": [
     {
       "name": "Beaverhead",
       "state": "MT",
-      "temp_f": 38.8
+      "temp_f": 38.2
     },
     {
-      "name": "Aroostook",
-      "state": "ME",
-      "temp_f": 39.2
+      "name": "Deschutes",
+      "state": "OR",
+      "temp_f": 38.4
     },
     {
       "name": "Deer Lodge",
       "state": "MT",
-      "temp_f": 39.3
+      "temp_f": 38.8
     }
   ],
   "national": {
-    "min_f": 38.8,
-    "max_f": 85.5,
-    "mean_f": 65.9
+    "min_f": 38.2,
+    "max_f": 87.0,
+    "mean_f": 69.5
   }
 }

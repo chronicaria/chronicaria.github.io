@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-12T15:37:55Z",
+ "updated": "2026-09-12T20:39:45Z",
  "errors": [],
  "teams": [
   {
@@ -216,13 +216,6 @@
    ],
    "next": [
     {
-     "date": "2026-09-12T19:30Z",
-     "opp": "Illinois",
-     "oppAbbr": "ILL",
-     "home": false,
-     "url": "https://www.espn.com/college-football/game/_/gameId/401858217"
-    },
-    {
      "date": "2026-09-19T20:00Z",
      "opp": "Stanford",
      "oppAbbr": "STAN",
@@ -289,6 +282,14 @@
      "oppAbbr": "CLEM",
      "home": true,
      "url": "https://www.espn.com/college-football/game/_/gameId/401858303"
+    },
+    {
+     "date": "2026-11-28T05:00Z",
+     "opp": "Wake Forest",
+     "oppAbbr": "WAKE",
+     "home": false,
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858312",
+     "tbd": true
     }
    ]
   },
@@ -479,8 +480,8 @@
    "id": "367",
    "name": "Tottenham Hotspur",
    "abbr": "TOT",
-   "record": "0-1-2",
-   "standing": "18th in English Premier League",
+   "record": "0-2-2",
+   "standing": "17th in English Premier League",
    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
    "color": "ffffff",
    "form": [
@@ -508,6 +509,15 @@
      "oppAbbr": "NFO",
      "home": false,
      "url": "https://www.espn.com/soccer/match/_/gameId/401878780",
+     "res": "D",
+     "score": "0-0"
+    },
+    {
+     "date": "2026-09-12T16:30Z",
+     "opp": "Everton",
+     "oppAbbr": "EVE",
+     "home": true,
+     "url": "https://www.espn.com/soccer/match/_/gameId/401879277",
      "res": "D",
      "score": "0-0"
     }

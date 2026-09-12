@@ -649,6 +649,16 @@
    "home": true,
    "res": "W",
    "score": "2-0"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-09-12T16:30Z",
+   "opp": "Everton",
+   "home": true,
+   "res": "D",
+   "score": "0-0"
   }
  ]
 }

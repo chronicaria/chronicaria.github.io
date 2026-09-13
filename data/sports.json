@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-13T16:27:35Z",
+ "updated": "2026-09-13T20:56:53Z",
  "errors": [],
  "teams": [
   {
@@ -542,111 +542,22 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "0-0",
-   "standing": "1st in AFC South",
+   "record": "0-1",
+   "standing": "2nd in AFC South",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",
    "form": [
-    {
-     "date": "2025-10-26T20:25Z",
-     "opp": "Titans",
-     "oppAbbr": "TEN",
-     "home": true,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772761",
-     "res": "W",
-     "score": "38-14"
-    },
-    {
-     "date": "2025-11-02T18:00Z",
-     "opp": "Steelers",
-     "oppAbbr": "PIT",
-     "home": false,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772766",
-     "res": "L",
-     "score": "20-27"
-    },
-    {
-     "date": "2025-11-09T14:30Z",
-     "opp": "Falcons",
-     "oppAbbr": "ATL",
-     "home": true,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772636",
-     "res": "W",
-     "score": "31-25"
-    },
-    {
-     "date": "2025-11-23T18:00Z",
-     "opp": "Chiefs",
-     "oppAbbr": "KC",
-     "home": false,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772779",
-     "res": "L",
-     "score": "20-23"
-    },
-    {
-     "date": "2025-11-30T18:00Z",
-     "opp": "Texans",
-     "oppAbbr": "HOU",
-     "home": true,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772787",
-     "res": "L",
-     "score": "16-20"
-    },
-    {
-     "date": "2025-12-07T18:00Z",
-     "opp": "Jaguars",
-     "oppAbbr": "JAX",
-     "home": false,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772793",
-     "res": "L",
-     "score": "19-36"
-    },
-    {
-     "date": "2025-12-14T21:25Z",
-     "opp": "Seahawks",
-     "oppAbbr": "SEA",
-     "home": false,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772799",
-     "res": "L",
-     "score": "16-18"
-    },
-    {
-     "date": "2025-12-23T01:15Z",
-     "opp": "49ers",
-     "oppAbbr": "SF",
-     "home": true,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772824",
-     "res": "L",
-     "score": "27-48"
-    },
-    {
-     "date": "2025-12-28T18:00Z",
-     "opp": "Jaguars",
-     "oppAbbr": "JAX",
-     "home": true,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772915",
-     "res": "L",
-     "score": "17-23"
-    },
-    {
-     "date": "2026-01-04T18:00Z",
-     "opp": "Texans",
-     "oppAbbr": "HOU",
-     "home": false,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401772962",
-     "res": "L",
-     "score": "30-38"
-    }
-   ],
-   "next": [
     {
      "date": "2026-09-13T17:00Z",
      "opp": "Ravens",
      "oppAbbr": "BAL",
      "home": true,
      "url": "https://www.espn.com/nfl/game/_/gameId/401872659",
-     "odds": "BAL -3 \u00b7 O/U 48.5"
-    },
+     "res": "L",
+     "score": "23-41"
+    }
+   ],
+   "next": [
     {
      "date": "2026-09-21T00:20Z",
      "opp": "Chiefs",
@@ -709,6 +620,13 @@
      "oppAbbr": "MIA",
      "home": true,
      "url": "https://www.espn.com/nfl/game/_/gameId/401873059"
+    },
+    {
+     "date": "2026-11-20T01:15Z",
+     "opp": "Texans",
+     "oppAbbr": "HOU",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873066"
     }
    ]
   },

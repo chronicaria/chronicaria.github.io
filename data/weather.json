@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-13T11:00:00Z",
-  "updated": "2026-09-13T12:13:30Z",
+  "valid_time_utc": "2026-09-13T15:00:00Z",
+  "updated": "2026-09-13T16:34:47Z",
   "hottest": [
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 84.4
-    },
-    {
-      "name": "Aransas",
+      "name": "Hidalgo",
       "state": "TX",
-      "temp_f": 83.8
+      "temp_f": 89.6
     },
     {
-      "name": "La Paz",
-      "state": "AZ",
-      "temp_f": 83.7
+      "name": "Starr",
+      "state": "TX",
+      "temp_f": 89.4
+    },
+    {
+      "name": "San Patricio",
+      "state": "TX",
+      "temp_f": 89.2
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 34.0
-    },
-    {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 35.3
+      "temp_f": 32.9
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 36.1
+      "temp_f": 33.4
+    },
+    {
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 34.4
     }
   ],
   "national": {
-    "min_f": 34.0,
-    "max_f": 84.4,
-    "mean_f": 65.0
+    "min_f": 32.9,
+    "max_f": 89.6,
+    "mean_f": 72.0
   }
 }

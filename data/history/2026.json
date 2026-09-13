@@ -659,6 +659,26 @@
    "home": true,
    "res": "D",
    "score": "0-0"
+  },
+  {
+   "team": "duke-fb",
+   "label": "Duke FB",
+   "league": "NCAA FB",
+   "date": "2026-09-12T19:30Z",
+   "opp": "Illinois",
+   "home": false,
+   "res": "W",
+   "score": "31-27"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-09-13T00:30Z",
+   "opp": "Kansas City",
+   "home": false,
+   "res": "L",
+   "score": "1-3"
   }
  ]
 }

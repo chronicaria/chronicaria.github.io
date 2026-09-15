@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-15T16:00:00Z",
-  "updated": "2026-09-15T17:13:25Z",
+  "valid_time_utc": "2026-09-15T20:00:00Z",
+  "updated": "2026-09-15T21:39:27Z",
   "hottest": [
     {
-      "name": "Lee",
-      "state": "MS",
-      "temp_f": 94.1
+      "name": "McMullen",
+      "state": "TX",
+      "temp_f": 102.8
     },
     {
-      "name": "Decatur",
-      "state": "TN",
-      "temp_f": 93.9
+      "name": "Tillman",
+      "state": "OK",
+      "temp_f": 102.5
     },
     {
-      "name": "Henderson",
-      "state": "TN",
-      "temp_f": 93.8
+      "name": "Dimmit",
+      "state": "TX",
+      "temp_f": 102.5
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 29.3
+      "temp_f": 33.3
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 36.2
+      "temp_f": 41.1
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 37.1
+      "temp_f": 41.5
     }
   ],
   "national": {
-    "min_f": 29.3,
-    "max_f": 94.1,
-    "mean_f": 75.3
+    "min_f": 33.3,
+    "max_f": 102.8,
+    "mean_f": 81.5
   }
 }

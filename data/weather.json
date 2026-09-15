@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-15T11:00:00Z",
-  "updated": "2026-09-15T12:00:11Z",
+  "valid_time_utc": "2026-09-15T16:00:00Z",
+  "updated": "2026-09-15T17:13:25Z",
   "hottest": [
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 84.1
+      "name": "Lee",
+      "state": "MS",
+      "temp_f": 94.1
     },
     {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 84.0
+      "name": "Decatur",
+      "state": "TN",
+      "temp_f": 93.9
     },
     {
-      "name": "Aransas",
-      "state": "TX",
-      "temp_f": 83.6
+      "name": "Henderson",
+      "state": "TN",
+      "temp_f": 93.8
     }
   ],
   "coldest": [
     {
-      "name": "Teton",
-      "state": "WY",
-      "temp_f": 30.5
-    },
-    {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 30.5
+      "temp_f": 29.3
     },
     {
-      "name": "Beaverhead",
-      "state": "MT",
-      "temp_f": 31.7
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 36.2
+    },
+    {
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 37.1
     }
   ],
   "national": {
-    "min_f": 30.5,
-    "max_f": 84.1,
-    "mean_f": 63.5
+    "min_f": 29.3,
+    "max_f": 94.1,
+    "mean_f": 75.3
   }
 }

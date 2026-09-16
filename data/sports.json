@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-15T21:29:36Z",
+ "updated": "2026-09-16T04:57:57Z",
  "errors": [],
  "teams": [
   {
@@ -563,7 +563,8 @@
      "opp": "Chiefs",
      "oppAbbr": "KC",
      "home": false,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401872945"
+     "url": "https://www.espn.com/nfl/game/_/gameId/401872945",
+     "odds": "KC -6.5 \u00b7 O/U 46.5"
     },
     {
      "date": "2026-09-27T17:00Z",

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-15T20:00:00Z",
-  "updated": "2026-09-15T21:39:27Z",
+  "valid_time_utc": "2026-09-16T04:00:00Z",
+  "updated": "2026-09-16T05:06:25Z",
   "hottest": [
     {
-      "name": "McMullen",
+      "name": "Stonewall",
       "state": "TX",
-      "temp_f": 102.8
+      "temp_f": 90.7
     },
     {
-      "name": "Tillman",
-      "state": "OK",
-      "temp_f": 102.5
+      "name": "Knox",
+      "state": "TX",
+      "temp_f": 89.8
     },
     {
-      "name": "Dimmit",
+      "name": "Foard",
       "state": "TX",
-      "temp_f": 102.5
+      "temp_f": 89.7
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 33.3
-    },
-    {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 41.1
+      "temp_f": 33.7
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 41.5
+      "temp_f": 42.2
+    },
+    {
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 42.3
     }
   ],
   "national": {
-    "min_f": 33.3,
-    "max_f": 102.8,
-    "mean_f": 81.5
+    "min_f": 33.7,
+    "max_f": 90.7,
+    "mean_f": 68.3
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-16T04:00:00Z",
-  "updated": "2026-09-16T05:06:25Z",
+  "valid_time_utc": "2026-09-16T11:00:00Z",
+  "updated": "2026-09-16T11:57:06Z",
   "hottest": [
     {
-      "name": "Stonewall",
-      "state": "TX",
-      "temp_f": 90.7
+      "name": "St. Bernard",
+      "state": "LA",
+      "temp_f": 85.2
     },
     {
-      "name": "Knox",
-      "state": "TX",
-      "temp_f": 89.8
+      "name": "Plaquemines",
+      "state": "LA",
+      "temp_f": 84.0
     },
     {
-      "name": "Foard",
-      "state": "TX",
-      "temp_f": 89.7
+      "name": "Orleans",
+      "state": "LA",
+      "temp_f": 83.5
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 33.7
+      "temp_f": 32.7
     },
     {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 42.2
+      "name": "Koochiching",
+      "state": "MN",
+      "temp_f": 33.8
     },
     {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 42.3
+      "name": "Roseau",
+      "state": "MN",
+      "temp_f": 35.6
     }
   ],
   "national": {
-    "min_f": 33.7,
-    "max_f": 90.7,
-    "mean_f": 68.3
+    "min_f": 32.7,
+    "max_f": 85.2,
+    "mean_f": 63.7
   }
 }

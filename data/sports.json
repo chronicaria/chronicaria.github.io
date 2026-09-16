@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-16T11:48:42Z",
+ "updated": "2026-09-16T17:07:50Z",
  "errors": [],
  "teams": [
   {
@@ -149,12 +149,11 @@
      "tbd": true
     },
     {
-     "date": "2026-11-21T05:00Z",
+     "date": "2026-11-22T04:00Z",
      "opp": "Washington St",
      "oppAbbr": "WSU",
-     "home": true,
-     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909567",
-     "tbd": true
+     "home": false,
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909567"
     },
     {
      "date": "2026-11-25T05:00Z",

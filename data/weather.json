@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-17T11:00:00Z",
-  "updated": "2026-09-17T11:59:20Z",
+  "valid_time_utc": "2026-09-17T16:00:00Z",
+  "updated": "2026-09-17T17:13:10Z",
   "hottest": [
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 84.3
+      "name": "Carter",
+      "state": "MO",
+      "temp_f": 94.1
     },
     {
-      "name": "Galveston",
-      "state": "TX",
-      "temp_f": 83.3
+      "name": "Sebastian",
+      "state": "AR",
+      "temp_f": 93.9
     },
     {
-      "name": "Plaquemines",
-      "state": "LA",
-      "temp_f": 82.8
+      "name": "Oregon",
+      "state": "MO",
+      "temp_f": 93.9
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 32.9
+      "temp_f": 31.6
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 34.6
+      "temp_f": 32.9
     },
     {
-      "name": "Divide",
-      "state": "ND",
-      "temp_f": 36.0
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 35.3
     }
   ],
   "national": {
-    "min_f": 32.9,
-    "max_f": 84.3,
-    "mean_f": 65.6
+    "min_f": 31.6,
+    "max_f": 94.1,
+    "mean_f": 77.2
   }
 }

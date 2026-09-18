@@ -1,21 +1,21 @@
 {
-  "valid_time_utc": "2026-09-17T20:00:00Z",
-  "updated": "2026-09-17T21:37:37Z",
+  "valid_time_utc": "2026-09-18T04:00:00Z",
+  "updated": "2026-09-18T05:01:42Z",
   "hottest": [
     {
-      "name": "Oregon",
-      "state": "MO",
-      "temp_f": 100.4
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 87.9
     },
     {
-      "name": "Carter",
-      "state": "MO",
-      "temp_f": 100.2
+      "name": "Dimmit",
+      "state": "TX",
+      "temp_f": 87.8
     },
     {
-      "name": "Okfuskee",
-      "state": "OK",
-      "temp_f": 100.0
+      "name": "Knox",
+      "state": "TX",
+      "temp_f": 87.3
     }
   ],
   "coldest": [
@@ -25,19 +25,19 @@
       "temp_f": 33.2
     },
     {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 37.8
-    },
-    {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 39.0
+      "temp_f": 36.8
+    },
+    {
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 40.1
     }
   ],
   "national": {
     "min_f": 33.2,
-    "max_f": 100.4,
-    "mean_f": 82.9
+    "max_f": 87.9,
+    "mean_f": 70.6
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-18T10:00:00Z",
-  "updated": "2026-09-18T11:39:51Z",
+  "valid_time_utc": "2026-09-18T15:00:00Z",
+  "updated": "2026-09-18T16:39:06Z",
   "hottest": [
     {
-      "name": "Galveston",
-      "state": "TX",
-      "temp_f": 82.7
+      "name": "Mississippi",
+      "state": "AR",
+      "temp_f": 90.8
     },
     {
-      "name": "Calhoun",
-      "state": "TX",
-      "temp_f": 82.7
+      "name": "Carter",
+      "state": "MO",
+      "temp_f": 90.8
     },
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 82.4
+      "name": "Craighead",
+      "state": "AR",
+      "temp_f": 90.7
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 31.6
+      "temp_f": 30.6
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 32.0
+      "temp_f": 31.1
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 35.0
+      "temp_f": 32.7
     }
   ],
   "national": {
-    "min_f": 31.6,
-    "max_f": 82.7,
-    "mean_f": 66.5
+    "min_f": 30.6,
+    "max_f": 90.8,
+    "mean_f": 74.5
   }
 }

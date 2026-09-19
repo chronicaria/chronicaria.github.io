@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-18T22:00:00Z",
-  "updated": "2026-09-18T23:30:30Z",
+  "valid_time_utc": "2026-09-19T04:00:00Z",
+  "updated": "2026-09-19T04:54:15Z",
   "hottest": [
     {
-      "name": "Monroe",
-      "state": "AR",
-      "temp_f": 100.1
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 86.9
     },
     {
-      "name": "Haskell",
-      "state": "OK",
-      "temp_f": 100.1
+      "name": "Loving",
+      "state": "TX",
+      "temp_f": 86.3
     },
     {
-      "name": "Phillips",
-      "state": "AR",
-      "temp_f": 99.6
+      "name": "Hardeman",
+      "state": "TX",
+      "temp_f": 86.1
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 34.3
+      "temp_f": 33.3
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 38.7
+      "temp_f": 35.6
     },
     {
-      "name": "Northwest Arctic",
+      "name": "Nome",
       "state": "AK",
-      "temp_f": 39.7
+      "temp_f": 37.9
     }
   ],
   "national": {
-    "min_f": 34.3,
-    "max_f": 100.1,
-    "mean_f": 81.3
+    "min_f": 33.3,
+    "max_f": 86.9,
+    "mean_f": 69.4
   }
 }

@@ -689,6 +689,16 @@
    "home": true,
    "res": "L",
    "score": "23-41"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-09-19T11:30Z",
+   "opp": "Aston Villa",
+   "home": true,
+   "res": "L",
+   "score": "2-3"
   }
  ]
 }

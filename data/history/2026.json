@@ -699,6 +699,26 @@
    "home": true,
    "res": "L",
    "score": "2-3"
+  },
+  {
+   "team": "duke-fb",
+   "label": "Duke FB",
+   "league": "NCAA FB",
+   "date": "2026-09-19T20:00Z",
+   "opp": "Stanford",
+   "home": true,
+   "res": "W",
+   "score": "35-7"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-09-19T23:30Z",
+   "opp": "San Jose",
+   "home": false,
+   "res": "D",
+   "score": "2-2"
   }
  ]
 }

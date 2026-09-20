@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-20T20:00:00Z",
-  "updated": "2026-09-20T21:00:28Z",
+  "valid_time_utc": "2026-09-20T22:00:00Z",
+  "updated": "2026-09-20T23:22:33Z",
   "hottest": [
     {
       "name": "Starr",
       "state": "TX",
-      "temp_f": 100.9
+      "temp_f": 100.7
     },
     {
       "name": "Zapata",
       "state": "TX",
-      "temp_f": 99.1
+      "temp_f": 99.9
     },
     {
-      "name": "Leflore",
-      "state": "MS",
-      "temp_f": 99.1
+      "name": "Jim Hogg",
+      "state": "TX",
+      "temp_f": 99.3
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 30.2
+      "temp_f": 31.1
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 33.2
+      "temp_f": 36.1
     },
     {
       "name": "Nome",
       "state": "AK",
-      "temp_f": 36.2
+      "temp_f": 37.7
     }
   ],
   "national": {
-    "min_f": 30.2,
-    "max_f": 100.9,
-    "mean_f": 78.3
+    "min_f": 31.1,
+    "max_f": 100.7,
+    "mean_f": 77.3
   }
 }

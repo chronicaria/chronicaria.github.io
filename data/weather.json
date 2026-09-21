@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-21T12:00:00Z",
-  "updated": "2026-09-21T13:12:02Z",
+  "valid_time_utc": "2026-09-21T19:00:00Z",
+  "updated": "2026-09-21T20:06:05Z",
   "hottest": [
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 83.0
-    },
-    {
-      "name": "Galveston",
+      "name": "Starr",
       "state": "TX",
-      "temp_f": 82.5
+      "temp_f": 100.8
     },
     {
-      "name": "Orleans",
-      "state": "LA",
-      "temp_f": 81.4
+      "name": "Leflore",
+      "state": "MS",
+      "temp_f": 98.6
+    },
+    {
+      "name": "Zapata",
+      "state": "TX",
+      "temp_f": 98.6
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 27.5
+      "temp_f": 28.8
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 29.1
+      "temp_f": 31.2
     },
     {
-      "name": "Lake",
-      "state": "CO",
-      "temp_f": 32.3
+      "name": "Denali",
+      "state": "AK",
+      "temp_f": 34.5
     }
   ],
   "national": {
-    "min_f": 27.5,
-    "max_f": 83.0,
-    "mean_f": 62.2
+    "min_f": 28.8,
+    "max_f": 100.8,
+    "mean_f": 75.2
   }
 }

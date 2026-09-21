@@ -719,6 +719,16 @@
    "home": false,
    "res": "D",
    "score": "2-2"
+  },
+  {
+   "team": "colts",
+   "label": "Colts",
+   "league": "NFL",
+   "date": "2026-09-21T00:20Z",
+   "opp": "Chiefs",
+   "home": false,
+   "res": "L",
+   "score": "30-33"
   }
  ]
 }

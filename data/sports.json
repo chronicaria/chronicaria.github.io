@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-20T20:55:19Z",
+ "updated": "2026-09-21T05:07:50Z",
  "errors": [],
  "teams": [
   {
@@ -552,7 +552,7 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "0-1",
+   "record": "0-2",
    "standing": "2nd in AFC South",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",
@@ -565,17 +565,18 @@
      "url": "https://www.espn.com/nfl/game/_/gameId/401872659",
      "res": "L",
      "score": "23-41"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-09-21T00:20Z",
      "opp": "Chiefs",
      "oppAbbr": "KC",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401872945",
-     "odds": "KC -6 \u00b7 O/U 46.5"
-    },
+     "res": "L",
+     "score": "30-33"
+    }
+   ],
+   "next": [
     {
      "date": "2026-09-27T17:00Z",
      "opp": "Texans",
@@ -638,6 +639,13 @@
      "oppAbbr": "HOU",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401873066"
+    },
+    {
+     "date": "2026-11-29T18:00Z",
+     "opp": "Giants",
+     "oppAbbr": "NYG",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873088"
     }
    ]
   },
@@ -650,8 +658,8 @@
    "id": "7",
    "name": "Carolina Hurricanes",
    "abbr": "CAR",
-   "record": "0-0-0",
-   "standing": "1st in Metropolitan Division",
+   "record": "0-1-0",
+   "standing": "3rd in Metropolitan Division",
    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/car.png",
    "color": "e30426",
    "form": [

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-22T20:00:00Z",
-  "updated": "2026-09-22T21:35:13Z",
+  "valid_time_utc": "2026-09-22T22:00:00Z",
+  "updated": "2026-09-22T23:46:57Z",
   "hottest": [
     {
-      "name": "Starr",
+      "name": "Burleson",
       "state": "TX",
-      "temp_f": 100.2
+      "temp_f": 98.8
     },
     {
-      "name": "Harrison",
+      "name": "Zapata",
       "state": "TX",
-      "temp_f": 98.6
+      "temp_f": 98.4
     },
     {
-      "name": "Bienville",
-      "state": "LA",
-      "temp_f": 98.6
+      "name": "Bastrop",
+      "state": "TX",
+      "temp_f": 98.3
     }
   ],
   "coldest": [
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 32.3
+      "temp_f": 33.6
     },
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 33.9
+      "temp_f": 34.7
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 34.0
+      "temp_f": 36.0
     }
   ],
   "national": {
-    "min_f": 32.3,
-    "max_f": 100.2,
-    "mean_f": 72.7
+    "min_f": 33.6,
+    "max_f": 98.8,
+    "mean_f": 71.8
   }
 }

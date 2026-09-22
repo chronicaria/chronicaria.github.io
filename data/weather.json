@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-22T04:00:00Z",
-  "updated": "2026-09-22T05:17:20Z",
+  "valid_time_utc": "2026-09-22T11:00:00Z",
+  "updated": "2026-09-22T11:57:45Z",
   "hottest": [
     {
-      "name": "Dimmit",
-      "state": "TX",
-      "temp_f": 87.3
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 82.0
     },
     {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 85.9
+      "name": "Galveston",
+      "state": "TX",
+      "temp_f": 80.9
     },
     {
-      "name": "La Salle",
+      "name": "Aransas",
       "state": "TX",
-      "temp_f": 85.8
+      "temp_f": 80.4
     }
   ],
   "coldest": [
     {
-      "name": "North Slope",
-      "state": "AK",
-      "temp_f": 31.3
-    },
-    {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 32.6
+      "temp_f": 27.5
+    },
+    {
+      "name": "North Slope",
+      "state": "AK",
+      "temp_f": 30.2
     },
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 35.4
+      "temp_f": 30.7
     }
   ],
   "national": {
-    "min_f": 31.3,
-    "max_f": 87.3,
-    "mean_f": 64.3
+    "min_f": 27.5,
+    "max_f": 82.0,
+    "mean_f": 60.4
   }
 }

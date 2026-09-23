@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-23T11:00:00Z",
-  "updated": "2026-09-23T11:59:05Z",
+  "valid_time_utc": "2026-09-23T16:00:00Z",
+  "updated": "2026-09-23T17:23:01Z",
   "hottest": [
     {
-      "name": "Galveston",
+      "name": "Falls",
       "state": "TX",
-      "temp_f": 82.2
+      "temp_f": 91.4
     },
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 82.2
+      "name": "Robertson",
+      "state": "TX",
+      "temp_f": 91.4
     },
     {
-      "name": "Orleans",
-      "state": "LA",
-      "temp_f": 81.5
+      "name": "McLennan",
+      "state": "TX",
+      "temp_f": 91.2
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 26.9
+      "temp_f": 24.7
     },
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 27.7
+      "temp_f": 27.1
     },
     {
-      "name": "North Slope",
+      "name": "Matanuska-Susitna",
       "state": "AK",
-      "temp_f": 30.0
+      "temp_f": 28.5
     }
   ],
   "national": {
-    "min_f": 26.9,
-    "max_f": 82.2,
-    "mean_f": 59.4
+    "min_f": 24.7,
+    "max_f": 91.4,
+    "mean_f": 66.8
   }
 }

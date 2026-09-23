@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-22T22:00:00Z",
-  "updated": "2026-09-22T23:46:57Z",
+  "valid_time_utc": "2026-09-23T04:00:00Z",
+  "updated": "2026-09-23T05:01:31Z",
   "hottest": [
     {
-      "name": "Burleson",
-      "state": "TX",
-      "temp_f": 98.8
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 86.3
     },
     {
-      "name": "Zapata",
-      "state": "TX",
-      "temp_f": 98.4
+      "name": "Maricopa",
+      "state": "AZ",
+      "temp_f": 85.4
     },
     {
-      "name": "Bastrop",
+      "name": "Dallas",
       "state": "TX",
-      "temp_f": 98.3
+      "temp_f": 85.4
     }
   ],
   "coldest": [
     {
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 31.5
+    },
+    {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 33.6
+      "temp_f": 31.6
     },
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 34.7
-    },
-    {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 36.0
+      "temp_f": 33.1
     }
   ],
   "national": {
-    "min_f": 33.6,
-    "max_f": 98.8,
-    "mean_f": 71.8
+    "min_f": 31.5,
+    "max_f": 86.3,
+    "mean_f": 63.0
   }
 }

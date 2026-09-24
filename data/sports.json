@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-24T11:58:10Z",
+ "updated": "2026-09-24T17:19:56Z",
  "errors": [],
  "teams": [
   {
@@ -156,12 +156,11 @@
      "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909567"
     },
     {
-     "date": "2026-11-25T05:00Z",
+     "date": "2026-11-26T00:00Z",
      "opp": "UConn",
      "oppAbbr": "CONN",
      "home": true,
-     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909568",
-     "tbd": true
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909568"
     },
     {
      "date": "2026-12-02T02:30Z",
@@ -582,7 +581,7 @@
      "oppAbbr": "HOU",
      "home": true,
      "url": "https://www.espn.com/nfl/game/_/gameId/401872951",
-     "odds": "HOU -2.5 \u00b7 O/U 42.5"
+     "odds": "HOU -1.5 \u00b7 O/U 42.5"
     },
     {
      "date": "2026-10-04T13:30Z",

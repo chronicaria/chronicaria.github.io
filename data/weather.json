@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-24T16:00:00Z",
-  "updated": "2026-09-24T17:28:15Z",
+  "valid_time_utc": "2026-09-24T20:00:00Z",
+  "updated": "2026-09-24T21:42:36Z",
   "hottest": [
     {
-      "name": "Hidalgo",
+      "name": "Zapata",
       "state": "TX",
-      "temp_f": 90.2
+      "temp_f": 96.6
+    },
+    {
+      "name": "DeWitt",
+      "state": "TX",
+      "temp_f": 96.5
     },
     {
       "name": "Starr",
       "state": "TX",
-      "temp_f": 90.2
-    },
-    {
-      "name": "Cameron",
-      "state": "TX",
-      "temp_f": 89.6
+      "temp_f": 96.2
     }
   ],
   "coldest": [
     {
-      "name": "Denali",
-      "state": "AK",
-      "temp_f": 23.8
-    },
-    {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 25.8
+      "temp_f": 29.7
     },
     {
-      "name": "Fairbanks North Star",
+      "name": "Copper River",
       "state": "AK",
-      "temp_f": 26.0
+      "temp_f": 34.2
+    },
+    {
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 36.2
     }
   ],
   "national": {
-    "min_f": 23.8,
-    "max_f": 90.2,
-    "mean_f": 66.1
+    "min_f": 29.7,
+    "max_f": 96.6,
+    "mean_f": 71.7
   }
 }

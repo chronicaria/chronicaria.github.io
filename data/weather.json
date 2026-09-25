@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-25T11:00:00Z",
-  "updated": "2026-09-25T12:05:41Z",
+  "valid_time_utc": "2026-09-25T16:00:00Z",
+  "updated": "2026-09-25T17:27:21Z",
   "hottest": [
     {
-      "name": "Aransas",
+      "name": "McMullen",
       "state": "TX",
-      "temp_f": 81.4
+      "temp_f": 89.8
     },
     {
-      "name": "Nueces",
+      "name": "Hidalgo",
       "state": "TX",
-      "temp_f": 81.0
+      "temp_f": 89.7
     },
     {
-      "name": "Cameron",
+      "name": "Live Oak",
       "state": "TX",
-      "temp_f": 80.6
+      "temp_f": 89.4
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 25.1
+      "temp_f": 25.4
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 28.8
+      "temp_f": 26.7
     },
     {
-      "name": "Southeast Fairbanks",
+      "name": "Fairbanks North Star",
       "state": "AK",
-      "temp_f": 31.2
+      "temp_f": 29.3
     }
   ],
   "national": {
-    "min_f": 25.1,
-    "max_f": 81.4,
-    "mean_f": 56.9
+    "min_f": 25.4,
+    "max_f": 89.8,
+    "mean_f": 66.7
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-25T20:00:00Z",
-  "updated": "2026-09-25T21:46:01Z",
+  "valid_time_utc": "2026-09-26T04:00:00Z",
+  "updated": "2026-09-26T05:19:10Z",
   "hottest": [
     {
-      "name": "McMullen",
-      "state": "TX",
-      "temp_f": 98.7
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 88.1
     },
     {
-      "name": "La Salle",
+      "name": "Maverick",
       "state": "TX",
-      "temp_f": 98.1
+      "temp_f": 87.0
     },
     {
-      "name": "Starr",
+      "name": "Dimmit",
       "state": "TX",
-      "temp_f": 97.8
+      "temp_f": 86.6
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 29.9
+      "temp_f": 30.2
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 36.6
+      "temp_f": 33.3
     },
     {
-      "name": "Northwest Arctic",
+      "name": "Skagway",
       "state": "AK",
-      "temp_f": 38.6
+      "temp_f": 34.5
     }
   ],
   "national": {
-    "min_f": 29.9,
-    "max_f": 98.7,
-    "mean_f": 72.9
+    "min_f": 30.2,
+    "max_f": 88.1,
+    "mean_f": 61.0
   }
 }

@@ -729,6 +729,26 @@
    "home": false,
    "res": "L",
    "score": "30-33"
+  },
+  {
+   "team": "duke-fb",
+   "label": "Duke FB",
+   "league": "NCAA FB",
+   "date": "2026-09-26T19:30Z",
+   "opp": "William & Mary",
+   "home": true,
+   "res": "W",
+   "score": "62-7"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-09-27T00:30Z",
+   "opp": "Dallas",
+   "home": false,
+   "res": "L",
+   "score": "0-1"
   }
  ]
 }

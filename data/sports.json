@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-27T17:04:05Z",
+ "updated": "2026-09-27T21:27:03Z",
  "errors": [],
  "teams": [
   {
@@ -552,7 +552,7 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "0-2",
+   "record": "1-2",
    "standing": "2nd in AFC South",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",
@@ -574,6 +574,15 @@
      "url": "https://www.espn.com/nfl/game/_/gameId/401872945",
      "res": "L",
      "score": "30-33"
+    },
+    {
+     "date": "2026-09-27T17:00Z",
+     "opp": "Texans",
+     "oppAbbr": "HOU",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401872951",
+     "res": "W",
+     "score": "19-17"
     }
    ],
    "next": [

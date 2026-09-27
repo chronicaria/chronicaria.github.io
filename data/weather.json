@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-27T11:00:00Z",
-  "updated": "2026-09-27T12:20:23Z",
+  "valid_time_utc": "2026-09-27T16:00:00Z",
+  "updated": "2026-09-27T17:10:55Z",
   "hottest": [
     {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 82.4
-    },
-    {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 80.3
-    },
-    {
-      "name": "Galveston",
+      "name": "Starr",
       "state": "TX",
-      "temp_f": 79.4
+      "temp_f": 91.4
+    },
+    {
+      "name": "Hidalgo",
+      "state": "TX",
+      "temp_f": 90.5
+    },
+    {
+      "name": "Brooks",
+      "state": "TX",
+      "temp_f": 90.5
     }
   ],
   "coldest": [
     {
-      "name": "Glacier",
-      "state": "MT",
-      "temp_f": 30.3
+      "name": "North Slope",
+      "state": "AK",
+      "temp_f": 29.5
     },
     {
-      "name": "Powell",
-      "state": "MT",
-      "temp_f": 30.4
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 29.6
     },
     {
-      "name": "Granite",
-      "state": "MT",
-      "temp_f": 31.1
+      "name": "Copper River",
+      "state": "AK",
+      "temp_f": 30.6
     }
   ],
   "national": {
-    "min_f": 30.3,
-    "max_f": 82.4,
-    "mean_f": 56.1
+    "min_f": 29.5,
+    "max_f": 91.4,
+    "mean_f": 68.4
   }
 }

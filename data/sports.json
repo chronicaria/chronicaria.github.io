@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-27T12:12:47Z",
+ "updated": "2026-09-27T17:04:05Z",
  "errors": [],
  "teams": [
   {
@@ -578,14 +578,6 @@
    ],
    "next": [
     {
-     "date": "2026-09-27T17:00Z",
-     "opp": "Texans",
-     "oppAbbr": "HOU",
-     "home": true,
-     "url": "https://www.espn.com/nfl/game/_/gameId/401872951",
-     "odds": "HOU -1.5 \u00b7 O/U 42.5"
-    },
-    {
      "date": "2026-10-04T13:30Z",
      "opp": "Commanders",
      "oppAbbr": "WSH",
@@ -647,6 +639,13 @@
      "oppAbbr": "NYG",
      "home": true,
      "url": "https://www.espn.com/nfl/game/_/gameId/401873088"
+    },
+    {
+     "date": "2026-12-13T18:00Z",
+     "opp": "Eagles",
+     "oppAbbr": "PHI",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873114"
     }
    ]
   },
@@ -761,7 +760,8 @@
      "opp": "Panthers",
      "oppAbbr": "FLA",
      "home": true,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401891773"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401891773",
+     "odds": "CAR -130 \u00b7 O/U 6.5"
     },
     {
      "date": "2026-10-02T23:00Z",

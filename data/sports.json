@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-28T14:10:58Z",
+ "updated": "2026-09-28T23:22:28Z",
  "errors": [],
  "teams": [
   {
@@ -178,12 +178,11 @@
      "tbd": true
     },
     {
-     "date": "2026-12-08T05:00Z",
+     "date": "2026-12-09T02:00Z",
      "opp": "Georgia",
      "oppAbbr": "UGA",
      "home": false,
-     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906786",
-     "tbd": true
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906786"
     }
    ]
   },
@@ -240,12 +239,11 @@
    ],
    "next": [
     {
-     "date": "2026-10-10T04:00Z",
+     "date": "2026-10-10T19:30Z",
      "opp": "Georgia Tech",
      "oppAbbr": "GT",
      "home": false,
-     "url": "https://www.espn.com/college-football/game/_/gameId/401858255",
-     "tbd": true
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858255"
     },
     {
      "date": "2026-10-17T04:00Z",
@@ -770,7 +768,7 @@
      "oppAbbr": "FLA",
      "home": true,
      "url": "https://www.espn.com/nhl/game/_/gameId/401891773",
-     "odds": "CAR -125 \u00b7 O/U 6.5"
+     "odds": "CAR -130 \u00b7 O/U 6.5"
     },
     {
      "date": "2026-10-02T23:00Z",

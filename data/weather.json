@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-28T13:00:00Z",
-  "updated": "2026-09-28T14:20:53Z",
+  "valid_time_utc": "2026-09-28T20:00:00Z",
+  "updated": "2026-09-28T21:20:41Z",
   "hottest": [
     {
-      "name": "Galveston",
+      "name": "Starr",
       "state": "TX",
-      "temp_f": 81.5
+      "temp_f": 98.5
     },
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 80.4
+      "name": "Maverick",
+      "state": "TX",
+      "temp_f": 98.5
     },
     {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 80.3
+      "name": "Dimmit",
+      "state": "TX",
+      "temp_f": 98.5
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 26.5
-    },
-    {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 28.2
+      "temp_f": 28.8
     },
     {
-      "name": "Denali",
+      "name": "Copper River",
       "state": "AK",
-      "temp_f": 32.2
+      "temp_f": 33.5
+    },
+    {
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 33.9
     }
   ],
   "national": {
-    "min_f": 26.5,
-    "max_f": 81.5,
-    "mean_f": 58.6
+    "min_f": 28.8,
+    "max_f": 98.5,
+    "mean_f": 75.3
   }
 }

@@ -1,21 +1,21 @@
 {
-  "valid_time_utc": "2026-09-28T20:00:00Z",
-  "updated": "2026-09-28T21:20:41Z",
+  "valid_time_utc": "2026-09-29T00:00:00Z",
+  "updated": "2026-09-29T01:10:33Z",
   "hottest": [
     {
-      "name": "Starr",
+      "name": "Zapata",
       "state": "TX",
-      "temp_f": 98.5
-    },
-    {
-      "name": "Maverick",
-      "state": "TX",
-      "temp_f": 98.5
+      "temp_f": 95.1
     },
     {
       "name": "Dimmit",
       "state": "TX",
-      "temp_f": 98.5
+      "temp_f": 95.1
+    },
+    {
+      "name": "Webb",
+      "state": "TX",
+      "temp_f": 95.0
     }
   ],
   "coldest": [
@@ -25,19 +25,19 @@
       "temp_f": 28.8
     },
     {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 33.5
-    },
-    {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 33.9
+      "temp_f": 35.1
+    },
+    {
+      "name": "Skagway",
+      "state": "AK",
+      "temp_f": 36.0
     }
   ],
   "national": {
     "min_f": 28.8,
-    "max_f": 98.5,
-    "mean_f": 75.3
+    "max_f": 95.1,
+    "mean_f": 69.6
   }
 }

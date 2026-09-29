@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-29T17:00:00Z",
-  "updated": "2026-09-29T18:13:07Z",
+  "valid_time_utc": "2026-09-29T21:00:00Z",
+  "updated": "2026-09-29T22:31:53Z",
   "hottest": [
     {
-      "name": "Starr",
+      "name": "La Salle",
       "state": "TX",
-      "temp_f": 94.0
+      "temp_f": 99.5
     },
     {
-      "name": "Brooks",
+      "name": "McMullen",
       "state": "TX",
-      "temp_f": 93.9
+      "temp_f": 99.3
     },
     {
       "name": "Zapata",
       "state": "TX",
-      "temp_f": 93.9
+      "temp_f": 99.3
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 23.8
-    },
-    {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 26.8
+      "temp_f": 25.1
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 28.3
+      "temp_f": 29.4
+    },
+    {
+      "name": "Denali",
+      "state": "AK",
+      "temp_f": 29.8
     }
   ],
   "national": {
-    "min_f": 23.8,
-    "max_f": 94.0,
-    "mean_f": 73.1
+    "min_f": 25.1,
+    "max_f": 99.5,
+    "mean_f": 76.7
   }
 }

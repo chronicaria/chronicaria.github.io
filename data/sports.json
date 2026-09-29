@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-29T13:06:34Z",
+ "updated": "2026-09-29T22:24:06Z",
  "errors": [],
  "teams": [
   {
@@ -763,14 +763,6 @@
    ],
    "next": [
     {
-     "date": "2026-09-29T21:00Z",
-     "opp": "Panthers",
-     "oppAbbr": "FLA",
-     "home": true,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401891773",
-     "odds": "CAR -125 \u00b7 O/U 6.5"
-    },
-    {
      "date": "2026-10-02T23:00Z",
      "opp": "Capitals",
      "oppAbbr": "WSH",
@@ -832,6 +824,13 @@
      "oppAbbr": "CGY",
      "home": false,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892534"
+    },
+    {
+     "date": "2026-10-21T02:00Z",
+     "opp": "Canucks",
+     "oppAbbr": "VAN",
+     "home": false,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892548"
     }
    ]
   },

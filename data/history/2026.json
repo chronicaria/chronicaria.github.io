@@ -759,6 +759,16 @@
    "home": true,
    "res": "W",
    "score": "19-17"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-09-29T21:00Z",
+   "opp": "Panthers",
+   "home": true,
+   "res": "L",
+   "score": "0-1"
   }
  ]
 }

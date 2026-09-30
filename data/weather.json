@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-30T12:00:00Z",
-  "updated": "2026-09-30T12:54:41Z",
+  "valid_time_utc": "2026-09-30T19:00:00Z",
+  "updated": "2026-09-30T20:13:47Z",
   "hottest": [
     {
-      "name": "Aransas",
+      "name": "Starr",
       "state": "TX",
-      "temp_f": 83.9
+      "temp_f": 96.9
     },
     {
-      "name": "Cameron",
+      "name": "Brooks",
       "state": "TX",
-      "temp_f": 83.3
+      "temp_f": 96.5
     },
     {
-      "name": "Calhoun",
+      "name": "Jim Hogg",
       "state": "TX",
-      "temp_f": 83.2
+      "temp_f": 96.5
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 21.4
-    },
-    {
-      "name": "Denali",
-      "state": "AK",
-      "temp_f": 23.8
+      "temp_f": 22.1
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 24.3
+      "temp_f": 24.9
+    },
+    {
+      "name": "Denali",
+      "state": "AK",
+      "temp_f": 25.9
     }
   ],
   "national": {
-    "min_f": 21.4,
-    "max_f": 83.9,
-    "mean_f": 60.7
+    "min_f": 22.1,
+    "max_f": 96.9,
+    "mean_f": 77.4
   }
 }

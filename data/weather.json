@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-09-29T21:00:00Z",
-  "updated": "2026-09-29T22:31:53Z",
+  "valid_time_utc": "2026-09-30T05:00:00Z",
+  "updated": "2026-09-30T05:50:52Z",
   "hottest": [
     {
-      "name": "La Salle",
+      "name": "Maverick",
       "state": "TX",
-      "temp_f": 99.5
+      "temp_f": 85.2
     },
     {
-      "name": "McMullen",
+      "name": "Nueces",
       "state": "TX",
-      "temp_f": 99.3
+      "temp_f": 84.9
     },
     {
-      "name": "Zapata",
+      "name": "Aransas",
       "state": "TX",
-      "temp_f": 99.3
+      "temp_f": 84.9
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 25.1
-    },
-    {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 29.4
+      "temp_f": 23.2
     },
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 29.8
+      "temp_f": 26.5
+    },
+    {
+      "name": "Northwest Arctic",
+      "state": "AK",
+      "temp_f": 26.9
     }
   ],
   "national": {
-    "min_f": 25.1,
-    "max_f": 99.5,
-    "mean_f": 76.7
+    "min_f": 23.2,
+    "max_f": 85.2,
+    "mean_f": 63.6
   }
 }

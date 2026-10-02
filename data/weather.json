@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-02T12:00:00Z",
-  "updated": "2026-10-02T13:01:08Z",
+  "valid_time_utc": "2026-10-02T19:00:00Z",
+  "updated": "2026-10-02T20:05:58Z",
   "hottest": [
     {
-      "name": "St. Bernard",
-      "state": "LA",
-      "temp_f": 81.8
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 95.7
     },
     {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 81.5
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 94.1
     },
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 81.3
+      "name": "Wilkinson",
+      "state": "MS",
+      "temp_f": 92.8
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 12.7
+      "temp_f": 13.6
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 16.1
+      "temp_f": 17.5
     },
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 19.5
+      "temp_f": 20.9
     }
   ],
   "national": {
-    "min_f": 12.7,
-    "max_f": 81.8,
-    "mean_f": 59.5
+    "min_f": 13.6,
+    "max_f": 95.7,
+    "mean_f": 72.8
   }
 }

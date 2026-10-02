@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-02T12:50:26Z",
+ "updated": "2026-10-02T22:21:03Z",
  "errors": [],
  "teams": [
   {
@@ -590,7 +590,7 @@
      "oppAbbr": "WSH",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401872965",
-     "odds": "IND -3.5 \u00b7 O/U 48.5"
+     "odds": "IND -4.5 \u00b7 O/U 47.5"
     },
     {
      "date": "2026-10-11T17:00Z",
@@ -687,7 +687,8 @@
      "opp": "Capitals",
      "oppAbbr": "WSH",
      "home": true,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892432"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892432",
+     "odds": "CAR -148 \u00b7 O/U 6.5"
     },
     {
      "date": "2026-10-03T23:00Z",

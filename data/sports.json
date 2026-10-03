@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-03T11:49:12Z",
+ "updated": "2026-10-03T16:31:21Z",
  "errors": [],
  "teams": [
   {
@@ -590,7 +590,7 @@
      "oppAbbr": "WSH",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401872965",
-     "odds": "IND -4.5 \u00b7 O/U 47.5"
+     "odds": "IND -4.5 \u00b7 O/U 46.5"
     },
     {
      "date": "2026-10-11T17:00Z",
@@ -696,7 +696,8 @@
      "opp": "Flyers",
      "oppAbbr": "PHI",
      "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892435"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892435",
+     "odds": "CAR -130 \u00b7 O/U 5.5"
     },
     {
      "date": "2026-10-06T23:00Z",

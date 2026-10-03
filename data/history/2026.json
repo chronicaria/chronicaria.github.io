@@ -769,6 +769,16 @@
    "home": true,
    "res": "L",
    "score": "0-1"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-10-02T23:00Z",
+   "opp": "Capitals",
+   "home": true,
+   "res": "L",
+   "score": "2-5"
   }
  ]
 }

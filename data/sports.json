@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-02T22:21:03Z",
+ "updated": "2026-10-03T05:27:38Z",
  "errors": [],
  "teams": [
   {
@@ -196,7 +196,7 @@
    "name": "Duke Blue Devils",
    "abbr": "DUKE",
    "record": "4-0",
-   "standing": "3rd in ACC",
+   "standing": "4th in ACC",
    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
    "color": "00539b",
    "form": [
@@ -666,8 +666,8 @@
    "id": "7",
    "name": "Carolina Hurricanes",
    "abbr": "CAR",
-   "record": "0-0-1",
-   "standing": "5th in Metropolitan Division",
+   "record": "0-1-1",
+   "standing": "6th in Metropolitan Division",
    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/car.png",
    "color": "e30426",
    "form": [
@@ -679,17 +679,18 @@
      "url": "https://www.espn.com/nhl/game/_/gameId/401891773",
      "res": "L",
      "score": "0-1"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-02T23:00Z",
      "opp": "Capitals",
      "oppAbbr": "WSH",
      "home": true,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892432",
-     "odds": "CAR -148 \u00b7 O/U 6.5"
-    },
+     "res": "L",
+     "score": "2-5"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-03T23:00Z",
      "opp": "Flyers",
@@ -752,6 +753,13 @@
      "oppAbbr": "VAN",
      "home": false,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892548"
+    },
+    {
+     "date": "2026-10-23T01:00Z",
+     "opp": "Oilers",
+     "oppAbbr": "EDM",
+     "home": false,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892561"
     }
    ]
   },

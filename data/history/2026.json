@@ -779,6 +779,16 @@
    "home": true,
    "res": "L",
    "score": "2-5"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-10-03T23:00Z",
+   "opp": "Flyers",
+   "home": false,
+   "res": "W",
+   "score": "3-2"
   }
  ]
 }

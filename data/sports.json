@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-04T12:32:44Z",
+ "updated": "2026-10-04T21:38:35Z",
  "errors": [],
  "teams": [
   {
@@ -550,7 +550,7 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "1-2",
+   "record": "2-2",
    "standing": "2nd in AFC South",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",
@@ -581,17 +581,18 @@
      "url": "https://www.espn.com/nfl/game/_/gameId/401872951",
      "res": "W",
      "score": "19-17"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-04T13:30Z",
      "opp": "Commanders",
      "oppAbbr": "WSH",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401872965",
-     "odds": "IND -4.5 \u00b7 O/U 46.5"
-    },
+     "res": "W",
+     "score": "30-13"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-11T17:00Z",
      "opp": "Steelers",
@@ -654,6 +655,13 @@
      "oppAbbr": "PHI",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401873114"
+    },
+    {
+     "date": "2026-12-20T18:00Z",
+     "opp": "Titans",
+     "oppAbbr": "TEN",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873131"
     }
    ]
   },

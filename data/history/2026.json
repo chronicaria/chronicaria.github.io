@@ -789,6 +789,16 @@
    "home": false,
    "res": "W",
    "score": "3-2"
+  },
+  {
+   "team": "colts",
+   "label": "Colts",
+   "league": "NFL",
+   "date": "2026-10-04T13:30Z",
+   "opp": "Commanders",
+   "home": false,
+   "res": "W",
+   "score": "30-13"
   }
  ]
 }

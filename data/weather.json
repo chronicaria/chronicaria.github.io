@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-05T14:00:00Z",
-  "updated": "2026-10-05T15:09:30Z",
+  "valid_time_utc": "2026-10-05T21:00:00Z",
+  "updated": "2026-10-05T22:09:15Z",
   "hottest": [
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 86.1
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 97.4
     },
     {
-      "name": "Broward",
-      "state": "FL",
-      "temp_f": 85.6
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 96.9
     },
     {
-      "name": "Palm Beach",
-      "state": "FL",
-      "temp_f": 85.4
+      "name": "Kings",
+      "state": "CA",
+      "temp_f": 96.9
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 17.3
+      "temp_f": 21.1
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 22.4
+      "temp_f": 26.7
     },
     {
       "name": "Yukon-Koyukuk",
       "state": "AK",
-      "temp_f": 26.9
+      "temp_f": 30.7
     }
   ],
   "national": {
-    "min_f": 17.3,
-    "max_f": 86.1,
-    "mean_f": 59.4
+    "min_f": 21.1,
+    "max_f": 97.4,
+    "mean_f": 74.2
   }
 }

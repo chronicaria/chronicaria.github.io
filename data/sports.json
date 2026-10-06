@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-06T06:32:28Z",
+ "updated": "2026-10-06T18:28:49Z",
  "errors": [],
  "teams": [
   {
@@ -712,7 +712,8 @@
      "opp": "Canadiens",
      "oppAbbr": "MTL",
      "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401891815"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401891815",
+     "odds": "CAR -130 \u00b7 O/U 6.5"
     },
     {
      "date": "2026-10-08T23:00Z",

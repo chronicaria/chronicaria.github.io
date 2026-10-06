@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-06T05:00:00Z",
-  "updated": "2026-10-06T06:44:00Z",
+  "valid_time_utc": "2026-10-06T15:00:00Z",
+  "updated": "2026-10-06T16:09:33Z",
   "hottest": [
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 85.7
-    },
-    {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 85.5
-    },
-    {
-      "name": "Monroe",
+      "name": "Miami-Dade",
       "state": "FL",
-      "temp_f": 82.6
+      "temp_f": 87.3
+    },
+    {
+      "name": "Collier",
+      "state": "FL",
+      "temp_f": 87.0
+    },
+    {
+      "name": "Broward",
+      "state": "FL",
+      "temp_f": 86.6
     }
   ],
   "coldest": [
     {
-      "name": "North Slope",
-      "state": "AK",
-      "temp_f": 20.9
-    },
-    {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 24.1
+      "temp_f": 20.3
     },
     {
-      "name": "Denali",
+      "name": "North Slope",
       "state": "AK",
-      "temp_f": 29.2
+      "temp_f": 20.5
+    },
+    {
+      "name": "Nome",
+      "state": "AK",
+      "temp_f": 26.3
     }
   ],
   "national": {
-    "min_f": 20.9,
-    "max_f": 85.7,
-    "mean_f": 57.6
+    "min_f": 20.3,
+    "max_f": 87.3,
+    "mean_f": 63.3
   }
 }

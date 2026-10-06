@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-05T14:57:51Z",
+ "updated": "2026-10-06T00:09:23Z",
  "errors": [],
  "teams": [
   {
@@ -246,12 +246,11 @@
      "url": "https://www.espn.com/college-football/game/_/gameId/401858255"
     },
     {
-     "date": "2026-10-17T04:00Z",
+     "date": "2026-10-17T19:30Z",
      "opp": "North Carolina",
      "oppAbbr": "UNC",
      "home": true,
-     "url": "https://www.espn.com/college-football/game/_/gameId/401858266",
-     "tbd": true
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858266"
     },
     {
      "date": "2026-10-23T23:00Z",

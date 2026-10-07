@@ -799,6 +799,16 @@
    "home": false,
    "res": "W",
    "score": "30-13"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-10-06T23:00Z",
+   "opp": "Canadiens",
+   "home": false,
+   "res": "W",
+   "score": "6-4"
   }
  ]
 }

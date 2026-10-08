@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-08T13:45:53Z",
+ "updated": "2026-10-08T23:26:54Z",
  "errors": [],
  "teams": [
   {
@@ -109,20 +109,18 @@
    ],
    "next": [
     {
-     "date": "2026-11-02T05:00Z",
+     "date": "2026-11-02T23:30Z",
      "opp": "Army",
      "oppAbbr": "ARMY",
      "home": true,
-     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909562",
-     "tbd": true
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909562"
     },
     {
-     "date": "2026-11-05T05:00Z",
+     "date": "2026-11-06T01:00Z",
      "opp": "Coastal",
      "oppAbbr": "CCU",
      "home": true,
-     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909563",
-     "tbd": true
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909563"
     },
     {
      "date": "2026-11-11T00:00Z",
@@ -132,26 +130,24 @@
      "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909564"
     },
     {
-     "date": "2026-11-13T05:00Z",
+     "date": "2026-11-14T01:00Z",
      "opp": "SIUE",
      "oppAbbr": "SIUE",
      "home": true,
-     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909565",
-     "tbd": true
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909565"
     },
     {
-     "date": "2026-11-17T05:00Z",
+     "date": "2026-11-18T00:00Z",
      "opp": "Illinois",
      "oppAbbr": "ILL",
      "home": true,
-     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909566",
-     "tbd": true
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909566"
     },
     {
      "date": "2026-11-22T04:00Z",
      "opp": "Washington St",
      "oppAbbr": "WSU",
-     "home": false,
+     "home": true,
      "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909567"
     },
     {
@@ -169,12 +165,11 @@
      "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906775"
     },
     {
-     "date": "2026-12-04T05:00Z",
+     "date": "2026-12-05T00:00Z",
      "opp": "Harvard",
      "oppAbbr": "HARV",
      "home": true,
-     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909569",
-     "tbd": true
+     "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909569"
     },
     {
      "date": "2026-12-09T02:00Z",
@@ -717,13 +712,6 @@
    ],
    "next": [
     {
-     "date": "2026-10-08T23:00Z",
-     "opp": "Canucks",
-     "oppAbbr": "VAN",
-     "home": true,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892461"
-    },
-    {
      "date": "2026-10-10T23:00Z",
      "opp": "Blackhawks",
      "oppAbbr": "CHI",
@@ -785,6 +773,13 @@
      "oppAbbr": "BOS",
      "home": true,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892586"
+    },
+    {
+     "date": "2026-10-29T23:00Z",
+     "opp": "Blue Jackets",
+     "oppAbbr": "CBJ",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892603"
     }
    ]
   },

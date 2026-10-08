@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-08T00:00:00Z",
-  "updated": "2026-10-08T01:12:38Z",
+  "valid_time_utc": "2026-10-08T10:00:00Z",
+  "updated": "2026-10-08T10:51:34Z",
   "hottest": [
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 100.9
+      "temp_f": 81.6
+    },
+    {
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 81.5
     },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 100.6
-    },
-    {
-      "name": "Sacramento",
-      "state": "CA",
-      "temp_f": 98.4
+      "temp_f": 79.2
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 18.1
+      "temp_f": 14.1
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 25.9
+      "temp_f": 18.3
     },
     {
-      "name": "Denali",
+      "name": "Yukon-Koyukuk",
       "state": "AK",
-      "temp_f": 28.8
+      "temp_f": 20.3
     }
   ],
   "national": {
-    "min_f": 18.1,
-    "max_f": 100.9,
-    "mean_f": 70.3
+    "min_f": 14.1,
+    "max_f": 81.6,
+    "mean_f": 54.9
   }
 }

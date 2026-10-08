@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-08T06:18:22Z",
+ "updated": "2026-10-08T13:45:53Z",
  "errors": [],
  "teams": [
   {
@@ -180,7 +180,7 @@
      "date": "2026-12-09T02:00Z",
      "opp": "Georgia",
      "oppAbbr": "UGA",
-     "home": false,
+     "home": true,
      "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401906786"
     }
    ]

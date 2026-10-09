@@ -809,6 +809,16 @@
    "home": false,
    "res": "W",
    "score": "6-4"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-10-08T23:00Z",
+   "opp": "Canucks",
+   "home": true,
+   "res": "W",
+   "score": "7-2"
   }
  ]
 }

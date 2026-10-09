@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-09T10:00:00Z",
-  "updated": "2026-10-09T10:50:36Z",
+  "valid_time_utc": "2026-10-09T17:00:00Z",
+  "updated": "2026-10-09T18:28:29Z",
   "hottest": [
-    {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 83.4
-    },
     {
       "name": "Imperial",
       "state": "CA",
-      "temp_f": 81.0
+      "temp_f": 91.3
     },
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 80.6
+      "name": "Yuma",
+      "state": "AZ",
+      "temp_f": 91.0
+    },
+    {
+      "name": "La Paz",
+      "state": "AZ",
+      "temp_f": 90.4
     }
   ],
   "coldest": [
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 15.1
+      "temp_f": 17.0
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 19.1
+      "temp_f": 18.2
     },
     {
       "name": "Fairbanks North Star",
       "state": "AK",
-      "temp_f": 19.2
+      "temp_f": 19.7
     }
   ],
   "national": {
-    "min_f": 15.1,
-    "max_f": 83.4,
-    "mean_f": 54.8
+    "min_f": 17.0,
+    "max_f": 91.3,
+    "mean_f": 73.1
   }
 }

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-10T12:43:36Z",
+ "updated": "2026-10-10T21:51:52Z",
  "errors": [],
  "teams": [
   {
@@ -190,7 +190,7 @@
    "name": "Duke Blue Devils",
    "abbr": "DUKE",
    "record": "4-0",
-   "standing": "3rd in ACC",
+   "standing": "2nd in ACC",
    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
    "color": "00539b",
    "form": [
@@ -232,13 +232,6 @@
     }
    ],
    "next": [
-    {
-     "date": "2026-10-10T19:30Z",
-     "opp": "Georgia Tech",
-     "oppAbbr": "GT",
-     "home": false,
-     "url": "https://www.espn.com/college-football/game/_/gameId/401858255"
-    },
     {
      "date": "2026-10-17T19:30Z",
      "opp": "North Carolina",
@@ -481,8 +474,8 @@
    "id": "367",
    "name": "Tottenham Hotspur",
    "abbr": "TOT",
-   "record": "0-2-3",
-   "standing": "20th in English Premier League",
+   "record": "0-3-3",
+   "standing": "18th in English Premier League",
    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
    "color": "ffffff",
    "form": [
@@ -530,6 +523,15 @@
      "url": "https://www.espn.com/soccer/match/_/gameId/401879269",
      "res": "L",
      "score": "2-3"
+    },
+    {
+     "date": "2026-10-10T16:30Z",
+     "opp": "Man United",
+     "oppAbbr": "MAN",
+     "home": false,
+     "url": "https://www.espn.com/soccer/match/_/gameId/401878773",
+     "res": "D",
+     "score": "1-1"
     }
    ],
    "next": []
@@ -725,7 +727,8 @@
      "opp": "Blackhawks",
      "oppAbbr": "CHI",
      "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892476"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892476",
+     "odds": "CAR -258 \u00b7 O/U 5.5"
     },
     {
      "date": "2026-10-11T23:00Z",

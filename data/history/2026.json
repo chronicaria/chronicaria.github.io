@@ -819,6 +819,16 @@
    "home": true,
    "res": "W",
    "score": "7-2"
+  },
+  {
+   "team": "spurs",
+   "label": "Spurs",
+   "league": "Premier League",
+   "date": "2026-10-10T16:30Z",
+   "opp": "Man United",
+   "home": false,
+   "res": "D",
+   "score": "1-1"
   }
  ]
 }

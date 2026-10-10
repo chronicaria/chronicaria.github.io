@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-09T18:25:18Z",
+ "updated": "2026-10-10T06:02:32Z",
  "errors": [],
  "teams": [
   {
@@ -126,7 +126,7 @@
      "date": "2026-11-11T00:00Z",
      "opp": "Michigan St",
      "oppAbbr": "MSU",
-     "home": false,
+     "home": true,
      "url": "https://www.espn.com/mens-college-basketball/game/_/gameId/401909564"
     },
     {

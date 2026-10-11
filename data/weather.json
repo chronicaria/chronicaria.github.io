@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-11T05:00:00Z",
-  "updated": "2026-10-11T06:13:01Z",
+  "valid_time_utc": "2026-10-11T12:00:00Z",
+  "updated": "2026-10-11T13:18:01Z",
   "hottest": [
     {
       "name": "Monroe",
       "state": "FL",
-      "temp_f": 84.1
+      "temp_f": 83.2
+    },
+    {
+      "name": "Sarasota",
+      "state": "FL",
+      "temp_f": 81.2
     },
     {
       "name": "Miami-Dade",
       "state": "FL",
-      "temp_f": 82.7
-    },
-    {
-      "name": "Pinellas",
-      "state": "FL",
-      "temp_f": 82.0
+      "temp_f": 80.9
     }
   ],
   "coldest": [
     {
       "name": "Deer Lodge",
       "state": "MT",
-      "temp_f": 26.5
+      "temp_f": 23.7
     },
     {
-      "name": "Granite",
-      "state": "MT",
-      "temp_f": 27.1
+      "name": "Deschutes",
+      "state": "OR",
+      "temp_f": 24.3
     },
     {
-      "name": "Glacier",
-      "state": "MT",
-      "temp_f": 27.2
+      "name": "Crook",
+      "state": "OR",
+      "temp_f": 24.5
     }
   ],
   "national": {
-    "min_f": 26.5,
-    "max_f": 84.1,
-    "mean_f": 61.8
+    "min_f": 23.7,
+    "max_f": 83.2,
+    "mean_f": 58.1
   }
 }

@@ -829,6 +829,36 @@
    "home": false,
    "res": "D",
    "score": "1-1"
+  },
+  {
+   "team": "duke-fb",
+   "label": "Duke FB",
+   "league": "NCAA FB",
+   "date": "2026-10-10T19:30Z",
+   "opp": "Georgia Tech",
+   "home": false,
+   "res": "L",
+   "score": "25-28"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-10-10T23:00Z",
+   "opp": "Blackhawks",
+   "home": false,
+   "res": "W",
+   "score": "5-2"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-10-11T02:30Z",
+   "opp": "Vancouver",
+   "home": true,
+   "res": "D",
+   "score": "1-1"
   }
  ]
 }

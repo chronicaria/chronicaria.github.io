@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-10T23:00:00Z",
-  "updated": "2026-10-11T00:21:41Z",
+  "valid_time_utc": "2026-10-11T05:00:00Z",
+  "updated": "2026-10-11T06:13:01Z",
   "hottest": [
     {
-      "name": "Dimmit",
-      "state": "TX",
-      "temp_f": 91.4
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 84.1
     },
     {
-      "name": "Maverick",
-      "state": "TX",
-      "temp_f": 91.3
+      "name": "Miami-Dade",
+      "state": "FL",
+      "temp_f": 82.7
     },
     {
-      "name": "La Salle",
-      "state": "TX",
-      "temp_f": 91.0
+      "name": "Pinellas",
+      "state": "FL",
+      "temp_f": 82.0
     }
   ],
   "coldest": [
     {
-      "name": "Lewis and Clark",
+      "name": "Deer Lodge",
       "state": "MT",
-      "temp_f": 29.7
+      "temp_f": 26.5
+    },
+    {
+      "name": "Granite",
+      "state": "MT",
+      "temp_f": 27.1
     },
     {
       "name": "Glacier",
       "state": "MT",
-      "temp_f": 29.8
-    },
-    {
-      "name": "Teton",
-      "state": "MT",
-      "temp_f": 31.3
+      "temp_f": 27.2
     }
   ],
   "national": {
-    "min_f": 29.7,
-    "max_f": 91.4,
-    "mean_f": 71.1
+    "min_f": 26.5,
+    "max_f": 84.1,
+    "mean_f": 61.8
   }
 }

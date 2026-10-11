@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-10T18:00:00Z",
-  "updated": "2026-10-10T19:27:11Z",
+  "valid_time_utc": "2026-10-10T23:00:00Z",
+  "updated": "2026-10-11T00:21:41Z",
   "hottest": [
     {
-      "name": "Broward",
-      "state": "FL",
-      "temp_f": 91.8
+      "name": "Dimmit",
+      "state": "TX",
+      "temp_f": 91.4
     },
     {
-      "name": "Seminole",
-      "state": "FL",
-      "temp_f": 90.9
+      "name": "Maverick",
+      "state": "TX",
+      "temp_f": 91.3
     },
     {
-      "name": "Osceola",
-      "state": "FL",
-      "temp_f": 90.8
+      "name": "La Salle",
+      "state": "TX",
+      "temp_f": 91.0
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 28.1
+      "name": "Lewis and Clark",
+      "state": "MT",
+      "temp_f": 29.7
     },
     {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 28.3
+      "name": "Glacier",
+      "state": "MT",
+      "temp_f": 29.8
     },
     {
-      "name": "North Slope",
-      "state": "AK",
-      "temp_f": 28.4
+      "name": "Teton",
+      "state": "MT",
+      "temp_f": 31.3
     }
   ],
   "national": {
-    "min_f": 28.1,
-    "max_f": 91.8,
-    "mean_f": 72.5
+    "min_f": 29.7,
+    "max_f": 91.4,
+    "mean_f": 71.1
   }
 }

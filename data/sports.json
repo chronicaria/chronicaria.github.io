@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-11T06:00:02Z",
+ "updated": "2026-10-11T13:05:50Z",
  "errors": [],
  "teams": [
   {
@@ -305,8 +305,8 @@
    "id": "6",
    "name": "Dallas Mavericks",
    "abbr": "DAL",
-   "record": "0-1",
-   "standing": "4th in Southwest Division",
+   "record": "1-1",
+   "standing": "2nd in Southwest Division",
    "logo": "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
    "color": "0064b1",
    "form": [
@@ -603,7 +603,7 @@
      "oppAbbr": "PIT",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401872985",
-     "odds": "PIT -2.5 \u00b7 O/U 43.5"
+     "odds": "PIT -3 \u00b7 O/U 43.5"
     },
     {
      "date": "2026-10-18T17:00Z",

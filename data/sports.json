@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-11T13:05:50Z",
+ "updated": "2026-10-11T22:07:46Z",
  "errors": [],
  "teams": [
   {
@@ -554,7 +554,7 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "2-2",
+   "record": "2-3",
    "standing": "2nd in AFC South",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",
@@ -594,17 +594,18 @@
      "url": "https://www.espn.com/nfl/game/_/gameId/401872965",
      "res": "W",
      "score": "30-13"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-11T17:00Z",
      "opp": "Steelers",
      "oppAbbr": "PIT",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401872985",
-     "odds": "PIT -3 \u00b7 O/U 43.5"
-    },
+     "res": "L",
+     "score": "22-34"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-18T17:00Z",
      "opp": "Titans",
@@ -667,6 +668,14 @@
      "oppAbbr": "TEN",
      "home": false,
      "url": "https://www.espn.com/nfl/game/_/gameId/401873131"
+    },
+    {
+     "date": "2026-12-27T05:00Z",
+     "opp": "Bengals",
+     "oppAbbr": "CIN",
+     "home": true,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873145",
+     "tbd": true
     }
    ]
   },
@@ -745,7 +754,8 @@
      "opp": "Flyers",
      "oppAbbr": "PHI",
      "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892484"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892484",
+     "odds": "CAR -218 \u00b7 O/U 5.5"
     },
     {
      "date": "2026-10-13T22:45Z",

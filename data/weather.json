@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-11T23:00:00Z",
-  "updated": "2026-10-12T00:42:00Z",
+  "valid_time_utc": "2026-10-12T10:00:00Z",
+  "updated": "2026-10-12T11:15:13Z",
   "hottest": [
     {
-      "name": "Reeves",
+      "name": "Aransas",
       "state": "TX",
-      "temp_f": 91.2
+      "temp_f": 81.6
     },
     {
-      "name": "Lincoln",
-      "state": "AR",
-      "temp_f": 90.8
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 81.5
     },
     {
-      "name": "Dimmit",
+      "name": "Calhoun",
       "state": "TX",
-      "temp_f": 90.7
+      "temp_f": 81.0
     }
   ],
   "coldest": [
     {
+      "name": "Granite",
+      "state": "MT",
+      "temp_f": 21.2
+    },
+    {
       "name": "Deer Lodge",
       "state": "MT",
-      "temp_f": 26.3
+      "temp_f": 21.7
     },
     {
-      "name": "Glacier",
+      "name": "Beaverhead",
       "state": "MT",
-      "temp_f": 26.6
-    },
-    {
-      "name": "Silver Bow",
-      "state": "MT",
-      "temp_f": 27.1
+      "temp_f": 23.1
     }
   ],
   "national": {
-    "min_f": 26.3,
-    "max_f": 91.2,
-    "mean_f": 70.7
+    "min_f": 21.2,
+    "max_f": 81.6,
+    "mean_f": 58.6
   }
 }

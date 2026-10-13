@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-13T14:23:21Z",
+ "updated": "2026-10-13T22:55:30Z",
  "errors": [],
  "teams": [
   {
@@ -11,7 +11,7 @@
    "id": "150",
    "name": "Duke Blue Devils",
    "abbr": "DUKE",
-   "record": "",
+   "record": "0-0",
    "standing": "",
    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
    "color": "00539b",
@@ -759,13 +759,6 @@
    ],
    "next": [
     {
-     "date": "2026-10-13T22:45Z",
-     "opp": "Capitals",
-     "oppAbbr": "WSH",
-     "home": true,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892491"
-    },
-    {
      "date": "2026-10-17T19:30Z",
      "opp": "Jets",
      "oppAbbr": "WPG",
@@ -827,6 +820,13 @@
      "oppAbbr": "NSH",
      "home": false,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892642"
+    },
+    {
+     "date": "2026-11-06T00:00Z",
+     "opp": "Islanders",
+     "oppAbbr": "NYI",
+     "home": false,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892652"
     }
    ]
   },

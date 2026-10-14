@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-14T04:00:00Z",
-  "updated": "2026-10-14T05:14:04Z",
+  "valid_time_utc": "2026-10-14T11:00:00Z",
+  "updated": "2026-10-14T12:15:26Z",
   "hottest": [
     {
-      "name": "Maverick",
+      "name": "Aransas",
       "state": "TX",
-      "temp_f": 86.8
+      "temp_f": 82.5
     },
     {
-      "name": "Dimmit",
+      "name": "Calhoun",
       "state": "TX",
-      "temp_f": 86.5
+      "temp_f": 81.9
     },
     {
-      "name": "Zavala",
+      "name": "Galveston",
       "state": "TX",
-      "temp_f": 85.3
+      "temp_f": 81.6
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 17.4
+      "temp_f": 15.3
+    },
+    {
+      "name": "Meagher",
+      "state": "MT",
+      "temp_f": 24.0
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 25.5
-    },
-    {
-      "name": "Denali",
-      "state": "AK",
-      "temp_f": 26.8
+      "temp_f": 24.8
     }
   ],
   "national": {
-    "min_f": 17.4,
-    "max_f": 86.8,
-    "mean_f": 63.1
+    "min_f": 15.3,
+    "max_f": 82.5,
+    "mean_f": 59.0
   }
 }

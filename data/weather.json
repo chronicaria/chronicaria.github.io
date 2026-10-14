@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-13T18:00:00Z",
-  "updated": "2026-10-13T19:27:43Z",
+  "valid_time_utc": "2026-10-13T23:00:00Z",
+  "updated": "2026-10-14T00:30:05Z",
   "hottest": [
     {
-      "name": "Hidalgo",
+      "name": "Dimmit",
       "state": "TX",
-      "temp_f": 93.8
+      "temp_f": 96.5
     },
     {
-      "name": "Zapata",
+      "name": "Webb",
       "state": "TX",
-      "temp_f": 93.3
+      "temp_f": 95.4
     },
     {
-      "name": "Starr",
+      "name": "La Salle",
       "state": "TX",
-      "temp_f": 92.9
+      "temp_f": 95.4
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 21.8
+      "temp_f": 21.2
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 24.1
+      "temp_f": 28.8
     },
     {
-      "name": "Southeast Fairbanks",
+      "name": "Matanuska-Susitna",
       "state": "AK",
-      "temp_f": 24.6
+      "temp_f": 31.3
     }
   ],
   "national": {
-    "min_f": 21.8,
-    "max_f": 93.8,
-    "mean_f": 73.5
+    "min_f": 21.2,
+    "max_f": 96.5,
+    "mean_f": 72.2
   }
 }

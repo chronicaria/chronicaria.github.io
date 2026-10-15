@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-14T21:00:00Z",
-  "updated": "2026-10-14T21:53:25Z",
+  "valid_time_utc": "2026-10-15T04:00:00Z",
+  "updated": "2026-10-15T05:01:07Z",
   "hottest": [
+    {
+      "name": "Maverick",
+      "state": "TX",
+      "temp_f": 83.9
+    },
     {
       "name": "Dimmit",
       "state": "TX",
-      "temp_f": 96.8
+      "temp_f": 83.2
     },
     {
       "name": "Zapata",
       "state": "TX",
-      "temp_f": 96.6
-    },
-    {
-      "name": "Webb",
-      "state": "TX",
-      "temp_f": 96.1
+      "temp_f": 83.2
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 16.0
+      "temp_f": 12.7
     },
     {
       "name": "San Juan",
       "state": "CO",
-      "temp_f": 25.1
+      "temp_f": 22.5
     },
     {
-      "name": "Northwest Arctic",
-      "state": "AK",
-      "temp_f": 27.8
+      "name": "Hinsdale",
+      "state": "CO",
+      "temp_f": 24.6
     }
   ],
   "national": {
-    "min_f": 16.0,
-    "max_f": 96.8,
-    "mean_f": 71.5
+    "min_f": 12.7,
+    "max_f": 83.9,
+    "mean_f": 61.4
   }
 }

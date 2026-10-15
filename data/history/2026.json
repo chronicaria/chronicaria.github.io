@@ -889,6 +889,16 @@
    "home": true,
    "res": "W",
    "score": "4-2"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-10-15T02:30Z",
+   "opp": "Austin",
+   "home": true,
+   "res": "W",
+   "score": "3-1"
   }
  ]
 }

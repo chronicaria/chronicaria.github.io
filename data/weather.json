@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-17T20:00:00Z",
-  "updated": "2026-10-17T20:50:39Z",
+  "valid_time_utc": "2026-10-17T22:00:00Z",
+  "updated": "2026-10-17T23:19:45Z",
   "hottest": [
     {
       "name": "Kings",
       "state": "CA",
-      "temp_f": 87.4
+      "temp_f": 90.7
     },
     {
-      "name": "Santa Clara",
+      "name": "Merced",
       "state": "CA",
-      "temp_f": 86.3
+      "temp_f": 89.7
     },
     {
-      "name": "San Luis Obispo",
+      "name": "Sacramento",
       "state": "CA",
-      "temp_f": 86.2
+      "temp_f": 87.7
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 20.4
+      "temp_f": 20.1
     },
     {
       "name": "Northwest Arctic",
       "state": "AK",
-      "temp_f": 21.0
+      "temp_f": 22.5
     },
     {
-      "name": "Copper River",
+      "name": "Denali",
       "state": "AK",
-      "temp_f": 25.2
+      "temp_f": 26.0
     }
   ],
   "national": {
-    "min_f": 20.4,
-    "max_f": 87.4,
-    "mean_f": 60.5
+    "min_f": 20.1,
+    "max_f": 90.7,
+    "mean_f": 60.2
   }
 }

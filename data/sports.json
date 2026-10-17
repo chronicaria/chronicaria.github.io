@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-17T10:56:49Z",
+ "updated": "2026-10-17T15:43:46Z",
  "errors": [],
  "teams": [
   {
@@ -773,7 +773,8 @@
      "opp": "Jets",
      "oppAbbr": "WPG",
      "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892520"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892520",
+     "odds": "CAR -205 \u00b7 O/U 6.5"
     },
     {
      "date": "2026-10-19T00:00Z",

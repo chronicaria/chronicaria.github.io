@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-17T15:43:46Z",
+ "updated": "2026-10-17T20:44:09Z",
  "errors": [],
  "teams": [
   {
@@ -190,7 +190,7 @@
    "name": "Duke Blue Devils",
    "abbr": "DUKE",
    "record": "4-1",
-   "standing": "10th in ACC",
+   "standing": "11th in ACC",
    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
    "color": "00539b",
    "form": [
@@ -241,13 +241,6 @@
     }
    ],
    "next": [
-    {
-     "date": "2026-10-17T19:30Z",
-     "opp": "North Carolina",
-     "oppAbbr": "UNC",
-     "home": true,
-     "url": "https://www.espn.com/college-football/game/_/gameId/401858266"
-    },
     {
      "date": "2026-10-23T23:00Z",
      "opp": "Virginia",
@@ -484,7 +477,7 @@
    "name": "Tottenham Hotspur",
    "abbr": "TOT",
    "record": "0-3-3",
-   "standing": "19th in English Premier League",
+   "standing": "20th in English Premier League",
    "logo": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
    "color": "ffffff",
    "form": [
@@ -769,14 +762,6 @@
    ],
    "next": [
     {
-     "date": "2026-10-17T19:30Z",
-     "opp": "Jets",
-     "oppAbbr": "WPG",
-     "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892520",
-     "odds": "CAR -205 \u00b7 O/U 6.5"
-    },
-    {
      "date": "2026-10-19T00:00Z",
      "opp": "Flames",
      "oppAbbr": "CGY",
@@ -838,6 +823,13 @@
      "oppAbbr": "NYI",
      "home": false,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892652"
+    },
+    {
+     "date": "2026-11-08T01:00Z",
+     "opp": "Blackhawks",
+     "oppAbbr": "CHI",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892668"
     }
    ]
   },

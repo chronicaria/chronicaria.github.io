@@ -1,28 +1,28 @@
 {
-  "valid_time_utc": "2026-10-17T15:00:00Z",
-  "updated": "2026-10-17T15:50:05Z",
+  "valid_time_utc": "2026-10-17T20:00:00Z",
+  "updated": "2026-10-17T20:50:39Z",
   "hottest": [
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 86.0
+      "name": "Kings",
+      "state": "CA",
+      "temp_f": 87.4
     },
     {
-      "name": "Broward",
-      "state": "FL",
-      "temp_f": 84.8
+      "name": "Santa Clara",
+      "state": "CA",
+      "temp_f": 86.3
     },
     {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 84.5
+      "name": "San Luis Obispo",
+      "state": "CA",
+      "temp_f": 86.2
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 19.2
+      "temp_f": 20.4
     },
     {
       "name": "Northwest Arctic",
@@ -32,12 +32,12 @@
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 21.9
+      "temp_f": 25.2
     }
   ],
   "national": {
-    "min_f": 19.2,
-    "max_f": 86.0,
-    "mean_f": 49.8
+    "min_f": 20.4,
+    "max_f": 87.4,
+    "mean_f": 60.5
   }
 }

@@ -899,6 +899,36 @@
    "home": true,
    "res": "W",
    "score": "3-1"
+  },
+  {
+   "team": "duke-fb",
+   "label": "Duke FB",
+   "league": "NCAA FB",
+   "date": "2026-10-17T19:30Z",
+   "opp": "North Carolina",
+   "home": true,
+   "res": "L",
+   "score": "20-24"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-10-17T19:30Z",
+   "opp": "Jets",
+   "home": false,
+   "res": "W",
+   "score": "3-2"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-10-17T23:30Z",
+   "opp": "NYCFC",
+   "home": false,
+   "res": "D",
+   "score": "1-1"
   }
  ]
 }

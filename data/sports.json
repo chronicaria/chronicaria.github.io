@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18T11:22:52Z",
+ "updated": "2026-10-18T15:58:35Z",
  "errors": [],
  "teams": [
   {
@@ -614,7 +614,7 @@
      "oppAbbr": "TEN",
      "home": true,
      "url": "https://www.espn.com/nfl/game/_/gameId/401873003",
-     "odds": "IND -6.5 \u00b7 O/U 44.5"
+     "odds": "IND -6.5 \u00b7 O/U 43.5"
     },
     {
      "date": "2026-10-25T17:00Z",
@@ -784,7 +784,8 @@
      "opp": "Flames",
      "oppAbbr": "CGY",
      "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892534"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892534",
+     "odds": "CAR -218 \u00b7 O/U 6.5"
     },
     {
      "date": "2026-10-21T02:00Z",

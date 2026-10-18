@@ -929,6 +929,16 @@
    "home": false,
    "res": "D",
    "score": "1-1"
+  },
+  {
+   "team": "colts",
+   "label": "Colts",
+   "league": "NFL",
+   "date": "2026-10-18T17:00Z",
+   "opp": "Titans",
+   "home": true,
+   "res": "L",
+   "score": "20-26"
   }
  ]
 }

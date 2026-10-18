@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18T15:58:35Z",
+ "updated": "2026-10-18T20:53:52Z",
  "errors": [],
  "teams": [
   {
@@ -556,7 +556,7 @@
    "id": "11",
    "name": "Indianapolis Colts",
    "abbr": "IND",
-   "record": "2-3",
+   "record": "2-4",
    "standing": "",
    "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
    "color": "003b75",
@@ -605,17 +605,18 @@
      "url": "https://www.espn.com/nfl/game/_/gameId/401872985",
      "res": "L",
      "score": "22-34"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-18T17:00Z",
      "opp": "Titans",
      "oppAbbr": "TEN",
      "home": true,
      "url": "https://www.espn.com/nfl/game/_/gameId/401873003",
-     "odds": "IND -6.5 \u00b7 O/U 43.5"
-    },
+     "res": "L",
+     "score": "20-26"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-25T17:00Z",
      "opp": "Vikings",
@@ -679,6 +680,13 @@
      "home": true,
      "url": "https://www.espn.com/nfl/game/_/gameId/401873145",
      "tbd": true
+    },
+    {
+     "date": "2027-01-03T18:00Z",
+     "opp": "Browns",
+     "oppAbbr": "CLE",
+     "home": false,
+     "url": "https://www.espn.com/nfl/game/_/gameId/401873162"
     }
    ]
   },

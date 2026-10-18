@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-18T15:00:00Z",
-  "updated": "2026-10-18T16:04:41Z",
+  "valid_time_utc": "2026-10-18T20:00:00Z",
+  "updated": "2026-10-18T20:58:22Z",
   "hottest": [
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 81.6
+      "name": "Kings",
+      "state": "CA",
+      "temp_f": 85.5
     },
     {
-      "name": "Broward",
-      "state": "FL",
-      "temp_f": 80.7
+      "name": "Merced",
+      "state": "CA",
+      "temp_f": 85.3
     },
     {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 80.4
+      "name": "Stanislaus",
+      "state": "CA",
+      "temp_f": 83.8
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 18.1
+      "temp_f": 19.8
     },
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 19.5
+      "temp_f": 21.0
     },
     {
-      "name": "Copper River",
+      "name": "Yukon-Koyukuk",
       "state": "AK",
-      "temp_f": 20.9
+      "temp_f": 23.2
     }
   ],
   "national": {
-    "min_f": 18.1,
-    "max_f": 81.6,
-    "mean_f": 52.0
+    "min_f": 19.8,
+    "max_f": 85.5,
+    "mean_f": 65.1
   }
 }

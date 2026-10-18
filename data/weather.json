@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-18T04:00:00Z",
-  "updated": "2026-10-18T04:57:48Z",
+  "valid_time_utc": "2026-10-18T10:00:00Z",
+  "updated": "2026-10-18T11:35:03Z",
   "hottest": [
     {
       "name": "Monroe",
       "state": "FL",
-      "temp_f": 78.3
+      "temp_f": 76.8
     },
     {
-      "name": "Honolulu",
-      "state": "HI",
-      "temp_f": 76.4
-    },
-    {
-      "name": "Miami-Dade",
+      "name": "Palm Beach",
       "state": "FL",
-      "temp_f": 75.9
+      "temp_f": 76.0
+    },
+    {
+      "name": "Martin",
+      "state": "FL",
+      "temp_f": 75.6
     }
   ],
   "coldest": [
     {
       "name": "North Slope",
       "state": "AK",
-      "temp_f": 19.4
+      "temp_f": 17.6
     },
     {
-      "name": "Northwest Arctic",
+      "name": "Denali",
       "state": "AK",
-      "temp_f": 22.9
+      "temp_f": 20.8
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 22.9
+      "temp_f": 21.4
     }
   ],
   "national": {
-    "min_f": 19.4,
-    "max_f": 78.3,
-    "mean_f": 46.8
+    "min_f": 17.6,
+    "max_f": 76.8,
+    "mean_f": 41.9
   }
 }

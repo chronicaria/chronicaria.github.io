@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-20T11:50:58Z",
+ "updated": "2026-10-20T17:20:02Z",
  "errors": [],
  "teams": [
   {
@@ -809,7 +809,8 @@
      "opp": "Canucks",
      "oppAbbr": "VAN",
      "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892548"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892548",
+     "odds": "CAR -298 \u00b7 O/U 6.5"
     },
     {
      "date": "2026-10-23T01:00Z",

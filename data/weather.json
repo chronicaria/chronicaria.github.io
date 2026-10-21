@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-20T20:00:00Z",
-  "updated": "2026-10-20T21:48:35Z",
+  "valid_time_utc": "2026-10-21T04:00:00Z",
+  "updated": "2026-10-21T05:09:25Z",
   "hottest": [
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 87.9
-    },
-    {
-      "name": "Hidalgo",
-      "state": "TX",
-      "temp_f": 87.0
+      "temp_f": 80.0
     },
     {
       "name": "Maricopa",
       "state": "AZ",
-      "temp_f": 86.4
+      "temp_f": 78.7
+    },
+    {
+      "name": "Imperial",
+      "state": "CA",
+      "temp_f": 78.0
     }
   ],
   "coldest": [
     {
-      "name": "Northwest Arctic",
+      "name": "Denali",
       "state": "AK",
-      "temp_f": 19.7
+      "temp_f": 18.4
     },
     {
       "name": "Yukon-Koyukuk",
       "state": "AK",
-      "temp_f": 19.9
+      "temp_f": 21.1
     },
     {
-      "name": "North Slope",
+      "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 20.1
+      "temp_f": 21.4
     }
   ],
   "national": {
-    "min_f": 19.7,
-    "max_f": 87.9,
-    "mean_f": 70.4
+    "min_f": 18.4,
+    "max_f": 80.0,
+    "mean_f": 52.0
   }
 }

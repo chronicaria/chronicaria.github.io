@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T12:02:32Z",
+ "updated": "2026-10-21T17:22:14Z",
  "errors": [],
  "teams": [
   {
@@ -408,7 +408,8 @@
      "opp": "Rockets",
      "oppAbbr": "HOU",
      "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401909840"
+     "url": "https://www.espn.com/nba/game/_/gameId/401909840",
+     "odds": "HOU -9.5 \u00b7 O/U 230.5"
     },
     {
      "date": "2026-10-23T23:00Z",

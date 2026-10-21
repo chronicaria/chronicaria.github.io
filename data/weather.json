@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-21T11:00:00Z",
-  "updated": "2026-10-21T12:12:48Z",
+  "valid_time_utc": "2026-10-21T16:00:00Z",
+  "updated": "2026-10-21T17:33:44Z",
   "hottest": [
     {
-      "name": "Kalawao",
-      "state": "HI",
-      "temp_f": 75.8
+      "name": "Miami-Dade",
+      "state": "FL",
+      "temp_f": 82.4
     },
     {
-      "name": "Honolulu",
-      "state": "HI",
-      "temp_f": 75.2
+      "name": "Broward",
+      "state": "FL",
+      "temp_f": 81.2
     },
     {
-      "name": "Yuma",
-      "state": "AZ",
-      "temp_f": 74.6
+      "name": "St. Lucie",
+      "state": "FL",
+      "temp_f": 81.2
     }
   ],
   "coldest": [
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 16.1
+      "temp_f": 15.9
     },
     {
       "name": "Yukon-Koyukuk",
       "state": "AK",
-      "temp_f": 17.8
+      "temp_f": 16.8
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 19.2
+      "temp_f": 17.6
     }
   ],
   "national": {
-    "min_f": 16.1,
-    "max_f": 75.8,
-    "mean_f": 46.0
+    "min_f": 15.9,
+    "max_f": 82.4,
+    "mean_f": 62.6
   }
 }

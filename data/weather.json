@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-21T04:00:00Z",
-  "updated": "2026-10-21T05:09:25Z",
+  "valid_time_utc": "2026-10-21T11:00:00Z",
+  "updated": "2026-10-21T12:12:48Z",
   "hottest": [
+    {
+      "name": "Kalawao",
+      "state": "HI",
+      "temp_f": 75.8
+    },
+    {
+      "name": "Honolulu",
+      "state": "HI",
+      "temp_f": 75.2
+    },
     {
       "name": "Yuma",
       "state": "AZ",
-      "temp_f": 80.0
-    },
-    {
-      "name": "Maricopa",
-      "state": "AZ",
-      "temp_f": 78.7
-    },
-    {
-      "name": "Imperial",
-      "state": "CA",
-      "temp_f": 78.0
+      "temp_f": 74.6
     }
   ],
   "coldest": [
     {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 18.4
+      "temp_f": 16.1
     },
     {
       "name": "Yukon-Koyukuk",
       "state": "AK",
-      "temp_f": 21.1
+      "temp_f": 17.8
     },
     {
-      "name": "Southeast Fairbanks",
+      "name": "Copper River",
       "state": "AK",
-      "temp_f": 21.4
+      "temp_f": 19.2
     }
   ],
   "national": {
-    "min_f": 18.4,
-    "max_f": 80.0,
-    "mean_f": 52.0
+    "min_f": 16.1,
+    "max_f": 75.8,
+    "mean_f": 46.0
   }
 }

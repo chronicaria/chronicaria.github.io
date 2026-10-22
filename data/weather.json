@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-22T16:00:00Z",
-  "updated": "2026-10-22T17:30:19Z",
+  "valid_time_utc": "2026-10-22T21:00:00Z",
+  "updated": "2026-10-22T21:51:37Z",
   "hottest": [
     {
-      "name": "St. Lucie",
-      "state": "FL",
-      "temp_f": 80.3
+      "name": "Karnes",
+      "state": "TX",
+      "temp_f": 87.3
     },
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 80.1
+      "name": "Bee",
+      "state": "TX",
+      "temp_f": 87.1
     },
     {
-      "name": "Martin",
-      "state": "FL",
-      "temp_f": 80.0
+      "name": "Goliad",
+      "state": "TX",
+      "temp_f": 87.0
     }
   ],
   "coldest": [
     {
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 16.5
+    },
+    {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 9.6
+      "temp_f": 16.6
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 11.7
-    },
-    {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 11.8
+      "temp_f": 16.6
     }
   ],
   "national": {
-    "min_f": 9.6,
-    "max_f": 80.3,
-    "mean_f": 64.0
+    "min_f": 16.5,
+    "max_f": 87.3,
+    "mean_f": 71.9
   }
 }

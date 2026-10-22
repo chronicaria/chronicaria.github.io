@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T21:49:52Z",
+ "updated": "2026-10-22T05:02:59Z",
  "errors": [],
  "teams": [
   {
@@ -306,111 +306,22 @@
    "id": "6",
    "name": "Dallas Mavericks",
    "abbr": "DAL",
-   "record": "0-0",
+   "record": "0-1",
    "standing": "",
    "logo": "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
    "color": "0064b1",
    "form": [
-    {
-     "date": "2025-03-25T23:30Z",
-     "opp": "Knicks",
-     "oppAbbr": "NY",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705614",
-     "res": "L",
-     "score": "113-128"
-    },
-    {
-     "date": "2025-03-27T23:00Z",
-     "opp": "Magic",
-     "oppAbbr": "ORL",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705626",
-     "res": "W",
-     "score": "101-92"
-    },
-    {
-     "date": "2025-03-30T00:00Z",
-     "opp": "Bulls",
-     "oppAbbr": "CHI",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705643",
-     "res": "W",
-     "score": "120-119"
-    },
-    {
-     "date": "2025-04-01T00:30Z",
-     "opp": "Nets",
-     "oppAbbr": "BKN",
-     "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705661",
-     "res": "L",
-     "score": "109-113"
-    },
-    {
-     "date": "2025-04-03T00:30Z",
-     "opp": "Hawks",
-     "oppAbbr": "ATL",
-     "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705675",
-     "res": "W",
-     "score": "120-118"
-    },
-    {
-     "date": "2025-04-05T02:30Z",
-     "opp": "Clippers",
-     "oppAbbr": "LAC",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705693",
-     "res": "L",
-     "score": "91-114"
-    },
-    {
-     "date": "2025-04-06T02:30Z",
-     "opp": "Clippers",
-     "oppAbbr": "LAC",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705698",
-     "res": "L",
-     "score": "104-135"
-    },
-    {
-     "date": "2025-04-09T23:30Z",
-     "opp": "Lakers",
-     "oppAbbr": "LAL",
-     "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705725",
-     "res": "L",
-     "score": "97-112"
-    },
-    {
-     "date": "2025-04-12T00:30Z",
-     "opp": "Raptors",
-     "oppAbbr": "TOR",
-     "home": true,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705744",
-     "res": "W",
-     "score": "124-102"
-    },
-    {
-     "date": "2025-04-13T19:30Z",
-     "opp": "Grizzlies",
-     "oppAbbr": "MEM",
-     "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401705760",
-     "res": "L",
-     "score": "97-132"
-    }
-   ],
-   "next": [
     {
      "date": "2026-10-22T00:30Z",
      "opp": "Rockets",
      "oppAbbr": "HOU",
      "home": false,
      "url": "https://www.espn.com/nba/game/_/gameId/401909840",
-     "odds": "HOU -9.5 \u00b7 O/U 230.5"
-    },
+     "res": "L",
+     "score": "110-128"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-23T23:00Z",
      "opp": "Pacers",
@@ -473,6 +384,13 @@
      "oppAbbr": "BKN",
      "home": true,
      "url": "https://www.espn.com/nba/game/_/gameId/401909948"
+    },
+    {
+     "date": "2026-11-10T01:00Z",
+     "opp": "Pacers",
+     "oppAbbr": "IND",
+     "home": true,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909956"
     }
    ]
   },

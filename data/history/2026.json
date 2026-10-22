@@ -969,6 +969,16 @@
    "home": false,
    "res": "W",
    "score": "6-3"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-10-22T00:30Z",
+   "opp": "Rockets",
+   "home": false,
+   "res": "L",
+   "score": "110-128"
   }
  ]
 }

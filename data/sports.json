@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T12:05:40Z",
+ "updated": "2026-10-22T17:19:36Z",
  "errors": [],
  "teams": [
   {
@@ -729,7 +729,8 @@
      "opp": "Oilers",
      "oppAbbr": "EDM",
      "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892561"
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892561",
+     "odds": "CAR -118 \u00b7 O/U 6.5"
     },
     {
      "date": "2026-10-24T23:00Z",

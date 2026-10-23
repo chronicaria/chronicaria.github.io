@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-22T21:00:00Z",
-  "updated": "2026-10-22T21:51:37Z",
+  "valid_time_utc": "2026-10-23T04:00:00Z",
+  "updated": "2026-10-23T05:12:38Z",
   "hottest": [
     {
-      "name": "Karnes",
-      "state": "TX",
-      "temp_f": 87.3
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 76.3
     },
     {
-      "name": "Bee",
+      "name": "Cameron",
       "state": "TX",
-      "temp_f": 87.1
+      "temp_f": 75.9
     },
     {
-      "name": "Goliad",
-      "state": "TX",
-      "temp_f": 87.0
+      "name": "Kauai",
+      "state": "HI",
+      "temp_f": 75.9
     }
   ],
   "coldest": [
     {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 16.5
-    },
-    {
       "name": "Denali",
       "state": "AK",
-      "temp_f": 16.6
+      "temp_f": 11.8
+    },
+    {
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 13.2
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 16.6
+      "temp_f": 13.4
     }
   ],
   "national": {
-    "min_f": 16.5,
-    "max_f": 87.3,
-    "mean_f": 71.9
+    "min_f": 11.8,
+    "max_f": 76.3,
+    "mean_f": 53.9
   }
 }

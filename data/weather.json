@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-23T11:00:00Z",
-  "updated": "2026-10-23T11:57:26Z",
+  "valid_time_utc": "2026-10-23T16:00:00Z",
+  "updated": "2026-10-23T17:22:36Z",
   "hottest": [
     {
-      "name": "Kalawao",
-      "state": "HI",
-      "temp_f": 74.7
+      "name": "Hidalgo",
+      "state": "TX",
+      "temp_f": 81.4
     },
     {
-      "name": "Honolulu",
-      "state": "HI",
-      "temp_f": 73.7
+      "name": "Cameron",
+      "state": "TX",
+      "temp_f": 81.3
     },
     {
-      "name": "Monroe",
-      "state": "FL",
-      "temp_f": 73.4
+      "name": "Willacy",
+      "state": "TX",
+      "temp_f": 80.4
     }
   ],
   "coldest": [
     {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 10.6
-    },
-    {
       "name": "Fairbanks North Star",
       "state": "AK",
-      "temp_f": 10.7
+      "temp_f": 9.5
+    },
+    {
+      "name": "Southeast Fairbanks",
+      "state": "AK",
+      "temp_f": 9.6
     },
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 11.2
+      "temp_f": 10.6
     }
   ],
   "national": {
-    "min_f": 10.6,
-    "max_f": 74.7,
-    "mean_f": 48.2
+    "min_f": 9.5,
+    "max_f": 81.4,
+    "mean_f": 63.3
   }
 }

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-23T11:50:04Z",
+ "updated": "2026-10-23T17:17:04Z",
  "errors": [],
  "teams": [
   {
@@ -327,7 +327,8 @@
      "opp": "Pacers",
      "oppAbbr": "IND",
      "home": false,
-     "url": "https://www.espn.com/nba/game/_/gameId/401909844"
+     "url": "https://www.espn.com/nba/game/_/gameId/401909844",
+     "odds": "IND -7.5 \u00b7 O/U 240.5"
     },
     {
      "date": "2026-10-25T00:00Z",

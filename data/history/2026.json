@@ -979,6 +979,16 @@
    "home": false,
    "res": "L",
    "score": "110-128"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-10-23T01:00Z",
+   "opp": "Oilers",
+   "home": false,
+   "res": "L",
+   "score": "5-6"
   }
  ]
 }

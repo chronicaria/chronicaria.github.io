@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T21:44:52Z",
+ "updated": "2026-10-23T05:02:55Z",
  "errors": [],
  "teams": [
   {
@@ -633,15 +633,6 @@
    "color": "e30426",
    "form": [
     {
-     "date": "2026-10-02T23:00Z",
-     "opp": "Capitals",
-     "oppAbbr": "WSH",
-     "home": true,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892432",
-     "res": "L",
-     "score": "2-5"
-    },
-    {
      "date": "2026-10-03T23:00Z",
      "opp": "Flyers",
      "oppAbbr": "PHI",
@@ -721,17 +712,18 @@
      "url": "https://www.espn.com/nhl/game/_/gameId/401892548",
      "res": "W",
      "score": "6-3"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-23T01:00Z",
      "opp": "Oilers",
      "oppAbbr": "EDM",
      "home": false,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892561",
-     "odds": "CAR -135 \u00b7 O/U 6.5"
-    },
+     "res": "L",
+     "score": "5-6"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-24T23:00Z",
      "opp": "Blues",
@@ -794,6 +786,13 @@
      "oppAbbr": "SEA",
      "home": true,
      "url": "https://www.espn.com/nhl/game/_/gameId/401891809"
+    },
+    {
+     "date": "2026-11-20T00:00Z",
+     "opp": "Canadiens",
+     "oppAbbr": "MTL",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892747"
     }
    ]
   },

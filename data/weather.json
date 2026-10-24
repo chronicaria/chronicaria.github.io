@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-23T20:00:00Z",
-  "updated": "2026-10-23T21:35:22Z",
+  "valid_time_utc": "2026-10-23T23:00:00Z",
+  "updated": "2026-10-23T23:58:03Z",
   "hottest": [
-    {
-      "name": "Hidalgo",
-      "state": "TX",
-      "temp_f": 87.2
-    },
-    {
-      "name": "Beauregard",
-      "state": "LA",
-      "temp_f": 87.0
-    },
     {
       "name": "Dimmit",
       "state": "TX",
-      "temp_f": 87.0
+      "temp_f": 86.7
+    },
+    {
+      "name": "Webb",
+      "state": "TX",
+      "temp_f": 86.4
+    },
+    {
+      "name": "Zapata",
+      "state": "TX",
+      "temp_f": 86.3
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 16.0
+      "temp_f": 19.1
+    },
+    {
+      "name": "Fairbanks North Star",
+      "state": "AK",
+      "temp_f": 20.1
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 16.7
-    },
-    {
-      "name": "Yukon-Koyukuk",
-      "state": "AK",
-      "temp_f": 17.2
+      "temp_f": 20.3
     }
   ],
   "national": {
-    "min_f": 16.0,
-    "max_f": 87.2,
-    "mean_f": 70.1
+    "min_f": 19.1,
+    "max_f": 86.7,
+    "mean_f": 65.0
   }
 }

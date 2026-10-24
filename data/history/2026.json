@@ -989,6 +989,26 @@
    "home": false,
    "res": "L",
    "score": "5-6"
+  },
+  {
+   "team": "duke-fb",
+   "label": "Duke FB",
+   "league": "NCAA FB",
+   "date": "2026-10-23T23:00Z",
+   "opp": "Virginia",
+   "home": false,
+   "res": "W",
+   "score": "19-16"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-10-23T23:00Z",
+   "opp": "Pacers",
+   "home": false,
+   "res": "W",
+   "score": "121-105"
   }
  ]
 }

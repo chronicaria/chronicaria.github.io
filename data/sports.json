@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-23T21:30:39Z",
+ "updated": "2026-10-24T04:47:42Z",
  "errors": [],
  "teams": [
   {
@@ -189,8 +189,8 @@
    "id": "150",
    "name": "Duke Blue Devils",
    "abbr": "DUKE",
-   "record": "4-2",
-   "standing": "12th in ACC",
+   "record": "5-2",
+   "standing": "9th in ACC",
    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
    "color": "00539b",
    "form": [
@@ -247,16 +247,18 @@
      "url": "https://www.espn.com/college-football/game/_/gameId/401858266",
      "res": "L",
      "score": "20-24"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-23T23:00Z",
      "opp": "Virginia",
      "oppAbbr": "UVA",
      "home": false,
-     "url": "https://www.espn.com/college-football/game/_/gameId/401858271"
-    },
+     "url": "https://www.espn.com/college-football/game/_/gameId/401858271",
+     "res": "W",
+     "score": "19-16"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-31T16:00Z",
      "opp": "Boston College",
@@ -306,7 +308,7 @@
    "id": "6",
    "name": "Dallas Mavericks",
    "abbr": "DAL",
-   "record": "0-1",
+   "record": "1-1",
    "standing": "",
    "logo": "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
    "color": "0064b1",
@@ -319,17 +321,18 @@
      "url": "https://www.espn.com/nba/game/_/gameId/401909840",
      "res": "L",
      "score": "110-128"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-23T23:00Z",
      "opp": "Pacers",
      "oppAbbr": "IND",
      "home": false,
      "url": "https://www.espn.com/nba/game/_/gameId/401909844",
-     "odds": "IND -7.5 \u00b7 O/U 240.5"
-    },
+     "res": "W",
+     "score": "121-105"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-25T00:00Z",
      "opp": "Spurs",
@@ -392,6 +395,13 @@
      "oppAbbr": "IND",
      "home": true,
      "url": "https://www.espn.com/nba/game/_/gameId/401909956"
+    },
+    {
+     "date": "2026-11-13T01:00Z",
+     "opp": "Timberwolves",
+     "oppAbbr": "MIN",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909978"
     }
    ]
   },

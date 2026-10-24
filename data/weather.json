@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-24T20:00:00Z",
-  "updated": "2026-10-24T21:04:49Z",
+  "valid_time_utc": "2026-10-24T22:00:00Z",
+  "updated": "2026-10-24T23:33:31Z",
   "hottest": [
-    {
-      "name": "Brooks",
-      "state": "TX",
-      "temp_f": 87.8
-    },
-    {
-      "name": "Hidalgo",
-      "state": "TX",
-      "temp_f": 87.6
-    },
     {
       "name": "Zapata",
       "state": "TX",
-      "temp_f": 87.5
+      "temp_f": 87.7
+    },
+    {
+      "name": "Delta",
+      "state": "TX",
+      "temp_f": 86.3
+    },
+    {
+      "name": "Red River",
+      "state": "TX",
+      "temp_f": 86.2
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 21.4
+      "temp_f": 23.5
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 21.9
+      "temp_f": 24.8
     },
     {
       "name": "Matanuska-Susitna",
       "state": "AK",
-      "temp_f": 25.8
+      "temp_f": 26.9
     }
   ],
   "national": {
-    "min_f": 21.4,
-    "max_f": 87.8,
-    "mean_f": 67.4
+    "min_f": 23.5,
+    "max_f": 87.7,
+    "mean_f": 65.6
   }
 }

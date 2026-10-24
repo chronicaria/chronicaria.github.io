@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-23T23:00:00Z",
-  "updated": "2026-10-23T23:58:03Z",
+  "valid_time_utc": "2026-10-24T04:00:00Z",
+  "updated": "2026-10-24T04:55:21Z",
   "hottest": [
     {
-      "name": "Dimmit",
-      "state": "TX",
-      "temp_f": 86.7
+      "name": "Honolulu",
+      "state": "HI",
+      "temp_f": 76.7
     },
     {
-      "name": "Webb",
-      "state": "TX",
-      "temp_f": 86.4
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 75.8
     },
     {
-      "name": "Zapata",
-      "state": "TX",
-      "temp_f": 86.3
+      "name": "Kauai",
+      "state": "HI",
+      "temp_f": 75.8
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 19.1
-    },
-    {
-      "name": "Fairbanks North Star",
-      "state": "AK",
-      "temp_f": 20.1
+      "temp_f": 15.8
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 20.3
+      "temp_f": 16.7
+    },
+    {
+      "name": "Fairbanks North Star",
+      "state": "AK",
+      "temp_f": 18.6
     }
   ],
   "national": {
-    "min_f": 19.1,
-    "max_f": 86.7,
-    "mean_f": 65.0
+    "min_f": 15.8,
+    "max_f": 76.7,
+    "mean_f": 53.6
   }
 }

@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-24T15:00:00Z",
-  "updated": "2026-10-24T16:10:34Z",
+  "valid_time_utc": "2026-10-24T20:00:00Z",
+  "updated": "2026-10-24T21:04:49Z",
   "hottest": [
     {
-      "name": "Cameron",
+      "name": "Brooks",
       "state": "TX",
-      "temp_f": 80.9
+      "temp_f": 87.8
     },
     {
-      "name": "Aransas",
+      "name": "Hidalgo",
       "state": "TX",
-      "temp_f": 79.9
+      "temp_f": 87.6
     },
     {
-      "name": "Miami-Dade",
-      "state": "FL",
-      "temp_f": 79.5
+      "name": "Zapata",
+      "state": "TX",
+      "temp_f": 87.5
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 16.0
+      "temp_f": 21.4
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 17.5
+      "temp_f": 21.9
     },
     {
-      "name": "Meagher",
-      "state": "MT",
-      "temp_f": 20.9
+      "name": "Matanuska-Susitna",
+      "state": "AK",
+      "temp_f": 25.8
     }
   ],
   "national": {
-    "min_f": 16.0,
-    "max_f": 80.9,
-    "mean_f": 57.1
+    "min_f": 21.4,
+    "max_f": 87.8,
+    "mean_f": 67.4
   }
 }

@@ -1039,6 +1039,16 @@
    "home": true,
    "res": "L",
    "score": "106-122"
+  },
+  {
+   "team": "colts",
+   "label": "Colts",
+   "league": "NFL",
+   "date": "2026-10-25T17:00Z",
+   "opp": "Vikings",
+   "home": false,
+   "res": "L",
+   "score": "10-16"
   }
  ]
 }

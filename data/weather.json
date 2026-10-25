@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-25T15:00:00Z",
-  "updated": "2026-10-25T16:42:23Z",
+  "valid_time_utc": "2026-10-25T20:00:00Z",
+  "updated": "2026-10-25T21:06:54Z",
   "hottest": [
     {
-      "name": "Miami-Dade",
+      "name": "Charlotte",
       "state": "FL",
-      "temp_f": 80.3
+      "temp_f": 84.1
     },
     {
-      "name": "Cameron",
-      "state": "TX",
-      "temp_f": 79.8
+      "name": "DeSoto",
+      "state": "FL",
+      "temp_f": 84.0
     },
     {
-      "name": "Brevard",
+      "name": "Sarasota",
       "state": "FL",
-      "temp_f": 79.7
+      "temp_f": 83.6
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 23.9
+      "temp_f": 25.5
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 24.0
+      "temp_f": 25.9
     },
     {
-      "name": "Meagher",
-      "state": "MT",
-      "temp_f": 24.2
+      "name": "Skagway",
+      "state": "AK",
+      "temp_f": 28.0
     }
   ],
   "national": {
-    "min_f": 23.9,
-    "max_f": 80.3,
-    "mean_f": 55.9
+    "min_f": 25.5,
+    "max_f": 84.1,
+    "mean_f": 66.8
   }
 }

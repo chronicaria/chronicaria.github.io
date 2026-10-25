@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-25T04:00:00Z",
-  "updated": "2026-10-25T05:06:38Z",
+  "valid_time_utc": "2026-10-25T11:00:00Z",
+  "updated": "2026-10-25T11:55:07Z",
   "hottest": [
     {
-      "name": "Cameron",
-      "state": "TX",
-      "temp_f": 76.8
+      "name": "Brevard",
+      "state": "FL",
+      "temp_f": 75.0
     },
     {
-      "name": "Maverick",
-      "state": "TX",
-      "temp_f": 76.3
+      "name": "Kalawao",
+      "state": "HI",
+      "temp_f": 74.4
     },
     {
-      "name": "Dimmit",
-      "state": "TX",
-      "temp_f": 76.1
+      "name": "Honolulu",
+      "state": "HI",
+      "temp_f": 74.2
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
-      "state": "AK",
+      "name": "Mercer",
+      "state": "ND",
       "temp_f": 22.5
     },
     {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 23.7
+      "name": "Dunn",
+      "state": "ND",
+      "temp_f": 23.0
     },
     {
-      "name": "Matanuska-Susitna",
-      "state": "AK",
-      "temp_f": 26.7
+      "name": "Oliver",
+      "state": "ND",
+      "temp_f": 23.6
     }
   ],
   "national": {
     "min_f": 22.5,
-    "max_f": 76.8,
-    "mean_f": 51.5
+    "max_f": 75.0,
+    "mean_f": 46.4
   }
 }

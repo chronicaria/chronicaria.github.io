@@ -1019,6 +1019,26 @@
    "home": false,
    "res": "W",
    "score": "2-0"
+  },
+  {
+   "team": "canes",
+   "label": "Canes",
+   "league": "NHL",
+   "date": "2026-10-24T23:00Z",
+   "opp": "Blues",
+   "home": false,
+   "res": "W",
+   "score": "4-0"
+  },
+  {
+   "team": "mavs",
+   "label": "Mavs",
+   "league": "NBA",
+   "date": "2026-10-25T00:00Z",
+   "opp": "Spurs",
+   "home": true,
+   "res": "L",
+   "score": "106-122"
   }
  ]
 }

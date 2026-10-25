@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24T20:58:18Z",
+ "updated": "2026-10-25T04:56:05Z",
  "errors": [],
  "teams": [
   {
@@ -190,7 +190,7 @@
    "name": "Duke Blue Devils",
    "abbr": "DUKE",
    "record": "5-2",
-   "standing": "7th in ACC",
+   "standing": "8th in ACC",
    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
    "color": "00539b",
    "form": [
@@ -308,7 +308,7 @@
    "id": "6",
    "name": "Dallas Mavericks",
    "abbr": "DAL",
-   "record": "1-1",
+   "record": "1-2",
    "standing": "",
    "logo": "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
    "color": "0064b1",
@@ -330,17 +330,18 @@
      "url": "https://www.espn.com/nba/game/_/gameId/401909844",
      "res": "W",
      "score": "121-105"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-25T00:00Z",
      "opp": "Spurs",
      "oppAbbr": "SA",
      "home": true,
      "url": "https://www.espn.com/nba/game/_/gameId/401909858",
-     "odds": "SA -14.5 \u00b7 O/U 229.5"
-    },
+     "res": "L",
+     "score": "106-122"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-26T23:30Z",
      "opp": "Heat",
@@ -403,6 +404,13 @@
      "oppAbbr": "MIN",
      "home": false,
      "url": "https://www.espn.com/nba/game/_/gameId/401909978"
+    },
+    {
+     "date": "2026-11-15T00:30Z",
+     "opp": "Cavaliers",
+     "oppAbbr": "CLE",
+     "home": false,
+     "url": "https://www.espn.com/nba/game/_/gameId/401909981"
     }
    ]
   },
@@ -648,20 +656,11 @@
    "id": "7",
    "name": "Carolina Hurricanes",
    "abbr": "CAR",
-   "record": "8-2",
+   "record": "9-2",
    "standing": "",
    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/car.png",
    "color": "e30426",
    "form": [
-    {
-     "date": "2026-10-03T23:00Z",
-     "opp": "Flyers",
-     "oppAbbr": "PHI",
-     "home": false,
-     "url": "https://www.espn.com/nhl/game/_/gameId/401892435",
-     "res": "W",
-     "score": "3-2"
-    },
     {
      "date": "2026-10-06T23:00Z",
      "opp": "Canadiens",
@@ -742,17 +741,18 @@
      "url": "https://www.espn.com/nhl/game/_/gameId/401892561",
      "res": "L",
      "score": "5-6"
-    }
-   ],
-   "next": [
+    },
     {
      "date": "2026-10-24T23:00Z",
      "opp": "Blues",
      "oppAbbr": "STL",
      "home": false,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892573",
-     "odds": "CAR -155 \u00b7 O/U 6.5"
-    },
+     "res": "W",
+     "score": "4-0"
+    }
+   ],
+   "next": [
     {
      "date": "2026-10-28T00:00Z",
      "opp": "Bruins",
@@ -815,6 +815,13 @@
      "oppAbbr": "MTL",
      "home": true,
      "url": "https://www.espn.com/nhl/game/_/gameId/401892747"
+    },
+    {
+     "date": "2026-11-21T18:00Z",
+     "opp": "Oilers",
+     "oppAbbr": "EDM",
+     "home": true,
+     "url": "https://www.espn.com/nhl/game/_/gameId/401892754"
     }
    ]
   },

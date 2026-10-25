@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-25T20:00:00Z",
-  "updated": "2026-10-25T21:06:54Z",
+  "valid_time_utc": "2026-10-25T22:00:00Z",
+  "updated": "2026-10-25T23:28:17Z",
   "hottest": [
     {
-      "name": "Charlotte",
-      "state": "FL",
-      "temp_f": 84.1
+      "name": "Zapata",
+      "state": "TX",
+      "temp_f": 83.9
     },
     {
-      "name": "DeSoto",
-      "state": "FL",
-      "temp_f": 84.0
+      "name": "Dimmit",
+      "state": "TX",
+      "temp_f": 82.2
     },
     {
-      "name": "Sarasota",
-      "state": "FL",
-      "temp_f": 83.6
+      "name": "Frio",
+      "state": "TX",
+      "temp_f": 81.9
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 25.5
+      "temp_f": 26.0
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 25.9
+      "temp_f": 27.5
     },
     {
-      "name": "Skagway",
+      "name": "Matanuska-Susitna",
       "state": "AK",
-      "temp_f": 28.0
+      "temp_f": 29.8
     }
   ],
   "national": {
-    "min_f": 25.5,
-    "max_f": 84.1,
-    "mean_f": 66.8
+    "min_f": 26.0,
+    "max_f": 83.9,
+    "mean_f": 64.9
   }
 }

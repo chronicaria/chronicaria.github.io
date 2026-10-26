@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-25T22:00:00Z",
-  "updated": "2026-10-25T23:28:17Z",
+  "valid_time_utc": "2026-10-26T04:00:00Z",
+  "updated": "2026-10-26T05:09:41Z",
   "hottest": [
     {
-      "name": "Zapata",
-      "state": "TX",
-      "temp_f": 83.9
+      "name": "Monroe",
+      "state": "FL",
+      "temp_f": 76.0
     },
     {
-      "name": "Dimmit",
-      "state": "TX",
-      "temp_f": 82.2
+      "name": "Brevard",
+      "state": "FL",
+      "temp_f": 75.8
     },
     {
-      "name": "Frio",
-      "state": "TX",
-      "temp_f": 81.9
+      "name": "Honolulu",
+      "state": "HI",
+      "temp_f": 75.3
     }
   ],
   "coldest": [
     {
       "name": "Copper River",
       "state": "AK",
-      "temp_f": 26.0
+      "temp_f": 24.0
+    },
+    {
+      "name": "San Juan",
+      "state": "CO",
+      "temp_f": 24.5
     },
     {
       "name": "Southeast Fairbanks",
       "state": "AK",
-      "temp_f": 27.5
-    },
-    {
-      "name": "Matanuska-Susitna",
-      "state": "AK",
-      "temp_f": 29.8
+      "temp_f": 24.7
     }
   ],
   "national": {
-    "min_f": 26.0,
-    "max_f": 83.9,
-    "mean_f": 64.9
+    "min_f": 24.0,
+    "max_f": 76.0,
+    "mean_f": 51.5
   }
 }

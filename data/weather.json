@@ -1,43 +1,43 @@
 {
-  "valid_time_utc": "2026-10-26T04:00:00Z",
-  "updated": "2026-10-26T05:09:41Z",
+  "valid_time_utc": "2026-10-26T12:00:00Z",
+  "updated": "2026-10-26T13:27:16Z",
   "hottest": [
     {
-      "name": "Monroe",
+      "name": "Martin",
       "state": "FL",
-      "temp_f": 76.0
+      "temp_f": 75.9
+    },
+    {
+      "name": "St. Lucie",
+      "state": "FL",
+      "temp_f": 75.6
     },
     {
       "name": "Brevard",
       "state": "FL",
-      "temp_f": 75.8
-    },
-    {
-      "name": "Honolulu",
-      "state": "HI",
-      "temp_f": 75.3
+      "temp_f": 75.5
     }
   ],
   "coldest": [
     {
-      "name": "Copper River",
-      "state": "AK",
-      "temp_f": 24.0
+      "name": "Renville",
+      "state": "ND",
+      "temp_f": 19.0
     },
     {
-      "name": "San Juan",
-      "state": "CO",
-      "temp_f": 24.5
+      "name": "Towner",
+      "state": "ND",
+      "temp_f": 19.0
     },
     {
-      "name": "Southeast Fairbanks",
-      "state": "AK",
-      "temp_f": 24.7
+      "name": "Burke",
+      "state": "ND",
+      "temp_f": 19.9
     }
   ],
   "national": {
-    "min_f": 24.0,
-    "max_f": 76.0,
-    "mean_f": 51.5
+    "min_f": 19.0,
+    "max_f": 75.9,
+    "mean_f": 46.5
   }
 }

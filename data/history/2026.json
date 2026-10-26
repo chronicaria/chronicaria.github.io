@@ -1049,6 +1049,16 @@
    "home": false,
    "res": "L",
    "score": "10-16"
+  },
+  {
+   "team": "lafc",
+   "label": "LAFC",
+   "league": "MLS",
+   "date": "2026-10-26T01:00Z",
+   "opp": "LA Galaxy",
+   "home": true,
+   "res": "D",
+   "score": "2-2"
   }
  ]
 }

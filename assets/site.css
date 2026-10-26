@@ -1,0 +1,54 @@
+/* chronicaria.github.io shell for the NBA Elo page. The page fragment (page/index.html) styles itself
+   through these tokens, the same names the private Dashboard artifact provides. Colour only via tokens. */
+@font-face { font-family: 'NB Hanken Grotesk'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../fonts/Hanken.woff2') format('woff2'); }
+@font-face { font-family: 'NB JetBrains Mono'; font-style: normal; font-weight: 400 800; font-display: swap; src: url('../fonts/JetBrainsMono.woff2') format('woff2'); }
+
+:root {
+  --color-bg: #f6f6f3; --color-panel: #ffffff; --color-fg: #1b1c1e; --color-fg-muted: #676b72;
+  --color-border-line: #e2e2dd; --color-bad: #bf3a31; --color-ok: #1d8049; --color-warn: #a96a00;
+  --cds-chart-categorical-1: #2f6fd6; --cds-chart-categorical-2: #d9732f; --cds-chart-categorical-3: #23968a;
+  --cds-chart-categorical-4: #8b55d9; --cds-chart-categorical-5: #c79312; --cds-chart-categorical-6: #d6538c;
+  --cds-chart-categorical-7: #5470e8; --cds-chart-categorical-8: #6c727a;
+  --cds-chart-reference: #9a9da3; --cds-chart-muted: #b9bcc1; --cds-chart-grid: rgba(0, 0, 0, .06); --cds-chart-axis: #c8cacd;
+  --cds-text-secondary: #676b72; --cds-surface-popover: #ffffff; --cds-border: rgba(0, 0, 0, .1);
+  --cds-shadow-popover: 0 8px 24px #0000001f, 0 2px 6px #00000014;
+  --cds-radius: .5rem; --cds-gap-md: 1rem; --cds-pad-lg: 1rem; --cds-pad-sm: .5rem; --cds-pad-xs: .375rem;
+  --cds-font-size-caption: .75rem; --cds-font-size-body: .875rem; --cds-font-size-heading: .9375rem; --cds-font-size-title: 1.375rem;
+  --cds-font-weight-medium: 500; --cds-dur-slow: .45s; --cds-ease-out: cubic-bezier(0, 0, .2, 1);
+  --font-anthropic-sans: 'NB Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --color-bg: #121315; --color-panel: #1b1c1f; --color-fg: #ecece9; --color-fg-muted: #9ca0a7;
+  --color-border-line: #2c2e32; --color-bad: #f0695d; --color-ok: #4cc27e; --color-warn: #e3a43a;
+  --cds-chart-categorical-1: #5b93ee; --cds-chart-categorical-2: #f0965c; --cds-chart-categorical-3: #43bdb0;
+  --cds-chart-categorical-4: #ab84f0; --cds-chart-categorical-5: #e2b23a; --cds-chart-categorical-6: #ee7fae;
+  --cds-chart-categorical-7: #8199ff; --cds-chart-categorical-8: #9aa0a8;
+  --cds-chart-reference: #6f737a; --cds-chart-muted: #4d5056; --cds-chart-grid: rgba(255, 255, 255, .07); --cds-chart-axis: #3b3e44;
+  --cds-text-secondary: #9ca0a7; --cds-surface-popover: #24262a; --cds-border: rgba(255, 255, 255, .12);
+  --cds-shadow-popover: 0 8px 24px #00000066, 0 2px 6px #0000004d;
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --color-bg: #121315; --color-panel: #1b1c1f; --color-fg: #ecece9; --color-fg-muted: #9ca0a7;
+  --color-border-line: #2c2e32; --color-bad: #f0695d; --color-ok: #4cc27e; --color-warn: #e3a43a;
+  --cds-chart-categorical-1: #5b93ee; --cds-chart-categorical-2: #f0965c; --cds-chart-categorical-3: #43bdb0;
+  --cds-chart-categorical-4: #ab84f0; --cds-chart-categorical-5: #e2b23a; --cds-chart-categorical-6: #ee7fae;
+  --cds-chart-categorical-7: #8199ff; --cds-chart-categorical-8: #9aa0a8;
+  --cds-chart-reference: #6f737a; --cds-chart-muted: #4d5056; --cds-chart-grid: rgba(255, 255, 255, .07); --cds-chart-axis: #3b3e44;
+  --cds-text-secondary: #9ca0a7; --cds-surface-popover: #24262a; --cds-border: rgba(255, 255, 255, .12);
+  --cds-shadow-popover: 0 8px 24px #00000066, 0 2px 6px #0000004d;
+  color-scheme: dark;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); font-size: 14px; line-height: 1.45; }
+#dash-root { padding-block: 28px 12px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.dash-skeleton:empty { min-height: 1.2em; border-radius: 4px; background: var(--color-border-line); }
+.site-foot { max-width: 1360px; margin: 8px auto 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); color: var(--color-fg-muted); font-size: 12px; }
+.site-foot p { margin: 0; max-width: 72ch; }
+.theme-toggle { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); z-index: 20; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--color-border-line); background: var(--color-panel); color: var(--color-fg-muted); font: 15px/1 var(--font-anthropic-sans); cursor: pointer; transition: color .25s ease, border-color .25s ease; }
+.theme-toggle:hover { color: var(--color-fg); border-color: var(--color-fg-muted); }
+.theme-toggle:focus-visible { outline: 2px solid var(--cds-chart-categorical-1); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+@media (max-width: 600px) { #dash-root { padding-top: 56px; } }  /* the fixed theme toggle sits above the title on phones */

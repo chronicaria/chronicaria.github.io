@@ -2,124 +2,1543 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
-<title>Andrew Park</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NBA Power Rankings</title>
+<meta name="description" content="NBA power rankings and season forecast: Elo ratings in points, adjusted for who plays, with 100,000 simulations of the rest of the season. Updated every morning.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d9732f'/%3E%3Cpath d='M2 16h28M16 2v28M6 6c6 5 6 15 0 20M26 6c-6 5-6 15 0 20' stroke='%231b1c1e' stroke-width='1.6' fill='none'/%3E%3C/svg%3E">
+<script>/* pre-paint theme: saved choice, else the system's */(() => { try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {} })();</script>
+<link rel="stylesheet" href="assets/site.css">
+<script>window.NB_PUBLIC = true; window.NB_DATA = 'data';</script>
+<script src="assets/d3.v7.min.js"></script>
+<script src="assets/dash.js"></script>
 <style>
-body{max-width:60em;margin:2.5em auto;padding:0 1.25em;line-height:1.55;font-family:Archivo,Helvetica,Arial,sans-serif;color:#111;background:#fff}
-nav{font-weight:600;text-transform:uppercase;font-size:.82em;letter-spacing:.09em;border-bottom:2px solid #111;padding-bottom:.7em;margin-bottom:1.5em}
-nav a{text-decoration:none;color:#111}
-nav a:hover{text-decoration:underline}
-h1{font-size:2.5em;font-weight:900;letter-spacing:-.02em;line-height:1.1;margin:.5em 0 .35em}
-h2{font-size:1.45em;font-weight:900;letter-spacing:-.01em;margin:1.7em 0 .5em;border-bottom:2px solid #111;padding-bottom:.12em}
-h3{font-size:1.1em;font-weight:700;margin:1.4em 0 .4em}
-h4{font-size:1em;font-weight:700;font-style:italic;margin:1.2em 0 .3em}
-table{border-collapse:collapse;margin:1.1em 0}
-th,td{border:1px solid #ddd;padding:.45em .75em;text-align:left;vertical-align:top}
-th{background:#f4f4f4;font-size:.8em;text-transform:uppercase;letter-spacing:.05em}
-tr:nth-child(even) td{background:#fafafa}
-blockquote{border:1.5px solid #111;padding:.9em 1.1em;margin:1.4em 0;background:#fafafa}
-dt{font-weight:700}
-dd{margin:0 0 .6em 1.4em}
-hr{border:none;border-top:1px solid #ddd;margin:2.2em 0 1em}
-footer{font-size:.85em;color:#666;font-style:italic}
+#dash-root { --dash-gutter: clamp(12px, 3%, 32px); }
+.nb {
+  --nb-sans: 'NB Hanken Grotesk', var(--font-anthropic-sans), system-ui, sans-serif;
+  --nb-mono: 'NB JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --nb-heat: var(--cds-chart-categorical-1);
+  container: nb / inline-size;
+  position: relative;
+  max-width: 1360px;
+  margin-inline: auto;
+  font-family: var(--nb-sans);
+  font-size: var(--cds-font-size-body);
+  color: var(--color-fg);
+  font-variant-numeric: tabular-nums;
+}
+.nb .mono, .nb .num, .nb .nb-label { font-family: var(--nb-mono); }
+.nb .nb-head { display: grid; gap: 4px; margin-bottom: var(--cds-gap-md); }
+.nb .nb-title { margin: 0; font-family: var(--nb-sans); font-weight: 650; font-size: calc(var(--cds-font-size-title) * 1.25); letter-spacing: -0.015em; line-height: 1.15; }
+.nb .nb-title .nb-season { color: var(--color-fg-muted); font-weight: 450; }
+.nb .nb-takeaway { margin: 2px 0 0; font-size: calc(var(--cds-font-size-body) * 1.12); line-height: 1.45; max-width: 70ch; }
+.nb .nb-takeaway .nb-em { font-weight: 650; }
+.nb .nb-meta { margin: 0; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: 0.01em; }
+.nb [data-dash-source-state=empty] { color: transparent; }
+.nb [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+
+/* tabs */
+.nb .nb-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--color-border-line); margin-bottom: var(--cds-gap-md); overflow-x: auto; scrollbar-width: none; }
+.nb .nb-tabs::-webkit-scrollbar { display: none; }
+.nb .nb-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 8px 12px; font: inherit; font-family: var(--nb-sans); font-weight: 550; color: var(--color-fg-muted); cursor: pointer; white-space: nowrap; }
+.nb .nb-tab:hover { color: var(--color-fg); }
+.nb .nb-tab[hidden] { display: none; }
+.nb .nb-tab[aria-selected=true] { color: var(--color-fg); border-bottom-color: var(--color-fg); }
+.nb .nb-tab:focus-visible { outline: 2px solid var(--cds-chart-categorical-1); outline-offset: -2px; border-radius: 4px; }
+.nb .nb-page[hidden] { display: none; }
+.nb .nb-page { display: grid; gap: var(--cds-gap-md); }
+
+/* cards */
+.nb .nb-grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); align-items: start; }
+.nb .nb-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: calc(var(--cds-radius) * 1.5); padding: var(--cds-pad-lg); min-width: 0; }
+.nb .nb-card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 8px 16px; margin-bottom: 10px; }
+.nb .nb-card-title { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); font-family: var(--nb-sans); }
+.nb .nb-card-note { margin: 2px 0 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); max-width: 72ch; }
+.nb .nb-sub { margin: 14px 0 6px; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-weight: 500; }
+.nb .nb-sub:first-child { margin-top: 0; }
+.nb .nb-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.nb .nb-legend .k { display: inline-flex; align-items: center; gap: 6px; }
+.nb .nb-key { display: inline-block; width: 16px; height: 8px; border-radius: 2px; background: color-mix(in srgb, var(--cds-chart-categorical-1) 28%, transparent); }
+.nb .nb-key.dot { width: 8px; border-radius: 50%; background: var(--color-fg); }
+.nb .nb-key.tick { width: 2px; height: 12px; border-radius: 0; background: var(--color-fg-muted); }
+.nb .nb-key.dash { width: 0; height: 12px; border-radius: 0; background: none; border-left: 2px dashed var(--cds-chart-reference); }
+.nb .nb-key.bar { width: 10px; height: 10px; background: var(--cds-chart-categorical-1); }
+
+/* segmented control */
+.nb .nb-seg { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 2px; gap: 2px; }
+.nb .nb-seg button { appearance: none; border: 0; background: none; font: inherit; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: 3px 10px; border-radius: 999px; cursor: pointer; }
+.nb .nb-seg button[aria-pressed=true] { background: var(--color-fg); color: var(--color-panel); }
+.nb .nb-select { font: inherit; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 3px 10px; max-width: 100%; }
+
+/* tables */
+.nb .nb-scroll { overflow-x: auto; min-width: 0; }
+.nb .nb-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.nb .nb-table th { font-family: var(--nb-mono); font-weight: 500; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); text-align: left; padding: 6px 6px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; vertical-align: bottom; }
+.nb .nb-table td { padding: 5px 6px; border-bottom: 1px solid color-mix(in srgb, var(--color-border-line) 60%, transparent); white-space: nowrap; vertical-align: middle; }
+.nb .nb-table tbody tr:last-child td { border-bottom: 0; }
+.nb .nb-table tbody tr:hover td { background: color-mix(in srgb, var(--color-fg) 4%, transparent); }
+.nb .nb-table .num { text-align: right; font-size: 12.5px; }
+.nb .nb-table th.num { text-align: right; }
+.nb .nb-table .muted { color: var(--color-fg-muted); }
+.nb .nb-table td.note { white-space: normal; min-width: 12rem; font-size: 12px; line-height: 1.35; }
+.nb .nb-table .up { color: var(--color-ok); }
+.nb .nb-table .down { color: var(--color-bad); }
+.nb .nb-sort { appearance: none; background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; display: inline-flex; gap: 3px; align-items: center; }
+.nb .nb-sort:hover { color: var(--color-fg); }
+.nb th[aria-sort] .nb-sort { color: var(--color-fg); }
+.nb th[aria-sort=ascending] .nb-sort::after { content: '\2191'; }
+.nb th[aria-sort=descending] .nb-sort::after { content: '\2193'; }
+.nb .nb-team { display: inline-flex; align-items: center; gap: 8px; font-weight: 550; vertical-align: middle; line-height: 20px; }
+.nb .nb-logo { width: 20px; height: 20px; flex: none; object-fit: contain; }
+.nb .nb-chip { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; }
+.nb .nb-best { font-weight: 700; }
+.nb .nb-rank { font-weight: 600; color: var(--color-fg); }
+
+/* rankings: one row per team in its colours (--rk-bg, --rk-ink, --rk-hl set per row) */
+.nb .nb-rk td { padding: 7px 8px; border-bottom: 1px solid var(--color-panel); }
+.nb .nb-rk th { padding: 6px 8px; }
+.nb .nb-rk tbody tr { cursor: pointer; }
+.nb .nb-rk tbody tr td { background: var(--rk-bg); color: var(--rk-ink); }
+.nb .nb-rk tbody tr:hover td, .nb .nb-rk tbody tr:focus-within td { background: linear-gradient(var(--rk-hl), var(--rk-hl)), var(--rk-bg); }
+.nb .nb-rk tbody tr:last-child td { border-bottom: 0; }
+.nb .nb-rk tbody tr:first-child td:first-child { border-top-left-radius: 6px; }
+.nb .nb-rk tbody tr:first-child td:last-child { border-top-right-radius: 6px; }
+.nb .nb-rk tbody tr:last-child td:first-child { border-bottom-left-radius: 6px; }
+.nb .nb-rk tbody tr:last-child td:last-child { border-bottom-right-radius: 6px; }
+.nb .nb-rk .nb-tlink:focus-visible { outline: 2px solid var(--rk-ink); outline-offset: 2px; }
+.nb .nb-rk .c-chg { width: 2.6rem; font-size: 11.5px; }
+.nb .nb-rk tbody td.c-chg.flat { font-weight: 400; }
+.nb .nb-rk tbody tr.rk-edge td { box-shadow: inset 0 1px 0 var(--cds-border), inset 0 -1px 0 var(--cds-border); }
+.nb .nb-rk tbody td.nb-rank { color: var(--rk-ink); font-weight: 700; width: 2rem; }
+.nb .nb-rk .nb-team { font-weight: 650; gap: 10px; }
+.nb .nb-rk .nb-badge { width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, .94); display: grid; place-items: center; flex: none; box-shadow: 0 0 0 1px rgba(0, 0, 0, .08); }
+.nb .nb-rk .nb-badge .nb-logo { width: 19px; height: 19px; }
+.nb .nb-rk .rec { font-weight: 400; margin-left: 2px; }
+.nb .nb-rk .short { display: none; }
+.nb .nb-rk .c-rating { font-weight: 700; font-size: 13px; }
+.nb .nb-rk .c-last { font-family: var(--nb-mono); font-size: 12px; }
+.nb .nb-rk .c-last b { font-weight: 700; }
+.nb .nb-rk .rk { font-weight: 400; font-size: .92em; }
+
+/* heatmap */
+.nb .nb-heat td.h { text-align: center; font-size: 10.5px; padding: 4px 2px; min-width: 46px; font-family: var(--nb-mono); border-bottom: 1px solid var(--color-panel); border-right: 1px solid var(--color-panel); }
+.nb .nb-heat td.h.zero { color: var(--color-fg-muted); opacity: .45; }
+.nb .nb-heat td.h.hi { color: #fff; }
+.nb .nb-heat .zl { box-shadow: inset 1px 0 0 var(--color-fg-muted); }
+.nb .nb-heat th.h { text-align: center; padding: 6px 2px; }
+.nb .nb-heat td.gap, .nb .nb-heat th.gap { padding: 0; width: 8px; min-width: 8px; border: 0; background: none !important; }
+.nb .nb-heat tbody tr:hover td.h { outline: 1px solid var(--color-fg); outline-offset: -1px; }
+.nb .nb-heat .sticky { position: sticky; left: 0; background: var(--color-panel); z-index: 1; }
+.nb .nb-heat tbody tr:hover td.sticky { background: var(--color-panel); }
+
+/* charts */
+.nb .nb-chart { position: relative; min-width: 0; }
+.nb .nb-chart svg { display: block; overflow: visible; }
+.nb .nb-chart text { font-family: var(--nb-mono); }
+.nb .nb-axis text { fill: var(--color-fg-muted); font-size: 10.5px; }
+.nb .nb-axis line, .nb .nb-axis path { stroke: var(--cds-chart-axis); }
+.nb .nb-grid-l line { stroke: var(--cds-chart-grid); }
+.nb .nb-grid-l path { display: none; }
+.nb .nb-failed { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.nb .nb-failed::before { content: ''; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+.nb .nb-empty-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 4px 0; }
+
+/* games */
+.nb .nb-split { display: inline-flex; width: clamp(70px, 12cqw, 180px); height: 8px; border-radius: 4px; overflow: hidden; gap: 2px; vertical-align: middle; }
+.nb .nb-split i { display: block; height: 100%; }
+.nb .nb-split .a, .nb .nb-split .h { background: var(--cds-chart-muted); }
+.nb .nb-split .fav { background: var(--cds-chart-categorical-1); }
+.nb .nb-pcell { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.nb .nb-g { table-layout: fixed; }
+.nb .nb-g th.c-tip { width: 76px; }
+.nb .nb-g th.c-team { width: 78px; }
+.nb .nb-g th.c-home { padding-left: 14px; }
+.nb .nb-g td.c-home { padding-left: 14px; }
+.nb .nb-g th.c-p { width: 44px; }
+.nb .nb-g th.c-sp { width: 58px; }
+.nb #games .nb-grid { grid-template-columns: minmax(0, 940px); }
+.nb .nb-g.upcoming .nb-split { width: auto; flex: 1; min-width: 36px; max-width: 200px; }
+
+/* model */
+.nb .nb-prose { font-size: var(--cds-font-size-body); line-height: 1.55; max-width: 78ch; }
+.nb .nb-prose p { margin: 0 0 8px; }
+.nb .nb-prose ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.nb .nb-prose .mono { font-size: 0.92em; }
+
+/* tooltip */
+.nb .nb-tip { position: absolute; z-index: 10; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); font-family: var(--nb-mono); white-space: nowrap; display: none; color: var(--color-fg); }
+.nb .nb-tip .t { color: var(--cds-text-secondary); margin-bottom: 2px; font-family: var(--nb-sans); }
+.nb .nb-tip .r { display: flex; gap: 10px; justify-content: space-between; }
+
+/* team links */
+.nb .nb-tlink { cursor: pointer; border-radius: 3px; }
+.nb .nb-tlink:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.nb .nb-tlink:focus-visible { outline: 2px solid var(--cds-chart-categorical-1); outline-offset: 1px; }
+.nb svg .nb-tlink:hover { text-decoration: underline; }
+
+/* team page */
+.nb .nb-grid3 { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); align-items: stretch; }
+.nb .nb-grid2 { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr)); align-items: start; }
+.nb .nb-thead { border-top: 4px solid var(--nb-team, var(--color-fg)); padding-top: calc(var(--cds-pad-lg) - 2px); }
+.nb .nb-th-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 16px; }
+.nb .nb-th-id { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.nb .nb-th-logo { width: 56px; height: 56px; flex: none; display: grid; place-items: center; }
+.nb .nb-th-logo img { width: 56px; height: 56px; object-fit: contain; }
+.nb .nb-th-logo .nb-chip { width: 28px; height: 28px; }
+.nb .nb-th-name { margin: 0; font-family: var(--nb-sans); font-weight: 650; font-size: calc(var(--cds-font-size-title) * 1.1); letter-spacing: -0.012em; line-height: 1.15; }
+.nb .nb-th-sub { margin: 3px 0 0; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.nb .nb-th-pick { display: flex; align-items: center; gap: 6px; }
+.nb .nb-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)); gap: 12px 18px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-border-line); }
+.nb .nb-tile { min-width: 0; }
+.nb .nb-tile .k { font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.nb .nb-tile .v { font-family: var(--nb-sans); font-weight: 600; font-size: 26px; line-height: 1.2; letter-spacing: -0.01em; margin-top: 2px; white-space: nowrap; }
+.nb .nb-tile .v small { font-size: 13px; font-weight: 500; color: var(--color-fg-muted); letter-spacing: 0; }
+.nb .nb-tile .s { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: 2px; line-height: 1.35; }
+.nb .nb-tile .s .up { color: var(--color-ok); }
+.nb .nb-tile .s .down { color: var(--color-bad); }
+.nb .nb-tile .v.down { color: var(--color-bad); }
+.nb .nb-path { display: grid; grid-template-columns: max-content minmax(40px, 1fr) 3.7rem; gap: 7px 10px; align-items: center; font-size: 12.5px; }
+.nb .nb-path .lab { white-space: nowrap; }
+.nb .nb-path .trk { position: relative; height: 14px; border-radius: 4px; background: color-mix(in srgb, var(--color-fg) 6%, transparent); overflow: hidden; }
+.nb .nb-path .trk i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--cds-chart-categorical-1); }
+.nb .nb-path .trk.fin i { background: color-mix(in srgb, var(--cds-chart-categorical-1) 45%, transparent); }
+.nb .nb-path .val { text-align: right; font-family: var(--nb-mono); font-size: 12px; }
+.nb .nb-path .grp { grid-column: 1 / -1; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: 6px; }
+.nb .nb-path .grp:first-child { margin-top: 0; }
+.nb .nb-tall { max-height: 460px; overflow: auto; }
+.nb .nb-tall thead th { position: sticky; top: 0; background: var(--color-panel); z-index: 1; }
+.nb .nb-wl { font-weight: 650; }
+.nb .nb-wl.w { color: var(--color-ok); }
+.nb .nb-wl.l { color: var(--color-bad); }
+.nb .nb-st-out { color: var(--color-bad); font-weight: 550; }
+.nb .nb-st-dtd { color: var(--color-warn); font-weight: 550; }
+.nb .nb-vcell { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.nb .nb-vbar { position: relative; width: clamp(40px, 8cqw, 90px); height: 6px; flex: none; }
+.nb .nb-vbar i { position: absolute; top: 0; bottom: 0; border-radius: 3px; background: var(--cds-chart-categorical-1); }
+.nb .nb-vbar i.neg { background: var(--cds-chart-muted); }
+.nb .nb-vbar::before { content: ''; position: absolute; top: -2px; bottom: -2px; left: var(--z, 0); width: 1px; background: var(--color-border-line); }
+.nb .nb-live { font-family: var(--nb-mono); font-size: 11px; font-weight: 600; color: var(--color-bad); }
+.nb .nb-summary { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0 0 8px; }
+.nb .nb-summary b { color: var(--color-fg); font-weight: 600; }
+
+/* narrow */
+.nb .nb-show-xs { display: none; }
+@container nb (max-width: 980px) {
+  .nb .nb-hide-md { display: none; }
+}
+@container nb (max-width: 720px) {
+  .nb .nb-hide-sm { display: none; }
+}
+@container nb (max-width: 520px) {
+  .nb .nb-hide-xs { display: none; }
+  .nb .nb-show-xs { display: table-cell; }
+  .nb .nb-card { padding: 10px; }
+  .nb .nb-table { font-size: 12px; }
+  .nb .nb-table td, .nb .nb-table th { padding: 5px 4px; }
+  .nb .nb-table .num { font-size: 11.5px; }
+  .nb .nb-team { gap: 5px; }
+  .nb .nb-rk td, .nb .nb-rk th { padding: 6px 3px; }
+  .nb .nb-rk .num { font-size: 11px; }
+  .nb .nb-rk .nb-team { gap: 6px; }
+  .nb .nb-rk .nb-badge { width: 22px; height: 22px; }
+  .nb .nb-rk .nb-badge .nb-logo { width: 16px; height: 16px; }
+  .nb .nb-rk .full { display: none; }
+  .nb .nb-rk .short { display: inline; }
+  .nb .nb-rk .c-chg { width: auto; font-size: 10.5px; }
+  .nb .nb-rk .c-rating { font-size: 12px; }
+  .nb .nb-logo { width: 18px; height: 18px; }
+  .nb .nb-g th.c-team { width: 64px; }
+  .nb .nb-g th.c-home, .nb .nb-g td.c-home { padding-left: 8px; }
+  .nb .nb-g th.c-sp { width: 50px; }
+  .nb .nb-tabs { flex-wrap: wrap; overflow: visible; }
+  .nb .nb-tab { padding: 6px 9px; }
+  .nb .nb-tile .v { font-size: 22px; }
+  .nb .nb-th-logo, .nb .nb-th-logo img { width: 44px; height: 44px; }
+  .nb .nb-th-pick, .nb .nb-th-pick .nb-select { width: 100%; }
+  .nb .nb-vbar { width: 36px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nb .nb-fade { animation: nb-in var(--cds-dur-slow) var(--cds-ease-out) both; }
+  @keyframes nb-in { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+}
 </style>
 </head>
 <body>
-<nav><a href="/">home</a> · <a href="/notes/">notes</a> · <a href="/music.html">music</a> · <a href="/literature.html">literature</a> · <a href="/weather.html">weather</a> · <a href="/daily/">daily</a></nav>
-<h1>Andrew Park</h1>
-<p>B.S. Mathematics and B.S. Computer Science at Duke University, Class of 2028, GPA 3.96/4. Interested in quantitative research: probability, stochastic processes, forecasting, markets. Based in New York, NY and Durham, NC.</p>
-<p><a href="mailto:andrewpark.us@duke.edu">andrewpark.us@duke.edu</a> | <a href="https://github.com/chronicaria">github</a> | <a href="https://www.linkedin.com/in/andrewparkus/">linkedin</a> | <a href="/assets/andrew-park-resume.pdf">resume (pdf)</a></p>
+<button class="theme-toggle" type="button" aria-label="Switch light or dark theme" title="Theme">&#9680;</button>
+<div data-appifact-content><div id="dash-root">
+<div class="nb" id="nb">
+  <header class="nb-head" id="overview">
+    <h1 class="nb-title" id="title">NBA power rankings <span class="nb-season"><span data-source="run" data-field="season" data-row="0" class="dash-skeleton">—</span> forecast</span></h1>
+    <p class="nb-takeaway" id="takeaway">
+      <span class="nb-tk-same" hidden>The <span class="nb-em" data-source="headline" data-field="top" data-row="0">—</span> lead on both counts: the top rating at <span class="mono" data-source="headline" data-field="top_rating" data-row="0">—</span> and a <span class="mono" data-source="headline" data-field="fav_title" data-row="0">—</span> title chance, with the <span class="nb-em" data-source="headline" data-field="next" data-row="0">—</span> next at <span class="mono" data-source="headline" data-field="next_title" data-row="0">—</span>.</span>
+      <span class="nb-tk-diff dash-skeleton">The <span class="nb-em" data-source="headline" data-field="top" data-row="0">—</span> have the top rating at <span class="mono" data-source="headline" data-field="top_rating" data-row="0">—</span>, but the <span class="nb-em" data-source="headline" data-field="fav" data-row="0">—</span> are the title favourite at <span class="mono" data-source="headline" data-field="fav_title" data-row="0">—</span>.</span>
+    </p>
+    <p class="nb-meta" id="run-line">Updated <span data-source="run" data-field="as_of" data-row="0" class="dash-skeleton">—</span> · <span data-source="run" data-field="n_sims" data-row="0">—</span> season sims · <span data-source="run" data-field="games_played" data-row="0">—</span> games played, <span data-source="run" data-field="games_left" data-row="0">—</span> to go · ratings in points vs an average team</p>
+  </header>
 
-<h2>Education</h2>
-<table>
-<tr><th>School</th><th>Credential</th><th>Years</th><th>Honors</th></tr>
-<tr><td>Duke University, Trinity College of Arts &amp; Sciences (Durham, NC)</td><td>B.S. Mathematics, B.S. Computer Science — GPA 3.96/4</td><td>expected May 2028</td><td>Julia Dale Prize for first-year mathematical excellence; Dean's List with Distinction</td></tr>
-<tr><td>Stuyvesant High School (New York, NY)</td><td></td><td>2024</td><td>ACT 36; National Merit Scholar</td></tr>
-</table>
-<p>Graded graduate Mathematical Finance as an undergraduate TA, plus proof-based problem sets in linear algebra, multivariable calculus, and differential equations.</p>
+  <nav class="nb-tabs" role="tablist" id="tabs" aria-label="Pages">
+    <button class="nb-tab" role="tab" id="tab-rankings" data-tab="rankings" aria-controls="rankings">Rankings</button>
+    <button class="nb-tab" role="tab" id="tab-playoffs" data-tab="playoffs" aria-controls="playoffs" hidden>Playoff odds</button>
+    <button class="nb-tab" role="tab" id="tab-wins" data-tab="wins" aria-controls="wins">Win distributions</button>
+    <button class="nb-tab" role="tab" id="tab-ratings" data-tab="ratings" aria-controls="ratings">Ratings</button>
+    <button class="nb-tab" role="tab" id="tab-games" data-tab="games" aria-controls="games">Games</button>
+    <button class="nb-tab" role="tab" id="tab-team" data-tab="team" aria-controls="team">Teams</button>
+    <button class="nb-tab" role="tab" id="tab-model" data-tab="model" aria-controls="model">Model</button>
+  </nav>
 
-<h2>Experience</h2>
-<p><b>Quantitative Research Intern, DataBallR</b> (May 2026 - present)</p>
-<ul>
-<li>Daily RAPM, a public multi-league player valuation model at <a href="https://andrewjparkus.github.io">andrewjparkus.github.io</a>.</li>
-<li>Designed a Kalman rating model that grades 10,681 college, G League and NBA players on the same scale.</li>
-<li>Led the 2026-27 season projection: player minutes, team depth charts, rotations and games missed each get their own model rather than one black box that prints a number.</li>
-<li>Improved on the Vegas closing line for NBA game margins by blending the ratings into it; over 12,034 games and 12 held-out seasons the fit put about 30% of its weight on the model.</li>
-</ul>
-<p><b>PRUV Research Fellow, Duke Mathematics</b> (April 2025 - present)</p>
-<ul>
-<li>Senior thesis under Professor J. Thomas Beale; manuscript in preparation.</li>
-<li>Modeled atmospheric flow on rapidly spinning brown dwarfs, which bulge out of the spherical shape nearly every current paper in the field assumes.</li>
-<li>Directed a 4,500-line Julia solver that puts the shallow-water equations on those non-spherical figures using Beale's surface discretization, verified against exact solutions to second-order spatial accuracy; the rotational signal came out thousands of times stronger than the sphere predicts.</li>
-</ul>
+  <!-- 1. Rankings -->
+  <section class="nb-page" id="rankings" role="tabpanel" aria-labelledby="tab-rankings">
+    <div class="nb-card" id="rankings-card">
+      <div class="nb-card-head">
+        <div>
+          <h2 class="nb-card-title" id="rankings-title">Power rankings</h2>
+          <p class="nb-card-note">Rating is in points against an average team (0): on a neutral court a +5 team is favoured by 5 over an average one. The arrows are the rank change since the last game day. SOS is the remaining opponents' mean rating; SOR (strength of resume) is wins above what an average team would expect against the same opponents and venues. Ranks in parentheses are league ranks: 1st is the hardest schedule left or the best resume. Click a team for its page.</p>
+        </div>
+        <div class="nb-seg" id="conf-filter" role="group" aria-label="Conference">
+          <button data-conf="All">All</button><button data-conf="East">East</button><button data-conf="West">West</button>
+        </div>
+      </div>
+      <div class="nb-scroll" data-source="logos">
+        <table class="nb-table nb-rk" id="rankings-table" data-source="teams" data-row-key="abbr">
+          <thead><tr>
+            <th class="num c-chg" data-field="rank_d1" data-sort="rank_d1"><button class="nb-sort" title="Rank change since the last game day" aria-label="Rank change since the last game day">±</button></th>
+            <th class="num" data-field="rank" data-sort="rank"><button class="nb-sort">#</button></th>
+            <th data-field="name" data-sort="name"><button class="nb-sort">Team</button></th>
+            <th class="num" data-field="rating" data-sort="rating"><button class="nb-sort"><span class="full">Rating</span><span class="short">Rtg</span></button></th>
+            <th class="nb-hide-xs" data-field="last_game"><span>Last game</span></th>
+            <th class="num" data-field="proj_w" data-sort="proj_w"><button class="nb-sort"><span class="full">Proj. W–L</span><span class="short">Proj.</span></button></th>
+            <th class="num nb-hide-sm" data-field="sos" data-sort="sos"><button class="nb-sort">SOS</button></th>
+            <th class="num nb-hide-sm" data-field="sor" data-sort="sor"><button class="nb-sort">SOR</button></th>
+            <th class="num" data-field="p_playoffs" data-sort="p_playoffs"><button class="nb-sort"><span class="full">Playoffs</span><span class="short">PO</span></button></th>
+            <th class="num" data-field="p_title" data-sort="p_title"><button class="nb-sort">Title</button></th>
+          </tr></thead>
+          <tbody class="dash-skeleton"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-<h2>Projects</h2>
-<p><b>Prediction-Market Trading &amp; Election Forecasting</b> (June 2022 - present)</p>
-<ul>
-<li>Founded and led a seven-person team that built a U.S. election model on precinct returns back to 1912.</li>
-<li>Built a portfolio optimizer over it, sizing positions with fractional Kelly and hedging the national environment; traded the book on Polymarket and Kalshi across presidential, Senate, House and gubernatorial races.</li>
-</ul>
-<p><b>Duke Poker Club, Founder &amp; President</b> (January 2025 - present)</p>
-<ul>
-<li>Re-launched the club to 100+ members, secured a collegiate Kalshi partnership and trained the intercollegiate tournament team.</li>
-<li>Interviewed by <a href="https://www.wsj.com/business/media/prediction-markets-campus-e57cd19f">The Wall Street Journal</a> on college poker and prediction markets.</li>
-</ul>
+  <!-- 2. Playoff odds -->
+  <section class="nb-page" id="playoffs" role="tabpanel" aria-labelledby="tab-playoffs" hidden>
+    <div class="nb-card" id="seeds-east-card">
+      <div class="nb-card-head"><div>
+        <h2 class="nb-card-title" id="seeds-east-title">East: seed and playoff odds</h2>
+        <p class="nb-card-note">Chance of finishing at each seed, sorted by average seed, then the chance of reaching each stage. Seeds 7–10 go to the play-in.</p>
+      </div></div>
+      <div class="nb-scroll"><table class="nb-table nb-heat" id="seeds-east" data-source="teams" data-row-key="abbr"><thead></thead><tbody class="dash-skeleton"></tbody></table></div>
+    </div>
+    <div class="nb-card" id="seeds-west-card">
+      <div class="nb-card-head"><div>
+        <h2 class="nb-card-title" id="seeds-west-title">West: seed and playoff odds</h2>
+        <p class="nb-card-note">Same layout. Top 6 avoids the play-in; Playoffs includes play-in winners.</p>
+      </div></div>
+      <div class="nb-scroll"><table class="nb-table nb-heat" id="seeds-west" data-source="teams" data-row-key="abbr"><thead></thead><tbody class="dash-skeleton"></tbody></table></div>
+    </div>
+  </section>
 
-<h2>Coursework</h2>
-<table>
-<tr><th>Semester</th><th>Course</th><th>Code</th><th>Notes</th></tr>
-<tr><td rowspan="4">Fall 2024</td><td><a href="https://cs.duke.edu/courses/data-structures-and-algorithms-0">Data Structures &amp; Algorithms</a></td><td>COMPSCI 201</td><td></td></tr>
-<tr><td><a href="https://math.duke.edu/courses/linear-algebra">Linear Algebra</a></td><td>MATH 221</td><td></td></tr>
-<tr><td><a href="https://romancestudies.duke.edu/courses/french-current-affairs">French for Current Affairs</a></td><td>FRENCH 303S</td><td></td></tr>
-<tr><td><a href="https://twp.duke.edu/students/undergraduate/writing101">Academic Writing</a></td><td>WRITING 101</td><td></td></tr>
-<tr><td rowspan="5">Spring 2025</td><td><a href="https://math.duke.edu/courses/advanced-multivariable-calculus-0">Advanced Multivariable Calculus</a></td><td>MATH 222</td><td></td></tr>
-<tr><td><a href="https://math.duke.edu/courses/advanced-introduction-probability">Advanced Intro to Probability</a></td><td>MATH 340</td><td></td></tr>
-<tr><td><a href="https://math.duke.edu/courses/elementary-differential-equations">Elementary Differential Equations</a></td><td>MATH 356</td><td></td></tr>
-<tr><td><a href="https://cs.duke.edu/courses/computer-architecture-1">Computer Architecture</a></td><td>COMPSCI 250D</td><td></td></tr>
-<tr><td><a href="https://cmrs.trinity.duke.edu/courses/dantes-divine-comedy-hell-purgatory-and-paradise">Dante's Divine Comedy</a></td><td>MEDREN 341</td><td></td></tr>
-<tr><td rowspan="4">Fall 2025</td><td><a href="https://math.duke.edu/courses/introduction-algebraic-structures-i">Algebraic Structures I</a></td><td>MATH 501</td><td>grad</td></tr>
-<tr><td><a href="https://math.duke.edu/courses/mathematical-finance">Mathematical Finance</a></td><td>MATH 581</td><td>grad — <a href="/notes/math581.html">notes</a></td></tr>
-<tr><td><a href="https://cs.duke.edu/courses/human-flourishing-digital-age">Human Flourishing in the Digital Age</a></td><td>COMPSCI 247S</td><td></td></tr>
-<tr><td><a href="https://scholars.duke.edu/course/ENVIRON210D">Conserving the Variety of Life</a></td><td>ENVIRON 210D</td><td></td></tr>
-<tr><td rowspan="5">Spring 2026</td><td><a href="https://math.duke.edu/courses/real-analysis-i">Real Analysis I</a></td><td>MATH 531</td><td>grad</td></tr>
-<tr><td><a href="https://math.duke.edu/courses/financial-derivatives">Financial Derivatives</a></td><td>MATH 582</td><td>grad</td></tr>
-<tr><td><a href="https://cs.duke.edu/courses/graphics-software-architecture">Graphics Software Architecture</a></td><td>COMPSCI 345</td><td></td></tr>
-<tr><td><a href="https://english.duke.edu/spring-2026-courses">Romanticism Across the Arts</a></td><td>ENGLISH 490S</td><td></td></tr>
-<tr><td><a href="https://music.duke.edu/ensembles/chamber-music">Chamber Music</a></td><td>MUSIC 211</td><td></td></tr>
-<tr><td rowspan="4">Fall 2026 (in progress)</td><td><a href="https://math.duke.edu/courses/applied-stochastic-processes">Applied Stochastic Processes</a></td><td>MATH 541</td><td>grad — <a href="/notes/math541.html">notes</a></td></tr>
-<tr><td><a href="https://cs.duke.edu/courses/introduction-design-and-analysis-algorithms-0">Introduction to the Design and Analysis of Algorithms</a></td><td>COMPSCI 330</td><td></td></tr>
-<tr><td><a href="https://polisci.duke.edu/courses/games-and-politics">Games and Politics</a></td><td>POLSCI 332</td><td></td></tr>
-<tr><td><a href="https://cmrs.trinity.duke.edu/courses/problem-love-western-literature">The Problem of Love in Western Literature</a></td><td>MEDREN 304</td><td></td></tr>
-</table>
+  <!-- 3. Win distributions -->
+  <section class="nb-page" id="wins" role="tabpanel" aria-labelledby="tab-wins" hidden>
+    <div class="nb-legend" id="wins-legend">
+      <span class="k"><i class="nb-key bar"></i>Simulated wins (darker = middle 80%)</span>
+      <span class="k"><i class="nb-key tick" style="background: var(--color-fg)"></i>Mean</span>
+      <span class="k"><i class="nb-key dash"></i>Vegas total</span>
+    </div>
+    <div class="nb-grid">
+      <div class="nb-card" id="wins-east-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="wins-east-title">East</h2><p class="nb-card-note">Regular-season wins across all simulations, on one shared scale.</p></div></div>
+        <div class="nb-chart dash-skeleton" id="wins-east" data-source="win_dist teams logos" style="min-height: 470px"></div>
+      </div>
+      <div class="nb-card" id="wins-west-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="wins-west-title">West</h2><p class="nb-card-note">Regular-season wins across all simulations, on one shared scale.</p></div></div>
+        <div class="nb-chart dash-skeleton" id="wins-west" data-source="win_dist teams logos" style="min-height: 470px"></div>
+      </div>
+    </div>
+  </section>
 
-<h2>Skills</h2>
-<table>
-<tr><th>Languages</th><td>Python, Julia, SQL, Java</td></tr>
-<tr><th>Tools</th><td>NumPy, pandas, SciPy, scikit-learn, XGBoost, Arrow/Parquet, Git, LaTeX</td></tr>
-<tr><th>Methods</th><td>probability, statistics, regression, stochastic processes, Monte Carlo, backtesting, portfolio optimization</td></tr>
-<tr><th>Spoken</th><td>English and Korean (native), French (fluent)</td></tr>
-</table>
+  <!-- 4. Ratings -->
+  <section class="nb-page" id="ratings" role="tabpanel" aria-labelledby="tab-ratings" hidden>
+    <div class="nb-card" id="ratings-card">
+      <div class="nb-card-head">
+        <div>
+          <h2 class="nb-card-title" id="ratings-title">Ratings this season</h2>
+          <p class="nb-card-note">Points against an average team (the 0 line), from each team's preseason prior, after each game day, each line in its team's colour. Hover a line or pick a team to follow it; click a name for its page.</p>
+        </div>
+        <select class="nb-select" id="ratings-team" aria-label="Team to highlight" data-source="teams"></select>
+      </div>
+      <div class="nb-chart dash-skeleton" id="ratings-chart" data-source="history teams" style="min-height: 460px"></div>
+    </div>
+  </section>
 
-<h2>Interests</h2>
-<p>Classical piano, and first violin in the New York Youth Symphony, including a Grammy-winning recording; more on the <a href="/music.html">music</a> page. Also nineteenth-century <a href="/literature.html">literature</a>.</p>
+  <!-- 5. Games -->
+  <section class="nb-page" id="games" role="tabpanel" aria-labelledby="tab-games" hidden>
+    <div class="nb-grid">
+      <div class="nb-card" id="upcoming-card">
+        <div class="nb-card-head"><div>
+          <h2 class="nb-card-title" id="upcoming-title">Today's games</h2>
+          <p class="nb-card-note">At today's ratings. Win chances include home court, altitude and back-to-backs; spread is the home side's, negative when favoured. Tip times Eastern.</p>
+        </div></div>
+        <div id="upcoming" class="dash-skeleton" style="min-height: 200px"></div>
+      </div>
+    </div>
+  </section>
 
-<h2>Elsewhere on this site</h2>
-<table>
-<tr><th>Page</th><th>What it is</th></tr>
-<tr><td><a href="/notes/">notes</a></td><td>course notes, LaTeX rendered with KaTeX</td></tr>
-<tr><td><a href="/daily/">daily</a></td><td>a self-printing daily paper</td></tr>
-<tr><td><a href="https://andrewjparkus.github.io">Daily RAPM</a></td><td>public multi-league basketball player valuation</td></tr>
-<tr><td><a href="/valorant/">valorant</a></td><td>Valorant MWPA, a win-probability-added model</td></tr>
-<tr><td><a href="/fantasy/">fantasy</a></td><td>fantasy encyclopedias</td></tr>
-<tr><td><a href="/quant-internships/">quant internships</a></td><td>quant internship tracker</td></tr>
-<tr><td><a href="/weather.html">weather</a></td><td>the county temperature map, simply — full dashboard at <a href="/nyc-weather/">nyc-weather</a></td></tr>
-<tr><td><a href="/winter-trip/">winter trip</a></td><td>Italy, winter 2026–27</td></tr>
-</table>
-<hr>
-<footer>last updated: August 26, 2026</footer>
+  <!-- 6. Team -->
+  <section class="nb-page" id="team" role="tabpanel" aria-labelledby="tab-team" hidden>
+    <div class="nb-card nb-thead" id="team-head" data-source="logos">
+      <div class="nb-th-top">
+        <div class="nb-th-id">
+          <span class="nb-th-logo" id="team-logo"></span>
+          <div>
+            <h2 class="nb-th-name" id="team-name"><span class="tm dash-skeleton" data-source="teams" data-field="city">—</span> <span class="tm" data-source="teams" data-field="name">—</span></h2>
+            <p class="nb-th-sub"><span class="tm" data-source="teams" data-field="conf">—</span> · <span class="tm" data-source="teams" data-field="div">—</span> · <span class="tm" data-source="derived" data-field="record">—</span></p>
+          </div>
+        </div>
+        <label class="nb-th-pick"><select class="nb-select" id="team-pick" aria-label="Team" data-source="teams"></select></label>
+      </div>
+      <div class="nb-tiles" id="team-tiles">
+        <div class="nb-tile" id="tile-rating"><div class="k">Rating</div><div class="v"><span class="tm" data-source="teams" data-field="rating">—</span></div><div class="s">Rank <span class="tm" data-source="teams" data-field="rank">—</span> of 30 · <span class="tm" data-source="teams" data-field="rating_d1">—</span> last game day, <span class="tm" data-source="teams" data-field="rating_d7">—</span> in 7 days</div></div>
+        <div class="nb-tile" id="tile-today" hidden><div class="k">Next game</div><div class="v"><span class="tm" data-source="teams" data-field="rating_today">—</span></div><div class="s" id="tile-today-s">Without <span class="tm" data-source="outs" data-field="names">—</span></div></div>
+        <div class="nb-tile" id="tile-proj"><div class="k">Projected record</div><div class="v"><span class="tm" data-source="teams" data-field="proj_w">—</span>–<span class="tm" data-source="teams" data-field="proj_l">—</span></div><div class="s">10th–90th pct <span class="tm" data-source="teams" data-field="w_p10">—</span>–<span class="tm" data-source="teams" data-field="w_p90">—</span> wins</div></div>
+        <div class="nb-tile" id="tile-po"><div class="k">Playoffs</div><div class="v"><span class="tm" data-source="teams" data-field="p_playoffs">—</span></div><div class="s">Title <span class="tm" data-source="teams" data-field="p_title">—</span></div></div>
+        <div class="nb-tile" id="tile-pre"><div class="k">Preseason</div><div class="v"><span class="tm" data-source="teams" data-field="vegas_total">—</span> <small>wins</small></div><div class="s">Vegas total · prior <span class="tm" data-source="teams" data-field="rating_prior">—</span></div></div>
+        <div class="nb-tile" id="tile-sos"><div class="k">Schedule left</div><div class="v"><span class="tm" data-source="teams" data-field="sos">—</span></div><div class="s">Remaining opponents' mean rating · <span class="tm" data-source="teams" data-field="sos_rank">—</span> hardest · resume <span class="tm" data-source="teams" data-field="sor">—</span> (<span class="tm" data-source="teams" data-field="sor_rank">—</span>)</div></div>
+      </div>
+    </div>
+
+    <div class="nb-grid3">
+      <div class="nb-card" id="team-wins-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-wins-title">Win distribution</h2><p class="nb-card-note">Regular-season wins across all simulations; darker bars are the middle 80%.</p></div></div>
+        <div class="nb-chart dash-skeleton" id="team-wins" data-source="win_dist teams" style="min-height: 210px"></div>
+      </div>
+      <div class="nb-card" id="team-path-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-path-title">Playoff path</h2><p class="nb-card-note">Where the season ends, then how far the run goes.</p></div></div>
+        <div class="dash-skeleton" id="team-path" data-source="teams" style="min-height: 210px"></div>
+      </div>
+      <div class="nb-card" id="team-seeds-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-seeds-title">Seed</h2><p class="nb-card-note">Chance of each conference seed; 7–10 go to the play-in.</p></div></div>
+        <div class="nb-chart dash-skeleton" id="team-seeds" data-source="teams" style="min-height: 210px"></div>
+      </div>
+    </div>
+
+    <div class="nb-grid2">
+      <div class="nb-card" id="team-history-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-history-title">Rating this season</h2><p class="nb-card-note">After each game day, from the preseason prior; grey lines are the other 29 teams, 0 is the league average.</p></div></div>
+        <div class="nb-chart dash-skeleton" id="team-history" data-source="history teams" style="min-height: 250px"></div>
+      </div>
+      <div class="nb-card" id="team-slate-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-slate-title">Remaining schedule</h2><p class="nb-card-note">Win chance in each game left at today's ratings, in date order; the line is a 10-game average.</p></div></div>
+        <p class="nb-summary" id="team-slate-sum"><b class="tm" data-source="slate" data-field="left">—</b> games left · <b class="tm" data-source="slate" data-field="exp_w">—</b> expected wins at today's ratings · average win chance <b class="tm" data-source="slate" data-field="avg_p">—</b></p>
+        <div class="nb-chart dash-skeleton" id="team-slate" data-source="team_games" style="min-height: 150px"></div>
+        <div class="nb-legend" style="margin-top: 6px"><span class="k"><i class="nb-key bar"></i>Home</span><span class="k"><i class="nb-key"></i>Away</span><span class="k"><i class="nb-key tick" style="background: var(--color-fg); width: 12px; height: 2px"></i>10-game average</span><span class="k"><i class="nb-key dash"></i>50%</span></div>
+      </div>
+    </div>
+
+    <div class="nb-grid2">
+      <div class="nb-card" id="team-results-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-results-title">Results</h2><p class="nb-card-note">Pregame win chance and the rating change in points from each game.</p></div></div>
+        <div class="nb-scroll nb-tall" data-source="logos"><table class="nb-table" id="team-results" data-source="team_games" data-row-key="id,abbr">
+          <thead><tr><th data-field="date">Date</th><th data-field="ha"></th><th data-field="opp">Opponent</th><th data-field="result">Result</th><th class="num" data-field="score">Score</th><th class="num nb-hide-xs" data-field="p_win">Pregame</th><th class="num" data-field="delta">Rating Δ</th></tr></thead>
+          <tbody class="dash-skeleton"></tbody></table></div>
+      </div>
+      <div class="nb-card" id="team-left-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-left-title">Still to play</h2><p class="nb-card-note">Every game left, at today's ratings. Spread is this team's, negative when favoured. Tip times Eastern.</p></div></div>
+        <div class="nb-scroll nb-tall" data-source="logos"><table class="nb-table" id="team-left" data-source="team_games" data-row-key="id,abbr">
+          <thead><tr><th data-field="date">Date</th><th class="nb-hide-xs" data-field="tip">Tip</th><th data-field="ha"></th><th data-field="opp">Opponent</th><th class="num" data-field="p_win">Win</th><th class="num" data-field="spread">Spread</th></tr></thead>
+          <tbody class="dash-skeleton"></tbody></table></div>
+      </div>
+    </div>
+
+    <div class="nb-card" id="team-roster-card">
+      <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-roster-title">Roster</h2><p class="nb-card-note">Value is the points per game the team loses when he sits at his usual minutes, against a replacement player. Miss next is the chance he misses the next game; ESPN's status and comment for anyone not active.</p></div></div>
+      <div class="nb-scroll"><table class="nb-table" id="team-roster" data-source="players" data-row-key="athlete_id">
+        <thead><tr><th data-field="name">Player</th><th data-field="pos">Pos</th><th class="num nb-hide-xs" data-field="gp">GP</th><th class="num" data-field="mpg">MPG</th><th class="num" data-field="value">Value</th><th data-field="status">Status</th><th class="num nb-hide-xs" data-field="p_out">Miss next</th><th class="nb-hide-xs" data-field="return_date">Return</th><th class="nb-hide-sm" data-field="comment">Comment</th></tr></thead>
+        <tbody class="dash-skeleton"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- 7. Model -->
+  <section class="nb-page" id="model" role="tabpanel" aria-labelledby="tab-model" hidden>
+    <div class="nb-card" id="model-about">
+      <h2 class="nb-card-title" id="model-title">How the model works</h2>
+      <div class="nb-prose" style="margin-top: 8px">
+        <ul>
+          <li><strong>Ratings.</strong> Published in points against an average team: 0 is average, and on a neutral court a +10 team is favoured by 10 points over an average one. A game's spread is the difference of the two ratings plus home court and the other context terms. The engine runs in Elo underneath; one point is <span class="mono" data-source="run" data-field="elo_per_point" data-row="0">—</span> Elo.</li>
+          <li><strong>Priors.</strong> Each team opens the season at the rating its preseason Vegas win total implies (times a fitted scale), so nobody starts level. Last season's rating adds nothing once the Vegas line is known.</li>
+          <li><strong>Updates.</strong> After every game both sides move by K × a margin-of-victory multiplier × (result − expected). Margins are capped, so blowouts stop counting past the cap, and an autocorrelation term shrinks the multiplier when a favourite wins big, so strong teams' ratings don't inflate.</li>
+          <li><strong>Game context.</strong> Home court and back-to-backs always shift a game's expected result. Each other factor was tested by leave-one-season-out fits and stays in only if it lowers held-out log loss. In: <span id="ctx-kept" data-source="params">—</span>. Out: <span id="ctx-dropped" data-source="params">—</span>.</li>
+          <li><strong>Forecast.</strong> The rest of the schedule is played <span class="mono" data-source="run" data-field="n_sims" data-row="0">—</span> times with ratings updating game by game, then the play-in and playoffs with NBA seeding.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="nb-grid">
+      <div class="nb-card" id="params-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="params-title">Core parameters</h2><p class="nb-card-note">Fitted on past seasons; rating-scale values in points.</p></div></div>
+        <div class="nb-scroll"><table class="nb-table" id="params-core" data-source="params" data-row-key="key">
+          <thead><tr><th data-field="label">Parameter</th><th class="num" data-field="value">Value</th><th data-field="unit">Unit</th><th class="nb-hide-xs" data-field="note">Note</th></tr></thead>
+          <tbody class="dash-skeleton"></tbody></table></div>
+      </div>
+      <div class="nb-card" id="factors-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="factors-title">Factors tested</h2><p class="nb-card-note">Change in log loss per game when the factor is added; negative helps. Held-out: averaged over leave-one-season-out fits on the training seasons, and it alone decides Kept. Better in: how many held-out seasons improved. Test: the same comparison on the test seasons, which played no part in the choice.</p></div></div>
+        <div class="nb-scroll"><table class="nb-table" id="params-factors" data-source="params" data-row-key="key">
+          <thead><tr><th data-field="label">Factor</th><th class="num" data-field="value">Value</th><th class="nb-hide-xs" data-field="unit">Unit</th><th data-field="kept">Status</th><th class="num" data-field="d_logloss">Held-out Δ</th><th class="num nb-hide-xs" data-field="seasons_better">Better in</th><th class="num" data-field="d_test">Test Δ</th></tr></thead>
+          <tbody class="dash-skeleton"></tbody></table></div>
+      </div>
+    </div>
+    <div class="nb-grid">
+      <div class="nb-card" id="backtest-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="backtest-title">Backtest</h2><p class="nb-card-note">Pregame win probabilities against results. Lower log loss and Brier are better; the best on each split is bold.</p></div></div>
+        <div class="nb-scroll"><table class="nb-table" id="backtest-table" data-source="backtest" data-row-key="model,split">
+          <thead><tr><th data-field="model">Model</th><th data-field="split">Split</th><th class="nb-hide-xs" data-field="seasons">Seasons</th><th class="num nb-hide-xs" data-field="games">Games</th><th class="num" data-field="logloss">Log loss</th><th class="num" data-field="brier">Brier</th><th class="num" data-field="acc">Accuracy</th></tr></thead>
+          <tbody class="dash-skeleton"></tbody></table></div>
+      </div>
+      <div class="nb-card" id="calibration-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="calibration-title">Calibration</h2><p class="nb-card-note">Test split: predicted home win chance against how often the home team won. Dot size is the number of games. Home favourites run a little hot because the home-court trend fitted on the training seasons did not foresee how far home court fell in the test seasons; away favourites are on the line. The live model is fitted on every season.</p></div></div>
+        <div class="nb-chart dash-skeleton" id="calibration-chart" data-source="calibration" style="min-height: 300px"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="nb-tip" id="nb-tip" role="tooltip"></div>
+</div>
+</div></div>
+<footer class="site-foot"><p>Ratings are in points against an average team, adjusted for who plays. Data: ESPN results, box scores and injury reports; preseason win totals from BetMGM, DraftKings and Fanatics. Updated every morning.</p></footer>
+<script>(() => {
+
+// ---------- calcs (readers see these) ----------
+dash.calc('headline', {
+  title: 'Top team and title favourite',
+  description: 'The highest-rated team, the team with the best title chance, and the next-best title chance.',
+  inputs: ['teams'],
+  fn: (teams) => {
+    if (!teams.length) return [];
+    const top = teams.reduce((a, b) => (+b.rating > +a.rating ? b : a));
+    const fav = teams.reduce((a, b) => (+b.p_title > +a.p_title ? b : a));
+    const next = teams.filter((t) => t.abbr !== fav.abbr).reduce((a, b) => (+b.p_title > +a.p_title ? b : a));
+    return [{ top: top.name, top_rating: +top.rating, fav: fav.name, fav_title: +fav.p_title, next: next.name, next_title: +next.p_title, same: top.abbr === fav.abbr }];
+  },
+});
+dash.calc('derived', {
+  title: 'Record and mean seed',
+  description: 'Per team: wins–losses and the average simulated seed.',
+  inputs: ['teams'],
+  fn: (teams) => teams.map((t) => {
+    let s = 0, m = 0;
+    for (let k = 1; k <= 15; k++) { s += +t['seed_' + k]; m += k * t['seed_' + k]; }
+    return { abbr: t.abbr, record: `${t.w}–${t.l}`, mean_seed: s ? m / s : null };
+  }),
+});
+dash.calc('game_odds', {
+  title: 'Away win chance',
+  description: 'For each game not yet final, 1 minus the home win chance.',
+  inputs: ['schedule'],
+  fn: (schedule) => schedule.filter((g) => g.status !== 'final').map((g) => ({ id: g.id, p_away: 1 - +g.p_home })),
+});
+dash.calc('team_games', {
+  title: 'Games from each team’s side',
+  description: 'Every game twice, once per team: opponent, home (vs), away (@) or neutral (N), result, score, win chance, spread and rating change for that team.',
+  inputs: ['schedule'],
+  fn: (schedule) => schedule.flatMap((g) => [true, false].map((home) => {
+    const fin = g.status === 'final';
+    const us = home ? g.hs : g.as, them = home ? g.as : g.hs;
+    return {
+      id: g.id, abbr: home ? g.home : g.away, opp: home ? g.away : g.home, date: g.date, tip: g.tip, status: g.status,
+      ha: String(g.neutral) === '1' ? 'N' : home ? 'vs' : '@',
+      result: fin ? (+us > +them ? 'W' : 'L') : '',
+      score: fin ? `${us}–${them}` : '',
+      p_win: home ? +g.p_home : 1 - g.p_home,
+      spread: home ? +g.spread : -g.spread,
+      delta: fin && g.home_delta !== '' ? (home ? +g.home_delta : -g.home_delta) : null,
+    };
+  })),
+});
+dash.calc('slate', {
+  title: 'Remaining schedule by team',
+  description: 'Per team: games left, expected wins at today’s ratings (the sum of its win chances) and the average win chance.',
+  inputs: ['team_games'],
+  fn: (team_games) => {
+    const by = {};
+    team_games.filter((g) => g.status !== 'final').forEach((g) => { const s = (by[g.abbr] ||= { abbr: g.abbr, left: 0, exp_w: 0 }); s.left += 1; s.exp_w += g.p_win; });
+    return Object.values(by).map((s) => ({ ...s, avg_p: s.exp_w / s.left }));
+  },
+});
+dash.calc('outs', {
+  title: 'Players out for the next game',
+  description: 'Per team: the players at least 50% to miss the next game, highest value first (three named, then a count).',
+  inputs: ['players'],
+  fn: (players) => {
+    const by = {};
+    players.forEach((p) => { by[p.abbr] ||= []; });
+    players.filter((p) => +p.p_out >= 0.5).sort((a, b) => b.value - a.value).forEach((p) => by[p.abbr].push(p.name));
+    return Object.entries(by).map(([abbr, n]) => ({ abbr, n: n.length, names: n.length > 3 ? `${n.slice(0, 3).join(', ')} and ${n.length - 3} more` : n.join(', ') }));
+  },
+});
+
+// ---------- helpers ----------
+const root = document.getElementById('nb');
+const tip = document.getElementById('nb-tip');
+const MINUS = '−';
+const N = (x) => (x === '' || x === null || x === undefined ? NaN : +x);
+const rnd = (x, d) => Math.sign(x) * Math.round(Math.abs(x) * 10 ** d + 1e-9) / 10 ** d;  // half-up on the decimal, not the binary float
+// every probability to one decimal: <0.1% below 0.05%, >99.9% from 99.95% up to 100%, 100% only for 1, — for 0
+const fmtP = (v) => {
+  const p = N(v);
+  if (!Number.isFinite(p)) return '';
+  if (p <= 0) return '—';
+  if (p >= 1) return '100%';
+  if (p < 0.0005) return '<0.1%';
+  if (p >= 0.9995) return '>99.9%';
+  return rnd(p * 100, 1).toFixed(1) + '%';
+};
+const signed = (v, d = 0) => {
+  const x = N(v);
+  if (!Number.isFinite(x)) return '';
+  const r = rnd(x, d);
+  if (r === 0) return (0).toFixed(d);
+  return (r > 0 ? '+' : MINUS) + Math.abs(r).toFixed(d);
+};
+const fmtR = (v) => signed(v, 2);                       // a rating in points: +7.91, −5.50, 0.00
+const fmtTick = (v) => signed(v, Number.isInteger(+v) ? 0 : 1);  // axis ticks: +4, −2.5
+const ordinal = (v) => { const n = N(v); if (!Number.isFinite(n)) return ''; const k = n % 100, j = n % 10; return n + (k >= 11 && k <= 13 ? 'th' : j === 1 ? 'st' : j === 2 ? 'nd' : j === 3 ? 'rd' : 'th'); };
+const code = (t) => (t && t.tricode) || (t && t.abbr) || '';   // NBA three-letter code for display
+const tone = (v, d = 1) => { const r = rnd(N(v), d); return r > 0 ? 'up' : r < 0 ? 'down' : 'muted'; };
+const fmt1 = (v) => (Number.isFinite(N(v)) ? rnd(N(v), 1).toFixed(1) : '');
+const fmtNum = (v) => { const x = N(v); if (!Number.isFinite(x)) return ''; const r = rnd(x, 1); return (r < 0 ? MINUS : '') + Math.abs(r).toFixed(1); };
+const fmtVal = (v) => { const x = N(v); if (!Number.isFinite(x)) return String(v ?? ''); return Number.isInteger(x) ? String(x) : String(+x.toPrecision(4)).replace('-', MINUS); };
+const fmtSpread = (v) => { const x = N(v); if (!Number.isFinite(x)) return ''; return rnd(x, 1) === 0 ? 'PK' : signed(x, 1); };
+const parseDay = (s) => new Date(String(s).slice(0, 10) + 'T00:00:00Z');
+const fmtDay = d3.utcFormat('%b %-d');
+const fmtDayY = d3.utcFormat('%b %-d, %Y');
+const fmtDow = d3.utcFormat('%a, %b %-d');
+const fmtMon = d3.utcFormat('%b');
+const etTime = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' });
+const etStamp = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+const fmtTip = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : etTime.format(d); };
+const comma = d3.format(',');
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+const td = (text, cls) => el('td', cls, text);
+const OK = (id) => dash.data(id).status === 'ok';
+const BAD = new Set(['error', 'connect', 'declined', 'missing']);
+const state = (...ids) => { const s = ids.map((id) => dash.data(id).status); if (s.every((x) => x === 'ok')) return 'ok'; if (s.some((x) => BAD.has(x))) return 'error'; return 'loading'; };
+const failed = (box) => { box.replaceChildren(); box.classList.remove('dash-skeleton'); box.classList.add('nb-failed'); box.append('Failed to load'); };
+const ready = (box) => { box.classList.remove('dash-skeleton', 'nb-failed'); };
+const pending = (box) => { box.classList.remove('nb-failed'); box.classList.add('dash-skeleton'); };
+const failRow = (tbody, cols, h = 200, text = 'Failed to load', cls = 'nb-failed') => { tbody.replaceChildren(); const tr = el('tr'); const c = td('', cls); c.colSpan = cols; c.style.height = h + 'px'; c.append(text); tr.append(c); tbody.append(tr); tbody.classList.remove('dash-skeleton'); };
+// a table body's state: true when its data is ready to draw
+const tableState = (tbody, cols, ids, h) => {
+  const s = state(...ids);
+  if (s === 'ok') { ready(tbody); return true; }
+  if (s === 'error') failRow(tbody, cols, h); else pending(tbody);
+  return false;
+};
+
+// CSS color -> {r,g,b} through a canvas (handles any token's computed color)
+const cnv = document.createElement('canvas'); cnv.width = cnv.height = 1;
+const cctx = cnv.getContext('2d', { willReadFrequently: true });
+const toRGB = (c) => { cctx.clearRect(0, 0, 1, 1); cctx.fillStyle = '#000'; cctx.fillStyle = c; cctx.fillRect(0, 0, 1, 1); const [r, g, b] = cctx.getImageData(0, 0, 1, 1).data; return { r, g, b }; };
+const lum = ({ r, g, b }) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+const hex = (c) => { const s = String(c || '').trim().replace(/^#/, ''); return /^[0-9a-f]{6}$/i.test(s) ? '#' + s : null; };
+let panelRGB = null;
+const inkCache = new Map();
+const teamInk = (t) => {
+  if (!t) return 'var(--color-fg)';
+  const key = t.abbr + '|' + JSON.stringify(panelRGB);
+  if (inkCache.has(key)) return inkCache.get(key);
+  const opts = [hex(t.color), hex(t.alt_color)].filter(Boolean).map((c) => ({ c, k: contrast(toRGB(c), panelRGB) }));
+  let ink = 'var(--color-fg)';
+  if (opts.length) { const best = opts[0].k >= 2.2 ? opts[0] : opts.reduce((a, b) => (b.k > a.k ? b : a)); if (best.k >= 2.2) ink = best.c; }
+  inkCache.set(key, ink);
+  return ink;
+};
+// the team ink, pulled toward the theme's text colour until it reaches `min` contrast on the panel (for thin lines and small labels)
+const teamInkMin = (t, min = 3) => {
+  const base = teamInk(t);
+  if (!panelRGB || /^var\(/.test(base)) return base;
+  const key = 'min' + min + '|' + base + '|' + JSON.stringify(panelRGB);
+  if (inkCache.has(key)) return inkCache.get(key);
+  const c = toRGB(base), to = lum(panelRGB) < 0.2 ? { r: 255, g: 255, b: 255 } : { r: 0, g: 0, b: 0 };
+  let out = base;
+  for (let w = 0; w <= 1.0001; w += 0.05) {
+    const m = { r: Math.round(c.r + (to.r - c.r) * w), g: Math.round(c.g + (to.g - c.g) * w), b: Math.round(c.b + (to.b - c.b) * w) };
+    if (contrast(m, panelRGB) >= min) { out = w ? `rgb(${m.r},${m.g},${m.b})` : base; break; }
+  }
+  inkCache.set(key, out);
+  return out;
+};
+
+const teamMap = () => new Map((OK('teams') ? dash.data('teams').data : []).map((t) => [t.abbr, t]));
+const logoMap = () => new Map((OK('logos') ? dash.data('logos').data : []).map((l) => [l.abbr, l.src]));
+const logoImg = (logos, t, cls = 'nb-logo') => {
+  const src = logos.get(t.abbr);
+  if (src && /^data:image\//.test(src)) { const i = el('img', cls); i.src = src; i.alt = ''; i.decoding = 'async'; return i; }
+  const c = el('i', 'nb-chip'); c.style.background = hex(t.color) || 'var(--cds-chart-muted)'; return c;
+};
+// a team name + logo that opens the team's page (the abbreviation is kept on the element, not as an attribute)
+const teamTag = (logos, t, text) => {
+  const s = el('span', 'nb-team nb-tlink'); s.append(logoImg(logos, t), text);
+  s._abbr = t.abbr; s.tabIndex = 0; s.setAttribute('role', 'link');
+  return s;
+};
+
+// tooltip inside .nb
+const showTip = (evt, lines) => {
+  tip.replaceChildren();
+  lines.forEach((ln, i) => {
+    if (i === 0) { tip.append(el('div', 't', ln)); return; }
+    const row = el('div', 'r');
+    row.append(el('span', '', ln[0]), el('span', '', ln[1]));
+    tip.append(row);
+  });
+  tip.style.display = 'block';
+  const box = root.getBoundingClientRect();
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = evt.clientX - box.left + 14, y = evt.clientY - box.top + 14;
+  if (x + w > box.width) x = evt.clientX - box.left - w - 14;
+  if (x < 0) x = Math.max(0, box.width - w);
+  if (y + h > box.height) y = evt.clientY - box.top - h - 14;
+  tip.style.left = x + 'px'; tip.style.top = Math.max(0, y) + 'px';
+};
+const hideTip = () => { tip.style.display = 'none'; };
+
+// text width for SVG margins, measured as drawn
+const measure = (svg, texts, size) => {
+  const g = svg.append('g').attr('opacity', 0);
+  let w = 0;
+  texts.forEach((t) => { const n = g.append('text').attr('font-size', size).text(t).node(); w = Math.max(w, n.getComputedTextLength()); });
+  g.remove();
+  return w;
+};
+const newSvg = (box, W, H, label) => d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H).attr('role', 'img').attr('aria-label', label);
+const unfont = (g) => g.attr('font-size', null).attr('font-family', null);
+
+// ---------- tabs and links ----------
+// the public site (window.NB_PUBLIC) leaves out the Model tab; the Playoff odds tab is kept in code but not shown
+const PUBLIC = window.NB_PUBLIC === true;
+const HIDDEN = new Set(['playoffs', ...(PUBLIC ? ['model'] : [])]);
+const TABS = ['rankings', 'playoffs', 'wins', 'ratings', 'games', 'team', 'model'].filter((t) => !HIDDEN.has(t));
+root.querySelectorAll('.nb-tab').forEach((b) => { if (HIDDEN.has(b.dataset.tab)) b.remove(); });
+HIDDEN.forEach((t) => { document.getElementById(t).hidden = true; });
+if (PUBLIC) document.getElementById('model').remove();
+let teamAbbr = null;
+const readHash = () => {
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (/^team-[A-Za-z]+$/.test(h)) return { tab: 'team', abbr: h.slice(5).toUpperCase() };
+  return TABS.includes(h) ? { tab: h } : null;
+};
+const first = readHash();
+let current = first ? first.tab : 'rankings';
+if (first && first.abbr) teamAbbr = first.abbr;
+const tabButtons = [...root.querySelectorAll('.nb-tab')];
+const linkName = () => (current === 'team' && teamAbbr ? 'team-' + teamAbbr : current);
+const showTab = (id, link) => {
+  current = id;
+  tabButtons.forEach((b) => { const on = b.dataset.tab === id; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; });
+  TABS.forEach((t) => { document.getElementById(t).hidden = t !== id; });
+  hideTip();
+  if (link) dash.setLink(linkName());
+  draw();
+};
+const openTeam = (abbr) => {
+  const prev = teamAbbr;
+  teamAbbr = abbr;
+  const wasTeam = current === 'team';
+  showTab('team', true);
+  const nav = document.getElementById('tabs');
+  if (!wasTeam && nav.getBoundingClientRect().top < 0) nav.scrollIntoView({ block: 'start' });
+  if (wasTeam && prev !== abbr) document.getElementById('team-head').scrollIntoView({ block: 'start' });
+};
+tabButtons.forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab, true)));
+window.addEventListener('hashchange', () => {
+  const h = readHash(); if (!h) return;
+  if (h.tab === 'team' && h.abbr && h.abbr !== teamAbbr) { teamAbbr = h.abbr; showTab('team', false); }
+  else if (h.tab !== current) showTab(h.tab, false);
+});
+root.querySelector('#tabs').addEventListener('keydown', (e) => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const i = TABS.indexOf(current), j = (i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length;
+  showTab(TABS[j], true); tabButtons[j].focus();
+});
+// any team name or logo opens its page
+root.addEventListener('click', (e) => { const t = e.target.closest('.nb-tlink'); if (t && t._abbr) { e.preventDefault(); openTeam(t._abbr); } });
+root.addEventListener('keydown', (e) => { if (e.key !== 'Enter') return; const t = e.target.closest('.nb-tlink'); if (t && t._abbr) openTeam(t._abbr); });
+
+// ---------- header ----------
+const fill = (sel, text) => root.querySelectorAll(sel).forEach((e) => { e.textContent = text; e.classList.remove('dash-skeleton'); });
+function drawHeader() {
+  const run = dash.data('run');
+  if (run.status === 'ok' && run.data.length) {
+    const r = run.data[0];
+    const season = String(r.season ?? '');
+    fill('[data-source=run][data-field=season]', /^\d{4}$/.test(season) ? `${+season - 1}–${season.slice(-2)}` : season);
+    const at = new Date(r.as_of);
+    fill('[data-source=run][data-field=as_of]', isNaN(at) ? String(r.as_of) : etStamp.format(at) + ' ET');
+    fill('[data-source=run][data-field=n_sims]', comma(N(r.n_sims)));
+    fill('[data-source=run][data-field=games_played]', comma(N(r.games_played)));
+    fill('[data-source=run][data-field=games_left]', comma(N(r.games_left)));
+    fill('[data-source=run][data-field=elo_per_point]', fmt1(r.elo_per_point));
+  } else if (BAD.has(run.status)) {
+    fill('[data-source=run]', '');
+  }
+  const h = dash.data('headline');
+  const same = root.querySelector('.nb-tk-same'), diff = root.querySelector('.nb-tk-diff');
+  if (h.status === 'ok' && h.data.length) {
+    const r = h.data[0];
+    same.hidden = !r.same; diff.hidden = !!r.same;
+    diff.classList.remove('dash-skeleton');
+    fill('[data-source=headline][data-field=top]', r.top);
+    fill('[data-source=headline][data-field=top_rating]', fmtR(r.top_rating));
+    fill('[data-source=headline][data-field=fav]', r.fav);
+    fill('[data-source=headline][data-field=fav_title]', fmtP(r.fav_title));
+    fill('[data-source=headline][data-field=next]', r.next);
+    fill('[data-source=headline][data-field=next_title]', fmtP(r.next_title));
+  } else if (BAD.has(h.status)) {
+    same.hidden = true; diff.hidden = false; diff.classList.remove('dash-skeleton');
+    diff.textContent = '';
+  }
+}
+const hasToday = () => OK('teams') && dash.data('teams').data.length > 0 && 'rating_today' in dash.data('teams').data[0];
+
+// ---------- 1. rankings ----------
+let rkSort = { key: 'rank', dir: 1 };
+const DESC_FIRST = new Set(['rating', 'rank_d1', 'proj_w', 'sos', 'sor', 'p_playoffs', 'p_title']);
+const rkTable = document.getElementById('rankings-table');
+rkTable.querySelectorAll('th[data-sort]').forEach((th) => th.querySelector('button').addEventListener('click', () => {
+  const k = th.dataset.sort;
+  rkSort = rkSort.key === k ? { key: k, dir: -rkSort.dir } : { key: k, dir: DESC_FIRST.has(k) ? -1 : 1 };
+  draw();
+}));
+const confSeg = document.getElementById('conf-filter');
+confSeg.addEventListener('click', (e) => { const b = e.target.closest('button[data-conf]'); if (b) dash.setParams({ conf: b.dataset.conf }); });
+// a row's colours: the team colour, with white or near-black text, whichever reads better on it (same in both themes)
+const WHITE = { r: 255, g: 255, b: 255 }, INK_DARK = '#16181d', INK_DARK_RGB = { r: 22, g: 24, b: 29 };
+const rowCache = new Map();
+const rowColors = (t) => {
+  const key = hex(t.color) || '#5f6672';
+  if (rowCache.has(key)) return rowCache.get(key);
+  let bg = key, rgb = toRGB(bg);
+  const inks = [['#ffffff', WHITE], [INK_DARK, INK_DARK_RGB], ['#000000', { r: 0, g: 0, b: 0 }]];
+  let best = inks.reduce((a, b) => (contrast(b[1], rgb) > contrast(a[1], rgb) ? b : a));
+  for (let k = 0; contrast(best[1], rgb) < 4.5 && k < 12; k++) {  // no ink reaches AA: darken the row a step and use white
+    rgb = { r: rgb.r * 0.95, g: rgb.g * 0.95, b: rgb.b * 0.95 }; best = inks[0];
+    bg = `rgb(${Math.round(rgb.r)},${Math.round(rgb.g)},${Math.round(rgb.b)})`;
+  }
+  const light = best[0] === '#ffffff';
+  // hover moves the background away from the ink, so contrast only rises
+  const c = { bg, ink: best[0], hl: light ? 'rgba(0,0,0,.2)' : 'rgba(255,255,255,.28)', edge: contrast(rgb, panelRGB || WHITE) < 1.3 };
+  rowCache.set(key, c);
+  return c;
+};
+// the clicked row opens its team (the name inside stays the keyboard target)
+rkTable.addEventListener('click', (e) => { if (e.target.closest('.nb-tlink')) return; const tr = e.target.closest('tbody tr'); if (tr && tr._abbr) openTeam(tr._abbr); });
+
+function drawRankings() {
+  const conf = dash.params().conf || 'All';
+  confSeg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.conf === conf));
+  const tbody = rkTable.tBodies[0];
+  if (!tableState(tbody, 10, ['teams'])) return;
+  const teams = dash.data('teams').data;
+  const der = new Map((OK('derived') ? dash.data('derived').data : []).map((d) => [d.abbr, d]));
+  const logos = logoMap();
+  const rows = teams.filter((t) => conf === 'All' || t.conf === conf);
+  const val = (t, k) => (k === 'name' ? t.name : N(t[k]));
+  const fin = (v) => (Number.isFinite(v) ? v : -Infinity);
+  rows.sort((a, b) => {
+    const x = val(a, rkSort.key), y = val(b, rkSort.key);
+    let c = typeof x === 'string' ? x.localeCompare(y) : fin(x) - fin(y);
+    if (Number.isNaN(c)) c = 0;
+    return c ? c * rkSort.dir : N(a.rank) - N(b.rank);
+  });
+  rkTable.querySelectorAll('th[data-sort]').forEach((th) => {
+    if (th.dataset.sort === rkSort.key) th.setAttribute('aria-sort', rkSort.dir > 0 ? 'ascending' : 'descending'); else th.removeAttribute('aria-sort');
+  });
+  const withRank = (v, r) => { const c = el('span', '', signed(v, 2)); if (Number.isFinite(N(r))) c.append(el('span', 'rk', ` (${ordinal(r)})`)); return c; };
+  const out = rows.map((t) => {
+    const tr = el('tr'); tr.dataset.key = t.abbr; tr._abbr = t.abbr;
+    const rc = rowColors(t);
+    tr.style.setProperty('--rk-bg', rc.bg); tr.style.setProperty('--rk-ink', rc.ink); tr.style.setProperty('--rk-hl', rc.hl);
+    if (rc.edge) tr.classList.add('rk-edge');  // a black row on a dark panel keeps visible edges
+    const rd = N(t.rank_d1);
+    tr.append(td(rd > 0 ? '▲' + rd : rd < 0 ? '▼' + Math.abs(rd) : '–', 'num c-chg' + (rd ? '' : ' flat')));
+    tr.append(td(String(N(t.rank)), 'num nb-rank'));
+    const tag = el('span', 'nb-team nb-tlink'); tag._abbr = t.abbr; tag.tabIndex = 0; tag.setAttribute('role', 'link');
+    const badge = el('span', 'nb-badge'); badge.append(logoImg(logos, t));
+    const rec = der.get(t.abbr)?.record;
+    const nm = el('span'); nm.append(el('span', 'full', t.name), el('span', 'short', code(t)));
+    if (rec) nm.append(el('span', 'rec', ` (${rec})`));
+    tag.append(badge, nm);
+    const nc = td(''); nc.append(tag); tr.append(nc);
+    tr.append(td(fmtR(t.rating), 'num c-rating'));
+    const lg = String(t.last_game ?? ''); const lc = td('', 'c-last nb-hide-xs');
+    const m = /^([WL])(\s.*)$/.exec(lg);
+    if (m) lc.append(el('b', '', m[1]), m[2]); else lc.textContent = lg;
+    tr.append(lc);
+    tr.append(td(Number.isFinite(N(t.proj_w)) ? `${fmt1(t.proj_w)}–${fmt1(t.proj_l)}` : '', 'num'));
+    const sc = td('', 'num nb-hide-sm'); sc.append(withRank(t.sos, t.sos_rank)); tr.append(sc);
+    const rc2 = td('', 'num nb-hide-sm'); rc2.append(withRank(t.sor, t.sor_rank)); tr.append(rc2);
+    tr.append(td(fmtP(t.p_playoffs), 'num'));
+    tr.append(td(fmtP(t.p_title), 'num'));
+    return tr;
+  });
+  tbody.replaceChildren(...out);
+}
+
+// ---------- 2. playoff odds ----------
+const SEEDS = d3.range(1, 16);
+const STAGES = [['p_top6', 'Top 6'], ['p_playin', 'Play-in'], ['p_playoffs', 'Playoffs'], ['p_r2', '2nd rd'], ['p_cf', 'Conf F'], ['p_finals', 'Finals'], ['p_title', 'Title']];
+['east', 'west'].forEach((c) => {
+  const head = document.querySelector(`#seeds-${c} thead`);
+  const tr = el('tr');
+  const th0 = el('th', 'sticky nb-hide-xs'); th0.dataset.field = 'name'; th0.textContent = 'Team'; tr.append(th0);
+  const th0b = el('th', 'sticky nb-show-xs'); th0b.dataset.field = 'abbr'; th0b.textContent = 'Team'; tr.append(th0b);
+  const thm = el('th', 'num'); thm.dataset.source = 'derived'; thm.dataset.field = 'mean_seed'; thm.textContent = 'Avg'; tr.append(thm);
+  SEEDS.forEach((k) => { const th = el('th', 'h' + (k === 7 || k === 11 ? ' zl' : '')); th.dataset.field = 'seed_' + k; th.textContent = String(k); tr.append(th); });
+  tr.append(el('th', 'gap'));
+  STAGES.forEach(([f, label]) => { const th = el('th', 'h'); th.dataset.field = f; th.textContent = label; tr.append(th); });
+  head.append(tr);
+});
+const heatM = (x) => Math.round(8 + 82 * Math.pow(Math.min(1, x), 0.6));
+const heatBg = (p) => { const x = N(p); if (!(x > 0)) return ''; return `color-mix(in srgb, var(--nb-heat) ${heatM(x)}%, transparent)`; };
+let heatRGB = null, fgRGB = null;
+const heatWhite = (x) => { // white text only where it beats the page's text colour on the blended cell
+  if (!(x > 0) || !heatRGB || !panelRGB) return false;
+  const a = heatM(x) / 100, mix = {};
+  for (const k of 'rgb') mix[k] = heatRGB[k] * a + panelRGB[k] * (1 - a);
+  return contrast({ r: 255, g: 255, b: 255 }, mix) > contrast(fgRGB, mix);
+};
+function drawSeeds() {
+  const cs = getComputedStyle(document.getElementById('seeds-east'));
+  heatRGB = toRGB(cs.getPropertyValue('--nb-heat').trim()); fgRGB = toRGB(cs.color);
+  ['East', 'West'].forEach((conf) => {
+    const tbody = document.querySelector(`#seeds-${conf.toLowerCase()} tbody`);
+    if (!tableState(tbody, 26, ['teams'])) return;
+    const der = new Map((OK('derived') ? dash.data('derived').data : []).map((d) => [d.abbr, d]));
+    const logos = logoMap();
+    const rows = dash.data('teams').data.filter((t) => t.conf === conf).sort((a, b) => (der.get(a.abbr)?.mean_seed ?? 99) - (der.get(b.abbr)?.mean_seed ?? 99));
+    tbody.replaceChildren(...rows.map((t) => {
+      const tr = el('tr'); tr.dataset.key = t.abbr;
+      const n1 = td('', 'sticky nb-hide-xs'); n1.append(teamTag(logos, t, t.name)); tr.append(n1);
+      const n2 = td('', 'sticky nb-show-xs'); n2.append(teamTag(logos, t, t.abbr)); tr.append(n2);
+      const ms = der.get(t.abbr)?.mean_seed;
+      tr.append(td(Number.isFinite(ms) ? ms.toFixed(1) : '', 'num muted'));
+      const cell = (f) => { const p = N(t[f]); const c = td(fmtP(p), 'h' + (p > 0 ? '' : ' zero') + (heatWhite(p) ? ' hi' : '') + (f === 'seed_7' || f === 'seed_11' ? ' zl' : '')); const bg = heatBg(p); if (bg) c.style.background = bg; return c; };
+      SEEDS.forEach((k) => tr.append(cell('seed_' + k)));
+      tr.append(el('td', 'gap'));
+      STAGES.forEach(([f]) => tr.append(cell(f)));
+      return tr;
+    }));
+  });
+}
+
+// ---------- 3. win distributions ----------
+const winRows = () => dash.data('win_dist').data.map((r) => ({ abbr: r.abbr, wins: N(r.wins), p: N(r.p) })).filter((r) => Number.isFinite(r.wins) && r.p > 0);
+function drawWins() {
+  const s = state('win_dist', 'teams');
+  ['East', 'West'].forEach((conf) => {
+    const box = document.getElementById('wins-' + conf.toLowerCase());
+    if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } return; }
+    ready(box);
+    box.replaceChildren();
+    const teams = dash.data('teams').data;
+    const wd = winRows();
+    const byTeam = d3.group(wd, (r) => r.abbr);
+    const logos = logoMap();
+    const rows = teams.filter((t) => t.conf === conf).sort((a, b) => N(b.proj_w) - N(a.proj_w));
+    const vis = wd.filter((r) => r.p >= 0.0005);
+    const xmin = Math.max(0, (d3.min(vis, (r) => r.wins) ?? 0) - 1), xmax = Math.min(82, (d3.max(vis, (r) => r.wins) ?? 82) + 1);
+    const pmax = d3.max(wd, (r) => r.p) || 1;
+    const W = box.clientWidth, rowH = W < 420 ? 26 : 28, top = 18, bottom = 24;
+    const H = top + rows.length * rowH + bottom;
+    box.style.minHeight = H + 'px';
+    const svg = newSvg(box, W, H, `${conf} simulated win distributions`);
+    const narrow = W < 460;
+    const labels = rows.map((t) => (narrow ? code(t) : t.name));
+    const lw = measure(svg, labels, 12) + 26;
+    const rw1 = measure(svg, rows.map((t) => fmt1(t.proj_w)).concat(['Mean']), 11);
+    const rw2 = measure(svg, rows.map((t) => fmt1(t.vegas_total)).concat(['Vegas']), 11);
+    const right = rw1 + rw2 + 22;
+    const x = d3.scaleLinear([xmin, xmax + 1], [lw + 8, W - right]);
+    const bw = Math.max(1, x(xmin + 1) - x(xmin) - (x(xmin + 1) - x(xmin) > 4 ? 1 : 0));
+    const ticks = x.ticks(Math.max(2, Math.floor((W - lw - right) / 70))).filter((v) => Number.isInteger(v) && v >= xmin && v <= xmax);
+    svg.append('g').attr('class', 'nb-grid-l').selectAll('line').data(ticks).join('line')
+      .attr('x1', (v) => x(v + 0.5)).attr('x2', (v) => x(v + 0.5)).attr('y1', top).attr('y2', H - bottom);
+    unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${H - bottom})`)
+      .call(d3.axisBottom(d3.scaleLinear([xmin + 0.5, xmax + 1.5], [x(xmin + 0.5), x(xmax + 1.5)])).tickValues(ticks.map((v) => v + 0.5)).tickFormat((v) => String(v - 0.5)).tickSizeOuter(0).tickSize(4)));
+    svg.append('text').attr('x', W - right + 8 + rw1).attr('y', 11).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text('Mean');
+    svg.append('text').attr('x', W - 2).attr('y', 11).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text('Vegas');
+    const g = svg.selectAll('g.row').data(rows).join('g').attr('class', 'row').attr('transform', (t, i) => `translate(0,${top + i * rowH})`);
+    g.append('rect').attr('x', 0).attr('width', W).attr('height', rowH).attr('fill', 'transparent');
+    g.append('line').attr('x1', lw + 8).attr('x2', W - right).attr('y1', rowH - 1.5).attr('y2', rowH - 1.5).attr('stroke', 'var(--cds-chart-grid)');
+    g.each(function (t) {
+      const row = d3.select(this);
+      const lab = row.append('g').attr('class', 'nb-tlink').attr('tabindex', 0).attr('role', 'link').attr('aria-label', t.city + ' ' + t.name).style('cursor', 'pointer');
+      lab.node()._abbr = t.abbr;
+      lab.append('rect').attr('x', 0).attr('y', 0).attr('width', lw).attr('height', rowH).attr('fill', 'transparent');
+      const src = logos.get(t.abbr);
+      if (src && /^data:image\//.test(src)) lab.append('image').attr('href', src).attr('x', 0).attr('y', (rowH - 18) / 2).attr('width', 18).attr('height', 18);
+      else lab.append('circle').attr('cx', 9).attr('cy', rowH / 2).attr('r', 5).attr('fill', hex(t.color) || 'var(--cds-chart-muted)');
+      lab.append('text').attr('x', 24).attr('y', rowH / 2 + 4).attr('font-size', 12).style('font-family', 'var(--nb-sans)').attr('font-weight', 550).attr('fill', 'var(--color-fg)').text(narrow ? code(t) : t.name);
+      const dist = byTeam.get(t.abbr) || [];
+      const p10 = N(t.w_p10), p90 = N(t.w_p90);
+      const hgt = rowH - 6;
+      row.selectAll('rect.b').data(dist.filter((r) => r.wins >= xmin && r.wins <= xmax)).join('rect').attr('class', 'b')
+        .attr('x', (r) => x(r.wins)).attr('width', bw).attr('y', (r) => rowH - 2 - Math.max(0.5, (r.p / pmax) * hgt)).attr('height', (r) => Math.max(0.5, (r.p / pmax) * hgt))
+        .attr('rx', Math.min(1.5, bw / 2)).attr('fill', 'var(--cds-chart-categorical-1)').attr('fill-opacity', (r) => (r.wins >= p10 && r.wins <= p90 ? 0.9 : 0.35));
+      const mx = x(N(t.proj_w) + 0.5), vx = x(N(t.vegas_total) + 0.5);
+      if (Number.isFinite(vx)) row.append('line').attr('x1', vx).attr('x2', vx).attr('y1', 2).attr('y2', rowH - 2).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.5).attr('stroke-dasharray', '3 2');
+      if (Number.isFinite(mx)) row.append('line').attr('x1', mx).attr('x2', mx).attr('y1', 1).attr('y2', rowH - 2).attr('stroke', 'var(--color-fg)').attr('stroke-width', 2);
+      row.append('text').attr('x', W - right + 8 + rw1).attr('y', rowH / 2 + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg)').text(fmt1(t.proj_w));
+      row.append('text').attr('x', W - 2).attr('y', rowH / 2 + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(fmt1(t.vegas_total));
+    });
+    g.on('pointermove', function (e, t) {
+      const [px] = d3.pointer(e, svg.node());
+      if (px < lw) { hideTip(); return; }
+      const w = Math.floor(x.invert(px));
+      const dist = byTeam.get(t.abbr) || [];
+      const at = dist.find((r) => r.wins === w)?.p ?? 0;
+      const atLeast = d3.sum(dist.filter((r) => r.wins >= w), (r) => r.p);
+      const lines = [`${t.city} ${t.name}`, ['Mean', fmt1(t.proj_w)], ['Vegas total', fmt1(t.vegas_total)]];
+      if (w >= xmin && w <= xmax) lines.push([`Exactly ${w}`, fmtP(at)], [`${w} or more`, fmtP(Math.min(1, atLeast))]);
+      showTip(e, lines);
+    }).on('pointerleave', hideTip);
+  });
+}
+
+// ---------- 4. ratings ----------
+let rtPinned = null, rtHover = null;
+const rtSel = document.getElementById('ratings-team');
+rtSel.addEventListener('change', () => { rtPinned = rtSel.value || null; draw(); });
+const historyRows = () => dash.data('history').data.map((r) => ({ abbr: r.abbr, date: parseDay(r.date), rating: N(r.rating) })).filter((r) => !isNaN(r.date) && Number.isFinite(r.rating));
+const teamOptions = (sel, first) => {
+  const ts = [...teamMap().values()].sort((a, b) => `${a.city} ${a.name}`.localeCompare(`${b.city} ${b.name}`));
+  const want = ts.length + (first ? 1 : 0);
+  if (sel.options.length !== want) sel.replaceChildren(...(first ? [new Option(first, '')] : []), ...ts.map((t) => new Option(`${t.city} ${t.name}`, t.abbr)));
+};
+function drawRatings() {
+  const box = document.getElementById('ratings-chart');
+  const s = state('history', 'teams');
+  if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } return; }
+  ready(box);
+  const tmap = teamMap();
+  teamOptions(rtSel, 'Highlight a team');
+  rtSel.value = rtPinned || '';
+  box.replaceChildren();
+  const rows = historyRows();
+  if (!rows.length) { box.append(el('p', 'nb-empty-note', 'No ratings yet this season.')); return; }
+  const series = d3.groups(rows, (r) => r.abbr).map(([abbr, pts]) => ({ abbr, t: tmap.get(abbr), pts: pts.sort((a, b) => a.date - b.date) }));
+  const W = box.clientWidth;
+  const H = W < 560 ? 460 : Math.round(Math.max(480, Math.min(620, W * 0.42)));
+  box.style.minHeight = H + 'px';
+  const svg = newSvg(box, W, H, 'Rating in points by team this season');
+  const yExt = d3.extent(rows, (r) => r.rating);
+  const y0 = d3.scaleLinear().domain([Math.min(yExt[0], 0) - 0.4, Math.max(yExt[1], 0) + 0.4]).nice();
+  const yt = y0.ticks(Math.max(3, Math.floor(H / 70)));
+  const left = measure(svg, yt.map((v) => fmtTick(v)), 10.5) + 10;
+  const lab = (s) => `${code(s.t) || s.abbr} ${fmtR(s.pts.at(-1).rating)}`;
+  const fs = 10.5;
+  const right = measure(svg, series.map(lab), fs) + 22;
+  const top = 10, bottom = 26;
+  const x = d3.scaleUtc(d3.extent(rows, (r) => r.date), [left, W - right]);
+  const y = d3.scaleLinear(y0.domain(), [H - bottom - 8, top]);
+  svg.append('g').attr('class', 'nb-grid-l').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(-(W - right - left)).tickFormat(''));
+  const ya = unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(0).tickPadding(6).tickFormat((v) => fmtTick(v))));
+  ya.select('.domain').remove();
+  // the league average
+  svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.25).attr('stroke-dasharray', '4 3');
+  svg.append('text').attr('x', left + 4).attr('y', y(0) - 4).attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text('League average');
+  const days = d3.utcDay.count(x.domain()[0], x.domain()[1]) + 1;
+  const nt = Math.max(2, Math.min(days, Math.floor((W - left - right) / 70)));
+  let xt = x.ticks(nt).filter((d) => +d3.utcDay.floor(d) === +d);
+  if (xt.length < 2) xt = x.domain();
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).tickValues(xt).tickFormat(fmtDay).tickSizeOuter(0).tickSize(4)));
+  const line = d3.line().x((p) => x(p.date)).y((p) => y(p.rating));
+  const focus = () => rtHover || rtPinned;
+  const lines = svg.append('g').attr('fill', 'none').attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+  const paths = lines.selectAll('path').data(series).join('path').attr('d', (s) => line(s.pts));
+  const dots = svg.append('g');
+  // end labels, kept apart
+  const xEnd = x.range()[1];
+  const items = series.map((s) => ({ s, y0: y(s.pts.at(-1).rating), xe: x(s.pts.at(-1).date) }));
+  let gap = fs + 2.5;
+  const lo = top + 4, hi = H - bottom - 2;
+  if ((items.length - 1) * gap > hi - lo) gap = (hi - lo) / Math.max(1, items.length - 1);
+  items.sort((a, b) => a.y0 - b.y0).forEach((d) => { d.y = d.y0; });
+  for (let it = 0; it < 200; it++) {
+    let moved = false;
+    for (let i = 1; i < items.length; i++) { const o = items[i - 1].y + gap - items[i].y; if (o > 0.01) { items[i - 1].y -= o / 2; items[i].y += o / 2; moved = true; } }
+    if (items[0].y < lo) { items[0].y = lo; moved = true; }
+    if (items.at(-1).y > hi) { items.at(-1).y = hi; moved = true; }
+    if (!moved) break;
+  }
+  for (let i = 1; i < items.length; i++) items[i].y = Math.max(items[i].y, items[i - 1].y + gap);
+  for (let i = items.length - 2; i >= 0; i--) items[i].y = Math.min(items[i].y, items[i + 1].y - gap);
+  const lg = svg.append('g');
+  const leaders = lg.selectAll('path').data(items).join('path').attr('fill', 'none').attr('stroke-width', 1)
+    .attr('d', (d) => `M${xEnd + 3},${d.y0}L${xEnd + 6},${d.y0}L${xEnd + 14},${d.y}L${xEnd + 17},${d.y}`);
+  const carry = lines.selectAll('line').data(items.filter((d) => xEnd - d.xe > 1)).join('line')
+    .attr('x1', (d) => d.xe).attr('x2', xEnd).attr('y1', (d) => d.y0).attr('y2', (d) => d.y0).attr('stroke-dasharray', '1 3').attr('stroke-width', 1.25);
+  const texts = lg.selectAll('text').data(items).join('text').attr('class', 'nb-tlink').attr('x', xEnd + 19).attr('y', (d) => d.y + 3.5).attr('font-size', fs).text((d) => lab(d.s)).style('cursor', 'pointer')
+    .on('pointerenter', (e, d) => { rtHover = d.s.abbr; style(); }).on('pointerleave', () => { rtHover = null; style(); })
+    .attr('tabindex', 0).attr('role', 'link').each(function (d) { this._abbr = d.s.abbr; });
+  function style() {
+    const f = focus();
+    const on = (abbr) => abbr === f;
+    // every line in its team's ink; the hovered or picked one at full strength and thicker, the rest light and thin
+    const op = (abbr) => (on(abbr) ? 1 : f ? 0.18 : 0.6);
+    paths.attr('stroke', (s) => teamInkMin(s.t)).attr('stroke-width', (s) => (on(s.abbr) ? 3 : 1.5)).attr('stroke-opacity', (s) => op(s.abbr));
+    paths.filter((s) => on(s.abbr)).raise();
+    carry.attr('stroke', (d) => teamInkMin(d.s.t)).attr('stroke-opacity', (d) => op(d.s.abbr) * 0.8);
+    texts.attr('fill', (d) => teamInkMin(d.s.t, 4.5)).attr('font-weight', (d) => (on(d.s.abbr) ? 700 : 500))
+      .attr('opacity', (d) => (on(d.s.abbr) ? 1 : f ? 0.4 : 1));
+    leaders.attr('stroke', (d) => teamInkMin(d.s.t)).attr('stroke-opacity', (d) => (on(d.s.abbr) ? 1 : f ? 0.2 : 0.5));
+    const fs_ = series.find((s) => on(s.abbr));
+    dots.selectAll('circle').data(fs_ ? fs_.pts : []).join('circle').attr('cx', (p) => x(p.date)).attr('cy', (p) => y(p.rating)).attr('r', 3)
+      .attr('fill', fs_ ? teamInkMin(fs_.t) : 'none').attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
+  }
+  style();
+  const pts = series.flatMap((s) => s.pts.map((p, i) => ({ s, p, prev: s.pts[i - 1] })));
+  const delaunay = d3.Delaunay.from(pts, (d) => x(d.p.date), (d) => y(d.p.rating));
+  svg.append('rect').attr('x', left).attr('y', top).attr('width', Math.max(0, W - right - left + 6)).attr('height', H - top - bottom).attr('fill', 'transparent')
+    .on('pointermove', (e) => {
+      const [mx, my] = d3.pointer(e, svg.node());
+      const d = pts[delaunay.find(mx, my)];
+      if (!d) return;
+      if (rtHover !== d.s.abbr) { rtHover = d.s.abbr; style(); }
+      const t = d.s.t;
+      const lines = [fmtDow(d.p.date), [t ? `${t.city} ${t.name}` : d.s.abbr, fmtR(d.p.rating)]];
+      if (d.prev) lines.push(['Change', signed(d.p.rating - d.prev.rating, 2)]); else lines.push(['', 'Preseason prior']);
+      showTip(e, lines);
+    })
+    .on('pointerleave', () => { rtHover = null; style(); hideTip(); })
+    .on('click', () => { rtPinned = rtHover && rtPinned !== rtHover ? rtHover : null; rtSel.value = rtPinned || ''; style(); });
+}
+
+// ---------- 5. games ----------
+const teamCell = (logos, tmap, abbr, cls) => { const t = tmap.get(abbr) || { abbr }; const c = td('', cls); c.append(teamTag(logos, t, code(t))); return c; };
+// today's Eastern date at view time, as YYYY-MM-DD
+const etDay = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' });
+const todayET = () => etDay.format(new Date());
+// only the games still to play today (Eastern); if none are left today, the next date that has games
+function drawGames() {
+  const box = document.getElementById('upcoming');
+  const title = document.getElementById('upcoming-title');
+  const s = state('schedule');
+  if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } return; }
+  ready(box);
+  const tmap = teamMap(), logos = logoMap();
+  const today = todayET();
+  const open = dash.data('schedule').data.filter((g) => (g.status === 'scheduled' || g.status === 'live') && String(g.date) >= today);
+  const day = open.some((g) => g.date === today) ? today : open.map((g) => g.date).sort()[0];
+  const games = open.filter((g) => g.date === day);
+  const odds = new Map((OK('game_odds') ? dash.data('game_odds').data : []).map((o) => [String(o.id), o.p_away]));
+  box.replaceChildren();
+  title.textContent = !day || day === today ? "Today's games" : 'Next games';
+  if (!games.length) { box.append(el('p', 'nb-empty-note', 'No games left on the schedule.')); return; }
+  if (day !== today) box.append(el('p', 'nb-empty-note', 'No games left today.'));
+  const h = el('h3', 'nb-sub', (day === today ? 'Today · ' : 'Next game day · ') + fmtDow(parseDay(day)));
+  h.dataset.source = 'schedule'; h.dataset.field = 'date'; h.dataset.where = 'date=' + encodeURIComponent(day) + '&status=' + games[0].status;
+  box.append(h);
+  const wrap = el('div', 'nb-scroll');
+  const table = el('table', 'nb-table nb-g upcoming');
+  table.dataset.source = 'schedule'; table.dataset.rowKey = 'id';
+  const head = el('tr');
+  const th = (f, label, cls, src) => { const x = el('th', cls, label); x.dataset.field = f; if (src) x.dataset.source = src; head.append(x); };
+  th('tip', 'Tip', 'c-tip nb-hide-xs'); th('away', 'Away', 'c-team'); th('p_away', 'Win', 'num c-p', 'game_odds'); th('p_home', 'Win', 'num c-bar'); th('home', 'Home', 'c-team c-home'); th('spread', 'Spread', 'num c-sp');
+  const thead = el('thead'); thead.append(head);
+  const tbody = el('tbody');
+  games.sort((a, b) => d3.ascending(a.tip, b.tip) || d3.ascending(a.id, b.id)).forEach((g) => {
+    const tr = el('tr'); tr.dataset.key = g.id;
+    const ph = N(g.p_home), pa = odds.has(String(g.id)) ? odds.get(String(g.id)) : 1 - ph;
+    tr.append(g.status === 'live' ? td('Live', 'nb-live nb-hide-xs') : td(fmtTip(g.tip), 'muted nb-hide-xs mono'));
+    tr.append(teamCell(logos, tmap, g.away));
+    tr.append(td(fmtP(pa), 'num' + (pa > ph ? ' nb-best' : '')));
+    const pc = td(''); const wrapc = el('span', 'nb-pcell'); const bar = el('span', 'nb-split');
+    const a = el('i', 'a' + (pa > ph ? ' fav' : '')), hh = el('i', 'h' + (ph >= pa ? ' fav' : ''));
+    a.style.width = (pa * 100) + '%'; hh.style.width = (ph * 100) + '%';
+    bar.append(a, hh); const pt = el('span', 'num' + (ph >= pa ? ' nb-best' : ''), fmtP(ph)); pt.style.fontSize = '12.5px';
+    wrapc.append(bar, pt); pc.append(wrapc); tr.append(pc);
+    tr.append(teamCell(logos, tmap, g.home, 'c-home'));
+    tr.append(td(fmtSpread(g.spread), 'num'));
+    tbody.append(tr);
+  });
+  table.append(thead, tbody); wrap.append(table); box.append(wrap);
+}
+
+// ---------- 6. team ----------
+const teamPick = document.getElementById('team-pick');
+teamPick.addEventListener('change', () => { if (teamPick.value) openTeam(teamPick.value); });
+const TM_FMT = {
+  rating: fmtR, rating_today: fmtR, rating_prior: fmtR, sos: fmtR, rating_d7: (v) => signed(v, 2), rating_d1: (v) => signed(v, 2), sor: (v) => signed(v, 2), sos_rank: ordinal, sor_rank: ordinal,
+  rank: (v) => String(N(v)), vegas_total: fmt1, proj_w: fmt1, proj_l: fmt1, w_p10: (v) => String(N(v)), w_p90: (v) => String(N(v)),
+  p_playoffs: fmtP, p_title: fmtP, exp_w: fmt1, avg_p: fmtP, left: (v) => String(v),
+};
+// point every single-value mark on the team page at the chosen team's row, then fill it
+function fillTeamMarks(abbr) {
+  const rowsOf = (id) => (OK(id) ? dash.data(id).data : null);
+  root.querySelectorAll('#team .tm').forEach((e) => {
+    e.dataset.where = 'abbr=' + encodeURIComponent(abbr);
+    const rows = rowsOf(e.dataset.source);
+    if (!rows) { if (BAD.has(dash.data(e.dataset.source).status)) { e.textContent = ''; e.classList.remove('dash-skeleton'); } return; }
+    const r = rows.find((x) => x.abbr === abbr);
+    const v = r ? r[e.dataset.field] : '';
+    e.textContent = r ? (TM_FMT[e.dataset.field] || String)(v) : '';
+    e.classList.remove('dash-skeleton');
+  });
+}
+function drawTeam() {
+  const s = state('teams');
+  const head = document.getElementById('team-head');
+  if (s !== 'ok') {
+    ['team-wins', 'team-seeds', 'team-path', 'team-history', 'team-slate'].forEach((id) => { const b = document.getElementById(id); if (s === 'error') failed(b); else { b.replaceChildren(); pending(b); } });
+    return;
+  }
+  const tmap = teamMap();
+  if (!teamAbbr || !tmap.has(teamAbbr)) {
+    teamAbbr = dash.data('teams').data.reduce((a, b) => (N(b.rank) < N(a.rank) ? b : a)).abbr;
+    if (current === 'team') dash.setLink(linkName());
+  }
+  const t = tmap.get(teamAbbr);
+  teamOptions(teamPick);
+  teamPick.value = teamAbbr;
+  const ink = teamInk(t);
+  head.style.setProperty('--nb-team', ink);
+  const logos = logoMap();
+  document.getElementById('team-logo').replaceChildren(logoImg(logos, t, ''));
+  fillTeamMarks(teamAbbr);
+  // tiles that depend on the data
+  const today = hasToday() && fmtR(t.rating_today) !== fmtR(t.rating);
+  document.getElementById('tile-today').hidden = !today;
+  const tv = document.querySelector('#tile-today .v');
+  tv.classList.toggle('down', today && N(t.rating_today) < N(t.rating));
+  const outs = dash.data('outs');
+  const sub = document.getElementById('tile-today-s');
+  sub.hidden = !(outs.status === 'ok' && outs.data.some((o) => o.abbr === teamAbbr && o.n > 0));
+  document.querySelector('#tile-rating [data-field=rating_d7]').className = 'tm ' + tone(t.rating_d7, 2);
+  document.querySelector('#tile-rating [data-field=rating_d1]').className = 'tm ' + tone(t.rating_d1, 2);
+  drawTeamWins(t);
+  drawTeamPath(t);
+  drawTeamSeeds(t);
+  drawTeamHistory(t, tmap);
+  drawTeamSchedule(t, tmap, logos);
+  drawTeamRoster(t);
+}
+
+function drawTeamWins(t) {
+  const box = document.getElementById('team-wins');
+  const s = state('win_dist', 'teams');
+  if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } return; }
+  ready(box); box.replaceChildren();
+  const dist = winRows().filter((r) => r.abbr === t.abbr).sort((a, b) => a.wins - b.wins);
+  if (!dist.length) { box.append(el('p', 'nb-empty-note', 'No simulated wins for this team.')); return; }
+  const vis = dist.filter((r) => r.p >= 0.0005);
+  const vg = N(t.vegas_total), mean = N(t.proj_w), p10 = N(t.w_p10), p90 = N(t.w_p90);
+  const xmin = Math.max(0, Math.min(d3.min(vis, (r) => r.wins), Number.isFinite(vg) ? Math.floor(vg) : 99) - 1);
+  const xmax = Math.min(82, Math.max(d3.max(vis, (r) => r.wins), Number.isFinite(vg) ? Math.ceil(vg) : 0) + 1);
+  const W = box.clientWidth, H = 210, top = 34, bottom = 22, left = 4, right = 4;
+  const svg = newSvg(box, W, H, `${t.name} simulated win distribution`);
+  const x = d3.scaleLinear([xmin, xmax + 1], [left, W - right]);
+  const y = d3.scaleLinear([0, d3.max(dist, (r) => r.p)], [H - bottom, top]);
+  const bw = Math.max(1, x(xmin + 1) - x(xmin) - 1);
+  const ticks = x.ticks(Math.max(2, Math.floor(W / 60))).filter((v) => Number.isInteger(v) && v >= xmin && v <= xmax);
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${H - bottom})`)
+    .call(d3.axisBottom(d3.scaleLinear([xmin + 0.5, xmax + 1.5], [x(xmin + 0.5), x(xmax + 1.5)])).tickValues(ticks.map((v) => v + 0.5)).tickFormat((v) => String(v - 0.5)).tickSizeOuter(0).tickSize(4)));
+  svg.append('g').selectAll('rect').data(dist.filter((r) => r.wins >= xmin && r.wins <= xmax)).join('rect')
+    .attr('x', (r) => x(r.wins)).attr('width', bw).attr('y', (r) => y(r.p)).attr('height', (r) => Math.max(0.5, y(0) - y(r.p))).attr('rx', Math.min(2, bw / 2))
+    .attr('fill', 'var(--cds-chart-categorical-1)').attr('fill-opacity', (r) => (r.wins >= p10 && r.wins <= p90 ? 0.9 : 0.35));
+  // mean and Vegas on two label rows; the left line's label sits left of it, the right one's right of it
+  const mark = (v, row, label, dash_, side) => {
+    if (!Number.isFinite(v)) return;
+    const px = x(v + 0.5);
+    svg.append('line').attr('x1', px).attr('x2', px).attr('y1', row === 0 ? 12 : 26).attr('y2', H - bottom).attr('stroke', dash_ ? 'var(--cds-chart-reference)' : 'var(--color-fg)').attr('stroke-width', dash_ ? 1.5 : 2).attr('stroke-dasharray', dash_ ? '3 2' : null);
+    const txt = svg.append('text').attr('y', row === 0 ? 9 : 23).attr('font-size', 10.5).attr('fill', dash_ ? 'var(--color-fg-muted)' : 'var(--color-fg)').text(label);
+    const w = txt.node().getComputedTextLength();
+    let leftSide = side < 0;
+    if (leftSide && px - 4 - w < left) leftSide = false;
+    if (!leftSide && px + 4 + w > W - right) leftSide = true;
+    txt.attr('x', leftSide ? px - 4 : px + 4).attr('text-anchor', leftSide ? 'end' : 'start');
+  };
+  const meanLeft = Number.isFinite(vg) && mean < vg;
+  mark(mean, 0, `Mean ${fmt1(mean)}`, false, meanLeft ? -1 : 1);
+  mark(vg, 1, `Vegas ${fmt1(vg)}`, true, meanLeft ? 1 : -1);
+  svg.append('rect').attr('x', left).attr('y', top).attr('width', W - left - right).attr('height', H - top - bottom).attr('fill', 'transparent')
+    .on('pointermove', (e) => {
+      const [px] = d3.pointer(e, svg.node());
+      const w = Math.floor(x.invert(px));
+      if (w < xmin || w > xmax) { hideTip(); return; }
+      const at = dist.find((r) => r.wins === w)?.p ?? 0;
+      const atLeast = d3.sum(dist.filter((r) => r.wins >= w), (r) => r.p);
+      showTip(e, [`${w} wins`, ['Exactly', fmtP(at)], [`${w} or more`, fmtP(Math.min(1, atLeast))]]);
+    }).on('pointerleave', hideTip);
+}
+
+const PATH = [['grp', 'Regular-season finish'], ['p_top6', 'Top-6 seed', 1], ['p_playin', 'Play-in (7–10)', 1], ['grp', 'Playoff run'],
+  ['p_playoffs', 'Make playoffs'], ['p_r2', 'Reach 2nd round'], ['p_cf', 'Reach conf finals'], ['p_finals', 'Reach Finals'], ['p_title', 'Win title']];
+function drawTeamPath(t) {
+  const box = document.getElementById('team-path');
+  ready(box);
+  const grid = el('div', 'nb-path');
+  PATH.forEach(([f, label, finish]) => {
+    if (f === 'grp') { grid.append(el('div', 'grp', label)); return; }
+    const p = N(t[f]);
+    const trk = el('div', 'trk' + (finish ? ' fin' : '')); const bar = el('i'); bar.style.width = (Math.max(0, Math.min(1, p)) * 100) + '%'; trk.append(bar);
+    grid.append(el('div', 'lab', label), trk, el('div', 'val', fmtP(p)));
+  });
+  box.replaceChildren(grid);
+}
+
+function drawTeamSeeds(t) {
+  const box = document.getElementById('team-seeds');
+  ready(box); box.replaceChildren();
+  const rows = SEEDS.map((k) => ({ k, p: N(t['seed_' + k]) || 0 }));
+  const W = box.clientWidth, H = 210, top = 22, bottom = 22, left = 2, right = 2;
+  const svg = newSvg(box, W, H, `${t.name} seed chances`);
+  const x = d3.scaleBand(SEEDS, [left, W - right]).padding(0.18);
+  const y = d3.scaleLinear([0, Math.max(0.05, d3.max(rows, (r) => r.p))], [H - bottom, top]);
+  // the play-in zone
+  const z0 = x(7) - (x.step() * x.padding()) / 2, z1 = x(10) + x.bandwidth() + (x.step() * x.padding()) / 2;
+  svg.append('rect').attr('x', z0).attr('width', z1 - z0).attr('y', top - 16).attr('height', H - bottom - top + 16).attr('fill', 'color-mix(in srgb, var(--color-fg) 4%, transparent)');
+  svg.append('text').attr('x', (z0 + z1) / 2).attr('y', top - 5).attr('text-anchor', 'middle').attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text('Play-in');
+  svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.k)).attr('width', x.bandwidth()).attr('y', (r) => y(r.p)).attr('height', (r) => Math.max(r.p > 0 ? 1 : 0, y(0) - y(r.p)))
+    .attr('rx', Math.min(3, x.bandwidth() / 2)).attr('fill', 'var(--cds-chart-categorical-1)');
+  // value labels where they fit
+  const lw = measure(svg, ['99.9%'], 9.5);
+  if (x.bandwidth() + x.step() * x.padding() >= lw + 2) {
+    svg.append('g').selectAll('text').data(rows.filter((r) => r.p >= 0.0005)).join('text').attr('x', (r) => x(r.k) + x.bandwidth() / 2).attr('y', (r) => y(r.p) - 3)
+      .attr('text-anchor', 'middle').attr('font-size', 9.5).attr('fill', 'var(--color-fg-muted)').text((r) => fmtP(r.p));
+  }
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).tickSize(0).tickPadding(6))).select('.domain').attr('stroke', 'var(--cds-chart-axis)');
+  svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.k) - (x.step() * x.padding()) / 2).attr('width', x.step()).attr('y', top).attr('height', H - top - bottom).attr('fill', 'transparent')
+    .on('pointermove', (e, r) => showTip(e, [`Seed ${r.k}`, ['Chance', fmtP(r.p)]])).on('pointerleave', hideTip);
+}
+
+function drawTeamHistory(t, tmap) {
+  const box = document.getElementById('team-history');
+  const s = state('history', 'teams');
+  if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } return; }
+  ready(box); box.replaceChildren();
+  const rows = historyRows();
+  const mine = rows.filter((r) => r.abbr === t.abbr).sort((a, b) => a.date - b.date);
+  if (!mine.length) { box.append(el('p', 'nb-empty-note', 'No ratings yet this season.')); return; }
+  const W = box.clientWidth, H = 250, top = 12, bottom = 24;
+  const svg = newSvg(box, W, H, `${t.name} rating this season`);
+  const ext = d3.extent(rows, (r) => r.rating);
+  const y0 = d3.scaleLinear().domain([Math.min(ext[0], 0) - 0.4, Math.max(ext[1], 0) + 0.4]).nice();
+  const yt = y0.ticks(5);
+  const left = measure(svg, yt.map((v) => fmtTick(v)), 10.5) + 10;
+  const endLab = fmtR(mine.at(-1).rating);
+  const right = measure(svg, [endLab], 11) + 12;
+  const x = d3.scaleUtc(d3.extent(rows, (r) => r.date), [left, W - right]);
+  const y = d3.scaleLinear(y0.domain(), [H - bottom - 8, top]);
+  svg.append('g').attr('class', 'nb-grid-l').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(-(W - right - left)).tickFormat(''));
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(0).tickPadding(6).tickFormat((v) => fmtTick(v)))).select('.domain').remove();
+  const days = d3.utcDay.count(x.domain()[0], x.domain()[1]) + 1;
+  let xt = x.ticks(Math.max(2, Math.min(days, Math.floor((W - left - right) / 70)))).filter((d) => +d3.utcDay.floor(d) === +d);
+  if (xt.length < 2) xt = x.domain();
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).tickValues(xt).tickFormat(fmtDay).tickSizeOuter(0).tickSize(4)));
+  const line = d3.line().x((p) => x(p.date)).y((p) => y(p.rating));
+  svg.append('g').attr('fill', 'none').selectAll('path').data(d3.groups(rows.filter((r) => r.abbr !== t.abbr), (r) => r.abbr)).join('path')
+    .attr('d', ([, p]) => line(p.sort((a, b) => a.date - b.date))).attr('stroke', 'var(--cds-chart-muted)').attr('stroke-opacity', 0.35).attr('stroke-width', 1);
+  svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.25).attr('stroke-dasharray', '4 3');
+  svg.append('text').attr('x', left + 4).attr('y', y(0) - 4).attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text('League average');
+  const ink = teamInk(t);
+  svg.append('path').attr('d', line(mine)).attr('fill', 'none').attr('stroke', ink).attr('stroke-width', 2.5).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+  svg.append('g').selectAll('circle').data(mine).join('circle').attr('cx', (p) => x(p.date)).attr('cy', (p) => y(p.rating)).attr('r', 3).attr('fill', ink).attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
+  svg.append('text').attr('x', x(mine.at(-1).date) + 7).attr('y', y(mine.at(-1).rating) + 4).attr('font-size', 11).attr('font-weight', 650).attr('fill', ink).text(endLab);
+  const hover = svg.append('circle').attr('r', 5).attr('fill', 'none').attr('stroke', ink).attr('stroke-width', 2).attr('opacity', 0);
+  svg.append('rect').attr('x', left).attr('y', top).attr('width', W - left - right).attr('height', H - top - bottom).attr('fill', 'transparent')
+    .on('pointermove', (e) => {
+      const [mx] = d3.pointer(e, svg.node());
+      const i = d3.leastIndex(mine, (p) => Math.abs(x(p.date) - mx));
+      const p = mine[i]; if (!p) return;
+      hover.attr('cx', x(p.date)).attr('cy', y(p.rating)).attr('opacity', 1);
+      showTip(e, [fmtDow(p.date), ['Rating', fmtR(p.rating)], i ? ['Change', signed(p.rating - mine[i - 1].rating, 2)] : ['', 'Preseason prior']]);
+    }).on('pointerleave', () => { hover.attr('opacity', 0); hideTip(); });
+}
+
+function drawTeamSchedule(t, tmap, logos) {
+  const slateBox = document.getElementById('team-slate');
+  const resBody = document.querySelector('#team-results tbody');
+  const leftBody = document.querySelector('#team-left tbody');
+  const s = state('schedule');
+  if (s !== 'ok') { if (s === 'error') { failed(slateBox); failRow(resBody, 7, 120); failRow(leftBody, 6, 120); } else { slateBox.replaceChildren(); pending(slateBox); pending(resBody); pending(leftBody); } return; }
+  const games = (OK('team_games') ? dash.data('team_games').data : []).filter((g) => g.abbr === t.abbr).sort((a, b) => d3.ascending(a.tip, b.tip) || d3.ascending(a.id, b.id));
+  const done = games.filter((g) => g.status === 'final');
+  const left = games.filter((g) => g.status !== 'final');
+  const key = (g) => encodeURIComponent(g.id) + ',' + encodeURIComponent(g.abbr);
+  const opp = (g) => { const c = td(''); const o = tmap.get(g.opp) || { abbr: g.opp }; c.append(teamTag(logos, o, code(o))); return c; };
+  ready(resBody);
+  if (!done.length) failRow(resBody, 7, 60, 'No games played yet.', 'muted');
+  else resBody.replaceChildren(...[...done].reverse().map((g) => {
+    const tr = el('tr'); tr.dataset.key = key(g);
+    tr.append(td(fmtDay(parseDay(g.date)), 'muted'), td(g.ha, 'muted'), opp(g), td(g.result, 'nb-wl ' + (g.result === 'W' ? 'w' : 'l')), td(g.score, 'num'),
+      td(fmtP(g.p_win), 'num muted nb-hide-xs'), td(signed(g.delta, 2), 'num ' + tone(g.delta, 2)));
+    return tr;
+  }));
+  ready(leftBody);
+  if (!left.length) failRow(leftBody, 6, 60, 'No games left.', 'muted');
+  else leftBody.replaceChildren(...left.map((g) => {
+    const tr = el('tr'); tr.dataset.key = key(g);
+    tr.append(td(fmtDow(parseDay(g.date)), 'muted'), g.status === 'live' ? td('Live', 'nb-live nb-hide-xs') : td(fmtTip(g.tip), 'muted mono nb-hide-xs'), td(g.ha, 'muted'), opp(g),
+      td(fmtP(g.p_win), 'num' + (g.p_win >= 0.5 ? ' nb-best' : '')), td(fmtSpread(g.spread), 'num'));
+    return tr;
+  }));
+  drawTeamSlate(slateBox, left, tmap);
+}
+
+function drawTeamSlate(box, left, tmap) {
+  ready(box); box.replaceChildren();
+  if (!left.length) { box.append(el('p', 'nb-empty-note', 'No games left.')); return; }
+  const W = box.clientWidth, H = 150, top = 8, bottom = 20;
+  const svg = newSvg(box, W, H, 'Win chance in each remaining game');
+  const yt = [0, 0.5, 1];
+  const lm = measure(svg, yt.map(d3.format('.0%')), 10.5) + 8;
+  const x = d3.scaleBand(d3.range(left.length), [lm, W - 2]).paddingInner(left.length > 60 ? 0.2 : 0.25);
+  const y = d3.scaleLinear([0, 1], [H - bottom, top]);
+  svg.append('g').attr('class', 'nb-grid-l').attr('transform', `translate(${lm},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(-(W - 2 - lm)).tickFormat(''));
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(${lm},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(0).tickPadding(5).tickFormat(d3.format('.0%')))).select('.domain').remove();
+  svg.append('g').selectAll('rect').data(left).join('rect').attr('x', (g, i) => x(i)).attr('width', x.bandwidth()).attr('y', (g) => y(g.p_win)).attr('height', (g) => Math.max(0.5, y(0) - y(g.p_win)))
+    .attr('rx', Math.min(2, x.bandwidth() / 2)).attr('fill', 'var(--cds-chart-categorical-1)').attr('fill-opacity', (g) => (g.ha === '@' ? 0.32 : 0.85));
+  svg.append('line').attr('x1', lm).attr('x2', W - 2).attr('y1', y(0.5)).attr('y2', y(0.5)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '3 2');
+  // 10-game average, centred
+  const roll = left.map((g, i) => { const a = left.slice(Math.max(0, i - 4), i + 6); return { i, v: d3.mean(a, (d) => d.p_win) }; });
+  svg.append('path').attr('d', d3.line().x((d) => x(d.i) + x.bandwidth() / 2).y((d) => y(d.v))(roll)).attr('fill', 'none').attr('stroke', 'var(--color-fg)').attr('stroke-width', 1.75).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+  // month labels at each month's first game, dropped where they would meet
+  const months = []; let lastM = '', lastX = -Infinity;
+  left.forEach((g, i) => { const m = g.date.slice(0, 7); if (m !== lastM) { lastM = m; const px = x(i); if (px - lastX >= 30) { months.push({ px, d: parseDay(g.date) }); lastX = px; } } });
+  const mg = svg.append('g');
+  months.forEach(({ px, d }) => {
+    mg.append('line').attr('x1', px).attr('x2', px).attr('y1', H - bottom).attr('y2', H - bottom + 4).attr('stroke', 'var(--cds-chart-axis)');
+    mg.append('text').attr('x', px).attr('y', H - 5).attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text(fmtMon(d));
+  });
+  svg.append('g').selectAll('rect').data(left).join('rect').attr('x', (g, i) => x(i) - (x.step() - x.bandwidth()) / 2).attr('width', x.step()).attr('y', top).attr('height', H - top - bottom).attr('fill', 'transparent')
+    .on('pointermove', (e, g) => { const o = tmap.get(g.opp); showTip(e, [fmtDow(parseDay(g.date)), [`${g.ha} ${o ? o.city + ' ' + o.name : g.opp}`, ''], ['Win chance', fmtP(g.p_win)], ['Spread', fmtSpread(g.spread)]]); })
+    .on('pointerleave', hideTip);
+}
+
+const STATUS_CLS = (s) => (/^out$|suspen/i.test(s) ? 'nb-st-out' : /active/i.test(s) ? 'muted' : 'nb-st-dtd');
+function drawTeamRoster(t) {
+  const tbody = document.querySelector('#team-roster tbody');
+  const st = dash.data('players').status;
+  if (st === 'missing') { failRow(tbody, 9, 80, 'Player availability is not in this dashboard yet.', 'muted'); return; }
+  if (!tableState(tbody, 9, ['players'], 120)) return;
+  const all = dash.data('players').data;
+  const rows = all.filter((p) => p.abbr === t.abbr).sort((a, b) => N(b.value) - N(a.value));
+  if (!rows.length) { failRow(tbody, 9, 60, 'No roster listed for this team.', 'muted'); return; }
+  const vmax = Math.max(1, d3.max(all, (p) => N(p.value)) || 1), vmin = Math.min(0, d3.min(all, (p) => N(p.value)) || 0);
+  const span = vmax - vmin, z = (-vmin / span) * 100;
+  const yr = OK('run') ? String(dash.data('run').data[0]?.as_of || '').slice(0, 4) : '';
+  tbody.replaceChildren(...rows.map((p) => {
+    const tr = el('tr'); tr.dataset.key = p.athlete_id;
+    const active = /^active$/i.test(p.status);
+    const v = N(p.value);
+    const vc = td('', 'num'); const wrap = el('span', 'nb-vcell'); const bar = el('span', 'nb-vbar'); bar.style.setProperty('--z', z + '%');
+    const b = el('i', v < 0 ? 'neg' : ''); const w = (Math.abs(v) / span) * 100;
+    b.style.left = (v < 0 ? z - w : z) + '%'; b.style.width = Math.max(0, w) + '%'; bar.append(b);
+    wrap.append(el('span', '', fmtNum(v)), bar); vc.append(wrap);
+    const rd = p.return_date ? parseDay(p.return_date) : null;
+    const comment = td(active ? '' : p.comment || '', 'note muted nb-hide-sm');
+    tr.append(td(p.name, active ? '' : 'nb-best'), td(p.pos, 'muted'), td(String(N(p.gp)), 'num muted nb-hide-xs'), td(fmt1(p.mpg), 'num'), vc,
+      td(p.status, STATUS_CLS(p.status)), td(active && !(N(p.p_out) > 0) ? '' : fmtP(p.p_out), 'num nb-hide-xs'),
+      td(rd && !isNaN(rd) ? (String(rd.getUTCFullYear()) === yr ? fmtDay(rd) : fmtDayY(rd)) : '', 'muted nb-hide-xs'), comment);
+    return tr;
+  }));
+}
+
+// ---------- 7. model ----------
+function simpleTable(tableId, ids, build) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  if (!tableState(tbody, 8, ids, 120)) return;
+  tbody.replaceChildren(...build());
+}
+function drawModel() {
+  simpleTable('params-core', ['params'], () => dash.data('params').data.filter((p) => p.group === 'core').map((p) => {
+    const tr = el('tr'); tr.dataset.key = p.key;
+    tr.append(td(p.label), td(fmtVal(p.value), 'num'), td(p.unit, 'muted'), td(p.note, 'muted note nb-hide-xs'));
+    return tr;
+  }));
+  simpleTable('params-factors', ['params'], () => dash.data('params').data.filter((p) => p.group === 'factor')
+    .sort((a, b) => (N(b.kept) - N(a.kept)) || (N(a.d_logloss) - N(b.d_logloss)))
+    .map((p) => {
+      const tr = el('tr'); tr.dataset.key = p.key;
+      const kept = String(p.kept) === '1';
+      const delta = (v) => td(Number.isFinite(v) ? (v > 0 ? '+' : v < 0 ? MINUS : '') + Math.abs(v).toFixed(6) : '', 'num ' + (v < 0 ? 'up' : v > 0 ? 'down' : 'muted'));
+      tr.append(td(p.label), td(fmtVal(p.value), 'num'), td(p.unit, 'muted nb-hide-xs'), td(kept ? 'Kept' : 'Dropped', kept ? '' : 'muted'),
+        delta(N(p.d_logloss)), td(p.folds ? `${p.seasons_better} of ${p.folds}` : '', 'num muted nb-hide-xs'), delta(N(p.d_test)));
+      return tr;
+    }));
+  const facs = state('params') === 'ok' ? dash.data('params').data.filter((p) => p.group === 'factor') : [];
+  const names = (k) => [...new Set(facs.filter((p) => String(p.kept) === k).map((p) => p.note.charAt(0).toLowerCase() + p.note.slice(1)))].join(', ') || 'none';
+  document.getElementById('ctx-kept').textContent = facs.length ? names('1') : '—';
+  document.getElementById('ctx-dropped').textContent = facs.length ? names('0') : '—';
+  simpleTable('backtest-table', ['backtest'], () => {
+    const rows = dash.data('backtest').data;
+    const best = {};
+    ['logloss', 'brier'].forEach((m) => d3.groups(rows, (r) => r.split).forEach(([sp, rs]) => { best[sp + m] = d3.min(rs, (r) => N(r[m])); }));
+    d3.groups(rows, (r) => r.split).forEach(([sp, rs]) => { best[sp + 'acc'] = d3.max(rs, (r) => N(r.acc)); });
+    const order = (sp) => (sp === 'test' ? 0 : 1);
+    return [...rows].sort((a, b) => order(a.split) - order(b.split) || N(a.logloss) - N(b.logloss)).map((r) => {
+      const tr = el('tr'); tr.dataset.key = encodeURIComponent(r.model) + ',' + encodeURIComponent(r.split);
+      const b = (m) => (N(r[m]) === best[r.split + m] ? ' nb-best' : '');
+      tr.append(td(r.model, r.model === 'This model' ? 'nb-best' : ''), td(r.split, 'muted'), td(r.seasons || '', 'muted nb-hide-xs'), td(comma(N(r.games)), 'num muted nb-hide-xs'),
+        td(N(r.logloss).toFixed(4), 'num' + b('logloss')), td(N(r.brier).toFixed(4), 'num' + b('brier')), td(fmtP(r.acc), 'num' + b('acc')));
+      return tr;
+    });
+  });
+  drawCalibration();
+}
+function drawCalibration() {
+  const box = document.getElementById('calibration-chart');
+  const s = state('calibration');
+  if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } return; }
+  ready(box); box.replaceChildren();
+  const rows = dash.data('calibration').data.map((r) => ({ bin: r.bin, p: N(r.p_mean), a: N(r.actual), n: N(r.n) })).filter((r) => Number.isFinite(r.p) && Number.isFinite(r.a)).sort((a, b) => a.p - b.p);
+  if (!rows.length) { box.append(el('p', 'nb-empty-note', 'No calibration bins.')); return; }
+  const W = box.clientWidth, H = Math.round(Math.min(380, Math.max(260, W * 0.7)));
+  box.style.minHeight = H + 'px';
+  const svg = newSvg(box, W, H, 'Calibration: predicted against actual');
+  const pf = d3.format('.0%');
+  const ticks = [0, 0.25, 0.5, 0.75, 1];
+  const left = measure(svg, ticks.map(pf), 10.5) + 22, bottom = 38, top = 8, right = 12;
+  const side = Math.min(W - left - right, H - top - bottom);
+  const x = d3.scaleLinear([0, 1], [left, left + side]);
+  const y = d3.scaleLinear([0, 1], [top + side, top]);
+  const r = d3.scaleSqrt([0, d3.max(rows, (d) => d.n) || 1], [0, Math.max(5, side / 28)]);
+  svg.append('g').attr('class', 'nb-grid-l').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(ticks).tickSize(-side).tickFormat(''));
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(ticks).tickFormat(pf).tickSize(0).tickPadding(6))).select('.domain').remove();
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${top + side})`).call(d3.axisBottom(x).tickValues(ticks).tickFormat(pf).tickSize(4).tickSizeOuter(0)));
+  svg.append('text').attr('x', left + side / 2).attr('y', top + side + 32).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', 'var(--color-fg-muted)').text('Predicted home win');
+  svg.append('text').attr('transform', `translate(10,${top + side / 2}) rotate(-90)`).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', 'var(--color-fg-muted)').text('Home won');
+  svg.append('line').attr('x1', x(0)).attr('y1', y(0)).attr('x2', x(1)).attr('y2', y(1)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 3');
+  svg.append('path').attr('d', d3.line().x((d) => x(d.p)).y((d) => y(d.a))(rows)).attr('fill', 'none').attr('stroke', 'var(--cds-chart-categorical-1)').attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+  svg.append('g').selectAll('circle').data(rows).join('circle').attr('cx', (d) => x(d.p)).attr('cy', (d) => y(d.a)).attr('r', (d) => Math.max(2.5, r(d.n)))
+    .attr('fill', 'var(--cds-chart-categorical-1)').attr('fill-opacity', 0.25).attr('stroke', 'var(--cds-chart-categorical-1)').attr('stroke-width', 1.5)
+    .on('pointerenter', function () { d3.select(this).attr('fill-opacity', 0.6); })
+    .on('pointermove', (e, d) => showTip(e, [`Bin ${d.bin}`, ['Predicted', fmtP(d.p)], ['Actual', fmtP(d.a)], ['Games', comma(d.n)]]))
+    .on('pointerleave', function () { d3.select(this).attr('fill-opacity', 0.25); hideTip(); });
+}
+
+// ---------- draw ----------
+const PAGES = { rankings: drawRankings, playoffs: drawSeeds, wins: drawWins, ratings: drawRatings, games: drawGames, team: drawTeam, model: drawModel };
+let firstDraw = true;
+function draw() {
+  const prevPanel = JSON.stringify(panelRGB);
+  panelRGB = toRGB(getComputedStyle(document.getElementById('rankings-card')).backgroundColor);
+  if (JSON.stringify(panelRGB) !== prevPanel) rowCache.clear();  // theme changed: row edges depend on the panel
+  drawHeader();
+  PAGES[current]();
+  if (firstDraw && OK('teams')) { firstDraw = false; root.querySelectorAll('.nb-page').forEach((p) => p.classList.add('nb-fade')); }
+}
+showTab(current, false);
+dash.onData(draw);
+
+})();</script>
+<script>
+document.querySelector('.theme-toggle').addEventListener('click', () => {
+  const root = document.documentElement;
+  const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme = dark ? 'light' : 'dark';
+  try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  dash.setParams({});  // redraw: charts and row inks read the theme's computed colours
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => dash.setParams({}));
+</script>
 </body>
 </html>

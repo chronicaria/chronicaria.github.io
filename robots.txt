@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://chronicaria.github.io/sitemap.xml

@@ -4,13 +4,13 @@
 @font-face { font-family: 'NB JetBrains Mono'; font-style: normal; font-weight: 400 800; font-display: swap; src: url('../fonts/JetBrainsMono.woff2') format('woff2'); }
 
 :root {
-  --color-bg: #f6f6f3; --color-panel: #ffffff; --color-fg: #1b1c1e; --color-fg-muted: #676b72;
-  --color-border-line: #e2e2dd; --color-bad: #bf3a31; --color-ok: #1d8049; --color-warn: #a96a00;
+  --color-bg: #f6f6f3; --color-panel: #ffffff; --color-fg: #1b1c1e; --color-fg-muted: #5b5f66;
+  --color-border-line: #e2e2dd; --color-bad: #b0302a; --color-ok: #16703d; --color-warn: #a96a00;
   --cds-chart-categorical-1: #2f6fd6; --cds-chart-categorical-2: #d9732f; --cds-chart-categorical-3: #23968a;
   --cds-chart-categorical-4: #8b55d9; --cds-chart-categorical-5: #c79312; --cds-chart-categorical-6: #d6538c;
   --cds-chart-categorical-7: #5470e8; --cds-chart-categorical-8: #6c727a;
   --cds-chart-reference: #9a9da3; --cds-chart-muted: #b9bcc1; --cds-chart-grid: rgba(0, 0, 0, .06); --cds-chart-axis: #c8cacd;
-  --cds-text-secondary: #676b72; --cds-surface-popover: #ffffff; --cds-border: rgba(0, 0, 0, .1);
+  --cds-text-secondary: #5b5f66; --cds-surface-popover: #ffffff; --cds-border: rgba(0, 0, 0, .1);
   --cds-shadow-popover: 0 8px 24px #0000001f, 0 2px 6px #00000014;
   --cds-radius: .5rem; --cds-gap-md: 1rem; --cds-pad-lg: 1rem; --cds-pad-sm: .5rem; --cds-pad-xs: .375rem;
   --cds-font-size-caption: .75rem; --cds-font-size-body: .875rem; --cds-font-size-heading: .9375rem; --cds-font-size-title: 1.375rem;

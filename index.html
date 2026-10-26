@@ -101,8 +101,12 @@
 .nb .nb-rk td { height: 34px; border-bottom: 1px solid color-mix(in srgb, var(--color-border-line) 55%, transparent); }
 .nb .nb-rk .num { font-size: 11px; }
 .nb .nb-rk tbody tr { cursor: pointer; }
+.nb .nb-rk tbody td { background: color-mix(in srgb, var(--tc, transparent) var(--tint, 8%), transparent); }  /* a faint wash of the team colour */
+.nb.nb-dark .nb-rk tbody td { --tint: 15%; }
 .nb .nb-rk tbody td:first-child { box-shadow: inset 3px 0 0 var(--tm, transparent); padding-left: 8px; }
-.nb .nb-rk tbody tr:hover td, .nb .nb-rk tbody tr:focus-within td { background: color-mix(in srgb, var(--color-fg) 4%, transparent); }
+.nb .nb-rk tbody tr:hover td, .nb .nb-rk tbody tr:focus-within td { --tint: 16%; }
+.nb.nb-dark .nb-rk tbody tr:hover td, .nb.nb-dark .nb-rk tbody tr:focus-within td { --tint: 24%; }
+.nb .nb-rk caption { caption-side: top; text-align: left; padding: 0 8px 8px; font-size: 12px; font-weight: 650; color: var(--color-fg); }
 .nb .nb-rk thead th:first-child { padding-left: 8px; }
 .nb .nb-rk .c-chg { width: 30px; font-size: 10px; text-align: left; }
 .nb .nb-rk td.c-chg.up { color: var(--color-ok); }
@@ -112,32 +116,35 @@
 .nb .nb-rk td.c-rank { font-weight: 600; }
 .nb .nb-rk .nb-team { font-weight: 600; gap: 7px; max-width: 100%; overflow: hidden; }
 .nb .nb-rk .nb-team > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.nb .nb-rk .nb-badge { width: 20px; height: 20px; display: grid; place-items: center; flex: none; border-radius: 50%; }
-.nb.nb-dark .nb-rk .nb-badge { background: rgba(255, 255, 255, .9); }
-.nb .nb-rk .nb-badge .nb-logo { width: 18px; height: 18px; }
-.nb.nb-dark .nb-rk .nb-badge .nb-logo { width: 15px; height: 15px; }
+.nb .nb-rk .nb-badge { width: 20px; height: 20px; display: grid; place-items: center; flex: none; }
+.nb .nb-rk .nb-badge .nb-logo { width: 19px; height: 19px; }
+.nb.nb-dark .nb-rk .nb-badge .nb-logo { filter: drop-shadow(0 0 1px rgba(255, 255, 255, .5)); }  /* keeps black logos visible, no white disc */
 .nb .nb-rk .rec { font-weight: 400; font-size: 11px; color: var(--color-fg-muted); margin-left: 3px; }
 .nb .nb-rk .short { display: none; }
-.nb .nb-rk .c-rating { width: 46px; }
-.nb .nb-rk td.c-rating { position: relative; font-weight: 650; font-size: 11.5px; }
-.nb .nb-rk .rbar { position: absolute; right: 4px; width: 38px; bottom: 5px; height: 2px; border-radius: 1px; background: color-mix(in srgb, var(--color-fg) 8%, transparent); }
-.nb .nb-rk .rbar i { position: absolute; top: 0; bottom: 0; border-radius: 1px; background: color-mix(in srgb, var(--cds-chart-categorical-1) 75%, transparent); }
-.nb .nb-rk .rbar i.neg { background: var(--cds-chart-muted); }
-.nb .nb-rk .c-last { width: 104px; padding-left: 10px; font-size: 11px; color: var(--color-fg-muted); overflow: hidden; text-overflow: ellipsis; }
+.nb .nb-rk .c-team { width: 136px; }
+.nb .nb-rk .c-rating { width: 52px; }
+.nb .nb-rk td.c-rating { font-weight: 650; font-size: 11.5px; }
+.nb .nb-rk .c-last { padding-left: 12px; font-size: 11px; color: var(--color-fg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nb .nb-rk .c-last b { font-weight: 600; color: var(--color-fg); }
-.nb .nb-rk .c-proj { width: 38px; }
+.nb .nb-rk .c-proj { width: 50px; }
 .nb .nb-rk th { font-family: var(--nb-sans); font-size: 11px; }
 .nb .nb-rk th.num { direction: rtl; }  /* a header wider than its column spills left, over the gap, not into the next one */
 .nb .nb-rk th.num > * { direction: ltr; }
-.nb .nb-rk .c-sos { width: 62px; }
+.nb .nb-rk .c-sos { width: 70px; }
 .nb .nb-rk .rk { font-family: var(--nb-sans); font-size: 9.5px; color: var(--color-fg-muted); margin-left: 3px; display: inline-block; min-width: 2.3em; text-align: left; }
-.nb .nb-rk .c-p { width: 50px; }
+.nb .nb-rk .c-p { width: 56px; }
 .nb .nb-rk td.c-p { padding-left: 6px; }
 .nb .nb-rk .pb { display: block; padding: 2px 4px; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--cds-chart-categorical-1) 16%, transparent) var(--p), transparent var(--p)); }
 .nb .nb-rk th.c-p { padding-right: 8px; }
 @container nb (min-width: 1180px) {
   .nb .nb-rk-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 20px; }
   .nb #rankings-card { padding-inline: 12px; }
+}
+@container nb (min-width: 1180px) and (max-width: 1340px) {  /* two halves on a laptop: tighter columns so Last keeps its room */
+  .nb .nb-rk .c-team { width: 122px; }
+  .nb .nb-rk .c-sos { width: 62px; }
+  .nb .nb-rk .c-p { width: 50px; }
+  .nb .nb-rk .c-proj { width: 44px; }
 }
 @container nb (max-width: 1179.98px) {
   .nb .nb-rk-2 thead { display: none; }
@@ -274,7 +281,7 @@
   .nb .nb-rk .c-chg { width: 30px; }
   .nb .nb-rk .c-rank { width: 22px; }
   .nb .nb-rk .c-rating { width: 46px; }
-  .nb .nb-rk .rbar { width: 34px; right: 3px; }
+  .nb .nb-rk .c-team { width: 96px; }
   .nb .nb-rk .c-proj { width: 46px; }
   .nb .nb-rk .c-p { width: 48px; }
   .nb .nb-rk .pb { padding: 2px 3px; }
@@ -320,8 +327,8 @@
   <section class="nb-page" id="rankings" role="tabpanel" aria-labelledby="tab-rankings">
     <div class="nb-card" id="rankings-card">
       <div class="nb-card-head nb-rk-head">
-        <div class="nb-seg" id="conf-filter" role="group" aria-label="Conference">
-          <button data-conf="All">All</button><button data-conf="East">East</button><button data-conf="West">West</button>
+        <div class="nb-seg" id="conf-filter" role="group" aria-label="View">
+          <button data-view="league">League</button><button data-view="conf">Conference</button>
         </div>
       </div>
       <div class="nb-rk-wrap" id="rankings-wrap" data-source="logos">
@@ -726,7 +733,7 @@ const unfont = (g) => g.attr('font-size', null).attr('font-family', null);
 // ---------- tabs and links ----------
 // the public site (window.NB_PUBLIC) leaves out the Model tab; the Playoff odds tab is kept in code but not shown
 const PUBLIC = window.NB_PUBLIC === true;
-const HIDDEN = new Set(['playoffs', ...(PUBLIC ? ['model'] : [])]);
+const HIDDEN = new Set(['playoffs', 'ratings', ...(PUBLIC ? ['model'] : [])]);
 const TABS = ['rankings', 'playoffs', 'wins', 'ratings', 'games', 'team', 'model'].filter((t) => !HIDDEN.has(t));
 root.querySelectorAll('.nb-tab').forEach((b) => { if (HIDDEN.has(b.dataset.tab)) b.remove(); });
 HIDDEN.forEach((t) => { document.getElementById(t).hidden = true; });
@@ -807,20 +814,21 @@ rkTables.forEach((tb) => tb.querySelectorAll('th[data-sort]').forEach((th) => th
   draw();
 })));
 const confSeg = document.getElementById('conf-filter');
-confSeg.addEventListener('click', (e) => { const b = e.target.closest('button[data-conf]'); if (b) dash.setParams({ conf: b.dataset.conf }); });
+confSeg.addEventListener('click', (e) => { const b = e.target.closest('button[data-view]'); if (b) dash.setParams({ view: b.dataset.view }); });
 // the clicked row opens its team (the name inside stays the keyboard target)
 document.getElementById('rankings-wrap').addEventListener('click', (e) => { if (e.target.closest('.nb-tlink')) return; const tr = e.target.closest('tbody tr'); if (tr && tr._abbr) openTeam(tr._abbr); });
 
 function drawRankings() {
-  const conf = dash.params().conf || 'All';
-  confSeg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.conf === conf));
+  const view = dash.params().view === 'conf' ? 'conf' : 'league';  // league: 1–15 | 16–30; conf: East | West
+  confSeg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.view === view));
+  rkTables.forEach((tb, i) => { if (view === 'conf') tb.createCaption().textContent = i ? 'West' : 'East'; else tb.deleteCaption(); });
   const [tb1, tb2] = rkTables.map((t) => t.tBodies[0]);
   if (!tableState(tb1, 10, ['teams'])) { tb2.replaceChildren(); ready(tb2); return; }
   ready(tb2);
   const teams = dash.data('teams').data;
   const der = new Map((OK('derived') ? dash.data('derived').data : []).map((d) => [d.abbr, d]));
   const logos = logoMap();
-  const rows = teams.filter((t) => conf === 'All' || t.conf === conf);
+  const rows = teams.slice();
   const val = (t, k) => (k === 'name' ? t.name : N(t[k]));
   const fin = (v) => (Number.isFinite(v) ? v : -Infinity);
   rows.sort((a, b) => {
@@ -832,12 +840,11 @@ function drawRankings() {
   rkTables.forEach((tb) => tb.querySelectorAll('th[data-sort]').forEach((th) => {
     if (th.dataset.sort === rkSort.key) th.setAttribute('aria-sort', rkSort.dir > 0 ? 'ascending' : 'descending'); else th.removeAttribute('aria-sort');
   }));
-  const rmax = Math.max(1, d3.max(teams, (t) => Math.abs(N(t.rating))) || 1);  // the rating bar's half-width, league-wide
   const withRank = (v, r) => { const c = el('span', '', signed(v, 2)); c.append(el('span', 'rk', Number.isFinite(N(r)) ? ordinal(r) : '')); return c; };
   const pbar = (v) => { const c = td('', 'num c-p'); const s = el('span', 'pb', fmtP(v)); const p = N(v); s.style.setProperty('--p', (Number.isFinite(p) ? Math.max(0, Math.min(1, p)) * 100 : 0) + '%'); c.append(s); return c; };
   const out = rows.map((t) => {
     const tr = el('tr'); tr.dataset.key = t.abbr; tr._abbr = t.abbr;
-    tr.style.setProperty('--tm', teamInk(t));  // the row's only team colour: a 3px stripe
+    tr.style.setProperty('--tm', teamInk(t)); tr.style.setProperty('--tc', hex(t.color) || 'transparent');  // stripe + faint row wash
     const rd = N(t.rank_d1);
     tr.append(td(rd > 0 ? '▲' + rd : rd < 0 ? '▼' + Math.abs(rd) : '–', 'c-chg ' + (rd > 0 ? 'up' : rd < 0 ? 'down' : 'flat')));
     tr.append(td(String(N(t.rank)), 'num c-rank'));
@@ -848,16 +855,10 @@ function drawRankings() {
     if (rec) nm.append(el('span', 'rec', rec));
     tag.append(badge, nm);
     const nc = td('', 'c-team'); nc.append(tag); tr.append(nc);
-    const rc = td(fmtR(t.rating), 'num c-rating');
-    const r = N(t.rating);
-    if (Number.isFinite(r)) {
-      const bar = el('span', 'rbar'), b = el('i', r < 0 ? 'neg' : ''), w = Math.min(1, Math.abs(r) / rmax) * 50;
-      b.style.left = (r < 0 ? 50 - w : 50) + '%'; b.style.width = w + '%'; bar.append(b); rc.append(bar);
-    }
-    tr.append(rc);
+    tr.append(td(fmtR(t.rating), 'num c-rating'));
     const lg = String(t.last_game ?? ''); const lc = td('', 'c-last nb-hide-xs');
-    const m = /^([WL])(\s.*)$/.exec(lg);  // "W 108–101 vs LAC" shows as "W 108–101 LAC" (away keeps its @); the full line is the tooltip
-    if (m) { lc.append(el('b', '', m[1]), m[2].replace(/\svs\s/, ' ').replace(/\s@\s/, ' @')); lc.title = lg; } else lc.textContent = lg;
+    const m = /^([WL]) (\d+)–(\d+) (vs|@) (\S+)$/.exec(lg);  // "W 108–101 vs LAC" shows as "W +7 vs LAC"; the score is the tooltip
+    if (m) { const d = +m[2] - +m[3]; lc.append(el('b', '', m[1]), ` ${d > 0 ? '+' : MINUS}${Math.abs(d)} ${m[4]} ${m[5]}`); lc.title = lg; } else lc.textContent = lg;
     tr.append(lc);
     tr.append(td(fmt1(t.proj_w), 'num c-proj'));
     const sc = td('', 'num c-sos nb-hide-sm'); sc.append(withRank(t.sos, t.sos_rank)); tr.append(sc);
@@ -865,9 +866,14 @@ function drawRankings() {
     tr.append(pbar(t.p_playoffs), pbar(t.p_title));
     return tr;
   });
-  const half = Math.ceil(out.length / 2);
-  tb1.replaceChildren(...out.slice(0, half));
-  tb2.replaceChildren(...out.slice(half));
+  if (view === 'conf') {
+    tb1.replaceChildren(...out.filter((tr, i) => rows[i].conf === 'East'));
+    tb2.replaceChildren(...out.filter((tr, i) => rows[i].conf === 'West'));
+  } else {
+    const half = Math.ceil(out.length / 2);
+    tb1.replaceChildren(...out.slice(0, half));
+    tb2.replaceChildren(...out.slice(half));
+  }
 }
 
 // ---------- 2. playoff odds ----------

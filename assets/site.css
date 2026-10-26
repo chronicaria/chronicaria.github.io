@@ -41,6 +41,7 @@
   color-scheme: dark;
 }
 
+*, *::before, *::after { box-sizing: border-box; }  /* the page's fixed column widths assume border-box, as in the dashboard */
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); font-size: 14px; line-height: 1.45; }
 #dash-root { padding-block: 28px 12px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }

@@ -30,8 +30,6 @@
 .nb .nb-head { display: grid; gap: 4px; margin-bottom: var(--cds-gap-md); }
 .nb .nb-title { margin: 0; font-family: var(--nb-sans); font-weight: 650; font-size: calc(var(--cds-font-size-title) * 1.25); letter-spacing: -0.015em; line-height: 1.15; }
 .nb .nb-title .nb-season { color: var(--color-fg-muted); font-weight: 450; }
-.nb .nb-takeaway { margin: 2px 0 0; font-size: calc(var(--cds-font-size-body) * 1.12); line-height: 1.45; max-width: 70ch; }
-.nb .nb-takeaway .nb-em { font-weight: 650; }
 .nb .nb-meta { margin: 0; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: 0.01em; }
 .nb [data-dash-source-state=empty] { color: transparent; }
 .nb [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
@@ -93,31 +91,59 @@
 .nb .nb-best { font-weight: 700; }
 .nb .nb-rank { font-weight: 600; color: var(--color-fg); }
 
-/* rankings: one row per team in its colours (--rk-bg, --rk-ink, --rk-hl set per row) */
-.nb .nb-rk td { padding: 7px 8px; border-bottom: 1px solid var(--color-panel); }
-.nb .nb-rk th { padding: 6px 8px; }
+/* rankings: two compact halves side by side on wide screens (1–15 | 16–30), one list when narrower.
+   Calm rows: the theme's text colours, a thin team-colour stripe (--tm) and the logo; faint bars for rating and odds. */
+.nb .nb-rk-head { margin-bottom: 8px; }
+.nb .nb-rk-wrap { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.nb .nb-rk { table-layout: fixed; font-size: 12px; }
+.nb .nb-rk th, .nb .nb-rk td { padding: 0 4px; }
+.nb .nb-rk th { padding-bottom: 6px; padding-top: 2px; }
+.nb .nb-rk td { height: 34px; border-bottom: 1px solid color-mix(in srgb, var(--color-border-line) 55%, transparent); }
+.nb .nb-rk .num { font-size: 11px; }
 .nb .nb-rk tbody tr { cursor: pointer; }
-.nb .nb-rk tbody tr td { background: var(--rk-bg); color: var(--rk-ink); }
-.nb .nb-rk tbody tr:hover td, .nb .nb-rk tbody tr:focus-within td { background: linear-gradient(var(--rk-hl), var(--rk-hl)), var(--rk-bg); }
-.nb .nb-rk tbody tr:last-child td { border-bottom: 0; }
-.nb .nb-rk tbody tr:first-child td:first-child { border-top-left-radius: 6px; }
-.nb .nb-rk tbody tr:first-child td:last-child { border-top-right-radius: 6px; }
-.nb .nb-rk tbody tr:last-child td:first-child { border-bottom-left-radius: 6px; }
-.nb .nb-rk tbody tr:last-child td:last-child { border-bottom-right-radius: 6px; }
-.nb .nb-rk .nb-tlink:focus-visible { outline: 2px solid var(--rk-ink); outline-offset: 2px; }
-.nb .nb-rk .c-chg { width: 2.6rem; font-size: 11.5px; }
-.nb .nb-rk tbody td.c-chg.flat { font-weight: 400; }
-.nb .nb-rk tbody tr.rk-edge td { box-shadow: inset 0 1px 0 var(--cds-border), inset 0 -1px 0 var(--cds-border); }
-.nb .nb-rk tbody td.nb-rank { color: var(--rk-ink); font-weight: 700; width: 2rem; }
-.nb .nb-rk .nb-team { font-weight: 650; gap: 10px; }
-.nb .nb-rk .nb-badge { width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, .94); display: grid; place-items: center; flex: none; box-shadow: 0 0 0 1px rgba(0, 0, 0, .08); }
-.nb .nb-rk .nb-badge .nb-logo { width: 19px; height: 19px; }
-.nb .nb-rk .rec { font-weight: 400; margin-left: 2px; }
+.nb .nb-rk tbody td:first-child { box-shadow: inset 3px 0 0 var(--tm, transparent); padding-left: 8px; }
+.nb .nb-rk tbody tr:hover td, .nb .nb-rk tbody tr:focus-within td { background: color-mix(in srgb, var(--color-fg) 4%, transparent); }
+.nb .nb-rk thead th:first-child { padding-left: 8px; }
+.nb .nb-rk .c-chg { width: 30px; font-size: 10px; text-align: left; }
+.nb .nb-rk td.c-chg.up { color: var(--color-ok); }
+.nb .nb-rk td.c-chg.down { color: var(--color-bad); }
+.nb .nb-rk td.c-chg.flat { color: var(--color-fg-muted); font-weight: 400; }
+.nb .nb-rk .c-rank { width: 24px; }
+.nb .nb-rk td.c-rank { font-weight: 600; }
+.nb .nb-rk .nb-team { font-weight: 600; gap: 7px; max-width: 100%; overflow: hidden; }
+.nb .nb-rk .nb-team > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nb .nb-rk .nb-badge { width: 20px; height: 20px; display: grid; place-items: center; flex: none; border-radius: 50%; }
+.nb.nb-dark .nb-rk .nb-badge { background: rgba(255, 255, 255, .9); }
+.nb .nb-rk .nb-badge .nb-logo { width: 18px; height: 18px; }
+.nb.nb-dark .nb-rk .nb-badge .nb-logo { width: 15px; height: 15px; }
+.nb .nb-rk .rec { font-weight: 400; font-size: 11px; color: var(--color-fg-muted); margin-left: 3px; }
 .nb .nb-rk .short { display: none; }
-.nb .nb-rk .c-rating { font-weight: 700; font-size: 13px; }
-.nb .nb-rk .c-last { font-family: var(--nb-mono); font-size: 12px; }
-.nb .nb-rk .c-last b { font-weight: 700; }
-.nb .nb-rk .rk { font-weight: 400; font-size: .92em; }
+.nb .nb-rk .c-rating { width: 46px; }
+.nb .nb-rk td.c-rating { position: relative; font-weight: 650; font-size: 11.5px; }
+.nb .nb-rk .rbar { position: absolute; right: 4px; width: 38px; bottom: 5px; height: 2px; border-radius: 1px; background: color-mix(in srgb, var(--color-fg) 8%, transparent); }
+.nb .nb-rk .rbar i { position: absolute; top: 0; bottom: 0; border-radius: 1px; background: color-mix(in srgb, var(--cds-chart-categorical-1) 75%, transparent); }
+.nb .nb-rk .rbar i.neg { background: var(--cds-chart-muted); }
+.nb .nb-rk .c-last { width: 104px; padding-left: 10px; font-size: 11px; color: var(--color-fg-muted); overflow: hidden; text-overflow: ellipsis; }
+.nb .nb-rk .c-last b { font-weight: 600; color: var(--color-fg); }
+.nb .nb-rk .c-proj { width: 38px; }
+.nb .nb-rk th { font-family: var(--nb-sans); font-size: 11px; }
+.nb .nb-rk th.num { direction: rtl; }  /* a header wider than its column spills left, over the gap, not into the next one */
+.nb .nb-rk th.num > * { direction: ltr; }
+.nb .nb-rk .c-sos { width: 62px; }
+.nb .nb-rk .rk { font-family: var(--nb-sans); font-size: 9.5px; color: var(--color-fg-muted); margin-left: 3px; display: inline-block; min-width: 2.3em; text-align: left; }
+.nb .nb-rk .c-p { width: 50px; }
+.nb .nb-rk td.c-p { padding-left: 6px; }
+.nb .nb-rk .pb { display: block; padding: 2px 4px; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--cds-chart-categorical-1) 16%, transparent) var(--p), transparent var(--p)); }
+.nb .nb-rk th.c-p { padding-right: 8px; }
+@container nb (min-width: 1180px) {
+  .nb .nb-rk-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 20px; }
+  .nb #rankings-card { padding-inline: 12px; }
+}
+@container nb (max-width: 1179.98px) {
+  .nb .nb-rk-2 thead { display: none; }
+  .nb .nb-rk-1 tbody tr:last-child td { border-bottom: 1px solid color-mix(in srgb, var(--color-border-line) 55%, transparent); }
+  .nb .nb-rk .c-last { width: auto; }
+}
 
 /* heatmap */
 .nb .nb-heat td.h { text-align: center; font-size: 10.5px; padding: 4px 2px; min-width: 46px; font-family: var(--nb-mono); border-bottom: 1px solid var(--color-panel); border-right: 1px solid var(--color-panel); }
@@ -156,7 +182,7 @@
 .nb .nb-g th.c-p { width: 44px; }
 .nb .nb-g th.c-sp { width: 58px; }
 .nb #games .nb-grid { grid-template-columns: minmax(0, 940px); }
-.nb .nb-g.upcoming .nb-split { width: auto; flex: 1; min-width: 36px; max-width: 200px; }
+.nb .nb-g.upcoming .nb-split { width: auto; flex: 1; min-width: 36px; }
 
 /* model */
 .nb .nb-prose { font-size: var(--cds-font-size-body); line-height: 1.55; max-width: 78ch; }
@@ -219,6 +245,9 @@
 .nb .nb-live { font-family: var(--nb-mono); font-size: 11px; font-weight: 600; color: var(--color-bad); }
 .nb .nb-summary { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0 0 8px; }
 .nb .nb-summary b { color: var(--color-fg); font-weight: 600; }
+.nb .nb-card-head .nb-summary { margin: 2px 0 0; font-family: var(--nb-mono); }
+.nb .nb-hint { cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.nb th[title] { cursor: help; }
 
 /* narrow */
 .nb .nb-show-xs { display: none; }
@@ -236,15 +265,21 @@
   .nb .nb-table td, .nb .nb-table th { padding: 5px 4px; }
   .nb .nb-table .num { font-size: 11.5px; }
   .nb .nb-team { gap: 5px; }
-  .nb .nb-rk td, .nb .nb-rk th { padding: 6px 3px; }
+  .nb .nb-rk td, .nb .nb-rk th { padding-left: 3px; padding-right: 3px; }
+  .nb .nb-rk tbody td:first-child, .nb .nb-rk thead th:first-child { padding-left: 7px; }
   .nb .nb-rk .num { font-size: 11px; }
-  .nb .nb-rk .nb-team { gap: 6px; }
-  .nb .nb-rk .nb-badge { width: 22px; height: 22px; }
-  .nb .nb-rk .nb-badge .nb-logo { width: 16px; height: 16px; }
+  .nb .nb-rk .nb-team { gap: 5px; }
   .nb .nb-rk .full { display: none; }
   .nb .nb-rk .short { display: inline; }
-  .nb .nb-rk .c-chg { width: auto; font-size: 10.5px; }
-  .nb .nb-rk .c-rating { font-size: 12px; }
+  .nb .nb-rk .c-chg { width: 30px; }
+  .nb .nb-rk .c-rank { width: 22px; }
+  .nb .nb-rk .c-rating { width: 46px; }
+  .nb .nb-rk .rbar { width: 34px; right: 3px; }
+  .nb .nb-rk .c-proj { width: 46px; }
+  .nb .nb-rk .c-p { width: 48px; }
+  .nb .nb-rk .pb { padding: 2px 3px; }
+  .nb .nb-rk td.c-p { padding-left: 4px; }
+  .nb .nb-rk th.c-p { padding-right: 6px; }
   .nb .nb-logo { width: 18px; height: 18px; }
   .nb .nb-g th.c-team { width: 64px; }
   .nb .nb-g th.c-home, .nb .nb-g td.c-home { padding-left: 8px; }
@@ -267,12 +302,8 @@
 <div data-appifact-content><div id="dash-root">
 <div class="nb" id="nb">
   <header class="nb-head" id="overview">
-    <h1 class="nb-title" id="title">NBA power rankings <span class="nb-season"><span data-source="run" data-field="season" data-row="0" class="dash-skeleton">—</span> forecast</span></h1>
-    <p class="nb-takeaway" id="takeaway">
-      <span class="nb-tk-same" hidden>The <span class="nb-em" data-source="headline" data-field="top" data-row="0">—</span> lead on both counts: the top rating at <span class="mono" data-source="headline" data-field="top_rating" data-row="0">—</span> and a <span class="mono" data-source="headline" data-field="fav_title" data-row="0">—</span> title chance, with the <span class="nb-em" data-source="headline" data-field="next" data-row="0">—</span> next at <span class="mono" data-source="headline" data-field="next_title" data-row="0">—</span>.</span>
-      <span class="nb-tk-diff dash-skeleton">The <span class="nb-em" data-source="headline" data-field="top" data-row="0">—</span> have the top rating at <span class="mono" data-source="headline" data-field="top_rating" data-row="0">—</span>, but the <span class="nb-em" data-source="headline" data-field="fav" data-row="0">—</span> are the title favourite at <span class="mono" data-source="headline" data-field="fav_title" data-row="0">—</span>.</span>
-    </p>
-    <p class="nb-meta" id="run-line">Updated <span data-source="run" data-field="as_of" data-row="0" class="dash-skeleton">—</span> · <span data-source="run" data-field="n_sims" data-row="0">—</span> season sims · <span data-source="run" data-field="games_played" data-row="0">—</span> games played, <span data-source="run" data-field="games_left" data-row="0">—</span> to go · ratings in points vs an average team</p>
+    <h1 class="nb-title" id="title">NBA power rankings <span class="nb-season"><span data-source="run" data-field="season" data-row="0" class="dash-skeleton">—</span></span></h1>
+    <p class="nb-meta" id="run-line">Updated <span data-source="run" data-field="as_of" data-row="0" class="dash-skeleton">—</span></p>
   </header>
 
   <nav class="nb-tabs" role="tablist" id="tabs" aria-label="Pages">
@@ -288,31 +319,28 @@
   <!-- 1. Rankings -->
   <section class="nb-page" id="rankings" role="tabpanel" aria-labelledby="tab-rankings">
     <div class="nb-card" id="rankings-card">
-      <div class="nb-card-head">
-        <div>
-          <h2 class="nb-card-title" id="rankings-title">Power rankings</h2>
-          <p class="nb-card-note">Rating is in points against an average team (0): on a neutral court a +5 team is favoured by 5 over an average one. The arrows are the rank change since the last game day. SOS is the remaining opponents' mean rating; SOR (strength of resume) is wins above what an average team would expect against the same opponents and venues. Ranks in parentheses are league ranks: 1st is the hardest schedule left or the best resume. Click a team for its page.</p>
-        </div>
+      <div class="nb-card-head nb-rk-head">
         <div class="nb-seg" id="conf-filter" role="group" aria-label="Conference">
           <button data-conf="All">All</button><button data-conf="East">East</button><button data-conf="West">West</button>
         </div>
       </div>
-      <div class="nb-scroll" data-source="logos">
-        <table class="nb-table nb-rk" id="rankings-table" data-source="teams" data-row-key="abbr">
+      <div class="nb-rk-wrap" id="rankings-wrap" data-source="logos">
+        <table class="nb-table nb-rk nb-rk-1" id="rankings-table" data-source="teams" data-row-key="abbr">
           <thead><tr>
-            <th class="num c-chg" data-field="rank_d1" data-sort="rank_d1"><button class="nb-sort" title="Rank change since the last game day" aria-label="Rank change since the last game day">±</button></th>
-            <th class="num" data-field="rank" data-sort="rank"><button class="nb-sort">#</button></th>
-            <th data-field="name" data-sort="name"><button class="nb-sort">Team</button></th>
-            <th class="num" data-field="rating" data-sort="rating"><button class="nb-sort"><span class="full">Rating</span><span class="short">Rtg</span></button></th>
-            <th class="nb-hide-xs" data-field="last_game"><span>Last game</span></th>
-            <th class="num" data-field="proj_w" data-sort="proj_w"><button class="nb-sort"><span class="full">Proj. W–L</span><span class="short">Proj.</span></button></th>
-            <th class="num nb-hide-sm" data-field="sos" data-sort="sos"><button class="nb-sort">SOS</button></th>
-            <th class="num nb-hide-sm" data-field="sor" data-sort="sor"><button class="nb-sort">SOR</button></th>
-            <th class="num" data-field="p_playoffs" data-sort="p_playoffs"><button class="nb-sort"><span class="full">Playoffs</span><span class="short">PO</span></button></th>
-            <th class="num" data-field="p_title" data-sort="p_title"><button class="nb-sort">Title</button></th>
+            <th class="c-chg" data-field="rank_d1" data-sort="rank_d1"><button class="nb-sort" title="Rank change since the last game day" aria-label="Rank change since the last game day">±</button></th>
+            <th class="num c-rank" data-field="rank" data-sort="rank"><button class="nb-sort">#</button></th>
+            <th class="c-team" data-field="name" data-sort="name"><button class="nb-sort">Team</button></th>
+            <th class="num c-rating" data-field="rating" data-sort="rating"><button class="nb-sort" title="Points vs an average team (0); +5 = favoured by 5 on a neutral court"><span class="full">Rating</span><span class="short">Rtg</span></button></th>
+            <th class="c-last nb-hide-xs" data-field="last_game"><span>Last</span></th>
+            <th class="num c-proj" data-field="proj_w" data-sort="proj_w"><button class="nb-sort" title="Projected wins: mean of the season simulations">Proj. W</button></th>
+            <th class="num c-sos nb-hide-sm" data-field="sos" data-sort="sos"><button class="nb-sort" title="Remaining schedule strength: opponents' mean rating; 1st = hardest">SOS</button></th>
+            <th class="num c-sos nb-hide-sm" data-field="sor" data-sort="sor"><button class="nb-sort" title="Strength of record: wins above an average team's expectation against the same games; 1st = best">SOR</button></th>
+            <th class="num c-p" data-field="p_playoffs" data-sort="p_playoffs"><button class="nb-sort" title="Chance to make the playoffs (play-in winners included)"><span class="full">Playoffs</span><span class="short">PO</span></button></th>
+            <th class="num c-p" data-field="p_title" data-sort="p_title"><button class="nb-sort" title="Chance to win the title">Title</button></th>
           </tr></thead>
           <tbody class="dash-skeleton"></tbody>
         </table>
+        <table class="nb-table nb-rk nb-rk-2" id="rankings-table-2" data-source="teams" data-row-key="abbr"><thead></thead><tbody class="dash-skeleton"></tbody></table>
       </div>
     </div>
   </section>
@@ -338,17 +366,17 @@
   <!-- 3. Win distributions -->
   <section class="nb-page" id="wins" role="tabpanel" aria-labelledby="tab-wins" hidden>
     <div class="nb-legend" id="wins-legend">
-      <span class="k"><i class="nb-key bar"></i>Simulated wins (darker = middle 80%)</span>
+      <span class="k"><i class="nb-key bar"></i>Simulated wins (dark = middle 80%)</span>
       <span class="k"><i class="nb-key tick" style="background: var(--color-fg)"></i>Mean</span>
       <span class="k"><i class="nb-key dash"></i>Vegas total</span>
     </div>
     <div class="nb-grid">
       <div class="nb-card" id="wins-east-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="wins-east-title">East</h2><p class="nb-card-note">Regular-season wins across all simulations, on one shared scale.</p></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="wins-east-title">East</h2></div></div>
         <div class="nb-chart dash-skeleton" id="wins-east" data-source="win_dist teams logos" style="min-height: 470px"></div>
       </div>
       <div class="nb-card" id="wins-west-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="wins-west-title">West</h2><p class="nb-card-note">Regular-season wins across all simulations, on one shared scale.</p></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="wins-west-title">West</h2></div></div>
         <div class="nb-chart dash-skeleton" id="wins-west" data-source="win_dist teams logos" style="min-height: 470px"></div>
       </div>
     </div>
@@ -360,7 +388,6 @@
       <div class="nb-card-head">
         <div>
           <h2 class="nb-card-title" id="ratings-title">Ratings this season</h2>
-          <p class="nb-card-note">Points against an average team (the 0 line), from each team's preseason prior, after each game day, each line in its team's colour. Hover a line or pick a team to follow it; click a name for its page.</p>
         </div>
         <select class="nb-select" id="ratings-team" aria-label="Team to highlight" data-source="teams"></select>
       </div>
@@ -374,7 +401,6 @@
       <div class="nb-card" id="upcoming-card">
         <div class="nb-card-head"><div>
           <h2 class="nb-card-title" id="upcoming-title">Today's games</h2>
-          <p class="nb-card-note">At today's ratings. Win chances include home court, altitude and back-to-backs; spread is the home side's, negative when favoured. Tip times Eastern.</p>
         </div></div>
         <div id="upcoming" class="dash-skeleton" style="min-height: 200px"></div>
       </div>
@@ -395,62 +421,61 @@
         <label class="nb-th-pick"><select class="nb-select" id="team-pick" aria-label="Team" data-source="teams"></select></label>
       </div>
       <div class="nb-tiles" id="team-tiles">
-        <div class="nb-tile" id="tile-rating"><div class="k">Rating</div><div class="v"><span class="tm" data-source="teams" data-field="rating">—</span></div><div class="s">Rank <span class="tm" data-source="teams" data-field="rank">—</span> of 30 · <span class="tm" data-source="teams" data-field="rating_d1">—</span> last game day, <span class="tm" data-source="teams" data-field="rating_d7">—</span> in 7 days</div></div>
+        <div class="nb-tile" id="tile-rating"><div class="k">Rating</div><div class="v"><span class="tm" data-source="teams" data-field="rating">—</span></div><div class="s"><span class="tm" data-source="teams" data-field="rank">—</span> · <span class="tm" data-source="teams" data-field="rating_d7">—</span> in 7 days</div></div>
         <div class="nb-tile" id="tile-today" hidden><div class="k">Next game</div><div class="v"><span class="tm" data-source="teams" data-field="rating_today">—</span></div><div class="s" id="tile-today-s">Without <span class="tm" data-source="outs" data-field="names">—</span></div></div>
-        <div class="nb-tile" id="tile-proj"><div class="k">Projected record</div><div class="v"><span class="tm" data-source="teams" data-field="proj_w">—</span>–<span class="tm" data-source="teams" data-field="proj_l">—</span></div><div class="s">10th–90th pct <span class="tm" data-source="teams" data-field="w_p10">—</span>–<span class="tm" data-source="teams" data-field="w_p90">—</span> wins</div></div>
+        <div class="nb-tile" id="tile-proj"><div class="k">Proj. W</div><div class="v"><span class="tm" data-source="teams" data-field="proj_w">—</span></div><div class="s" title="10th to 90th percentile of simulated wins">80%: <span class="tm" data-source="teams" data-field="w_p10">—</span>–<span class="tm" data-source="teams" data-field="w_p90">—</span></div></div>
         <div class="nb-tile" id="tile-po"><div class="k">Playoffs</div><div class="v"><span class="tm" data-source="teams" data-field="p_playoffs">—</span></div><div class="s">Title <span class="tm" data-source="teams" data-field="p_title">—</span></div></div>
-        <div class="nb-tile" id="tile-pre"><div class="k">Preseason</div><div class="v"><span class="tm" data-source="teams" data-field="vegas_total">—</span> <small>wins</small></div><div class="s">Vegas total · prior <span class="tm" data-source="teams" data-field="rating_prior">—</span></div></div>
-        <div class="nb-tile" id="tile-sos"><div class="k">Schedule left</div><div class="v"><span class="tm" data-source="teams" data-field="sos">—</span></div><div class="s">Remaining opponents' mean rating · <span class="tm" data-source="teams" data-field="sos_rank">—</span> hardest · resume <span class="tm" data-source="teams" data-field="sor">—</span> (<span class="tm" data-source="teams" data-field="sor_rank">—</span>)</div></div>
+        <div class="nb-tile" id="tile-pre"><div class="k">Vegas total</div><div class="v"><span class="tm" data-source="teams" data-field="vegas_total">—</span></div><div class="s">Prior <span class="tm" data-source="teams" data-field="rating_prior">—</span></div></div>
+        <div class="nb-tile" id="tile-sos"><div class="k" title="Remaining schedule strength (opponents' mean rating) and strength of record">SOS · SOR</div><div class="v"><span class="tm" data-source="teams" data-field="sos_rank">—</span> <small>·</small> <span class="tm" data-source="teams" data-field="sor_rank">—</span></div><div class="s"><span class="tm" data-source="teams" data-field="sos">—</span> · <span class="tm" data-source="teams" data-field="sor">—</span></div></div>
       </div>
     </div>
 
     <div class="nb-grid3">
       <div class="nb-card" id="team-wins-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-wins-title">Win distribution</h2><p class="nb-card-note">Regular-season wins across all simulations; darker bars are the middle 80%.</p></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-wins-title">Wins</h2></div></div>
         <div class="nb-chart dash-skeleton" id="team-wins" data-source="win_dist teams" style="min-height: 210px"></div>
       </div>
       <div class="nb-card" id="team-path-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-path-title">Playoff path</h2><p class="nb-card-note">Where the season ends, then how far the run goes.</p></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-path-title">Playoff path</h2></div></div>
         <div class="dash-skeleton" id="team-path" data-source="teams" style="min-height: 210px"></div>
       </div>
       <div class="nb-card" id="team-seeds-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-seeds-title">Seed</h2><p class="nb-card-note">Chance of each conference seed; 7–10 go to the play-in.</p></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-seeds-title">Seed</h2></div></div>
         <div class="nb-chart dash-skeleton" id="team-seeds" data-source="teams" style="min-height: 210px"></div>
       </div>
     </div>
 
     <div class="nb-grid2">
       <div class="nb-card" id="team-history-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-history-title">Rating this season</h2><p class="nb-card-note">After each game day, from the preseason prior; grey lines are the other 29 teams, 0 is the league average.</p></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-history-title">Rating</h2></div></div>
         <div class="nb-chart dash-skeleton" id="team-history" data-source="history teams" style="min-height: 250px"></div>
       </div>
       <div class="nb-card" id="team-slate-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-slate-title">Remaining schedule</h2><p class="nb-card-note">Win chance in each game left at today's ratings, in date order; the line is a 10-game average.</p></div></div>
-        <p class="nb-summary" id="team-slate-sum"><b class="tm" data-source="slate" data-field="left">—</b> games left · <b class="tm" data-source="slate" data-field="exp_w">—</b> expected wins at today's ratings · average win chance <b class="tm" data-source="slate" data-field="avg_p">—</b></p>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-slate-title">Games left</h2></div><p class="nb-summary" id="team-slate-sum"><b class="tm" data-source="slate" data-field="left">—</b> left · <b class="tm" data-source="slate" data-field="exp_w">—</b> exp. W</p></div>
         <div class="nb-chart dash-skeleton" id="team-slate" data-source="team_games" style="min-height: 150px"></div>
-        <div class="nb-legend" style="margin-top: 6px"><span class="k"><i class="nb-key bar"></i>Home</span><span class="k"><i class="nb-key"></i>Away</span><span class="k"><i class="nb-key tick" style="background: var(--color-fg); width: 12px; height: 2px"></i>10-game average</span><span class="k"><i class="nb-key dash"></i>50%</span></div>
+        <div class="nb-legend" style="margin-top: 6px"><span class="k"><i class="nb-key bar"></i>Home</span><span class="k"><i class="nb-key"></i>Away</span><span class="k"><i class="nb-key tick" style="background: var(--color-fg); width: 12px; height: 2px"></i>10-game avg</span></div>
       </div>
     </div>
 
     <div class="nb-grid2">
       <div class="nb-card" id="team-results-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-results-title">Results</h2><p class="nb-card-note">Pregame win chance and the rating change in points from each game.</p></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-results-title">Results</h2></div></div>
         <div class="nb-scroll nb-tall" data-source="logos"><table class="nb-table" id="team-results" data-source="team_games" data-row-key="id,abbr">
-          <thead><tr><th data-field="date">Date</th><th data-field="ha"></th><th data-field="opp">Opponent</th><th data-field="result">Result</th><th class="num" data-field="score">Score</th><th class="num nb-hide-xs" data-field="p_win">Pregame</th><th class="num" data-field="delta">Rating Δ</th></tr></thead>
+          <thead><tr><th data-field="date">Date</th><th data-field="ha"></th><th data-field="opp">Opponent</th><th data-field="result">Result</th><th class="num" data-field="score">Score</th><th class="num nb-hide-xs" data-field="p_win" title="Pregame win chance">Pregame</th><th class="num" data-field="delta" title="Rating change from the game">Δ</th></tr></thead>
           <tbody class="dash-skeleton"></tbody></table></div>
       </div>
       <div class="nb-card" id="team-left-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-left-title">Still to play</h2><p class="nb-card-note">Every game left, at today's ratings. Spread is this team's, negative when favoured. Tip times Eastern.</p></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-left-title">Schedule</h2></div></div>
         <div class="nb-scroll nb-tall" data-source="logos"><table class="nb-table" id="team-left" data-source="team_games" data-row-key="id,abbr">
-          <thead><tr><th data-field="date">Date</th><th class="nb-hide-xs" data-field="tip">Tip</th><th data-field="ha"></th><th data-field="opp">Opponent</th><th class="num" data-field="p_win">Win</th><th class="num" data-field="spread">Spread</th></tr></thead>
+          <thead><tr><th data-field="date">Date</th><th class="nb-hide-xs" data-field="tip">ET</th><th data-field="ha"></th><th data-field="opp">Opponent</th><th class="num" data-field="p_win">Win</th><th class="num" data-field="spread" title="This team's spread; negative = favoured">Spread</th></tr></thead>
           <tbody class="dash-skeleton"></tbody></table></div>
       </div>
     </div>
 
     <div class="nb-card" id="team-roster-card">
-      <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-roster-title">Roster</h2><p class="nb-card-note">Value is the points per game the team loses when he sits at his usual minutes, against a replacement player. Miss next is the chance he misses the next game; ESPN's status and comment for anyone not active.</p></div></div>
+      <div class="nb-card-head"><div><h2 class="nb-card-title" id="team-roster-title">Roster</h2></div></div>
       <div class="nb-scroll"><table class="nb-table" id="team-roster" data-source="players" data-row-key="athlete_id">
-        <thead><tr><th data-field="name">Player</th><th data-field="pos">Pos</th><th class="num nb-hide-xs" data-field="gp">GP</th><th class="num" data-field="mpg">MPG</th><th class="num" data-field="value">Value</th><th data-field="status">Status</th><th class="num nb-hide-xs" data-field="p_out">Miss next</th><th class="nb-hide-xs" data-field="return_date">Return</th><th class="nb-hide-sm" data-field="comment">Comment</th></tr></thead>
+        <thead><tr><th data-field="name">Player</th><th data-field="pos">Pos</th><th class="num nb-hide-xs" data-field="gp">GP</th><th class="num" data-field="mpg">MPG</th><th class="num" data-field="value" title="Points per game the team loses when he sits, vs a replacement player">Value</th><th data-field="status" title="ESPN status; hover for the report">Status</th><th class="num nb-hide-xs" data-field="p_out" title="Chance he misses the next game">Miss next</th><th class="nb-hide-xs" data-field="return_date">Return</th></tr></thead>
         <tbody class="dash-skeleton"></tbody></table></div>
     </div>
   </section>
@@ -500,22 +525,10 @@
   <div class="nb-tip" id="nb-tip" role="tooltip"></div>
 </div>
 </div></div>
-<footer class="site-foot"><p>Ratings are in points against an average team, adjusted for who plays. Data: ESPN results, box scores and injury reports; preseason win totals from BetMGM, DraftKings and Fanatics. Updated every morning.</p></footer>
+<footer class="site-foot"><p>Ratings: points vs an average team. Data: ESPN; preseason lines: BetMGM, DraftKings, Fanatics. Updated every morning.</p></footer>
 <script>(() => {
 
 // ---------- calcs (readers see these) ----------
-dash.calc('headline', {
-  title: 'Top team and title favourite',
-  description: 'The highest-rated team, the team with the best title chance, and the next-best title chance.',
-  inputs: ['teams'],
-  fn: (teams) => {
-    if (!teams.length) return [];
-    const top = teams.reduce((a, b) => (+b.rating > +a.rating ? b : a));
-    const fav = teams.reduce((a, b) => (+b.p_title > +a.p_title ? b : a));
-    const next = teams.filter((t) => t.abbr !== fav.abbr).reduce((a, b) => (+b.p_title > +a.p_title ? b : a));
-    return [{ top: top.name, top_rating: +top.rating, fav: fav.name, fav_title: +fav.p_title, next: next.name, next_title: +next.p_title, same: top.abbr === fav.abbr }];
-  },
-});
 dash.calc('derived', {
   title: 'Record and mean seed',
   description: 'Per team: wins–losses and the average simulated seed.',
@@ -778,22 +791,6 @@ function drawHeader() {
   } else if (BAD.has(run.status)) {
     fill('[data-source=run]', '');
   }
-  const h = dash.data('headline');
-  const same = root.querySelector('.nb-tk-same'), diff = root.querySelector('.nb-tk-diff');
-  if (h.status === 'ok' && h.data.length) {
-    const r = h.data[0];
-    same.hidden = !r.same; diff.hidden = !!r.same;
-    diff.classList.remove('dash-skeleton');
-    fill('[data-source=headline][data-field=top]', r.top);
-    fill('[data-source=headline][data-field=top_rating]', fmtR(r.top_rating));
-    fill('[data-source=headline][data-field=fav]', r.fav);
-    fill('[data-source=headline][data-field=fav_title]', fmtP(r.fav_title));
-    fill('[data-source=headline][data-field=next]', r.next);
-    fill('[data-source=headline][data-field=next_title]', fmtP(r.next_title));
-  } else if (BAD.has(h.status)) {
-    same.hidden = true; diff.hidden = false; diff.classList.remove('dash-skeleton');
-    diff.textContent = '';
-  }
 }
 const hasToday = () => OK('teams') && dash.data('teams').data.length > 0 && 'rating_today' in dash.data('teams').data[0];
 
@@ -801,40 +798,25 @@ const hasToday = () => OK('teams') && dash.data('teams').data.length > 0 && 'rat
 let rkSort = { key: 'rank', dir: 1 };
 const DESC_FIRST = new Set(['rating', 'rank_d1', 'proj_w', 'sos', 'sor', 'p_playoffs', 'p_title']);
 const rkTable = document.getElementById('rankings-table');
-rkTable.querySelectorAll('th[data-sort]').forEach((th) => th.querySelector('button').addEventListener('click', () => {
+const rkTable2 = document.getElementById('rankings-table-2');
+const rkTables = [rkTable, rkTable2];
+rkTable2.tHead.replaceWith(rkTable.tHead.cloneNode(true));  // the right half (16–30) repeats the header
+rkTables.forEach((tb) => tb.querySelectorAll('th[data-sort]').forEach((th) => th.querySelector('button').addEventListener('click', () => {
   const k = th.dataset.sort;
   rkSort = rkSort.key === k ? { key: k, dir: -rkSort.dir } : { key: k, dir: DESC_FIRST.has(k) ? -1 : 1 };
   draw();
-}));
+})));
 const confSeg = document.getElementById('conf-filter');
 confSeg.addEventListener('click', (e) => { const b = e.target.closest('button[data-conf]'); if (b) dash.setParams({ conf: b.dataset.conf }); });
-// a row's colours: the team colour, with white or near-black text, whichever reads better on it (same in both themes)
-const WHITE = { r: 255, g: 255, b: 255 }, INK_DARK = '#16181d', INK_DARK_RGB = { r: 22, g: 24, b: 29 };
-const rowCache = new Map();
-const rowColors = (t) => {
-  const key = hex(t.color) || '#5f6672';
-  if (rowCache.has(key)) return rowCache.get(key);
-  let bg = key, rgb = toRGB(bg);
-  const inks = [['#ffffff', WHITE], [INK_DARK, INK_DARK_RGB], ['#000000', { r: 0, g: 0, b: 0 }]];
-  let best = inks.reduce((a, b) => (contrast(b[1], rgb) > contrast(a[1], rgb) ? b : a));
-  for (let k = 0; contrast(best[1], rgb) < 4.5 && k < 12; k++) {  // no ink reaches AA: darken the row a step and use white
-    rgb = { r: rgb.r * 0.95, g: rgb.g * 0.95, b: rgb.b * 0.95 }; best = inks[0];
-    bg = `rgb(${Math.round(rgb.r)},${Math.round(rgb.g)},${Math.round(rgb.b)})`;
-  }
-  const light = best[0] === '#ffffff';
-  // hover moves the background away from the ink, so contrast only rises
-  const c = { bg, ink: best[0], hl: light ? 'rgba(0,0,0,.2)' : 'rgba(255,255,255,.28)', edge: contrast(rgb, panelRGB || WHITE) < 1.3 };
-  rowCache.set(key, c);
-  return c;
-};
 // the clicked row opens its team (the name inside stays the keyboard target)
-rkTable.addEventListener('click', (e) => { if (e.target.closest('.nb-tlink')) return; const tr = e.target.closest('tbody tr'); if (tr && tr._abbr) openTeam(tr._abbr); });
+document.getElementById('rankings-wrap').addEventListener('click', (e) => { if (e.target.closest('.nb-tlink')) return; const tr = e.target.closest('tbody tr'); if (tr && tr._abbr) openTeam(tr._abbr); });
 
 function drawRankings() {
   const conf = dash.params().conf || 'All';
   confSeg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.conf === conf));
-  const tbody = rkTable.tBodies[0];
-  if (!tableState(tbody, 10, ['teams'])) return;
+  const [tb1, tb2] = rkTables.map((t) => t.tBodies[0]);
+  if (!tableState(tb1, 10, ['teams'])) { tb2.replaceChildren(); ready(tb2); return; }
+  ready(tb2);
   const teams = dash.data('teams').data;
   const der = new Map((OK('derived') ? dash.data('derived').data : []).map((d) => [d.abbr, d]));
   const logos = logoMap();
@@ -847,38 +829,45 @@ function drawRankings() {
     if (Number.isNaN(c)) c = 0;
     return c ? c * rkSort.dir : N(a.rank) - N(b.rank);
   });
-  rkTable.querySelectorAll('th[data-sort]').forEach((th) => {
+  rkTables.forEach((tb) => tb.querySelectorAll('th[data-sort]').forEach((th) => {
     if (th.dataset.sort === rkSort.key) th.setAttribute('aria-sort', rkSort.dir > 0 ? 'ascending' : 'descending'); else th.removeAttribute('aria-sort');
-  });
-  const withRank = (v, r) => { const c = el('span', '', signed(v, 2)); if (Number.isFinite(N(r))) c.append(el('span', 'rk', ` (${ordinal(r)})`)); return c; };
+  }));
+  const rmax = Math.max(1, d3.max(teams, (t) => Math.abs(N(t.rating))) || 1);  // the rating bar's half-width, league-wide
+  const withRank = (v, r) => { const c = el('span', '', signed(v, 2)); c.append(el('span', 'rk', Number.isFinite(N(r)) ? ordinal(r) : '')); return c; };
+  const pbar = (v) => { const c = td('', 'num c-p'); const s = el('span', 'pb', fmtP(v)); const p = N(v); s.style.setProperty('--p', (Number.isFinite(p) ? Math.max(0, Math.min(1, p)) * 100 : 0) + '%'); c.append(s); return c; };
   const out = rows.map((t) => {
     const tr = el('tr'); tr.dataset.key = t.abbr; tr._abbr = t.abbr;
-    const rc = rowColors(t);
-    tr.style.setProperty('--rk-bg', rc.bg); tr.style.setProperty('--rk-ink', rc.ink); tr.style.setProperty('--rk-hl', rc.hl);
-    if (rc.edge) tr.classList.add('rk-edge');  // a black row on a dark panel keeps visible edges
+    tr.style.setProperty('--tm', teamInk(t));  // the row's only team colour: a 3px stripe
     const rd = N(t.rank_d1);
-    tr.append(td(rd > 0 ? '▲' + rd : rd < 0 ? '▼' + Math.abs(rd) : '–', 'num c-chg' + (rd ? '' : ' flat')));
-    tr.append(td(String(N(t.rank)), 'num nb-rank'));
+    tr.append(td(rd > 0 ? '▲' + rd : rd < 0 ? '▼' + Math.abs(rd) : '–', 'c-chg ' + (rd > 0 ? 'up' : rd < 0 ? 'down' : 'flat')));
+    tr.append(td(String(N(t.rank)), 'num c-rank'));
     const tag = el('span', 'nb-team nb-tlink'); tag._abbr = t.abbr; tag.tabIndex = 0; tag.setAttribute('role', 'link');
     const badge = el('span', 'nb-badge'); badge.append(logoImg(logos, t));
     const rec = der.get(t.abbr)?.record;
     const nm = el('span'); nm.append(el('span', 'full', t.name), el('span', 'short', code(t)));
-    if (rec) nm.append(el('span', 'rec', ` (${rec})`));
+    if (rec) nm.append(el('span', 'rec', rec));
     tag.append(badge, nm);
-    const nc = td(''); nc.append(tag); tr.append(nc);
-    tr.append(td(fmtR(t.rating), 'num c-rating'));
+    const nc = td('', 'c-team'); nc.append(tag); tr.append(nc);
+    const rc = td(fmtR(t.rating), 'num c-rating');
+    const r = N(t.rating);
+    if (Number.isFinite(r)) {
+      const bar = el('span', 'rbar'), b = el('i', r < 0 ? 'neg' : ''), w = Math.min(1, Math.abs(r) / rmax) * 50;
+      b.style.left = (r < 0 ? 50 - w : 50) + '%'; b.style.width = w + '%'; bar.append(b); rc.append(bar);
+    }
+    tr.append(rc);
     const lg = String(t.last_game ?? ''); const lc = td('', 'c-last nb-hide-xs');
-    const m = /^([WL])(\s.*)$/.exec(lg);
-    if (m) lc.append(el('b', '', m[1]), m[2]); else lc.textContent = lg;
+    const m = /^([WL])(\s.*)$/.exec(lg);  // "W 108–101 vs LAC" shows as "W 108–101 LAC" (away keeps its @); the full line is the tooltip
+    if (m) { lc.append(el('b', '', m[1]), m[2].replace(/\svs\s/, ' ').replace(/\s@\s/, ' @')); lc.title = lg; } else lc.textContent = lg;
     tr.append(lc);
-    tr.append(td(Number.isFinite(N(t.proj_w)) ? `${fmt1(t.proj_w)}–${fmt1(t.proj_l)}` : '', 'num'));
-    const sc = td('', 'num nb-hide-sm'); sc.append(withRank(t.sos, t.sos_rank)); tr.append(sc);
-    const rc2 = td('', 'num nb-hide-sm'); rc2.append(withRank(t.sor, t.sor_rank)); tr.append(rc2);
-    tr.append(td(fmtP(t.p_playoffs), 'num'));
-    tr.append(td(fmtP(t.p_title), 'num'));
+    tr.append(td(fmt1(t.proj_w), 'num c-proj'));
+    const sc = td('', 'num c-sos nb-hide-sm'); sc.append(withRank(t.sos, t.sos_rank)); tr.append(sc);
+    const rc2 = td('', 'num c-sos nb-hide-sm'); rc2.append(withRank(t.sor, t.sor_rank)); tr.append(rc2);
+    tr.append(pbar(t.p_playoffs), pbar(t.p_title));
     return tr;
   });
-  tbody.replaceChildren(...out);
+  const half = Math.ceil(out.length / 2);
+  tb1.replaceChildren(...out.slice(0, half));
+  tb2.replaceChildren(...out.slice(half));
 }
 
 // ---------- 2. playoff odds ----------
@@ -1132,8 +1121,7 @@ function drawGames() {
   box.replaceChildren();
   title.textContent = !day || day === today ? "Today's games" : 'Next games';
   if (!games.length) { box.append(el('p', 'nb-empty-note', 'No games left on the schedule.')); return; }
-  if (day !== today) box.append(el('p', 'nb-empty-note', 'No games left today.'));
-  const h = el('h3', 'nb-sub', (day === today ? 'Today · ' : 'Next game day · ') + fmtDow(parseDay(day)));
+  const h = el('h3', 'nb-sub', fmtDow(parseDay(day)));
   h.dataset.source = 'schedule'; h.dataset.field = 'date'; h.dataset.where = 'date=' + encodeURIComponent(day) + '&status=' + games[0].status;
   box.append(h);
   const wrap = el('div', 'nb-scroll');
@@ -1141,7 +1129,7 @@ function drawGames() {
   table.dataset.source = 'schedule'; table.dataset.rowKey = 'id';
   const head = el('tr');
   const th = (f, label, cls, src) => { const x = el('th', cls, label); x.dataset.field = f; if (src) x.dataset.source = src; head.append(x); };
-  th('tip', 'Tip', 'c-tip nb-hide-xs'); th('away', 'Away', 'c-team'); th('p_away', 'Win', 'num c-p', 'game_odds'); th('p_home', 'Win', 'num c-bar'); th('home', 'Home', 'c-team c-home'); th('spread', 'Spread', 'num c-sp');
+  th('tip', 'ET', 'c-tip nb-hide-xs'); th('away', 'Away', 'c-team'); th('p_away', 'Win', 'num c-p', 'game_odds'); th('p_home', 'Win', 'num c-bar'); th('home', 'Home', 'c-team c-home'); th('spread', 'Spread', 'num c-sp'); head.lastChild.title = 'Home spread; negative = home favoured';
   const thead = el('thead'); thead.append(head);
   const tbody = el('tbody');
   games.sort((a, b) => d3.ascending(a.tip, b.tip) || d3.ascending(a.id, b.id)).forEach((g) => {
@@ -1167,7 +1155,7 @@ const teamPick = document.getElementById('team-pick');
 teamPick.addEventListener('change', () => { if (teamPick.value) openTeam(teamPick.value); });
 const TM_FMT = {
   rating: fmtR, rating_today: fmtR, rating_prior: fmtR, sos: fmtR, rating_d7: (v) => signed(v, 2), rating_d1: (v) => signed(v, 2), sor: (v) => signed(v, 2), sos_rank: ordinal, sor_rank: ordinal,
-  rank: (v) => String(N(v)), vegas_total: fmt1, proj_w: fmt1, proj_l: fmt1, w_p10: (v) => String(N(v)), w_p90: (v) => String(N(v)),
+  rank: ordinal, vegas_total: fmt1, proj_w: fmt1, proj_l: fmt1, w_p10: (v) => String(N(v)), w_p90: (v) => String(N(v)),
   p_playoffs: fmtP, p_title: fmtP, exp_w: fmt1, avg_p: fmtP, left: (v) => String(v),
 };
 // point every single-value mark on the team page at the chosen team's row, then fill it
@@ -1212,7 +1200,6 @@ function drawTeam() {
   const sub = document.getElementById('tile-today-s');
   sub.hidden = !(outs.status === 'ok' && outs.data.some((o) => o.abbr === teamAbbr && o.n > 0));
   document.querySelector('#tile-rating [data-field=rating_d7]').className = 'tm ' + tone(t.rating_d7, 2);
-  document.querySelector('#tile-rating [data-field=rating_d1]').className = 'tm ' + tone(t.rating_d1, 2);
   drawTeamWins(t);
   drawTeamPath(t);
   drawTeamSeeds(t);
@@ -1269,8 +1256,8 @@ function drawTeamWins(t) {
     }).on('pointerleave', hideTip);
 }
 
-const PATH = [['grp', 'Regular-season finish'], ['p_top6', 'Top-6 seed', 1], ['p_playin', 'Play-in (7–10)', 1], ['grp', 'Playoff run'],
-  ['p_playoffs', 'Make playoffs'], ['p_r2', 'Reach 2nd round'], ['p_cf', 'Reach conf finals'], ['p_finals', 'Reach Finals'], ['p_title', 'Win title']];
+const PATH = [['p_top6', 'Top 6', 1], ['p_playin', 'Play-in', 1], ['grp', ''],
+  ['p_playoffs', 'Playoffs'], ['p_r2', '2nd round'], ['p_cf', 'Conf finals'], ['p_finals', 'Finals'], ['p_title', 'Title']];
 function drawTeamPath(t) {
   const box = document.getElementById('team-path');
   ready(box);
@@ -1417,11 +1404,11 @@ const STATUS_CLS = (s) => (/^out$|suspen/i.test(s) ? 'nb-st-out' : /active/i.tes
 function drawTeamRoster(t) {
   const tbody = document.querySelector('#team-roster tbody');
   const st = dash.data('players').status;
-  if (st === 'missing') { failRow(tbody, 9, 80, 'Player availability is not in this dashboard yet.', 'muted'); return; }
-  if (!tableState(tbody, 9, ['players'], 120)) return;
+  if (st === 'missing') { failRow(tbody, 8, 80, 'Player availability is not in this dashboard yet.', 'muted'); return; }
+  if (!tableState(tbody, 8, ['players'], 120)) return;
   const all = dash.data('players').data;
   const rows = all.filter((p) => p.abbr === t.abbr).sort((a, b) => N(b.value) - N(a.value));
-  if (!rows.length) { failRow(tbody, 9, 60, 'No roster listed for this team.', 'muted'); return; }
+  if (!rows.length) { failRow(tbody, 8, 60, 'No roster listed for this team.', 'muted'); return; }
   const vmax = Math.max(1, d3.max(all, (p) => N(p.value)) || 1), vmin = Math.min(0, d3.min(all, (p) => N(p.value)) || 0);
   const span = vmax - vmin, z = (-vmin / span) * 100;
   const yr = OK('run') ? String(dash.data('run').data[0]?.as_of || '').slice(0, 4) : '';
@@ -1434,10 +1421,11 @@ function drawTeamRoster(t) {
     b.style.left = (v < 0 ? z - w : z) + '%'; b.style.width = Math.max(0, w) + '%'; bar.append(b);
     wrap.append(el('span', '', fmtNum(v)), bar); vc.append(wrap);
     const rd = p.return_date ? parseDay(p.return_date) : null;
-    const comment = td(active ? '' : p.comment || '', 'note muted nb-hide-sm');
+    const stat = td(p.status, STATUS_CLS(p.status));
+    if (!active && p.comment) { stat.title = p.comment; stat.classList.add('nb-hint'); }
     tr.append(td(p.name, active ? '' : 'nb-best'), td(p.pos, 'muted'), td(String(N(p.gp)), 'num muted nb-hide-xs'), td(fmt1(p.mpg), 'num'), vc,
-      td(p.status, STATUS_CLS(p.status)), td(active && !(N(p.p_out) > 0) ? '' : fmtP(p.p_out), 'num nb-hide-xs'),
-      td(rd && !isNaN(rd) ? (String(rd.getUTCFullYear()) === yr ? fmtDay(rd) : fmtDayY(rd)) : '', 'muted nb-hide-xs'), comment);
+      stat, td(active && !(N(p.p_out) > 0) ? '' : fmtP(p.p_out), 'num nb-hide-xs'),
+      td(rd && !isNaN(rd) ? (String(rd.getUTCFullYear()) === yr ? fmtDay(rd) : fmtDayY(rd)) : '', 'muted nb-hide-xs'));
     return tr;
   }));
 }
@@ -1521,7 +1509,7 @@ let firstDraw = true;
 function draw() {
   const prevPanel = JSON.stringify(panelRGB);
   panelRGB = toRGB(getComputedStyle(document.getElementById('rankings-card')).backgroundColor);
-  if (JSON.stringify(panelRGB) !== prevPanel) rowCache.clear();  // theme changed: row edges depend on the panel
+  root.classList.toggle('nb-dark', lum(panelRGB) < 0.2);  // logos get a light badge on dark panels
   drawHeader();
   PAGES[current]();
   if (firstDraw && OK('teams')) { firstDraw = false; root.querySelectorAll('.nb-page').forEach((p) => p.classList.add('nb-fade')); }

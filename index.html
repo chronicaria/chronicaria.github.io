@@ -108,7 +108,7 @@
 .nb.nb-dark .nb-rk tbody tr:hover td, .nb.nb-dark .nb-rk tbody tr:focus-within td { --tint: 24%; }
 .nb .nb-rk caption { caption-side: top; text-align: left; padding: 0 8px 8px; font-size: 12px; font-weight: 650; color: var(--color-fg); }
 .nb .nb-rk thead th:first-child { padding-left: 8px; }
-.nb .nb-rk .c-chg { width: 30px; font-size: 10px; text-align: left; }
+.nb .nb-rk .c-chg { width: 24px; font-size: 10px; text-align: left; }
 .nb .nb-rk td.c-chg.up { color: var(--color-ok); }
 .nb .nb-rk td.c-chg.down { color: var(--color-bad); }
 .nb .nb-rk td.c-chg.flat { color: var(--color-fg-muted); font-weight: 400; }
@@ -121,30 +121,34 @@
 .nb.nb-dark .nb-rk .nb-badge .nb-logo { filter: drop-shadow(0 0 1px rgba(255, 255, 255, .5)); }  /* keeps black logos visible, no white disc */
 .nb .nb-rk .rec { font-weight: 400; font-size: 11px; color: var(--color-fg-muted); margin-left: 3px; }
 .nb .nb-rk .short { display: none; }
-.nb .nb-rk .c-team { width: 136px; }
-.nb .nb-rk .c-rating { width: 52px; }
+.nb .nb-rk .c-team { width: 112px; }
+.nb .nb-rk .c-rating { width: 48px; }
 .nb .nb-rk td.c-rating { font-weight: 650; font-size: 11.5px; }
 .nb .nb-rk .c-last { padding-left: 12px; font-size: 11px; color: var(--color-fg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nb .nb-rk .c-last b { font-weight: 600; color: var(--color-fg); }
-.nb .nb-rk .c-proj { width: 50px; }
+.nb .nb-rk .c-last { width: 116px; }
+.nb .nb-rk .c-next { width: 76px; font-size: 11px; color: var(--color-fg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nb .nb-rk .c-next b { font-weight: 600; color: var(--color-fg); }
+.nb .nb-rk .c-proj { width: 38px; }
 .nb .nb-rk th { font-family: var(--nb-sans); font-size: 11px; }
 .nb .nb-rk th.num { direction: rtl; }  /* a header wider than its column spills left, over the gap, not into the next one */
 .nb .nb-rk th.num > * { direction: ltr; }
-.nb .nb-rk .c-sos { width: 70px; }
-.nb .nb-rk .rk { font-family: var(--nb-sans); font-size: 9.5px; color: var(--color-fg-muted); margin-left: 3px; display: inline-block; min-width: 2.3em; text-align: left; }
-.nb .nb-rk .c-p { width: 56px; }
+.nb .nb-rk .c-sos { width: 62px; }
+.nb .nb-rk .rk { font-family: var(--nb-sans); font-size: 9.5px; font-weight: 600; color: var(--rkc, var(--color-fg-muted)); margin-left: 3px; display: inline-block; min-width: 2.3em; text-align: left; }
+.nb .nb-rk .c-p { width: 46px; }
 .nb .nb-rk td.c-p { padding-left: 6px; }
-.nb .nb-rk .pb { display: block; padding: 2px 4px; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--cds-chart-categorical-1) 16%, transparent) var(--p), transparent var(--p)); }
 .nb .nb-rk th.c-p { padding-right: 8px; }
 @container nb (min-width: 1180px) {
   .nb .nb-rk-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 20px; }
   .nb #rankings-card { padding-inline: 12px; }
 }
 @container nb (min-width: 1180px) and (max-width: 1340px) {  /* two halves on a laptop: tighter columns so Last keeps its room */
-  .nb .nb-rk .c-team { width: 122px; }
-  .nb .nb-rk .c-sos { width: 62px; }
-  .nb .nb-rk .c-p { width: 50px; }
-  .nb .nb-rk .c-proj { width: 44px; }
+  .nb .nb-rk .c-team { width: 84px; }
+  .nb .nb-rk .full { display: none; }
+  .nb .nb-rk .short { display: inline; }
+  .nb .nb-rk .c-sos { width: 36px; }
+  .nb .nb-rk .c-sos .v { display: none; }  /* SOS/SOR as coloured ranks only; the value is the tooltip */
+  .nb .nb-rk .c-sos .rk { margin-left: 0; min-width: 0; }
 }
 @container nb (max-width: 1179.98px) {
   .nb .nb-rk-2 thead { display: none; }
@@ -263,6 +267,9 @@
 }
 @container nb (max-width: 720px) {
   .nb .nb-hide-sm { display: none; }
+  .nb .nb-rk .full { display: none; }
+  .nb .nb-rk .short { display: inline; }
+  .nb .nb-rk .c-team { width: 96px; }
 }
 @container nb (max-width: 520px) {
   .nb .nb-hide-xs { display: none; }
@@ -284,7 +291,6 @@
   .nb .nb-rk .c-team { width: 96px; }
   .nb .nb-rk .c-proj { width: 46px; }
   .nb .nb-rk .c-p { width: 48px; }
-  .nb .nb-rk .pb { padding: 2px 3px; }
   .nb .nb-rk td.c-p { padding-left: 4px; }
   .nb .nb-rk th.c-p { padding-right: 6px; }
   .nb .nb-logo { width: 18px; height: 18px; }
@@ -338,7 +344,8 @@
             <th class="num c-rank" data-field="rank" data-sort="rank"><button class="nb-sort">#</button></th>
             <th class="c-team" data-field="name" data-sort="name"><button class="nb-sort">Team</button></th>
             <th class="num c-rating" data-field="rating" data-sort="rating"><button class="nb-sort" title="Points vs an average team (0); +5 = favoured by 5 on a neutral court"><span class="full">Rating</span><span class="short">Rtg</span></button></th>
-            <th class="c-last nb-hide-xs" data-field="last_game"><span>Last</span></th>
+            <th class="c-last nb-hide-xs" data-field="last_game" title="Yesterday's game"><span>Last</span></th>
+            <th class="c-next nb-hide-xs" data-field="next_game" title="Today's game, tip in ET"><span>Next</span></th>
             <th class="num c-proj" data-field="proj_w" data-sort="proj_w"><button class="nb-sort" title="Projected wins: mean of the season simulations">Proj. W</button></th>
             <th class="num c-sos nb-hide-sm" data-field="sos" data-sort="sos"><button class="nb-sort" title="Remaining schedule strength: opponents' mean rating; 1st = hardest">SOS</button></th>
             <th class="num c-sos nb-hide-sm" data-field="sor" data-sort="sor"><button class="nb-sort" title="Strength of record: wins above an average team's expectation against the same games; 1st = best">SOR</button></th>
@@ -840,8 +847,18 @@ function drawRankings() {
   rkTables.forEach((tb) => tb.querySelectorAll('th[data-sort]').forEach((th) => {
     if (th.dataset.sort === rkSort.key) th.setAttribute('aria-sort', rkSort.dir > 0 ? 'ascending' : 'descending'); else th.removeAttribute('aria-sort');
   }));
-  const withRank = (v, r) => { const c = el('span', '', signed(v, 2)); c.append(el('span', 'rk', Number.isFinite(N(r)) ? ordinal(r) : '')); return c; };
-  const pbar = (v) => { const c = td('', 'num c-p'); const s = el('span', 'pb', fmtP(v)); const p = N(v); s.style.setProperty('--p', (Number.isFinite(p) ? Math.max(0, Math.min(1, p)) * 100 : 0) + '%'); c.append(s); return c; };
+  const withRank = (v, r) => { const c = el('span', ''); c.title = signed(v, 2); c.append(el('span', 'v', signed(v, 2))); c.append(el('span', 'rk', Number.isFinite(N(r)) ? ordinal(r) : '')); return c; };
+  // rank colour: green at the good end, muted mid-table, red at the bad end (best = 1st unless flipped)
+  const withRankTone = (v, r, flip) => { const c = withRank(v, r); const n = N(r); if (Number.isFinite(n)) { const f = (flip ? 30 - n : n - 1) / 29, x = Math.round(Math.abs(1 - 2 * f) * 100); c.lastChild.style.setProperty('--rkc', `color-mix(in srgb, var(${f < 0.5 ? '--color-ok' : '--color-bad'}) ${x}%, var(--color-fg-muted))`); } return c; };
+  // Last = yesterday's final, Next = today's game (ET days); no game that day = –
+  const today = todayET(), yday = new Date(parseDay(today) - 864e5).toISOString().slice(0, 10);
+  const tmap = teamMap(), sched = OK('schedule') ? dash.data('schedule').data : [];
+  const lastG = new Map(), nextG = new Map();
+  sched.forEach((g) => {
+    if (g.status === 'final' && g.date === yday) { lastG.set(g.home, [g, true]); lastG.set(g.away, [g, false]); }
+    if (g.status !== 'final' && g.date === today) { nextG.set(g.home, [g, true]); nextG.set(g.away, [g, false]); }
+  });
+  const opp = (g, home) => `${home ? 'vs.' : '@'} ${code(tmap.get(home ? g.away : g.home)) || (home ? g.away : g.home)}`;
   const out = rows.map((t) => {
     const tr = el('tr'); tr.dataset.key = t.abbr; tr._abbr = t.abbr;
     tr.style.setProperty('--tm', teamInk(t)); tr.style.setProperty('--tc', hex(t.color) || 'transparent');  // stripe + faint row wash
@@ -856,14 +873,16 @@ function drawRankings() {
     tag.append(badge, nm);
     const nc = td('', 'c-team'); nc.append(tag); tr.append(nc);
     tr.append(td(fmtR(t.rating), 'num c-rating'));
-    const lg = String(t.last_game ?? ''); const lc = td('', 'c-last nb-hide-xs');
-    const m = /^([WL]) (\d+)–(\d+) (vs|@) (\S+)$/.exec(lg);  // "W 108–101 vs LAC" shows as "W +7 vs LAC"; the score is the tooltip
-    if (m) { const d = +m[2] - +m[3]; lc.append(el('b', '', m[1]), ` ${d > 0 ? '+' : MINUS}${Math.abs(d)} ${m[4]} ${m[5]}`); lc.title = lg; } else lc.textContent = lg;
+    const lc = td('–', 'c-last nb-hide-xs'), lg = lastG.get(t.abbr);  // "W 113–109 vs. PHX"
+    if (lg) { const [g, home] = lg, us = +(home ? g.hs : g.as), them = +(home ? g.as : g.hs); lc.replaceChildren(el('b', '', us > them ? 'W' : 'L'), ` ${us}–${them} ${opp(g, home)}`); }
     tr.append(lc);
+    const xc = td('–', 'c-next nb-hide-xs'), ng = nextG.get(t.abbr);  // "@ SA 8:00 PM"
+    if (ng) { const [g, home] = ng; xc.replaceChildren(el('b', '', opp(g, home)), ' ' + (g.status === 'live' ? 'Live' : fmtTip(g.tip).replace(' PM', ''))); }
+    tr.append(xc);
     tr.append(td(fmt1(t.proj_w), 'num c-proj'));
-    const sc = td('', 'num c-sos nb-hide-sm'); sc.append(withRank(t.sos, t.sos_rank)); tr.append(sc);
-    const rc2 = td('', 'num c-sos nb-hide-sm'); rc2.append(withRank(t.sor, t.sor_rank)); tr.append(rc2);
-    tr.append(pbar(t.p_playoffs), pbar(t.p_title));
+    const sc = td('', 'num c-sos nb-hide-sm'); sc.append(withRankTone(t.sos, t.sos_rank, true)); tr.append(sc);
+    const rc2 = td('', 'num c-sos nb-hide-sm'); rc2.append(withRankTone(t.sor, t.sor_rank)); tr.append(rc2);
+    tr.append(td(fmtP(t.p_playoffs), 'num c-p'), td(fmtP(t.p_title), 'num c-p'));
     return tr;
   });
   if (view === 'conf') {

@@ -93,7 +93,11 @@
 
 /* rankings: two compact halves side by side on wide screens (1–15 | 16–30), one list when narrower.
    Calm rows: the theme's text colours, a thin team-colour stripe (--tm) and the logo; faint bars for rating and odds. */
-.nb .nb-rk-head { margin-bottom: 8px; }
+.nb .nb-rk-head { margin-bottom: 8px; align-items: center; }
+.nb .nb-png { appearance: none; border: 1px solid var(--color-border-line); background: none; border-radius: 999px; font: inherit; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: 3px 10px; cursor: pointer; }
+.nb .nb-png:hover { color: var(--color-fg); }
+.nb .nb-rk-cap { margin: 0 0 10px; font-family: var(--nb-sans); font-size: 15px; font-weight: 650; }
+.nb .nb-rk-cap span { color: var(--color-fg-muted); font-weight: 450; }
 .nb .nb-rk-wrap { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
 .nb .nb-rk { table-layout: fixed; font-size: 12px; }
 .nb .nb-rk th, .nb .nb-rk td { padding: 0 4px; }
@@ -121,14 +125,14 @@
 .nb.nb-dark .nb-rk .nb-badge .nb-logo { filter: drop-shadow(0 0 1px rgba(255, 255, 255, .5)); }  /* keeps black logos visible, no white disc */
 .nb .nb-rk .rec { font-weight: 400; font-size: 11px; color: var(--color-fg-muted); margin-left: 3px; }
 .nb .nb-rk .short { display: none; }
-.nb .nb-rk .c-team { width: 112px; }
+.nb .nb-rk .c-team { width: 132px; }
 .nb .nb-rk .c-rating { width: 48px; }
 .nb .nb-rk td.c-rating { font-weight: 650; font-size: 11.5px; }
 .nb .nb-rk .c-last { padding-left: 12px; font-size: 11px; color: var(--color-fg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nb .nb-rk .c-last b { font-weight: 600; color: var(--color-fg); }
 .nb .nb-rk .c-last { width: 116px; }
-.nb .nb-rk .c-next { width: 76px; font-size: 11px; color: var(--color-fg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.nb .nb-rk .c-next b { font-weight: 600; color: var(--color-fg); }
+.nb .nb-rk .c-next { width: 56px; font-size: 11px; }
+.nb .nb-rk td.c-next { color: var(--color-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nb .nb-rk .c-proj { width: 38px; }
 .nb .nb-rk th { font-family: var(--nb-sans); font-size: 11px; }
 .nb .nb-rk th.num { direction: rtl; }  /* a header wider than its column spills left, over the gap, not into the next one */
@@ -336,7 +340,9 @@
         <div class="nb-seg" id="conf-filter" role="group" aria-label="View">
           <button data-view="league">League</button><button data-view="conf">Conference</button>
         </div>
+        <button class="nb-png" id="rk-png" title="Download this view as a PNG">PNG</button>
       </div>
+      <h2 class="nb-rk-cap" id="rk-cap" hidden></h2>
       <div class="nb-rk-wrap" id="rankings-wrap" data-source="logos">
         <table class="nb-table nb-rk nb-rk-1" id="rankings-table" data-source="teams" data-row-key="abbr">
           <thead><tr>
@@ -345,7 +351,7 @@
             <th class="c-team" data-field="name" data-sort="name"><button class="nb-sort">Team</button></th>
             <th class="num c-rating" data-field="rating" data-sort="rating"><button class="nb-sort" title="Points vs an average team (0); +5 = favoured by 5 on a neutral court"><span class="full">Rating</span><span class="short">Rtg</span></button></th>
             <th class="c-last nb-hide-xs" data-field="last_game" title="Yesterday's game"><span>Last</span></th>
-            <th class="c-next nb-hide-xs" data-field="next_game" title="Today's game, tip in ET"><span>Next</span></th>
+            <th class="c-next nb-hide-xs" data-field="next_game" title="Today's game"><span>Next</span></th>
             <th class="num c-proj" data-field="proj_w" data-sort="proj_w"><button class="nb-sort" title="Projected wins: mean of the season simulations">Proj. W</button></th>
             <th class="num c-sos nb-hide-sm" data-field="sos" data-sort="sos"><button class="nb-sort" title="Remaining schedule strength: opponents' mean rating; 1st = hardest">SOS</button></th>
             <th class="num c-sos nb-hide-sm" data-field="sor" data-sort="sor"><button class="nb-sort" title="Strength of record: wins above an average team's expectation against the same games; 1st = best">SOR</button></th>
@@ -825,6 +831,24 @@ confSeg.addEventListener('click', (e) => { const b = e.target.closest('button[da
 // the clicked row opens its team (the name inside stays the keyboard target)
 document.getElementById('rankings-wrap').addEventListener('click', (e) => { if (e.target.closest('.nb-tlink')) return; const tr = e.target.closest('tbody tr'); if (tr && tr._abbr) openTeam(tr._abbr); });
 
+// PNG of the card as shown (League or Conference), with a title line in place of the controls
+document.getElementById('rk-png').addEventListener('click', async (e) => {
+  const btn = e.currentTarget, card = document.getElementById('rankings-card'), cap = document.getElementById('rk-cap');
+  const view = dash.params().view === 'conf' ? 'Conference' : 'League';
+  const asOf = document.querySelector('#run-line span')?.textContent || '';
+  const day = OK('run') ? String(dash.data('run').data[0].as_of).slice(0, 10) : todayET();
+  btn.disabled = true;
+  cap.replaceChildren(`NBA power rankings ${OK('run') ? dash.data('run').data[0].season : ''} `, el('span', '', `· ${view} · ${asOf}`));
+  cap.hidden = false;
+  try {
+    const { toPng } = await import('https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/+esm');
+    const bg = getComputedStyle(document.body).backgroundColor;
+    const url = await toPng(card, { pixelRatio: 2, backgroundColor: bg, filter: (n) => !n.classList?.contains('nb-rk-head') });
+    const a = el('a'); a.href = url; a.download = `nba-power-rankings-${view.toLowerCase()}-${day}.png`; a.click();
+  } catch (err) { console.error('PNG export failed', err); btn.textContent = 'PNG failed'; }
+  finally { cap.hidden = true; btn.disabled = false; }
+});
+
 function drawRankings() {
   const view = dash.params().view === 'conf' ? 'conf' : 'league';  // league: 1–15 | 16–30; conf: East | West
   confSeg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.view === view));
@@ -876,8 +900,8 @@ function drawRankings() {
     const lc = td('–', 'c-last nb-hide-xs'), lg = lastG.get(t.abbr);  // "W 113–109 vs. PHX"
     if (lg) { const [g, home] = lg, us = +(home ? g.hs : g.as), them = +(home ? g.as : g.hs); lc.replaceChildren(el('b', '', us > them ? 'W' : 'L'), ` ${us}–${them} ${opp(g, home)}`); }
     tr.append(lc);
-    const xc = td('–', 'c-next nb-hide-xs'), ng = nextG.get(t.abbr);  // "@ SA 8:00 PM"
-    if (ng) { const [g, home] = ng; xc.replaceChildren(el('b', '', opp(g, home)), ' ' + (g.status === 'live' ? 'Live' : fmtTip(g.tip).replace(' PM', ''))); }
+    const xc = td('–', 'c-next nb-hide-xs'), ng = nextG.get(t.abbr);  // "@ SAS"
+    if (ng) xc.textContent = opp(...ng);
     tr.append(xc);
     tr.append(td(fmt1(t.proj_w), 'num c-proj'));
     const sc = td('', 'num c-sos nb-hide-sm'); sc.append(withRankTone(t.sos, t.sos_rank, true)); tr.append(sc);

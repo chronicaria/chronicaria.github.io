@@ -7,8 +7,8 @@ ATL,2490149,CJ McCollum,G,4,26.8,0.89,Active,,,
 ATL,3146557,Jock Landale,C,4,18.5,0.52,Active,,,
 ATL,4397183,Aaron Wiggins,G,4,27.5,0.45,Active,,,
 ATL,4712863,Mouhamed Gueye,F,0,,0.35,Out,1.0,2026-11-20,"Gueye underwent surgery Tuesday to repair a fractured left foot that he suffered during a workout last week, Brad Rowland of the Locked On Podcast Network reports."
-ATL,5149077,Kingston Flemings,G,4,18.2,0.24,Active,,,
 ATL,4280151,Corey Kispert,F,2,5.5,0.24,Active,,,
+ATL,5149077,Kingston Flemings,G,4,18.2,0.24,Active,,,
 ATL,4397020,Luguentz Dort,G,4,22.8,0.18,Active,,,
 ATL,4873201,Asa Newell,F,2,4.5,0.14,Active,,,
 ATL,2578185,Dorian Finney-Smith,F,2,4.5,0.03,Active,,,
@@ -31,8 +31,8 @@ BKN,5242502,Ben Saraf,G,1,4.0,-0.03,Active,,,
 BKN,5279130,Nolan Traore,G,4,17.5,-0.13,Active,,,
 BKN,5105626,Tyler Bilodeau,F,0,,,Out,0.5,,Bilodeau (shoulder) has been ruled out for Sunday's game against Indiana.
 BOS,4066354,Payton Pritchard,G,4,26.0,1.34,Active,,,
-BOS,4065648,Jayson Tatum,F,4,36.2,1.28,Active,,,
 BOS,4251,Paul George,F,4,31.5,1.28,Active,,,
+BOS,4065648,Jayson Tatum,F,4,36.2,1.28,Active,,,
 BOS,4397424,Neemias Queta,C,4,19.5,1.13,Active,,,
 BOS,3078576,Derrick White,G,4,30.0,0.83,Active,,,
 BOS,4065804,Sam Hauser,F,4,21.5,0.79,Active,,,
@@ -101,8 +101,8 @@ DAL,4278078,P.J. Washington,F,4,35.2,0.52,Active,,,
 DAL,4432107,Marcus Sasser,G,4,21.5,0.34,Active,,,
 DAL,4683688,Dereck Lively II,C,0,,0.32,Out,1.0,2026-11-02,Lively (foot) has been ruled out for Friday's game against the Pacers.
 DAL,4873153,Morez Johnson Jr.,F,4,14.5,0.24,Active,,,
-DAL,5279129,Sergio de Larrea,F,4,11.8,0.18,Day-To-Day,1.0,,De Larrea (knee) has been ruled out for Wednesday's game against the Thunder.
 DAL,4896372,Walter Clayton Jr.,G,3,11.0,0.18,Active,,,
+DAL,5279129,Sergio de Larrea,F,4,11.8,0.18,Day-To-Day,1.0,,De Larrea (knee) has been ruled out for Wednesday's game against the Thunder.
 DAL,5105806,Jett Howard,G,1,4.0,0.17,Active,,,
 DAL,4701208,Moussa Cisse,C,3,3.7,0.14,Active,,,
 DAL,5106040,Tobi Lawal,F,2,2.5,0.01,Active,,,
@@ -116,12 +116,12 @@ DEN,4431767,Christian Braun,G,3,35.7,0.87,Active,,,
 DEN,4277848,Marvin Bagley III,F,3,10.3,0.59,Active,,,
 DEN,4592427,Spencer Jones,F,0,,0.57,Out,1.0,2026-11-02,Jones (hamstring) has been ruled out for Wednesday's game against New Orleans.
 DEN,4065813,Alpha Diallo,F,1,22.0,0.4,Out,0.5,,Diallo is out for Wednesday's game against the Pelicans due to personal reasons.
-DEN,4432181,Julian Strawther,G,0,,0.36,Out,1.0,2026-11-29,"Strawther (knee) was diagnosed with a left knee sprain Friday and will be re-evaluated in six weeks, Vinny Benedetto of The Denver Gazette reports."
 DEN,4698719,Trevon Brazile,F,3,21.0,0.36,Active,,,
+DEN,4432181,Julian Strawther,G,0,,0.36,Out,1.0,2026-11-29,"Strawther (knee) was diagnosed with a left knee sprain Friday and will be re-evaluated in six weeks, Vinny Benedetto of The Denver Gazette reports."
 DEN,3135046,Tyus Jones,G,3,9.7,0.23,Active,,,
 DEN,5105592,Cam Whitmore,F,2,7.5,0.22,Active,,,
-DEN,4433629,Ryan Nembhard,G,2,3.0,0.2,Active,,,
 DEN,4565698,Bryce Hopkins,F,3,17.3,0.2,Active,,,
+DEN,4433629,Ryan Nembhard,G,2,3.0,0.2,Active,,,
 DEN,4431690,Zeke Nnaji,F,1,4.0,0.14,Active,,,
 DEN,4433607,DaRon Holmes II,F,2,3.0,0.12,Active,,,
 DET,4433621,Jalen Duren,C,2,19.0,1.51,Out,1.0,2026-11-09,"Duren will be re-evaluated in two weeks due to a right hamstring strain, Eric Vincent of ClutchPoints.com reports."
@@ -192,7 +192,7 @@ IND,4431752,Kobe Brown,G,1,1.0,0.15,Active,,,
 LAC,2991139,Kris Dunn,G,3,31.3,1.11,Active,,,
 LAC,4396907,Darius Garland,G,3,35.0,0.94,Active,,,
 LAC,3936099,Derrick Jones Jr.,F,3,30.3,0.92,Active,,,
-LAC,4066648,Rui Hachimura,F,3,31.3,0.9,Out,0.0,2026-10-30,"Hachimura (quadriceps) has been ruled out for Wednesday's game against the Lakers, Joey Linn of SI.com reports."
+LAC,4066648,Rui Hachimura,F,3,31.3,0.9,Out,0.5,,"Hachimura (quadriceps) has been ruled out for Wednesday's game against the Lakers, Joey Linn of SI.com reports."
 LAC,3913176,Brandon Ingram,F,0,,0.86,Out,1.0,2026-11-08,"Ingram (Achilles) is making progress but is set to miss at least one more week, Ohm Youngmisuk of ESPN.com reports."
 LAC,4396818,Jordan Miller,G,0,,0.76,Out,1.0,2027-03-02,"Miller underwent surgery Wednesday to repair a torn left rotator cuff and will be re-evaluated in six months, per Law Murray of The Athletic."
 LAC,3448,Brook Lopez,C,3,23.3,0.68,Active,,,
@@ -227,8 +227,8 @@ MEM,4065733,Ty Jerome,G,4,31.5,1.14,Active,,,
 MEM,4903027,Cedric Coward,F,3,30.3,0.84,Active,,,
 MEM,5112087,Jaylen Wells,F,4,29.0,0.65,Active,,,
 MEM,2991070,Jerami Grant,F,4,24.0,0.62,Active,,,
-MEM,4432810,Isaiah Stewart,C,3,17.7,0.56,Active,,,
 MEM,4600663,Zach Edey,C,3,21.3,0.56,Active,,,
+MEM,4432810,Isaiah Stewart,C,3,17.7,0.56,Active,,,
 MEM,5041935,Cameron Boozer,F,4,33.0,0.51,Active,,,
 MEM,4593016,Quinten Post,C,4,17.0,0.37,Active,,,
 MEM,5105550,GG Jackson,F,4,15.0,0.36,Active,,,
@@ -290,8 +290,8 @@ NO,4277956,Jordan Poole,G,3,19.0,0.23,Day-To-Day,0.5,,"Poole (ankle) won't retur
 NO,5144091,Jeremiah Fears,G,3,22.7,0.1,Active,,,
 NY,3934719,OG Anunoby,F,4,34.2,1.88,Active,,,
 NY,3136195,Karl-Anthony Towns,C,4,31.8,1.73,Active,,,
-NY,3147657,Mikal Bridges,G,4,30.5,1.52,Active,,,
 NY,3934672,Jalen Brunson,G,4,34.8,1.52,Active,,,
+NY,3147657,Mikal Bridges,G,4,30.5,1.52,Active,,,
 NY,3062679,Josh Hart,G,4,32.0,1.43,Active,,,
 NY,4431823,Miles McBride,G,4,18.5,0.54,Active,,,
 NY,3914044,Landry Shamet,G,4,24.0,0.53,Active,,,
@@ -300,8 +300,8 @@ NY,6585,Andre Drummond,C,4,13.0,0.32,Active,,,
 NY,4433225,Tyler Kolek,G,2,13.0,0.21,Active,,,
 NY,4432808,James Wiseman,C,3,3.3,0.1,Active,,,
 NY,5289900,Mohamed Diawara,F,1,1.0,0.06,Active,,,
-NY,5211983,Pacome Dadiet,F,1,1.0,0.04,Active,,,
 NY,2528426,Jordan Clarkson,G,3,5.3,0.04,Active,,,
+NY,5211983,Pacome Dadiet,F,1,1.0,0.04,Active,,,
 NY,4683730,Jaden Akins,G,1,2.0,0.01,Active,,,
 OKC,4278073,Shai Gilgeous-Alexander,G,4,34.2,3.77,Active,,,
 OKC,4433255,Chet Holmgren,C,3,30.0,1.95,Day-To-Day,1.0,,Holmgren (knee) has been ruled out for Wednesday's game against the Mavericks.
@@ -316,8 +316,8 @@ OKC,3133626,Kenrich Williams,G,4,11.0,0.29,Active,,,
 OKC,5174983,Aday Mara,C,4,14.8,0.24,Active,,,
 OKC,5241364,Bennett Stirtz,G,4,9.8,0.13,Active,,,
 OKC,5159925,Nikola Topic,G,0,,0.12,Out,1.0,2026-11-04,Topic (back) will remain on the inactive list for Wednesday's game in Dallas.
-OKC,5105800,Josh Dix,G,1,22.0,0.07,Active,,,
 OKC,4684208,Brooks Barnhizer,F,3,2.0,0.07,Active,,,
+OKC,5105800,Josh Dix,G,1,22.0,0.07,Active,,,
 OKC,5061603,Thomas Sorber,C,0,,,Out,1.0,2026-11-04,Sorber (knee) has been ruled out for Wednesday's game against the Mavericks.
 ORL,4066320,Desmond Bane,G,3,31.7,1.3,Active,,,
 ORL,4277847,Wendell Carter Jr.,C,3,31.0,1.16,Active,,,
@@ -329,8 +329,8 @@ ORL,6478,Nikola Vucevic,C,3,8.0,0.7,Active,,,
 ORL,4702382,Tristan da Silva,F,3,28.0,0.66,Active,,,
 ORL,4348700,Goga Bitadze,C,2,12.0,0.45,Active,,,
 ORL,5239561,Jase Richardson,G,3,15.0,0.26,Active,,,
-ORL,4278572,Jamal Cain,F,3,13.3,0.22,Active,,,
 ORL,3133635,Jevon Carter,G,1,13.0,0.22,Active,,,
+ORL,4278572,Jamal Cain,F,3,13.3,0.22,Active,,,
 ORL,4065654,Jonathan Isaac,F,0,,0.18,Out,0.5,,Isaac (knee) has been ruled out ahead of Wednesday's game against the Raptors.
 ORL,5214637,Noah Penda,F,0,,0.17,Out,1.0,2026-11-18,"Penda was diagnosed with a partially torn right hamstring Saturday, Jason Beede of the Orlando Sentinel reports."
 ORL,4593034,Alex Morales,G,1,4.0,0.06,Active,,,
@@ -428,8 +428,8 @@ TOR,4432241,Jamal Shead,G,3,20.3,0.33,Active,,,
 TOR,2993874,Kyle Anderson,F,2,8.0,0.33,Active,,,
 TOR,4431893,Jamison Battle,F,3,12.0,0.25,Active,,,
 TOR,4431684,Trayce Jackson-Davis,F,3,5.7,0.16,Active,,,
-TOR,4702656,Alijah Martin,G,3,4.3,0.08,Active,,,
 TOR,4432737,Jaden Bradley,G,3,3.7,0.08,Active,,,
+TOR,4702656,Alijah Martin,G,3,4.3,0.08,Active,,,
 TOR,4432586,Nate Bittle,C,0,,,Out,1.0,2026-11-02,"Bittle (foot) has been ruled out for Wednesday's game against the Magic, Cody Taylor of USA Today reports."
 UTAH,4433627,Keyonte George,G,4,31.8,1.47,Active,,,
 UTAH,4066336,Lauri Markkanen,F,4,28.5,1.37,Day-To-Day,1.0,,Markkanen (wrist) is out for Wednesday's tilt against the Spurs.

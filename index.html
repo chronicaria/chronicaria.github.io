@@ -350,8 +350,8 @@
             <th class="num c-rank" data-field="rank" data-sort="rank"><button class="nb-sort">#</button></th>
             <th class="c-team" data-field="name" data-sort="name"><button class="nb-sort">Team</button></th>
             <th class="num c-rating" data-field="rating" data-sort="rating"><button class="nb-sort" title="Points vs an average team (0); +5 = favoured by 5 on a neutral court"><span class="full">Rating</span><span class="short">Rtg</span></button></th>
-            <th class="c-last nb-hide-xs" data-field="last_game" title="Yesterday's game"><span>Last</span></th>
-            <th class="c-next nb-hide-xs" data-field="next_game" title="Today's game"><span>Next</span></th>
+            <th class="c-last nb-hide-xs" data-field="last_game" title="Last game (yesterday's, or today's once it is final)"><span>Last</span></th>
+            <th class="c-next nb-hide-xs" data-field="next_game" title="Next game (today's, or tomorrow's once today's slate is final)"><span>Next</span></th>
             <th class="num c-proj" data-field="proj_w" data-sort="proj_w"><button class="nb-sort" title="Projected wins: mean of the season simulations">Proj. W</button></th>
             <th class="num c-sos nb-hide-sm" data-field="sos" data-sort="sos"><button class="nb-sort" title="Remaining schedule strength: opponents' mean rating; 1st = hardest">SOS</button></th>
             <th class="num c-sos nb-hide-sm" data-field="sor" data-sort="sor"><button class="nb-sort" title="Strength of record: wins above an average team's expectation against the same games; 1st = best">SOR</button></th>
@@ -874,13 +874,16 @@ function drawRankings() {
   const withRank = (v, r) => { const c = el('span', ''); c.title = signed(v, 2); c.append(el('span', 'v', signed(v, 2))); c.append(el('span', 'rk', Number.isFinite(N(r)) ? ordinal(r) : '')); return c; };
   // rank colour: green at the good end, muted mid-table, red at the bad end (best = 1st unless flipped)
   const withRankTone = (v, r, flip) => { const c = withRank(v, r); const n = N(r); if (Number.isFinite(n)) { const f = (flip ? 30 - n : n - 1) / 29, x = Math.round(Math.abs(1 - 2 * f) * 100); c.lastChild.style.setProperty('--rkc', `color-mix(in srgb, var(${f < 0.5 ? '--color-ok' : '--color-bad'}) ${x}%, var(--color-fg-muted))`); } return c; };
-  // Last = yesterday's final, Next = today's game (ET days); no game that day = –
-  const today = todayET(), yday = new Date(parseDay(today) - 864e5).toISOString().slice(0, 10);
+  // Last = yesterday's final, Next = today's game (ET days); no game that day = –. Once today's whole slate is final
+  // the day rolls forward: Last = today's finals, Next = tomorrow's games. Mid-slate, a team whose game is over shows it.
   const tmap = teamMap(), sched = OK('schedule') ? dash.data('schedule').data : [];
+  const today = todayET(), shiftDay = (n) => new Date(+parseDay(today) + n * 864e5).toISOString().slice(0, 10);
+  const slate = sched.filter((g) => g.date === today), done = slate.length > 0 && slate.every((g) => g.status === 'final');
+  const lastDays = done ? [today] : [shiftDay(-1), today], nextDay = done ? shiftDay(1) : today;
   const lastG = new Map(), nextG = new Map();
-  sched.forEach((g) => {
-    if (g.status === 'final' && g.date === yday) { lastG.set(g.home, [g, true]); lastG.set(g.away, [g, false]); }
-    if (g.status !== 'final' && g.date === today) { nextG.set(g.home, [g, true]); nextG.set(g.away, [g, false]); }
+  sched.forEach((g) => {  // schedule is in date order, so today's final overwrites yesterday's
+    if (g.status === 'final' && lastDays.includes(g.date)) { lastG.set(g.home, [g, true]); lastG.set(g.away, [g, false]); }
+    if (g.status !== 'final' && g.date === nextDay) { nextG.set(g.home, [g, true]); nextG.set(g.away, [g, false]); }
   });
   const opp = (g, home) => `${home ? 'vs.' : '@'} ${code(tmap.get(home ? g.away : g.home)) || (home ? g.away : g.home)}`;
   const out = rows.map((t) => {

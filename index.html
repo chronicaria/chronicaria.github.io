@@ -122,7 +122,7 @@
 .nb .nb-rk tbody tr { cursor: pointer; }
 .nb .nb-rk tbody td { background: color-mix(in srgb, var(--tc, transparent) var(--tint, 8%), transparent); }  /* a faint wash of the team colour */
 .nb.nb-dark .nb-rk tbody td { --tint: 15%; }
-.nb .nb-rk tbody td:first-child { box-shadow: inset 3px 0 0 var(--tm, transparent); padding-left: 8px; }
+.nb .nb-rk tbody td:first-child { padding-left: 8px; }
 .nb .nb-rk tbody tr:hover td, .nb .nb-rk tbody tr:focus-within td { --tint: 16%; }
 .nb.nb-dark .nb-rk tbody tr:hover td, .nb.nb-dark .nb-rk tbody tr:focus-within td { --tint: 24%; }
 .nb .nb-rk caption { caption-side: top; text-align: left; padding: 0 8px 8px; font-size: 12px; font-weight: 650; color: var(--color-fg); }
@@ -928,7 +928,7 @@ function drawRankings() {
   const opp = (g, home) => `${home ? 'vs.' : '@'} ${code(tmap.get(home ? g.away : g.home)) || (home ? g.away : g.home)}`;
   const out = rows.map((t) => {
     const tr = el('tr'); tr.dataset.key = t.abbr; tr._abbr = t.abbr;
-    tr.style.setProperty('--tm', teamInk(t)); tr.style.setProperty('--tc', hex(t.color) || 'transparent');  // stripe + faint row wash
+    tr.style.setProperty('--tc', hex(t.color) || 'transparent');  // faint row wash
     const rd = N(t.rank_d1);
     tr.append(td(rd > 0 ? '▲' + rd : rd < 0 ? '▼' + Math.abs(rd) : '–', 'c-chg ' + (rd > 0 ? 'up' : rd < 0 ? 'down' : 'flat')));
     tr.append(td(String(N(t.rank)), 'num c-rank'));

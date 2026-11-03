@@ -96,8 +96,24 @@
 .nb .nb-rk-head { margin-bottom: 8px; align-items: center; }
 .nb .nb-png { appearance: none; border: 1px solid var(--color-border-line); background: none; border-radius: 999px; font: inherit; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: 3px 10px; cursor: pointer; }
 .nb .nb-png:hover { color: var(--color-fg); }
-.nb .nb-rk-cap { margin: 0 0 10px; font-family: var(--nb-sans); font-size: 15px; font-weight: 650; }
-.nb .nb-rk-cap span { color: var(--color-fg-muted); font-weight: 450; }
+/* PNG export card: the league in three columns of ten, on a fixed dark board (built off-screen on click, then removed) */
+.nb .nb-x { --x-bg: #0d0f13; --x-row: #12151a; --x-hair: #1f232b; --x-rule: #4a515c; --x-fg: #eceef1; --x-mute: #8d939e;
+  position: fixed; left: -100000px; top: 0; width: max-content; background: var(--x-bg); color: var(--x-fg); padding: 26px 28px 22px; border-radius: 12px; font-family: var(--nb-sans); }
+.nb .nb-x-title { margin: 0; font-size: 28px; font-weight: 650; letter-spacing: -0.015em; line-height: 1.15; }
+.nb .nb-x-meta { margin: 6px 0 20px; font-family: var(--nb-mono); font-size: 12px; color: var(--x-mute); }
+.nb .nb-x-cols { display: grid; grid-template-columns: repeat(3, max-content); gap: 0 28px; }
+.nb .nb-x-t { border-collapse: separate; border-spacing: 0; font-variant-numeric: tabular-nums; }
+.nb .nb-x-t th { padding: 0 10px 8px; font-family: var(--nb-mono); font-weight: 500; font-size: 11px; color: var(--x-mute); text-align: center; border-bottom: 1px solid var(--x-rule); }
+.nb .nb-x-t th.l { text-align: left; }
+.nb .nb-x-t td { height: 42px; padding: 0 10px; text-align: center; white-space: nowrap; border-bottom: 1px solid var(--x-hair); background: color-mix(in srgb, var(--tc, transparent) 22%, var(--x-row)); }
+.nb .nb-x-t td.rk { box-shadow: inset 4px 0 0 var(--tm, transparent); padding-left: 16px; text-align: right; font-family: var(--nb-mono); font-size: 13px; color: var(--x-mute); width: 20px; }
+.nb .nb-x-t td.chg { font-family: var(--nb-mono); font-size: 11.5px; width: 30px; padding: 0 4px; }
+.nb .nb-x-t td.chg.up { color: #3ccf74; } .nb .nb-x-t td.chg.down { color: #f05a63; } .nb .nb-x-t td.chg.flat { color: var(--x-mute); }
+.nb .nb-x-t td.lg { width: 28px; padding: 0 4px 0 6px; }
+.nb .nb-x-t td.lg img { width: 28px; height: 28px; max-width: none; object-fit: contain; display: block; }
+.nb .nb-x-t td.tm { text-align: left; font-size: 15.5px; font-weight: 650; letter-spacing: .02em; padding-right: 18px; }
+.nb .nb-x-t td.n { font-family: var(--nb-mono); font-size: 13.5px; color: #f4f5f7; border-left: 1px solid var(--x-hair); }
+.nb .nb-x-t td.n.pos { color: #6fe39a; } .nb .nb-x-t td.n.neg { color: #ff8189; }
 .nb .nb-rk-wrap { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
 .nb .nb-rk { table-layout: fixed; font-size: 12px; }
 .nb .nb-rk th, .nb .nb-rk td { padding: 0 4px; }
@@ -342,7 +358,6 @@
         </div>
         <button class="nb-png" id="rk-png" title="Download this view as a PNG">PNG</button>
       </div>
-      <h2 class="nb-rk-cap" id="rk-cap" hidden></h2>
       <div class="nb-rk-wrap" id="rankings-wrap" data-source="logos">
         <table class="nb-table nb-rk nb-rk-1" id="rankings-table" data-source="teams" data-row-key="abbr">
           <thead><tr>
@@ -831,22 +846,58 @@ confSeg.addEventListener('click', (e) => { const b = e.target.closest('button[da
 // the clicked row opens its team (the name inside stays the keyboard target)
 document.getElementById('rankings-wrap').addEventListener('click', (e) => { if (e.target.closest('.nb-tlink')) return; const tr = e.target.closest('tbody tr'); if (tr && tr._abbr) openTeam(tr._abbr); });
 
-// PNG of the card as shown (League or Conference), with a title line in place of the controls
+// PNG: a clean league card (three columns of ten: rank, change, logo, team code, rating, projected wins) on a dark board,
+// built off-screen from the teams data, captured, then removed. It ignores the table's sort and the Conference view.
+const X_ROW = { r: 18, g: 21, b: 26 };
+const xInk = (t) => {  // stripe colour: the team colour, or its alternate when the main one vanishes on the dark row
+  const opts = [hex(t.color), hex(t.alt_color)].filter(Boolean).map((c) => ({ c, k: contrast(toRGB(c), X_ROW) }));
+  if (!opts.length) return 'transparent';
+  return opts[0].k >= 2.2 ? opts[0].c : opts.reduce((a, b) => (b.k > a.k ? b : a)).c;
+};
+function exportCard() {
+  const teams = dash.data('teams').data.slice().sort((a, b) => N(a.rank) - N(b.rank));
+  const logos = new Map((OK('logos') ? dash.data('logos').data : []).map((l) => [l.abbr, l.dark || l.src]));
+  const sched = OK('schedule') ? dash.data('schedule').data : [];
+  const lastDay = sched.filter((g) => g.status === 'final').map((g) => g.date).sort().pop();
+  const card = el('div', 'nb-x');
+  card.append(el('h2', 'nb-x-title', `NBA Power Rankings${OK('run') ? ' ' + dash.data('run').data[0].season : ''}`),
+    el('p', 'nb-x-meta', `${lastDay ? `Through games of ${fmtDay(parseDay(lastDay))} · ` : ''}Rating = points vs an average team · chronicaria.github.io`));
+  const cols = el('div', 'nb-x-cols');
+  for (let c = 0; c < 3; c++) {
+    const t = el('table', 'nb-x-t'), head = el('tr');
+    for (const [txt, cls] of [['#', ''], ['±', ''], ['', ''], ['Team', 'l'], ['Rating', ''], ['Proj. W', '']]) head.append(el('th', cls, txt));
+    t.createTHead().append(head);
+    const body = t.createTBody();
+    for (const tm of teams.slice(c * 10, c * 10 + 10)) {
+      const tr = el('tr');
+      tr.style.setProperty('--tc', hex(tm.color) || 'transparent');
+      tr.style.setProperty('--tm', xInk(tm));
+      const rd = N(tm.rank_d1), r = N(tm.rating);
+      const img = el('img'); img.alt = ''; const src = logos.get(tm.abbr); if (src) img.src = src;
+      const lg = td('', 'lg'); lg.append(img);
+      tr.append(td(String(N(tm.rank)), 'rk'), td(rd > 0 ? '▲' + rd : rd < 0 ? '▼' + Math.abs(rd) : '–', 'chg ' + (rd > 0 ? 'up' : rd < 0 ? 'down' : 'flat')),
+        lg, td(code(tm), 'tm'), td(fmtR(r), 'n ' + (r > 0 ? 'pos' : r < 0 ? 'neg' : '')), td(fmt1(tm.proj_w), 'n'));
+      body.append(tr);
+    }
+    cols.append(t);
+  }
+  card.append(cols);
+  return card;
+}
 document.getElementById('rk-png').addEventListener('click', async (e) => {
-  const btn = e.currentTarget, card = document.getElementById('rankings-card'), cap = document.getElementById('rk-cap');
-  const view = dash.params().view === 'conf' ? 'Conference' : 'League';
-  const asOf = document.querySelector('#run-line span')?.textContent || '';
+  const btn = e.currentTarget;
+  if (!OK('teams')) return;
   const day = OK('run') ? String(dash.data('run').data[0].as_of).slice(0, 10) : todayET();
   btn.disabled = true;
-  cap.replaceChildren(`NBA power rankings ${OK('run') ? dash.data('run').data[0].season : ''} `, el('span', '', `· ${view} · ${asOf}`));
-  cap.hidden = false;
+  const card = exportCard();
+  document.querySelector('.nb').append(card);
   try {
+    await Promise.all([...card.querySelectorAll('img')].map((i) => (i.src ? i.decode().catch(() => {}) : null)));
     const { toPng } = await import('https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/+esm');
-    const bg = getComputedStyle(document.body).backgroundColor;
-    const url = await toPng(card, { pixelRatio: 2, backgroundColor: bg, filter: (n) => !n.classList?.contains('nb-rk-head') });
-    const a = el('a'); a.href = url; a.download = `nba-power-rankings-${view.toLowerCase()}-${day}.png`; a.click();
+    const url = await toPng(card, { pixelRatio: 2, backgroundColor: '#0d0f13', width: card.offsetWidth, height: card.offsetHeight, style: { position: 'static', left: '0', top: '0' } });
+    const a = el('a'); a.href = url; a.download = `nba-power-rankings-${day}.png`; a.click();
   } catch (err) { console.error('PNG export failed', err); btn.textContent = 'PNG failed'; }
-  finally { cap.hidden = true; btn.disabled = false; }
+  finally { card.remove(); btn.disabled = false; }
 });
 
 function drawRankings() {

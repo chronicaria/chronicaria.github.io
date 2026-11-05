@@ -40,7 +40,7 @@
   const load = (id) => {
     sets[id] = { status: 'loading', data: [], columns: [], message: '', refreshing: false, meta: [] };
     const file = FILES[id] || `${id}.csv`;
-    fetch(`${base}/${file}`).then((r) => {
+    fetch(`${base}/${file}`, { cache: 'no-cache' }).then((r) => {  // revalidate: Pages' max-age=600 served yesterday's data after a publish
       if (!r.ok) throw new Error(`${r.status} ${file}`);
       return r.text();
     }).then((text) => {

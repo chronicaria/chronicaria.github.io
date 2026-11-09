@@ -6,13 +6,13 @@ ATL,4869342,Dyson Daniels,G,11,30.3,1.33,Active,,,
 ATL,2490149,CJ McCollum,G,11,25.7,0.61,Active,,,
 ATL,4397183,Aaron Wiggins,G,11,26.3,0.49,Active,,,
 ATL,5149077,Kingston Flemings,G,10,21.7,0.42,Active,,,
-ATL,3146557,Jock Landale,C,7,15.3,0.37,Out,0.0,2026-11-09,Landale (hip) has been ruled out for Saturday's game against the Nets.
+ATL,3146557,Jock Landale,C,7,15.3,0.37,Out,0.5,,Landale (hip) is listed as questionable for Monday's game against the Lakers.
 ATL,4712863,Mouhamed Gueye,F,0,,0.35,Out,1.0,2026-11-20,"Gueye underwent surgery Tuesday to repair a fractured left foot that he suffered during a workout last week, Brad Rowland of the Locked On Podcast Network reports."
-ATL,4585618,Keshon Gilbert,G,0,,0.33,Out,0.0,2026-11-09,Gilbert (knee) is out for Saturday's game against Brooklyn.
+ATL,4585618,Keshon Gilbert,G,0,,0.33,Out,1.0,2026-11-13,Gilbert (knee) has been ruled out for Monday's game against the Lakers.
 ATL,4280151,Corey Kispert,F,6,9.7,0.22,Active,,,
-ATL,5106262,Zuby Ejiofor,F,6,12.3,0.21,Active,,,
 ATL,4397020,Luguentz Dort,G,11,25.5,0.21,Active,,,
-ATL,4873201,Asa Newell,F,5,11.0,0.2,Out,0.0,2026-11-09,Newell (toe)  is out for Saturday's game against the Nets.
+ATL,5106262,Zuby Ejiofor,F,6,12.3,0.21,Active,,,
+ATL,4873201,Asa Newell,F,5,11.0,0.2,Out,1.0,2026-11-13,Newell (toe) has been ruled out for Monday's game against the Lakers.
 ATL,4431941,RayJ Dennis,G,1,8.0,0.13,Absent,1.0,,missed the last 3 games; not on the injury feed
 ATL,2578185,Dorian Finney-Smith,F,3,4.0,0.01,Active,,,
 ATL,5105571,Henri Veesaar,C,0,,,Out,1.0,2027-07-01,"Veesaar was diagnosed with a torn right ACL and is expected to miss the 2026-27 season, the Hawks announced Monday."
@@ -21,11 +21,12 @@ BKN,4432194,Day'Ron Sharpe,C,9,24.1,0.72,Active,,,
 BKN,3064514,Julius Randle,F,9,33.8,0.71,Active,,,
 BKN,4702177,Keon Ellis,G,8,22.5,0.44,Active,,,
 BKN,3150844,Moritz Wagner,C,9,18.6,0.4,Active,,,
-BKN,5175643,Egor Demin,G,4,21.8,0.39,Out,1.0,2026-11-11,"The Nets exercised Demin's third-year team option for the 2027-28 season, Sharif Phillips-Keaton of USA Today reports Thursday."
-BKN,5101761,Mikel Brown Jr.,G,7,23.3,0.34,Out,1.0,2026-11-11,"Brown, who finished with 18 points (5-13 FG, 3-8 3Pt, 5-7 FT), one rebound, three assists and one steal over 25 minutes in Saturday's 124-121 loss to Atlanta, won't play in Sunday's game against Dallas, Erik Slater of ClutchPoints.com reports."
+BKN,5175643,Egor Demin,G,4,21.8,0.39,Out,0.0,2026-11-11,"The Nets exercised Demin's third-year team option for the 2027-28 season, Sharif Phillips-Keaton of USA Today reports Thursday."
+BKN,5101761,Mikel Brown Jr.,G,7,23.3,0.34,Out,0.0,2026-11-11,"Brown, who finished with 18 points (5-13 FG, 3-8 3Pt, 5-7 FT), one rebound, three assists and one steal over 25 minutes in Saturday's 124-121 loss to Atlanta, won't play in Sunday's game against Dallas, Erik Slater of ClutchPoints.com reports."
 BKN,5174655,Chaney Johnson,F,9,19.7,0.32,Active,,,
 BKN,4712896,Noah Clowney,F,9,21.1,0.2,Active,,,
 BKN,5107173,Danny Wolf,F,4,19.2,0.2,Active,,,
+BKN,4702670,Grant Nelson,F,0,,0.17,Day-To-Day,0.5,,"Nelson signed a two-way contract with the Nets on Friday, Michael Scotto of HoopsHype.com reports."
 BKN,4687718,Josh Minott,F,4,9.8,0.17,Active,,,
 BKN,3907823,Terance Mann,G,4,14.0,0.16,Active,,,
 BKN,4870564,Joshua Jefferson,F,1,4.0,0.07,Absent,1.0,,missed the last 6 games; not on the injury feed
@@ -47,46 +48,45 @@ BOS,3195,Mike Conley,G,3,7.3,0.15,Active,,,
 BOS,4397251,Ron Harper Jr.,G,4,6.8,0.1,Active,,,
 BOS,5106283,Dillon Mitchell,F,1,2.0,0.03,Active,,,
 BOS,5142621,Chris Cenac Jr.,F,3,3.0,0.02,Active,,,
-CHA,5061575,Kon Knueppel,G,1,6.0,1.17,Out,0.0,2026-11-09,Knueppel (hamstring) is out for Friday's game against the Celtics.
-CHA,4433249,Moussa Diabate,F,9,28.8,0.96,Day-To-Day,1.0,,"Diabate (quadriceps) has been ruled out for Friday's game against Boston, according to the Hornets' official injury report."
+CHA,5061575,Kon Knueppel,G,1,6.0,1.17,Out,1.0,2026-12-12,Knueppel (hamstring) was diagnosed with a left hamstring strain Sunday and will be re-evaluated in four weeks.
+CHA,4433249,Moussa Diabate,F,9,28.8,0.96,Day-To-Day,0.5,,Diabate (quadriceps) is questionable for Monday's game against the Cavaliers.
 CHA,3135045,Grayson Allen,G,10,26.0,0.9,Active,,,
 CHA,4576060,Ryan Kalkbrenner,C,10,17.2,0.77,Active,,,
 CHA,4396971,Naz Reid,C,10,29.3,0.73,Active,,,
 CHA,2583632,Royce O'Neale,F,10,18.8,0.7,Active,,,
-CHA,4433287,Brandon Miller,F,10,31.0,0.44,Day-To-Day,0.5,,"Head coach Charles Lee said Miller (groin) will be re-evaluated over the weekend, and they expect to have more information by Monday, Steve Reed of The Associated Press reports."
-CHA,4066218,Grant Williams,F,0,,0.39,Out,0.0,2026-11-09,The Hornets recalled Williams (hamstring) from the G League's Greensboro Swarm on Wednesday.
-CHA,4395651,Coby White,G,3,16.7,0.37,Active,,,
+CHA,4433287,Brandon Miller,F,10,31.0,0.44,Out,1.0,2026-11-12,Miller (groin) is listed as out for Monday's game against Cleveland.
+CHA,4066218,Grant Williams,F,0,,0.39,Out,1.0,2026-11-12,Williams (hamstring) is out for Monday's game against the Cavaliers.
 CHA,5211176,Tidjane Salaun,F,9,14.9,0.37,Active,,,
+CHA,4395651,Coby White,G,3,16.7,0.37,Active,,,
 CHA,4602025,Sion James,G,10,24.9,0.23,Active,,,
 CHA,5281370,Hannes Steinbach,F,4,12.5,0.12,Active,,,
 CHA,5060701,Christian Anderson,G,9,12.0,0.11,Active,,,
 CHA,5239590,Liam McNeeley,G,5,9.2,0.1,Active,,,
-CHA,3032979,Dennis Schroder,G,9,30.0,0.09,Out,0.0,2026-11-09,Schroder (thigh) is out for Friday's game versus Boston.
+CHA,3032979,Dennis Schroder,G,9,30.0,0.09,Out,1.0,2026-11-25,"Schroder has been diagnosed with a left hamstring strain and will be reevaluated in two weeks, Michael Scotto of HoopsHype.com reports."
 CHA,4701225,PJ Hall,C,2,6.0,0.06,Absent,1.0,,missed the last 3 games; not on the injury feed
 CHI,4395626,Tre Jones,G,8,18.1,1.29,Active,,,
-CHI,2595516,Norman Powell,G,8,28.9,1.21,Day-To-Day,0.5,,Powell (shoulder) is listed as questionable for Sunday's game against the 76ers.
-CHI,4278067,Nic Claxton,C,0,,1.01,Out,0.5,,Claxton (hamstring) has been downgraded to questionable for Sunday's game against the 76ers.
+CHI,2595516,Norman Powell,G,8,28.9,1.21,Out,0.0,2026-11-11,"Powell (shoulder) has been ruled out for Sunday's game against the 76ers, Adam Aaronson of PhillyVoice.com reports."
 CHI,4871145,Josh Giddey,G,8,27.2,0.93,Active,,,
-CHI,4397189,Jalen Smith,F,8,22.4,0.72,Day-To-Day,0.1,,Smith (finger) is probable for Sunday's game against Philadelphia.
+CHI,4397189,Jalen Smith,F,8,22.4,0.72,Active,,,
 CHI,4711294,Matas Buzelis,F,8,25.1,0.65,Active,,,
 CHI,5095151,Caleb Wilson,F,8,32.5,0.49,Active,,,
 CHI,5044385,Leonard Miller,F,8,17.6,0.4,Active,,,
 CHI,4432822,Isaac Okoro,F,8,17.9,0.3,Active,,,
 CHI,2990984,Buddy Hield,G,8,13.0,0.29,Active,,,
-CHI,4066650,Zach Collins,F,6,8.7,0.19,Out,1.0,2026-11-11,Collins (illness) is out for Sunday's game against Philadelphia.
+CHI,4066650,Zach Collins,F,6,8.7,0.19,Out,0.0,2026-11-11,Collins (illness) is out for Sunday's game against Philadelphia.
 CHI,5242496,Noa Essengue,F,7,13.9,0.15,Active,,,
-CHI,5105555,Tobe Awaka,F,4,10.0,0.15,Day-To-Day,0.5,,Awaka (knee) is questionable for Sundays' game against the 76ers.
+CHI,5105555,Tobe Awaka,F,4,10.0,0.15,Active,,,
 CHI,4898010,Jaylin Sellers,G,5,9.0,0.13,Active,,,
 CHI,4848625,Dailyn Swain,G,2,9.5,0.05,Active,,,
 CHI,4683750,Jordan Hawkins,G,4,5.5,0.02,Active,,,
 CHI,4431687,Patrick Williams,F,1,20.0,0.02,Active,,,
 CLE,3908809,Donovan Mitchell,G,10,33.5,2.2,Active,,,
 CLE,4432158,Evan Mobley,C,10,32.8,1.87,Active,,,
-CLE,4066328,Jarrett Allen,C,8,25.1,1.47,Out,0.0,2026-11-09,Allen (knee) is out for Saturday's game against the Knicks
+CLE,4066328,Jarrett Allen,C,8,25.1,1.47,Day-To-Day,0.5,,Allen (knee) is questionable for Monday's game against Charlotte.
 CLE,3992,James Harden,G,10,33.3,1.35,Active,,,
-CLE,4066757,Sam Merrill,G,9,23.1,0.91,Out,0.0,2026-11-09,Merrill (elbow) is out for Saturday's game against the Knicks.
+CLE,4066757,Sam Merrill,G,9,23.1,0.91,Out,1.0,2026-11-11,Merrill (elbow) is listed as out for Monday's game against the Hornets.
 CLE,4576087,Peyton Watson,G,8,28.4,0.68,Active,,,
-CLE,4683747,Jaylon Tyson,G,5,20.8,0.52,Out,0.0,2026-11-09,Tyson (ankle) is out for Saturday's game against the Knicks.
+CLE,4683747,Jaylon Tyson,G,5,20.8,0.52,Out,1.0,2026-11-11,Tyson (ankle) is out for Monday's game against the Hornets.
 CLE,5023693,Tyrese Proctor,G,9,15.9,0.39,Active,,,
 CLE,5041951,Meleek Thomas,G,7,22.4,0.37,Active,,,
 CLE,3934723,Thomas Bryant,C,5,12.0,0.3,Active,,,
@@ -101,10 +101,10 @@ DAL,4278049,Daniel Gafford,F,9,22.7,0.95,Active,,,
 DAL,4278594,Naji Marshall,F,6,26.3,0.87,Active,,,
 DAL,4593125,Santi Aldama,F,1,13.0,0.82,Active,,,
 DAL,4278078,P.J. Washington,F,9,34.7,0.52,Active,,,
-DAL,4432582,Max Christie,G,8,22.0,0.43,Active,,,
 DAL,5211175,Zaccharie Risacher,F,9,26.2,0.43,Active,,,
-DAL,4873153,Morez Johnson Jr.,F,9,16.9,0.32,Active,,,
+DAL,4432582,Max Christie,G,8,22.0,0.43,Active,,,
 DAL,4683688,Dereck Lively II,C,0,,0.32,Out,1.0,2026-11-12,Lively (foot) is listed as out for Monday's game against the Kings.
+DAL,4873153,Morez Johnson Jr.,F,9,16.9,0.32,Active,,,
 DAL,3138160,Caleb Martin,F,5,18.2,0.3,Active,,,
 DAL,4896372,Walter Clayton Jr.,G,8,15.6,0.25,Active,,,
 DAL,4432107,Marcus Sasser,G,8,17.4,0.21,Active,,,
@@ -113,12 +113,12 @@ DAL,5105806,Jett Howard,G,4,2.5,0.07,Active,,,
 DAL,4701208,Moussa Cisse,C,6,2.8,0.06,Active,,,
 DAL,5106040,Tobi Lawal,F,5,2.2,0.02,Active,,,
 DAL,5148538,Tarik Biberovic,F,0,,,Out,1.0,2026-11-12,Biberovic (heel) is listed as out for Monday's game against Sacramento.
-DEN,3112335,Nikola Jokic,C,8,35.9,3.86,Active,,,
-DEN,3936299,Jamal Murray,G,8,36.5,2.71,Active,,,
-DEN,3978,DeMar DeRozan,G,7,24.7,1.19,Active,,,
-DEN,3138196,Cameron Johnson,F,5,27.6,1.1,Active,,,
-DEN,4431767,Christian Braun,G,8,34.2,1.04,Active,,,
-DEN,3064290,Aaron Gordon,F,8,29.1,1.01,Active,,,
+DEN,3112335,Nikola Jokic,C,8,35.9,3.86,Day-To-Day,0.5,,Jokic (elbow) is listed as questionable for Monday's game in Houston.
+DEN,3936299,Jamal Murray,G,8,36.5,2.71,Day-To-Day,0.5,,Murray is questionable for Monday's game against the Rockets due to a left shin contusion.
+DEN,3978,DeMar DeRozan,G,7,24.7,1.19,Day-To-Day,0.5,,DeRozan is questionable for Monday's game against the Rockets due to lower back spasms.
+DEN,3138196,Cameron Johnson,F,5,27.6,1.1,Day-To-Day,0.5,,Johnson (lower body) is questionable for Monday's game against Houston.
+DEN,4431767,Christian Braun,G,8,34.2,1.04,Day-To-Day,0.5,,Braun (calf/illness) is listed as questionable for Monday's game against Houston.
+DEN,3064290,Aaron Gordon,F,8,29.1,1.01,Day-To-Day,0.5,,Gordon (lower body injury management) is listed as questionable for Monday's game against the Rockets.
 DEN,4592427,Spencer Jones,F,1,21.0,0.61,Active,,,
 DEN,4277848,Marvin Bagley III,F,8,12.4,0.54,Active,,,
 DEN,4698719,Trevon Brazile,F,8,21.1,0.41,Active,,,
@@ -132,17 +132,17 @@ DEN,4431690,Zeke Nnaji,F,2,4.0,0.06,Active,,,
 DEN,4433607,DaRon Holmes II,F,3,3.3,0.05,Active,,,
 DET,3157465,Duncan Robinson,F,8,31.0,1.67,Active,,,
 DET,4432166,Cade Cunningham,G,8,33.5,1.59,Active,,,
-DET,4433621,Jalen Duren,C,2,19.0,1.51,Out,1.0,2026-11-09,"Duren will be re-evaluated in two weeks due to a right hamstring strain, Eric Vincent of ClutchPoints.com reports."
+DET,4433621,Jalen Duren,C,2,19.0,1.51,Out,1.0,2026-11-24,"Duren (hamstring) has begun on-court activity and will be re-evaluated in two weeks, Hunter Patterson of The Athletic reports."
 DET,4278562,Paul Reed,F,8,27.4,1.28,Active,,,
 DET,4684742,Ausar Thompson,G,7,27.4,1.01,Active,,,
 DET,3908845,John Collins,F,8,25.5,0.86,Active,,,
-DET,4395702,Isaiah Joe,G,3,13.7,0.77,Out,1.0,2026-11-09,Joe (hip) has been ruled out for Sunday's game against the Lakers.
+DET,4395702,Isaiah Joe,G,3,13.7,0.77,Out,0.0,2026-11-09,Joe (hip) has been ruled out for Sunday's game against the Lakers.
 DET,2596112,Javonte Green,G,8,18.5,0.7,Active,,,
 DET,4066372,Kevin Huerter,G,8,20.4,0.62,Active,,,
 DET,5107199,Daniss Jenkins,G,8,23.9,0.31,Active,,,
 DET,4683771,Ronald Holland II,F,8,15.8,0.19,Active,,,
-DET,4397449,Elijah Harkless,G,1,3.0,0.14,Active,,,
 DET,2990962,Taurean Prince,F,2,6.5,0.14,Active,,,
+DET,4397449,Elijah Harkless,G,1,3.0,0.14,Active,,,
 DET,4397882,Tolu Smith,F,7,4.0,0.09,Active,,,
 DET,5107818,Isaac Jones,C,3,4.0,0.05,Active,,,
 DET,4700852,Chaz Lanier,G,3,4.0,0.04,Active,,,
@@ -154,11 +154,11 @@ GS,4432171,Moses Moody,G,0,,0.89,Out,1.0,2026-12-01,"Moody (knee) is progressing
 GS,3102531,Kristaps Porzingis,C,0,,0.82,Out,1.0,2027-01-02,Porzingis announced on his social media that he's stepping away from basketball.
 GS,5175737,Yaxel Lendeborg,F,10,32.2,0.7,Active,,,
 GS,3213,Al Horford,C,8,17.9,0.58,Active,,,
-GS,2990969,Georges Niang,F,10,20.6,0.53,Active,,,
 GS,4397040,Brandon Williams,G,9,17.8,0.53,Active,,,
+GS,2990969,Georges Niang,F,10,20.6,0.53,Active,,,
 GS,3134903,Gary Payton II,G,10,13.4,0.52,Active,,,
-GS,4997536,Gui Santos,F,7,19.0,0.48,Active,,,
-GS,4897262,Will Richard,G,10,17.1,0.46,Active,,,
+GS,4997536,Gui Santos,F,7,19.0,0.48,Day-To-Day,0.1,,Santos (knee) is listed as probable for Monday's game against New Orleans.
+GS,4897262,Will Richard,G,10,17.1,0.46,Out,1.0,2026-11-11,Richard is out for Monday's game against the Pelicans due to a left thumb UCL tear.
 GS,4066436,De'Anthony Melton,G,10,21.8,0.39,Active,,,
 GS,4397886,Charles Bassey,C,8,11.8,0.35,Active,,,
 GS,6589,Draymond Green,F,8,27.6,0.32,Active,,,
@@ -173,18 +173,18 @@ HOU,2991230,Fred VanVleet,G,8,30.1,1.06,Active,,,
 HOU,4711272,Reed Sheppard,G,7,20.6,0.8,Active,,,
 HOU,2990992,Marcus Smart,G,7,22.6,0.34,Active,,,
 HOU,4433192,Tari Eason,F,10,24.4,0.32,Active,,,
-HOU,3102529,Clint Capela,C,6,14.2,0.27,Out,0.0,2026-11-09,Capela (ankle) is out for Saturday's game against the Suns.
-HOU,2991235,Steven Adams,C,1,8.0,0.22,Out,0.0,2026-11-09,"Head coach Ime Udoka said Wednesday that Adams (calf) is still without a timetable to return and will be evaluated on a ""weekly basis,"" Varun Shankar of the Houston Chronicle reports."
+HOU,3102529,Clint Capela,C,6,14.2,0.27,Out,1.0,2026-11-11,Capela (ankle) is listed as out for Monday's game against Denver.
+HOU,2991235,Steven Adams,C,1,8.0,0.22,Out,1.0,2026-11-11,"Head coach Ime Udoka said Wednesday that Adams (calf) is still without a timetable to return and will be evaluated on a ""weekly basis,"" Varun Shankar of the Houston Chronicle reports."
 HOU,4432827,Oscar Tshiebwe,C,6,6.8,0.2,Active,,,
 HOU,3037789,Bogdan Bogdanovic,G,10,11.2,0.16,Active,,,
 HOU,4592857,Isaiah Crawford,F,6,5.2,0.06,Active,,,
-HOU,3136777,Jae'Sean Tate,F,6,2.7,0.03,Active,,,
 HOU,5105837,Bruce Thornton,G,6,3.2,0.03,Active,,,
+HOU,3136777,Jae'Sean Tate,F,6,2.7,0.03,Active,,,
 IND,4396993,Tyrese Haliburton,G,4,33.0,3.23,Out,1.0,2026-11-13,"Haliburton (hamstring) is progressing well but does not have a timetable to return, Dustin Dopirak of The Indianapolis Star reports."
 IND,4395712,Andrew Nembhard,G,8,33.1,1.2,Active,,,
 IND,3149673,Pascal Siakam,F,9,32.0,1.1,Active,,,
 IND,4065731,Jay Huff,C,9,18.3,0.77,Active,,,
-IND,2530530,T.J. McConnell,G,1,9.0,0.75,Active,,,
+IND,2530530,T.J. McConnell,G,1,9.0,0.75,Day-To-Day,0.5,,McConnell is questionable for Monday's game against the Mavericks due to a right hamstring strain.
 IND,4278355,Obi Toppin,F,7,22.3,0.64,Active,,,
 IND,4592829,Quenton Jackson,G,10,21.4,0.64,Active,,,
 IND,4017837,Ivica Zubac,C,5,20.6,0.52,Active,,,
@@ -200,31 +200,31 @@ IND,5106060,Jarace Walker,F,10,23.6,0.23,Active,,,
 LAC,2991139,Kris Dunn,G,8,30.5,1.16,Active,,,
 LAC,3936099,Derrick Jones Jr.,F,7,30.0,0.97,Active,,,
 LAC,4066648,Rui Hachimura,F,6,31.2,0.95,Active,,,
-LAC,3913176,Brandon Ingram,F,0,,0.86,Out,1.0,2026-11-10,"Ingram (Achilles) won't play in Sunday's game against New Orleans, Law Murray of The Athletic reports."
+LAC,3913176,Brandon Ingram,F,0,,0.86,Out,0.0,2026-11-10,"Ingram (Achilles) won't play in Sunday's game against New Orleans, Law Murray of The Athletic reports."
 LAC,4396907,Darius Garland,G,8,33.8,0.81,Active,,,
 LAC,4396818,Jordan Miller,G,0,,0.76,Out,1.0,2027-03-02,"Miller underwent surgery Wednesday to repair a torn left rotator cuff and will be re-evaluated in six months, per Law Murray of The Athletic."
 LAC,3448,Brook Lopez,C,8,23.6,0.72,Active,,,
-LAC,4432170,Isaiah Jackson,F,8,21.1,0.56,Out,1.0,2026-11-10,"Jackson (groin) won't suit up for Sunday's game against the Pelicans, Law Murray of The Athletic reports."
+LAC,4432170,Isaiah Jackson,F,8,21.1,0.56,Out,0.0,2026-11-10,"Jackson (groin) won't suit up for Sunday's game against the Pelicans, Law Murray of The Athletic reports."
 LAC,4065778,Max Strus,G,2,23.0,0.53,Active,,,
 LAC,4702352,Kobe Sanders,G,8,24.4,0.44,Active,,,
 LAC,5254165,Keaton Wagler,G,8,23.9,0.39,Active,,,
 LAC,6580,Bradley Beal,G,0,,0.28,Out,1.0,2026-11-29,"Beal (knee) will not be ready for the start of the regular season, NBA writer Justin Russo reports."
-LAC,5108024,Yanic Konan Niederhauser,C,0,,0.26,Out,1.0,2026-11-10,The Clippers recalled Niederhauser (foot) from the G League's San Diego Clippers on Sunday.
+LAC,5108024,Yanic Konan Niederhauser,C,0,,0.26,Out,0.0,2026-11-10,The Clippers recalled Niederhauser (foot) from the G League's San Diego Clippers on Sunday.
 LAC,5106258,Gradey Dick,G,8,14.9,0.19,Active,,,
 LAC,5075626,Baba Miller,F,7,8.1,0.15,Active,,,
 LAC,4398390,Jalen Pickett,G,3,5.3,0.09,Active,,,
 LAC,4683935,Blake Wesley,G,2,4.5,0.07,Active,,,
 LAC,5105832,Nick Martinelli,F,4,4.8,0.04,Active,,,
 LAC,4845363,Cam Christie,G,4,6.8,0.03,Active,,,
-LAL,3945274,Luka Doncic,G,9,35.9,3.51,Day-To-Day,0.5,,Doncic (back) is questionable for Sunday's game against the Pistons.
+LAL,3945274,Luka Doncic,G,9,35.9,3.51,Out,0.0,2026-11-09,"Doncic has been ruled out for Sunday's game at Detroit due to lower-back tightness, Trevor Lane of LakersNation.com reports."
 LAL,4066457,Austin Reaves,G,10,36.1,1.68,Active,,,
 LAL,4278580,Sandro Mamukelashvili,F,10,23.2,1.15,Active,,,
 LAL,4433136,Walker Kessler,C,10,31.2,1.11,Active,,,
-LAL,3907498,Matisse Thybulle,G,10,24.2,0.74,Active,,,
 LAL,4433137,Ziaire Williams,F,7,24.6,0.74,Active,,,
-LAL,4397014,Quentin Grimes,G,10,25.5,0.6,Active,,,
-LAL,4277811,Collin Sexton,G,9,16.6,0.54,Active,,,
+LAL,3907498,Matisse Thybulle,G,10,24.2,0.74,Active,,,
+LAL,4397014,Quentin Grimes,G,10,25.5,0.6,Day-To-Day,0.5,,Grimes (finger) did not return to Sunday's game against the Pistons.
 LAL,4592691,Jake LaRavia,F,9,23.6,0.54,Active,,,
+LAL,4277811,Collin Sexton,G,9,16.6,0.54,Active,,,
 LAL,4596528,Lawson Lovering,C,2,1.0,0.25,Active,,,
 LAL,4278077,Jarred Vanderbilt,F,5,11.8,0.12,Active,,,
 LAL,5060631,Adou Thiero,F,1,7.0,0.1,Active,,,
@@ -236,20 +236,20 @@ LAL,5113969,Cameron Carr,G,3,1.0,0.02,Active,,,
 MEM,4433083,Cam Spencer,G,9,19.7,1.34,Active,,,
 MEM,4065733,Ty Jerome,G,8,30.5,1.23,Active,,,
 MEM,4903027,Cedric Coward,F,8,28.5,0.88,Active,,,
-MEM,4432810,Isaiah Stewart,C,7,18.3,0.64,Out,0.0,2026-11-09,Stewart (knee) has been ruled out for Friday's game against the Thunder.
 MEM,4781746,Javon Small,G,2,20.5,0.64,Active,,,
+MEM,4432810,Isaiah Stewart,C,7,18.3,0.64,Out,1.0,2026-11-11,Stewart (knee) has been ruled out for Monday's game against Toronto.
 MEM,5112087,Jaylen Wells,F,9,27.0,0.55,Active,,,
 MEM,2991070,Jerami Grant,F,9,24.0,0.53,Active,,,
 MEM,4600663,Zach Edey,C,8,20.6,0.5,Active,,,
 MEM,5041935,Cameron Boozer,F,9,32.0,0.44,Active,,,
-MEM,4431785,Scotty Pippen Jr.,G,5,16.2,0.29,Out,0.0,2026-11-09,Pippen (back) has been ruled out for Friday's game against Oklahoma City.
+MEM,4431785,Scotty Pippen Jr.,G,5,16.2,0.29,Out,1.0,2026-11-11,Pippen (back) won't play in Monday's game versus the Raptors.
 MEM,4593016,Quinten Post,C,7,14.4,0.29,Active,,,
 MEM,5105550,GG Jackson,F,8,15.6,0.27,Active,,,
 MEM,4595400,Olivier-Maxence Prosper,F,4,6.2,0.25,Active,,,
 MEM,4594326,Kris Murray,F,6,14.0,0.14,Active,,,
 MEM,4684806,Taylor Hendricks,F,4,4.5,0.1,Active,,,
-MEM,5231919,Karim Lopez,F,3,3.7,0.03,Active,,,
 MEM,4683934,Jahmai Mashack,G,2,4.0,0.03,Active,,,
+MEM,5231919,Karim Lopez,F,3,3.7,0.03,Active,,,
 MEM,5105817,Carson Cooper,C,1,3.0,0.01,Active,,,
 MEM,5105462,Richie Saunders,G,0,,,Out,1.0,2026-12-01,"Saunders signed a two-way contract with the Grizzlies on Saturday, Shams Charania of ESPN reports."
 MIA,3032977,Giannis Antetokounmpo,F,9,32.8,2.12,Active,,,
@@ -260,8 +260,8 @@ MIA,3059319,Andrew Wiggins,F,9,25.8,0.79,Active,,,
 MIA,3064482,Bobby Portis,F,9,20.8,0.71,Active,,,
 MIA,2528210,Tim Hardaway Jr.,G,9,15.6,0.54,Active,,,
 MIA,6475,Klay Thompson,G,9,23.3,0.46,Active,,,
-MIA,4066993,Dru Smith,G,6,8.5,0.23,Active,,,
 MIA,5107157,Ryan Conwell,G,7,10.3,0.23,Active,,,
+MIA,4066993,Dru Smith,G,6,8.5,0.23,Active,,,
 MIA,3899664,Simone Fontecchio,F,4,3.2,0.11,Active,,,
 MIA,4431772,Myron Gardner,F,5,2.0,0.05,Active,,,
 MIA,4997528,Nikola Jovic,F,7,12.1,0.03,Active,,,
@@ -277,7 +277,7 @@ MIL,5214640,Kasparas Jakucionis,G,9,19.9,0.43,Active,,,
 MIL,5082206,Brayden Burries,G,9,20.1,0.4,Active,,,
 MIL,5164559,Nate Ament,F,7,15.0,0.2,Active,,,
 MIL,4277922,Jericho Sims,C,5,6.4,0.14,Active,,,
-MIL,4277843,Gary Trent Jr.,G,2,6.5,0.04,Active,,,
+MIL,4277843,Gary Trent Jr.,G,2,6.5,0.04,Out,0.0,2026-11-10,Trent (illness) won't play in Sunday's game versus the Celtics.
 MIL,4997526,Ousmane Dieng,F,6,10.2,0.04,Active,,,
 MIL,5214989,Bogoljub Markovic,F,1,5.0,0.01,Active,,,
 MIN,4594268,Anthony Edwards,G,4,33.8,1.92,Out,1.0,2026-12-21,"Edwards underwent a successful arthroscopic procedure on his right knee Thursday, the Timberwolves announced."
@@ -287,9 +287,9 @@ MIN,3934673,Donte DiVincenzo,G,0,,1.11,Out,1.0,2027-04-02,"DiVincenzo (Achilles)
 MIN,4432816,LaMelo Ball,G,10,27.6,1.05,Active,,,
 MIN,3032976,Rudy Gobert,C,9,29.9,0.98,Active,,,
 MIN,4433247,Jonathan Kuminga,F,10,31.2,0.59,Active,,,
-MIN,4592492,Bones Hyland,G,10,12.2,0.48,Active,,,
 MIN,3136196,Trey Lyles,F,10,18.2,0.48,Active,,,
-MIN,5279133,Joan Beringer,F,10,16.5,0.41,Day-To-Day,0.5,,Beringer (nose) is questionable for Sunday's game against the Jazz.
+MIN,4592492,Bones Hyland,G,10,12.2,0.48,Active,,,
+MIN,5279133,Joan Beringer,F,10,16.5,0.41,Active,,,
 MIN,4432847,Terrence Shannon Jr.,G,7,22.0,0.35,Absent,1.0,,missed the last 3 games; not on the injury feed
 MIN,4432247,Jaylen Clark,G,9,13.6,0.27,Active,,,
 MIN,4592979,Zyon Pullin,G,2,3.5,0.05,Active,,,
@@ -301,7 +301,7 @@ NO,4397136,Saddiq Bey,F,9,27.0,1.29,Active,,,
 NO,3907497,Dejounte Murray,G,6,34.8,0.88,Active,,,
 NO,4997538,Karlo Matkovic,F,8,18.6,0.84,Active,,,
 NO,4869780,Derik Queen,C,9,22.6,0.44,Active,,,
-NO,5061589,Yves Missi,C,2,19.5,0.39,Out,1.0,2026-11-09,Missi (knee) is out for Friday's game against Minnesota.
+NO,5061589,Yves Missi,C,2,19.5,0.39,Out,0.0,2026-11-09,Missi (knee) is out for Friday's game against Minnesota.
 NO,4431675,Trendon Watford,F,5,18.0,0.32,Active,,,
 NO,4683634,Bennedict Mathurin,G,9,15.6,0.23,Active,,,
 NO,4277813,Herbert Jones,F,9,22.9,0.17,Active,,,
@@ -314,7 +314,7 @@ NO,5170947,AJ Johnson,G,1,3.0,-0.0,Active,,,
 NY,3136195,Karl-Anthony Towns,C,9,31.6,1.85,Active,,,
 NY,3934719,OG Anunoby,F,9,33.1,1.74,Active,,,
 NY,3934672,Jalen Brunson,G,9,33.9,1.65,Active,,,
-NY,3062679,Josh Hart,G,7,31.7,1.33,Out,0.0,2026-11-10,Hart is out for Saturday's game against the Cavaliers due to right ankle soreness.
+NY,3062679,Josh Hart,G,7,31.7,1.33,Day-To-Day,1.0,,Hart is out for Saturday's game against the Cavaliers due to right ankle soreness.
 NY,3147657,Mikal Bridges,G,9,26.0,1.2,Active,,,
 NY,3914044,Landry Shamet,G,9,25.3,0.62,Active,,,
 NY,4431823,Miles McBride,G,9,17.3,0.46,Active,,,
@@ -334,7 +334,7 @@ OKC,4593803,Jalen Williams,G,3,31.7,0.98,Out,1.0,2027-03-02,"Williams (leg) unde
 OKC,4222252,Isaiah Hartenstein,C,10,24.2,0.87,Active,,,
 OKC,4683692,Cason Wallace,G,3,16.3,0.86,Out,1.0,2027-03-02,"Wallace underwent surgery Friday to repair a torn labrum in his left shoulder and will be re-evaluated before the end of the regular season, Clemente Almanza of USA Today reports."
 OKC,2991350,Alex Caruso,G,7,18.4,0.76,Active,,,
-OKC,4432823,Jaylin Williams,F,7,18.4,0.65,Out,0.0,2026-11-10,"Williams (back) has been ruled out for Saturday's game against the Wizards, Brandon Rahbar of DailyThunder.com reports."
+OKC,4432823,Jaylin Williams,F,7,18.4,0.65,Out,0.5,,"Williams (back) has been ruled out for Saturday's game against the Wizards, Brandon Rahbar of DailyThunder.com reports."
 OKC,3133626,Kenrich Williams,G,10,18.4,0.48,Active,,,
 OKC,5241364,Bennett Stirtz,G,10,18.0,0.44,Active,,,
 OKC,5174983,Aday Mara,C,10,19.8,0.4,Active,,,
@@ -344,19 +344,19 @@ OKC,4432185,Micah Peavy,G,6,17.0,0.15,Active,,,
 OKC,4433159,Dalen Terry,G,2,5.5,0.15,Active,,,
 OKC,4684208,Brooks Barnhizer,F,7,5.6,0.07,Active,,,
 OKC,5061603,Thomas Sorber,C,0,,,Out,1.0,2026-11-13,Sorber (knee) is out for Wednesday's game against the Cavaliers.
-ORL,4066320,Desmond Bane,G,8,34.5,1.32,Out,0.0,2026-11-10,Bane (illness) has been ruled out for Saturday's game against the Warriors.
+ORL,4066320,Desmond Bane,G,8,34.5,1.32,Day-To-Day,1.0,,Bane (illness) has been ruled out for Saturday's game against the Warriors.
 ORL,4277847,Wendell Carter Jr.,C,9,33.4,1.29,Active,,,
 ORL,4566434,Franz Wagner,F,9,36.4,1.07,Active,,,
 ORL,4432573,Paolo Banchero,F,2,33.5,0.94,Out,1.0,2026-11-27,"Low-grade high right ankle sprain on 23 Oct; reported 4 to 6 weeks (Charania), so the central case is 5 weeks rather than ESPN's 4 (override 2026-10-27)"
 ORL,4712849,Anthony Black,G,6,30.2,0.79,Active,,,
 ORL,4702382,Tristan da Silva,F,9,30.4,0.75,Active,,,
-ORL,4432165,Jalen Suggs,G,3,33.3,0.74,Out,0.0,2026-11-10,"Suggs has been diagnosed with a mild bone bruise in his right knee and will be re-evaluated in two weeks, Shams Charania of ESPN reports."
+ORL,4432165,Jalen Suggs,G,3,33.3,0.74,Out,0.5,,"Suggs has been diagnosed with a mild bone bruise in his right knee and will be re-evaluated in two weeks, Shams Charania of ESPN reports."
 ORL,6478,Nikola Vucevic,C,9,8.6,0.4,Active,,,
 ORL,5239561,Jase Richardson,G,9,22.6,0.36,Active,,,
 ORL,4278572,Jamal Cain,F,9,19.4,0.33,Active,,,
 ORL,4348700,Goga Bitadze,C,7,8.7,0.3,Active,,,
 ORL,3133635,Jevon Carter,G,5,14.2,0.21,Active,,,
-ORL,4065654,Jonathan Isaac,F,0,,0.18,Out,0.0,2026-11-10,Orlando recalled Isaac (knee) from the G League's Osceola Magic on Wednesday.
+ORL,4065654,Jonathan Isaac,F,0,,0.18,Out,0.5,,Orlando recalled Isaac (knee) from the G League's Osceola Magic on Wednesday.
 ORL,5214637,Noah Penda,F,0,,0.17,Out,1.0,2026-11-18,"Penda was diagnosed with a partially torn right hamstring Saturday, Jason Beede of the Orlando Sentinel reports."
 ORL,4593034,Alex Morales,G,6,9.2,0.12,Active,,,
 ORL,4397204,Colin Castleton,C,3,4.3,0.03,Active,,,
@@ -364,17 +364,17 @@ ORL,5107251,Izaiyah Nelson,F,0,,,Out,1.0,2026-11-18,"Team president Jeff Weltman
 PHI,4431678,Tyrese Maxey,G,10,36.6,2.61,Active,,,
 PHI,1966,LeBron James,F,8,32.9,1.55,Active,,,
 PHI,3917376,Jaylen Brown,G,9,36.0,1.04,Active,,,
-PHI,3059318,Joel Embiid,C,8,32.2,1.01,Day-To-Day,0.1,,Embiid (foot) is probable for Sunday's game against the Bulls.
+PHI,3059318,Joel Embiid,C,8,32.2,1.01,Active,,,
 PHI,5124612,VJ Edgecombe,G,9,33.3,0.77,Active,,,
 PHI,3912848,Dean Wade,F,8,25.6,0.7,Active,,,
 PHI,4870562,Dominick Barlow,F,0,,0.56,Out,1.0,2026-11-18,"Head coach Nick Nurse said Wednesday that Barlow (back) likely needs another 10-12 days before he's cleared to return to the court, Derek Bodner of AllPHLY.com reports."
 PHI,4351851,Anfernee Simons,G,10,22.5,0.52,Active,,,
 PHI,2581018,Kentavious Caldwell-Pope,G,10,22.1,0.4,Active,,,
-PHI,5105637,Adem Bona,C,9,14.2,0.19,Out,1.0,2026-11-10,Bona (back) is out for Sunday's game in Chicago.
+PHI,5105637,Adem Bona,C,9,14.2,0.19,Out,0.0,2026-11-10,Bona (back) is out for Sunday's game in Chicago.
 PHI,4432446,Jabari Walker,F,6,9.5,0.15,Active,,,
 PHI,4871141,Ariel Hukporti,C,0,,0.13,Out,1.0,2027-10-01,"Hukporti has sustained a season-ending ruptured right Achilles tendon, per Shams Charania of ESPN."
-PHI,3904625,Tacko Fall,C,1,3.0,0.07,Active,,,
 PHI,4711297,Justin Edwards,F,4,2.2,0.07,Active,,,
+PHI,3904625,Tacko Fall,C,1,3.0,0.07,Active,,,
 PHI,4873090,Labaron Philon Jr.,G,6,6.5,0.06,Active,,,
 PHI,4433144,Caleb Love,G,1,1.0,0.03,Absent,1.0,,missed the last 3 games; not on the injury feed
 PHI,5099752,Rayan Rupert,G,1,2.0,0.02,Active,,,
@@ -384,7 +384,7 @@ PHX,4701232,Mark Williams,C,0,,1.13,Out,1.0,2027-02-03,"Williams underwent surge
 PHX,4278585,Collin Gillespie,G,8,24.5,0.92,Active,,,
 PHX,3913174,Luke Kennard,G,7,16.1,0.9,Active,,,
 PHX,4601023,Oso Ighodaro,F,6,21.7,0.62,Active,,,
-PHX,4278402,Jordan Goodwin,G,5,18.8,0.56,Out,0.0,2026-11-09,Goodwin (calf) is out for Saturday's game against the Rockets.
+PHX,4278402,Jordan Goodwin,G,5,18.8,0.56,Out,0.5,,Goodwin (calf) is questionable for Monday's game against the Spurs.
 PHX,3155526,Dillon Brooks,F,8,31.2,0.44,Active,,,
 PHX,4888725,Ryan Dunn,F,8,16.0,0.36,Active,,,
 PHX,5203685,Khaman Maluach,C,8,19.6,0.27,Active,,,
@@ -397,7 +397,7 @@ PHX,5105977,Rasheer Fleming,F,2,7.5,0.04,Active,,,
 POR,6606,Damian Lillard,G,9,29.4,1.76,Active,,,
 POR,4683021,Deni Avdija,F,9,32.1,1.24,Active,,,
 POR,5105565,Donovan Clingan,C,9,24.8,1.09,Active,,,
-POR,4066211,Robert Williams III,C,7,16.4,0.9,Out,0.0,2026-11-10,Williams (rest) won't play in Saturday's game against the Spurs.
+POR,4066211,Robert Williams III,C,7,16.4,0.9,Day-To-Day,1.0,,Williams (rest) won't play in Saturday's game against the Spurs.
 POR,3995,Jrue Holiday,G,9,25.9,0.87,Active,,,
 POR,4431736,Toumani Camara,F,9,27.2,0.59,Active,,,
 POR,4279888,Ja Morant,G,4,26.0,0.53,Out,1.0,2026-12-01,"Head coach Micah Nori said Morant met with a doctor in Los Angeles, who gave him a positive outlook on his recovery from the hamstring injury. While Nori declined to update Morant's timetable, he added Morant ""may not be out for as long as we thought,"" Trail Blazers Insider Sean Highkin reports."
@@ -406,8 +406,8 @@ POR,4066399,Micah Potter,C,5,8.2,0.27,Active,,,
 POR,4914336,Shaedon Sharpe,G,0,,0.23,Out,1.0,2027-03-02,"Sharpe suffered a torn meniscus in his knee and is expected to miss six months, per Shams Charania of ESPN."
 POR,4706557,Chris Youngblood,G,5,13.4,0.22,Active,,,
 POR,4592435,Branden Carlson,C,4,7.8,0.18,Active,,,
-POR,5081727,Sidy Cissoko,G,9,21.1,0.12,Active,,,
 POR,4593043,John Tonje,F,1,5.0,0.12,Absent,1.0,,missed the last 5 games; not on the injury feed
+POR,5081727,Sidy Cissoko,G,9,21.1,0.12,Active,,,
 POR,4703889,Jayson Kent,G,2,9.5,0.1,Active,,,
 POR,4683678,Scoot Henderson,G,9,22.4,0.05,Active,,,
 POR,5217746,Yang Hansen,C,6,10.2,0.01,Active,,,
@@ -415,8 +415,8 @@ SA,5104157,Victor Wembanyama,F,10,30.3,2.93,Active,,,
 SA,5037871,Dylan Harper,G,10,31.9,1.3,Active,,,
 SA,4066259,De'Aaron Fox,G,10,29.5,1.26,Active,,,
 SA,4592479,Julian Champagnie,F,10,25.5,1.23,Active,,,
-SA,4395630,Devin Vassell,G,10,30.2,1.15,Active,,,
-SA,6440,Tobias Harris,F,0,,1.05,Out,0.0,2026-11-09,Harris (calf) is listed as out for Saturday's game against Minnesota.
+SA,4395630,Devin Vassell,G,10,30.2,1.15,Day-To-Day,0.5,,Vassell is questionable for Monday's game against the Suns due to left adductor tightness.
+SA,6440,Tobias Harris,F,0,,1.05,Out,1.0,2026-11-11,Harris (calf) is listed as out for Monday's game against Phoenix.
 SA,3064560,Luke Kornet,C,10,15.2,0.67,Active,,,
 SA,4845367,Stephon Castle,G,10,28.9,0.67,Active,,,
 SA,4395723,Keldon Johnson,F,10,23.4,0.62,Active,,,
@@ -429,14 +429,14 @@ SA,5107968,Ja'Kobi Gillespie,G,2,2.0,0.03,Absent,1.0,,missed the last 7 games; n
 SA,5105337,Maliq Brown,F,1,1.0,0.02,Absent,1.0,,missed the last 9 games; not on the injury feed
 SA,5101845,Jayden Quaintance,F,0,,,Out,1.0,2026-12-03,"Quaintance has been around the team but has not yet been cleared for basketball activities, Matt Guzman of SI.com reports."
 SAC,3064440,Zach LaVine,G,9,33.6,0.99,Active,,,
-SAC,3155942,Domantas Sabonis,F,9,35.6,0.95,Active,,,
-SAC,4898371,Maxime Raynaud,C,0,,0.88,Out,1.0,2026-11-10,"Raynaud (knee) is progressing in his rehabilitation and will be re-evaluated in approximately two weeks, Brenden Nunes of KHTK Sactown Sports 1140 reports."
+SAC,3155942,Domantas Sabonis,F,9,35.6,0.95,Out,0.0,2026-11-10,Sabonis (knee) is out for Sunday's game against the Heat.
+SAC,4898371,Maxime Raynaud,C,0,,0.88,Out,0.0,2026-11-10,"Raynaud (knee) is progressing in his rehabilitation and will be re-evaluated in approximately two weeks, Brenden Nunes of KHTK Sactown Sports 1140 reports."
 SAC,4431679,Precious Achiuwa,F,9,26.7,0.71,Active,,,
 SAC,5142620,Darius Acuff Jr.,G,9,36.8,0.48,Active,,,
 SAC,3907387,Ben Simmons,PG,0,,0.44,Out,1.0,2027-10-01,"Simmons underwent successful surgery Tuesday to repair a torn right Achilles tendon, James Ham of ESPN 1320 Sacramento reports."
 SAC,4433174,Dylan Cardwell,C,2,14.0,0.43,Active,,,
 SAC,4066262,Malik Monk,G,8,16.4,0.42,Active,,,
-SAC,4594327,Keegan Murray,F,2,27.0,0.39,Out,0.5,,Murray (ankle) is questionable for Sunday's game against the Heat.
+SAC,4594327,Keegan Murray,F,2,27.0,0.39,Absent,1.0,,missed the last 7 games; not on the injury feed
 SAC,4395650,Leaky Black,F,4,23.8,0.39,Active,,,
 SAC,5106058,Emanuel Sharp,G,9,18.7,0.35,Active,,,
 SAC,4065732,De'Andre Hunter,F,8,31.2,0.25,Active,,,
@@ -445,8 +445,8 @@ SAC,5107897,Jonathan Mogbo,F,4,17.2,0.11,Active,,,
 SAC,4917149,Alex Karaban,F,5,9.8,0.09,Active,,,
 SAC,4702384,Nique Clifford,G,8,6.2,-0.0,Active,,,
 TOR,6450,Kawhi Leonard,F,2,26.0,2.46,Out,1.0,2026-11-23,"Leonard has completed treatment to reduce swelling in his left knee and he will be re-evaluated in one week, Brett Siegel of ClutchPoints.com reports."
-TOR,4395724,Immanuel Quickley,G,8,31.8,1.81,Day-To-Day,1.0,,"Quickley (hamstring) won't play Friday in Milwaukee, Michael Grange of Sportsnet.ca reports."
-TOR,4433134,Scottie Barnes,F,8,33.4,1.59,Day-To-Day,1.0,,"Barnes (adductor) is listed as out for Friday's game against Milwaukee, Michael Grange of Sportsnet.ca reports."
+TOR,4395724,Immanuel Quickley,G,8,31.8,1.81,Day-To-Day,0.5,,"Quickley (hamstring) was a limited participant in Sunday's practice and will be listed as questionable for Monday's game against the Grizzlies, Michael Grange of Sportsnet.ca reports."
+TOR,4433134,Scottie Barnes,F,8,33.4,1.59,Day-To-Day,0.5,,"Barnes (adductor) was a limited participant in Sunday's practice and will be listed as questionable for Monday's game against the Grizzlies, Michael Grange of Sportsnet.ca reports."
 TOR,4395625,RJ Barrett,F,9,33.0,1.04,Active,,,
 TOR,4684272,Ja'Kobe Walter,G,9,29.1,0.99,Active,,,
 TOR,3134908,Jakob Poeltl,C,7,21.6,0.99,Active,,,
@@ -458,9 +458,9 @@ TOR,4702656,Alijah Martin,G,8,10.0,0.22,Active,,,
 TOR,2993874,Kyle Anderson,F,6,6.2,0.15,Active,,,
 TOR,4431684,Trayce Jackson-Davis,F,8,6.6,0.12,Active,,,
 TOR,4432737,Jaden Bradley,G,7,4.6,0.08,Active,,,
-TOR,4432586,Nate Bittle,C,0,,,Out,0.0,2026-11-09,Bittle (foot) is out for Monday's game against the Clippers and remains without a timetable to return.
-UTAH,4066336,Lauri Markkanen,F,8,30.9,1.5,Day-To-Day,0.5,,Markkanen is questionable for Sunday's game against the Timberwolves due to a right wrist sprain.
-UTAH,4433627,Keyonte George,G,9,32.3,1.31,Active,,,
+TOR,4432586,Nate Bittle,C,0,,,Out,1.0,2026-11-15,Bittle (foot) is listed as out for Monday's game against Memphis.
+UTAH,4066336,Lauri Markkanen,F,8,30.9,1.5,Out,0.0,2026-11-10,"Markkanen (wrist) is out for Sunday's game against the Timberwolves, Shreyas Laddha of The Salt Lake Tribune reports."
+UTAH,4433627,Keyonte George,G,9,32.3,1.31,Day-To-Day,0.5,,George will not return to Sunday's game against the Timberwolves due to a right ankle injury.
 UTAH,4397077,Jaxson Hayes,C,8,24.9,1.13,Active,,,
 UTAH,4277961,Jaren Jackson Jr.,F,4,26.0,0.72,Out,1.0,2026-12-14,"Jackson has been diagnosed with a torn MCL in his right knee and will be sidelined for 6-to-8 weeks, per Shams Charania of ESPN."
 UTAH,3102530,Jusuf Nurkic,C,0,,0.66,Out,1.0,2026-11-20,"Nurkic (toe) has begun participating in on-court activities as he continues recovering from a right foot injury sustained during an Oct. 4 preseason game against Denver. He will be re-evaluated in two weeks, the Jazz announced Friday."
@@ -471,19 +471,19 @@ UTAH,5105839,Brice Sensabaugh,F,9,14.3,0.35,Active,,,
 UTAH,4432811,Josh Green,G,7,16.6,0.28,Active,,,
 UTAH,4065663,Josh Okogie,G,8,18.8,0.26,Active,,,
 UTAH,4277919,Mo Bamba,C,5,17.8,0.22,Active,,,
-UTAH,4873138,Ace Bailey,G,9,30.4,0.18,Active,,,
 UTAH,4684793,Kyle Filipowski,F,6,6.7,0.18,Active,,,
+UTAH,4873138,Ace Bailey,G,9,30.4,0.18,Active,,,
 UTAH,4065673,Tony Bradley,C,3,4.7,0.05,Active,,,
 WSH,4277905,Trae Young,G,10,35.2,1.05,Active,,,
-WSH,6583,Anthony Davis,F,8,33.1,1.01,Out,0.0,2026-11-09,Davis (ankle) won't play Saturday against the Thunder.
+WSH,6583,Anthony Davis,F,8,33.1,1.01,Day-To-Day,0.5,,Davis (ankle) is listed as questionable for Monday's game in Detroit.
 WSH,5160992,Alex Sarr,C,9,26.0,0.83,Active,,,
 WSH,5174563,Kyshawn George,F,10,33.1,0.79,Active,,,
 WSH,4432907,Justin Champagnie,F,4,18.5,0.71,Out,1.0,2027-02-25,"Champagnie (foot) is expected to miss several months, per Josh Robbins of The Athletic."
-WSH,4278129,Deandre Ayton,C,10,15.1,0.69,Day-To-Day,0.5,,Ayton won't return to Saturday's game against the Thunder due to a lower leg injury.
+WSH,4278129,Deandre Ayton,C,10,15.1,0.69,Active,,,
 WSH,5104155,Bilal Coulibaly,G,10,25.8,0.58,Active,,,
 WSH,5142718,AJ Dybantsa,F,6,31.5,0.53,Active,,,
 WSH,4606840,Jamir Watkins,G,0,,0.51,Out,1.0,2027-04-02,The Wizards announced Thursday that Watkins has undergone surgery for a torn ACL.
-WSH,4997537,Tristan Vukcevic,F,0,,0.35,Out,0.0,2026-11-09,Vukcevic (hip) is listed as out for Monday's game against Orlando.
+WSH,4997537,Tristan Vukcevic,F,0,,0.35,Out,1.0,2026-11-16,Vukcevic (hip) has been ruled out for Monday's game against Detroit.
 WSH,4845374,Bub Carrington,G,10,19.3,0.26,Active,,,
 WSH,2581184,Anthony Gill,F,2,5.0,0.12,Active,,,
 WSH,5144126,Will Riley,G,8,7.1,0.12,Active,,,

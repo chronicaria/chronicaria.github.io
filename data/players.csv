@@ -11,8 +11,8 @@ ATL,4712863,Mouhamed Gueye,F,0,,0.35,Out,1.0,2026-11-20,"Gueye underwent surgery
 ATL,4585618,Keshon Gilbert,G,0,,0.33,Out,0.5,,Gilbert (knee) has been ruled out for Monday's game against the Lakers.
 ATL,4873201,Asa Newell,F,5,11.0,0.2,Out,0.5,,Newell (toe) has been ruled out for Monday's game against the Lakers.
 ATL,5106262,Zuby Ejiofor,F,7,11.1,0.18,Active,,,
-ATL,4397020,Luguentz Dort,G,12,24.8,0.17,Active,,,
 ATL,4280151,Corey Kispert,F,6,9.7,0.17,Active,,,
+ATL,4397020,Luguentz Dort,G,12,24.8,0.17,Active,,,
 ATL,4431941,RayJ Dennis,G,1,8.0,0.13,Absent,1.0,,missed the last 4 games; not on the injury feed
 ATL,2578185,Dorian Finney-Smith,F,3,4.0,0.01,Active,,,
 ATL,5105571,Henri Veesaar,C,0,,,Out,1.0,2027-07-01,"Veesaar was diagnosed with a torn right ACL and is expected to miss the 2026-27 season, the Hawks announced Monday."
@@ -33,8 +33,8 @@ BKN,4870564,Joshua Jefferson,F,1,4.0,0.07,Absent,1.0,,missed the last 7 games; n
 BKN,5037873,Drake Powell,G,3,9.0,0.03,Active,,,
 BKN,5279130,Nolan Traore,G,10,22.1,0.01,Day-To-Day,0.5,,Traore (calf) is listed as questionable for Wednesday's game against New Orleans.
 BKN,5242502,Ben Saraf,G,1,4.0,-0.03,Absent,1.0,,missed the last 7 games; not on the injury feed
-BOS,4065648,Jayson Tatum,F,9,33.8,1.25,Active,,,
 BOS,4251,Paul George,F,9,30.1,1.25,Active,,,
+BOS,4065648,Jayson Tatum,F,9,33.8,1.25,Active,,,
 BOS,4066354,Payton Pritchard,G,10,26.6,1.23,Active,,,
 BOS,4397424,Neemias Queta,C,10,21.7,1.17,Active,,,
 BOS,3078576,Derrick White,G,10,29.8,0.85,Active,,,
@@ -79,8 +79,8 @@ CHI,5242496,Noa Essengue,F,8,14.0,0.16,Active,,,
 CHI,4898010,Jaylin Sellers,G,5,9.0,0.13,Active,,,
 CHI,5105555,Tobe Awaka,F,4,10.0,0.12,Day-To-Day,0.5,,Awaka (back) is questionable for Wednesday's game against the Spurs.
 CHI,4848625,Dailyn Swain,G,2,9.5,0.05,Active,,,
-CHI,4683750,Jordan Hawkins,G,5,7.8,0.03,Active,,,
 CHI,4431687,Patrick Williams,F,2,22.5,0.03,Active,,,
+CHI,4683750,Jordan Hawkins,G,5,7.8,0.03,Active,,,
 CLE,3908809,Donovan Mitchell,G,11,32.5,2.06,Active,,,
 CLE,4432158,Evan Mobley,C,11,32.0,1.77,Active,,,
 CLE,4066328,Jarrett Allen,C,9,24.4,1.45,Active,,,
@@ -110,8 +110,8 @@ DAL,3138160,Caleb Martin,F,7,18.4,0.3,Active,,,
 DAL,4896372,Walter Clayton Jr.,G,10,16.6,0.29,Active,,,
 DAL,5279129,Sergio de Larrea,F,4,11.8,0.18,Out,0.5,,De Larrea (knee) is out for Friday's game against Utah.
 DAL,4432107,Marcus Sasser,G,9,16.4,0.16,Active,,,
-DAL,4701208,Moussa Cisse,C,7,3.1,0.05,Active,,,
 DAL,5105806,Jett Howard,G,5,2.6,0.05,Active,,,
+DAL,4701208,Moussa Cisse,C,7,3.1,0.05,Active,,,
 DAL,5106040,Tobi Lawal,F,6,2.7,0.03,Active,,,
 DAL,5148538,Tarik Biberovic,F,0,,,Out,0.5,,Biberovic (heel) is listed as out for Monday's game against Sacramento.
 DEN,3112335,Nikola Jokic,C,9,36.2,3.96,Active,,,
@@ -129,8 +129,8 @@ DEN,5105592,Cam Whitmore,F,2,7.5,0.18,Absent,1.0,,missed the last 5 games; not o
 DEN,4065813,Alpha Diallo,F,4,8.2,0.17,Active,,,
 DEN,4565698,Bryce Hopkins,F,7,14.3,0.16,Active,,,
 DEN,4433629,Ryan Nembhard,G,3,3.3,0.11,Active,,,
-DEN,4431690,Zeke Nnaji,F,2,4.0,0.05,Active,,,
 DEN,4433607,DaRon Holmes II,F,4,2.8,0.05,Active,,,
+DEN,4431690,Zeke Nnaji,F,2,4.0,0.05,Active,,,
 DET,3157465,Duncan Robinson,F,10,30.9,1.68,Active,,,
 DET,4432166,Cade Cunningham,G,10,33.3,1.52,Active,,,
 DET,4433621,Jalen Duren,C,2,19.0,1.51,Out,1.0,2026-11-24,"Duren (hamstring) has begun on-court activity and will be re-evaluated in two weeks, Hunter Patterson of The Athletic reports."
@@ -172,8 +172,8 @@ HOU,4871144,Alperen Sengun,C,9,34.8,1.28,Active,,,
 HOU,4684740,Amen Thompson,G,11,33.4,1.27,Active,,,
 HOU,2991230,Fred VanVleet,G,9,30.1,1.05,Active,,,
 HOU,4711272,Reed Sheppard,G,8,20.1,0.77,Active,,,
-HOU,2990992,Marcus Smart,G,8,21.9,0.33,Active,,,
 HOU,4433192,Tari Eason,F,11,23.9,0.33,Active,,,
+HOU,2990992,Marcus Smart,G,8,21.9,0.33,Active,,,
 HOU,3102529,Clint Capela,C,6,14.2,0.27,Out,1.0,2026-11-15,"Head coach Ime Udoka stated Monday that Capela (ankle) could be cleared to return either Nov. 15 in Washington or Nov. 16 in Miami, Lachard Binkley of SI.com reports."
 HOU,2991235,Steven Adams,C,1,8.0,0.22,Out,1.0,2026-11-15,"Head coach Ime Udoka said Monday that Adams could return as soon as Sunday's game at Washington, Lachard Binkley of SI.com reports."
 HOU,4432827,Oscar Tshiebwe,C,6,6.8,0.2,Active,,,
@@ -185,8 +185,8 @@ IND,4396993,Tyrese Haliburton,G,4,33.0,3.23,Out,1.0,2026-11-13,"Haliburton (hams
 IND,3149673,Pascal Siakam,F,10,32.3,1.25,Active,,,
 IND,4395712,Andrew Nembhard,G,9,33.2,1.22,Active,,,
 IND,4592829,Quenton Jackson,G,11,21.7,0.69,Active,,,
-IND,2530530,T.J. McConnell,G,2,8.5,0.66,Day-To-Day,0.5,,McConnell is questionable for Wednesday's game against the Wizards due to a strained right hamstring.
 IND,4278355,Obi Toppin,F,8,21.9,0.66,Active,,,
+IND,2530530,T.J. McConnell,G,2,8.5,0.66,Day-To-Day,0.5,,McConnell is questionable for Wednesday's game against the Wizards due to a strained right hamstring.
 IND,4065731,Jay Huff,C,9,18.3,0.61,Active,,,
 IND,4017837,Ivica Zubac,C,6,21.8,0.58,Active,,,
 IND,3133603,Kelly Oubre Jr.,G,9,22.4,0.46,Active,,,
@@ -232,8 +232,8 @@ LAL,5060631,Adou Thiero,F,3,7.3,0.11,Active,,,
 LAL,4702972,Chris Manon,G,2,3.5,0.06,Absent,1.0,,missed the last 6 games; not on the injury feed
 LAL,5113969,Cameron Carr,G,4,2.5,0.04,Active,,,
 LAL,3155535,Kevon Looney,F,4,7.5,0.03,Active,,,
-LAL,4868423,Jaden Hardy,G,6,3.3,0.02,Active,,,
 LAL,4683774,Bronny James,G,5,2.4,0.02,Active,,,
+LAL,4868423,Jaden Hardy,G,6,3.3,0.02,Active,,,
 MEM,4433083,Cam Spencer,G,10,19.4,1.29,Active,,,
 MEM,4065733,Ty Jerome,G,9,30.7,1.26,Active,,,
 MEM,4903027,Cedric Coward,F,9,28.4,0.88,Active,,,
@@ -249,8 +249,8 @@ MEM,4593016,Quinten Post,C,8,12.9,0.24,Out,1.0,2026-11-13,Post (concussion) has 
 MEM,4595400,Olivier-Maxence Prosper,F,5,5.2,0.2,Active,,,
 MEM,4684806,Taylor Hendricks,F,5,6.8,0.16,Active,,,
 MEM,4594326,Kris Murray,F,7,12.1,0.11,Active,,,
-MEM,5231919,Karim Lopez,F,3,3.7,0.03,Active,,,
 MEM,4683934,Jahmai Mashack,G,2,4.0,0.03,Active,,,
+MEM,5231919,Karim Lopez,F,3,3.7,0.03,Active,,,
 MEM,5105817,Carson Cooper,C,1,3.0,0.01,Absent,1.0,,missed the last 3 games; not on the injury feed
 MEM,5105462,Richie Saunders,G,0,,,Out,1.0,2026-12-01,"Saunders signed a two-way contract with the Grizzlies on Saturday, Shams Charania of ESPN reports."
 MIA,3032977,Giannis Antetokounmpo,F,10,32.9,2.13,Active,,,
@@ -265,8 +265,8 @@ MIA,5107157,Ryan Conwell,G,8,11.4,0.25,Active,,,
 MIA,4066993,Dru Smith,G,6,8.5,0.18,Active,,,
 MIA,3899664,Simone Fontecchio,F,4,3.2,0.09,Active,,,
 MIA,4431772,Myron Gardner,F,5,2.0,0.04,Active,,,
-MIA,4278076,Nick Richards,C,5,2.0,0.02,Active,,,
 MIA,4997528,Nikola Jovic,F,7,12.1,0.02,Active,,,
+MIA,4278076,Nick Richards,C,5,2.0,0.02,Active,,,
 MIL,4395725,Tyler Herro,G,10,30.7,1.23,Out,0.0,2026-11-11,Herro (knee) is listed as out for Tuesday's game against New York.
 MIL,4432848,Jaime Jaquez Jr.,F,10,27.8,0.77,Active,,,
 MIL,3133628,Myles Turner,C,10,27.1,0.74,Active,,,
@@ -287,8 +287,8 @@ MIN,4431671,Jaden McDaniels,F,11,33.9,1.13,Active,,,
 MIN,3934673,Donte DiVincenzo,G,0,,1.11,Out,1.0,2027-04-02,"DiVincenzo (Achilles) remains confident that he'll return during the 2026-27 season, Jon Krawczynski of The Athletic reports."
 MIN,4432816,LaMelo Ball,G,11,27.8,1.06,Active,,,
 MIN,3032976,Rudy Gobert,C,10,30.0,0.99,Active,,,
-MIN,3136196,Trey Lyles,F,11,18.5,0.5,Active,,,
 MIN,4433247,Jonathan Kuminga,F,11,30.6,0.5,Active,,,
+MIN,3136196,Trey Lyles,F,11,18.5,0.5,Active,,,
 MIN,4592492,Bones Hyland,G,11,12.3,0.49,Active,,,
 MIN,5279133,Joan Beringer,F,11,16.5,0.42,Active,,,
 MIN,4432847,Terrence Shannon Jr.,G,8,21.5,0.32,Active,,,
@@ -342,8 +342,8 @@ OKC,5241364,Bennett Stirtz,G,10,18.0,0.44,Active,,,
 OKC,5174983,Aday Mara,C,10,19.8,0.4,Active,,,
 OKC,4683778,Jared McCain,G,10,25.2,0.29,Active,,,
 OKC,5105800,Josh Dix,G,6,17.2,0.17,Active,,,
-OKC,4432185,Micah Peavy,G,6,17.0,0.15,Active,,,
 OKC,4433159,Dalen Terry,G,2,5.5,0.15,Active,,,
+OKC,4432185,Micah Peavy,G,6,17.0,0.15,Active,,,
 OKC,4684208,Brooks Barnhizer,F,7,5.6,0.08,Active,,,
 OKC,5061603,Thomas Sorber,C,0,,,Out,1.0,2026-11-13,Sorber (knee) is out for Wednesday's game against the Cavaliers.
 ORL,4066320,Desmond Bane,G,8,34.5,1.32,Active,,,
@@ -351,7 +351,7 @@ ORL,4277847,Wendell Carter Jr.,C,9,33.4,1.29,Active,,,
 ORL,4566434,Franz Wagner,F,9,36.4,1.07,Active,,,
 ORL,4432573,Paolo Banchero,F,2,33.5,0.94,Out,1.0,2026-11-27,"Low-grade high right ankle sprain on 23 Oct; reported 4 to 6 weeks (Charania), so the central case is 5 weeks rather than ESPN's 4 (override 2026-10-27)"
 ORL,4712849,Anthony Black,G,6,30.2,0.79,Active,,,
-ORL,4702382,Tristan da Silva,F,9,30.4,0.75,Out,1.0,2026-11-11,"Da Silva (calf) has been ruled out for Tuesday's game against the Kings, Jason Beede of the Orlando Sentinel reports."
+ORL,4702382,Tristan da Silva,F,9,30.4,0.75,Out,0.0,2026-11-11,"Da Silva (calf) has been ruled out for Tuesday's game against the Kings, Jason Beede of the Orlando Sentinel reports."
 ORL,4432165,Jalen Suggs,G,3,33.3,0.74,Out,1.0,2026-11-16,Suggs (knee) has been ruled out for Tuesday's game against the Kings.
 ORL,6478,Nikola Vucevic,C,9,8.6,0.4,Active,,,
 ORL,5239561,Jase Richardson,G,9,22.6,0.36,Active,,,
@@ -391,8 +391,8 @@ PHX,4888725,Ryan Dunn,F,9,16.8,0.37,Active,,,
 PHX,3155526,Dillon Brooks,F,9,30.7,0.33,Active,,,
 PHX,5203685,Khaman Maluach,C,9,19.7,0.3,Active,,,
 PHX,4280245,Jamaree Bouyea,G,5,4.8,0.11,Active,,,
-PHX,4592714,Pat Spencer,G,4,4.5,0.1,Active,,,
 PHX,4066268,Duop Reath,C,6,5.7,0.1,Active,,,
+PHX,4592714,Pat Spencer,G,4,4.5,0.1,Active,,,
 PHX,4437244,Jalen Green,G,9,28.6,0.09,Active,,,
 PHX,5041953,Koa Peat,F,5,4.2,0.06,Active,,,
 PHX,5105977,Rasheer Fleming,F,3,8.0,0.04,Active,,,
@@ -430,8 +430,8 @@ SA,5105809,Tarris Reed Jr.,C,7,5.9,0.08,Active,,,
 SA,5107968,Ja'Kobi Gillespie,G,2,2.0,0.03,Absent,1.0,,missed the last 8 games; not on the injury feed
 SA,5105337,Maliq Brown,F,1,1.0,0.02,Absent,1.0,,missed the last 10 games; not on the injury feed
 SA,5101845,Jayden Quaintance,F,0,,,Out,1.0,2026-12-03,"Quaintance has been around the team but has not yet been cleared for basketball activities, Matt Guzman of SI.com reports."
-SAC,3155942,Domantas Sabonis,F,9,35.6,0.95,Active,,,
 SAC,3064440,Zach LaVine,G,10,32.7,0.95,Active,,,
+SAC,3155942,Domantas Sabonis,F,9,35.6,0.95,Active,,,
 SAC,4898371,Maxime Raynaud,C,0,,0.88,Out,1.0,2026-11-15,Raynaud (knee) has been ruled out for Tuesday's game against Orlando.
 SAC,4431679,Precious Achiuwa,F,10,27.6,0.72,Active,,,
 SAC,5142620,Darius Acuff Jr.,G,10,37.0,0.54,Active,,,
@@ -454,8 +454,8 @@ TOR,4684272,Ja'Kobe Walter,G,10,29.6,0.98,Active,,,
 TOR,4395625,RJ Barrett,F,10,33.3,0.97,Active,,,
 TOR,5093267,Collin Murray-Boyles,F,9,22.2,0.85,Day-To-Day,0.5,,Murray-Boyles (illness) is questionable for Wednesday's game against the Celtics.
 TOR,4432241,Jamal Shead,G,10,24.2,0.5,Active,,,
-TOR,4397784,Malachi Smith,G,1,1.0,0.48,Active,,,
 TOR,4431893,Jamison Battle,F,10,18.2,0.48,Active,,,
+TOR,4397784,Malachi Smith,G,1,1.0,0.48,Active,,,
 TOR,5149115,Allen Graves,F,10,13.2,0.25,Active,,,
 TOR,4702656,Alijah Martin,G,9,11.2,0.24,Active,,,
 TOR,2993874,Kyle Anderson,F,7,7.6,0.22,Active,,,
@@ -470,8 +470,8 @@ UTAH,3102530,Jusuf Nurkic,C,0,,0.66,Out,1.0,2026-11-20,"Nurkic (toe) has begun p
 UTAH,5041955,Darryn Peterson,G,10,30.7,0.58,Active,,,
 UTAH,4683766,Isaiah Collier,G,10,15.6,0.4,Active,,,
 UTAH,4432811,Josh Green,G,8,18.0,0.32,Active,,,
-UTAH,3133602,Svi Mykhailiuk,G,10,15.1,0.31,Active,,,
 UTAH,5105839,Brice Sensabaugh,F,10,14.2,0.31,Active,,,
+UTAH,3133602,Svi Mykhailiuk,G,10,15.1,0.31,Active,,,
 UTAH,4277919,Mo Bamba,C,6,17.7,0.26,Active,,,
 UTAH,4684793,Kyle Filipowski,F,7,7.9,0.23,Active,,,
 UTAH,4065663,Josh Okogie,G,9,18.6,0.23,Active,,,
@@ -491,7 +491,7 @@ WSH,4845374,Bub Carrington,G,11,19.3,0.25,Active,,,
 WSH,2581184,Anthony Gill,F,3,4.0,0.11,Active,,,
 WSH,5144126,Will Riley,G,9,6.8,0.1,Active,,,
 WSH,4432187,Reece Beekman,G,1,1.0,0.09,Out,1.0,2026-12-03,The Wizards announced Monday that Beekman sustained a right acromioclavicular joint injury and will be re-evaluated in approximately three weeks.
-WSH,6609,Khris Middleton,F,5,13.8,0.02,Active,,,
 WSH,5105841,Felix Okpara,F,3,2.0,0.02,Active,,,
+WSH,6609,Khris Middleton,F,5,13.8,0.02,Active,,,
 WSH,4432819,Tre Mann,G,5,5.0,0.0,Active,,,
 WSH,5238230,Tre Johnson,G,10,22.4,-0.01,Active,,,

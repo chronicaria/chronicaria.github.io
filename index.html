@@ -161,7 +161,7 @@
   .nb .nb-rk-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 20px; }
   .nb #rankings-card { padding-inline: 12px; }
 }
-@container nb (min-width: 1180px) and (max-width: 1340px) {  /* two halves on a laptop: tighter columns so Last keeps its room */
+@container nb (min-width: 1180px) and (max-width: 1499.98px) {  /* two halves on a laptop: tighter columns so Last keeps its room (1500 since Off/Def) */
   .nb .nb-rk .c-team { width: 84px; }
   .nb .nb-rk .full { display: none; }
   .nb .nb-rk .short { display: inline; }
@@ -279,6 +279,16 @@
 .nb .nb-hint { cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .nb th[title] { cursor: help; }
 
+/* Off/Def: coloured rank only (value in the tooltip) except in the single-table width, which has room for both */
+.nb .nb-rk .c-od { width: 36px; }
+.nb .nb-rk .c-od .v { display: none; }
+.nb .nb-rk .c-od .rk { margin-left: 0; min-width: 0; }
+@container nb (min-width: 981px) and (max-width: 1179.98px) {
+  .nb .nb-rk .c-od { width: 62px; }
+  .nb .nb-rk .c-od .v { display: inline; }
+  .nb .nb-rk .c-od .rk { margin-left: 3px; min-width: 2.3em; }
+}
+
 /* narrow */
 .nb .nb-show-xs { display: none; }
 @container nb (max-width: 980px) {
@@ -364,6 +374,8 @@
             <th class="num c-rank" data-field="rank" data-sort="rank"><button class="nb-sort">#</button></th>
             <th class="c-team" data-field="name" data-sort="name"><button class="nb-sort">Team</button></th>
             <th class="num c-rating" data-field="rating" data-sort="rating"><button class="nb-sort" title="Points vs an average team (0); +5 = favoured by 5 on a neutral court"><span class="full">Rating</span><span class="short">Rtg</span></button></th>
+            <th class="num c-od nb-hide-sm" data-field="off" data-sort="off"><button class="nb-sort" title="Offence: points per game better than average; Off + Def = Rating">Off</button></th>
+            <th class="num c-od nb-hide-sm" data-field="def" data-sort="def"><button class="nb-sort" title="Defence: points per game better than average (higher = better); Off + Def = Rating">Def</button></th>
             <th class="c-last nb-hide-xs" data-field="last_game" title="Last game (yesterday's, or today's once it is final)"><span>Last</span></th>
             <th class="c-next nb-hide-xs" data-field="next_game" title="Next game (today's, or tomorrow's once today's slate is final)"><span>Next</span></th>
             <th class="num c-proj" data-field="proj_w" data-sort="proj_w"><button class="nb-sort" title="Projected wins: mean of the season simulations">Proj. W</button></th>
@@ -940,6 +952,7 @@ function drawRankings() {
     tag.append(badge, nm);
     const nc = td('', 'c-team'); nc.append(tag); tr.append(nc);
     tr.append(td(fmtR(t.rating), 'num c-rating'));
+    for (const k of ['off', 'def']) { const c = td('', 'num c-od nb-hide-sm'); if (t[k] !== undefined && t[k] !== '') c.append(withRankTone(t[k], t[k + '_rank'])); else c.textContent = '–'; tr.append(c); }
     const lc = td('–', 'c-last nb-hide-xs'), lg = lastG.get(t.abbr);  // "W 113–109 vs. PHX"
     if (lg) { const [g, home] = lg, us = +(home ? g.hs : g.as), them = +(home ? g.as : g.hs); lc.replaceChildren(el('b', '', us > them ? 'W' : 'L'), ` ${us}–${them} ${opp(g, home)}`); }
     tr.append(lc);

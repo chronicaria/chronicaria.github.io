@@ -287,6 +287,12 @@
 }
 @container nb (min-width: 1100px) { .nb .nb-rk .c-od { width: 84px; } }
 
+.nb #od-card { margin-top: 16px; }
+.nb .nb-od image { cursor: pointer; }
+.nb .nb-od .iso { stroke: var(--color-border-line); stroke-dasharray: 3 4; }
+.nb .nb-od .iso-l, .nb .nb-od .quad { fill: var(--color-fg-muted); font-size: 10px; }
+.nb .nb-od .quad { opacity: .7; }
+
 /* narrow */
 .nb .nb-show-xs { display: none; }
 @container nb (max-width: 980px) {
@@ -386,6 +392,13 @@
         </table>
         <table class="nb-table nb-rk nb-rk-2" id="rankings-table-2" data-source="teams" data-row-key="abbr"><thead></thead><tbody class="dash-skeleton"></tbody></table>
       </div>
+    </div>
+    <div class="nb-card" id="od-card">
+      <div class="nb-card-head"><div>
+        <h2 class="nb-card-title" id="od-title">Offense vs. defense</h2>
+        <p class="nb-card-note">Points per game better than an average team at each end; up and to the right is better. Off + Def = Rating, so teams on the same diagonal share a rating.</p>
+      </div></div>
+      <div class="nb-chart dash-skeleton" id="od-chart" data-source="teams logos" style="min-height: 420px"></div>
     </div>
   </section>
 
@@ -971,6 +984,7 @@ function drawRankings() {
     tb1.replaceChildren(...out.slice(0, half));
     tb2.replaceChildren(...out.slice(half));
   }
+  drawOD();
 }
 
 // ---------- 2. playoff odds ----------
@@ -996,6 +1010,73 @@ const heatWhite = (x) => { // white text only where it beats the page's text col
   for (const k of 'rgb') mix[k] = heatRGB[k] * a + panelRGB[k] * (1 - a);
   return contrast({ r: 255, g: 255, b: 255 }, mix) > contrast(fgRGB, mix);
 };
+// Off (x) vs Def (y), one logo per team; dashed diagonals = equal Rating (Off + Def)
+function drawOD() {
+  const box = document.getElementById('od-chart');
+  const s = state('teams', 'logos');
+  if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } return; }
+  const teams = dash.data('teams').data.filter((t) => Number.isFinite(N(t.off)) && Number.isFinite(N(t.def)));
+  if (!teams.length) { box.replaceChildren(); ready(box); box.style.minHeight = '0'; document.getElementById('od-card').hidden = true; return; }
+  document.getElementById('od-card').hidden = false;
+  ready(box); box.replaceChildren();
+  const dark = root.classList.contains('nb-dark');
+  const lg = new Map(dash.data('logos').data.map((l) => [l.abbr, dark && l.dark ? l.dark : l.src]));
+  const W = box.clientWidth, narrow = W < 520, sz = narrow ? 22 : 30;
+  const H = Math.round(Math.min(640, Math.max(340, W * (narrow ? 0.95 : 0.62))));
+  box.style.minHeight = H + 'px';
+  const svg = newSvg(box, W, H, 'Offense against defense, points per game better than average').attr('class', 'nb-od');
+  const m = { top: 12, right: 16, bottom: 40, left: 48 };
+  const ext = (k) => { const v = teams.map((t) => N(t[k])); const lo = d3.min(v), hi = d3.max(v), pad = Math.max(0.6, (hi - lo) * 0.08); return [Math.min(lo - pad, -1), Math.max(hi + pad, 1)]; };
+  const x = d3.scaleLinear(ext('off'), [m.left, W - m.right]).nice();
+  const y = d3.scaleLinear(ext('def'), [H - m.bottom, m.top]).nice();
+  const [x0, x1] = x.domain(), [y0, y1] = y.domain();
+  svg.append('defs').append('clipPath').attr('id', 'od-clip').append('rect').attr('x', m.left).attr('y', m.top).attr('width', W - m.left - m.right).attr('height', H - m.top - m.bottom);
+  const nt = narrow ? 5 : 8;
+  svg.append('g').attr('class', 'nb-grid-l').attr('transform', `translate(${m.left},0)`).call(d3.axisLeft(y).ticks(nt).tickSize(-(W - m.left - m.right)).tickFormat(''));
+  svg.append('g').attr('class', 'nb-grid-l').attr('transform', `translate(0,${H - m.bottom})`).call(d3.axisBottom(x).ticks(nt).tickSize(-(H - m.top - m.bottom)).tickFormat(''));
+  // equal-rating diagonals, Off + Def = r, every 4 points
+  const g = svg.append('g').attr('clip-path', 'url(#od-clip)');
+  for (let r = Math.ceil((x0 + y0) / 4) * 4; r <= x1 + y1; r += 4) {
+    g.append('line').attr('class', 'iso').attr('x1', x(r - y0)).attr('y1', y(y0)).attr('x2', x(r - y1)).attr('y2', y(y1));
+    if (narrow) continue;  // labels would sit on logos; the note explains the diagonals
+    const lab = `Rtg ${r > 0 ? '+' : r < 0 ? '−' : ''}${Math.abs(r)}`;
+    if (r - y0 <= x1) {  // leaves through the bottom edge: label just above it, right of the line
+      if (r - y0 > x0 + 0.5 && r - y0 < x1 - 1.5) g.append('text').attr('class', 'iso-l').attr('x', x(r - y0) + 6).attr('y', y(y0) - 6).text(lab);
+    } else if (r - x1 < y1 - 0.4) {  // leaves through the right edge
+      g.append('text').attr('class', 'iso-l').attr('x', x(x1) - 4).attr('y', y(r - x1) - 4).attr('text-anchor', 'end').text(lab);
+    }
+  }
+  // league-average lines
+  svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', m.top).attr('y2', H - m.bottom).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.25);
+  svg.append('line').attr('x1', m.left).attr('x2', W - m.right).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.25);
+  if (!narrow) {
+    const q = (tx, ty, anchor, txt) => svg.append('text').attr('class', 'quad').attr('x', tx).attr('y', ty).attr('text-anchor', anchor).text(txt);
+    q(W - m.right - 6, m.top + 14, 'end', 'Good offense, good defense');
+    q(m.left + 6, m.top + 14, 'start', 'Defense first');
+    q(W - m.right - 6, H - m.bottom - 8, 'end', 'Offense first');
+    q(m.left + 6, H - m.bottom - 8, 'start', 'Below average at both');
+  }
+  const fmtA = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v);
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${H - m.bottom})`).call(d3.axisBottom(x).ticks(nt).tickSize(0).tickPadding(8).tickFormat(fmtA))).select('.domain').remove();
+  unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(${m.left},0)`).call(d3.axisLeft(y).ticks(nt).tickSize(0).tickPadding(8).tickFormat(fmtA))).select('.domain').remove();
+  svg.append('text').attr('x', W - m.right).attr('y', H - 6).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text('Offense →');
+  svg.append('text').attr('transform', `translate(12,${m.top}) rotate(-90)`).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text('Defense →');
+  // logos, best rating drawn last so it sits on top
+  const pts = svg.append('g');
+  teams.slice().sort((a, b) => N(a.rating) - N(b.rating)).forEach((t) => {
+    const src = lg.get(t.abbr), cx = x(N(t.off)), cy = y(N(t.def));
+    const node = /^data:image\//.test(src || '')
+      ? pts.append('image').attr('href', src).attr('x', cx - sz / 2).attr('y', cy - sz / 2).attr('width', sz).attr('height', sz)
+      : pts.append('circle').attr('cx', cx).attr('cy', cy).attr('r', sz / 3).attr('fill', hex(t.color) || 'var(--cds-chart-muted)');
+    if (dark) node.attr('style', 'filter: drop-shadow(0 0 1px rgba(255,255,255,.5))');
+    node.attr('role', 'link').attr('tabindex', 0).attr('aria-label', `${t.city} ${t.name}: offense ${signed(t.off, 2)}, defense ${signed(t.def, 2)}`)
+      .on('pointermove', (e) => showTip(e, [`${t.city} ${t.name}`, ['Rating', `${fmtR(t.rating)}  ${ordinal(t.rank)}`], ['Offense', `${signed(t.off, 2)}  ${ordinal(t.off_rank)}`], ['Defense', `${signed(t.def, 2)}  ${ordinal(t.def_rank)}`]]))
+      .on('pointerleave', hideTip)
+      .on('click', () => openTeam(t.abbr))
+      .on('keydown', (e) => { if (e.key === 'Enter') openTeam(t.abbr); });
+  });
+}
+
 function drawSeeds() {
   const cs = getComputedStyle(document.getElementById('seeds-east'));
   heatRGB = toRGB(cs.getPropertyValue('--nb-heat').trim()); fgRGB = toRGB(cs.color);

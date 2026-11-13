@@ -157,22 +157,19 @@
 .nb .nb-rk .c-p { width: 46px; }
 .nb .nb-rk td.c-p { padding-left: 6px; }
 .nb .nb-rk th.c-p { padding-right: 8px; }
-@container nb (min-width: 1180px) {
-  .nb .nb-rk-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 20px; }
-  .nb #rankings-card { padding-inline: 12px; }
-}
-@container nb (min-width: 1180px) and (max-width: 1499.98px) {  /* two halves on a laptop: tighter columns so Last keeps its room (1500 since Off/Def) */
-  .nb .nb-rk .c-team { width: 84px; }
-  .nb .nb-rk .full { display: none; }
-  .nb .nb-rk .short { display: inline; }
-  .nb .nb-rk .c-sos { width: 36px; }
-  .nb .nb-rk .c-sos .v { display: none; }  /* SOS/SOR as coloured ranks only; the value is the tooltip */
-  .nb .nb-rk .c-sos .rk { margin-left: 0; min-width: 0; }
-}
-@container nb (max-width: 1179.98px) {
-  .nb .nb-rk-2 thead { display: none; }
-  .nb .nb-rk-1 tbody tr:last-child td { border-bottom: 1px solid color-mix(in srgb, var(--color-border-line) 55%, transparent); }
-  .nb .nb-rk .c-last { width: auto; }
+/* one table, 1–30 top to bottom (13 Nov): the second table carries 16–30 (or the West) under the first, without its header */
+.nb .nb-rk-2 thead { display: none; }
+.nb .nb-rk-1 tbody tr:last-child td { border-bottom: 1px solid color-mix(in srgb, var(--color-border-line) 55%, transparent); }
+.nb .nb-rk .c-last { width: auto; }
+@container nb (min-width: 1100px) {  /* wide: every column fixed, so the spare width spreads across them instead of into Last */
+  .nb .nb-rk .c-chg, .nb .nb-rk .c-rank { width: 28px; }
+  .nb .nb-rk .c-team { width: 170px; }
+  .nb .nb-rk .c-rating { width: 64px; }
+  .nb .nb-rk .c-sos { width: 84px; }  /* .c-od's 84 sits after the Off/Def rules below */
+  .nb .nb-rk .c-last { width: 170px; }
+  .nb .nb-rk .c-next { width: 72px; }
+  .nb .nb-rk .c-proj { width: 60px; }
+  .nb .nb-rk .c-p { width: 64px; }
 }
 
 /* heatmap */
@@ -279,15 +276,16 @@
 .nb .nb-hint { cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .nb th[title] { cursor: help; }
 
-/* Off/Def: coloured rank only (value in the tooltip) except in the single-table width, which has room for both */
+/* Off/Def: value + coloured rank like SOS/SOR; under 840 px the value moves to the tooltip so Last keeps its room */
 .nb .nb-rk .c-od { width: 36px; }
 .nb .nb-rk .c-od .v { display: none; }
 .nb .nb-rk .c-od .rk { margin-left: 0; min-width: 0; }
-@container nb (min-width: 981px) and (max-width: 1179.98px) {
+@container nb (min-width: 840px) {
   .nb .nb-rk .c-od { width: 62px; }
   .nb .nb-rk .c-od .v { display: inline; }
   .nb .nb-rk .c-od .rk { margin-left: 3px; min-width: 2.3em; }
 }
+@container nb (min-width: 1100px) { .nb .nb-rk .c-od { width: 84px; } }
 
 /* narrow */
 .nb .nb-show-xs { display: none; }
@@ -902,7 +900,7 @@ document.getElementById('rk-png').addEventListener('click', async (e) => {
 });
 
 function drawRankings() {
-  const view = dash.params().view === 'conf' ? 'conf' : 'league';  // league: 1–15 | 16–30; conf: East | West
+  const view = dash.params().view === 'conf' ? 'conf' : 'league';  // league: 1–15 then 16–30, stacked; conf: East then West
   confSeg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.view === view));
   rkTables.forEach((tb, i) => { if (view === 'conf') tb.createCaption().textContent = i ? 'West' : 'East'; else tb.deleteCaption(); });
   const [tb1, tb2] = rkTables.map((t) => t.tBodies[0]);

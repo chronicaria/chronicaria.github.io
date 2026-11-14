@@ -293,6 +293,40 @@
 .nb .nb-od .iso-l, .nb .nb-od .quad { fill: var(--color-fg-muted); font-size: 10px; }
 .nb .nb-od .quad { opacity: .7; }
 
+/* PROTOTYPE layouts (?rk=a|b|c): box-score columns only from a 1100 px container */
+.nb .nb-rk .rk-x { display: none; }
+@container nb (min-width: 1100px) {
+  .nb .nb-rk .rk-x { display: table-cell; }
+  .nb[data-rk]:not([data-rk="b"]) .nb-rk thead th { position: relative; padding-top: 24px; }
+  .nb[data-rk] .nb-rk thead th.rk-gm { background: linear-gradient(var(--color-border-line), var(--color-border-line)) no-repeat 0 17px / 100% 1px; }
+  .nb[data-rk] .nb-rk thead th.rk-gs { background-position: 10px 17px; background-size: calc(100% - 10px) 1px; }
+  .nb[data-rk] .nb-rk thead th.rk-gs::before { content: attr(data-g); position: absolute; top: 2px; left: 10px; direction: ltr; font: 500 10px/1.2 var(--nb-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--color-fg-muted); white-space: nowrap; }
+  .nb[data-rk] .nb-rk .c-team { width: 150px; }
+  .nb[data-rk] .nb-rk .c-last { width: 150px; }
+  .nb[data-rk] .nb-rk .c-next { width: 64px; }
+  .nb[data-rk] .nb-rk .c-od, .nb[data-rk] .nb-rk .c-sos { width: 78px; }
+  .nb[data-rk] .nb-rk .c-box { width: 64px; }
+  .nb[data-rk="b"] .nb-rk .c-box, .nb[data-rk="b"] .nb-rk .c-od, .nb[data-rk="b"] .nb-rk .c-sos { width: 60px; }
+  .nb[data-rk="c"] .nb-rk .c-team { width: 140px; }
+  .nb[data-rk="c"] .nb-rk .c-last { width: 130px; }
+  .nb[data-rk="c"] .nb-rk .c-od, .nb[data-rk="c"] .nb-rk .c-sos { width: 72px; }
+  .nb[data-rk="c"] .nb-rk .c-box { width: 52px; }
+  .nb[data-rk="c"] .nb-rk .c-box .rk { display: none; }
+  .nb .nb-rk .c-trend { width: 104px; padding-inline: 8px; }
+  .nb .nb-rk td.c-trend svg { display: block; }
+}
+@container nb (min-width: 1100px) and (max-width: 1339.98px) {  /* laptop: box-score values only, rank in the tooltip */
+  .nb[data-rk] .nb-rk .c-box { width: 52px; }
+  .nb[data-rk] .nb-rk .c-box .rk { display: none; }
+  .nb[data-rk="c"] .nb-rk .c-trend { width: 72px; }
+  .nb[data-rk="c"] .nb-rk .c-od, .nb[data-rk="c"] .nb-rk .c-sos { width: 42px; }
+  .nb[data-rk="c"] .nb-rk .c-od .v, .nb[data-rk="c"] .nb-rk .c-sos .v { display: none; }
+  .nb[data-rk="c"] .nb-rk .c-od .rk, .nb[data-rk="c"] .nb-rk .c-sos .rk { margin-left: 0; min-width: 0; }
+}
+.nb[data-rk="b"] .nb-rk .rk { display: none; }
+.nb[data-rk="b"] .nb-rk tbody td.tile { background: var(--tile); }
+.nb[data-rk="b"] .nb-rk tbody td.tile .v { font-weight: 500; }
+
 /* narrow */
 .nb .nb-show-xs { display: none; }
 @container nb (max-width: 980px) {
@@ -853,10 +887,26 @@ const hasToday = () => OK('teams') && dash.data('teams').data.length > 0 && 'rat
 
 // ---------- 1. rankings ----------
 let rkSort = { key: 'rank', dir: 1 };
-const DESC_FIRST = new Set(['rating', 'rank_d1', 'proj_w', 'sos', 'sor', 'p_playoffs', 'p_title']);
+const DESC_FIRST = new Set(['rating', 'rank_d1', 'proj_w', 'sos', 'sor', 'p_playoffs', 'p_title', 'off', 'def', 'ppg', 'fg_pct', 'fg3_pct', 'ft_pct']);
 const rkTable = document.getElementById('rankings-table');
 const rkTable2 = document.getElementById('rankings-table-2');
 const rkTables = [rkTable, rkTable2];
+// PROTOTYPE (14 Nov): ?rk=a|b|c tries box-score columns; remove the losers once Andrew picks
+const RKV = (new URLSearchParams(location.search).get('rk') || '').toLowerCase();
+const BOXC = [['ppg', 'PPG', 'Points scored per game'], ['opp_ppg', 'Opp', 'Points allowed per game; 1st = fewest'],
+  ['fg_pct', 'FG%', 'Field-goal percentage'], ['fg3_pct', '3P%', 'Three-point percentage'], ['ft_pct', 'FT%', 'Free-throw percentage']];
+if (RKV) {
+  root.dataset.rk = RKV;
+  const hr = rkTable.tHead.rows[0], at = (f) => hr.querySelector(`th[data-field="${f}"]`);
+  const mk = (f, label, title, cls) => { const th = el('th', `num ${cls} rk-x`); th.dataset.field = f; th.dataset.sort = f; const b = el('button', 'nb-sort', label); b.title = title; th.append(b); return th; };
+  at('next_game').after(...BOXC.map(([f, l, t]) => mk(f, l, t, 'c-box')));
+  if (RKV === 'c') { const th = el('th', 'c-trend rk-x', 'Trend'); th.title = 'Rating change since the preseason prior, every team on one scale'; at('def').after(th); }
+  if (RKV !== 'b') {  // group labels drawn above the header cells (a separate band row would break the fixed column widths)
+    const groups = [['Model', ['rating', 'off', 'def', 'trend']], ['Games', ['last_game', 'next_game']], ['Box score', BOXC.map(([f]) => f)], ['Outlook', ['proj_w', 'sos', 'sor', 'p_playoffs', 'p_title']]];
+    [...hr.cells].forEach((th) => { if (th.classList.contains('c-trend')) th.dataset.field = 'trend'; });
+    groups.forEach(([label, fields]) => fields.map(at).filter(Boolean).forEach((th, i) => { th.classList.add('rk-gm'); if (!i) { th.classList.add('rk-gs'); th.dataset.g = label; } }));
+  }
+}
 rkTable2.tHead.replaceWith(rkTable.tHead.cloneNode(true));  // the right half (16–30) repeats the header
 rkTables.forEach((tb) => tb.querySelectorAll('th[data-sort]').forEach((th) => th.querySelector('button').addEventListener('click', () => {
   const k = th.dataset.sort;
@@ -937,6 +987,23 @@ function drawRankings() {
   const withRank = (v, r) => { const c = el('span', ''); c.title = signed(v, 2); c.append(el('span', 'v', signed(v, 2))); c.append(el('span', 'rk', Number.isFinite(N(r)) ? ordinal(r) : '')); return c; };
   // rank colour: green at the good end, muted mid-table, red at the bad end (best = 1st unless flipped)
   const withRankTone = (v, r, flip) => { const c = withRank(v, r); const n = N(r); if (Number.isFinite(n)) { const f = (flip ? 30 - n : n - 1) / 29, x = Math.round(Math.abs(1 - 2 * f) * 100); c.lastChild.style.setProperty('--rkc', `color-mix(in srgb, var(${f < 0.5 ? '--color-ok' : '--color-bad'}) ${x}%, var(--color-fg-muted))`); } return c; };
+  // B: shade the whole cell by league rank (green = good end, red = bad end), the digits stay plain
+  const tile = (c, r, flip) => { if (RKV !== 'b') return; const n = N(r); if (!Number.isFinite(n)) return; const f = (flip ? 30 - n : n - 1) / 29, x = Math.abs(1 - 2 * f);
+    c.classList.add('tile'); c.style.setProperty('--tile', `color-mix(in srgb, var(${f < 0.5 ? '--color-ok' : '--color-bad'}) ${Math.round(x * 34)}%, transparent)`); };
+  // C: one shared scale for every team, so slopes compare across rows
+  const hist = RKV === 'c' && OK('history') ? d3.group(historyRows(), (r) => r.abbr) : null;
+  const hx = hist && d3.scaleUtc(d3.extent(historyRows(), (r) => r.date), [2, 98]);
+  const first = hist && new Map([...hist].map(([a, p]) => [a, d3.least(p, (r) => r.date).rating]));
+  const dmax = hist && (d3.max(historyRows(), (r) => Math.abs(r.rating - first.get(r.abbr))) || 1);
+  const hy = hist && d3.scaleLinear([-dmax, dmax], [21, 3]);
+  const spark = (c, t) => {
+    const pts = hist && (hist.get(t.abbr) || []).slice().sort((a, b) => a.date - b.date); if (!pts || pts.length < 2) { c.textContent = '–'; return; }
+    const svg = d3.select(c).append('svg').attr('viewBox', '0 0 100 24').attr('width', '100%').attr('height', 24).attr('preserveAspectRatio', 'none').attr('aria-hidden', 'true');
+    svg.append('line').attr('x1', 2).attr('x2', 98).attr('y1', hy(0)).attr('y2', hy(0)).attr('stroke', 'var(--color-border-line)').attr('stroke-width', 1).attr('vector-effect', 'non-scaling-stroke');
+    svg.append('path').attr('d', d3.line().x((p) => hx(p.date)).y((p) => hy(p.rating - pts[0].rating))(pts)).attr('fill', 'none').attr('stroke', teamInk(t)).attr('stroke-width', 1.75).attr('vector-effect', 'non-scaling-stroke').attr('stroke-linejoin', 'round');
+    svg.append('circle').attr('cx', hx(pts.at(-1).date)).attr('cy', hy(pts.at(-1).rating - pts[0].rating)).attr('r', 2.2).attr('fill', teamInk(t));
+    c.title = `${fmtR(pts[0].rating)} preseason → ${fmtR(pts.at(-1).rating)} now (${signed(pts.at(-1).rating - pts[0].rating, 2)})`;
+  };
   // Last = yesterday's final, Next = today's game (ET days); no game that day = –. Once today's whole slate is final
   // the day rolls forward: Last = today's finals, Next = tomorrow's games. Mid-slate, a team whose game is over shows it.
   const tmap = teamMap(), sched = OK('schedule') ? dash.data('schedule').data : [];
@@ -963,16 +1030,26 @@ function drawRankings() {
     tag.append(badge, nm);
     const nc = td('', 'c-team'); nc.append(tag); tr.append(nc);
     tr.append(td(fmtR(t.rating), 'num c-rating'));
-    for (const k of ['off', 'def']) { const c = td('', 'num c-od nb-hide-sm'); if (t[k] !== undefined && t[k] !== '') c.append(withRankTone(t[k], t[k + '_rank'])); else c.textContent = '–'; tr.append(c); }
+    for (const k of ['off', 'def']) { const c = td('', 'num c-od nb-hide-sm'); if (t[k] !== undefined && t[k] !== '') { c.append(withRankTone(t[k], t[k + '_rank'])); tile(c, t[k + '_rank']); } else c.textContent = '–'; tr.append(c); }
+    if (RKV === 'c') { const c = td('', 'c-trend rk-x'); spark(c, t); tr.append(c); }
     const lc = td('–', 'c-last nb-hide-xs'), lg = lastG.get(t.abbr);  // "W 113–109 vs. PHX"
     if (lg) { const [g, home] = lg, us = +(home ? g.hs : g.as), them = +(home ? g.as : g.hs); lc.replaceChildren(el('b', '', us > them ? 'W' : 'L'), ` ${us}–${them} ${opp(g, home)}`); }
     tr.append(lc);
     const xc = td('–', 'c-next nb-hide-xs'), ng = nextG.get(t.abbr);  // "@ SAS"
     if (ng) xc.textContent = opp(...ng);
     tr.append(xc);
+    if (RKV) for (const [k] of BOXC) {
+      const c = td('–', 'num c-box rk-x'), v = N(t[k]);
+      if (Number.isFinite(v)) {
+        const txt = k.endsWith('_pct') ? (v * 100).toFixed(1) : v.toFixed(1);
+        const sp = withRankTone(0, t[k + '_rank']); sp.firstChild.textContent = txt; sp.title = `${txt} · ${ordinal(t[k + '_rank'])}`;
+        c.replaceChildren(sp); tile(c, t[k + '_rank']);
+      }
+      tr.append(c);
+    }
     tr.append(td(fmt1(t.proj_w), 'num c-proj'));
-    const sc = td('', 'num c-sos nb-hide-sm'); sc.append(withRankTone(t.sos, t.sos_rank, true)); tr.append(sc);
-    const rc2 = td('', 'num c-sos nb-hide-sm'); rc2.append(withRankTone(t.sor, t.sor_rank)); tr.append(rc2);
+    const sc = td('', 'num c-sos nb-hide-sm'); sc.append(withRankTone(t.sos, t.sos_rank, true)); tile(sc, t.sos_rank, true); tr.append(sc);
+    const rc2 = td('', 'num c-sos nb-hide-sm'); rc2.append(withRankTone(t.sor, t.sor_rank)); tile(rc2, t.sor_rank); tr.append(rc2);
     tr.append(td(fmtP(t.p_playoffs), 'num c-p'), td(fmtP(t.p_title), 'num c-p'));
     return tr;
   });

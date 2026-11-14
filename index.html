@@ -154,6 +154,8 @@
 .nb .nb-rk th.num > * { direction: ltr; }
 .nb .nb-rk .c-sos { width: 62px; }
 .nb .nb-rk .rk { font-family: var(--nb-sans); font-size: 9.5px; font-weight: 600; color: var(--rkc, var(--color-fg-muted)); margin-left: 3px; display: inline-block; min-width: 2.3em; text-align: left; }
+.nb .nb-rk .rk:not(:empty)::before { content: '('; }
+.nb .nb-rk .rk:not(:empty)::after { content: ')'; }
 .nb .nb-rk .c-p { width: 46px; }
 .nb .nb-rk td.c-p { padding-left: 6px; }
 .nb .nb-rk th.c-p { padding-right: 8px; }
@@ -189,7 +191,9 @@
   .nb .nb-rk .c-next { width: 42px; }
   .nb .nb-rk .c-proj { width: 30px; }
   .nb .nb-rk .c-p { width: 39px; }
-  .nb .nb-rk .c-last { font-size: 10.5px; padding-left: 8px; }
+  .nb .nb-rk .c-last { font-size: 10.5px; padding-left: 6px; }
+  .nb .nb-rk-wrap { column-gap: 12px; }
+  .nb #rankings-card { padding-inline: 8px; }
 }
 
 /* heatmap */
@@ -300,16 +304,19 @@
 .nb .nb-rk .c-od { width: 36px; }
 .nb .nb-rk .c-od .v { display: none; }
 .nb .nb-rk .c-od .rk { margin-left: 0; min-width: 0; }
+.nb .nb-rk .c-od .rk::before, .nb .nb-rk .c-od .rk::after { content: none; }  /* rank-only: no brackets */
 @container nb (min-width: 840px) {
   .nb .nb-rk .c-od { width: 62px; }
   .nb .nb-rk .c-od .v { display: inline; }
   .nb .nb-rk .c-od .rk { margin-left: 3px; min-width: 2.3em; }
+  .nb .nb-rk .c-od .rk:not(:empty)::before { content: '('; }
+  .nb .nb-rk .c-od .rk:not(:empty)::after { content: ')'; }
 }
 @container nb (min-width: 1100px) { .nb .nb-rk .c-od, .nb .nb-rk .c-sos { width: 84px; } }
 @container nb (min-width: 1230px) {
-  .nb .nb-rk .c-od, .nb .nb-rk .c-sos { width: 41px; }
-  .nb .nb-rk .c-od .v, .nb .nb-rk .c-sos .v { display: inline; color: var(--rkc, inherit); font-weight: 600; }
-  .nb .nb-rk .c-od .rk, .nb .nb-rk .c-sos .rk { display: none; }
+  .nb .nb-rk .c-od, .nb .nb-rk .c-sos { width: 47.5px; padding-inline: 1px; }
+  .nb .nb-rk .c-od .v, .nb .nb-rk .c-sos .v { display: inline; color: var(--rkc, inherit); font-weight: 600; font-size: 10px; }
+  .nb .nb-rk .c-od .rk, .nb .nb-rk .c-sos .rk { margin-left: 1px; min-width: 1.8em; font-size: 8px; font-weight: 500; color: var(--color-fg-muted); }  /* value tinted; the rank is a small muted "(1)" */
 }
 
 .nb #od-card { margin-top: 16px; }
@@ -959,7 +966,7 @@ function drawRankings() {
   rkTables.forEach((tb) => tb.querySelectorAll('th[data-sort]').forEach((th) => {
     if (th.dataset.sort === rkSort.key) th.setAttribute('aria-sort', rkSort.dir > 0 ? 'ascending' : 'descending'); else th.removeAttribute('aria-sort');
   }));
-  const withRank = (v, r) => { const c = el('span', ''); c.title = signed(v, 2) + (Number.isFinite(N(r)) ? ' · ' + ordinal(r) : ''); c.append(el('span', 'v', signed(v, 2))); c.append(el('span', 'rk', Number.isFinite(N(r)) ? ordinal(r) : '')); return c; };
+  const withRank = (v, r) => { const c = el('span', ''); c.title = signed(v, 2) + (Number.isFinite(N(r)) ? ' · ' + ordinal(r) : ''); c.append(el('span', 'v', signed(v, 2))); c.append(el('span', 'rk', Number.isFinite(N(r)) ? String(N(r)) : '')); return c; };
   // rank colour: green at the good end, muted mid-table, red at the bad end (best = 1st unless flipped)
   const withRankTone = (v, r, flip) => { const c = withRank(v, r); const n = N(r); if (Number.isFinite(n)) { const f = (flip ? 30 - n : n - 1) / 29, x = Math.round(Math.abs(1 - 2 * f) * 100); c.style.setProperty('--rkc', `color-mix(in srgb, var(${f < 0.5 ? '--color-ok' : '--color-bad'}) ${x}%, var(--color-fg-muted))`); } return c; };
   // Last = yesterday's final, Next = today's game (ET days); no game that day = –. Once today's whole slate is final

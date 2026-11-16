@@ -387,6 +387,7 @@
   <nav class="nb-tabs" role="tablist" id="tabs" aria-label="Pages">
     <button class="nb-tab" role="tab" id="tab-rankings" data-tab="rankings" aria-controls="rankings">Rankings</button>
     <button class="nb-tab" role="tab" id="tab-playoffs" data-tab="playoffs" aria-controls="playoffs" hidden>Playoff odds</button>
+    <button class="nb-tab" role="tab" id="tab-proj" data-tab="proj" aria-controls="proj">Projected wins</button>
     <button class="nb-tab" role="tab" id="tab-wins" data-tab="wins" aria-controls="wins">Win distributions</button>
     <button class="nb-tab" role="tab" id="tab-ratings" data-tab="ratings" aria-controls="ratings">Ratings</button>
     <button class="nb-tab" role="tab" id="tab-games" data-tab="games" aria-controls="games">Games</button>
@@ -453,6 +454,20 @@
   </section>
 
   <!-- 3. Win distributions -->
+  <section class="nb-page" id="proj" role="tabpanel" aria-labelledby="tab-proj" hidden>
+    <p class="nb-summary" id="proj-note">Projected wins after each game day: the mean of that day's season simulations. The first point is the preseason prior. Hover a line for a day's projection; click to keep a team highlighted.</p>
+    <div class="nb-grid">
+      <div class="nb-card" id="proj-east-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title">Eastern Conference</h2></div></div>
+        <div class="nb-chart dash-skeleton" id="proj-east" data-source="proj_history teams" style="min-height: 440px"></div>
+      </div>
+      <div class="nb-card" id="proj-west-card">
+        <div class="nb-card-head"><div><h2 class="nb-card-title">Western Conference</h2></div></div>
+        <div class="nb-chart dash-skeleton" id="proj-west" data-source="proj_history teams" style="min-height: 440px"></div>
+      </div>
+    </div>
+  </section>
+
   <section class="nb-page" id="wins" role="tabpanel" aria-labelledby="tab-wins" hidden>
     <div class="nb-legend" id="wins-legend">
       <span class="k"><i class="nb-key bar"></i>Simulated wins (dark = middle 80%)</span>
@@ -816,7 +831,7 @@ const unfont = (g) => g.attr('font-size', null).attr('font-family', null);
 // the public site (window.NB_PUBLIC) leaves out the Model tab; the Playoff odds tab is kept in code but not shown
 const PUBLIC = window.NB_PUBLIC === true;
 const HIDDEN = new Set(['playoffs', 'ratings', ...(PUBLIC ? ['model'] : [])]);
-const TABS = ['rankings', 'playoffs', 'wins', 'ratings', 'games', 'team', 'model'].filter((t) => !HIDDEN.has(t));
+const TABS = ['rankings', 'proj', 'playoffs', 'wins', 'ratings', 'games', 'team', 'model'].filter((t) => !HIDDEN.has(t));
 root.querySelectorAll('.nb-tab').forEach((b) => { if (HIDDEN.has(b.dataset.tab)) b.remove(); });
 HIDDEN.forEach((t) => { document.getElementById(t).hidden = true; });
 if (PUBLIC) document.getElementById('model').remove();
@@ -1208,9 +1223,9 @@ function drawWins() {
 }
 
 // ---------- 4. ratings ----------
-let rtPinned = null, rtHover = null;
+const rt = { hover: null, pinned: null };
 const rtSel = document.getElementById('ratings-team');
-rtSel.addEventListener('change', () => { rtPinned = rtSel.value || null; draw(); });
+rtSel.addEventListener('change', () => { rt.pinned = rtSel.value || null; draw(); });
 const historyRows = () => dash.data('history').data.map((r) => ({ abbr: r.abbr, date: parseDay(r.date), rating: N(r.rating) })).filter((r) => !isNaN(r.date) && Number.isFinite(r.rating));
 const teamOptions = (sel, first) => {
   const ts = [...teamMap().values()].sort((a, b) => `${a.city} ${a.name}`.localeCompare(`${b.city} ${b.name}`));
@@ -1224,44 +1239,54 @@ function drawRatings() {
   ready(box);
   const tmap = teamMap();
   teamOptions(rtSel, 'Highlight a team');
-  rtSel.value = rtPinned || '';
+  rtSel.value = rt.pinned || '';
   box.replaceChildren();
   const rows = historyRows();
   if (!rows.length) { box.append(el('p', 'nb-empty-note', 'No ratings yet this season.')); return; }
+  teamLines(box, rows.map((r) => ({ abbr: r.abbr, date: r.date, v: r.rating })), {
+    st: rt, aria: 'Rating in points by team this season', fmt: fmtR, fmtChg: (v) => signed(v, 2), pad: 0.4, ref: { v: 0, label: 'League average' },
+    height: (W) => (W < 560 ? 460 : Math.round(Math.max(480, Math.min(620, W * 0.42)))), onPin: (a) => { rtSel.value = a || ''; } });
+}
+
+// one line per team in its ink, end labels kept apart, hover/click to highlight. rows: [{abbr, date, v}];
+// o: {st: {hover, pinned}, aria, fmt, fmtChg, pad, ref: {v, label} | null, height(W), onPin?, yDomain?, fmtTick?}
+function teamLines(box, rows, o) {
+  const tmap = teamMap();
   const series = d3.groups(rows, (r) => r.abbr).map(([abbr, pts]) => ({ abbr, t: tmap.get(abbr), pts: pts.sort((a, b) => a.date - b.date) }));
   const W = box.clientWidth;
-  const H = W < 560 ? 460 : Math.round(Math.max(480, Math.min(620, W * 0.42)));
+  const H = o.height(W);
   box.style.minHeight = H + 'px';
-  const svg = newSvg(box, W, H, 'Rating in points by team this season');
-  const yExt = d3.extent(rows, (r) => r.rating);
-  const y0 = d3.scaleLinear().domain([Math.min(yExt[0], 0) - 0.4, Math.max(yExt[1], 0) + 0.4]).nice();
+  const svg = newSvg(box, W, H, o.aria);
+  const yExt = d3.extent(rows, (r) => r.v);
+  const y0 = d3.scaleLinear().domain(o.yDomain ? o.yDomain : o.ref ? [Math.min(yExt[0], o.ref.v) - o.pad, Math.max(yExt[1], o.ref.v) + o.pad] : [yExt[0] - o.pad, yExt[1] + o.pad]).nice();
   const yt = y0.ticks(Math.max(3, Math.floor(H / 70)));
-  const left = measure(svg, yt.map((v) => fmtTick(v)), 10.5) + 10;
-  const lab = (s) => `${code(s.t) || s.abbr} ${fmtR(s.pts.at(-1).rating)}`;
+  const left = measure(svg, yt.map((v) => (o.fmtTick || fmtTick)(v)), 10.5) + 10;
+  const lab = (s) => `${code(s.t) || s.abbr} ${o.fmt(s.pts.at(-1).v)}`;
   const fs = 10.5;
   const right = measure(svg, series.map(lab), fs) + 22;
   const top = 10, bottom = 26;
   const x = d3.scaleUtc(d3.extent(rows, (r) => r.date), [left, W - right]);
   const y = d3.scaleLinear(y0.domain(), [H - bottom - 8, top]);
   svg.append('g').attr('class', 'nb-grid-l').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(-(W - right - left)).tickFormat(''));
-  const ya = unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(0).tickPadding(6).tickFormat((v) => fmtTick(v))));
+  const ya = unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(0).tickPadding(6).tickFormat((v) => (o.fmtTick || fmtTick)(v))));
   ya.select('.domain').remove();
-  // the league average
-  svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.25).attr('stroke-dasharray', '4 3');
-  svg.append('text').attr('x', left + 4).attr('y', y(0) - 4).attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text('League average');
+  if (o.ref) {  // a reference level: the league average, or .500
+    svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(o.ref.v)).attr('y2', y(o.ref.v)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.25).attr('stroke-dasharray', '4 3');
+    svg.append('text').attr('x', left + 4).attr('y', y(o.ref.v) - 4).attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text(o.ref.label);
+  }
   const days = d3.utcDay.count(x.domain()[0], x.domain()[1]) + 1;
   const nt = Math.max(2, Math.min(days, Math.floor((W - left - right) / 70)));
   let xt = x.ticks(nt).filter((d) => +d3.utcDay.floor(d) === +d);
   if (xt.length < 2) xt = x.domain();
   unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).tickValues(xt).tickFormat(fmtDay).tickSizeOuter(0).tickSize(4)));
-  const line = d3.line().x((p) => x(p.date)).y((p) => y(p.rating));
-  const focus = () => rtHover || rtPinned;
+  const line = d3.line().x((p) => x(p.date)).y((p) => y(p.v));
+  const focus = () => o.st.hover || o.st.pinned;
   const lines = svg.append('g').attr('fill', 'none').attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
   const paths = lines.selectAll('path').data(series).join('path').attr('d', (s) => line(s.pts));
   const dots = svg.append('g');
   // end labels, kept apart
   const xEnd = x.range()[1];
-  const items = series.map((s) => ({ s, y0: y(s.pts.at(-1).rating), xe: x(s.pts.at(-1).date) }));
+  const items = series.map((s) => ({ s, y0: y(s.pts.at(-1).v), xe: x(s.pts.at(-1).date) }));
   let gap = fs + 2.5;
   const lo = top + 4, hi = H - bottom - 2;
   if ((items.length - 1) * gap > hi - lo) gap = (hi - lo) / Math.max(1, items.length - 1);
@@ -1281,7 +1306,7 @@ function drawRatings() {
   const carry = lines.selectAll('line').data(items.filter((d) => xEnd - d.xe > 1)).join('line')
     .attr('x1', (d) => d.xe).attr('x2', xEnd).attr('y1', (d) => d.y0).attr('y2', (d) => d.y0).attr('stroke-dasharray', '1 3').attr('stroke-width', 1.25);
   const texts = lg.selectAll('text').data(items).join('text').attr('class', 'nb-tlink').attr('x', xEnd + 19).attr('y', (d) => d.y + 3.5).attr('font-size', fs).text((d) => lab(d.s)).style('cursor', 'pointer')
-    .on('pointerenter', (e, d) => { rtHover = d.s.abbr; style(); }).on('pointerleave', () => { rtHover = null; style(); })
+    .on('pointerenter', (e, d) => { o.st.hover = d.s.abbr; style(); }).on('pointerleave', () => { o.st.hover = null; style(); })
     .attr('tabindex', 0).attr('role', 'link').each(function (d) { this._abbr = d.s.abbr; });
   function style() {
     const f = focus();
@@ -1295,25 +1320,45 @@ function drawRatings() {
       .attr('opacity', (d) => (on(d.s.abbr) ? 1 : f ? 0.4 : 1));
     leaders.attr('stroke', (d) => teamInkMin(d.s.t)).attr('stroke-opacity', (d) => (on(d.s.abbr) ? 1 : f ? 0.2 : 0.5));
     const fs_ = series.find((s) => on(s.abbr));
-    dots.selectAll('circle').data(fs_ ? fs_.pts : []).join('circle').attr('cx', (p) => x(p.date)).attr('cy', (p) => y(p.rating)).attr('r', 3)
+    dots.selectAll('circle').data(fs_ ? fs_.pts : []).join('circle').attr('cx', (p) => x(p.date)).attr('cy', (p) => y(p.v)).attr('r', 3)
       .attr('fill', fs_ ? teamInkMin(fs_.t) : 'none').attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
   }
   style();
   const pts = series.flatMap((s) => s.pts.map((p, i) => ({ s, p, prev: s.pts[i - 1] })));
-  const delaunay = d3.Delaunay.from(pts, (d) => x(d.p.date), (d) => y(d.p.rating));
+  const delaunay = d3.Delaunay.from(pts, (d) => x(d.p.date), (d) => y(d.p.v));
   svg.append('rect').attr('x', left).attr('y', top).attr('width', Math.max(0, W - right - left + 6)).attr('height', H - top - bottom).attr('fill', 'transparent')
     .on('pointermove', (e) => {
       const [mx, my] = d3.pointer(e, svg.node());
       const d = pts[delaunay.find(mx, my)];
       if (!d) return;
-      if (rtHover !== d.s.abbr) { rtHover = d.s.abbr; style(); }
+      if (o.st.hover !== d.s.abbr) { o.st.hover = d.s.abbr; style(); }
       const t = d.s.t;
-      const lines = [fmtDow(d.p.date), [t ? `${t.city} ${t.name}` : d.s.abbr, fmtR(d.p.rating)]];
-      if (d.prev) lines.push(['Change', signed(d.p.rating - d.prev.rating, 2)]); else lines.push(['', 'Preseason prior']);
+      const lines = [fmtDow(d.p.date), [t ? `${t.city} ${t.name}` : d.s.abbr, o.fmt(d.p.v)]];
+      if (d.prev) lines.push(['Change', o.fmtChg(d.p.v - d.prev.v)]); else lines.push(['', 'Preseason prior']);
       showTip(e, lines);
     })
-    .on('pointerleave', () => { rtHover = null; style(); hideTip(); })
-    .on('click', () => { rtPinned = rtHover && rtPinned !== rtHover ? rtHover : null; rtSel.value = rtPinned || ''; style(); });
+    .on('pointerleave', () => { o.st.hover = null; style(); hideTip(); })
+    .on('click', () => { o.st.pinned = o.st.hover && o.st.pinned !== o.st.hover ? o.st.hover : null; if (o.onPin) o.onPin(o.st.pinned); style(); });
+}
+
+// ---------- 4b. projected wins, one chart per conference ----------
+const pjState = { East: { hover: null, pinned: null }, West: { hover: null, pinned: null } };
+function drawProj() {
+  const all = OK('proj_history') ? dash.data('proj_history').data.map((r) => N(r.proj_w)).filter(Number.isFinite) : [];
+  const yDomain = all.length ? [Math.min(d3.min(all), 41) - 1, Math.max(d3.max(all), 41) + 1] : null;  // one scale for both conferences
+  for (const [conf, id] of [['East', 'proj-east'], ['West', 'proj-west']]) {
+    const box = document.getElementById(id);
+    const s = state('proj_history', 'teams');
+    if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } continue; }
+    ready(box);
+    box.replaceChildren();
+    const tmap = teamMap();
+    const rows = dash.data('proj_history').data.filter((r) => tmap.get(r.abbr)?.conf === conf)
+      .map((r) => ({ abbr: r.abbr, date: parseDay(r.date), v: N(r.proj_w) })).filter((r) => !isNaN(r.date) && Number.isFinite(r.v));
+    if (!rows.length) { box.append(el('p', 'nb-empty-note', 'No projections yet this season.')); continue; }
+    teamLines(box, rows, { st: pjState[conf], aria: `Projected wins by day, ${conf}ern Conference`, fmt: fmt1, fmtChg: (v) => signed(v, 1), pad: 1, ref: { v: 41, label: '41 wins (.500)' }, yDomain, fmtTick: (v) => String(v),
+      height: (W) => (W < 560 ? 420 : Math.round(Math.max(440, Math.min(560, W * 0.62)))) });
+  }
 }
 
 // ---------- 5. games ----------
@@ -1720,7 +1765,7 @@ function drawCalibration() {
 }
 
 // ---------- draw ----------
-const PAGES = { rankings: drawRankings, playoffs: drawSeeds, wins: drawWins, ratings: drawRatings, games: drawGames, team: drawTeam, model: drawModel };
+const PAGES = { rankings: drawRankings, proj: drawProj, playoffs: drawSeeds, wins: drawWins, ratings: drawRatings, games: drawGames, team: drawTeam, model: drawModel };
 let firstDraw = true;
 function draw() {
   const prevPanel = JSON.stringify(panelRGB);

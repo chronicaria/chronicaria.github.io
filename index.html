@@ -96,6 +96,21 @@
 .nb .nb-rk-head { margin-bottom: 8px; align-items: center; }
 .nb .nb-png { appearance: none; border: 1px solid var(--color-border-line); background: none; border-radius: 999px; font: inherit; font-family: var(--nb-mono); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: 3px 10px; cursor: pointer; }
 .nb .nb-png:hover { color: var(--color-fg); }
+/* Projected wins tab + its PNG card (built off-screen on click, then removed) */
+.nb .nb-pj-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.nb .nb-pj-bar .nb-summary { margin: 0; }
+.nb .nb-pj-sub { margin: 3px 0 0; font-family: var(--nb-mono); font-size: 11px; color: var(--color-fg-muted); }
+.nb .nb-pj-sub b { font-weight: 600; } .nb .nb-pj-sub b.up { color: var(--color-ok); } .nb .nb-pj-sub b.down { color: var(--color-bad); }
+.nb .nb-pj-sub .sep { margin: 0 7px; opacity: .6; }
+.nb #proj .nb-card { box-shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 8px 24px -12px rgba(0, 0, 0, .18); }
+.nb .nb-pjx { position: fixed; left: -100000px; top: 0; width: 1480px; padding: 30px 32px 20px; background: var(--color-panel); color: var(--color-fg); font-family: var(--nb-sans); }
+.nb .nb-pjx-head { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--color-border-line); }
+.nb .nb-pjx-title { font-size: 26px; font-weight: 700; letter-spacing: -.01em; }
+.nb .nb-pjx-meta { font-family: var(--nb-mono); font-size: 12px; color: var(--color-fg-muted); }
+.nb .nb-pjx-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+.nb .nb-pjx-conf { font-size: 16px; font-weight: 650; }
+.nb .nb-pjx-chart { width: 100%; margin-top: 10px; }
+.nb .nb-pjx-foot { margin-top: 10px; text-align: right; font-family: var(--nb-mono); font-size: 11px; color: var(--color-fg-muted); }
 /* PNG export card: the league in three columns of ten, on a fixed dark board (built off-screen on click, then removed) */
 .nb .nb-x { --x-bg: #0d0f13; --x-row: #12151a; --x-hair: #1f232b; --x-rule: #4a515c; --x-fg: #eceef1; --x-mute: #8d939e;
   position: fixed; left: -100000px; top: 0; width: max-content; background: var(--x-bg); color: var(--x-fg); padding: 20px 20px 18px; border-radius: 12px; font-family: var(--nb-sans); }
@@ -455,14 +470,17 @@
 
   <!-- 3. Win distributions -->
   <section class="nb-page" id="proj" role="tabpanel" aria-labelledby="tab-proj" hidden>
-    <p class="nb-summary" id="proj-note">Projected wins after each game day: the mean of that day's season simulations. The first point is the preseason prior. Hover a line for a day's projection; click to keep a team highlighted.</p>
+    <div class="nb-pj-bar">
+      <p class="nb-summary" id="proj-note">Projected wins after each game day: the mean of that day's season simulations, starting from the preseason prior. Hover a line for a day's projection; click to keep a team highlighted.</p>
+      <button class="nb-png" id="pj-png" title="Download both charts as a PNG">PNG</button>
+    </div>
     <div class="nb-grid">
       <div class="nb-card" id="proj-east-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title">Eastern Conference</h2></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title">Eastern Conference</h2><p class="nb-pj-sub" id="proj-east-sub"></p></div></div>
         <div class="nb-chart dash-skeleton" id="proj-east" data-source="proj_history teams" style="min-height: 440px"></div>
       </div>
       <div class="nb-card" id="proj-west-card">
-        <div class="nb-card-head"><div><h2 class="nb-card-title">Western Conference</h2></div></div>
+        <div class="nb-card-head"><div><h2 class="nb-card-title">Western Conference</h2><p class="nb-pj-sub" id="proj-west-sub"></p></div></div>
         <div class="nb-chart dash-skeleton" id="proj-west" data-source="proj_history teams" style="min-height: 440px"></div>
       </div>
     </div>
@@ -1249,7 +1267,8 @@ function drawRatings() {
 }
 
 // one line per team in its ink, end labels kept apart, hover/click to highlight. rows: [{abbr, date, v}];
-// o: {st: {hover, pinned}, aria, fmt, fmtChg, pad, ref: {v, label} | null, height(W), onPin?, yDomain?, fmtTick?}
+// o: {st: {hover, pinned}, aria, fmt, fmtChg, pad, ref: {v, label} | null, height(W), onPin?, yDomain?, fmtTick?,
+//     logos? (Map abbr -> src: a logo before each end label), minor? (half-step and daily gridlines), curve?, lw?, op? (line width, resting opacity)}
 function teamLines(box, rows, o) {
   const tmap = teamMap();
   const series = d3.groups(rows, (r) => r.abbr).map(([abbr, pts]) => ({ abbr, t: tmap.get(abbr), pts: pts.sort((a, b) => a.date - b.date) }));
@@ -1263,26 +1282,40 @@ function teamLines(box, rows, o) {
   const left = measure(svg, yt.map((v) => (o.fmtTick || fmtTick)(v)), 10.5) + 10;
   const lab = (s) => `${code(s.t) || s.abbr} ${o.fmt(s.pts.at(-1).v)}`;
   const fs = 10.5;
-  const right = measure(svg, series.map(lab), fs) + 22;
+  const LG = o.logos ? 17 : 0;  // logo slot before each end label
+  const right = measure(svg, series.map(lab), fs) + 22 + LG;
   const top = 10, bottom = 26;
   const x = d3.scaleUtc(d3.extent(rows, (r) => r.date), [left, W - right]);
   const y = d3.scaleLinear(y0.domain(), [H - bottom - 8, top]);
   svg.append('g').attr('class', 'nb-grid-l').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(-(W - right - left)).tickFormat(''));
   const ya = unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(${left},0)`).call(d3.axisLeft(y).tickValues(yt).tickSize(0).tickPadding(6).tickFormat((v) => (o.fmtTick || fmtTick)(v))));
   ya.select('.domain').remove();
-  if (o.ref) {  // a reference level: the league average, or .500
-    svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(o.ref.v)).attr('y2', y(o.ref.v)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.25).attr('stroke-dasharray', '4 3');
-    svg.append('text').attr('x', left + 4).attr('y', y(o.ref.v) - 4).attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text(o.ref.label);
-  }
   const days = d3.utcDay.count(x.domain()[0], x.domain()[1]) + 1;
   const nt = Math.max(2, Math.min(days, Math.floor((W - left - right) / 70)));
   let xt = x.ticks(nt).filter((d) => +d3.utcDay.floor(d) === +d);
   if (xt.length < 2) xt = x.domain();
+  if (o.minor) {  // minor grid: half steps across, every day down (fainter), the x ticks' days a little stronger
+    const st = yt.length > 1 ? (yt[1] - yt[0]) / 2 : 0, [ya0, ya1] = y.domain(), g = svg.insert('g', '.nb-axis').attr('class', 'nb-minor');
+    if (st) g.selectAll('line.h').data(d3.range(Math.ceil(ya0 / st) * st, ya1 + 1e-9, st).filter((v) => !yt.includes(v))).join('line').attr('class', 'h')
+      .attr('x1', left).attr('x2', W - right).attr('y1', (v) => y(v)).attr('y2', (v) => y(v)).attr('stroke', 'var(--cds-chart-grid)').attr('stroke-opacity', 0.55).attr('stroke-dasharray', '2 3');
+    g.selectAll('line.v').data(d3.utcDay.range(x.domain()[0], d3.utcDay.offset(x.domain()[1], 1))).join('line').attr('class', 'v')
+      .attr('x1', (d) => x(d)).attr('x2', (d) => x(d)).attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--cds-chart-grid)')
+      .attr('stroke-opacity', (d) => (xt.some((t) => +t === +d) ? 0.9 : 0.3));
+  }
+  if (o.ref) {  // a reference level: the league average, or .500 (its label at the right end, over the line)
+    svg.append('line').attr('x1', left).attr('x2', W - right).attr('y1', y(o.ref.v)).attr('y2', y(o.ref.v)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.25).attr('stroke-dasharray', '4 3');
+    const rx = o.minor ? W - right - 4 : left + 4;
+    svg.append('text').attr('x', rx).attr('y', y(o.ref.v) - 4).attr('text-anchor', o.minor ? 'end' : 'start').attr('font-size', 10).attr('font-family', 'var(--nb-mono)')
+      .attr('fill', 'var(--color-fg-muted)').attr('paint-order', 'stroke').attr('stroke', 'var(--color-panel)').attr('stroke-width', 3).text(o.ref.label);
+  }
   unfont(svg.append('g').attr('class', 'nb-axis').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).tickValues(xt).tickFormat(fmtDay).tickSizeOuter(0).tickSize(4)));
   const line = d3.line().x((p) => x(p.date)).y((p) => y(p.v));
+  if (o.curve) line.curve(d3.curveMonotoneX);
   const focus = () => o.st.hover || o.st.pinned;
   const lines = svg.append('g').attr('fill', 'none').attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
   const paths = lines.selectAll('path').data(series).join('path').attr('d', (s) => line(s.pts));
+  const ends = lines.append('g').attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5).selectAll('circle').data(o.lw ? series : []).join('circle')
+    .attr('cx', (s) => x(s.pts.at(-1).date)).attr('cy', (s) => y(s.pts.at(-1).v)).attr('r', 3);  // a dot where each line ends
   const dots = svg.append('g');
   // end labels, kept apart
   const xEnd = x.range()[1];
@@ -1305,15 +1338,19 @@ function teamLines(box, rows, o) {
     .attr('d', (d) => `M${xEnd + 3},${d.y0}L${xEnd + 6},${d.y0}L${xEnd + 14},${d.y}L${xEnd + 17},${d.y}`);
   const carry = lines.selectAll('line').data(items.filter((d) => xEnd - d.xe > 1)).join('line')
     .attr('x1', (d) => d.xe).attr('x2', xEnd).attr('y1', (d) => d.y0).attr('y2', (d) => d.y0).attr('stroke-dasharray', '1 3').attr('stroke-width', 1.25);
-  const texts = lg.selectAll('text').data(items).join('text').attr('class', 'nb-tlink').attr('x', xEnd + 19).attr('y', (d) => d.y + 3.5).attr('font-size', fs).text((d) => lab(d.s)).style('cursor', 'pointer')
+  const imgs = lg.selectAll('image').data(o.logos ? items.filter((d) => o.logos.get(d.s.abbr)) : []).join('image').attr('href', (d) => o.logos.get(d.s.abbr))
+    .attr('x', xEnd + 19).attr('y', (d) => d.y - 7).attr('width', 14).attr('height', 14).attr('preserveAspectRatio', 'xMidYMid meet').attr('pointer-events', 'none');
+  const texts = lg.selectAll('text').data(items).join('text').attr('class', 'nb-tlink').attr('x', xEnd + 19 + LG).attr('y', (d) => d.y + 3.5).attr('font-size', fs).text((d) => lab(d.s)).style('cursor', 'pointer')
     .on('pointerenter', (e, d) => { o.st.hover = d.s.abbr; style(); }).on('pointerleave', () => { o.st.hover = null; style(); })
     .attr('tabindex', 0).attr('role', 'link').each(function (d) { this._abbr = d.s.abbr; });
   function style() {
     const f = focus();
     const on = (abbr) => abbr === f;
     // every line in its team's ink; the hovered or picked one at full strength and thicker, the rest light and thin
-    const op = (abbr) => (on(abbr) ? 1 : f ? 0.18 : 0.6);
-    paths.attr('stroke', (s) => teamInkMin(s.t)).attr('stroke-width', (s) => (on(s.abbr) ? 3 : 1.5)).attr('stroke-opacity', (s) => op(s.abbr));
+    const op = (abbr) => (on(abbr) ? 1 : f ? 0.18 : o.op || 0.6);
+    paths.attr('stroke', (s) => teamInkMin(s.t)).attr('stroke-width', (s) => (on(s.abbr) ? 3 : o.lw || 1.5)).attr('stroke-opacity', (s) => op(s.abbr));
+    ends.attr('fill', (s) => teamInkMin(s.t)).attr('opacity', (s) => (on(s.abbr) || !f ? 1 : 0.25));
+    imgs.attr('opacity', (d) => (on(d.s.abbr) || !f ? 1 : 0.3));
     paths.filter((s) => on(s.abbr)).raise();
     carry.attr('stroke', (d) => teamInkMin(d.s.t)).attr('stroke-opacity', (d) => op(d.s.abbr) * 0.8);
     texts.attr('fill', (d) => teamInkMin(d.s.t, 4.5)).attr('font-weight', (d) => (on(d.s.abbr) ? 700 : 500))
@@ -1324,6 +1361,7 @@ function teamLines(box, rows, o) {
       .attr('fill', fs_ ? teamInkMin(fs_.t) : 'none').attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
   }
   style();
+  if (o.static) return;  // the PNG copy: no hover layer
   const pts = series.flatMap((s) => s.pts.map((p, i) => ({ s, p, prev: s.pts[i - 1] })));
   const delaunay = d3.Delaunay.from(pts, (d) => x(d.p.date), (d) => y(d.p.v));
   svg.append('rect').attr('x', left).attr('y', top).attr('width', Math.max(0, W - right - left + 6)).attr('height', H - top - bottom).attr('fill', 'transparent')
@@ -1343,23 +1381,64 @@ function teamLines(box, rows, o) {
 
 // ---------- 4b. projected wins, one chart per conference ----------
 const pjState = { East: { hover: null, pinned: null }, West: { hover: null, pinned: null } };
+const projRows = (conf) => { const tmap = teamMap(); return dash.data('proj_history').data.filter((r) => tmap.get(r.abbr)?.conf === conf)
+  .map((r) => ({ abbr: r.abbr, date: parseDay(r.date), v: N(r.proj_w) })).filter((r) => !isNaN(r.date) && Number.isFinite(r.v)); };
+const projDomain = () => { const all = dash.data('proj_history').data.map((r) => N(r.proj_w)).filter(Number.isFinite);
+  return [Math.min(d3.min(all), 41) - 1, Math.max(d3.max(all), 41) + 1]; };  // one scale for both conferences
+const projLogos = () => { const dark = root.classList.contains('nb-dark');
+  return new Map((OK('logos') ? dash.data('logos').data : []).map((l) => [l.abbr, dark ? l.dark || l.src : l.src]).filter(([, v]) => /^data:image\//.test(v || ''))); };
+const projOpts = (conf, st, extra) => ({ st, aria: `Projected wins by day, ${conf}ern Conference`, fmt: fmt1, fmtChg: (v) => signed(v, 1), pad: 1,
+  ref: { v: 41, label: '.500' }, yDomain: projDomain(), fmtTick: (v) => String(v), logos: projLogos(), minor: true, curve: true, lw: 2, op: 0.85,
+  height: (W) => (W < 560 ? 420 : Math.round(Math.max(440, Math.min(560, W * 0.62)))), ...extra });
+// "LAL +8.4 · UTAH −11.7 since the preseason": the conference's biggest climb and drop, from the first and last days
+function projMovers(conf) {
+  const tmap = teamMap(), by = d3.groups(projRows(conf), (r) => r.abbr).map(([a, p]) => { p.sort((x, y) => x.date - y.date); return { t: tmap.get(a), d: p.at(-1).v - p[0].v }; });
+  if (!by.length) return null;
+  const up = d3.greatest(by, (r) => r.d), dn = d3.least(by, (r) => r.d), f = (r) => `${code(r.t)} ${signed(r.d, 1)}`;
+  return [['Biggest climb', f(up), 'up'], ['Biggest drop', f(dn), 'down']];
+}
+const moversEl = (conf) => { const m = projMovers(conf), p = el('p', 'nb-pj-sub'); if (!m) return p;
+  m.forEach(([k, v, cls], i) => { if (i) p.append(el('span', 'sep', '·')); p.append(el('span', 'k', k + ' '), el('b', cls, v)); });
+  p.append(el('span', 'k', ' since the preseason')); return p; };
 function drawProj() {
-  const all = OK('proj_history') ? dash.data('proj_history').data.map((r) => N(r.proj_w)).filter(Number.isFinite) : [];
-  const yDomain = all.length ? [Math.min(d3.min(all), 41) - 1, Math.max(d3.max(all), 41) + 1] : null;  // one scale for both conferences
   for (const [conf, id] of [['East', 'proj-east'], ['West', 'proj-west']]) {
-    const box = document.getElementById(id);
+    const box = document.getElementById(id), sub = document.getElementById(id + '-sub');
     const s = state('proj_history', 'teams');
     if (s !== 'ok') { if (s === 'error') failed(box); else { box.replaceChildren(); pending(box); } continue; }
     ready(box);
     box.replaceChildren();
-    const tmap = teamMap();
-    const rows = dash.data('proj_history').data.filter((r) => tmap.get(r.abbr)?.conf === conf)
-      .map((r) => ({ abbr: r.abbr, date: parseDay(r.date), v: N(r.proj_w) })).filter((r) => !isNaN(r.date) && Number.isFinite(r.v));
+    const rows = projRows(conf);
     if (!rows.length) { box.append(el('p', 'nb-empty-note', 'No projections yet this season.')); continue; }
-    teamLines(box, rows, { st: pjState[conf], aria: `Projected wins by day, ${conf}ern Conference`, fmt: fmt1, fmtChg: (v) => signed(v, 1), pad: 1, ref: { v: 41, label: '41 wins (.500)' }, yDomain, fmtTick: (v) => String(v),
-      height: (W) => (W < 560 ? 420 : Math.round(Math.max(440, Math.min(560, W * 0.62)))) });
+    sub.replaceChildren(...moversEl(conf).childNodes);
+    teamLines(box, rows, projOpts(conf, pjState[conf]));
   }
 }
+// PNG: both conferences side by side on the page's own panel colour, with a title line, built off-screen and captured
+document.getElementById('pj-png').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  if (state('proj_history', 'teams') !== 'ok') return;
+  const day = d3.max(dash.data('proj_history').data, (r) => r.date);  // the last game day (run.as_of is UTC, a day ahead late at night)
+  btn.disabled = true;
+  const card = el('div', 'nb-pjx'), head = el('div', 'nb-pjx-head'), cols = el('div', 'nb-pjx-cols');
+  const n = OK('run') ? comma(N(dash.data('run').data[0].n_sims)) : '';
+  head.append(el('div', 'nb-pjx-title', 'NBA projected wins'), el('div', 'nb-pjx-meta', `2026–27 · through ${fmtDay(parseDay(day))} · mean of ${n} season simulations each day`));
+  card.append(head, cols);
+  const boxes = [];
+  for (const conf of ['East', 'West']) {
+    const c = el('div', 'nb-pjx-col'), t = el('div', 'nb-pjx-conf', `${conf}ern Conference`), b = el('div', 'nb-pjx-chart');
+    c.append(t, moversEl(conf), b); cols.append(c); boxes.push([conf, b]);
+  }
+  card.append(el('div', 'nb-pjx-foot', 'chronicaria.github.io'));
+  document.querySelector('.nb').append(card);
+  try {
+    for (const [conf, b] of boxes) teamLines(b, projRows(conf), projOpts(conf, { hover: null, pinned: null }, { static: true, height: () => 560 }));
+    const { toPng } = await import('https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/+esm');
+    const bg = getComputedStyle(document.getElementById('proj-east-card')).backgroundColor;
+    const url = await toPng(card, { pixelRatio: 2, backgroundColor: bg, width: card.offsetWidth, height: card.offsetHeight, style: { position: 'static', left: '0', top: '0' } });
+    const a = el('a'); a.href = url; a.download = `nba-projected-wins-${day}.png`; a.click();
+  } catch (err) { console.error('PNG export failed', err); btn.textContent = 'PNG failed'; }
+  finally { card.remove(); btn.disabled = false; }
+});
 
 // ---------- 5. games ----------
 const teamCell = (logos, tmap, abbr, cls) => { const t = tmap.get(abbr) || { abbr }; const c = td('', cls); c.append(teamTag(logos, t, code(t))); return c; };

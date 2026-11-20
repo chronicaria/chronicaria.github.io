@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700;800&display=swap">
+<script>document.write('<link rel="stylesheet" href="style.css?v=' + Math.floor(Date.now() / 300000) + '">');</script>
 </head>
 <body>
 <header class="top">
@@ -30,8 +31,8 @@
 <footer class="foot wrap">SMP League · a Basketball GM league · results come from the commissioner's simulation · player photos from ESPN</footer>
 <script>
 // GitHub Pages lets browsers keep files for ten minutes; a stale script against fresh data misreads bids.
-// Load the stylesheet and scripts under a stamp that changes every five minutes.
-(function () { var v = Math.floor(Date.now() / 300000); document.write('<link rel="stylesheet" href="style.css?v=' + v + '"><script src="auction.js?v=' + v + '"><\/script><script src="app.js?v=' + v + '"><\/script>'); })();
+// Load the scripts (and, in the head, the stylesheet) under a stamp that changes every five minutes.
+(function () { var v = Math.floor(Date.now() / 300000); document.write('<script src="auction.js?v=' + v + '"><\/script><script src="app.js?v=' + v + '"><\/script>'); })();
 </script>
 </body>
 </html>

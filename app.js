@@ -508,7 +508,7 @@
   }
   async function loadAuction() {
     if (AU && Date.now() - AU.at < 60e3) return AU;
-    const raw = await fetch('data/auction.json').then((r) => r.json()), demo = !raw.csv;
+    const raw = await fetch('data/auction.json', { cache: 'no-cache' }).then((r) => r.json()), demo = !raw.csv;
     const text = await fetch(raw.csv || 'data/auction-demo.csv', { cache: 'no-store' }).then((r) => r.text());
     const start = raw.start ? Date.parse(raw.start) : (AU ? AU.cfg.start : Date.now() - 20 * 3600e3), cfg = { ...raw, start, close: raw.close ? Date.parse(raw.close) : start + raw.hours * 3600e3 };
     const byName = new Map(cfg.lots.map((l) => [l.n.toLowerCase(), l.id]));
@@ -617,7 +617,7 @@
     fav.href = tt ? tt.logo : 'data:,';
   }
 
-  Promise.all([fetch('data/league.json').then((r) => r.json()), fetch('data/recaps.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({}))]).then(([d, rc]) => {
+  Promise.all([fetch('data/league.json', { cache: 'no-cache' }).then((r) => r.json()), fetch('data/recaps.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({}))]).then(([d, rc]) => {
     D = d; R = rc;
     if (D.preseason) { T = D.teams; P = new Map(); document.querySelectorAll('[data-nav]').forEach((a) => { a.hidden = a.dataset.nav !== 'auction'; }); } else derive();
     document.getElementById('when').textContent = D.preseason ? `${D.season} · preseason` : `${D.season} · through Game ${lastDay}`;

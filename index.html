@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="top">
@@ -29,7 +28,10 @@
 </header>
 <main id="app" class="wrap"><p class="muted">Loading the league…</p></main>
 <footer class="foot wrap">SMP League · a Basketball GM league · results come from the commissioner's simulation · player photos from ESPN</footer>
-<script src="auction.js"></script>
-<script src="app.js"></script>
+<script>
+// GitHub Pages lets browsers keep files for ten minutes; a stale script against fresh data misreads bids.
+// Load the stylesheet and scripts under a stamp that changes every five minutes.
+(function () { var v = Math.floor(Date.now() / 300000); document.write('<link rel="stylesheet" href="style.css?v=' + v + '"><script src="auction.js?v=' + v + '"><\/script><script src="app.js?v=' + v + '"><\/script>'); })();
+</script>
 </body>
 </html>

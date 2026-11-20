@@ -22,7 +22,7 @@
       if (!L) { no('Player is not in the auction'); continue; }
       if (!(b.t >= cfg.start)) { no('Before the auction opened'); continue; }
       if (!(b.t < cfg.close)) { no('After the deadline'); continue; }
-      if (!Number.isInteger(b.sal) || b.sal < 1 || b.sal > cfg.max) { no(`Salary must be a whole number from $1M to $${cfg.max}M`); continue; }
+      if (!Number.isInteger(b.sal) || b.sal < 1 || (cfg.max && b.sal > cfg.max)) { no(cfg.max ? `Salary must be a whole number from $1M to $${cfg.max}M` : 'Salary must be a whole number of millions, $1M or more'); continue; }   // no cap unless cfg.max is set; the budget rule below still applies
       if (!Number.isInteger(b.yrs) || b.yrs < 1 || b.yrs > 5) { no('Length must be 1 to 5 years'); continue; }
       const score = b.sal * mult(b.yrs);
       if (L.lead ? score <= L.lead.score : score < L.open) { no(L.lead ? `Does not beat $${L.lead.sal}M x ${L.lead.yrs}` : `Below the $${L.open}M opening price`); continue; }

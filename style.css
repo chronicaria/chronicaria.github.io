@@ -516,3 +516,30 @@ td b.hi { font-weight: 800; color: #fff; font-size: 1.08em; }
 .pager .seg { flex-wrap: wrap; justify-content: center; }
 [hidden] { display: none !important; }
 @media (max-width: 900px) { .rules-ol { columns: 1; } }
+
+/* auction, final pass: one-column rules, loud bid buttons, top pager, phone layout */
+.rules-ol { columns: 1; font-size: 15px; }
+.btn.go { height: 46px; padding: 0 26px; font: 700 16px var(--f); }
+.au-clock .btn.go { margin-top: 10px; }
+.btn.go.sm { height: 34px; padding: 0 16px; font-size: 14px; display: inline-flex; align-items: center; }
+.lot-a .btn.go { height: 42px; font-size: 15px; }
+.au-list td.act { text-align: right; white-space: nowrap; }
+.pgr { display: inline-flex; align-items: center; gap: 10px; font: 400 13.5px var(--f); color: var(--muted); }
+.pgr b { color: var(--ink); font: 600 13.5px var(--m); }
+.pgr button { width: 40px; height: 40px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 500 20px/1 var(--f); cursor: pointer; }
+.pgr button:hover:not(:disabled) { background: var(--raise); } .pgr button:disabled { color: var(--faint); cursor: default; }
+@media (max-width: 720px) {
+  .au-list .hm { display: none; }
+  .au-list th, .au-list td { padding-inline: 5px; }
+  .au-list .pl { gap: 8px; font-size: 14px; } .au-list .pl .face { width: 32px !important; height: 32px !important; }
+  .au-list td.rk { width: 30px; }
+  .au-tools .q { width: 100% !important; } .au-tools .seg { width: 100%; } .au-tools .seg button { flex: 1; padding-inline: 4px; }
+  .au-tools .sp2 { display: none; } .pgr { width: 100%; justify-content: space-between; }
+  .au-clock .btn.go { width: 100%; justify-content: center; text-align: center; display: grid; place-items: center; }
+  .dl { grid-template-columns: 40px minmax(0, 1fr); } .dt { width: 96px; }
+  .rules-ol { padding-left: 32px; font-size: 14px; }
+}
+.au-list .pp { display: none; font: 500 11px var(--m); color: var(--muted); }
+@media (max-width: 720px) { .au-list .pp { display: inline; } .au-list .pl a, .au-list .pl > span:not(.face) { white-space: normal; overflow-wrap: anywhere; line-height: 1.2; } .au-list .px b { font-size: 13.5px; } .btn.go.sm { padding: 0 12px; } .au-team .who b { font-size: 13px; } }
+.hd .sub a.btn.go { color: #14171c; }
+@media (max-width: 720px) { .au-list .pl a, .au-list .pl > span:not(.face) { overflow-wrap: normal; word-break: normal; } .dl { min-height: 64px; } }

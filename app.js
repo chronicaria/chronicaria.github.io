@@ -517,7 +517,8 @@
     const c = { t: ix('time'), team: ix('team'), p: ix('player'), s: ix('salary'), y: ix('year') };
     // Google Sheets stamps look like 11/20/2026 14:03:22 in the sheet's own time zone; read them with cfg.tz so every viewer, in any time zone, gets the same instant
     const when = (v) => { const m = /^(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)$/.exec(String(v).trim()), z = (n) => String(n).padStart(2, '0'); return String(v).startsWith('h:') ? start + parseFloat(v.slice(2)) * 3600e3 : m ? Date.parse(`${m[3]}-${z(m[1])}-${z(m[2])}T${z(m[4])}:${z(m[5])}:${z(m[6])}${raw.tz || '-05:00'}`) : Date.parse(v); };
-    const bids = rows.filter((r) => r.length > Math.max(c.t, c.team, c.p, c.s, c.y) && r[c.team]).map((r) => ({ t: when(r[c.t]), team: abbr(r[c.team]), pid: byName.get(key(r[c.p])), name: r[c.p], sal: Number(String(r[c.s]).replace(/[$,mM\s]/g, '')), yrs: Number(String(r[c.y]).replace(/[^\d.]/g, '')) }));
+    const all = rows.filter((r) => r.length > Math.max(c.t, c.team, c.p, c.s, c.y) && r[c.team]).map((r) => ({ t: when(r[c.t]), team: abbr(r[c.team]), pid: byName.get(key(r[c.p])), name: r[c.p], sal: Number(String(r[c.s]).replace(/[$,mM\s]/g, '')), yrs: Number(String(r[c.y]).replace(/[^\d.]/g, '')) }));
+    const aiT = raw.aiSince ? Date.parse(raw.aiSince) : 0, bids = all.filter((b) => !((raw.ai || []).includes(b.team) && b.t < aiT));   // superseded AI-team bids stay in the sheet but do not count
     AU = { cfg, demo, bids, state: SMPAuction.run(cfg, bids), at: Date.now(), byId: new Map(cfg.lots.map((l) => [l.id, l])) };
     return AU;
   }

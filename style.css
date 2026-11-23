@@ -544,8 +544,5 @@ td b.hi { font-weight: 800; color: #fff; font-size: 1.08em; }
 .hd .sub a.btn.go { color: #14171c; }
 @media (max-width: 720px) { .au-list .pl a, .au-list .pl > span:not(.face) { overflow-wrap: normal; word-break: normal; } .dl { min-height: 64px; } }
 
-/* preseason front page */
-.r-open { grid-template-columns: 34px minmax(0, 1fr) 34px 130px; min-height: 58px; } .r-open .v { font: 500 13px var(--f); color: var(--muted); text-align: right; }
-.r-pre { grid-template-columns: 40px minmax(0, 1fr) auto 62px; min-height: 60px; } .r-pre .faces { display: flex; } .r-pre .faces .face { margin-left: -8px; }
-.r-pre .v { text-align: right; font: 700 14px var(--m); }
-@media (max-width: 720px) { .r-open { grid-template-columns: 30px minmax(0, 1fr) 30px; } .r-open .v { display: none; } .r-pre .faces { display: none; } .r-pre { grid-template-columns: 34px minmax(0, 1fr) 56px; } }
+/* team names in score rows link to the team */
+.tmw a { color: inherit; } .tmw b a:hover { text-decoration: underline; text-underline-offset: 3px; }

@@ -518,7 +518,7 @@
     // Google Sheets stamps look like 11/20/2026 14:03:22 in the sheet's own time zone; read them with cfg.tz so every viewer, in any time zone, gets the same instant
     const when = (v) => { const m = /^(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)$/.exec(String(v).trim()), z = (n) => String(n).padStart(2, '0'); return String(v).startsWith('h:') ? start + parseFloat(v.slice(2)) * 3600e3 : m ? Date.parse(`${m[3]}-${z(m[1])}-${z(m[2])}T${z(m[4])}:${z(m[5])}:${z(m[6])}${raw.tz || '-05:00'}`) : Date.parse(v); };
     const all = rows.filter((r) => r.length > Math.max(c.t, c.team, c.p, c.s, c.y) && r[c.team]).map((r) => ({ t: when(r[c.t]), team: abbr(r[c.team]), pid: byName.get(key(r[c.p])), name: r[c.p], sal: Number(String(r[c.s]).replace(/[$,mM\s]/g, '')), yrs: Number(String(r[c.y]).replace(/[^\d.]/g, '')) }));
-    const aiT = raw.aiSince ? Date.parse(raw.aiSince) : 0, bids = all.filter((b) => !((raw.ai || []).includes(b.team) && b.t < aiT));   // superseded AI-team bids stay in the sheet but do not count
+    const cut = (t) => { const v = raw.aiSince && (typeof raw.aiSince === 'string' ? raw.aiSince : raw.aiSince[t]); return v ? Date.parse(v) : 0; }, bids = all.filter((b) => !((raw.ai || []).includes(b.team) && b.t < cut(b.team)));   // superseded AI-team bids stay in the sheet but do not count
     AU = { cfg, demo, bids, state: SMPAuction.run(cfg, bids), at: Date.now(), byId: new Map(cfg.lots.map((l) => [l.id, l])) };
     return AU;
   }
@@ -537,7 +537,7 @@
     const closed = Date.now() >= cfg.close, q = AS.q.toLowerCase(), bidLink = formUrl(cfg), L = (l) => state.lots.get(l.id);
     const byName = [...T].sort((a, b) => a.region.localeCompare(b.region));
     const tiles = byName.map((t) => { const s = state.teams[t.abbrev];
-      return `<a class="au-team" href="#auction-${t.abbrev}">${logo(t.tid, 38)}<span class="who"><b>${esc(t.name)}</b><span>${s.n}/${cfg.roster} players${(cfg.ai || []).includes(t.abbrev) ? ' · AI bids' : ''}</span></span><span class="amt"><b>$${s.left}M</b><span>left</span></span><span class="meter"><i style="width:${100 * s.spent / cfg.budget}%;background:${t.accent}"></i></span></a>`; }).join('');
+      return `<a class="au-team" href="#auction-${t.abbrev}">${logo(t.tid, 38)}<span class="who"><b>${esc(t.name)}</b><span>${s.n}/${cfg.roster} players${(cfg.ai || []).includes(t.abbrev) && s.n ? ' · AI bids' : ''}</span></span><span class="amt"><b>$${s.left}M</b><span>left</span></span><span class="meter"><i style="width:${100 * s.spent / cfg.budget}%;background:${t.accent}"></i></span></a>`; }).join('');
     const feed = (xs) => xs.map(([l, b, sub]) => `<a class="row r-bid" href="#auction-${b.team}">${logo(tidOf(b.team), 22)}${lface(l, 30)}<span class="who"><b>${esc(l.n)}</b><span>${sub}</span></span><span class="v">${deal(b)}</span></a>`).join('') || '<p class="note">No bids yet.</p>';
     const recent = feed(state.log.filter((b) => b.ok).slice(-5).reverse().map((b) => [byId.get(b.pid), b, `${team(tidOf(b.team)).name} · ${ago(b.t)}`]));
     const biggest = feed([...state.lots.values()].filter((x) => x.lead).sort((a, b) => b.lead.score - a.lead.score).slice(0, 5).map((x) => [x, x.lead, `${team(tidOf(x.lead.team)).name} · ${x.history.length} bid${x.history.length === 1 ? '' : 's'}`]));
@@ -590,7 +590,7 @@
     const all = state.log.filter((b) => b.team === ab).reverse(), shown = AS.allBids ? all : all.slice(0, 8);
     const bids = shown.map((b) => { const l = byId.get(b.pid), [txt, cls] = status(b); return `<div class="row r-mybid">${l ? lface(l, 30) : '<span class="face" style="width:30px;height:30px"></span>'}<span class="who"><b>${esc(l ? l.n : b.name || 'Unknown player')}</b><span class="${cls}">${esc(txt)}</span></span><span class="v">${Number.isFinite(b.sal) && Number.isFinite(b.yrs) ? deal(b) : '—'}</span><span class="n">${ago(b.t)}</span></div>`; }).join('') || '<p class="note">No bids yet.</p>';
     const bid = formUrl(cfg, null, ab);
-    $app.innerHTML = `<section class="card hd" style="--c:${t.accent};--wm:url(${t.logo})">${logo(t.tid, 96)}<div><h1>${tname(t.tid)}</h1><div class="sub"><span>${closed ? 'Final auction roster' : 'The roster if every leading bid holds'}</span>${(cfg.ai || []).includes(ab) ? '<span>Bids placed by AI for an absent owner</span>' : ''}</div>
+    $app.innerHTML = `<section class="card hd" style="--c:${t.accent};--wm:url(${t.logo})">${logo(t.tid, 96)}<div><h1>${tname(t.tid)}</h1><div class="sub"><span>${closed ? 'Final auction roster' : 'The roster if every leading bid holds'}</span>${(cfg.ai || []).includes(ab) && s.n ? '<span>Bids placed by AI for an absent owner</span>' : ''}</div>
         <div class="sub" style="margin-top:10px"><a class="btn" href="#auction">← All players</a>${bid && !closed ? `<a class="btn go" href="${bid}" target="_blank" rel="noopener">Place a bid</a>` : ''}</div></div>
         <div class="nums"><div><b>${mine.length}/${cfg.roster}</b><span>Roster</span></div><div><b>$${spent}M</b><span>Committed</span></div><div><b>$${cfg.budget - spent}M</b><span>Left</span></div></div></section>
       ${demo ? '<p class="au-demo">Demo bids, made up to show how the page works.</p>' : ''}

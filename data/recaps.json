@@ -1,1 +1,59 @@
-{}
+{
+ "preview": {
+  "kicker": "Preseason power rankings",
+  "headline": "Toronto starts on top, and it is not close",
+  "dek": "The auction is over, nobody has played a game, and we already have opinions. Here is how the ten teams stack up before opening night.",
+  "teams": [
+   {
+    "team": "TOR",
+    "line": "Projected 29-7 · title 64%",
+    "text": "Toronto treated the auction like a grocery run with somebody else's card. Luka Dončić cost $25M, and the Jays still walked out with Scottie Barnes, Cade Cunningham and Karl-Anthony Towns. Every starter is signed through at least 2030. The bench has Tyrese Haliburton, Donovan Mitchell and a 39-year-old Kevin Durant on $4M, which is unfair. The only open question is who gets the ball, and that is a lovely question to have."
+   },
+   {
+    "team": "GOO",
+    "line": "Projected 27-9 · title 30%",
+    "text": "The Gooners signed Nikola Jokić and Alperen Şengün, two centers who both want the ball at the elbow, and decided to sort it out later. Anthony Edwards and Tyrese Maxey supply the scoring, Giannis Antetokounmpo arrived for $6M, and the whole starting five cost $48M. The other $37M bought a bench that is mostly promise: three guards aged 21 or younger. If the kids hold up, this is the one team that can take a series off Toronto."
+   },
+   {
+    "team": "CAM",
+    "line": "Projected 23-13 · title 4%",
+    "text": "Cambridge led the auction for most of the weekend, then watched Dončić and Jokić get bid away on the final day. What is left is still good: Shai Gilgeous-Alexander at $21M, Jayson Tatum, Jalen Brunson and Chet Holmgren, plus Stephen Curry, who is 39 and costs $5M. The Platypuses finished with $29M unspent, the most in the league, which is either discipline or a missed bid depending on who you ask. A playoff team with a guard for every occasion."
+   },
+   {
+    "team": "WAL",
+    "line": "Projected 20-16 · title 2%",
+    "text": "Waltham spent a third of its budget on one player, and it is hard to argue. Victor Wembanyama's $33M is the richest deal in the league by $8M. The Bears then signed Josh Giddey for $1M five seconds before the deadline, the best piece of business all weekend. Cooper Flagg, Amen Thompson and Jalen Johnson make this the most athletic frontcourt going. Whether a 23-year-old center and a 21-year-old forward can drag a team into the top four is the season's best subplot."
+   },
+   {
+    "team": "STO",
+    "line": "Projected 16-20 · playoffs 15%",
+    "text": "The Stingrays have Evan Mobley, Bam Adebayo and Jaren Jackson Jr., so good luck scoring at the rim. Scoring at the other end is the worry: the offence runs through Kawhi Leonard, who is 36, and Quentin Grimes. Stony Brook is the best bet among the bottom six to crash the top four, mostly because somebody has to be. Expect a lot of games that finish 98-94."
+   },
+   {
+    "team": "DUR",
+    "line": "Projected 14-22 · playoffs 7%",
+    "text": "Durham's starting small forward is LeBron James, who is 43. He is on a one-year deal, which feels right. The actual plan is on the wings, where Trey Murphy III and Deni Avdija cost $13M each, and at point guard, where Ja Morant and a 37-year-old Damian Lillard will take turns. Cameron Boozer, 20, is the rookie to watch. There are 23 years between the oldest and youngest Destroyers, and you may well see both on the floor at once."
+   },
+   {
+    "team": "ITH",
+    "line": "Projected 13-23 · playoffs 3%",
+    "text": "The oldest roster in the league already has its first casualty: Jimmy Butler, 38, will miss 35 of the 36 games. The Thunder's richest contract belongs to VJ Edgecombe, who is 22 and makes $12M, twice what Devin Booker does. James Harden is also 38 and also here. There is real talent in Booker, Zion Williamson and Domantas Sabonis, and a real chance most of it is on the injury report by Game 10."
+   },
+   {
+    "team": "NAS",
+    "line": "Projected 13-23 · playoffs 3%",
+    "text": "Nashville's second-biggest contract, Moses Moody at $9M, is out for 35 games, so the Elephants open the season with $9M sitting in a suit. What remains is guards: Jalen Suggs, Jamal Murray, Tyler Herro, Immanuel Quickley and Luguentz Dort, all of whom would like the same minutes. Rudy Gobert, 35, and Myles Turner guard the rim. It is a perfectly professional team with no obvious way to win a shootout."
+   },
+   {
+    "team": "ROC",
+    "line": "Projected 13-23 · playoffs 3%",
+    "text": "Franz Wagner at $18M is the fourth-richest deal in the league, and the Dragons will need every dollar of it. Anthony Davis is 34 and on a one-year contract, and Pascal Siakam and Fred VanVleet are both 33. Trae Young comes off the bench for $5M, behind a starting five with no point guard in it. Jalen Williams is the piece worth watching. Everything else here has a best-before date."
+   },
+   {
+    "team": "QUE",
+    "line": "Projected 13-23 · playoffs 2%",
+    "text": "Somebody has to be last. Queens has Austin Reaves on $13M, De'Aaron Fox, Derrick White and Brandon Ingram, which reads like a decent team until you notice that everyone above them has a star and the Pigeons have four second options. Neemias Queta and Sandro Mamukelashvili are the centers at $6M each. The upside: Stephon Castle is 23 and signed through 2031, and the first pick in the 2027 draft is very much in play."
+   }
+  ]
+ }
+}

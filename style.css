@@ -546,3 +546,12 @@ td b.hi { font-weight: 800; color: #fff; font-size: 1.08em; }
 
 /* team names in score rows link to the team */
 .tmw a { color: inherit; } .tmw b a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* power rankings article */
+.prk { display: flex; align-items: center; gap: 10px; margin: 26px 0 8px; font: 700 19px/1.2 var(--f); }
+.prk:first-child { margin-top: 4px; }
+.prk .n { font: 800 24px/1 var(--m); color: var(--gold); min-width: 34px; }
+.prk a { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
+.prk small { margin-left: auto; font: 500 12.5px var(--m); color: var(--muted); white-space: nowrap; }
+.art .prk + p { margin-bottom: 4px; }
+@media (max-width: 720px) { .prk { flex-wrap: wrap; font-size: 17px; } .prk small { margin-left: 44px; width: 100%; } }

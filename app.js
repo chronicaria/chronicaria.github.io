@@ -65,7 +65,7 @@
   const streak = (tid) => { const r = rec[tid].res; if (!r.length) return '—'; let n = 0; for (let i = r.length - 1; i >= 0 && r[i] === r.at(-1); i--) n++; return r.at(-1) + n; };
   const last10 = (tid) => { const r = rec[tid].res.slice(-10); return `${r.filter((x) => x === 'W').length}-${r.filter((x) => x === 'L').length}`; };
   const diff = (tid) => (rec[tid].pf - rec[tid].pa) / Math.max(1, gpT(tid));
-  const order = () => T.map((t) => t.tid).sort((a, b) => rec[b].w / Math.max(1, gpT(b)) - rec[a].w / Math.max(1, gpT(a)) || diff(b) - diff(a) || T[a].region.localeCompare(T[b].region));
+  const order = () => T.map((t) => t.tid).sort((a, b) => rec[b].w / Math.max(1, gpT(b)) - rec[a].w / Math.max(1, gpT(a)) || diff(b) - diff(a) || power(b) - power(a) || T[a].region.localeCompare(T[b].region));
   const gb = (tid, lead) => { const v = ((rec[lead].w - rec[tid].w) + (rec[tid].l - rec[lead].l)) / 2; return v ? String(v) : '—'; };
   const short = (n) => { const p = n.split(' '); return p.length > 1 ? `${p[0][0]}. ${p.slice(1).join(' ')}` : n; };
   const per = (s, k) => s[k] / s.gp;
@@ -215,10 +215,15 @@
   function recapPage(n) {
     const r = R[n]; if (!r) return notFound();
     const sc = (g) => { const w = g.home.pts > g.away.pts ? g.home : g.away, l = w === g.home ? g.away : g.home; return `${logo(w.tid, 18)}${team(w.tid).abbrev} ${w.pts}, ${team(l.tid).abbrev} ${l.pts}${g.ot ? ` · ${g.ot > 1 ? g.ot : ''}OT` : ''} · Box score`; };
-    const others = Object.keys(R).map(Number).filter((x) => x !== n).sort((a, b) => b - a);
+    const others = Object.keys(R).map(Number).filter((x) => Number.isFinite(x) && x !== n).sort((a, b) => b - a);
     $app.innerHTML = `<article class="card lede story" style="${recapLead(r)}"><div class="gh lede-top"><span class="kick">Game ${n} recap</span><h1>${esc(r.headline)}</h1><p class="dek">${esc(r.dek)}</p></div>
       <div class="art">${r.games.map((x) => { const g = byGid.get(x.gid); return g ? `<p><b class="dateline">${esc(team(g.home.tid).region)}</b> — ${esc(x.text)}</p><a class="slug" href="#game-${g.gid}">${sc(g)}</a>` : ''; }).join('')}</div></article>
       ${others.length ? `<p class="note" style="max-width:760px;margin:0 auto">Earlier recaps: ${others.map((x) => `<a href="#recap-${x}">Game ${x}</a>`).join(' · ')}</p>` : ''}`;
+  }
+  function previewPage() {   // the preseason power rankings: one ranked entry per team
+    const r = R.preview; if (!r) return notFound();
+    $app.innerHTML = `<article class="card lede story"><div class="gh lede-top"><span class="kick">${esc(r.kicker)}</span><h1>${esc(r.headline)}</h1><p class="dek">${esc(r.dek)}</p></div>
+      <div class="art">${r.teams.map((x, i) => { const t = T.find((y) => y.abbrev === x.team); return `<h2 class="prk"><span class="n">${i + 1}</span>${tlink(t.tid, `${logo(t.tid, 34)}<span>${tname(t.tid)}</span>`)}<small>${esc(x.line)}</small></h2><p>${esc(x.text)}</p>`; }).join('')}</div></article>`;
   }
   function around() {
     const out = [], rows = D.games.flatMap(allRows), best = new Map();
@@ -236,10 +241,11 @@
     return out.length ? card('Around the league', out.slice(0, 7).map(([img, a, b, href]) => `<a class="row r-news" href="${href}">${img}<span class="who"><b>${a}</b><span>${b}</span></span><span></span></a>`).join(''), `<span>After Game ${lastDay}</span>`) : '';
   }
   function home() {
-    if (!D.games.length) {   // nothing played: the same layout with the next game day's matchups where results go
-      const nd = Math.min(...D.schedule.map((s) => s.day));
-      $app.innerHTML = `<div class="grid g-main"><div class="stack"><div class="grid g-2">${D.schedule.filter((s) => s.day === nd).map(upCard).join('')}</div>${teamStatsTable()}</div>
-        <aside class="stack">${standingsMini()}${injuryCard(null)}</aside></div>`;
+    if (!D.games.length) {   // nothing played: the usual layout, with the next game day's matchups in the score strip
+      const nd = Math.min(...D.schedule.map((s) => s.day)), ln = (tid) => `<span class="ln">${logo(tid, 18)}<span>${team(tid).abbrev}</span><b></b></span>`;
+      const up = `<div class="strip">${D.schedule.filter((s) => s.day === nd).map((s) => `<a href="#scores-${nd}"><span class="st">Game ${s.day} · ${spread(s)}</span>${ln(s.away)}${ln(s.home)}</a>`).join('')}</div>`;
+      const pv = R.preview ? `<a class="card lede" href="#recap-preview" style="display:block"><div class="gh lede-top" style="border-bottom:0"><span class="kick">${esc(R.preview.kicker)}</span><h1>${esc(R.preview.headline)}</h1><p class="dek">${esc(R.preview.dek)}</p><span class="more">Read the rankings →</span></div></a>` : '';
+      $app.innerHTML = `${up}<div class="grid g-main"><div class="stack">${pv}${teamStatsTable()}</div><aside class="stack">${standingsMini()}${injuryCard(null)}</aside></div>`;
       return;
     }
     const today = D.games.filter((g) => g.day === lastDay), feat = [...today].sort((a, b) => { const fa = flow(a), fb = flow(b); return (fb.changes + fb.ties * 0.5 - Math.abs(b.home.pts - b.away.pts)) - (fa.changes + fa.ties * 0.5 - Math.abs(a.home.pts - a.away.pts)); })[0];
@@ -621,7 +627,7 @@
     const nav = { home: 'home', scores: 'scores', game: 'scores', standings: 'standings', leaders: 'players', players: 'players', player: 'players', freeagents: 'players', draft: 'draft', recap: 'home', auction: 'players' }[kind];
     clearInterval(auTimer);
     document.querySelectorAll('[data-nav]').forEach((a) => (a.dataset.nav === nav ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
-    ({ home, scores: () => scores(+arg), game: () => game(+arg), standings, team: () => teamPage(arg), player: () => player(+arg), leaders: () => playersPage('leaders'), players: () => playersPage(arg), freeagents: freeAgents, draft: draftPage, recap: () => recapPage(+arg), auction: () => auctionPage(arg) }[kind] || notFound)();
+    ({ home, scores: () => scores(+arg), game: () => game(+arg), standings, team: () => teamPage(arg), player: () => player(+arg), leaders: () => playersPage('leaders'), players: () => playersPage(arg), freeagents: freeAgents, draft: draftPage, recap: () => (arg === 'preview' ? previewPage() : recapPage(+arg)), auction: () => auctionPage(arg) }[kind] || notFound)();
     window.scrollTo(0, 0);
     const pl = kind === 'player' ? P.get(+arg) : null, gm = kind === 'game' ? byGid.get(+arg) : null;
     const tt = kind === 'team' || (kind === 'auction' && arg) ? T.find((t) => t.abbrev === arg) : pl && pl.tid >= 0 ? team(pl.tid) : null;

@@ -23,7 +23,7 @@
     T = D.teams; P = new Map(D.players.map((p) => [p.pid, p]));
     C = Object.fromEntries(D.cols.map((c, i) => [c, i + 1]));
     byGid = new Map(D.games.map((g) => [g.gid, g]));
-    lastDay = Math.max(...D.games.map((g) => g.day));
+    PRE = !D.games.length; lastDay = PRE ? 0 : Math.max(...D.games.map((g) => g.day));
     rec = T.map(() => ({ w: 0, l: 0, hw: 0, hl: 0, aw: 0, al: 0, pf: 0, pa: 0, res: [] }));
     tstat = T.map(() => ({ me: blank(), op: blank() }));
     stats = new Map();
@@ -44,10 +44,10 @@
     const prev = T.map(() => ({ w: 0, l: 0, d: 0 }));
     for (const g of D.games) if (g.day < lastDay) for (const [me, op] of [[g.home, g.away], [g.away, g.home]]) { prev[me.tid][me.pts > op.pts ? 'w' : 'l']++; prev[me.tid].d += me.pts - op.pts; }
     const po = T.map((t) => t.tid).sort((a, b) => prev[b].w / Math.max(1, prev[b].w + prev[b].l) - prev[a].w / Math.max(1, prev[a].w + prev[a].l) || prev[b].d - prev[a].d), now = order();
-    move = T.map((t) => po.indexOf(t.tid) - now.indexOf(t.tid));   // positive = climbed since the last game day
-    odds = playoffOdds();
+    move = T.map((t) => (PRE ? 0 : po.indexOf(t.tid) - now.indexOf(t.tid)));   // positive = climbed since the last game day
+    odds = PRE ? T.map(() => ({ p: NaN, c: NaN, w: NaN })) : playoffOdds();   // no odds before a game is played
   }
-  let DIST = null;
+  let DIST = null, PRE = false;
   const HK = { min: (s) => per(s, 'min'), pts: (s) => per(s, 'pts'), reb: (s) => per(s, 'reb'), ast: (s) => per(s, 'ast'), stl: (s) => per(s, 'stl'), blk: (s) => per(s, 'blk'), tov: (s) => per(s, 'tov'),
     fgp: (s) => (s.fga >= 2 * s.gp ? s.fg / s.fga : null), tpp: (s) => (s.tpa >= s.gp ? s.tp / s.tpa : null), ftp: (s) => (s.fta >= s.gp ? s.ft / s.fta : null), pm: (s) => per(s, 'pm') };
   const rankIn = (arr, v) => { let lo = 0, hi = 0; for (const y of arr) { if (y < v) lo++; if (y <= v) hi++; } return arr.length ? (lo + hi) / 2 / arr.length : 0.5; };
@@ -65,7 +65,7 @@
   const streak = (tid) => { const r = rec[tid].res; if (!r.length) return '—'; let n = 0; for (let i = r.length - 1; i >= 0 && r[i] === r.at(-1); i--) n++; return r.at(-1) + n; };
   const last10 = (tid) => { const r = rec[tid].res.slice(-10); return `${r.filter((x) => x === 'W').length}-${r.filter((x) => x === 'L').length}`; };
   const diff = (tid) => (rec[tid].pf - rec[tid].pa) / Math.max(1, gpT(tid));
-  const order = () => T.map((t) => t.tid).sort((a, b) => rec[b].w / Math.max(1, gpT(b)) - rec[a].w / Math.max(1, gpT(a)) || diff(b) - diff(a));
+  const order = () => T.map((t) => t.tid).sort((a, b) => rec[b].w / Math.max(1, gpT(b)) - rec[a].w / Math.max(1, gpT(a)) || diff(b) - diff(a) || T[a].region.localeCompare(T[b].region));
   const gb = (tid, lead) => { const v = ((rec[lead].w - rec[tid].w) + (rec[tid].l - rec[lead].l)) / 2; return v ? String(v) : '—'; };
   const short = (n) => { const p = n.split(' '); return p.length > 1 ? `${p[0][0]}. ${p.slice(1).join(' ')}` : n; };
   const per = (s, k) => s[k] / s.gp;
@@ -92,7 +92,7 @@
   }
   const arrow = (tid) => (move[tid] > 0 ? `<span class="mv up">▲ ${move[tid]}</span>` : move[tid] < 0 ? `<span class="mv dn">▼ ${-move[tid]}</span>` : '<span class="mv"></span>');
   const recPl = (tid) => `${recStr(tid)} (${ord(order().indexOf(tid) + 1)})`;
-  const pctStr = (p) => (p > 0.9995 ? '>99.9%' : p < 0.0005 ? '<0.1%' : (100 * p).toFixed(1) + '%');
+  const pctStr = (p) => (Number.isNaN(p) ? '—' : p > 0.9995 ? '>99.9%' : p < 0.0005 ? '<0.1%' : (100 * p).toFixed(1) + '%');
   const oddsStr = (tid) => pctStr(odds[tid].p);
 
   /* game flow from the score timeline [sec, away, home] */
@@ -236,6 +236,7 @@
     return out.length ? card('Around the league', out.slice(0, 7).map(([img, a, b, href]) => `<a class="row r-news" href="${href}">${img}<span class="who"><b>${a}</b><span>${b}</span></span><span></span></a>`).join(''), `<span>After Game ${lastDay}</span>`) : '';
   }
   function home() {
+    if (PRE) return preHome();
     const today = D.games.filter((g) => g.day === lastDay), feat = [...today].sort((a, b) => { const fa = flow(a), fb = flow(b); return (fb.changes + fb.ties * 0.5 - Math.abs(b.home.pts - b.away.pts)) - (fa.changes + fa.ties * 0.5 - Math.abs(a.home.pts - a.away.pts)); })[0];
     const f = flow(feat), a = feat.away, h = feat.home, aw = a.pts > h.pts;
     const blk = (s, home, won) => `<div class="gt${home ? ' h' : ''}">${logo(s.tid, 64)}<div class="who"><b>${tname(s.tid)}</b><span>${recStr(s.tid)}</span></div><span class="big ${won ? '' : 'lost'}">${s.pts}</span></div>`;
@@ -247,8 +248,59 @@
     $app.innerHTML = `${strip(lastDay)}
       <div class="grid g-main"><div class="stack">${recap()}${featured}
         <div class="grid g-2">${today.filter((g) => g !== feat).map(gameCard).join('')}</div>
-        ${teamStatsTable()}</div>
+        ${PRE ? '' : teamStatsTable()}</div>
       <aside class="stack">${standingsMini()}${around()}${injuryCard(null)}</aside></div>`;
+  }
+
+  /* ---------- preseason pages: rosters and schedule, no results ---------- */
+  const lastLine = (p, i) => (p.ls && p.ls[i] != null ? (i === 3 ? p.ls[i] : f1(p.ls[i])) : '<span class="faint">—</span>');
+  function preHome() {
+    const signed = D.players.filter((p) => p.tid >= 0).sort((a, b) => b.sal - a.sal || a.name.localeCompare(b.name)), big = signed[0], money = signed.reduce((a, p) => a + p.sal, 0);
+    const lede = `<a class="card lede" href="#auction" style="display:block"><div class="gh lede-top" style="border-bottom:0"><span class="kick">Preseason</span><h1>The auction is over. Opening night is next.</h1><p class="dek">Ten rosters are set and $${money}M is committed for ${D.season}. ${esc(big.name)} drew the richest deal, $${big.sal}M a season from the ${esc(team(big.tid).name)}.</p><span class="more">See how the auction went →</span></div></a>`;
+    const games = D.schedule.filter((s) => s.day === 1).map((s) => `<a class="row r-open" href="#scores-1">${logo(s.away, 34)}<span class="who"><b>${tname(s.away)}</b><span>at ${tname(s.home)}</span></span>${logo(s.home, 34)}<span class="v">${esc(team(s.home).arena)}</span></a>`).join('');
+    const teams = order().map((tid) => { const r = signed.filter((p) => p.tid === tid);
+      return `<a class="row r-pre" href="#team-${team(tid).abbrev}">${logo(tid, 40)}<span class="who"><b>${tname(tid)}</b><span>${r.slice(0, 3).map((p) => esc(short(p.name))).join(', ')}</span></span><span class="faces">${r.slice(0, 3).map((p) => face(p.pid, 34)).join('')}</span><span class="v">$${r.reduce((a, p) => a + p.sal, 0)}M</span></a>`; }).join('');
+    const rich = signed.slice(0, 10).map((p, i) => `<a class="row r-lead${i ? '' : ' first'}" href="#player-${p.pid}"><span class="n">${i + 1}</span>${face(p.pid)}<span class="who"><b>${esc(p.name)}</b><span>${team(p.tid).abbrev} · ${p.pos} · through ${p.exp}</span></span><span class="v">$${p.sal}M</span></a>`).join('');
+    $app.innerHTML = `<div class="grid g-main"><div class="stack">${lede}${card('Opening night', games, '<a href="#scores-1">Full schedule</a>')}${card('The ten teams', teams, '<span>Three highest-paid players · payroll</span>')}</div>
+      <aside class="stack">${card('Biggest contracts', rich, '<span>Per season</span>')}${injuryCard(null)}</aside></div>`;
+  }
+  function prePlayerBody(p) {
+    const signed = D.players.filter((x) => x.tid >= 0).sort((a, b) => b.sal - a.sal), mates = signed.filter((x) => x.tid === p.tid), pay = mates.reduce((a, x) => a + x.sal, 0);
+    const rk = signed.filter((x) => x.sal > p.sal).length + 1, trk = mates.filter((x) => x.sal > p.sal).length + 1;
+    const next = D.schedule.filter((s) => s.home === p.tid || s.away === p.tid).slice(0, 6).map((s) => { const hm = s.home === p.tid, opp = hm ? s.away : s.home; return `<a class="row r-sched" href="#team-${team(opp).abbrev}"><span class="d">Game ${s.day}</span>${logo(opp, 20)}<span>${hm ? 'vs' : '@'} ${esc(team(opp).name)}</span><span class="res muted">${esc(team(hm ? p.tid : opp).arena)}</span></a>`; }).join('');
+    const others = mates.filter((x) => x.pid !== p.pid).slice(0, 6).map((x) => `<a class="row r-news" href="#player-${x.pid}">${face(x.pid)}<span class="who"><b>${esc(x.name)}</b><span>${x.pos} · through ${x.exp}</span></span><span class="v">$${x.sal}M</span></a>`).join('');
+    return `<div class="grid g-main"><div class="stack">
+        ${card('Contract', `<div class="kv"><div><b>$${p.sal}M</b><span>Per season</span></div><div><b>${p.exp}</b><span>Signed through</span></div><div><b>${ord(rk)}</b><span>Richest in the league</span></div><div><b>${ord(trk)}</b><span>On the ${esc(team(p.tid).name)}</span></div><div><b>${Math.round(100 * p.sal / Math.max(1, pay))}%</b><span>Of team payroll</span></div></div>`, '<span>From the auction</span>')}
+        ${p.ls ? card('Last season', `<div class="kv"><div><b>${p.ls[3]}</b><span>Games</span></div><div><b>${f1(p.ls[0])}</b><span>Points</span></div><div><b>${f1(p.ls[1])}</b><span>Rebounds</span></div><div><b>${f1(p.ls[2])}</b><span>Assists</span></div></div>`, '<span>Per game</span>') : ''}
+        ${card('Teammates', others, `<span>${esc(team(p.tid).name)} · highest paid</span>`)}</div>
+      <aside class="stack">${card('First games', next)}</aside></div>`;
+  }
+  const PP = { key: 'sal', dir: -1 };
+  function prePlayers() {
+    const cols = [['age', 'Age', (p) => p.age, ''], ['gp', 'GP', (p) => (p.ls ? p.ls[3] : -1), 'grp'], ['pts', 'PTS', (p) => (p.ls ? p.ls[0] : -1), ''], ['reb', 'REB', (p) => (p.ls ? p.ls[1] : -1), ''], ['ast', 'AST', (p) => (p.ls ? p.ls[2] : -1), ''], ['sal', 'Salary', (p) => p.sal, 'grp'], ['exp', 'Thru', (p) => p.exp, '']];
+    const f = cols.find((c) => c[0] === PP.key)[2], q = PS.q.toLowerCase();
+    const rows = D.players.filter((p) => p.tid >= 0 && (!PS.pos || p.pos === PS.pos) && (!q || `${p.name} ${team(p.tid).abbrev} ${team(p.tid).name}`.toLowerCase().includes(q))).sort((a, b) => (f(a) - f(b)) * PP.dir || a.name.localeCompare(b.name));
+    $app.innerHTML = `<div class="page-h"><h1>Players</h1><span>Rosters after the auction · stats are last season's</span></div>
+      <div class="tools au-tools"><input class="q" id="pq" type="search" placeholder="Search players or teams" value="${esc(PS.q)}" aria-label="Search players"><div class="seg" role="group" aria-label="Position">${['', 'PG', 'SG', 'SF', 'PF', 'C'].map((x) => `<button type="button" data-pos="${x}" aria-pressed="${PS.pos === x}">${x || 'All'}</button>`).join('')}</div></div>
+      ${card('All players', `<div class="scroll"><table id="pt"><thead><tr><th class="t">#</th><th class="t">Player</th><th class="t">Team</th><th class="t">Pos</th><th>Ht</th>${cols.map(([k, lab, , cls]) => `<th data-k="${k}" class="${cls}${k === PP.key ? ' on' : ''}">${lab}${k === PP.key ? (PP.dir < 0 ? ' ↓' : ' ↑') : ''}</th>`).join('')}</tr></thead><tbody>${rows.map((p, i) =>
+        `<tr><td class="t muted">${i + 1}</td><td class="t nm"><a href="#player-${p.pid}">${face(p.pid, 26)}<span>${esc(p.name)}</span></a></td><td class="t">${tlink(p.tid, team(p.tid).abbrev)}</td><td class="t"><span class="chip">${p.pos}</span></td><td>${htS(p.ht)}</td><td>${p.age}</td><td class="grp">${lastLine(p, 3)}</td><td>${lastLine(p, 0)}</td><td>${lastLine(p, 1)}</td><td>${lastLine(p, 2)}</td><td class="grp"><b>$${p.sal}M</b></td><td>${p.exp}</td></tr>`).join('')}</tbody></table></div>`, `<span>${rows.length} players · click a column to sort</span>`)}`;
+    const inp = document.getElementById('pq');
+    inp.addEventListener('input', () => { PS.q = inp.value; prePlayers(); const n = document.getElementById('pq'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); });
+    document.querySelectorAll('[data-pos]').forEach((b) => b.addEventListener('click', () => { PS.pos = b.dataset.pos; prePlayers(); }));
+    document.getElementById('pt').addEventListener('click', (e) => { const th = e.target.closest('th[data-k]'); if (!th) return; PP.dir = PP.key === th.dataset.k ? -PP.dir : (th.dataset.k === 'age' ? 1 : -1); PP.key = th.dataset.k; prePlayers(); });
+  }
+  function preTeam(t) {
+    const tid = t.tid, r = D.players.filter((p) => p.tid === tid).sort((a, b) => b.sal - a.sal || a.name.localeCompare(b.name)), pay = r.reduce((a, p) => a + p.sal, 0);
+    const first = D.schedule.filter((s) => s.home === tid || s.away === tid)[0], nm = (v, lab) => `<div><b>${v}</b><span>${lab}</span></div>`;
+    const depth = ['PG', 'SG', 'SF', 'PF', 'C'].map((pos) => { const xs = r.filter((p) => p.pos === pos);
+      return `<div class="dl"><span class="dp">${pos}</span><div class="dts">${xs.map((p, i) => `<a class="dt${i ? '' : ' star'}" href="#player-${p.pid}">${face(p.pid, i ? 44 : 56)}<b>${esc(p.name)}</b><span>$${p.sal}M / ${p.exp}</span></a>`).join('') || '<span class="dn2">Nobody</span>'}</div></div>`; }).join('');
+    const rows = r.map((p) => `<tr><td class="t nm"><a href="#player-${p.pid}">${face(p.pid, 28)}<span>${esc(p.name)}</span>${p.inj ? `<span class="inj">out ${p.inj[1]}</span>` : ''}</a></td><td class="t"><span class="chip">${p.pos}</span></td><td>${p.age}</td><td>${htS(p.ht)}</td><td class="grp">${lastLine(p, 3)}</td><td>${lastLine(p, 0)}</td><td>${lastLine(p, 1)}</td><td>${lastLine(p, 2)}</td><td class="grp"><b>$${p.sal}M</b></td><td>${p.exp}</td></tr>`).join('');
+    const next = D.schedule.filter((s) => s.home === tid || s.away === tid).slice(0, 6).map((s) => { const hm = s.home === tid, opp = hm ? s.away : s.home; return `<a class="row r-sched" href="#team-${team(opp).abbrev}"><span class="d">Game ${s.day}</span>${logo(opp, 20)}<span>${hm ? 'vs' : '@'} ${esc(team(opp).name)}</span><span class="res muted">${hm ? esc(t.arena) : esc(team(opp).arena)}</span></a>`; }).join('');
+    $app.innerHTML = `<section class="card hd" style="--c:${t.accent};--wm:url(${t.logo})">${logo(tid, 96)}<div><h1>${tname(tid)}</h1><div class="sub"><span>Preseason${first ? ` · opens ${first.home === tid ? 'at home to' : 'away at'} the ${esc(team(first.home === tid ? first.away : first.home).name)}` : ''}</span></div><div class="sub"><span>Home: ${esc(t.arena)}</span></div>${banners(t)}</div>
+      <div class="nums">${nm(`$${pay}M`, 'Payroll')}${nm(`$${Math.max(0, D.cap - pay)}M`, 'Cap room')}${nm(f1(r.reduce((a, p) => a + p.age, 0) / Math.max(1, r.length)), 'Average age')}${nm(r.length, 'Players')}</div></section>
+      <div class="grid g-main"><div class="stack">${card('Depth chart', `<div class="depth">${depth}</div>`, '<span>Highest salary first</span>')}
+        ${card('Roster', `<div class="scroll"><table><thead><tr><th class="t">Player</th><th class="t">Pos</th><th>Age</th><th>Ht</th><th class="grp">GP</th><th>PTS</th><th>REB</th><th>AST</th><th class="grp">Salary</th><th>Thru</th></tr></thead><tbody>${rows}</tbody></table></div>`, `<span>Stats are last season's · payroll $${pay}M of $${D.cap}M cap</span>`)}</div>
+      <aside class="stack">${card('First games', next)}${injuryCard(tid)}</aside></div>`;
   }
 
   /* ---------- scores ---------- */
@@ -265,14 +317,15 @@
   }
   function upRow(s) {
     const tr = (tid) => `<tr><td class="t tm"><div class="tmw">${logo(tid, 30)}<span><b>${esc(team(tid).name)}</b><small>${recPl(tid)}</small></span></div></td></tr>`;
-    const lead = (tid) => { const b = [...stats.entries()].filter(([, x]) => x.tid === tid && x.gp >= 3).sort((x, y) => per(y[1], 'pts') - per(x[1], 'pts'))[0]; return b ? `<a class="tp" href="#player-${b[0]}">${face(b[0], 38)}<span><b>${esc(short(P.get(b[0]).name))}</b> <small>${P.get(b[0]).pos} · ${team(tid).abbrev}</small><em>${f1(per(b[1], 'pts'))} PPG, ${f1(per(b[1], 'reb'))} RPG, ${f1(per(b[1], 'ast'))} APG</em></span></a>` : ''; };
+    const lead = (tid) => { const b = [...stats.entries()].filter(([, x]) => x.tid === tid && x.gp >= 3).sort((x, y) => per(y[1], 'pts') - per(x[1], 'pts'))[0]; if (PRE) { const p = D.players.filter((x) => x.tid === tid).sort((x, y) => y.sal - x.sal)[0]; return p ? `<a class="tp" href="#player-${p.pid}">${face(p.pid, 38)}<span><b>${esc(short(p.name))}</b> <small>${p.pos} · ${team(tid).abbrev}</small><em>$${p.sal}M through ${p.exp}</em></span></a>` : ''; }
+      return b ? `<a class="tp" href="#player-${b[0]}">${face(b[0], 38)}<span><b>${esc(short(P.get(b[0]).name))}</b> <small>${P.get(b[0]).pos} · ${team(tid).abbrev}</small><em>${f1(per(b[1], 'pts'))} PPG, ${f1(per(b[1], 'reb'))} RPG, ${f1(per(b[1], 'ast'))} APG</em></span></a>` : ''; };
     return `<section class="card grow up"><div class="gcell ls2"><table><thead><tr><th class="t">Upcoming</th></tr></thead><tbody>${tr(s.away)}${tr(s.home)}</tbody></table></div>
-      <div class="gcell"><span class="label">Line</span><span class="line">${spread(s)}</span><span class="cap">${team(s.away).abbrev} at ${team(s.home).abbrev}</span></div>
-      <div class="gcell"><span class="label">Leading scorers</span>${lead(s.away)}${lead(s.home)}</div><div class="gcell"></div></section>`;
+      <div class="gcell"><span class="label">${PRE ? 'Arena' : 'Line'}</span><span class="line"${PRE ? ' style="font-size:18px"' : ''}>${PRE ? esc(team(s.home).arena) : spread(s)}</span><span class="cap">${team(s.away).abbrev} at ${team(s.home).abbrev}</span></div>
+      <div class="gcell"><span class="label">${PRE ? 'Highest paid' : 'Leading scorers'}</span>${lead(s.away)}${lead(s.home)}</div><div class="gcell"></div></section>`;
   }
   function scores(day) {
     const days = [...new Set([...D.games.map((g) => g.day), ...D.schedule.map((s) => s.day)])].sort((a, b) => a - b);
-    day = days.includes(day) ? day : lastDay;
+    day = days.includes(day) ? day : (lastDay || 1);
     const games = D.games.filter((g) => g.day === day), up = D.schedule.filter((s) => s.day === day), i = days.indexOf(day);
     $app.innerHTML = `<div class="page-h"><h1>Scores</h1><span>Game ${day} of ${days.at(-1)}</span></div>
       <div class="days"><a class="btn" href="#scores-${days[Math.max(0, i - 1)]}" aria-label="Previous game">‹</a><div class="dayrail" id="rail">${days.map((d) => `<a href="#scores-${d}" class="${d > lastDay ? 'fut' : ''}" aria-current="${d === day}" aria-label="Game ${d}">${d}</a>`).join('')}</div><a class="btn" href="#scores-${days[Math.min(days.length - 1, i + 1)]}" aria-label="Next game">›</a></div>
@@ -324,10 +377,10 @@
     const rows = o.map((tid, i) => { const r = rec[tid], gp = gpT(tid), d = diff(tid);
       return `<tr${i === 3 ? ' class="cut"' : ''}><td class="t muted">${arrow(tid)}${i + 1}</td><td class="t nm">${tlink(tid, `${logo(tid, 24)}${tname(tid)}`)}</td><td>${r.w}</td><td>${r.l}</td><td>${(r.w / Math.max(1, gp)).toFixed(3).replace(/^0/, '')}</td><td>${gb(tid, o[0])}</td><td>${r.hw}-${r.hl}</td><td>${r.aw}-${r.al}</td><td>${f1(r.pf / gp)}</td><td>${f1(r.pa / gp)}</td><td class="${d > 0 ? 'up' : 'dn'}">${sgn(d, 1)}</td><td>${streak(tid)}</td><td>${last10(tid)}</td><td>${f1(odds[tid].w)}</td><td><b>${oddsStr(tid)}</b></td><td><b>${pctStr(odds[tid].c)}</b></td></tr>`; }).join('');
     const h2h = (a, b) => { const ms = D.games.filter((g) => (g.home.tid === a && g.away.tid === b) || (g.home.tid === b && g.away.tid === a)); const w = ms.filter((g) => (g.home.tid === a ? g.home.pts > g.away.pts : g.away.pts > g.home.pts)).length; return ms.length ? `${w}-${ms.length - w}` : '·'; };
-    $app.innerHTML = `<div class="page-h"><h1>Standings</h1><span>${D.season} · through Game ${lastDay} of 36</span></div><div class="stack">
+    $app.innerHTML = `<div class="page-h"><h1>Standings</h1><span>${D.season} · ${PRE ? 'preseason' : `through Game ${lastDay} of 36`}</span></div><div class="stack">
       ${card('League table', `<div class="scroll"><table><thead><tr><th class="t">#</th><th class="t">Team</th><th>W</th><th>L</th><th>Pct</th><th>GB</th><th>Home</th><th>Away</th><th>PF</th><th>PA</th><th>Diff</th><th>Strk</th><th>L10</th><th>Proj W</th><th>Playoffs</th><th>Title</th></tr></thead><tbody>${rows}</tbody></table></div><p class="note">Top four make the playoffs (best of five). Arrows show movement since the last game. Projected wins, playoff chances and title chances come from 3,000 simulations of the remaining schedule and a best-of-five bracket, based on each team's point differential.</p>`)}
       ${card('Head to head', `<div class="scroll"><table class="h2h"><thead><tr><th class="t">Row vs column</th>${o.map((t) => `<th>${team(t).abbrev}</th>`).join('')}</tr></thead><tbody>${o.map((a) => `<tr><td class="t nm">${tlink(a, `${logo(a, 20)}${esc(team(a).name)}`)}</td>${o.map((b) => (a === b ? '<td class="x">—</td>' : `<td>${h2h(a, b)}</td>`)).join('')}</tr>`).join('')}</tbody></table></div>`)}
-      ${teamStatsTable()}</div>`;
+      ${PRE ? '' : teamStatsTable()}</div>`;
   }
 
   /* ---------- teams ---------- */
@@ -342,6 +395,7 @@
   }
   function teamPage(abbrev) {
     const t = T.find((x) => x.abbrev === abbrev); if (!t) return notFound();
+    if (PRE) return preTeam(t);
     const tid = t.tid, o = order(), r = rec[tid], gp = gpT(tid), m = tstat[tid].me, op = tstat[tid].op;
     const roster = D.players.filter((p) => p.tid === tid).map((p) => [p, stats.get(p.pid)]).sort((a, b) => (b[1] ? per(b[1], 'min') : -1) - (a[1] ? per(a[1], 'min') : -1));
     const starters = new Set(roster.filter(([, s]) => s).sort((a, b) => b[1].gs - a[1].gs || b[1].min - a[1].min).slice(0, 5).map(([p]) => p.pid));
@@ -396,6 +450,7 @@
   }
   const PS = { key: 'pts', dir: -1, q: '', pos: '', view: 'leaders' };
   function playersPage(arg) {
+    if (PRE) return prePlayers();
     if (['leaders', 'awards', 'stats'].includes(arg)) PS.view = arg;
     const tabs = `<div class="tools au-tools"><div class="seg" role="group" aria-label="View">${[['leaders', 'Leaders'], ['awards', 'Awards'], ['stats', 'All players']].map(([k, lab]) => `<a href="#players-${k}" aria-current="${PS.view === k}">${lab}</a>`).join('')}</div></div>`;
     if (PS.view !== 'stats') { $app.innerHTML = `<div class="page-h"><h1>Players</h1><span>${PS.view === 'leaders' ? `Per game · at least ${Math.ceil(Math.max(3, lastDay * 0.4))} games played` : `Projected through Game ${lastDay}`}</span></div>${tabs}${PS.view === 'leaders' ? leadersView() : awardsView()}`; return; }
@@ -434,7 +489,7 @@
     const pv = played.map((x) => x.r[C.pts]), mx = Math.max(1, ...pv), avg = s ? per(s, 'pts') : 0;
     const spark = pv.length > 1 ? `<svg class="spark" viewBox="0 0 ${pv.length * 20} 44" preserveAspectRatio="none">${pv.map((v, i) => `<rect x="${i * 20 + 3}" y="${44 - 40 * v / mx}" width="14" height="${40 * v / mx}" fill="${v >= avg ? (t ? t.accent : 'var(--gold)') : '#39414b'}"/>`).join('')}<line x1="0" x2="${pv.length * 20}" y1="${44 - 40 * avg / mx}" y2="${44 - 40 * avg / mx}" stroke="var(--ink)" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"/></svg>` : '';
     const rk = (f) => { const r = rankOf(pid, f); return r ? `<small>${ord(r)}</small>` : '<small>&nbsp;</small>'; };
-    const bio = [['Age', p.age], ['Size', `${htS(p.ht)}${p.wt ? `, ${p.wt} lbs` : ''}`], ['Contract', p.sal ? `$${p.sal}M / ${p.exp}` : null], ['Draft', p.smp ? `Round ${Math.ceil(p.smp / 10)} Pick ${((p.smp - 1) % 10) + 1}` : null]].filter((x) => x[1]);
+    const bio = [['Age', p.age], ['Size', `${htS(p.ht)}${p.wt ? `, ${p.wt} lbs` : ''}`], ['Contract', p.sal ? `$${p.sal}M / ${p.exp}` : null], ['Draft', p.smp ? `Round ${Math.ceil(p.smp / 10)} Pick ${((p.smp - 1) % 10) + 1}` : null], ['Last season', p.ls ? `${p.ls[0]} pts, ${p.ls[1]} reb, ${p.ls[2]} ast in ${p.ls[3]} games` : null]].filter((x) => x[1]);
     $app.innerHTML = `<section class="card hd" style="--c:${t ? t.accent : '#555'}${t ? `;--wm:url(${t.logo})` : ''}">${pface(pid, 104)}<div><h1>${esc(p.name)}</h1><div class="sub">${t ? tlink(t.tid, tname(t.tid)) : '<span>Free agent</span>'}<span>${p.pos}${p.num ? ` · #${esc(p.num)}` : ''}${p.rk ? ' · Rookie' : ''}</span>${p.inj ? `<span class="inj">${esc(p.inj[0])}, out ${p.inj[1]} games</span>` : ''}</div>
       <div class="bio">${bio.map(([k, v]) => `<span>${k}</span><b>${esc(v)}</b>`).join('')}</div></div>
       ${s ? `<div class="nums2"><div class="nums"><div><b>${f1(per(s, 'pts'))}</b><span>PTS</span>${rk((x) => per(x, 'pts'))}</div><div><b>${f1(per(s, 'reb'))}</b><span>REB</span>${rk((x) => per(x, 'reb'))}</div><div><b>${f1(per(s, 'ast'))}</b><span>AST</span>${rk((x) => per(x, 'ast'))}</div><div><b>${f1(per(s, 'stl'))}</b><span>STL</span>${rk((x) => per(x, 'stl'))}</div><div><b>${f1(per(s, 'blk'))}</b><span>BLK</span>${rk((x) => per(x, 'blk'))}</div></div>
@@ -442,7 +497,7 @@
       ${s ? `<div class="grid g-main"><div class="stack">
         ${card('Season stats', `<div class="scroll"><table>${sh}<tbody>${statRow('Per game', s)}${statRow('Totals', s, true)}</tbody></table></div>${p.adv ? `<div class="kv"><div><b>${sgn(p.adv[6], 1)}</b><span>OBPM</span></div><div><b>${sgn(p.adv[7], 1)}</b><span>DBPM</span></div><div><b>${sgn(p.adv[6] + p.adv[7], 1)}</b><span>BPM</span></div><div><b>${p.adv[0]}</b><span>PER</span></div><div><b>${p.adv[1].toFixed(1)}</b><span>Win shares</span></div><div><b>${p.adv[3]}%</b><span>Usage</span></div></div>` : ''}`, `<span>${D.season} · ${s.gs} starts</span>`)}
         ${card('Game log', `<div class="scroll"><table><thead><tr><th class="t">Game</th><th class="t">Opp</th><th class="t">Result</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>FG</th><th>3PT</th><th>FT</th><th>PF</th><th>+/-</th><th>GmSc</th></tr></thead><tbody>${logRows}</tbody></table></div>`, `<span>${played.length} played · ${log.length - played.length} missed</span>`)}</div>
-      <aside class="stack">${card('Season highs', hi)}${card('Shot diet', `<table><thead><tr><th class="t">Zone</th><th>Made</th><th>FG%</th><th>Share</th><th></th></tr></thead><tbody>${zones}</tbody></table>`, '<span>Share of his shots</span>')}</aside></div>` : '<p class="muted">He has not played a game yet.</p>'}`;
+      <aside class="stack">${card('Season highs', hi)}${card('Shot diet', `<table><thead><tr><th class="t">Zone</th><th>Made</th><th>FG%</th><th>Share</th><th></th></tr></thead><tbody>${zones}</tbody></table>`, '<span>Share of his shots</span>')}</aside></div>` : (PRE && t ? prePlayerBody(p) : '<p class="muted">He has not played a game yet.</p>')}`;
   }
 
   const FS = { fa: '', dr: '' };
@@ -470,17 +525,17 @@
     const o = order().reverse(), ht2 = (p) => `${p.age} · ${htS(p.ht)}${p.col ? ` · ${esc(p.col)}` : ''}`;
     const pick = (tid, i) => { const p = D.draft[i]; return `<div class="pk"><span class="no">${i + 1}</span>${tlink(tid, logo(tid, 40))}<span class="who"><b>${esc(p.name)}</b><span>${p.pos} · ${ht2(p)}</span></span><span class="tm">${tlink(tid, esc(team(tid).name))}<small>${recStr(tid)}</small></span></div>`; };
     const xs = D.draft.map((p, i) => [p, i + 1]).filter(([p]) => !FS.dr || p.pos === FS.dr);
-    const rows = xs.map(([p, n]) => `<tr><td class="t rk">${n}</td><td class="t nm"><span class="pl" style="min-height:34px">${esc(p.name)}</span></td><td class="t"><span class="chip">${p.pos}</span></td><td>${p.age}</td><td>${htS(p.ht)}</td><td class="t">${p.col ? esc(p.col) : '—'}</td><td class="t">${n <= 10 ? tlink(o[n - 1], `<span class="pl" style="gap:6px;font-size:13px">${logo(o[n - 1], 18)}${team(o[n - 1]).abbrev}</span>`) : ''}</td></tr>`).join('');
+    const rows = xs.map(([p, n]) => `<tr><td class="t rk">${n}</td><td class="t nm"><span class="pl" style="min-height:34px">${esc(p.name)}</span></td><td class="t"><span class="chip">${p.pos}</span></td><td>${p.age}</td><td>${htS(p.ht)}</td><td class="t">${p.col ? esc(p.col) : '—'}</td><td class="t">${!PRE && n <= 10 ? tlink(o[n - 1], `<span class="pl" style="gap:6px;font-size:13px">${logo(o[n - 1], 18)}${team(o[n - 1]).abbrev}</span>`) : ''}</td></tr>`).join('');
     const cols = {}; for (const p of D.draft) if (p.col) cols[p.col] = (cols[p.col] || 0) + 1;
     const top = Object.entries(cols).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 8), mx = Math.max(1, ...top.map((x) => x[1]));
     const schools = top.map(([c, n]) => `<div class="hbar" style="grid-template-columns:130px minmax(0,1fr) 30px"><span class="t">${esc(c)}</span><span class="b"><i style="width:${100 * n / mx}%"></i></span><span class="v">${n}</span></div>`).join('');
     const ages = [...D.draft].sort((a, b) => a.age - b.age), tall = [...D.draft].sort((a, b) => b.ht - a.ht)[0];
     const race = o.slice(0, 5).map((tid, i) => `<a class="row r-news" href="#team-${team(tid).abbrev}">${logo(tid, 28)}<span class="who"><b>${esc(team(tid).name)}</b><span>${recStr(tid)}${streakTxt(tid) ? ` · ${streakTxt(tid)}` : ''}</span></span><span class="v">${ord(i + 1)}</span></a>`).join('');
     $app.innerHTML = `<div class="page-h"><h1>${D.draftYear} draft</h1><span>One round, ten picks</span></div>
-      ${card('If the draft were today', `<div class="pks">${o.map(pick).join('')}</div><p class="note">Teams pick in reverse order of the standings (the lottery rules are not set yet), each taking the best prospect left on the league's scouting board.</p>`, '<span>Projected first round</span>')}
+      ${PRE ? '' : card('If the draft were today', `<div class="pks">${o.map(pick).join('')}</div><p class="note">Teams pick in reverse order of the standings (the lottery rules are not set yet), each taking the best prospect left on the league's scouting board.</p>`, '<span>Projected first round</span>')}
       <div style="margin-top:var(--gap)">${posTabs('dr')}</div>
       <div class="grid g-main"><div class="stack">${card('Scouting board', `<div class="scroll"><table class="au-list"><thead><tr><th class="t">#</th><th class="t">Prospect</th><th class="t">Pos</th><th>Age</th><th>Ht</th><th class="t">School</th><th class="t">Projected</th></tr></thead><tbody>${rows}</tbody></table></div>`, `<span>${xs.length} of ${D.draft.length} prospects</span>`)}</div>
-      <aside class="stack">${card('Race for the first pick', race, '<span>Worst records</span>')}${card('Schools', `<div style="padding:8px 0">${schools}</div>`, '<span>Most prospects</span>')}
+      <aside class="stack">${PRE ? '' : card('Race for the first pick', race, '<span>Worst records</span>')}${card('Schools', `<div style="padding:8px 0">${schools}</div>`, '<span>Most prospects</span>')}
         ${card('The class', `<div style="padding:8px 0">${posBars(D.draft)}</div><div class="bud"><div class="kv"><div><b>${f1(D.draft.reduce((a, p) => a + p.age, 0) / D.draft.length)}</b><span>Average age</span></div><div><b>${ages[0].age}</b><span>Youngest: ${esc(short(ages[0].name))}</span></div><div><b>${htS(tall.ht)}</b><span>Tallest: ${esc(short(tall.name))}</span></div><div><b>${Object.keys(cols).length}</b><span>Schools</span></div></div></div>`, '<span>By position</span>')}</aside></div>`;
     wirePos(draftPage);
   }
@@ -623,7 +678,7 @@
   Promise.all([fetch('data/league.json', { cache: 'no-cache' }).then((r) => r.json()), fetch('data/recaps.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({}))]).then(([d, rc]) => {
     D = d; R = rc;
     if (D.preseason) { T = D.teams; P = new Map(); document.querySelectorAll('[data-nav]').forEach((a) => { a.hidden = a.dataset.nav !== 'auction'; }); } else derive();
-    document.getElementById('when').textContent = D.preseason ? `${D.season} · preseason` : `${D.season} · through Game ${lastDay}`;
+    document.getElementById('when').textContent = D.preseason || PRE ? `${D.season} · preseason` : `${D.season} · through Game ${lastDay}`;
     document.getElementById('logos').innerHTML = [...T].sort((a, b) => a.region.localeCompare(b.region)).map((t) => `<a href="#${D.preseason ? 'auction' : 'team'}-${t.abbrev}" title="${tname(t.tid)}">${logo(t.tid, 22)}${t.abbrev}</a>`).join('');
     addEventListener('hashchange', route); route();
   }).catch((e) => { console.error(e); $app.innerHTML = '<p class="muted">The league data did not load. Reload the page.</p>'; });

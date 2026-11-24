@@ -558,3 +558,9 @@ td b.hi { font-weight: 800; color: #fff; font-size: 1.08em; }
 
 /* a game in progress */
 .livelab, .strip .st.livelab, .ls .sub.livelab { color: var(--gold); font-weight: 600; }
+
+/* live play-by-play */
+.r-pbp { grid-template-columns: 62px 18px minmax(0, 1fr) auto; min-height: 34px; font-size: 13.5px; color: var(--muted); }
+.r-pbp .d { font: 500 11.5px var(--m); color: var(--faint); } .r-pbp .v { font: 600 12px var(--m); color: var(--ink); white-space: nowrap; }
+.r-pbp.sc .tx { color: var(--ink); font-weight: 600; }
+@media (max-width: 720px) { .r-pbp { grid-template-columns: 54px 18px minmax(0, 1fr); } .r-pbp .v { grid-column: 3; } }

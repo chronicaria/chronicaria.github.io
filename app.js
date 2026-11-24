@@ -157,7 +157,9 @@
      for each game a stream of stat events [game seconds, player, stat index, amount]. Until the last game ends the page
      shows the league as it stood before the day and rebuilds each game's box score up to the current moment. */
   let LV = null, lvTimer = null;
-  const lvNow = () => Date.now() + (window.__lvSkew || 0);
+  // previews: on localhost, ?lvt=70 pretends the page was opened 70 minutes after the tip (the clock then runs normally)
+  const lvT = location.hostname === 'localhost' ? new URLSearchParams(location.search).get('lvt') : null, lvOpen = Date.now();
+  const lvNow = () => (LV && lvT != null ? LV.start + lvT * 60000 + (Date.now() - lvOpen) : Date.now() + (window.__lvSkew || 0));
   const lvTip = () => new Date(LV.start).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' });
   const lvGames = (day) => (LV ? LV.cur.filter((g) => g.day === day) : []);
   // real seconds since the tip -> game seconds. 25-minute quarters, 2.5-minute breaks, a 15-minute halftime: two hours for
@@ -188,6 +190,11 @@
       box: fin.box.filter((r) => rows.has(r[0])).map((r) => { const x = rows.get(r[0]); x[C.min] = Math.round(x[C.min] * 10) / 10; x[C.pm] = Math.round(x[C.pm]); return x; }).filter((x) => x[C.min] > 0 || x[C.gs]) });
     return { ...g, ot: Math.max(0, per - 4), live: c.label, done: false, at: c.sec, home: side(g.home, 0), away: side(g.away, 1), tl: g.tl.filter((x) => x[0] <= c.sec) };
   }
+  function feedCard(g) {   // play-by-play for a game of the live day, newest first
+    const L = LV && LV.games.find((x) => x.g.gid === g.gid); if (!L || !L.pbp) return '';
+    const xs = L.pbp.filter((e) => g.done || e[0] <= g.at).slice(-18).reverse(), ab = [team(g.home.tid).abbrev, team(g.away.tid).abbrev];
+    return card('Play-by-play', xs.map(([s, t, txt, a, h]) => `<div class="row r-pbp${a != null ? ' sc' : ''}"><span class="d">${clock(s, L.len)}</span>${t === 0 || t === 1 ? logo(t ? g.away.tid : g.home.tid, 18) : '<span></span>'}<span class="tx">${esc(txt)}</span><span class="v">${a != null ? `${ab[1]} ${a} · ${ab[0]} ${h}` : ''}</span></div>`).join('') || '<p class="note">Waiting for the tip.</p>', `<span>${g.done ? 'The last plays' : 'Latest first'}</span>`);
+  }
   function liveStrip() {
     if (!LV) return '';
     const ln = (tid, pts, dim) => `<span class="ln${dim ? ' lost' : ''}">${logo(tid, 18)}<span>${team(tid).abbrev}</span><b>${pts}</b></span>`;
@@ -198,7 +205,7 @@
     if (!txt) return; let x;
     try { const b = atob(txt.trim()), k = 'smp3', u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i) ^ k.charCodeAt(i % k.length); x = JSON.parse(new TextDecoder().decode(u)); } catch (e) { return; }
     if (D.games.some((g) => g.day === x.day)) return;   // that day is already published in full
-    const games = x.after.games.filter((g) => g.day === x.day).map((g) => ({ g, ev: x.ev[g.gid], len: 2880 + 300 * g.ot, side: new Map([...g.home.box.map((r) => [r[0], 0]), ...g.away.box.map((r) => [r[0], 1])]) }));
+    const games = x.after.games.filter((g) => g.day === x.day).map((g) => ({ g, ev: x.ev[g.gid], pbp: (x.pbp || {})[g.gid], len: 2880 + 300 * g.ot, side: new Map([...g.home.box.map((r) => [r[0], 0]), ...g.away.box.map((r) => [r[0], 1])]) }));
     const start = Date.parse(x.start);
     LV = { day: x.day, start, games, after: x.after, recap: x.recap, lineups: x.lineups, cur: [], end: start + 1000 * Math.max(...games.map((L) => 7200 + (L.len - 2880) / 300 * 510)) };
   }
@@ -390,7 +397,7 @@
     const ls = `<table><thead><tr><th></th>${qh.map((q) => `<th>${q}</th>`).join('')}<th>T</th></tr></thead><tbody><tr><td class="t">${ta.abbrev}</td>${a.q.map((x) => `<td>${x}</td>`).join('')}<td>${a.pts}</td></tr><tr><td class="t">${th.abbrev}</td>${h.q.map((x) => `<td>${x}</td>`).join('')}<td>${h.pts}</td></tr></tbody></table>`;
     const blk = (s, home, won) => `<div class="gt${home ? ' h' : ''}">${tlink(s.tid, logo(s.tid, 76))}<div class="who"><b>${tlink(s.tid, tname(s.tid))}</b><span>${recStr(s.tid)} · ${home ? 'Home' : 'Away'}</span></div><span class="big ${won ? '' : 'lost'}">${s.pts}</span></div>`;
     $app.innerHTML = `<div style="--away:${ta.accent};--home:${th.accent}"><section class="card gh" style="margin-bottom:var(--gap)"><div class="gh-in" style="--wa:url(${ta.logo});--wh:url(${th.logo})">${blk(a, false, aw || run)}<div class="ls">${ls}<div class="sub${run ? ' livelab' : ''}">${run ? g.live : `Game ${g.day}`}</div></div>${blk(h, true, !aw || run)}</div></section>
-      <div class="grid g-game"><aside class="stack">${gameLeaders(g)}${gameTeamStats(g, f)}</aside><div class="stack">${wpCard(g, f)}${boxTable(a)}${boxTable(h)}</div></div></div>`;
+      <div class="grid g-game"><aside class="stack">${gameLeaders(g)}${gameTeamStats(g, f)}</aside><div class="stack">${wpCard(g, f)}${feedCard(g)}${boxTable(a)}${boxTable(h)}</div></div></div>`;
     wireWp(g, f);
   }
 

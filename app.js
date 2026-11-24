@@ -97,10 +97,10 @@
 
   /* game flow from the score timeline [sec, away, home] */
   function flow(g) {
-    const total = 2880 + 300 * g.ot, tl = [[0, 0, 0], ...g.tl], f = { total, bigA: 0, bigH: 0, changes: 0, ties: 0, ledA: 0, ledH: 0, series: [] };
+    const total = 2880 + 300 * g.ot, running = !!g.live && !g.done, lim = running ? Math.max(12, g.at) : total, tl = [[0, 0, 0], ...g.tl], f = { total, bigA: 0, bigH: 0, changes: 0, ties: 0, ledA: 0, ledH: 0, series: [] };
     let prev = 0;
     for (let i = 0; i < tl.length; i++) {
-      const [t, a, h] = tl[i], lead = h - a, end = i + 1 < tl.length ? tl[i + 1][0] : total;
+      const [t, a, h] = tl[i], lead = h - a, end = i + 1 < tl.length ? tl[i + 1][0] : lim;
       f.bigA = Math.max(f.bigA, -lead); f.bigH = Math.max(f.bigH, lead);
       if (lead > 0) f.ledH += end - t; else if (lead < 0) f.ledA += end - t;
       if (lead === 0 && i) f.ties++;
@@ -109,14 +109,13 @@
     }
     const M = D.wp, wp = (t, lead) => { if (t >= total) return lead > 0 ? 1 : lead < 0 ? 0 : 0.5; const fr = (t < 2880 ? 2880 - t : total - t) / 2880; return phi((lead + M.hca * fr) / Math.sqrt(M.sd * M.sd * fr + M.kappa)); };
     f.series = tl.map(([t, a, h]) => [t, a, h, wp(t, h - a)]);
-    for (let t = 240; t < total; t += 240) { const e = tl.findLast((x) => x[0] <= t); f.series.push([t, e[1], e[2], wp(t, e[2] - e[1])]); }   // a point every four minutes so quiet stretches still drift
-    f.series.sort((x, y) => x[0] - y[0]); f.series.push([total, g.away.pts, g.home.pts, 0]);
+    for (let t = 240; t < lim; t += 240) { const e = tl.findLast((x) => x[0] <= t); f.series.push([t, e[1], e[2], wp(t, e[2] - e[1])]); }   // a point every four minutes so quiet stretches still drift
+    f.series.sort((x, y) => x[0] - y[0]); if (!running) f.series.push([total, g.away.pts, g.home.pts, 0]);
     // display curve: the model sampled every 12 s, averaged over 24 s either side (less near the ends, so it still starts and finishes true)
     const at = (t) => { const e = tl.findLast((x) => x[0] <= t) || tl[0]; return wp(t, e[2] - e[1]); }, grid = [];
-    for (let t = 0; t <= total; t += 12) grid.push([t, at(Math.min(t, total - 0.5))]);
-    f.curve = grid.map(([t], k) => { const w = Math.round(Math.min(24, t, total - t) / 12); let s = 0; for (let m = k - w; m <= k + w; m++) s += grid[m][1]; return [t, s / (2 * w + 1)]; });
-    f.curve.push([total, g.home.pts > g.away.pts ? 1 : 0]);
-    f.series[f.series.length - 1][3] = g.home.pts > g.away.pts ? 1 : 0;
+    for (let t = 0; t <= lim; t += 12) grid.push([t, at(Math.min(t, total - 0.5))]);
+    f.curve = grid.map(([t], k) => { const w = Math.max(0, Math.floor(Math.min(24, t, lim - t) / 12)); let s = 0; for (let m = k - w; m <= k + w; m++) s += grid[m][1]; return [t, s / (2 * w + 1)]; });
+    if (!running) { f.curve.push([total, g.home.pts > g.away.pts ? 1 : 0]); f.series[f.series.length - 1][3] = g.home.pts > g.away.pts ? 1 : 0; }
     return f;
   }
   const clock = (t, total) => { if (t >= total) return 'Final'; const q = t < 2880 ? Math.floor(t / 720) : 4 + Math.floor((t - 2880) / 300), len = q < 4 ? 720 : 300, into = q < 4 ? t - q * 720 : (t - 2880) % 300, rem = len - into; return `${q < 4 ? 'Q' + (q + 1) : 'OT' + (q > 4 ? q - 3 : '')} ${Math.floor(rem / 60)}:${String(Math.floor(rem % 60)).padStart(2, '0')}`; };
@@ -152,6 +151,71 @@
   const spread = (s) => { const x = Math.round((power(s.home) - power(s.away) + 2.5) * 2) / 2; return x ? `${team(x > 0 ? s.home : s.away).abbrev} -${Math.abs(x).toFixed(1)}` : 'Pick ’em'; };
   const strip = (day) => `<div class="strip">${D.games.filter((g) => g.day === day).map((g) => { const ln = (s, o) => `<span class="ln${s.pts < o.pts ? ' lost' : ''}">${logo(s.tid, 18)}<span>${team(s.tid).abbrev}</span><b>${s.pts}</b></span>`;
     return `<a href="#game-${g.gid}"><span class="st">Game ${g.day}${g.ot ? ` · ${g.ot > 1 ? g.ot : ''}OT` : ''}</span>${ln(g.away, g.home)}${ln(g.home, g.away)}</a>`; }).join('')}</div>`;
+
+  /* ---------- live game day ----------
+     data/live.json (tools/make_live.py) holds one game day that is revealed on a real clock: the finished league, and
+     for each game a stream of stat events [game seconds, player, stat index, amount]. Until the last game ends the page
+     shows the league as it stood before the day and rebuilds each game's box score up to the current moment. */
+  let LV = null, lvTimer = null;
+  const lvNow = () => Date.now() + (window.__lvSkew || 0);
+  const lvTip = () => new Date(LV.start).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' });
+  const lvGames = (day) => (LV ? LV.cur.filter((g) => g.day === day) : []);
+  // real seconds since the tip -> game seconds. 25-minute quarters, 2.5-minute breaks, a 15-minute halftime: two hours for
+  // regulation, and 8.5 minutes more for each overtime.
+  function lvClock(len, el) {
+    if (el < 0) return { sec: -1 };
+    const segs = []; let r = 0, g = 0;
+    for (let q = 0; q < 4; q++) { segs.push([r, r + 1500, g, g + 720, `Q${q + 1}`]); r += 1500; g += 720; if (q < 3) { const b = q === 1 ? 900 : 150; segs.push([r, r + b, g, g, q === 1 ? 'Halftime' : `End Q${q + 1}`]); r += b; } }
+    for (let o = 0; g < len; o++) { segs.push([r, r + 150, g, g, o ? `End OT${o > 1 ? o : ''}` : 'End Q4']); r += 150; segs.push([r, r + 360, g, g + 300, `OT${o ? o + 1 : ''}`]); r += 360; g += 300; }
+    const s = segs.find((x) => el < x[1]);
+    if (!s) return { sec: len, label: 'Final', final: true };
+    if (s[2] === s[3]) return { sec: s[2], label: s[4], brk: true };
+    const sec = s[2] + (el - s[0]) / (s[1] - s[0]) * (s[3] - s[2]), rem = s[3] - sec;
+    return { sec, label: `${s[4]} ${Math.floor(rem / 60)}:${String(Math.floor(rem % 60)).padStart(2, '0')}` };
+  }
+  function lvBuild(L, now) {
+    const c = lvClock(L.len, (now - LV.start) / 1000), g = L.g; if (c.sec < 0) return null;
+    if (c.final) return { ...g, live: 'Final', done: true };
+    const pIdx = (s) => (s < 2880 ? Math.floor(s / 720) : 4 + Math.floor((s - 2880) / 300)), per = pIdx(c.brk ? c.sec - 0.05 : c.sec) + 1, n = D.cols.length;
+    const rows = new Map(), q = [new Array(per).fill(0), new Array(per).fill(0)], pts = [0, 0];
+    for (const [s, pid, k, amt] of L.ev) {
+      if (s > c.sec) break;
+      let r = rows.get(pid); if (!r) rows.set(pid, r = [pid, ...new Array(n).fill(0)]);
+      r[k + 1] += amt;
+      if (k + 1 === C.pts) { const sd = L.side.get(pid); q[sd][Math.min(per - 1, pIdx(s))] += amt; pts[sd] += amt; }
+    }
+    const side = (fin, sd) => ({ tid: fin.tid, pts: pts[sd], q: q[sd], dnp: [],
+      box: fin.box.filter((r) => rows.has(r[0])).map((r) => { const x = rows.get(r[0]); x[C.min] = Math.round(x[C.min] * 10) / 10; x[C.pm] = Math.round(x[C.pm]); return x; }).filter((x) => x[C.min] > 0 || x[C.gs]) });
+    return { ...g, ot: Math.max(0, per - 4), live: c.label, done: false, at: c.sec, home: side(g.home, 0), away: side(g.away, 1), tl: g.tl.filter((x) => x[0] <= c.sec) };
+  }
+  function liveStrip() {
+    if (!LV) return '';
+    const ln = (tid, pts, dim) => `<span class="ln${dim ? ' lost' : ''}">${logo(tid, 18)}<span>${team(tid).abbrev}</span><b>${pts}</b></span>`;
+    if (!LV.cur.length) return `<div class="strip">${LV.games.map(({ g }) => `<a href="#scores-${g.day}"><span class="st">Game ${g.day} · ${lvTip()} ET</span>${ln(g.away.tid, '')}${ln(g.home.tid, '')}</a>`).join('')}</div>`;
+    return `<div class="strip">${LV.cur.map((g) => `<a href="#game-${g.gid}"><span class="st${g.done ? '' : ' livelab'}">${g.live}</span>${ln(g.away.tid, g.away.pts, g.done && g.away.pts < g.home.pts)}${ln(g.home.tid, g.home.pts, g.done && g.home.pts < g.away.pts)}</a>`).join('')}</div>`;
+  }
+  function lvInit(txt) {
+    if (!txt) return; let x;
+    try { const b = atob(txt.trim()), k = 'smp3', u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i) ^ k.charCodeAt(i % k.length); x = JSON.parse(new TextDecoder().decode(u)); } catch (e) { return; }
+    if (D.games.some((g) => g.day === x.day)) return;   // that day is already published in full
+    const games = x.after.games.filter((g) => g.day === x.day).map((g) => ({ g, ev: x.ev[g.gid], len: 2880 + 300 * g.ot, side: new Map([...g.home.box.map((r) => [r[0], 0]), ...g.away.box.map((r) => [r[0], 1])]) }));
+    const start = Date.parse(x.start);
+    LV = { day: x.day, start, games, after: x.after, recap: x.recap, lineups: x.lineups, cur: [], end: start + 1000 * Math.max(...games.map((L) => 7200 + (L.len - 2880) / 300 * 510)) };
+  }
+  function lvTick(first) {
+    if (!LV) return;
+    const now = lvNow();
+    if (now >= LV.end) {   // every game is over: the league moves on a day
+      D = LV.after; if (LV.recap) R[LV.day] = LV.recap; if (LV.lineups) LU = LV.lineups;
+      LV = null; clearInterval(lvTimer); derive(); setWhen(); if (first !== true) route(true);
+      return;
+    }
+    LV.cur = LV.games.map((L) => lvBuild(L, now)).filter(Boolean); LV.cur.forEach((g) => byGid.set(g.gid, g));
+    if (first === true) return;
+    const h = location.hash.slice(1) || 'home';
+    if (h === 'home') { const el = document.querySelector('.strip'), s = liveStrip(); if (el && s) el.outerHTML = s; }
+    else if (h.startsWith('scores') || (h.startsWith('game-') && LV.cur.some((g) => g.gid === +h.slice(5)))) route(true);
+  }
 
   /* ---------- shared blocks ---------- */
   function standingsMini() {
@@ -256,7 +320,7 @@
       <a class="gh" href="#game-${feat.gid}" style="display:block"><div class="gh-in" style="--wa:url(${team(a.tid).logo});--wh:url(${team(h.tid).logo})">${blk(a, false, aw)}<div class="ls"><div class="sub">Game ${feat.day}</div></div>${blk(h, true, !aw)}</div></a>
       <div class="wp" style="border-top:1px solid var(--line)">${wpChart(feat, f, 110)}</div>
       <div class="grid g-3" style="gap:0;border-top:1px solid var(--line)">${best.map(([r, tid]) => `<a class="row r-news" style="border-bottom:0" href="#player-${r[0]}">${face(r[0])}<span class="who"><b>${esc(short(P.get(r[0]).name))}</b><span>${team(tid).abbrev} · ${line(r)}</span></span><span></span></a>`).join('')}</div></section>`;
-    $app.innerHTML = `${strip(lastDay)}
+    $app.innerHTML = `${liveStrip() || strip(lastDay)}
       <div class="grid g-main"><div class="stack">${recap()}${featured}
         <div class="grid g-2">${today.filter((g) => g !== feat).map(gameCard).join('')}</div>
         ${teamStatsTable()}</div>
@@ -266,11 +330,11 @@
   /* ---------- scores ---------- */
   function scoreRow(g) {
     const a = g.away, h = g.home, f = flow(g), qh = a.q.map((_, i) => (i < 4 ? i + 1 : 'OT'));
-    const tr = (s, o) => `<tr class="${s.pts > o.pts ? 'won' : 'lost'}"><td class="t tm"><div class="tmw">${tlink(s.tid, logo(s.tid, 30))}<span><b>${tlink(s.tid, esc(team(s.tid).name))}</b><small>${recPl(s.tid)}</small></span></div></td>${s.q.map((x) => `<td>${x}</td>`).join('')}<td class="tt">${s.pts}</td></tr>`;
+    const run = g.live && !g.done, tr = (s, o) => `<tr class="${run ? '' : s.pts > o.pts ? 'won' : 'lost'}"><td class="t tm"><div class="tmw">${tlink(s.tid, logo(s.tid, 30))}<span><b>${tlink(s.tid, esc(team(s.tid).name))}</b><small>${recPl(s.tid)}</small></span></div></td>${s.q.map((x) => `<td>${x}</td>`).join('')}<td class="tt">${s.pts}</td></tr>`;
     const top = (s) => { const r = s.box.reduce((x, y) => (gmsc(y) > gmsc(x) ? y : x)); return `<a class="tp" href="#player-${r[0]}">${face(r[0], 38)}<span><b>${esc(short(P.get(r[0]).name))}</b> <small>${P.get(r[0]).pos} · ${team(s.tid).abbrev}</small><em>${r[C.pts]} PTS, ${r[C.orb] + r[C.drb]} REB, ${r[C.ast]} AST${r[C.stl] >= 3 ? `, ${r[C.stl]} STL` : ''}${r[C.blk] >= 3 ? `, ${r[C.blk]} BLK` : ''}</em></span></a>`; };
     const t = (s, k) => tot(s, k), st = (lab, fa, fh) => `<tr><td>${fa}</td><th>${lab}</th><td>${fh}</td></tr>`;
     return `<section class="card grow" style="--away:${team(a.tid).accent};--home:${team(h.tid).accent}">
-      <div class="gcell ls2"><table><thead><tr><th class="t">${g.ot ? (g.ot > 1 ? g.ot : '') + 'OT' : ''}</th>${qh.map((q) => `<th>${q}</th>`).join('')}<th>T</th></tr></thead><tbody>${tr(a, h)}${tr(h, a)}</tbody></table></div>
+      <div class="gcell ls2"><table><thead><tr><th class="t${run ? ' livelab' : ''}">${run ? g.live : g.ot ? (g.ot > 1 ? g.ot : '') + 'OT' : ''}</th>${qh.map((q) => `<th>${q}</th>`).join('')}<th>T</th></tr></thead><tbody>${tr(a, h)}${tr(h, a)}</tbody></table></div>
       <a class="gcell" href="#game-${g.gid}"><span class="label">Win probability</span>${wpChart(g, f, 150)}<span class="cap">${f.changes} lead change${f.changes === 1 ? '' : 's'} · largest lead ${team(f.bigA > f.bigH ? a.tid : h.tid).abbrev} ${Math.max(f.bigA, f.bigH)}</span></a>
       <div class="gcell"><span class="label">Top performers</span>${top(a)}${top(h)}</div>
       <div class="gcell"><table class="ks"><thead><tr><td>${team(a.tid).abbrev}</td><th></th><td>${team(h.tid).abbrev}</td></tr></thead><tbody>${st('FG%', pct(t(a, 'fg'), t(a, 'fga')), pct(t(h, 'fg'), t(h, 'fga')))}${st('3PT', `${t(a, 'tp')}-${t(a, 'tpa')}`, `${t(h, 'tp')}-${t(h, 'tpa')}`)}${st('REB', t(a, 'orb') + t(a, 'drb'), t(h, 'orb') + t(h, 'drb'))}${st('AST', t(a, 'ast'), t(h, 'ast'))}${st('TO', t(a, 'tov'), t(h, 'tov'))}</tbody></table><a class="btn" href="#game-${g.gid}">Box score</a></div></section>`;
@@ -284,9 +348,9 @@
   }
   function scores(day) {
     const days = [...new Set([...D.games.map((g) => g.day), ...D.schedule.map((s) => s.day)])].sort((a, b) => a - b);
-    day = days.includes(day) ? day : (lastDay || days[0]);
-    const games = D.games.filter((g) => g.day === day), up = D.schedule.filter((s) => s.day === day), i = days.indexOf(day);
-    $app.innerHTML = `<div class="page-h"><h1>Scores</h1><span>Game ${day} of ${days.at(-1)}</span></div>
+    day = days.includes(day) ? day : (LV && LV.cur.length ? LV.day : lastDay || days[0]);
+    const lg = lvGames(day), games = [...D.games.filter((g) => g.day === day), ...lg], up = D.schedule.filter((s) => s.day === day && !lg.some((g) => g.gid === s.gid)), i = days.indexOf(day);
+    $app.innerHTML = `<div class="page-h"><h1>Scores</h1><span>Game ${day} of ${days.at(-1)}${LV && day === LV.day && !LV.cur.length ? ` · tips off at ${lvTip()} ET` : ''}</span></div>
       <div class="days"><a class="btn" href="#scores-${days[Math.max(0, i - 1)]}" aria-label="Previous game">‹</a><div class="dayrail" id="rail">${days.map((d) => `<a href="#scores-${d}" class="${d > lastDay ? 'fut' : ''}" aria-current="${d === day}" aria-label="Game ${d}">${d}</a>`).join('')}</div><a class="btn" href="#scores-${days[Math.min(days.length - 1, i + 1)]}" aria-label="Next game">›</a></div>
       <div class="stack">${games.map(scoreRow).join('') + up.map(upRow).join('')}</div>`;
     document.querySelector('#rail [aria-current="true"]')?.scrollIntoView({ inline: 'center', block: 'nearest' });
@@ -321,11 +385,11 @@
   }
   function game(gid) {
     const g = byGid.get(gid); if (!g) return notFound();
-    const a = g.away, h = g.home, ta = team(a.tid), th = team(h.tid), aw = a.pts > h.pts, f = flow(g);
+    const a = g.away, h = g.home, ta = team(a.tid), th = team(h.tid), aw = a.pts > h.pts, f = flow(g), run = g.live && !g.done;
     const qh = a.q.map((_, i) => (i < 4 ? i + 1 : `OT${i > 4 ? i - 3 : ''}`));
     const ls = `<table><thead><tr><th></th>${qh.map((q) => `<th>${q}</th>`).join('')}<th>T</th></tr></thead><tbody><tr><td class="t">${ta.abbrev}</td>${a.q.map((x) => `<td>${x}</td>`).join('')}<td>${a.pts}</td></tr><tr><td class="t">${th.abbrev}</td>${h.q.map((x) => `<td>${x}</td>`).join('')}<td>${h.pts}</td></tr></tbody></table>`;
     const blk = (s, home, won) => `<div class="gt${home ? ' h' : ''}">${tlink(s.tid, logo(s.tid, 76))}<div class="who"><b>${tlink(s.tid, tname(s.tid))}</b><span>${recStr(s.tid)} · ${home ? 'Home' : 'Away'}</span></div><span class="big ${won ? '' : 'lost'}">${s.pts}</span></div>`;
-    $app.innerHTML = `<div style="--away:${ta.accent};--home:${th.accent}"><section class="card gh" style="margin-bottom:var(--gap)"><div class="gh-in" style="--wa:url(${ta.logo});--wh:url(${th.logo})">${blk(a, false, aw)}<div class="ls">${ls}<div class="sub">Game ${g.day}</div></div>${blk(h, true, !aw)}</div></section>
+    $app.innerHTML = `<div style="--away:${ta.accent};--home:${th.accent}"><section class="card gh" style="margin-bottom:var(--gap)"><div class="gh-in" style="--wa:url(${ta.logo});--wh:url(${th.logo})">${blk(a, false, aw || run)}<div class="ls">${ls}<div class="sub${run ? ' livelab' : ''}">${run ? g.live : `Game ${g.day}`}</div></div>${blk(h, true, !aw || run)}</div></section>
       <div class="grid g-game"><aside class="stack">${gameLeaders(g)}${gameTeamStats(g, f)}</aside><div class="stack">${wpCard(g, f)}${boxTable(a)}${boxTable(h)}</div></div></div>`;
     wireWp(g, f);
   }
@@ -621,14 +685,15 @@
   const notFound = () => { $app.innerHTML = '<p class="muted">That page does not exist. <a href="#home">Back to the front page</a>.</p>'; };
 
   /* ---------- router ---------- */
-  function route() {
+  const setWhen = () => { document.getElementById('when').textContent = D.preseason || !lastDay ? `${D.season} · preseason` : `${D.season} · through Game ${lastDay}`; };
+  function route(keep) {
     const h = location.hash.slice(1) || 'home', i = h.indexOf('-'); let kind = i < 0 ? h : h.slice(0, i), arg = i < 0 ? '' : h.slice(i + 1);
     if (D.preseason && kind !== 'auction') { kind = 'auction'; arg = ''; }   // nothing has been played yet: every page is the auction
     const nav = { home: 'home', scores: 'scores', game: 'scores', standings: 'standings', leaders: 'players', players: 'players', player: 'players', freeagents: 'players', draft: 'draft', recap: 'home', auction: 'players' }[kind];
     clearInterval(auTimer);
     document.querySelectorAll('[data-nav]').forEach((a) => (a.dataset.nav === nav ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     ({ home, scores: () => scores(+arg), game: () => game(+arg), standings, team: () => teamPage(arg), player: () => player(+arg), leaders: () => playersPage('leaders'), players: () => playersPage(arg), freeagents: freeAgents, draft: draftPage, recap: () => (arg === 'preview' ? previewPage() : recapPage(+arg)), auction: () => auctionPage(arg) }[kind] || notFound)();
-    window.scrollTo(0, 0);
+    if (keep !== true) window.scrollTo(0, 0);
     const pl = kind === 'player' ? P.get(+arg) : null, gm = kind === 'game' ? byGid.get(+arg) : null;
     const tt = kind === 'team' || (kind === 'auction' && arg) ? T.find((t) => t.abbrev === arg) : pl && pl.tid >= 0 ? team(pl.tid) : null;
     const name = pl ? pl.name : tt ? `${tt.region} ${tt.name}${kind === 'auction' ? ' auction' : ''}` : gm ? `${team(gm.away.tid).abbrev} ${gm.away.pts}, ${team(gm.home.tid).abbrev} ${gm.home.pts}` : { scores: 'Scores', standings: 'Standings', players: 'Players', auction: 'Auction', freeagents: 'Free agents', draft: 'Draft' }[kind];
@@ -637,11 +702,12 @@
     fav.href = tt ? tt.logo : 'data:,';
   }
 
-  Promise.all([fetch('data/league.json', { cache: 'no-cache' }).then((r) => r.json()), fetch('data/recaps.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({}))]).then(([d, rc]) => {
+  Promise.all([fetch('data/league.json', { cache: 'no-cache' }).then((r) => r.json()), fetch('data/recaps.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({})), fetch('data/live.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.text() : '')).catch(() => '')]).then(([d, rc, lv]) => {
     D = d; R = rc;
     if (D.preseason) { T = D.teams; P = new Map(); document.querySelectorAll('[data-nav]').forEach((a) => { a.hidden = a.dataset.nav !== 'auction'; }); } else derive();
-    document.getElementById('when').textContent = D.preseason || !lastDay ? `${D.season} · preseason` : `${D.season} · through Game ${lastDay}`;
+    setWhen();
     document.getElementById('logos').innerHTML = [...T].sort((a, b) => a.region.localeCompare(b.region)).map((t) => `<a href="#${D.preseason ? 'auction' : 'team'}-${t.abbrev}" title="${tname(t.tid)}">${logo(t.tid, 22)}${t.abbrev}</a>`).join('');
-    addEventListener('hashchange', route); route();
+    lvInit(lv); lvTick(true); if (LV) lvTimer = setInterval(lvTick, 5000);
+    addEventListener('hashchange', () => route()); route();
   }).catch((e) => { console.error(e); $app.innerHTML = '<p class="muted">The league data did not load. Reload the page.</p>'; });
 })();

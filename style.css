@@ -555,3 +555,6 @@ td b.hi { font-weight: 800; color: #fff; font-size: 1.08em; }
 .prk small { margin-left: auto; font: 500 12.5px var(--m); color: var(--muted); white-space: nowrap; }
 .art .prk + p { margin-bottom: 4px; }
 @media (max-width: 720px) { .prk { flex-wrap: wrap; font-size: 17px; } .prk small { margin-left: 44px; width: 100%; } }
+
+/* a game in progress */
+.livelab, .strip .st.livelab, .ls .sub.livelab { color: var(--gold); font-weight: 600; }

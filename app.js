@@ -43,7 +43,7 @@
     }
     const prev = T.map(() => ({ w: 0, l: 0, d: 0 }));
     for (const g of D.games) if (g.day < lastDay) for (const [me, op] of [[g.home, g.away], [g.away, g.home]]) { prev[me.tid][me.pts > op.pts ? 'w' : 'l']++; prev[me.tid].d += me.pts - op.pts; }
-    const po = T.map((t) => t.tid).sort((a, b) => prev[b].w / Math.max(1, prev[b].w + prev[b].l) - prev[a].w / Math.max(1, prev[a].w + prev[a].l) || prev[b].d - prev[a].d), now = order();
+    const po = T.map((t) => t.tid).sort((a, b) => prev[b].w / Math.max(1, prev[b].w + prev[b].l) - prev[a].w / Math.max(1, prev[a].w + prev[a].l) || prev[b].d - prev[a].d || (T[b].prior || 0) - (T[a].prior || 0) || T[a].region.localeCompare(T[b].region)), now = order();
     move = T.map((t) => (lastDay ? po.indexOf(t.tid) - now.indexOf(t.tid) : 0));   // positive = climbed since the last game day
     odds = playoffOdds();
   }
@@ -218,7 +218,7 @@
     const others = Object.keys(R).map(Number).filter((x) => Number.isFinite(x) && x !== n).sort((a, b) => b - a);
     $app.innerHTML = `<article class="card lede story" style="${recapLead(r)}"><div class="gh lede-top"><span class="kick">Game ${n} recap</span><h1>${esc(r.headline)}</h1><p class="dek">${esc(r.dek)}</p></div>
       <div class="art">${r.games.map((x) => { const g = byGid.get(x.gid); return g ? `<p><b class="dateline">${esc(team(g.home.tid).region)}</b> — ${esc(x.text)}</p><a class="slug" href="#game-${g.gid}">${sc(g)}</a>` : ''; }).join('')}</div></article>
-      ${others.length ? `<p class="note" style="max-width:760px;margin:0 auto">Earlier recaps: ${others.map((x) => `<a href="#recap-${x}">Game ${x}</a>`).join(' · ')}</p>` : ''}`;
+      ${others.length || R.preview ? `<p class="note" style="max-width:760px;margin:0 auto">Earlier: ${[...others.map((x) => `<a href="#recap-${x}">Game ${x}</a>`), ...(R.preview ? ['<a href="#recap-preview">Preseason power rankings</a>'] : [])].join(' · ')}</p>` : ''}`;
   }
   function previewPage() {   // the preseason power rankings: one ranked entry per team
     const r = R.preview; if (!r) return notFound();

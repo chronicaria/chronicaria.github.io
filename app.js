@@ -195,6 +195,16 @@
     const xs = L.pbp.filter((e) => g.done || e[0] <= g.at).slice(-18).reverse(), ab = [team(g.home.tid).abbrev, team(g.away.tid).abbrev];
     return card('Play-by-play', xs.map(([s, t, txt, a, h]) => `<div class="row r-pbp${a != null ? ' sc' : ''}"><span class="d">${clock(s, L.len)}</span>${t === 0 || t === 1 ? logo(t ? g.away.tid : g.home.tid, 18) : '<span></span>'}<span class="tx">${esc(txt)}</span><span class="v">${a != null ? `${ab[1]} ${a} · ${ab[0]} ${h}` : ''}</span></div>`).join('') || '<p class="note">Waiting for the tip.</p>', `<span>${g.done ? 'The last plays' : 'Latest first'}</span>`);
   }
+  const PBP = new Map();   // gid -> play-by-play lines, from live.json for the staged day or data/pbp/<gid>.json for earlier ones
+  async function pbpCard(g) {   // the whole log of a finished game, in order
+    const spot = () => { const el = document.getElementById('pbp'); return el && +el.dataset.gid === g.gid ? el : null; };
+    if (!spot()) return;
+    let xs = PBP.get(g.gid);
+    if (!xs) { try { const r = await fetch(`data/pbp/${g.gid}.json`); if (!r.ok) return; xs = await r.json(); PBP.set(g.gid, xs); } catch (e) { return; } }
+    const el = spot(); if (!el) return;
+    const ab = [team(g.home.tid).abbrev, team(g.away.tid).abbrev], total = 2880 + 300 * g.ot;
+    el.innerHTML = card('Play-by-play', `<div class="pbplog">${xs.map(([s, t, txt, a, h]) => `<div class="row r-pbp${a != null ? ' sc' : ''}"><span class="d">${s >= total ? '' : clock(s, total)}</span>${t === 0 || t === 1 ? logo(t ? g.away.tid : g.home.tid, 18) : '<span></span>'}<span class="tx">${esc(txt)}</span><span class="v">${a != null ? `${ab[1]} ${a} · ${ab[0]} ${h}` : ''}</span></div>`).join('')}</div>`, `<span>${xs.length} plays · first to last</span>`);
+  }
   function liveStrip() {
     if (!LV) return '';
     const ln = (tid, pts, dim) => `<span class="ln${dim ? ' lost' : ''}">${logo(tid, 18)}<span>${team(tid).abbrev}</span><b>${pts}</b></span>`;
@@ -207,6 +217,7 @@
     if (D.games.some((g) => g.day === x.day)) return;   // that day is already published in full
     const games = x.after.games.filter((g) => g.day === x.day).map((g) => ({ g, ev: x.ev[g.gid], pbp: (x.pbp || {})[g.gid], len: 2880 + 300 * g.ot, side: new Map([...g.home.box.map((r) => [r[0], 0]), ...g.away.box.map((r) => [r[0], 1])]) }));
     const start = Date.parse(x.start);
+    games.forEach((L) => { if (L.pbp) PBP.set(L.g.gid, L.pbp); });   // only shown once a game is final
     LV = { day: x.day, start, games, after: x.after, recap: x.recap, lineups: x.lineups, cur: [], end: start + 1000 * Math.max(...games.map((L) => 7200 + (L.len - 2880) / 300 * 510)) };
   }
   function lvTick(first) {
@@ -397,8 +408,9 @@
     const ls = `<table><thead><tr><th></th>${qh.map((q) => `<th>${q}</th>`).join('')}<th>T</th></tr></thead><tbody><tr><td class="t">${ta.abbrev}</td>${a.q.map((x) => `<td>${x}</td>`).join('')}<td>${a.pts}</td></tr><tr><td class="t">${th.abbrev}</td>${h.q.map((x) => `<td>${x}</td>`).join('')}<td>${h.pts}</td></tr></tbody></table>`;
     const blk = (s, home, won) => `<div class="gt${home ? ' h' : ''}">${tlink(s.tid, logo(s.tid, 76))}<div class="who"><b>${tlink(s.tid, tname(s.tid))}</b><span>${recStr(s.tid)} · ${home ? 'Home' : 'Away'}</span></div><span class="big ${won ? '' : 'lost'}">${s.pts}</span></div>`;
     $app.innerHTML = `<div style="--away:${ta.accent};--home:${th.accent}"><section class="card gh" style="margin-bottom:var(--gap)"><div class="gh-in" style="--wa:url(${ta.logo});--wh:url(${th.logo})">${blk(a, false, aw || run)}<div class="ls">${ls}<div class="sub${run ? ' livelab' : ''}">${run ? g.live : `Game ${g.day}`}</div></div>${blk(h, true, !aw || run)}</div></section>
-      <div class="grid g-game"><aside class="stack">${gameLeaders(g)}${gameTeamStats(g, f)}</aside><div class="stack">${wpCard(g, f)}${feedCard(g)}${boxTable(a)}${boxTable(h)}</div></div></div>`;
+      <div class="grid g-game"><aside class="stack">${gameLeaders(g)}${gameTeamStats(g, f)}</aside><div class="stack">${wpCard(g, f)}${run ? feedCard(g) : `<div id="pbp" data-gid="${g.gid}"></div>`}${boxTable(a)}${boxTable(h)}</div></div></div>`;
     wireWp(g, f);
+    if (!run) pbpCard(g);
   }
 
   /* ---------- standings ---------- */

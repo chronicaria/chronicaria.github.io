@@ -159,8 +159,10 @@
   let LV = null, lvTimer = null;
   // previews: on localhost, ?lvt=70 pretends the page was opened 70 minutes after the tip (the clock then runs normally)
   const lvT = location.hostname === 'localhost' ? new URLSearchParams(location.search).get('lvt') : null, lvOpen = Date.now();
-  const lvNow = () => (LV && lvT != null ? LV.start + lvT * 60000 + (Date.now() - lvOpen) : Date.now() + (window.__lvSkew || 0));
-  const lvTip = () => new Date(LV.start).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' });
+  let LVX = null, LVbase = 0;   // LVX: the list of staged days (slate.json); LVbase: the start the preview clock counts from
+  const lvNow = () => (LVbase > 1 && lvT != null ? LVbase + lvT * 60000 + (Date.now() - lvOpen) : Date.now() + (window.__lvSkew || 0));
+  const lvTip = () => { const z = { timeZone: 'America/New_York' }, d = new Date(LV.start), today = d.toLocaleDateString('en-US', z) === new Date(lvNow()).toLocaleDateString('en-US', z);
+    return (today ? '' : d.toLocaleDateString('en-US', { ...z, weekday: 'short' }) + ' ') + d.toLocaleTimeString('en-US', { ...z, hour: 'numeric', minute: '2-digit' }); };
   const lvGames = (day) => (LV ? LV.cur.filter((g) => g.day === day) : []);
   // real seconds since the tip -> game seconds. 25-minute quarters, 2.5-minute breaks, a 15-minute halftime: two hours for
   // regulation, and 8.5 minutes more for each overtime.
@@ -200,7 +202,9 @@
     const spot = () => { const el = document.getElementById('pbp'); return el && +el.dataset.gid === g.gid ? el : null; };
     if (!spot()) return;
     let xs = PBP.get(g.gid);
-    if (!xs) { try { const r = await fetch(`data/pbp/${g.gid}.json`); if (!r.ok) return; xs = await r.json(); PBP.set(g.gid, xs); } catch (e) { return; } }
+    if (!xs) { try { const r = await fetch(`data/pbp/${g.gid}.json`); if (r.ok) { xs = await r.json(); PBP.set(g.gid, xs); }
+      else if (LVX && LVX.days.some((d) => d.day === g.day)) { const x = await lvFile(g.day); for (const [gid, v] of Object.entries(x.pbp || {})) PBP.set(+gid, v); xs = PBP.get(g.gid); } } catch (e) { return; } }
+    if (!xs) return;
     const el = spot(); if (!el) return;
     const ab = [team(g.home.tid).abbrev, team(g.away.tid).abbrev], total = 2880 + 300 * g.ot;
     el.innerHTML = card('Play-by-play', `<div class="pbplog">${xs.map(([s, t, txt, a, h]) => `<div class="row r-pbp${a != null ? ' sc' : ''}"><span class="d">${s >= total ? '' : clock(s, total)}</span>${t === 0 || t === 1 ? logo(t ? g.away.tid : g.home.tid, 18) : '<span></span>'}<span class="tx">${esc(txt)}</span><span class="v">${a != null ? `${ab[1]} ${a} · ${ab[0]} ${h}` : ''}</span></div>`).join('')}</div>`, `<span>${xs.length} plays · first to last</span>`);
@@ -211,21 +215,40 @@
     if (!LV.cur.length) return `<div class="strip">${LV.games.map(({ g }) => `<a href="#scores-${g.day}"><span class="st">Game ${g.day} · ${lvTip()} ET</span>${ln(g.away.tid, '')}${ln(g.home.tid, '')}</a>`).join('')}</div>`;
     return `<div class="strip">${LV.cur.map((g) => `<a href="#game-${g.gid}"><span class="st${g.done ? '' : ' livelab'}">${g.live}</span>${ln(g.away.tid, g.away.pts, g.done && g.away.pts < g.home.pts)}${ln(g.home.tid, g.home.pts, g.done && g.home.pts < g.away.pts)}</a>`).join('')}</div>`;
   }
-  function lvInit(txt) {
-    if (!txt) return; let x;
-    try { const b = atob(txt.trim()), k = 'smp3', u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i) ^ k.charCodeAt(i % k.length); x = JSON.parse(new TextDecoder().decode(u)); } catch (e) { return; }
+  const unveil = (txt) => { const b = atob(txt.trim()), k = 'smp3', u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i) ^ k.charCodeAt(i % k.length); return JSON.parse(new TextDecoder().decode(u)); };
+  const lvFile = (day) => fetch(`data/live-${day}.json`, { cache: 'no-cache' }).then((r) => { if (!r.ok) throw new Error('no day file'); return r.text(); }).then(unveil);
+  const lvRecaps = (x) => x.recaps || (x.recap ? { [x.day]: x.recap } : {});
+  function lvUse(x) {   // arm one staged day
     if (D.games.some((g) => g.day === x.day)) return;   // that day is already published in full
     const games = x.after.games.filter((g) => g.day === x.day).map((g) => ({ g, ev: x.ev[g.gid], pbp: (x.pbp || {})[g.gid], len: 2880 + 300 * g.ot, side: new Map([...g.home.box.map((r) => [r[0], 0]), ...g.away.box.map((r) => [r[0], 1])]) }));
     const start = Date.parse(x.start);
     games.forEach((L) => { if (L.pbp) PBP.set(L.g.gid, L.pbp); });   // only shown once a game is final
-    LV = { day: x.day, start, games, after: x.after, recap: x.recap, lineups: x.lineups, cur: [], end: start + 1000 * Math.max(...games.map((L) => 7200 + (L.len - 2880) / 300 * 510)) };
+    if (!LVbase) LVbase = start;
+    LV = { day: x.day, start, games, after: x.after, recaps: lvRecaps(x), lineups: x.lineups, cur: [], end: start + 1000 * Math.max(...games.map((L) => 7200 + (L.len - 2880) / 300 * 510)) };
+  }
+  function lvInit(txt) { if (!txt) return; try { lvUse(unveil(txt)); } catch (e) { /* no live day */ } }
+  function lvApply(x) {   // a staged day that is already over: the league is as it stood after it
+    D = x.after; Object.assign(R, lvRecaps(x)); if (x.lineups) LU = x.lineups;
+    for (const [gid, v] of Object.entries(x.pbp || {})) PBP.set(+gid, v);
+    derive(); setWhen();
+  }
+  async function lvSetup(txt) {   // several staged days (slate.json): skip the ones already over, arm the next one
+    if (txt) { try { LVX = unveil(txt); } catch (e) { LVX = null; } }
+    if (!LVX || !LVX.days) return false;
+    const have = new Set(D.games.map((g) => g.day)), days = LVX.days.filter((d) => !have.has(d.day));
+    if (!LVbase) { const nx = days.find((d) => Date.now() < Date.parse(d.end)); LVbase = nx ? Date.parse(nx.start) : 1; }
+    const now = lvNow(), done = days.filter((d) => now >= Date.parse(d.end)), next = days.find((d) => now < Date.parse(d.end));
+    try { if (done.length) lvApply(await lvFile(done.at(-1).day)); if (next) lvUse(await lvFile(next.day)); } catch (e) { return false; }
+    return true;
   }
   function lvTick(first) {
     if (!LV) return;
     const now = lvNow();
     if (now >= LV.end) {   // every game is over: the league moves on a day
-      D = LV.after; if (LV.recap) R[LV.day] = LV.recap; if (LV.lineups) LU = LV.lineups;
-      LV = null; clearInterval(lvTimer); derive(); setWhen(); if (first !== true) route(true);
+      D = LV.after; Object.assign(R, LV.recaps); if (LV.lineups) LU = LV.lineups;
+      LV = null; derive(); setWhen();
+      if (LVX) lvSetup().then(() => { lvTick(true); if (first !== true) route(true); });   // the next staged day, if any, now waits for its own start
+      else { clearInterval(lvTimer); if (first !== true) route(true); }
       return;
     }
     LV.cur = LV.games.map((L) => lvBuild(L, now)).filter(Boolean); LV.cur.forEach((g) => byGid.set(g.gid, g));
@@ -721,12 +744,13 @@
     fav.href = tt ? tt.logo : 'data:,';
   }
 
-  Promise.all([fetch('data/league.json', { cache: 'no-cache' }).then((r) => r.json()), fetch('data/recaps.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({})), fetch('data/live.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.text() : '')).catch(() => '')]).then(([d, rc, lv]) => {
+  Promise.all([fetch('data/league.json', { cache: 'no-cache' }).then((r) => r.json()), fetch('data/recaps.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({})), fetch('data/live.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.text() : '')).catch(() => ''), fetch('data/slate.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.text() : '')).catch(() => '')]).then(async ([d, rc, lv, sl]) => {
     D = d; R = rc;
     if (D.preseason) { T = D.teams; P = new Map(); document.querySelectorAll('[data-nav]').forEach((a) => { a.hidden = a.dataset.nav !== 'auction'; }); } else derive();
     setWhen();
     document.getElementById('logos').innerHTML = [...T].sort((a, b) => a.region.localeCompare(b.region)).map((t) => `<a href="#${D.preseason ? 'auction' : 'team'}-${t.abbrev}" title="${tname(t.tid)}">${logo(t.tid, 22)}${t.abbrev}</a>`).join('');
-    lvInit(lv); lvTick(true); if (LV) lvTimer = setInterval(lvTick, 5000);
+    if (!(await lvSetup(sl))) lvInit(lv);
+    lvTick(true); if (LV || LVX) lvTimer = setInterval(lvTick, 5000);
     addEventListener('hashchange', () => route()); route();
   }).catch((e) => { console.error(e); $app.innerHTML = '<p class="muted">The league data did not load. Reload the page.</p>'; });
 })();
